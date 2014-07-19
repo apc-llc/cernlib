@@ -36,4 +36,4 @@ make install.bin > ../log/scripts
 # Install the libraries
 
 cd $CERN_ROOT/build
-make > log/make.`date +%m%d`
+C_INCLUDE_PATH=/usr/include/freetype2 make > log/make.`date +%m%d`
