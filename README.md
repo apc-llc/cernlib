@@ -24,6 +24,8 @@ In `build32` select which version to build - `2005` or `2006` and then run:
 $ ./build32
 ```
 
+Resulting libraries will be placed into `2005/lib` or `2006/lib`.
+
 ### 64-bit build
 
 In `build64` select which version to build - `2005` or `2006` and then run:
@@ -31,6 +33,8 @@ In `build64` select which version to build - `2005` or `2006` and then run:
 ```
 $ ./build64
 ```
+
+Resulting libraries will be placed into `2005/lib` or `2006/lib`.
 
 ### Debugging
 
