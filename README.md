@@ -6,9 +6,16 @@
 sudo apt-get install xutils-dev makedepend libmotif-dev
 ```
 
-### Building
+### 32-bit build
 
 ```
-cd cernlib
-./build
+$ cd cernlib
+$ ./build32
+```
+
+### 64-bit build
+
+```
+$ cd cernlib
+$ ./build64
 ```
