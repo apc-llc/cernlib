@@ -1,0 +1,5 @@
+#!/usr/bin/perl
+my(@filtered) = grep(!/\-fugly\-complex/, @ARGV);
+my($cmd) = "gfortran -std=legacy -m32 @filtered";
+#print "$cmd\n";
+exit(system($cmd));
