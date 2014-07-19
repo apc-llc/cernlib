@@ -1,0 +1,79 @@
+*
+* $Id: patchy.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: patchy.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[5] PATCHY
+
+      PATCHY is a code management system developed at CERN. The COJETS file
+is supplied in the form of a PATCHY CARDS file. Instructions for using PATCHY
+and a PATCHY installation tape are available on request from the CERN DD
+Division.
+
+      The COJETS PAM file is divided into the following PATCHes:
+
+COJCDE    contains all common blocks, etc.
+COJDATA   contains BLOCK DATA COJVER, and the BLOCK DATA, each one on a
+          separate DECK (COJVER and DATA, resp.).
+COJETS    contains the code for generating events. Each subroutine is
+          in a separate DECK with the same name.
+COJTAPEW  contains the code for writing tapes, with each subroutine
+          on a separate DECK (IOISA).
+COJTAPER  contains the code for reading tapes, with each subroutine
+          on a separate DECK (IOISA).
+COJPLT    contains the skeleton of a histogramming job using HBOOK (IOISA).
+COJCONV   contains shells of the main program and user routines, each one
+          on a separate DECK (IOCON).
+COJTEXT   contains the instructions for using COJETS, i.e. the text of
+          this document.
+COJTABLE  contains the particle and decay table.
+
+      In addition, there are patches representing sample set-ups for the
+IOCON main program and user routines, in the form of correction patches for
+COJCONV. They are described in [8]. There is also a patch GAMMA, containing
+the gamma function. It can be +USE selected if the gamma function is not
+available otherwise.
+
+      After having compacted the CARDS file into a binary PAM file, by
+the use of YTOBIN, one must use YPATCHY to get from it, with the optional
+addition of corrections, the desired ASM file containing the
+selected/modified FORTRAN code ready for compilation. In order to facilitate
+input to YPATCHY, the COJETS file contains the following pilot patches:
+
+*COJCONV      +USE selects COJCDE, COJDATA, COJETS and corrections to them.
+              It is meant for running COJETS with IOCON.
+*COJETS       +USE selects COJCDE, COJDATA, COJETS, COJTAPEW and corrections
+              to them. It is meant for running COJETS with IOISA.
+*COJPLT       +USE selects COJCDE, COJTAPER, COJPLT and appropriate decks of
+              COJDATA and COJETS plus corrections to them. It is meant for
+              reading and analysing an IOISA tape.
+*COJTEXT      +USE selects COJCDE, COJTEXT and corrections to them. The ASM
+              file in output contains the documentation text to read.
+*COJTABLE     +USE selects COJTABLE and corrections to it. The ASM file in
+              output contains the particle-decay table to be read by COJETS.
+
+      One of the flags SINGLE, DOUBLE must be used to select single or
+double precision.
+
+      One of the flags CRAY, CDC, IBM, VAX must be used to select the
+machine dependent features of CERN Library routines used by COJETS.
+
+      In order to get the desired ASM file, it should be sufficient to run
+YPATCHY with the following cradle (with all cards starting with + in column
+1):
+
+ USE,(SINGLE,DOUBLE).                                         choose one
+ USE,(CRAY,CDC,IBM,VAX).                                      choose one
+ USE,(*COJCONV,*COJETS,*COJPLT,*COJTEXT,*COJTABLE)            choose one
+ EXE.
+ PAM.
+ QUIT.
+
+      User modifications to COJETS can be included in the YPATCHY input. They
+should be kept temporary to avoid conflict with later corrective patches.
+
+
+

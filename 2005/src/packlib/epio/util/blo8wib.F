@@ -1,0 +1,43 @@
+*
+* $Id: blo8wib.F,v 1.1.1.1 1996/03/08 15:21:48 mclareni Exp $
+*
+* $Log: blo8wib.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:48  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_IBM)||defined(CERNLIB_VAX)||defined(CERNLIB_APOLLO)
+      SUBROUTINE BLO8W(SOURCE,N1,TARGET,N2,N3)
+C.+++++++ IBM VAX AND APOLLO VERSION ++++++++++
+C. BLOWS (UNPACKS) 8 BIT BYTES INTO MACHINE WORDS(32 BIT).
+C.
+C. INPUT
+C. SOURCE    ARRAY CONTAINING 8 BIT BYTES IN PACKED FORM
+C. N1        FIRST 8 BIT BYTE IN SOURCE TO BLOW
+C. TARGET    TARGET ARRAY FOR UNPACKED 8 BIT BYTES
+C. N2        TARGET(N2) WILL CONTAIN FIRST UNPACKED WORD
+C. N3        NO. OF 8 BIT BYTES TO UNPACK
+      INTEGER   TARGET(2),ITEMP
+#if defined(CERNLIB_IBM)||defined(CERNLIB_VAX)
+      LOGICAL*1 SOURCE(2),LTEMP(4)
+#endif
+#if defined(CERNLIB_APOLLO)
+      CHARACTER*1 SOURCE(2),LTEMP(4)
+#endif
+      EQUIVALENCE (ITEMP,LTEMP(1))
+      DATA ITEMP / 0/
+      IF(N3.LE.0)  GOTO 77777
+      I1=N1-1
+      I2=N2-1
+      DO 1  I=1,N3
+#if defined(CERNLIB_VAX)
+      LTEMP(1)= SOURCE(I1+I)
+#endif
+#if !defined(CERNLIB_VAX)
+      LTEMP(4)= SOURCE(I1+I)
+#endif
+    1 TARGET(I2+I)= ITEMP
+77777 RETURN
+      END
+#endif

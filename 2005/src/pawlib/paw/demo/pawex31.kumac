@@ -1,0 +1,137 @@
+MACRO PAWEX31
+**************************************************************************
+*                       PAW EXAMPLE 31                                   *
+* Test almost all the system functions                                   *
+**************************************************************************
+MESSAGE
+MESSAGE '**********************************************'
+MESSAGE '*           System functions test            *'
+MESSAGE '**********************************************'
+MESSAGE
+Exec ALLDEF
+cd //pawc
+set * ; opt *
+HI/DEL * ; V/DEL *
+V/CREATE X(10) R 1 2 3 4 5 6 5 4 3 2
+1D 1 'Test 1' 12 -1.2345 9.987
+2D 2 'Test 2' 12 -1.2345 9.987 24 -2.3456 7.890
+SLIX 2 3
+SLIY 2 12
+BANX 2 0 1
+BANX 2 1 2
+BANY 2 0 1
+H/PRO 2
+HFILL X 1
+HFILL X 2
+Appl Comis QUIT
+      REAL FUNCTION F1()
+      F1 = 123.456
+      END
+      INTEGER FUNCTION F2()
+      F2 = 123456
+      END
+      LOGICAL FUNCTION F3()
+      F3 = .TRUE.
+      END
+      DOUBLE PRECISION FUNCTION F4()
+      F4 = 12345.67890
+      END
+QUIT
+*
+MESSAGE '$PID' ................................ $PID
+MESSAGE '$MACHINE' ............................ $MACHINE
+MESSAGE '$OS' ................................. $OS
+MESSAGE '$STYLE' .............................. $STYLE
+MESSAGE '$DATE' ............................... $DATE
+MESSAGE '$ENV(''DISPLAY'')' ..................... $ENV('DISPLAY')
+MESSAGE '$TIME' ............................... $TIME
+MESSAGE '$CPTIME' ............................. $CPTIME
+MESSAGE '$RTIME' .............................. $RTIME
+MESSAGE '$VDIM(X,1)' .......................... $VDIM(X,1)
+MESSAGE '$VLEN(X,1)' .......................... $VLEN(X,1)
+MESSAGE '$NUMVEC' ............................. $NUMVEC
+MESSAGE '$VEXIST(X)' .......................... $VEXIST(X)
+MESSAGE '$SUBSTRING(''ABCD'',2,2)' .............. $SUBSTRING('ABCD',2,2)
+MESSAGE '$UPPER(''abcd'')' ...................... $UPPER('abcd')
+MESSAGE '$LOWER(''ABCD'')' ...................... $LOWER('ABCD')
+MESSAGE '$LEN(''ABCD'')' ........................ $LEN('ABCD')
+MESSAGE '$INDEX(''ABCD'',''C'')' .................. $INDEX('ABCD','C')
+MESSAGE '$WORDS(''A-B-C-D'',''-'')' ............... $WORDS('A-B-C-D','-')
+MESSAGE '$QUOTE(ABCD)' ........................ $QUOTE(ABCD)
+MESSAGE '$UNQUOTE(ABCD)' ...................... $UNQUOTE(ABCD)
+MESSAGE '$HEXIST(1)' .......................... $HEXIST(1)
+MESSAGE '$HTITLE(1)' .......................... $HTITLE(1)
+MESSAGE '$HINFO(1,''1DHISTO'')' ................. $HINFO(1,'1DHISTO')
+MESSAGE '$HINFO(2,''2DHISTO'')' ................. $HINFO(2,'2DHISTO')
+MESSAGE '$HINFO(2,''TABLE'')' ................... $HINFO(2,'TABLE')
+MESSAGE '$HINFO(2,''PROFILE'')' ................. $HINFO(2,'PROFILE')
+MESSAGE '$HINFO(1,''NTUPLE'')' .................. $HINFO(1,'NTUPLE')
+MESSAGE '$HINFO(1,''LOG'')' ..................... $HINFO(1,'LOG')
+MESSAGE '$HINFO(1,''ENTRIES'')' ................. $HINFO(1,'ENTRIES')
+MESSAGE '$HINFO(1,''MEAN'')' .................... $HINFO(1,'MEAN')
+MESSAGE '$HINFO(1,''RMS'')' ..................... $HINFO(1,'RMS')
+MESSAGE '$HINFO(1,''EVENTS'')' .................. $HINFO(1,'EVENTS')
+MESSAGE '$HINFO(1,''OVERFLOW'')' ................ $HINFO(1,'OVERFLOW')
+MESSAGE '$HINFO(1,''UNDERFLOW'')' ............... $HINFO(1,'UNDERFLOW')
+MESSAGE '$HINFO(1,''MIN'')' ..................... $HINFO(1,'MIN')
+MESSAGE '$HINFO(1,''MAX'')' ..................... $HINFO(1,'MAX')
+MESSAGE '$HINFO(1,''SUM'')' ..................... $HINFO(1,'SUM')
+MESSAGE '$HINFO(2,''NSLIX'')' ................... $HINFO(2,'NSLIX')
+MESSAGE '$HINFO(2,''NSLIY'')' ................... $HINFO(2,'NSLIY')
+MESSAGE '$HINFO(2,''NBANX'')' ................... $HINFO(2,'NBANX')
+MESSAGE '$HINFO(2,''NBANY'')' ................... $HINFO(2,'NBANY')
+MESSAGE '$HINFO(2,''NPROX'')' ................... $HINFO(2,'NPROX')
+MESSAGE '$HINFO(2,''NPROY'')' ................... $HINFO(2,'NPROY')
+MESSAGE '$HINFO(1,''XBINS'')' ................... $HINFO(1,'XBINS')
+MESSAGE '$HINFO(1,''XMIN'')' .................... $HINFO(1,'XMIN')
+MESSAGE '$HINFO(1,''XMAX'')' .................... $HINFO(1,'XMAX')
+MESSAGE '$HINFO(2,''YBINS'')' ................... $HINFO(2,'YBINS')
+MESSAGE '$HINFO(2,''YMIN'')' .................... $HINFO(2,'YMIN')
+MESSAGE '$HINFO(2,''YMAX'')' .................... $HINFO(2,'YMAX')
+MESSAGE '$HCDIR()' ............................ $HCDIR()
+cd //pawc
+MESSAGE '$LAST' ............................... $LAST
+MESSAGE '$GRAFINFO(''XZONES'')' ................. $GRAFINFO('XZONES')
+MESSAGE '$GRAFINFO(''YZONES'')' ................. $GRAFINFO('YZONES')
+MESSAGE '$GRAFINFO(''NT'')' ..................... $GRAFINFO('NT')
+MESSAGE '$GRAFINFO(''WNXMIN'')' ................. $GRAFINFO('WNXMIN')
+MESSAGE '$GRAFINFO(''WNXMAX'')' ................. $GRAFINFO('WNXMAX')
+MESSAGE '$GRAFINFO(''WNYMIN'')' ................. $GRAFINFO('WNYMIN')
+MESSAGE '$GRAFINFO(''WNYMAX'')' ................. $GRAFINFO('WNYMAX')
+MESSAGE '$GRAFINFO(''VPXMIN'')' ................. $GRAFINFO('VPXMIN')
+MESSAGE '$GRAFINFO(''VPXMAX'')' ................. $GRAFINFO('VPXMAX')
+MESSAGE '$GRAFINFO(''VPYMIN'')' ................. $GRAFINFO('VPYMIN')
+MESSAGE '$GRAFINFO(''VPYMAX'')' ................. $GRAFINFO('VPYMAX')
+MESSAGE '$GRAFINFO(''TXALIH'')' ................. $GRAFINFO('TXALIH')
+MESSAGE '$GRAFINFO(''TXALIV'')' ................. $GRAFINFO('TXALIV')
+MESSAGE '$GRAFINFO(''TXFONT'')' ................. $GRAFINFO('TXFONT')
+MESSAGE '$GRAFINFO(''TXPREC'')' ................. $GRAFINFO('TXPREC')
+MESSAGE '$FEXIST(''pawlogon.kumac'')' ........... $FEXIST('pawlogon.kumac')
+MESSAGE '$IQUEST(1)' .......................... $IQUEST(1)
+MESSAGE '$SIGMA(PI)' .......................... $SIGMA(PI)
+MESSAGE '$RSIGMA(PI)' ......................... $RSIGMA(PI)
+MESSAGE '$EVAL(PI)' ........................... $EVAL(PI)
+MESSAGE '$ANUM' ............................... $ANUM
+MESSAGE '$FORMAT(3.14,F5.3)' .................. $FORMAT(3.14,F5.3)
+MESSAGE '$KEYNUM' ............................. $KEYNUM
+MESSAGE '$KEYVAL' ............................. $KEYVAL
+MESSAGE '$ARGS' ............................... $ARGS
+MESSAGE '$ANAM(2)' ............................ $ANAM(2)
+MESSAGE '$AVAL(2)' ............................ $AVAL(2)
+MESSAGE '$CUT(1)' . ........................... $CUT(1)
+MESSAGE '$CUTEXPAND(''X.and.$1'')' .............. $CUTEXPAND('X.and.$1')
+MESSAGE '$SHELL(pwd,'' '')' ..................... $SHELL(pwd,' ')
+MESSAGE '$SHELL(pwd)' ......................... $SHELL(pwd)
+MESSAGE '$SHELL(pwd,1)' ....................... $SHELL(pwd,1)                                            
+MESSAGE '$RGBINFO(7,''R'')' ..................... $RGBINFO(7,'R')
+MESSAGE '$RGBINFO(7,''G'')' ..................... $RGBINFO(7,'G')
+MESSAGE '$RGBINFO(7,''B'')' ..................... $RGBINFO(7,'B')
+MESSAGE '$CALL(''F1'')' ......................... $CALL('F1')
+MESSAGE '$ICALL(''F2'')' ........................ $ICALL('F2')
+MESSAGE '$LCALL(''F3'')' ........................ $LCALL('F3')
+MESSAGE '$DCALL(''F4'')' ........................ $DCALL('F4')
+MESSAGE
+RETURN
+*$EXEC('macro args')  .........  EXITM value of EXEC call                                                            
+*$DEFINED('var_name')  ........  List of defined macro variables                                                     
+*$SHELL(cmd,sep)  .............  Shell output with newlines replaced by sep                                          

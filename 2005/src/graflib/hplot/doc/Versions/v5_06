@@ -1,0 +1,29 @@
+*
+* $Id: v5_06,v 1.1.1.1 1996/01/19 10:50:14 mclareni Exp $
+*
+* $Log: v5_06,v $
+* Revision 1.1.1.1  1996/01/19 10:50:14  mclareni
+* Hplot
+*
+*
+*CMZ :          27/08/91  18.30.03  by  Unknown
+*-- Author :
+*
+*::>          VERSION  5.06/01   890712 11.29
+*
+*       HPLINT calls IGINIT(1000) instead of IGINIT(100)
+*       Option FILE draws the file for each plot and not only for each page
+*       Legos with negative contains are now correct (HPLEG1)
+*       Option FIT and SET FIT are now available
+*       Now the BCOL has the format C.BS where C is the color of
+*          the histo box B the color of the width box and S the
+*          color of the shadow for the STAT and FIT boxes.
+*       Bug corrected in HPLSTA (CALL HSTATI)
+*       Bug corrected in HPLSTA: UDFLW and OVFLW was swaped
+*
+*::>          VERSION  5.06/00   890601 14.04
+*
+*       Generic functions introduced (LOG10, MAX, MIN etc ..)
+*       Bug corrected in HPLF in case of ZOOM
+*       Option LOGX introduced (changes in HPLH HPLF and HPLONE)
+*

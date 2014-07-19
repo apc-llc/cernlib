@@ -1,0 +1,31 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernvmi.car patch kernvmi
+#if !defined(CERNLIB_KERNVMI)
+
+              KERNLIB routines particular to VAX / MIPS
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KVAOS    Pilot patch to make KERNLIB for Alpha OSF 32-bit
+*KVMI     Pilot patch to make KERNLIB for VAX / MIPS
+
+QMVAOS    VAO machine patch, short, 32 bit
+QMVMI     VMI machine patch
+
+VAOGS     VAOS specific routines
+VMIGS     VMI  specific routines
+ALLGS     specific routines both for VMI and VAO 32-bit
+
+QMVAO     option for VAX Alpha both short and long, 32 or 64 bits
+
+=====================================================================
+#endif

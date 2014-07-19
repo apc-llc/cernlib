@@ -1,0 +1,191 @@
+*
+* $Id: match.F,v 1.1.1.1 1996/01/11 14:14:40 mclareni Exp $
+*
+* $Log: match.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:40  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE MATCH(IWG,WGTCAS)
+C     ****************************
+C-- MATCHES PARTONS FROM INITIAL CASCADES (CALLED BY PREGEN)
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/alqgen.inc"
+#include "cojets/bkwg.inc"
+#include "cojets/entrev.inc"
+#include "cojets/event.inc"
+#include "cojets/inmat.inc"
+#include "cojets/itapes.inc"
+#include "cojets/maxn.inc"
+#include "cojets/mflain.inc"
+#include "cojets/nevol.inc"
+#include "cojets/nflav.inc"
+#include "cojets/nkinpt.inc"
+#include "cojets/parq.inc"
+#include "cojets/qcds.inc"
+#include "cojets/thrfla.inc"
+      DIMENSION WFDSDT(6)
+C
+C-- PREENTERING
+      DO 10 IB=1,2
+      IBEAM=IB
+      NBOOK(IBEAM)=0
+      ICANC(IBEAM)=0
+      ZERO=0.
+      CALL Q2GEN(IFLAIN(IB),ZERO,Y,QSQ)
+      XM=(PXIN(IB)**2+PYIN(IB)**2)/(S*XIN(IB))
+      CALL BOOK(IFLAIN(IB),0,XM,Y,XIN(IB),PXIN(IB),PYIN(IB),ZERO,YF)
+10    CONTINUE
+C
+C-- MAIN LOOP
+      DO 200 M=1,NALQ
+      YQSQ=LOG(ALQI+DALQ*FLOAT(M))
+      NENTR=0
+      DO 100 IB=1,2
+      IBEAM=IB
+      NB=NBOOK(IB)
+      ICANC(IB)=0
+C-- EVOLVE ONE  M  STEP FURTHER
+      DO 90 J=1,NB
+      Y=PARACT(J,4,IB)
+      IF(Y.GT.YQSQ) GO TO 90
+      JX=J
+      IBACK(IBEAM)=0
+      CALL EVOL(JX,YQSQ)
+      MNBOOK=MAX(MNBOOK,NBOOK(IB))
+90    CONTINUE
+      IF(ICANC(IB).EQ.0) GO TO 100
+C-- CANCEL DECAYED QUANTA
+      ICN=ICANC(IB)
+      DO 91 I=1,ICN
+      IN=NBKCNC(I,IB)
+91    PARACT(IN,1,IB)=0.
+      JC=0
+      NB=NBOOK(IB)
+      DO 92 J=1,NB
+      JZ=PARACT(J,1,IB)
+      IF(JZ.EQ.0) GO TO 92
+      JC=JC+1
+      DO 93 L=1,9
+93    PARACT(JC,L,IB)=PARACT(J,L,IB)
+92    CONTINUE
+      NBOOK(IB)=NBOOK(IB)-ICN
+      ICANC(IB)=0
+100   CONTINUE
+      NB1=NBOOK(1)
+      NB2=NBOOK(2)
+      IF(NB1.EQ.0.OR.NB2.EQ.0) RETURN
+C-- CALCULATION OF HARD WEIGHT AND BOOKING
+      DO 110 J1=1,NB1
+      IF(YQSQ.LT.PARACT(J1,8,1)) GO TO 110
+      IF(YQSQ.GT.PARACT(J1,9,1)) GO TO 110
+      IFLA1=PARACT(J1,1,1)
+      XM1=PARACT(J1,3,1)
+      XP1=PARACT(J1,5,1)
+      PX1=PARACT(J1,6,1)
+      PY1=PARACT(J1,7,1)
+      MFLA1=ABS(IFLA1)
+      NENT1=0
+      DO 120 J2=1,NB2
+      IF(YQSQ.LT.PARACT(J2,8,2)) GO TO 120
+      IF(YQSQ.GT.PARACT(J2,9,2)) GO TO 120
+      IFLA2=PARACT(J2,1,2)
+      XM2=PARACT(J2,3,2)
+      XP2=PARACT(J2,5,2)
+      PX2=PARACT(J2,6,2)
+      PY2=PARACT(J2,7,2)
+      MFLA2=ABS(IFLA2)
+      NENT2(J2)=0
+      SHAT=(XP1*XP2+XM1*XM2)*S-2.*(PX1*PX2+PY1*PY2)
+      IF(SHAT.LT.3.*Q2VECT(M)) GO TO 120
+      IF(KPRHEV.EQ.0) GO TO 271
+      IF(KPRHEV.EQ.1.AND.SHAT.LE.THRFLA(KFRFLA)) GO TO 120
+      IF(KPRHEV.EQ.2.AND.SHAT.LE.AM2HEV(KFRFLA)) GO TO 120
+271   CONTINUE
+      NENT1=1
+      NENT2(J2)=1
+      IM=IMATCH(MFLA1,MFLA2)
+      IF(IM.NE.2) GO TO 122
+      IF(IFLA1*IFLA2.LT.0) IM=3
+122   CONTINUE
+      IF(IM.NE.9) GO TO 132
+      IF(IFLA1*IFLA2.LT.0) IM=10
+132   CONTINUE
+      IF(KPRHEV.EQ.0.OR.KPRHEV.GE.3) GO TO 272
+      IF(KPRHEV.EQ.1) GO TO 273
+      IF(KPRHEV.EQ.2) GO TO 274
+273   IF(IM.NE.3.AND.IM.NE.5.AND.IM.NE.10) GO TO 120
+      IF(SHAT.LE.THRFLA(KFRFLA)) GO TO 120
+      GO TO 272
+274   IF(IM.LE.5) GO TO 120
+277   IF(MFLA1.NE.KFRFLA.AND.MFLA2.NE.KFRFLA) GO TO 120
+      IF(SHAT.LE.AM2HEV(KFRFLA)) GO TO 120
+272   CONTINUE
+      DSQ1=SQRT(ABS(1.-4./(1.+SHAT/Q2VECT(M))))
+      T1=-SHAT*.5*(1.+DSQ1)
+      U1=-SHAT*.5*(1.-DSQ1)
+      IF(SHAT.LT.3.*Q2VECT(M+1)) GO TO 124
+      DSQ2=SQRT(ABS(1.-4./(1.+SHAT/Q2VECT(M+1))))
+      T2=-SHAT*.5*(1.+DSQ2)
+      U2=-SHAT*.5*(1.-DSQ2)
+      GO TO 125
+124   T2=-SHAT*.5
+      U2=T2
+125   CONTINUE
+      T=T1+(T2-T1)*CJRN(0.)
+      U=-SHAT-T
+      CALL DSDT(IM,SHAT,T,U,WT1,WFDSDT)
+      CALL DSDT(IM,SHAT,U,T,WT2,WFDSDT)
+      NKINPT=NKINPT+2
+      QSQ=2.*SHAT*T*U/(SHAT**2+T**2+U**2)
+      DQSQ=Q2VECT(M+1)-Q2VECT(M)
+      WGT=(WT1+WT2)
+     1 *PI/(BALPH*LOG(QSQ/ALAMB**2)*SHAT)**2
+     2 *(T2-T1)
+      WGT=WGT*WGTCAS
+      WGALQ(M,IWG,1)=WGALQ(M,IWG,1)+WGT
+      WGALQ(M,IWG,2)=WGALQ(M,IWG,2)+WGTCAS*DQSQ
+      NENTR=1
+120   CONTINUE
+C-- KEEP RECORD OF QUANTA TOO SOFT TO PASS THRESHOLD
+      IF(NENT1.GT.0) GO TO 110
+      ICANC(1)=ICANC(1)+1
+      NBKCNC(ICANC(1),1)=J1
+110   CONTINUE
+C
+      DO 130 J2=1,NB2
+      IF(NENT2(J2).GT.0) GO TO 130
+      ICANC(2)=ICANC(2)+1
+      NBKCNC(ICANC(2),2)=J2
+130   CONTINUE
+      IF(NENTR.GT.0) WGALQ(M,IWG,3)=WGALQ(M,IWG,3)+WGTCAS*DQSQ
+C-- CANCEL QUANTA TOO SOFT TO PASS THRESHOLD
+      DO 250 IB=1,2
+      IF(ICANC(IB).EQ.0) GO TO 250
+      IF(ICANC(IB).EQ.NBOOK(IB)) RETURN
+      ICN=ICANC(IB)
+      DO 251 I=1,ICN
+      IN=NBKCNC(I,IB)
+251   PARACT(IN,1,IB)=0.
+      JC=0
+      NB=NBOOK(IB)
+      DO 252 J=1,NB
+      JZ=PARACT(J,1,IB)
+      IF(JZ.EQ.0) GO TO 252
+      JC=JC+1
+      DO 253 L=1,9
+253   PARACT(JC,L,IB)=PARACT(J,L,IB)
+252   CONTINUE
+      NBOOK(IB)=NBOOK(IB)-ICN
+      ICANC(IB)=0
+250   CONTINUE
+C
+200   CONTINUE
+      RETURN
+      END

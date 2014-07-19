@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 getpidf.F ifbatch.F jumpad.F sleepf.F \ @@\
+	 tminit.F tmread.F vaxtio.F wait2s.F whoami.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

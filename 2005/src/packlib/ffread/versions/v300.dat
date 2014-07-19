@@ -1,0 +1,16 @@
+*
+* $Id: v300.dat,v 1.1.1.1 1996/03/08 11:50:43 mclareni Exp $
+*
+* $Log: v300.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:43  mclareni
+* Ffread
+*
+*
+* Version 3.00   860417
+C
+C- Complete rewrite to allow an arbitrary length of user
+C  keys in the range of 4 to 32.
+C  It is now possible to do nested reads.
+C  A new type of key 'LOGI' for FFKEY.
+C  FORTRAN-77 version only.
+C

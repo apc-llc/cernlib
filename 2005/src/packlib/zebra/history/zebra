@@ -1,0 +1,186 @@
+*
+* $Id: zebra,v 1.1.1.1 1996/03/06 10:47:15 mclareni Exp $
+*
+* $Log: zebra,v $
+* Revision 1.1.1.1  1996/03/06 10:47:15  mclareni
+* Zebra
+*
+*
+* This directory was created from zebra.car patch history
+Version 3.02=For import into CVS
+Version 3.01=RZFILE: return RZ file format in IQUEST(13)
+             RZOPEN: use STATF in case of C I/O
+             RZSTAT: set iquest(13-14)
+             RZCOP1, RZCOPY, RZDELK, RZINK, RZOUT, RZTOF1, RZVOUT: change
+                key/cycle check from key number to KEY(1)
+             RZCDES: remove duplicate Z=RZCOUNT.
+             RZOUT: move definition of logl, improve warning message
+                    for large directories
+             RZOPEN: increase filename length to 255
+             RZVER1: cater for new RZ file format
+             RZMAKE,RZQUOT: permit quote>65000 for new RZ format
+Version 3.00=RZVIN: add option O
+             RZIN: correct fix for vectors (below).
+             RZTOF: remove option N from call to RZMAKE.
+             RZWRT: (again) EOR problems when data is not converted
+             RZOPEN: retry in exchange mode of auto-RECL determination fails
+                     issue warning when LRECL>safe_max (8191 words)
+             (MZEBRA: zero Z=RZCSTR/nstrip)
+             RZOUT: add option Q, as S for RZVOUT
+             RZFILE: call RZVCYC
+             RZOPEN, RZTOFRZ: mods for Convex from Victor Balashov
+             RZVOUT: correct option S
+             RZOPEN: mods from RDM (see deck)
+             RZVOUT: add option S
+             RZWRT: more problems at EOR
+             Bug fix in RZIN for vectors
+             Remove check on RZ version in RZFILE
+             Temporarily disable N option in RZMAKE
+             Mods in RZOPEN and RZIODO to support PIAF file striping
+             New routines RZSTRIP and RZSTRIR added
+             WARNING!!!!! New sequence RZCSTR in patch QCDE
+             Removal of 64K limitations (Sunanda Banerjee) 20/06/94
+Version 2.00=RZVER1: set ISTAT2
+             RZWRT: better handling of record boundaries
+             RZFILE: check version of RZFILE - ZFATAM if new format
+             Flags change: QMCVX = Convex, QMCV32/64 for 32/64 bit versions
+             RFCONV: mods from FNAL to avoid modifying DCLTABLES (VMS)
+             RZFILE: bug fix in PWD handling
+             RZFRF: QUOTA=MIN(65000,QUOTA) for historic DBL3 files
+             BTEST2: QMNXT flag for BSLASH
+             RZWRT: change FORMAT to indicate RZWRT called from RZOUT/RZVOUT
+             RZWRT: bug fix for exchange mode case
+             More changes for LINUX: exchange mode no longer compulsory,
+                QMLNX flags also in P=RZTOFRFZ and BRZTEST (Anatoli Lomov)
+             RZOUT: protections against directories>64K
+             Changes for CONVEX (from balashov)
+             RZMAKE: word 16 of top directory used to indicate version
+             of RZ structure
+             RZOPEN: return IQUEST(12).ne.0 if exchange mode
+             RZWRT: protect against continued event when last bank
+             finishes on a record boundary
+             RZOPEN: protect against non-RZ files
+             RZCDIR: protect against no files open
+             Bug fix in RZFDIR
+             LINUX support (QMLNX) from Balashov V.K.
+             Mods to RZREAD/WRT to continue in case of conversion problems
+             Add RZCHCY to check cycles block and reset pointers if needed
+             RZIODO: error messages printed unconditionally
+             QMDOS flags in RZFILE, RZIODO, RZOPEN and BLANKDEK from V. Fine
+             Add QMNXT flag for NeXT machine
+             RZFDIR: include Z=RZCLUN unconditionally, set IMODEC/X/H
+             RZOPEN: set IMODEH to zero (flag for user I/O routine)
+             RZKEYS: always return NK and NWK in IQUEST(11-12)
+             Bug fixed in RZINS in replace mode when calling MZIOCR
+             RZIODO: byte swap in channel mode for QMVAX, QMVMI.
+             RZVOUT,RZOBKN,RZWRT: mods to avoid FZOCV calls for bit patterns
+             RZWRT:  bug fix in IQUEST(1)=0 resetting after FZOCV
+             RZVOUT: missing sequence, RZEND: logl manipulation
+             RZREAD: do not call FZICV for bit patterns
+             RZDELK: protection against cycles structure containing
+             previously deleted objects (should not occur)
+             RZLDIR: default is now 'short' listing intended for terminals.
+             Use option X to get extended (line printer output) listing
+             Add RZHOOK to connect to user I/O routine. This facility
+             is for *existing* files only. Address of user I/O routine
+             is stored as numeric id of RZ control bank. User LUN is
+             stored in bits 7-13 of status word. (Leaving one spare bit)
+             !!! ============> N.B. Z=RZCLUN modified <============== !!!
+             Limit loglevel to documented range (-3<=LOGL<=4) and
+             store in bits 15-17 of control bank status word
+             Tidy printout in RZLDI1
+             Option R also in RZVOUT
+             Option R (replace) in RZOUT. Mods to RZOUT & RZWRT & Z=RZCOUT
+             Bug fix in RZINS for option R and exchange mode
+             Add routines RZHFRA/RZHTOA from RB
+             Bug fixes in RZFILE, RZVERI for option B
+             Bug fix in RZCOP1 (from Dave Morrison, MIT)
+             Bug fix in RZFRF1 - option L on RZOUT
+Version 1.99=Support for MSDOS (IF=QMDOS).
+             New flag QCFIO,IF=QMCRY,QMVAX,QMCVX,QMAPO,QMAPO9,QMUIX,QMDOS
+             Translate filename to uppercase in RZOPEN before call to VMQFIL
+             Bug fixes in RZWRT, RZPAFF etc.
+             Protection in RZMDIR against blank or unseen characters
+             Handle > 20 keys in RZLDI1 correctly.
+             Correct C I/O options in RZOPEN for write
+             Add option Q to RZCDIR - do not print name of directory
+             if not found (mods to RZFDIR, RZCOPY)
+             Copy vector format in RZCOP1
+             Return type of vector read in IQUEST(13) (RZVIN)
+             Add routines RZVERI/1/2 to verify an RZ file (check bit map
+             of records allocated against actual usage, look for overwriting)
+             Add generic key printing routine RZPRNK.
+Version 1.98=Add routine RZVERS(CHTITL,CHCOMP,CHOPT) to print or return
+             the pam file title and compilation date/time
+             Include RZOPEN mods from GSI for MVS
+             Print directory name in RZMODS if write permission denied
+             New fix in RZFDIR (fquota) RB, mod for DESY in RZOPEN
+Version 1.97=November 21 1991
+             Bug fix in RZFDIR - check against bank at LT not LTOP. JDS
+Version 1.96=November 11 1991
+             Add C I/O option (Mods to RZOPEN, RZMAKE, RZFILE, RZIODO, RZCDIR.
+             Add routine RZCLOS, Modify sequences RZCLUN, RZCH.). J. Shiers
+             Add support for .. in RZCDIR, e.g. CALL RZCDIR('..',' ')
+             CALL RZCDIR('../../DSTS',' ') JDS. 15-NOV-91
+Version 1.95=October 21 1991
+             Correction in RZFRFZ. RZEXPD is called with the right value
+             in case of RZVOUT structures (bug reported by G.Poulard)
+Version 1.94=September 03 1991
+             Integrate MVS version of RZOPEN
+             Change VMCMS calls to use SYSTEMF.
+             Change RZ conversion programs on VM/CMS to use FORTRAN I/O
+             Implement Alliant version of RZ programs
+             Keep directory dates in RZFRFZ (mods in RZSAVE)
+             Protections in RZFDIR (directory overwritten protections)
+             New routine RZSCAN
+             Check IQUEST(1)<0 after calls to MZIOCR (Nobu Katayama)
+             Save IQUEST(1) in RZTOFZ and RZFRFZ (For ZFTP)
+             Protection in RZPAFF (M.Marquina)
+Version 1.93=April 22 1991
+             Reset LUN in RZFILE in case of failure
+             Changes in RZOPEN and PATCH,RTOA
+             Do garbage collection in RZTOFZ
+             Changes in RZRTOP in case LTOP=0
+             Bug corrected in RZDELK (C.Lane MIT)
+Version 1.92=March 23 1991
+             RZ eXchange mode implemented (B.Holl)
+             Error printing now on logical unit IQLOG and
+             LOG level dependent (B.Holl)
+             QMHPX (HPUX version introduced)
+             Corrections for MVS version
+             Corrections for AIX version 370 (QMIBX by R.Howard)
+             Changes in RZLOCK/RZFREE (IQUEST(1)=4 if no write permission)
+             Changes in RZFILE/RZOPEN for exchange mode files on Vax and VMI
+             Changes in RZOPEN for READONLY open on QMAPO
+             Changes in LTOP data words, in order to reserve to two words for
+             C file pointer (words 5 and 6). The eXchange mode flag is now
+             bit 12 in the 9th word of LTOP (B.Holl) ??? Is this a good idea ???
+             New option 'C' in RZOPEN (Do not convert filename to lower case)
+             (Changed to option P, 11/11/91 JDS)
+Version 1.91=November 22 1990
+             RZOUT/RZVOUT returns key number in IQUEST(20) (L.Levinson)
+             Protections in RZFILE in case of problems in RZIODO
+Version 1.90=October 31 1990
+             Mods in RTOX/RFRX,etc for QMVMI (A.Nathaniel)
+             RZEXPD,RZQUOT: bug corrected (B.Holl)
+             Alliant version introduced in RZOPEN
+             bug corrected in RZPURF
+             bug corrected in RZDELK (2, G.Grosdidier)
+             Additional protections in RZFILE,RZMAKE,RZLOCK,RZFREE
+             Bug corrected in RZIN (RZVOUT case) (O.Schaile)
+             Many protections introduced by B.Holl
+             RZCOPY can now copy a tree
+             New option 'F' in RZMAKE to preformat the file
+             New version of RZOPEN with logic to find LRECL
+             Changes in RTOX,etc
+             Keep original creation date in RFRX,FFRA and RZFRFZ
+Version 1.89=May 22 1990
+             Maximum number of directories changed from 20 to 100.
+             COMMON /RZDIR/ in QCDE has been changed.
+Version 1.88=April 18 1990
+             Bug corrected in RZOUT/RZVOUT when logical record
+             terminates at the end of a physical record then followed
+             by a directory change (Nobu Katayama, CLEO)
+Version 1.86=January 31 1990
+             New routine RZOPEN
+             Change 16 bits to 20 bits for 3rd word of cycle

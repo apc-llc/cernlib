@@ -1,0 +1,56 @@
+*
+* $Id: tranch.F,v 1.1.1.1 1996/03/22 16:42:47 mclareni Exp $
+*
+* $Log: tranch.F,v $
+* Revision 1.1.1.1  1996/03/22 16:42:47  mclareni
+* Phtools
+*
+*
+      SUBROUTINE TRANCH
+C--  CALLED FROM -   MAIN PROGRAM
+C--  PURPOSE -   ACCUMULATES WEIGHTS IN PROPER HISTO BINS
+C                RESETS PLACE TO ZERO AND WEIGHT TO ONE
+      COMMON / / NDIMEN,BINS(100)
+      COMMON/UTIL/PLACE(150),WEIGHT(150),NP,TECM,AMASS(18),PCM(5,18),WT
+     +/BEAM  / PRM       ,TARGM    ,PBM      ,ETA      ,GAM      ,DPBM
+     +/CONTRL/ NEVTOT    ,TLIMIT   ,TLIM2    ,NDUMP    ,IEVENT
+     +        ,DAT1      ,DAT2     ,IPAGE
+     +/HISTR / NHIST     ,NGRP     ,NHDIM    ,LTITLE   ,LOCP(150)
+     +/SCATR / IPL1(20)  ,IPL2(20) ,IWTS(20) ,LOCS(20)
+      DIMENSION NB(150),IBINS(100)
+      EQUIVALENCE (PLACE(1),NB(1)),(BINS(1),IBINS(1))
+      IF(IEVENT.LE.NDUMP) CALL DUMPME
+      IF(WT) 100,600,100
+C--       ACCUMULATE HISTOGRAM BINS
+  100 DO 400   IDO= 1, NHIST
+      K = LOCP(IDO)
+      IF(K) 400,400,250
+  250 IF(PLACE(IDO)) 320,380,320
+  320 WMUL = WEIGHT(IDO) * WT
+      NB(IDO) = IUCHAN(PLACE(IDO), BINS(K+1), BINS(K+2), BINS(K+3))
+      IF(WMUL) 330,400,330
+  330 BINS(K) = BINS(K) + 1.0000
+      K2 = K + 2*NB(IDO) + 4
+      BINS(K2) = BINS(K2) + WMUL
+      K3 = K2 + 1
+      BINS(K3) = BINS(K3) + WMUL*WMUL
+      GOTO 400
+  380 NB(IDO) = 5000
+  400 CONTINUE
+C--       ACCUMULATE SCATTERGRAM BOXES
+      DO 450 I= 1, 20
+      K = LOCS(I)
+      IF(K) 460,460,410
+  410 IP1 = IPL1(I)
+      IP2 = IPL2(I)
+      IF(NB(IP1) +NB(IP2).GT.4000) GOTO 450
+      IW = IWTS(I)
+      K2 = K + NB(IP2)*IBINS(K) + NB(IP1) + 1
+      BINS(K2) = BINS(K2) + WT*WEIGHT(IW)
+  450 CONTINUE
+  460 CONTINUE
+      DO 465 I= 1, NHIST
+      PLACE(I) = 0.0
+  465 WEIGHT(I) = 1.0
+  600 RETURN
+      END

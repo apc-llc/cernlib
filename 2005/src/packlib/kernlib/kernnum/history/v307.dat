@@ -1,0 +1,15 @@
+*
+* $Id: v307.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v307.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.07  911016  4.30
+C-  Refresh P=FKERNNUM with new machines
+C
+C-  C305 GAMMA     Inhibit code on IBM RISC 6000
+C-  D106 GQUAD     declare REAL GQUAD in P=D106FORT,D=GSET
+C-  G901 RAN2VS    save internal variables A,B,C,KAPPA in VRAN2S,VRAN3S
+C

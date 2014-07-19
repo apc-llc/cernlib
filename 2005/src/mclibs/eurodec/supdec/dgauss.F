@@ -1,0 +1,64 @@
+*
+* $Id: dgauss.F,v 1.1.1.1 1996/03/08 16:58:53 mclareni Exp $
+*
+* $Log: dgauss.F,v $
+* Revision 1.1.1.1  1996/03/08 16:58:53  mclareni
+* Eurodec
+*
+*
+#include "eurodec/pilot.h"
+      FUNCTION DGAUSS(F,A,B,EPS)
+C.----------------------------------------------------------------------
+C.
+C.    GAUSS INTEGRAL OF THE FUNCTION F IN INTERVAL A,B
+C.    LAST UPDATE: 10/04/88
+C.
+C.----------------------------------------------------------------------
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+      DIMENSION W(12),X(12)
+      EXTERNAL F
+      DATA CONST/1.E-12/
+      DATA W
+     &/0.101228536290376, 0.222381034453374, 0.313706645877887,
+     & 0.362683783378362, 0.027152459411754, 0.062253523938648,
+     & 0.095158511682493, 0.124628971255534, 0.149595988816577,
+     & 0.169156519395003, 0.182603415044924, 0.189450610455069/
+      DATA X
+     &/0.960289856497536, 0.796666477413627, 0.525532409916329,
+     & 0.183434642495650, 0.989400934991650, 0.944575023073233,
+     & 0.865631202387832, 0.755404408355003, 0.617876244402644,
+     & 0.458016777657227, 0.281603550779259, 0.095012509837637/
+C--
+C--   INITIALISE
+      DELTA=CONST*ABS(A-B)
+      DGAUSS=0.
+      AA=A
+C--
+C--   ITERATION LOOP
+   10 Y=B-AA
+C--
+C--   EPSILON REACHED ??
+      IF (ABS(Y).LE.DELTA) RETURN
+   20 BB=AA+Y
+      C1=0.5*(AA+BB)
+      C2=C1-AA
+      S8=0.
+      S16=0.
+      DO 30 I=1,4
+        U=X(I)*C2
+   30 S8=S8+W(I)*(F(C1+U)+F(C1-U))
+      DO 40 I=5,12
+        U=X(I)*C2
+   40 S16=S16+W(I)*(F(C1+U)+F(C1-U))
+      S8=S8*C2
+      S16=S16*C2
+      IF (ABS(S16-S8).GT.EPS*(1.0+ABS(S16))) GOTO 50
+      DGAUSS=DGAUSS+S16
+      AA=BB
+      GOTO 10
+   50 Y=0.5*Y
+      IF (ABS(Y).LE.DELTA) CALL ERRORD(34,' ',0.)
+      GOTO 20
+      END

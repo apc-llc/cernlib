@@ -1,0 +1,10 @@
+*
+* $Id: v112.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v112.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+C- Modifications:
+C  > Z264 GETARG  Handle imagename (GETARG(0,PARM))

@@ -1,0 +1,25 @@
+*
+* $Id: hcdire.inc,v 1.1.1.1 1996/03/08 15:44:16 mclareni Exp $
+*
+* $Log: hcdire.inc,v $
+* Revision 1.1.1.1  1996/03/08 15:44:16  mclareni
+* Cspack
+*
+*
+#ifndef CERNLIB_CSPACK_HCDIRE_INC
+#define CERNLIB_CSPACK_HCDIRE_INC
+*
+*
+* hcdire.inc
+*
+      PARAMETER (NLPATM=100, MXFILES=50)
+      COMMON /HCDIRN/NLCDIR,NLNDIR,NLPAT,ICDIR,NCHTOP,ICHTOP(MXFILES)
+     +              ,ICHTYP(MXFILES),ICHLUN(MXFILES)
+      CHARACTER*16   CHNDIR,    CHCDIR,    CHPAT    ,CHTOP
+      COMMON /HCDIRC/CHCDIR(NLPATM),CHNDIR(NLPATM),CHPAT(NLPATM)
+     +              ,CHTOP(NLPATM)
+      CHARACTER*80 HFNAME
+      COMMON /HCFILE/HFNAME(MXFILES)
+*
+
+#endif

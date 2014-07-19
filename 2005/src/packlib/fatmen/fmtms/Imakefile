@@ -1,0 +1,15 @@
+SRCS_F=	fmallo.F fmamed.F fmedia.F fmgetp.F fmgtms.F fmgvid.F \ @@\
+	fmgvol.F fmlock.F fmpool.F fmpref.F fmprot.F fmqmed.F fmqtms.F \ @@\
+	fmqvol.F fmsreq.F fmtags.F fmuall.F fmulok.F fmutms.F fmuvol.F \ @@\
+	fmvinf.F fmxvid.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(fmqtms,fmqtms,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fmqvol,fmqvol,'-WF,-P',NullParameter)
+#endif
+
+#ifdef CERNLIB_SHIFT
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

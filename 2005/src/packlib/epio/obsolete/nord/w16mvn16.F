@@ -1,0 +1,33 @@
+*
+* $Id: w16mvn16.F,v 1.1.1.1 1996/03/08 15:21:58 mclareni Exp $
+*
+* $Log: w16mvn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:58  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+      SUBROUTINE W16MOV(SOURCE,N1,TARGET,N2,N3)
+C.+++++++ NORD10/100  VERSION ++++++++++
+C.  MOVES 16 BIT WORDS IN PACKED FORM.
+C.
+C. INPUT
+C. SOURCE     SOURCE ARRAY
+C. N1         STARTING 16 BIT WORD IN SOURCE
+C. TARGET     TARGET ARRAY
+C. N2         STARTING 16 BIT WORD IN TARGET
+C. N3         NO. OF 16 BIT WORDS TO MOVE
+C.
+      INTEGER*2 N1,N2,N3,ZERO
+      INTEGER*2 SOURCE(2),TARGET(2)
+      DATA ZERO/0/
+      IF(N3.LE.ZERO)  GOTO 77777
+      I1=N1-1
+      I2=N2-1
+      I3=N3
+      DO 1  I=1,I3
+    1 TARGET(I2+I)=SOURCE(I1+I)
+77777 RETURN
+      END
+#endif

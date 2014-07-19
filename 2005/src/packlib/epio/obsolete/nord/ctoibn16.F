@@ -1,0 +1,32 @@
+*
+* $Id: ctoibn16.F,v 1.1.1.1 1996/03/08 15:21:57 mclareni Exp $
+*
+* $Log: ctoibn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:57  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+       SUBROUTINE CTOIBM(ARRAY,NW,MODE)
+C      +++++++NORD10/100 VERSION++++++++++
+C      VERSION 82-05-06
+C      CONVERT FIRST NW WORDS OF ARRAY INTO IBM FORMAT
+C      MODE = 1  CONVERT TO 16 BIT INTEGER(RIGHT ADJ. ZERO FILLED)
+C             2  CONVERT TO 32 BIT INTEGER(DUMMY)
+C             3  CONVERT TO 32 BIT IBM FLOATING
+C      ON RETURN,ARRAY CONTAINS CONVERTED VALUES.
+       INTEGER *4 ARRAY(2)
+       IF(NW.LE.0)RETURN
+       IF(MODE.EQ.1)THEN
+       DO FOR J=1,NW
+       ARRAY(J)=IAND(ARRAY(J),0177777B)
+       ENDDO
+       ENDIF
+       IF(MODE.EQ.3)THEN
+       CALL CTOIB(ARRAY,NW)
+       ENDIF
+C      OTHERWISE DO NOTHING
+       RETURN
+       END
+#endif

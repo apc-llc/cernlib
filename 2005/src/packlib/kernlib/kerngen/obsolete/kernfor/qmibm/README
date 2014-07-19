@@ -1,0 +1,39 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:13 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:13  mclareni
+* Kernlib
+*
+*
+*       for IBM
+* This directory was created from kernfor.car patch qmibm
+*        temporary for back-compatibility
+#if defined(CERNLIB_QMIBMFSI)
+#ifndef CERNLIB_QF_SIEM
+#define CERNLIB_QF_SIEM
+#endif
+#endif
+#if !defined(CERNLIB_QF_SIEM)
+#ifndef CERNLIB_QF_IBM
+#define CERNLIB_QF_IBM
+#endif
+#endif
+#ifndef CERNLIB_B32
+#define CERNLIB_B32
+#endif
+#ifndef CERNLIB_A4
+#define CERNLIB_A4
+#endif
+#ifndef CERNLIB_HEX
+#define CERNLIB_HEX
+#endif
+#ifndef CERNLIB_QEBCDIC
+#define CERNLIB_QEBCDIC
+#endif
+*   ISA standard routines, ISHFT, IOR, etc
+#if defined(CERNLIB_QF_IBM)
+#ifndef CERNLIB_QISASTD
+#define CERNLIB_QISASTD
+#endif
+#endif

@@ -1,0 +1,12 @@
+*
+* $Id: v212.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v212.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.12   950301  Munuit 95.03
+C     MNEXCM   fix bug: did not RETURN after CALL FCN 3
+C     MNSET    add new command: SHOw VERsion
+C     MNVERS   new routine to return Minuit version identifier.

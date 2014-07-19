@@ -1,0 +1,23 @@
+/* $Id: rtcchack.bac,v 1.1.1.1 1995/12/20 15:26:42 cernlib Exp $
+ *
+ * $Log: rtcchack.bac,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:42  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+/* High C version 1.4r absolutely will not support the XtOffset
+   macro as defined by the Intrinsics, nor have we been able to
+   find a suitable workaround, even using the builtin _offsetof().
+ */
+
+#undef AllTarget
+#define AllTarget(depends)						   @@\
+all::									   @@\
+	@$(MAKE) $(MFLAGS) CC=$(PCC) CDEBUGFLAGS=$(CDEBUGFLAGS) dummy \	   @@\
+	    `grep -w -l XtOffset *.c | sed -e 's/\(.*\).c$$/\1.o/'` 	   @@\
+	@$(MAKE) $(MFLAGS) CC=$(CC) CDEBUGFLAGS=$(CDEBUGFLAGS) everything  @@\
+									   @@\
+everything:: depends							   @@\
+									   @@\
+dummy::

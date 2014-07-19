@@ -1,0 +1,12 @@
+!
+!   Linker options to reduce the image size
+!
+!   Uninitialised, writeable portion of image section
+!   only eligible for compression if it contains at 
+!   least 20 contiguous pages
+!
+DZRO_MIN=20
+!   
+!   Compression stops at 512 image sections
+!
+ISD_MAX=512

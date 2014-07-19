@@ -1,0 +1,17 @@
+SRCS_F= \ @@\
+	 compo.F gheini.F gheish.F ghesig.F ghstop.F gmunu.F gmunui.F \ @@\
+	 gmusig.F gnslwd.F gpfis.F gpfisi.F gpghei.F gphmfi.F limdat.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

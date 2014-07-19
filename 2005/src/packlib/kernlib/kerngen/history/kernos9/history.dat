@@ -1,0 +1,26 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:46 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:46  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernos9.car patch kernos9
+#if !defined(CERNLIB_KERNOS9)
+ 
+              KERNLIB routines particular to Microware OS-9
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KOS9     Pilot-patch selecting the full standard general KERNLIB
+                                         for the Microware OS-9
+ 
+QMOS9     OS9 machine patch
+ 
+OS9GS     OS9 versions of general KERNLIB rotuines
+ 
+=====================================================================
+#endif

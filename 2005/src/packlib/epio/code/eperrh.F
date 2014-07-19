@@ -1,0 +1,44 @@
+*
+* $Id: eperrh.F,v 1.1.1.1 1996/03/08 15:21:43 mclareni Exp $
+*
+* $Log: eperrh.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:43  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+      SUBROUTINE EPERRH(LUNIT,IERR)
+C. PRINTS ERROR MESSAGES, UPDATES ERROR COUNTS
+C. INPUT
+C. LUNIT      LOGICAL UNIT
+C. IERR       ERROR NUMBER
+#include "epio/epiocom.inc"
+      IF(LIST(3).GE.LIST(2))  GOTO 77777
+      IF(IERR.EQ.1)  GOTO 10
+      IF(IERR.EQ.8.OR.IERR.EQ.9)  GOTO 20
+      IF(IERR.EQ.13.OR.IERR.EQ.14)  GOTO 20
+      IF(IERR.EQ.16.OR.IERR.EQ.17)  GOTO 20
+      WRITE(NOUTUT,2002) IERR,LUNIT,LIST(ISTART+11),LIST(ISTART+12)
+      GOTO 100
+   10 WRITE(NOUTUT,2000) LUNIT,LIST(ISTART+11),LIST(ISTART+12)
+      GOTO 100
+   20 WRITE(NOUTUT,2001) IERR,LUNIT
+  100 LIST(3)=LIST(3)+1
+77777 RETURN
+#if !defined(CERNLIB_CDC)
+2000  FORMAT(/,' +++ EP I/O PACKAGE - END OF FILE READ  UNIT',
+     1   I5,'  AFTER BLOCK ',I5,'  AND ',I8,'  RECORDS  +++')
+2001  FORMAT(/,' +++ EP I/O PACKAGE ERROR NO.',I5,'  ON UNIT',
+     1   I5,'  +++')
+2002  FORMAT(/,' +++ EP I/O PACKAGE ERROR NO.',I5,'  ON UNIT',
+     1   I5,'  AT BLOCK ',I5,'  RECORD ',I8,'  +++')
+#endif
+#if defined(CERNLIB_CDC)
+2000  FORMAT(/," +++ EP I/O PACKAGE - END OF FILE READ  UNIT",
+     1   I5,"  AFTER BLOCK ",I5,"  AND ",I8,"  RECORDS  +++")
+2001  FORMAT(/," +++ EP I/O PACKAGE ERROR NO.",I5,"  ON UNIT",
+     1   I5,"  +++")
+2002  FORMAT(/," +++ EP I/O PACKAGE ERROR NO.",I5,"  ON UNIT",
+     1   I5,"  AT BLOCK ",I5,"  RECORD ",I8,"  +++")
+#endif
+      END

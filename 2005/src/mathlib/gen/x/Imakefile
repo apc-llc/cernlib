@@ -1,0 +1,9 @@
+SRCS_F=	erprip.F pripar.F strag.F vomas.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

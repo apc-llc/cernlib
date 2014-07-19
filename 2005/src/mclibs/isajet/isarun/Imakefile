@@ -1,0 +1,11 @@
+DoIncludePackage(isajet)
+#include "pilot.h"
+
+#if defined(CERNLIB_INTERACT)
+SRCS_F= dialog.F isaset.F
+#endif
+
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

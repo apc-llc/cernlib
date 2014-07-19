@@ -1,0 +1,27 @@
+DoIncludePackage(fatmen)
+#include "pilot.h"
+
+SRCS_F=	fmclos.F fmcomp.F fmcopy.F fmcp.F fmdcb.F fmddir.F \ @@\
+	fmdisk.F fmfilc.F fmfill.F fmfils.F fmfind.F fmfnms.F \ @@\
+	fmfzcp.F fmgbyk.F fmgdsn.F fmget.F fmgeta.F fmgetc.F fmgeti.F \ @@\
+	fmgetk.F fmgetl.F fmgetv.F fminit.F fmkdir.F fmlfil.F fmln.F \ @@\
+	fmls.F fmmake.F fmmod.F fmmodu.F fmmv.F fmopen.F fmpuse.F \ @@\
+	fmput.F fmputc.F fmputi.F fmputv.F fmrcop.F fmrepl.F \ @@\
+	fmrm.F fmrmdr.F fmrmln.F fmsear.F fmselb.F fmselk.F fmselm.F \ @@\
+	fmsho2.F fmshow.F fmsmcf.F fmspac.F fmtape.F fmtouc.F fmuniq.F \ @@\
+	fmupdt.F fmupky.F fmuprt.F fmvers.F
+
+#if defined(CERNLIB_CZ)
+SRCS_F := $(SRCS_F) fmrin.F
+#endif
+
+#if defined(CERNLIB_FPACK)
+SRCS_F := $(SRCS_F) fmfpak.F
+#endif
+
+#ifdef CERNLIB_SHIFT
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

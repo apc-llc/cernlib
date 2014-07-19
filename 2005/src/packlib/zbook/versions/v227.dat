@@ -1,0 +1,12 @@
+*
+* $Id: v227.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v227.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.27  931007 20.10
+C-  New patches/flags:
+C   > Add LINUX
+C

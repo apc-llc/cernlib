@@ -1,0 +1,19 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(jetset74)
+
+SUBDIRS= jetset pythia test jetset74
+
+TopOfPackage(jetset74)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(jetset74,jetset pythia)
+
+InstallLibrary(jetset74,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(jetset74)

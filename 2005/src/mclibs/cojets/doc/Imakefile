@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 backward.F external.F intro.F iocon.F ioconfor.F ioconinp.F \ @@\
+	 ioconout.F ioisa.F ioisafor.F ioisainp.F ioisaout.F patchy.F \ @@\
+	 physics.F table.F taperead.F title.F usage.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

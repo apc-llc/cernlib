@@ -1,0 +1,42 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:09 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:09  mclareni
+* Kernlib
+*
+*
+*               for Alliant
+* This directory was created from kernfor.car patch qmalt
+#ifndef CERNLIB_B32
+#define CERNLIB_B32
+#endif
+#ifndef CERNLIB_A4
+#define CERNLIB_A4
+#endif
+#ifndef CERNLIB_HEX
+#define CERNLIB_HEX
+#endif
+*               running Unix
+#ifndef CERNLIB_QS_UNIX
+#define CERNLIB_QS_UNIX
+#endif
+*               running BSD
+#ifndef CERNLIB_QSYSBSD
+#define CERNLIB_QSYSBSD
+#endif
+*               BSD version for SETENVF
+#ifndef CERNLIB_QENVBSD
+#define CERNLIB_QENVBSD
+#endif
+*                 IEEE floating point
+#ifndef CERNLIB_QIEEE
+#define CERNLIB_QIEEE
+#endif
+*               MIL standard routines, IBITS, MVBITS, etc
+#ifndef CERNLIB_QMILSTD
+#define CERNLIB_QMILSTD
+#endif
+#ifndef CERNLIB_QDEFAULT
+#define CERNLIB_QDEFAULT
+#endif

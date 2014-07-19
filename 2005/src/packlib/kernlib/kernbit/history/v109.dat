@@ -1,0 +1,32 @@
+*
+* $Id: v109.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v109.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+*  Version 1.09  920722  3.30
+C- Add flags IPSC, MSDOS
+C
+C- Additions:
+C  > I303 RDWORD  Moved from GENLIB. Correct COMMON/RDNMB2/ def in RDMODE
+C  > J530 BINSIZ  Moved from GENLIB
+C  > M214 CVTVAX  Moved from GENLIB
+C  > M216 GETWI   Moved from GENLIB
+C  > M218 CVTCDC  Moved from GENLIB
+C  > M231 CVTIB   Moved from GENLIB
+C  > M232 CVTND   Moved from GENLIB
+C  > M416 UBLOW1  Moved from GENLIB
+C  > M429 NUMBIT  Moved from GENLIB
+C  > M437 GETBIT  Moved from GENLIB
+C  > M438 BTMOVE  Moved from GENLIB
+C  > M439 GETBYT  Moved from GENLIB
+C  > Z009 CALDAT  Moved from GENLIB
+C  > Z034 WHICH   Moved from GENLIB
+C  > Z265 WHICHF  Emulation of UNIX function in FORTRAN (to join KERNFOR)
+C  > Z313 JOBINFO Correct VMS version, implement HOSTID
+C
+C- Corrections:
+C  > M442 NAMEFD  Look for tags terminated by "."
+C

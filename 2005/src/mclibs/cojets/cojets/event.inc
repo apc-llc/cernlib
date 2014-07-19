@@ -1,0 +1,23 @@
+*
+* $Id: event.inc,v 1.1.1.1 1996/01/11 14:14:47 mclareni Exp $
+*
+* $Log: event.inc,v $
+* Revision 1.1.1.1  1996/01/11 14:14:47  mclareni
+* Cojets
+*
+*
+#ifndef CERNLIB_COJETS_EVENT_INC
+#define CERNLIB_COJETS_EVENT_INC
+*
+*
+* event.inc
+*
+      PARAMETER (MXPART=2000,IPACK=10000)
+      COMMON/EVENT/NEVENT,ECM,PARHAD(MXPART,7),NPART,WEIGHT
+     1,IORIG(MXPART),IDENT(MXPART),IDCAY(MXPART)
+      REAL ECM,PARHAD,WEIGHT
+      EQUIVALENCE (NPART,NPTCL)
+      COMMON/NOUNST/NOUNST
+      LOGICAL NOUNST
+
+#endif

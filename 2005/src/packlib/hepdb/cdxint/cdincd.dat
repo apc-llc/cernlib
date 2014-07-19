@@ -1,0 +1,169 @@
+*
+* $Id: cdincd.dat,v 1.1.1.1 1996/02/28 16:24:53 mclareni Exp $
+*
+* $Log: cdincd.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:53  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB__CDF)
+>Name CDINCD
+ 
+>Menu /HEPDB
+ 
+>Menu INITCLOSE
+>Guidance
+HEPDB Initializations or closing
+ 
+>Command CDCRDR
+>Parameters
+PATHN  'Pathname'                               C
+NKEX   'Number of user keys'                    I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Creates Directories interactively. It asks for the tags and types
+of user keys interactively.
+ CHOPT = 'C' : Data in the directory will be compressed by default
+       = 'P' : Create partitioned subdirectories for the pathname
+>Action CDACTI
+ 
+>Command CDDDIR
+>Parameters
+PATHN  'Pathname'                               C
+>Guidance
+Delete a directory or a directory tree interactively.
+>Action CDACTI
+ 
+>Command CDBFOR
+>Parameters
+TOPNM  'Name of the top directory'              C
+IDATE  'Last date of insertion in YYMMDD'       I
+ITIME  'Last time of insertion in HHMM'         I
+>Guidance
+Sets a cutoff on the insertion time for a given RZ file. The RZ file
+is identified by its top directory name. All subsequent CDUSE calls
+will ignore data objects inserted at a later date/time.
+>Action CDACTI
+ 
+>Command CDENFL
+>Parameters
+TOPNM  'Top directory name'                     C
+>Guidance
+Close one HEPDB file specified by its top directory name.
+>Action CDACTI
+ 
+>Command CDEND
+>Guidance
+Close all HEPDB files.
+>Action CDACTI
+ 
+>Command CDFZOP
+>Parameters
+TOPNM  'Top directory name'                     C
+LUNF   'Logical unit number of the FZ file'     I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Associates a journal file for a given data base. The journal file
+should be opened before hand using the command FZFILE in write mode.
+ CHOPT = ' ' : Stnadard journal file
+       = 'B' : Special backup file for objects entered with option B
+>Action CDACTI
+ 
+>Command CDFZUP
+>Parameters
+LUNF   'Logical unit number of the FZ file'     I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Update a data base from a journal file stored from a previous
+session. The stored file should be opened beforehand using the
+command FZFILE in read mode.
+ CHOPT = ' ' : Update keeping KEY(1) value unchanged
+       = 'O' : Update ignoring KEY(1) value which is recalculated
+>Action CDACTI
+ 
+>Command CDILDF
+>Parameters
+LUNI   'Logical unit number of the ASCII file'  I
+CFNAM  'Name of the file containing the list'   C
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Opens an ASCII file containing the list of directories to be updated
+from the journal file with the force option. This implies that all the
+objects in the journal file are entered in the data base as new objects.
+>Action CDACTI
+ 
+>Command CDILDU
+>Parameters
+LUNI   'Logical unit number of the ASCII file'  I
+CFNAM  'Name of the file containing the list'   C
+TOPNM  'Name of the Top Directory'              C
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Opens an ASCII file containing the list of directories to be updated
+from the journal file. Reads the directory names. The user can
+supply the root names of the directories if all directories with that
+root name are acceptable.
+>Action CDACTI
+ 
+>Command CDINIT
+>Parameters
+LUNRZ  'Logical Unit Number for Data Base file' I D=1
+CFNAM  'Name of the Data Base file'             C D='DBTEST.DAT'
+TOPNM  'Name of the Top Directory'              C D='HEPDB'
+LRECL  'Record length in words'                 I D=1000
+CHOPT  'Character option for RZFILE/RZMAKE'     C D=' '
+IDIV   'HEPDB user Division Index'              I D=20
++
+NREC   'Flag if the file already exists or not' I D=0
+NPAIR  'Number of key pairs for validity range' I D=1
+NTOP   'Serial number of top directory'         I D=1
+>Guidance
+Open the data base file and initialize HEPDB package.
+NREC should be set to zero if the file already exists.
+Otherwise, NREC should contain maximum number of records in the file.
+>Action CDACTI
+ 
+>Command CDLOGL
+>Parameters
+TOPNM  'Name of the Top Directory'              C D='HEPDB'
+LOGL   'Log level'                              I D=1
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Set the log level for HEPDB.
+>Action CDACTI
+ 
+>Command CDPART
+>Parameters
+PATHI  'Input Pathname'                         C
+PATHN  'Output Pathname'                        C
++
+MXKP   'Maximum objects in a partition'         I D=50
+NSAV   'Number of objects entered in 1 go'      I D=20
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Make partiotioned directory from a normal one.
+ CHOPT = ' ' : Stnadard default for updating
+       = 'F' : Updates with a fully matched data object (in user keys)
+>Action CDACTI
+ 
+>Command CDSAVE
+>Guidance
+Saves the information on to the Random Access file through a call to
+CDSAVE. This is useful only when the database is opened with option
+P on IBM.
+>Action CDACTI
+ 
+>Command CDSETD
+>Parameters
+MXDIS  'Horizontal Display range'               I D=80
+>Guidance
+Set the Horizontal Display range. At initialization the display
+range is limited to 80 characters per line.
+>Action CDACTI
+#endif

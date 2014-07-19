@@ -1,0 +1,33 @@
+All the kernnum include files are bits of source code and are therefore
+left in the local directory rather than the include directory.  The
+f*fort subdirectories have a lot of these local includes.
+
+Some +REP lines from kernnum.car have been added to the code.
+Also, cabs.F has been put into kernnum/c204fort.  This routine is for
+ibmrt only.
+
+Obsolete pilot patches:
+
+	numcd1a for CDC
+	numcd1f for CDC
+	numcd for CDC
+	numcdopt for CDC
+	numcr1f for CRAY
+	numcr for CRAY
+	numcv1f for CONVEX
+	numcv for CONVEX
+	numnd1a for NORD
+	numnd for NORD
+	numndopt for NORD
+	numuc1f for UNIVAC
+	numuc for UNIVAC
+
+	numib1a for IBMMVS
+	numib1f for IBMMVS
+	numib2a for IBMVM
+	numib2f for IBMVM
+	numib for IBM
+	numibopt for IBM
+
+All *cd code patches are for CDC
+All *ib code patches are for IBM

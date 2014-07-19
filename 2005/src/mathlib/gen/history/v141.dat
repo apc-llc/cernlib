@@ -1,0 +1,67 @@
+*
+* $Id: v141.dat,v 1.1.1.1 1996/04/01 15:01:36 mclareni Exp $
+*
+* $Log: v141.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:36  mclareni
+* Mathlib gen
+*
+*
+C C  Additions:
+C  ----------
+C
+C  V115 RANLUX
+C  V116 RM48
+C  V120 RNORML
+C  V121 RNORMX
+C  V122 CORSET
+C
+C  Routine changes: ( edited by GF, except where indicated )
+C  ---------------
+C
+C  G116 VVISET   correct statement order (Valeri Fine)
+C  C203 NZEROS   deleted, use C210 NZERFZ
+C  C206 POLY2    deleted, CPOLYZ
+C  C304 ALGAMA   reissued from C310. Jacket routines to intrinsics for IBM
+C  C305 CGAMMA   Reissued from C306
+C  C306 CLGAMA   Reissued from C333, CLOGAM(WLOGAM) renamed to CLGAMA(WLGAMA)
+C                                    keep old names as entry points
+C  C309 CCLBES   Fix compilation warnings (JDS)
+C  C314 THETA1   deleted, use C349 RTHETA
+C  C317 ADIGAM   deleted, use C316 RPSIPG
+C  C319 ELIN1    deleted, use C346 RELI1
+C  C327 BSIR4    Bug fix (JDS)
+C  C332 DILOG    Reissued from C304
+C  C333 CLOGAM   deleted, use C306 CLGAMA
+C  C338 CEXPIN   Fix compilation warnings (JDS)
+C  D151 DVDOT    Fix compilation warnings (JDS)
+C  D600 FRED1    deleted, use D601 RFRDH1
+C  E206 TRICOF   deleted, use D700 RFT
+C  E209 SPLIN3   deleted, use E211 RCSPLN
+C  E408 RCHPWS   New
+C  F120 DIRCOS   deleted, obsolete, reactivate ( used in geane )
+C  G115 VAVLOV   New
+C  G116 VVILOV   New
+C  G100 PROB     Modified
+C  H101 RSMPLX   New
+C  H301 ASSNDX   New
+C  M435 CHMOVE   deleted, obsolete
+C  M504 GETSST   deleted, use M432 CHPACK
+C  M505 LOCHAR   deleted, use M432 CHPACK
+C  V101 NORRAN   Fix compilation warnings (JDS)
+C  V106 RN32     Fix compilation warnings (JDS)
+C  V107 RNDM2    Macro & old versions of RNDM2 for VAX,IF=OLD. (JDS)    
+C                Add new Fortran version for VAX & AXP from             
+C                Christian Walck, Fysikum, Stockholm University, Sweden
+C  V108 RG32     Fix compilation warnings (JDS)
+C  X602 PRIPAR   deleted, obsolete
+C
+C  Global Changes:
+C  --------------
+C   G.Folger put changes for Convex from DESY.
+C   G.Folger, clean up for LINUX; changes from A.Lomov.
+C-- V.Fine, E.Potrebenikova
+C
+C   NOQUAD flad have been set for MSDOS.
+C   Delete string +PATCH, C307 located before line +PATCH, 307.
+C   +KEEP, DEFDR have been introduced for QF2C.
+

@@ -1,0 +1,10 @@
+SRCS_F= \ @@\
+	 chdirf.F getenvf.F jobnam.F statf.F systemf.F unlinkf.F xinbf.F
+
+SRCS_C= \ @@\
+	 iargv.c intrac.c memor.c signalf.c sigon.c timel.c tmpro.c tmread.c
+
+SRCS_S= \ @@\
+	 noarg.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,31 @@
+*
+* $Id: legvar.F,v 1.1.1.1 1996/02/15 17:52:37 mclareni Exp $
+*
+* $Log: legvar.F,v $
+* Revision 1.1.1.1  1996/02/15 17:52:37  mclareni
+* Kernlib
+*
+*
+#include "kerncry/pilot.h"
+      FUNCTION LEGVAR (WORD)
+C
+C CERN PROGLIB#         LEGVAR          .VERSION KERNCRY  1.00  830612
+C ORIG. 12/06/83 JZ
+C
+C--   CRAY VERSION OF THE CDC FUNCTION LEGVAR
+C--   INDICATING WHETHER THE ARGUMENT IS OVERFLOW/INDEFINITE
+C--   RETURNS ZERO IF WELL-BEHAVED FLOATING NUMBER, OR INTEGER
+
+
+      LEGVAR = 0
+
+      NN = SHIFTR (WORD,48)
+      IF (NN.EQ.0)           RETURN
+      IF (NN.EQ.177777B)     RETURN
+
+      NN = NN .AND. 77777B
+      IF (NN.LT.20000B)      GO TO 27
+      IF (NN.LT.60000B)      RETURN
+   27 LEGVAR = 1
+      RETURN
+      END

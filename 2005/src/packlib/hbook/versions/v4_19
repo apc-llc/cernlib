@@ -1,0 +1,116 @@
+*
+* $Id: v4_19,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_19,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.19/05 08/06/93  12.17.57  by  Rene Brun
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  4.19/05   08/06/93 12.17.57
+*
+*
+*      Add new sequence /CZCBUF/IZCBUF
+*      Changes in HMACHI,HRDIR and HLOGPF to use JUMPT2 to call CZGETC
+*
+*::>          VERSION  4.19/04   07/06/93 08.48.10
+*
+*
+*      Changes in HLNEXT (implement client/server for PIAF)
+*      Routine HCREATEM modified for SYSV systems (ICOMAD(1) set to 0)
+*      HRECOV improved for CWN. Recovery time faster.
+*      Problem fixed in handling of chains (1st event was missed occasionally)
+*
+*::>          VERSION  4.19/03   27/05/93 15.28.21
+*
+*      LINUX version introduced (from V.Balashov and A.Lomov)
+*
+*      Changes to HRECOV. New routines HRECO1 and HRECO2
+*
+*::>          VERSION  4.19/02   26/05/93 16.00.03
+*
+*
+*      New routine HRECOV to recover ntuples missing the last header info.
+*      HRECOV attempts to read the latest saved header. From the header
+*      information, it looks at all ntuple extensions to reconstruct
+*      the maximum number of blocks/events.
+*      If successful, the new header is written to the file
+*      Header of CWM Ntuple is written the first time a content buffer
+*      is written. The header is written again whenever a column has
+*      been added to the Ntuple. After every HFNT2 call that caused
+*      buffers to be written the RZ directory structure is flushed to disk.
+*      These intermediate Ntuple headers are used by the HRECOV routine.
+*      They can be recognized by the fact that IQ(LCID+ZNOENT) = -1.
+*
+*      Protection added in HBFUN2 (for HRNDM2) (O.Perdereau)
+*
+*      Improvements to HQSIG1/2/3. (J.Allison)
+*
+*      Mods in HROPEN. An already open file in U mode cannot be attached
+*      if another process is also attaching the file in U mode. RZEND now
+*      called to delete the ZEBRA structure.
+*
+*::>          VERSION  4.19/01   11/05/93 15.19.34
+*
+*      New sequences $CZBUFF and $CZSOCK in HCDES
+*      Changes in HCDIR, HRDIR and HLOGPF for the PIAF server case
+*
+*      Routine HFN saves now the ntuple header and calls RZSAVE everytime
+*      the RZ buffer is written to the file. This changes enables recovery
+*      in case the job writing the ntuple crashes before HROUT/HREND.
+*
+*      HRIN modified for the ADD option (IOFSET=99999)
+*      A user reported a case where ID1+IOFSET=ID of an existing histogram.
+*      When IOFSET=99999, the internal offset is now chosen to avoid a conflict.
+*
+*      Bug corrected in HXE for variable bin size histograms
+*
+*      Mods in Memory mapping routines HCREATEM and HALLOC
+*
+*::>          VERSION  4.19/00   930429  8.34
+*
+*      WARNING!!!. Patch HCDES split into individual sequences.
+*
+*      New sequences JBYT3,JBYT4 introduced for MSDOS.
+*      New sequence HCRLF (Carriage Return, Line Feed).
+*      Several routines modified to introduce the flags MSDOS,NDP and GNU.
+*      In printing formats, several '1' replaced by CRLF from HCRLF.
+*
+*      Sequence $HCK modified. Parameters KBWIDX,KBWIDY deleted.
+*      Parameters KMIN,KMAX renamed KMIN1 and KMIN2.
+*      New Parameters KMIN2,KMAX2.
+*      Logic to support HMINIM AND HMAXIM for 2-DIM implemented.
+*      As a consequence the inverse of the binwidth is not stored
+*      anymore in the LCID structure.
+*      The position Q(LCID+KBWIDX) is now occupied by Q(LCID+KMIN2)
+*      The position Q(LCID+KBWIDY) is now occupied by Q(LCID+KMAX2)
+*      Routines HMAXIM/HMINIM modified.
+*      All HBOOK/HPLOT routines dealing with the binwidth are changed.
+*
+*      Bug fixed in HMINUT. In case of loglikelihood fits, the
+*      MINUIT ERRDEF was incorrectly set to 0.5
+*
+*      Sequence /HCFITD/ has been modified to FITPAD(24),FITFUN
+*      When the option 'U' is given in the fit routines, the application
+*      must store the value of the function in FITFUN (Double Precision).
+*      By default, HFITGA,PO,EX use the 'U' option.
+*
+*      Change in routine HOPER1 to prevent INTEGER Overflows in HFCX.
+*      Number of entries in LC3 set to -1
+*
+*      Logic to handle ntuple chains introduced.
+*
+*      Bug corrected in HRZFRA (VAX version only)
+*
+*      Changes in HBUG (CHMESS(1:1)=+ prints Warning instead of Error
+*
+*      KEEP,HCFITR modified (added IFYLOW,IFYUP, renamed IFXLOW,IFXUP)
+*      Introduce subrange in Y in all fitting routines
+*
+*      HBFUN1: Change LCONT to LFUNC. LCONT recomputed if user function
+*         calls HFIND.
+*      HRZIN: Change LBANK-JBIAS to LBANK+JBIAS
+*      New routines for chains
+*      New option 'A' in HDIFFB

@@ -1,0 +1,13 @@
+*
+* $Id: v305.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v305.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.05   880711
+C
+C- Patchy flag for VAX ULTRIX introduced.
+C- PATCH TEST removed, see the INSTALL PAM file
+C

@@ -1,0 +1,81 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:53:29 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:29  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernnxt.car patch kernnxt
+#if !defined(CERNLIB_KERNNXT)
+ 
+              KERNLIB ROUTINES PARTICULAR TO THE Next
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KNXT     Pilot-patch selecting the standard KERNLIB for Next
+ 
+QMNXT     Next machine patch
+ 
+NXTPROGS  Next utility programs
+ 
+NXTGS     Next versions of general KERNLIB routines
+ 
+=====================================================================
+ 
+ 
+              UP-DATE RECORD FOR THE PAM-FILE  KERNNXT
+              ----------------------------------------
+ 
+ UP-DATE  2.02 :  03-dec-1992   (Dino Ferrero/Cern ECP)
+----------------------------
+ 
+Replacing file   KERNNXT 2.01
+ 
+Correct:	trailing underscores management on external symbols
+ 
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.00 :  18-Sep-1992   (F.Dittus/Uni Bern + F-H.Heinsius/Uni Hamburg)
+----------------------------
+ 
+Replacing file   KERNNXT  1.01  901112 15.50
+ 
+Correct :      P=*KNXT
+ 
+               removed   +USE, QMILSTD, T=INH.
+               added     +USE, CCGEN, CCGENCF.
+               added     +USE, CCGEN, D=QNEXTE, TIMEL, T=INH.
+               added     +USE, CCGEN, D=ABEND,  DATIME, DATIMU, T=INH.
+               added     +USE, CCGEN, D=INTRAC, JUMPXN, LOCB, LOCF, T=INH.
+               removed   +USE, TCGEN, D=LNBLNK, T=INH.
+ 
+Correct :      P=*QMNXT
+ 
+               added     +USE, QMUIX, QDEFAULT, QX_SC, QSYSBSD.
+ 
+Correct :      P=*NXTGS,D=TIMEL
+ 
+               add also stime,cstime to timstart,timnow.
+ 
+ 
+Correct :      P=*NXTGS,D=GETARG
+ 
+               iargc returns number of arguments, not counting the 0'th one,
+               for compatibility with iargc on other Unix machines.
+ 
+Remove  :      P=NXTPROGS,D=FCASPLIT
+ 
+               use FCASPLIT from KERNFOR, to always use the latest version!
+ 
+ 
+---------------------------------------------------------------------
+ 
+          First release of the KERNNXT Pam :   5-Nov-1990
+ 
+---------------------------------------------------------------------
+ 
+#endif

@@ -1,0 +1,74 @@
+/* $Id: Mips.cf,v 1.1.1.1 1995/12/20 15:26:43 cernlib Exp $
+ *
+ * $Log: Mips.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+/*
+ * Set version numbers before making makefiles.
+ * 
+ * X11r5 only builds using the berkeley libraries and compiler.  Make
+ * sure your path includes /bsd43/bin before /bin/ or /usr/bin.
+ */
+
+#define OSName            RISCOS
+#define OSMajorVersion    4
+#define OSMinorVersion    50
+
+XCOMM platform:  $XConsortium: Mips.cf,v 1.14 94/03/24 15:24:34 gildea Exp $
+XCOMM operating system:  OSName
+
+/***************************************************************************
+ *			 Platform-specific parameters                      *
+ ***************************************************************************/
+
+#define HasVoidSignalReturn		NO
+#define SetTtyGroup			YES
+#define UnalignedReferencesAllowed	NO     /* if arbitrary deref okay */
+#define HasBsearch			NO
+
+#define MipsArchitecture
+#define MakeEnv -e
+
+#define DefaultCCOptions -signed -systype bsd43 -Olimit 2000 -Wf,-XNd8400,-XNp12000
+#define StandardDefines -DMips -DBSD43
+#define PostIncDir /usr/include/bsd43
+#define ExtraLibraries -lmld
+#define ArCmd ar clr
+#define BootstrapCFlags -DMips
+#define InstallCmd /etc/mipsinstall -f
+#define MakeCmd make MakeEnv
+#define DoRanlibCmd NO
+#define AllocateLocalDefines -DINCLUDE_ALLOCA_H
+
+/***************************************************************************
+ *                                                                         *
+ *			DEFINE PARAMETERS FOR BUILDING                     *
+ *                                                                         *
+ ***************************************************************************/
+
+#define XmipsServer	YES
+
+/***************************************************************************
+ *                                                                         *
+ *	      OVERRIDE ANY CONFIGURATION PARAMETERS FROM Imake.tmpl        *
+ *                                                                         *
+ ***************************************************************************/
+
+#define SpecialMalloc		NO
+
+#define PrimaryScreenResolution	110
+
+#define ConstructMFLAGS	NO		/* build MFLAGS from MAKEFLAGS */
+
+#define DefaultUserPath /usr/net:/bin:/usr/bin:$(BINDIR):/usr/ucb
+#define DefaultSystemPath /usr/net:/bin:/usr/bin:/etc:$(BINDIR):/usr/ucb
+
+/* mips manuals are really complicated.  This certainly won't work. */
+
+#define ManDirectoryRoot /man/cat
+#define ManSourcePath $(MANPATH)/man
+
+#define InstKmemFlags -g sys -m 2755

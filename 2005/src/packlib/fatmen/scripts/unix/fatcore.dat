@@ -1,0 +1,27 @@
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /fatmen/fm*
+ 
+   do
+ 
+      typeset -u fatgrp
+      fatpath=$i
+      fatgrp=`basename $i`
+      eval $fatgrp=$fatpath;export $fatgrp
+#
+# Look for startable servers (fatserv exists)
+#
+      if [ -x ${i}/fatserv ]
+      then
+
+        if [ -f ${i}/core ]
+        then
+
+         subject=`echo Alert: core file found for ${fatgrp}`
+         ls -l ${i}/core | mail -s " ${subject} " fatcat-mgr@zfatal.cern.ch
+
+        fi
+      fi
+   done

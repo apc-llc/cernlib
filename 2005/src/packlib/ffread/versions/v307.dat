@@ -1,0 +1,14 @@
+*
+* $Id: v307.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v307.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.07   890709
+C
+C- New routine FFRSET to set user reading routine
+C- New routine FFUSET to set user action routine
+C- <0 units used with READ card to read from user routine set by FFRSET
+C

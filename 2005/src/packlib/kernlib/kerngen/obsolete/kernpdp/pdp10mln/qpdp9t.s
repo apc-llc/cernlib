@@ -1,0 +1,44 @@
+*
+* $Id: qpdp9t.s,v 1.1.1.1 1996/02/15 17:53:34 mclareni Exp $
+*
+* $Log: qpdp9t.s,v $
+* Revision 1.1.1.1  1996/02/15 17:53:34  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_UUOTAPOP)
+        TITLE     IBMTP
+;#
+; CERN PROGLIB#         IBMTP           .VERSION KERNPDP  2.02  840327
+; ORIG.  18-MAY-78  RJ PLANO/RUTGERS.
+;#
+; SETS TO HANDLE NINE TRACK TAPE IN INDUSTRY COMPATIBLE MODE.
+ 
+*   LOOK OUT ---  SYSTEM DEPENDENT NUMBERS
+#endif
+FLU.TB=231      ;FORTRAN LOGICAL UNIT NUMBER TABLE.
+FLU.MX=77
+CHN.TB=41       ;SOFTWARE CHANNEL TABLE.
+.JBOPS=135      ;LOW SEG DATA RELOCATION.
+A=1
+B=2
+C=3
+ENTRY QPDP9T
+ENTRY IBMTP
+ 
+IBMTP:
+QPDP9T: MOVE A, @0(16)  ;PICK UP LOGICAL UNIT NUMBER.
+        HRRZ C, .JBOPS
+        HRRZI A, 6(A)
+        IDIVI A, 6      ;FORM POINTER TO CHANNEL.
+        IMULI B, 6
+        ROT B, -6
+        IOR B, [POINT 6, FLU.TB(C), 35]
+        ADDI B, (A)
+        LDB A, B
+        LSH A, ^D23
+        IOR A, [MTAPE 0, 101]
+        XCT A
+        SETZM 0
+        POPJ 17, 0
+        PRGEND

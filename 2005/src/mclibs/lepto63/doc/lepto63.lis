@@ -1,0 +1,88 @@
+*
+* $Id: lepto63.lis,v 1.1.1.1 1996/03/08 17:40:17 mclareni Exp $
+*
+* $Log: lepto63.lis,v $
+* Revision 1.1.1.1  1996/03/08 17:40:17  mclareni
+* Lepto63
+*
+*
+C######################################################################C
+C                                                                      C
+C  The Lund Monte Carlo for Deep Inelastic Lepton-Nucleon Scattering   C
+C                                                                      C
+C                          L E P T O                                   C
+C                                                                      C
+C                 version 6.3,  July 17, 1995                          C
+C   Authors:                                                           C
+C   Gunnar Ingelman, DESY theory group     Dept. of Radiation Sciences C
+C                    (room 202  bldg 2a)   Uppsala University          C
+C                    D-22603 Hamburg, FRG  S-751 21 Uppsala, Sweden    C
+C               phone: +49(40)8998-2795    +46(18)18-3884              C
+C                 fax:            -2777             -3833              C
+C              e-mail: ingelman@desy.de    (ingelman@tsl.uu.se)        C
+C   Johan Rathsman, Dept. of Radiation Sciences, rathsman@tsl.uu.se    C
+C   Anders Edin, Dept. of Radiation Sciences, edin@tsl.uu.se           C
+C                                                                      C
+C   Contributions on parton cascades: M. Bengtsson, T. Sjostrand       C
+C                                                                      C
+C   Availability: on request or from DESY IBM and VAX/VMS systems:     C
+C   DESY IBM library      VXDESY directory         content             C
+C   T00ING.LUND(member)   DISK$T__:[INGELMAN.LUND]                     C
+C              LEPTOINF            LEPTO.INFO      info, news, updates C
+C              LEPTOPS             LEPTO.PS        manual, post script C
+C              LEPTO63             LEPTO63.FOR     source code         C
+C              LEPTODEM            LEPTODEM.FOR    demo program        C
+C                                  LEPTODEM.COM    demo command file   C
+C   T00ING.OBJECT(LEPTO63)         LEPTO63.OBJ     object code         C
+C                                                                      C
+C   Manual: see file above (DESY preprint in preparation), see also    C
+C           G. Ingelman, Uppsala preprint TSL/ISV 92-0065 and in       C
+C           "Physics at HERA", Eds. W. Buchmueller, G. Ingelman,       C
+C           DESY Hamburg 1992, vol. 3, p. 1366                         C
+C                                                                      C
+C   Please report any problems or suggestions for improvements.        C
+C                                                                      C
+C######################################################################C
+
+
+Updates/changes in the present version
+--------------------------------------
+
+Compared to LEPTO 6.1 the changes/updates are:
+
+-  Introduced non-zero lepton mass in kinematical formulae used. 
+-  New default value of $sin^2\theta_W$, see PARL(5).
+-  Uupdate of parton density parametrisations, see LST(15)and LST(16).
+-  Introduced option to simulate scattering on intrinsic charm 
+   quarks, see LST(15).
+-  Additional options, and new default, for use of grid to store 
+   probabilities for $qg$- and $q\bar{q}$-events, see LST(19).
+-  Additional options for applying cut-offs against divergences in QCD 
+   matrix elements, see LST(20).
+-  New default values for QCD matrix element cutoffs PARL(8) and PARL(9).
+-  New parameter PARL(10) for parton showers added on ME.
+-  Additional options of maximum virtuality for parton showers, see LST(9).
+-  Additional options, and new default, for treatment of the nucleon 
+   target remnant, see LST(14).
+-  Internal flag previously in LST(20) moved to LST(32), PARL(20) removed.
+-  Changed PY... to LY... in routine and common block names to avoid 
+   name clashes with {\sc Pythia}.
+-  Corrected bug in treatment of azimuthal angle dependence in first order
+   QCD matrix elements. 
+
+Compared to LEPTO 6.2 the changes/updates are:
+
+-  New treatment of sea quarks in the target remnant, see section 2.7 
+   and LST(35).
+-  Implemented a model for soft colour interactions (SCI) \cite{SCI},  as 
+   a mechanism to understand rapidity gap events, see section 2.8 and  
+   LST(34), PARL(7).
+-  New default values for PARL(8),PARL(9),PARL(10) and PYPAR(22) in 
+   connection with having SCI as default.  
+-  Corrected a few bugs. 
+-  Modified routines are LEPTOD, LINIT, LEPTO, LKINEM, LFRAME,
+   LSHOWR, LMEPS, LYSSPA. New routines are LSCI, LECSWI, LEASWI.
+   (To get the new physics introduced, it is also possible to use 
+   LEPTO version 6.2 and replacing LEPTOD, LEPTO, LYSSPA and 
+   adding LSCI, LECSWI, LEASWI from version 6.3.) 
+

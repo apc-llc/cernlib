@@ -1,0 +1,9 @@
+
+SRCS_F= test.F
+
+DefinePackageLibrary(NullParameter)
+
+
+CernlibFortranProgramTarget(herwigt,test.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+TestTarget(herwigt,NullParameter,NullParameter)

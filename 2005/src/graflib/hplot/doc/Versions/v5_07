@@ -1,0 +1,23 @@
+*
+* $Id: v5_07,v 1.1.1.1 1996/01/19 10:50:14 mclareni Exp $
+*
+* $Log: v5_07,v $
+* Revision 1.1.1.1  1996/01/19 10:50:14  mclareni
+* Hplot
+*
+*
+*CMZ :          27/08/91  18.30.03  by  Unknown
+*-- Author :
+*
+*::>          VERSION  5.07/00   891011 14.14
+*
+*       Mods in HPLNT (COMMON size)
+*       Mods in HPLO and HPLONE concerning the LOG scales
+*       New routine HPLTAB calling IGTABL. The routines:
+*          HPLC2 HPLC3 HPLEG1 HPLHI2 HPLHID HPLO HPLS HPLSU2
+*          HPLSU3 HPLSU4 HPLTWO are now obsolete.
+*       New option HIST and FUNC in HPLOT to plot separatly
+*          the Histogram or the Fit (FUNC) for a give histo ID
+*       The option HIST force to plot an histogram with errors
+*          bars as a normal histo.
+*

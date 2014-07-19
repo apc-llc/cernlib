@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNVMI)
+
+
+              Up-date record for the Pam-file  KERNVMI
+              ----------------------------------------
+
+
+UP-DATE  1.10 :  18-July-1995
+----------------------------
+
+Replacing File   KERNVMI  1.09  940530 22.05
+
+Correct :     use the new C routines VXINVB, VXINVC from KERFOR
+
+---------------------------------------------------------------------
+
+#endif

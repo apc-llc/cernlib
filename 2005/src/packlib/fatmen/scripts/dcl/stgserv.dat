@@ -1,0 +1,42 @@
+*
+* $Id: stgserv.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: stgserv.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, STGSERV.COM
+$ set noon
+$!
+$! STGSERV.COM
+$!
+$! This command file is invoked when a remote stage operation is
+$! required.
+$!
+$! Display remote user and node name
+$!
+$  remote_user = f$trnlnm("SYS$REM_ID")
+$  remote_node = f$trnlnm("SYS$REM_NODE")
+$!
+$  date_time   = f$cvtime(,"ABSOLUTE")
+$!
+$  write sys$output ""
+$  write sys$output ">>> Start of STGSERV command file"
+$  write sys$output ""
+$!
+$  write sys$output "Remote stage submit/query request from user ",-
+"''remote_user' at ''remote_node' at ''date_time'"
+$!
+$! Set messages how we want them...
+$!
+$  SET MESSAGE/FACILITY/IDENTIFICATION/SEVERITY/TEXT
+$!
+$! Run the server
+$!
+$  RUN SETUP_EXE:STGSERV
+$!
+$  write sys$output ""
+$  write sys$output ">>> End of STGSERV command file"
+$  write sys$output ""
+$!

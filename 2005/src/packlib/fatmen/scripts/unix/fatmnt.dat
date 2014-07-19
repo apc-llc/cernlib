@@ -1,0 +1,31 @@
+*
+* $Id: fatmnt.dat,v 1.1.1.1 1996/03/07 15:17:52 mclareni Exp $
+*
+* $Log: fatmnt.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+# Mount FATMEN disks from CERNVM
+#
+for i in /fatmen/fm*
+   do
+     fatgrp=`basename $i`
+#
+# Check that directory exists
+#
+     if [ ! -d ~jamie/fatmen/cernvm/${fatgrp} ]
+        then
+        echo Creating directory ~jamie/fatmen/cernvm/${fatgrp}
+        mkdir ~jamie/fatmen/cernvm/${fatgrp}
+     fi
+#
+# Now mount the file system
+#
+     echo Mounting ${fatgrp}.191
+     /etc/mount -n cernvm ${fatgrp}.191,ro,record=nl \
+                  ~jamie/fatmen/cernvm/${fatgrp}
+ 
+   done

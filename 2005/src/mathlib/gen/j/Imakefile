@@ -1,0 +1,10 @@
+SRCS_F=	conprt.F cont.F finarg.F findem.F frame.F frearg.F \ @@\
+	j509bd.F map.F names.F namezb.F ordre2.F paper.F setup.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

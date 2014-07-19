@@ -1,0 +1,37 @@
+*
+* $Id: fatpurg.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatpurg.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#
+# Purge journal files more than 1 week old
+#
+#find /fatmen/fm*/done/* -atime +7 -exec rm {} \;
+#
+# Do it the long way in case there are too many files found
+#
+for i in /fatmen/fm*/done/*
+   do
+      find $i -atime +7 -exec rm {} \;
+   done
+&PATCH,//FATMEN/SCRIPT
+&DECK,FMKUIP.
+rm fort.23 fmcdf.f fmkuip.f
+ypatchy /cern/src/car/zebra.car fmkuip.f :go <<!
+&use,qcde.
+&use,ibmrt,*fatlib.
+&use,fmc,t=inhibit.
+&use,fmh,t=inhibit.
+&use,tms,t=inhibit.
+&use,*fmkuip.
+&asm,23.
+&exe.
+&pam,11,r=qcde,t=c.
+&pam,12,t=c,a. fatmen.cards
+&quit
+!
+kuipc fort.23 fmcdf.f
+xlf -q extname fmkuip.f fmcdf.f  -L/cern/pro/lib -lpacklib -o fm

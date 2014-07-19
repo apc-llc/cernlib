@@ -1,0 +1,62 @@
+*
+* $Id: fatmast.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatmast.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATMAST.COM
+$SET NOON
+$ !
+$ !   Master FATMEN command file
+$ !
+$ !   define list of servers
+$ !
+$     if f$trnlnm("SYS$CLUSTER_NODE").eqs."VXCERN"
+$     then
+$        fatmen    = "FMDELPHI,FMNA44,FMCHORUS" ! Separate by commas
+$        fmdelphi:==disk$delphi1:[fmdelphi]
+$        fmna44  :==disk$mf:[fmna44]
+$        fmchorus:==disk$mf:[fmchorus]
+$        fatvm   :== CERNVM    ! Tailor for other nodes
+$     else
+$     endif
+$ !
+$     if f$type(fatmen).eqs.""
+$     then
+$        write sys$output "Check configuration - FATMEN symbol(s) not defined"
+$        exit
+$     endif
+$ !
+$     fmwakeup :== 00:30:00  ! Every 30 minutes
+$ !
+$     save_mess = f$environment("MESSAGE")
+$     set message/nofacility/noseverity/noid/notext
+$     write sys$output "FATMAST starting at ''f$time()'"
+$ !
+$ !   Ensure that FATMEN queue is started
+$ !
+$ if f$getqui("DISPLAY_QUEUE","QUEUE_STOPPED","SYS$FATMEN") .eqs. "TRUE" then -
+start/queue sys$fatmen
+$ again:
+$ !
+$ !   Run the command files that expect a complete list as argument
+$ !
+$     write sys$output ">>> FATPURGE..."
+$     @CERN_ROOT:[EXE]FATPURGE 'fatmen'  ! Purge old journal files
+$ !
+$     write sys$output ">>> FATCHECK..."
+$     @CERN_ROOT:[EXE]FATCHECK 'fatmen'  ! Check that servers are started
+$ !
+$     write sys$output ">>> FAT2VM..."
+$     @CERN_ROOT:[EXE]FAT2VM   'fatmen'  ! Retry transmission to 'FATVM'
+$ !
+$     write sys$output ">>> FATRL..."
+$     @CERN_ROOT:[EXE]FATRL    'fatmen'  ! Copy new updates from 'RDR'...
+$ !
+$     write sys$output ">>> waiting ''fmwakeup'..."
+$     wait 'fmwakeup'
+$     goto again
+$     set message 'save_mess'
+$     exit

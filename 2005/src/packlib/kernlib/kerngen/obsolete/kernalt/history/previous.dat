@@ -1,0 +1,138 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:57 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:57  mclareni
+* Kernlib
+*
+*
+ 
+Up-date  1.11 :  3-June-1992
+----------------------------
+ 
+Replacing file   KERNALT 1.10  910225 15.28
+ 
+New decks :   LENOCC         fast LNBLNK for many trailing blanks
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.10 :  25-Feb-1991
+----------------------------
+ 
+Replacing file   KERNALT 1.09  900724 15.35
+ 
+Correct :     connect CCGEN of KERNFOR
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.09 :  24-July-1990
+----------------------------
+ 
+Replacing file   KERNALT 1.08  891207 22.21
+ 
+Deleted :     P=ALTPROGS, D=ASPLIT, FPREP
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.08 :   7-Dec-1989
+----------------------------
+ 
+Replacing file   KERNALT 1.07  890913 21.04
+ 
+New decks :   LOCB           return the byte adr of a variable
+ 
+Corrections:  JUMPXN         name changed fromy JUMPXQ
+ 
+Deleted :     routines which are now available from KERNFOR :
+              CBYT, JBIT, JBYTxx, MBYTxx, MCBYT, MSBxxx,
+              SBITx, SBYTxx
+              PKBYT, UPKBYT, RNDM, ABEND
+              INCBYT, IUFORW, LOCBYT
+              FLOARG, INTARG, IUMODE, UFLINT
+              UBLOW,  UBUNCH, JOBNAM, TRACEQ
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.07 :  13-Sept-1989
+----------------------------
+ 
+Replacing file   KERNALT 1.06  890626 19.26
+ 
+Corrections:  DATIME                to return /SLATE/
+              JUMPXQ                add entry JUMPX0
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.06 :  26-June-1989
+----------------------------
+ 
+Replacing file   KERNALT 1.05  881021 10.23
+ 
+New decks :   KERNGT                to replace GSHOW eventually
+ 
+Corrections:  FCASPLIT              new version
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.05 :  21-oct-1988
+----------------------------
+ 
+Replacing file   KERNALT 1.04  880715 15.08
+ 
+New decks :   P=ALTPROGS, D=FCASPLIT
+ 
+Correct :     P=ALTPROGS, D=FPREP       fix bug 'C     END'
+              P=ALTGS, D=RNDM           correct multiplier 69069
+              make sure that all right-shifting ISHFT are in lower case
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.04 :  13-jul-1988
+----------------------------
+ 
+Replacing file   KERNALT 1.03  880701 11.32
+ 
+Correct :     RNDM           avoid exact zero result
+Delete :      NOARG          dummy is now on KERNFOR
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.03 :  30-jun-1988
+----------------------------
+ 
+Replacing file   KERNALT 1.02  880323 15.11
+ 
+New decks :   P=ALTGS,  D=LOCF          assembler version
+              P=ALTSYS, D=JUMPXQ, QNEXTE
+ 
+New Patch :   P=ALTPROGS               utility programs
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.02 :  23-mar-1988
+----------------------------
+ 
+Replacing file   KERNALT 1.01  880223  9.37
+ 
+New decks :   P=ALTGS,  D=RNDM     with entries IRNDM etc
+ 
+Deleted :     P=ALTSYS, D=IRNDM, RNDM
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.01 :  22-feb-1988
+----------------------------
+ 
+Replacing file   KERNALT 1.00  880217 12.00
+ 
+New decks :   P=ALTGS,  D=FLOARG, INCBYT, INTARG, LOCBYT, UFLINT
+ 
+Modifs :      P=ALTGS,  D=LOCF, UCOPY2, UHTOC
+              P=ALTSYS, D=INTRAC, IRNDM, RNDM, TIMED
+ 
+---------------------------------------------------------------------
+ 
+          First release of the KERNALT  Pam :  17-FEB-1988
+ 
+---------------------------------------------------------------------
+ 

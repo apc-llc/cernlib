@@ -1,0 +1,24 @@
+DoIncludePackage(isajet)
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= code isadata isasusy isarun isatape
+
+SUBDIRS= $(LIBDIRS) test data isajet
+
+TopOfPackage(isajet758)
+
+SubdirLibraryTarget(isajet758,$(LIBDIRS))
+
+InstallLibrary(isajet758,$(CERN_LIBDIR))
+
+SubdirDataFile($(LIBRARY),isajet.dat,data)
+
+/* install the data file : */
+
+InstallNonExecFileTarget(install.lib,isajet.dat,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(isajet)

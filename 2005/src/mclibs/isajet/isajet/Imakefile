@@ -1,0 +1,25 @@
+INCLUDES=	 brembm.inc calor.inc const.inc \ @@\
+	dkytab.inc dylim.inc dypar.inc \ @@\
+	eepar.inc final.inc force.inc frame.inc frgpar.inc getjet.inc \ @@\
+	hcon.inc hcon1.inc hcon2.inc hepevt.inc idrun.inc isabnk.inc \ @@\
+	isalnk.inc isapw.inc isaunt.inc isloop.inc ita.inc itapes.inc \ @@\
+	izisab.inc izisac.inc izisae.inc izisaf.inc izisaj.inc \ @@\
+	izisal.inc izisam.inc izisaq.inc iziscl.inc iziscm.inc \ @@\
+	izisjt.inc izismr.inc izisp1.inc izisp2.inc izisp3.inc \ @@\
+	izisrc.inc izisv1.inc izisv2.inc izpjet.inc izpjhd.inc \ @@\
+	izpjpt.inc jetlim.inc jetpar.inc jetset.inc jetsig.inc \ @@\
+	jwork.inc jwork2.inc keys.inc l2cal.inc l2dky.inc l2getj.inc \ @@\
+	l2jset.inc l2part.inc l2sigs.inc l2zevl.inc l2zout.inc \ @@\
+	limevl.inc listss.inc lkpjet.inc lstprt.inc luxpar.inc mbgen.inc \ @@\
+	mbpar.inc myhist.inc nodcay.inc partcl.inc pi.inc pinits.inc \ @@\
+	pjets.inc primar.inc prtout.inc ptpar.inc q1q2.inc qcdpar.inc \ @@\
+	qlmass.inc qsave.inc quest.inc rectp.inc seed.inc sslun.inc \ @@\
+	ssmode.inc sspar.inc sspols.inc sssm.inc sstmp.inc \ @@\
+	sstype.inc sugmg.inc sugnu.inc \ @@\
+	sugpas.inc sugxin.inc tcpar.inc times.inc totals.inc types.inc \ @@\
+	w50510.inc w50517.inc wcon.inc wcon1.inc wcon2.inc wgen.inc \ @@\
+	wsig.inc wwpar.inc wwpar1.inc wwpar2.inc wwsig.inc xmssm.inc \ @@\
+	kkgrav.inc mgcoms.inc mgkin.inc mglims.inc mgsigs.inc ssinf.inc \ @@\
+	zebcom.inc zevel.inc zlinka.inc zvout.inc dkyss3.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),isajet758)

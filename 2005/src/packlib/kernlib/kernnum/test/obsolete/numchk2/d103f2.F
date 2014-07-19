@@ -1,0 +1,34 @@
+*
+* $Id: d103f2.F,v 1.1.1.1 1996/02/15 17:48:40 mclareni Exp $
+*
+* $Log: d103f2.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:40  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+#if defined(CERNLIB_NEVER)
+      DOUBLE PRECISION FUNCTION D103F2(X)
+      DOUBLE PRECISION X,A,B,P,Q
+      COMMON /D103CM/DMY,NFN,A,B,P,Q
+C
+C  INTEGRAND FOR SUBPROGRAM DGAUSS.
+C
+C  START.
+C
+C  SHARP PEAK.
+      IF( NFN.EQ.1 ) D103F2 = P*EXP( MAX( -(P*(X-Q))**2, -100.D0 ) )
+C
+C  NON-POLYONOMIAL END-POINTS.
+      IF( NFN.EQ.2 ) D103F2= 0.5D0*P*SQRT( (B-A)**2 - (2.D0*X-B-A)**2 )
+C
+C  OSCILLATORY FUNCTION.
+      IF( NFN.EQ.3 .OR. NFN.EQ.4 ) D103F2 = P*(SIN(X)**2)*COS(Q*X)
+      IF( NFN.EQ.4 ) D103F2 = D103F2 + P
+C
+C  ERROR CONDITION (SINGULARITY).
+      IF ( NFN.EQ.5) D103F2 = 1.D0/X**2
+C
+      RETURN
+      END
+#endif

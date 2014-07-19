@@ -1,0 +1,22 @@
+*
+* $Id: v132.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v132.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+* Version 1.32
+C          GLOBAL CHANGES FROM 1.31 :
+C          - introduce UNIX flag, *GEN patch
+C          - change VMCMS flag to -IBMMVS.
+C          - change IBMVF flag to QMIBMVF.
+C
+C          ROUTINE CHANGES FROM 1.31 :
+C
+C          C311 LEGFN    Add dummy variable to align COMMON/LEGBL/
+C          D510 FUMILI   rearrange common blocks in sequences
+C          M233 TRTCH    CHanged for the new CERN character set
+C          M505 LOCHAR   Add CONVEX flag, change DATA statement for Cray
+C          V107 RNDM2    UNIX version introduced
+C

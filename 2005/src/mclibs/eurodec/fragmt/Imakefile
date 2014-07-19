@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 adjust.F bwmass.F clrstk.F detvtx.F finsho.F fragmt.F gjetfr.F \ @@\
+	 ibaryn.F idiqrk.F iqqbar.F meson.F ordstk.F qjetfr.F roter.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

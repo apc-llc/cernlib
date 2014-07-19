@@ -1,0 +1,104 @@
+DoIncludePackage(comis)
+#include "pilot.h"
+
+SRCS_F=	alphch.F anumch.F cgcont.F cs1200.F cs1600.F \ @@\
+	cs2036.F csacom.F csadcb.F csadcl.F csaddb.F csaddr.F \ @@\
+	csadecb.F csalphch.F csanumch.F csbuse.F cscall.F cscalx.F \ @@\
+	cscath.F csccal.F csccax.F cscfun.F cschcd.F cschid.F cscli.F \ @@\
+	csclos.F csclrb.F cscomx.F cscpar.F cscrsl.F \ @@\
+	csctli.F cscxnu.F csdcal.F csdcax.F csdclr.F csdeds.F csdefn.F \ @@\
+	csdepa.F csdfun.F csdigch.F csdio.F csdirh.F csdpow.F csdpro.F \ @@\
+	csdtab.F csdtli.F csdvln.F csedit.F csetcva.F csexec.F \ @@\
+	csexgb.F csexpr.F csextx.F csfile.F csfilx.F csflch.F \ @@\
+	csfmtc.F csfmtp.F csfrcbl.F csgetl.F csgetn.F csgscl.F \ @@\
+	csgtid.F csgtidb.F csgtidg.F csgtidl.F csgtidp.F \ @@\
+	cshlopt.F cshndl.F csical.F csicax.F csicns.F \ @@\
+	csierr.F csifun.F csilet.F csimed.F csimpl.F csinccl.F csinc1.F \ @@\
+	csincl.F csinfh.F csinfn.F csinit.F csint1.F csinta.F csintx.F \ @@\
+	csiocv.F csiodv.F csioed.F csioiv.F csiord.F csiori.F \ @@\
+	csiorv.F csiowi.F csiowr.F csioxv.F csipar.F csippd.F csitgb.F \ @@\
+	csitgi.F csitgp.F csitli.F csitll.F csjcax.F csjtjp.F cskcal.F \ @@\
+	cskide.F cskidn.F cskinp.F cskinq.F cskioa.F cskiov.F csknch.F \ @@\
+	cskpar.F cskrdw.F csktyp.F cskuvi.F cslab1.F cslbcl.F \ @@\
+	cslcal.F csldli.F csleqs.F cslexm.F cslfre.F cslib.F cslibr.F \ @@\
+	cslimp.F cslink.F cslistc.F cslistd.F cslistx.F csllib.F \ @@\
+	cslog.F cslpar.F csltab.F csltgb.F csltgi.F csltgp.F csltli.F \ @@\
+	csltll.F cslunf.F csmap.F csmark.F csmbit.F csmhel.F \ @@\
+	csnidn.F csnifn.F csnlex.F csnotb.F csnpar.F csnumb.F csofil.F \ @@\
+	csolog.F csomap.F csoutb.F csparsfn.F cspaus.F \ @@\
+	cspcll.F cspdat.F cspdir1.F cspdls.F cspecb.F cspmd0.F cspmd1.F \ @@\
+	cspmd2.F cspmd3.F cspmd4.F cspmd5.F cspmd6.F cspmd7.F cspmd8.F \ @@\
+	cspmd9.F cspmfs.F csptbl.F csptcl.F csptfs.F csptli.F csputl.F \ @@\
+	csr1fn.F csr2fn.F csr3fn.F csrblk.F csrcal.F csrcax.F csrd.F \ @@\
+	csrepv.F csrfun.F csrmcl.F csrmcll.F csrmsl.F \ @@\
+	csrnext.F csrpar.F csrspt.F csrtgb.F csrtgi.F csrtgp.F \ @@\
+	csrtli.F csrtll.F cssedt.F cssems.F cssetl.F cssgnu.F csshld.F \ @@\
+	csshmu.F csskue.F csslab.F cssout.F \ @@\
+	csspar.F cssubr.F cssvpt.F cstadv.F cstarr.F csterr.F cstext.F \ @@\
+	cstfrf.F cstinf.F cstlgb.F cstlog.F cstpar.F cstran.F cstrer.F \ @@\
+	cstypar.F cstype.F csubad.F csunam.F csundf.F csxpar.F \ @@\
+	mcline.F mcsident.F
+
+#if defined(CERNLIB_PAW)
+SRCS_F := $(SRCS_F) cspawi.F cskuix.F cktoiv.F cspawv.F csmkvd.F \ @@\
+		csf77.F cshext.F cshfast.F cssinpaw.F cspivec.F cspiwrvl.F
+#else
+SRCS_F := $(SRCS_F) cssinp.F
+#endif
+
+#if defined(CERNLIB_SHL)
+SRCS_F := $(SRCS_F) cscrexec.F
+#endif
+
+#if defined(CERNLIB_OLD)
+SRCS_F := $(SRCS_F) cspdir.F csrmbk.F
+#endif
+
+#if defined(CERNLIB_IBM)
+SRCS_F := $(SRCS_F) csintz.F
+#endif
+
+#if defined(CERNLIB_CSDEBUG)
+SRCS_F := $(SRCS_F) cspcod.F
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+#if defined(CERNLIB_HPUX)
+SpecialFortranLibObjectRule(csintx,csintx,'-WF,-P',NullParameter)
+#endif
+
+#if defined(CERNLIB_SGI) || defined(CERNLIB_SUN)
+SpecialFortranLibObjectRule(cstran,cstran,NullParameter,NullParameter)
+#endif
+
+#if defined(CERNLIB_SGI)
+FORTRANOPTIONS += -Nl1024
+#endif
+
+#if defined(CERNLIB_QMVAOS)
+FORTRANOPTIONS += -assume dummy_aliases
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+FORTRANOPTIONS := $(FORTRANOPTIONS) /assume=dummy
+#endif
+
+#if defined(CERNLIB_QFAPOGEE)
+/* without optimization compiler crashes */
+SpecialFortranLibObjectRule(csccal,csccal,'-O',NullParameter)
+SpecialFortranLibObjectRule(csccax,csccax,'-O',NullParameter)
+SpecialFortranLibObjectRule(cscfun,cscfun,'-O',NullParameter)
+#endif
+
+#if defined(CERNLIB_SOLARIS)
+SpecialFortranLibObjectRule(csr1fn,csr1fn,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csr2fn,csr2fn,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csdjcl,csdjcl,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csr3fn,csr3fn,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csintx,csintx,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csinfn,csinfn,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(cskide,cskide,-O0,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

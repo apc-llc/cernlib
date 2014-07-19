@@ -1,0 +1,38 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:10 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:10  mclareni
+* Kernlib
+*
+*
+*       for CDC Fortran 4
+* This directory was created from kernfor.car patch qmcdc
+#ifndef CERNLIB_B60
+#define CERNLIB_B60
+#endif
+#ifndef CERNLIB_B60M
+#define CERNLIB_B60M
+#endif
+#ifndef CERNLIB_B48M
+#define CERNLIB_B48M
+#endif
+#ifndef CERNLIB_B36M
+#define CERNLIB_B36M
+#endif
+#ifndef CERNLIB_A10
+#define CERNLIB_A10
+#endif
+#ifndef CERNLIB_A8M
+#define CERNLIB_A8M
+#endif
+#ifndef CERNLIB_A6M
+#define CERNLIB_A6M
+#endif
+#ifndef CERNLIB_A5M
+#define CERNLIB_A5M
+#endif
+*             ENTRY SYNTAX FOR CDC FORTRAN 4
+#ifndef CERNLIB_ENTRCDC
+#define CERNLIB_ENTRCDC
+#endif

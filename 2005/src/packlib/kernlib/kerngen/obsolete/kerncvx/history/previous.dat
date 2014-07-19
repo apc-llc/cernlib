@@ -1,0 +1,136 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:52:02 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:02  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNCVX)
+
+UP-DATE  1.10 :  28-Feb-1994
+----------------------------
+
+Replacing File   KERNCVX  1.09  910815 15.07
+
+Correct:      *KCVX  selects 64-bit, native mode, as before
+              *KCVY  selects 32-bit, IEEE mode, from now on
+
+              change QM significance:
+
+              QMCV64  64-bit mode (old: QMCVX)
+              QMCV32  32-bit mode (old: QMCVY)
+              QMCVX   either mode (old: QMCVX OR QMCVY)
+
+              change patch names:  CVXGS   -> CV64GS
+                                   CVYGS   -> CV32GS
+                                   CVALLGS -> CVXGS
+
+              re-write TIMELCC
+
+---------------------------------------------------------------------
+
+UP-DATE  1.09 :  15-Aug-1991
+----------------------------
+
+Replacing File   KERNCVX 1.08  910806 15.48
+
+New patches:  *KCVY          to trigger 32-bit Kernlib version
+              CVYGS          routines specific for 32-bit
+                             (64-bit specifics are in P=CVXGS)
+              CVALLGS        common routines for 32-bit and 64-bit
+
+Corrections:  Convex have changed the Fortran library:
+              before routines like GETARG expected 32-bit word parameters,
+              now 64-bit parameters are expected if compilation
+              -> and <- linking is done with 'fc -p8'
+              this affected routines: DATIME, DATIMH, IARGV, TIMEL
+
+              IE3 conversion routines:
+              there was a factor of 2 in both directions
+              this affects Zebra FZ files in exchange mode
+
+              UBLOW, UBUNCH        use standard version from KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.08 :   6-Aug-1991
+----------------------------
+
+Replacing File   KERNCVX 1.07  900726 20.02
+
+New decks :   Interface routines to the C library
+              CHDIRF, CTIMEF, GETENVF, GETPIDF, GETWDF, GMTIMEF, KILLF,
+              PERRORF, RENAMEF, SIGNALF, SLEEPF, STATF, SYSTEMF,
+              TMINIT, TMPRO, TMPROI, TMREAD, TMREADI,
+
+---------------------------------------------------------------------
+
+UP-DATE  1.07 :  26-July-1990
+----------------------------
+
+Replacing File   KERNCVX 1.06  891207 22.25
+
+Delete :      XBANNER             which is now on KERNFOR
+
+Correct:      Connect some routines from CCGEN
+
+---------------------------------------------------------------------
+
+UP-DATE  1.06 :   7-Dec-1989
+----------------------------
+
+Replacing File   KERNCVX 1.05  890913 21.08
+
+New decks :   LOCB           return the byte adr of a variable
+              XBANNER        for banner pages
+
+Correct :     DATIMH, RNDM, TIMED, TIMEX
+
+Delete :      ABEND, IUFORW  use default on KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.05 :  13-Sept-1989
+----------------------------
+
+Replacing File   KERNCVX 1.04  890626 15.24
+
+Correct :     DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+
+---------------------------------------------------------------------
+
+UP-DATE  1.04 :  26-June-1989
+----------------------------
+
+Replacing File   KERNCVX 1.03  890602 15.26
+
+Corrections after verification run at PSI, Villigen
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  1-June-1989
+----------------------------
+
+Replacing File   KERNCVX 1.01  890531 15.23
+
+Correct :     NOARG
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01 :  31-May-1989
+----------------------------
+
+Replacing File   KERNCVX 1.00  890317 13.10
+
+New Decks :   IE3xxy            IEEE conversion routines
+
+---------------------------------------------------------------------
+
+          First release of the KERNCVX  Pam :   15-mar-1989
+
+---------------------------------------------------------------------
+
+C====================================================================
+#endif

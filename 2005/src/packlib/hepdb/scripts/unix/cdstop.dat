@@ -1,0 +1,83 @@
+*
+* $Id: cdstop.dat,v 1.2 1996/04/16 10:09:08 jamie Exp $
+*
+* $Log: cdstop.dat,v $
+* Revision 1.2  1996/04/16 10:09:08  jamie
+* bring in sync with /afs/cern.ch/project/hepdb/scripts, aix 4 upgrade
+*
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+stop=" "
+run=" "
+nolog=" "
+noscr=" "
+b="."
+d=`date`
+#
+#   Ensure that variables are defined...
+#
+if [ -f restart_hepdb ]
+   echo Remove old restart_hepdb file...
+   then rm -i restart_hepdb
+fi
+ 
+for i in /hepdb/cd*
+   do
+ 
+typeset -u cdgrp
+typeset -l cdusr
+cdpath=$i
+cdgrp=`basename $i`
+cdusr=$cdgrp
+eval $cdgrp=$cdpath;export $cdgrp
+#
+# and stop those servers that are running...
+#
+if [ -x ${i}/cdserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /hepdb/${cdgrp}.log ]
+      then
+      echo Log file exists for ${cdgrp} - looking for existing process
+      log=${log}${b}${cdgrp}
+      pid=`cat /hepdb/${cdgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+         echo Looking for server process for $cdgrp
+         if(ps -ae  | grep -s $pid )
+            then
+            echo CDSERV running PID = $pid
+            run=${run}${b}${cdgrp}
+            echo rm /hepdb/${cdusr}/todo/signal.stop >> restart_hepdb
+            echo Server stopped at $d > /hepdb/${cdusr}/todo/signal.stop
+            else
+            echo No existing server found for $cdgrp
+            echo Removing old log file...
+            rm   /hepdb/${cdgrp}.log
+            if [ -f ${i}/todo/signal.stop ]
+               then echo signal.stop file found!
+               rm ${i}/todo/signal.stop
+               echo '(removed)'
+            fi
+         fi
+      fi
+   fi
+fi
+ 
+done
+ 
+echo
+echo Log files found for $log | tr '.' ' '
+echo Servers already running for $run | tr '.' ' '
+echo cdstart >> restart_hepdb
+if [ -f restart_hepdb ]
+   then chmod +x restart_hepdb
+   echo restart servers by typing restart_hepdb
+fi
+#endif

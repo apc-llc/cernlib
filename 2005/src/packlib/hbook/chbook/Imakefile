@@ -1,0 +1,19 @@
+SRCS_C= halloc.c hbvers.c hbpqry.c
+
+#ifdef CERNLIB_UNIX
+#if defined(CERNLIB_APOLLO) || defined(CERNLIB_CONVEX) || defined(CERNLIB_WINNT)
+SRCS_C+= hmmap.c
+#else
+SRCS_C+= hshm.c
+#endif
+#endif
+
+#if defined(CERNLIB_HPUX) ||  defined(CERNLIB_IBMRT)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Df2cFortran
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

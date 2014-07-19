@@ -1,0 +1,13 @@
+SRCS_F=	 dzare1.F dzarea.F dzbkdv.F dzbkhd.F dzbkup.F dzbkxr.F \ @@\
+	dzchbk.F dzchst.F dzchv1.F dzchvc.F dzdata.F dzform.F dzforp.F \ @@\
+	dziopd.F dzioph.F dziopr.F dzmap.F dzopt.F dzshow.F dzshpr.F \ @@\
+	dzsnap.F dzstdv.F dzstla.F dzstor.F dzsurv.F dzswap.F dztext.F \ @@\
+	dztyp.F dzveri.F dzzero.F lzloc.F nzleft.F zdvcop.F zpage.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(dzbkhd,dzbkhd,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(dzsnap,dzsnap,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(dzstor,dzstor,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

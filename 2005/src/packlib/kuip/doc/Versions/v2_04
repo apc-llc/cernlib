@@ -1,0 +1,157 @@
+*
+* $Id: v2_04,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_04,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.04/10 09/03/94  15.50.59  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   27/10/93
+*
+*::>          VERSION  2.04/10   09/03/94 15.50.59
+*
+* More corrections for Convex version.
+*
+* SHELL: do not convert shell command to uppercase on VM --- NQS++ uses
+* lowercase options (reported by Dave Edsall).
+*
+* New interface class String=$fun(Number,String) for application defined
+* functions.
+*
+* KUIPC: protect against TABs in CDF input (reported by Walter F.J. Mueller).
+*
+* Change' Set/LCDIR [path]' to ' -Set/LCDIR [path]' in KUIPMCDF
+*
+*::>          VERSION  2.04/09   01/03/94 11.27.08
+*
+* Changes in command PANELS (to correct a problem reported in HISTO/FIT)
+*
+* Introduction of teh command "panel 0 c title" ("panel close")
+* to close a panel with name title in a KUIP macro.
+* This was previously only possible with the mouse.
+*
+* Changes for CONVEX in $HKUIP_H, HKUIP and KEXEC
+*
+* Bug fix in KMENU when HELP without parameters
+*
+*::>          VERSION  2.04/08   16/02/94 14.16.39
+*
+* Batch mode did not work on VAX/VMS due to wrong VAXC$CRTL_INIT() placement
+* (reported by John Marrafino).
+*
+* "cmd $fun([var])" did not work if [var] contained an operator like ".and."
+* (reported by Mats Cronqvist).
+*
+* CALL KUCMD('..',' ','SW') crashed when creating a menu without any commands
+* (reported by Vincenzo Innocente).
+*
+* Allow comma-separated list of names for ALIAS/DELETE and VECTOR/DELETE
+* (reported by Mike Kelsey).
+*
+* Corrections for Windows/NT port by Valeri Fine.
+*
+*::>          VERSION  2.04/07   25/01/94 16.02.27
+*
+* KUFDEF: allow for functions without arguments given as "$name()".
+*
+*::>          VERSION  2.04/06   25/01/94 13.33.49
+*
+* $FORMAT: fix for format descriptors like I9.5 which did not put leading
+* zeroes on VAX/VMS.
+*
+* Use Fortran READ for command input when stdin is not a terminal.
+* (RS/6000, DECstation, and Alpha-OSF/1 Fortran I/O does not use C-stream
+* functions.)
+*
+* KUCMD: missing check if a menu name already existed.
+*
+* KMFILE: remove version number from VMS file specs in browser.
+*
+* GETLINE: make it less noisy be removing some beeps.
+*
+*::>          VERSION  2.04/05   22/12/93 09.43.07
+*
+* add ressource "centerCommand".
+* add command /MOTIF/ICON (panel with icons)
+* implement panel with icons.
+* suppress "Double Click" in list of browsables (browser).
+* new KUIPCC to suppress a bug for option parameter with integer values.
+*
+*::>          VERSION  2.04/04   14/12/93 15.03.03
+*
+* KXTERM: corrections for transcript saving in VMS.
+*
+* HOST_PRINTER and KUIP/PRINT: new commands to send a file to the printer;
+* Print is now included in the action menus of the file system browser.
+*
+* MACRO/DATA: new command to be used as "APPL DATA file.name" to write text
+* from immediate data in a macro.
+*
+* New system function $IQUEST(I) returning the status vector element.
+* "IF $IQUEST(1)=0 THEN ..." allows to test the success of the last command.
+*
+* KUESVR: create lock file in /tmp if /usr/tmp fails, e.g. because directory
+* is NFS mounted and locking not supported (reported by Dave Edsall).
+*
+*::>          VERSION  2.04/03   29/11/93 17.02.31
+*
+* Bug fix in the command pull-down menus of the main browser.
+*
+* Slight changes in the CDF.
+*
+*::>          VERSION  2.04/02   23/11/93 16.47.06
+*
+* KXTERM: delay flow control to allow FFREAD from stdin.
+*
+* KUGETF: allow KUGETL mechanism to get a list of filenames.
+*
+* Command COLUMNS: add protection in case environment variable "COLUMNS" does
+* not contain a number (reported by Maurizio Loreti).
+*
+* getline: ^Z-suspend did not work if the program was called from a shell
+* script (reported by Maarten Ballintijn).
+*
+* $SUBSTRING(s,k,n) returned one character too much if k+n happened to be the
+* length of the string.
+*
+*::>          VERSION  2.04/01   27/10/93 15.02.14
+*
+* KUIPC produced wrong Fortran code for a 64-character string on continuation
+* lines (reported by David Wagner).
+*
+* KUIPC: compiler-indepenent treatment of backslash in character strings.
+*
+*::>          VERSION  2.04/00   27/10/93 10.29.10
+*
+* Use HOST_EDITOR setting in VMS Motif version.
+*
+* Break interception for Motif version on VMS.
+*
+* "cmd;" resulted in "unknown command cmd;" rather than executing the
+* command "cmd".
+*
+* last.kumac could not be written if application started in a directory with
+* a mixed-case name.
+*
+* Treat alias content in expressions as number if possible.
+*
+* Preserve trailing blanks in variable initialization in MACRO header.
+*
+* Preserve trailing blanks in macro variable assignment
+*
+* KUHOME: do not apply filecase conversion to allow uppercase directory names.
+*
+* Browser: corrections for editing for path window.
+*
+* KUOPEN: new status code 'DONTKNOW' which opens the highest cycle on VMS
+* ('UNKNOWN' creates a new cycle);  on other systems equivalent to 'UNKNOWN'
+*
+* Disable Control-C for Motif version on VMS.
+*
+* Set Motif host editor to /DISPLAY=DECW.
+*
+* Mods for CONVEX version by Victor Balashov (Dubna).
+*
+* KIMATH: fix to recognize numbers .LT.1 without leading zero.
+*

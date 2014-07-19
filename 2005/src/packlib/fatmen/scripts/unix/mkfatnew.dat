@@ -1,0 +1,40 @@
+*
+* $Id: mkfatnew.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: mkfatnew.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#
+# Job to create empty FATMEN catalogue
+#
+cat <<!
+ 
+Please give the name of the FATMEN system. This name forms
+the top-level of the FATMEN catalogue,
+e.g. CERN, FNAL, DESY etc.
+ 
+!
+echo -n 'Please give the name of the FATMEN system '
+read FATSYS
+export FATSYS
+echo
+echo -n 'Please give the name of the FATMEN group '
+read FATGRP
+export FATGRP
+echo
+echo -n 'Please give the directory where the new catalogue should reside '
+read FATDIR
+OLDDIR=`pwd`
+echo Setting directory to $FATDIR ...
+cd $FATDIR
+echo Creating subdirectories ...
+mkdir todo
+mkdir tovm
+mkdir done
+chmod a+w todo
+echo Running FATNEW ...
+fatnew
+echo Restoring directory...
+cd $OLDDIR

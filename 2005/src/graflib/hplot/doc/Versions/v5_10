@@ -1,0 +1,89 @@
+*
+* $Id: v5_10,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_10,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :          27/08/91  18.30.03  by  Unknown
+*-- Author :
+*
+*::>          VERSION  5.10/13   910614 15.35
+*
+*       Mods in HPLF in order to plot the gaussian, exponential and
+*          polynomial fits with the parameters of the curves.
+*
+*::>          VERSION  5.10/12   910605 11.45
+*
+*       Mods in HPLSWN in case of option 'S' in H/PLOT and ZONE.
+*       New parameters XWID and YWID in HPLSET in order to change
+*          the width of the X and Y axis tick marks.
+*
+*::>          VERSION  5.10/11   910503 17.51
+*
+*       The marker type is now reset in the example 2 (HPLEX2)
+*       HPLCHA fill the COMMON QUEST in order to know if the picked
+*          histo is in LOG scale or not.
+*
+*::>          VERSION  5.10/10   910321 10.56
+*
+*       Bug fixed in HPLAX2. In case of OPTION SOFT the font value
+*          was not correct for the LEGO and SURFACE axis.
+*
+*::>          VERSION  5.10/09   910215 18.37
+*
+*       Changes of Patchy flags STRASB,NEWLIB,IBMMVS.
+*
+*::>          VERSION  5.10/08   910118 10.08
+*
+*       Bug fixed in HPLC: In case of OPTION LOGY on an histogram
+*          with YMINI=YMAXI nothing was drawn.
+*
+*::>          VERSION  5.10/07   901220 14.13
+*
+*       The value of "all channels" can be printed if option STAT
+*          is selected (and also SET STAT 1000000).
+*
+*::>          VERSION  5.10/06   901207 11.31
+*
+*       Changes in HPLTAB : the color of the contour plots could
+*          be changed via SET HCOL.
+*
+*::>          VERSION  5.10/05   901206 12.13
+*
+*       New option ERRX in HPLSET to define the error on X
+*          in % of the bin width. The default is 0.5 . SET ERRX 0
+*          set the default value. To delete the error on X one
+*          should set ERRX to a small value. This implies mods
+*          in HPLSET, HPLE, and HPLER. A new varialble RERRX is
+*          in the COMMON HPL1.
+*
+*::>          VERSION  5.10/04   901130 11.17
+*
+*       It is now possible to give to HPLSET *SIZ, *TYP, *COL, *WID
+*          and *FON to define respectivly all the text sizes, the
+*          fill area type, the colors, the line width and the text
+*          fonts with the same values.
+*
+*::>          VERSION  5.10/03   901129 10.59
+*
+*       Changes in HPLSET to correct the fact that SET HCOL 0.i
+*          set always the list 1 as current list.
+*
+*::>          VERSION  5.10/02   901123 10.56
+*
+*       Correction in HPLC in case of HMAX and LOGY
+*
+*::>          VERSION  5.10/00   901107 14.12
+*
+*       Axis are drawn after the 2D plots in HPLTAB
+*       The drawing of the errors bars take care with HWID
+*       Max for 2D histograms introduced in HPLTAB
+*       SET STAT works now 2D histograms
+*       New version of HPLTOC
+*       New option 'B' in HPLFRA to avoid the Box drawing
+*       New algorytms for LEGO and SURFACE
+*       A 1 Dim histogram could be plotted as a LEGO
+*       OPTION BAR and SET BARO and SET BARW work on LEGOS
+*

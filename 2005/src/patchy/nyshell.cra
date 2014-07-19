@@ -1,0 +1,4 @@
++USE, ${PLINAME}.
++EXE, YSHELL, D=NSHELL.
++USE, *PATCHY.
++PAM, 11, T=C,ATT   .patchy

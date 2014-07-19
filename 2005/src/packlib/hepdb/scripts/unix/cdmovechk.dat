@@ -1,0 +1,29 @@
+#!/bin/ksh
+#
+# Check that the HEPDB 'cdmove' server is not stuck
+#
+set -xv
+
+date
+
+tail /hepdb/cdmove/cdserv.log > /hepdb/cdmove/check1
+
+diff /hepdb/cdmove/check0 /hepdb/cdmove/check1 > /dev/null 2>&1
+
+if [ $? -eq 0 ]
+
+then
+   
+   logfile=/hepdb/cdmove/cdserv.log
+   lm=`ls -lLm ${logfile}`
+   subject=`echo ${0}: ${lm}`
+   tail ${logfile} | mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+   (su - jamie;restart_cdmove;exit)
+   ps -ef | grep cdmove | mail -s " cdmove restarted " hepdb-mgr@zfatal.cern.ch
+
+else
+
+   mv /hepdb/cdmove/check1 /hepdb/cdmove/check0
+
+fi
+

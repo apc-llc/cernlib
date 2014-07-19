@@ -1,0 +1,86 @@
+*
+* $Id: eudtxt,v 1.1.1.1 1996/03/08 16:58:50 mclareni Exp $
+*
+* $Log: eudtxt,v $
+* Revision 1.1.1.1  1996/03/08 16:58:50  mclareni
+* Eurodec
+*
+*
+* This directory was created from eurodec.car patch eudtxt
+C.----------------------------------------------------------------------
+C.
+C.    Eurodec is a general purpose Monte Carlo program for the
+C.    fragmentation and decay of quarks, di-quarks, heavy leptons etc.
+C.    It can be attached to the event generators:
+C.
+C.       EUROJET - EUROPPB, Event generator for pp(bar) interactions,
+C.               - EUREPEM, Event generator for e+e- interactions,
+C.               - EUROEP,  Event generator for e-p interactions,
+C.               - Your own event generator.
+C.
+C.    The routine FRAGMT provides the steering of this program. The I/0
+C.    follows through the common blocks /MOMGEN/ (input) and /RESULT/
+C.    (input/output). 'NTEIL' is the number of particles already
+C.    entered into /RESULT/ (the user should initialize 'NTEIL' !). New
+C.    particles will be added starting from position 'NTEIL+1'. The
+C.    arguments of the steering routine 'FRAGMT' the user has to
+C.    provide (only when it is used as a stand-alone program) read:
+C.
+C.    IP1    = pointer to first particle in the common /MOMGEN/,
+C.    IP2    = pointer to last particle in the common /MOMGEN/ to be
+C.             treated for fragmentation,
+C.    NTEIL0 = particles from position NTEIL0+1 onwards will be used in
+C.             the energy/momentum conservation procedure. Except for
+C.             the treatement of the underlying event in hadronic
+C.             interactions, NTEIL0 will generally be equal to NTEIL.
+C.
+C.    The other commons are needed for control and/or
+C.    initialization parameters (See Subroutine EUDCIN!).
+C.    Before the first call to the steering routine is made the user
+C.    should have made a call to the initialization package (EUDINI).
+C.    Written by:
+C.                    A. Ali            (DESY)
+C.                    B. van Eijk       (CERN)
+C.
+C.    Special thanks goes to:
+C.
+C.                    E. Pietarinen     (Helsinki)
+C.
+C.    for original ideas, and
+C.
+C.                    K. Bos            (NIKHEF-H)
+C.
+C.    for his help in debugging the program and the implementation of
+C.    secondary vertices. The help of:
+C.
+C.                    M.H. Gros         (Orsay)
+C.                    R. Kinnunen       (Helsinki)
+C.                    E. Barberio       (CERN)
+C.
+C.    on the concept of the particle table and the implementation of
+C.    specific decay modes is gratefully acknowledged.
+C.    Whenever you use this program, please give reference to one of the
+C.    following papers:
+C.    A. Ali, B. van Eijk, Proceedings of the 5th Topical Workshop on
+C.    Proton-Antiproton Coll. Physics, St. Vincent, Aosta Italy (1985).
+C.    B. van Eijk, 'New Particles 1985', Conference Proceedings,
+C.    University of Wisconsin, Madison, USA (1985).
+C.    A. Ali, B. van Eijk, Proceedings of the International Conference
+C.    on Proton-Antiproton Physics, Aachen FRG (1986).
+C.    B. van Eijk, CERN-EP/85-121, Preprint.
+C.    A. Ali, B. van Eijk and I. ten Have, CERN-TH.4523/86, Nucl. Phys.
+C.    B292 (1987) 1.
+C.    B. van Eijk and R. Kinnunen, NIKHEF-H/187-15.
+C.    B. van Eijk and R. Kinnunen, Z. Phys. C41 (1988) 489.
+C.    B. van Eijk, EURODEC User Manual, DELPHI Report DELPHI 89-39 PHYS
+C.    41 PROG 136 (1989),
+C.    K. Bos en B. van Eijk, (Heavy Flavour) Decays in Eurodec, DELPHI
+C.    Report DELPHI 89-50 PHYS 44 (1989),
+C.    B. van Eijk and J. Fuster, DELPHI Report DELPHI 89-45 PHYS 42
+C.    (1989),
+C.    E. Barberio and B. van Eijk, DELPHI Report DELPHI 89-XX PHYS XX
+C.    (1989)
+C.
+C.    LAST UPDATE: 12/09/89
+C.
+C.----------------------------------------------------------------------

@@ -1,0 +1,138 @@
+Macro PAWTEST5
+**************************************************************************
+*                             PAW TEST 5 :                               *
+*                              Axis tests                                *
+**************************************************************************
+   Exec ALLDEF
+   Set GSIZ .5
+   Set YGTI .5
+   Title 'Precision test on LOG axis'
+   Set YMGU 4
+   Hi/File 45 pawdemo.hbook
+   Cd axis_test
+   Opt logy
+   Zon 2 2
+   H/pl 1049
+   Zon 2 1 2 s
+   H/pl 1049
+   Zon 2 2 3 s
+   Nul 0 1 0.1 10
+   Close 45
+   Sel 1
+   Igset CHHE .35
+   Itx 5 14 '(A)'
+   Itx 15 14 '(B)'
+   Itx 5 5 '(C)'
+   Igset TXAL
+   Itx 2 17.7 '1)  (A) and (B) should have the same Y scale'
+   Itx 2 16.7 '2)  The (C) Y scale should be 0.1 to 10'
+   Waiting
+*
+   Exec Alldef
+   set YSIZ 28
+   zone 1 10
+   set NDVX 510
+   set NDVY 1
+   Set CSIZ 0.3
+   Set VSIZ 0.3
+*
+   Opt LINX
+   Nul 10.0 200
+   Opt LOGX
+   Nul 10.0 200
+   Opt LINX
+   Nul 10.1 200
+   Opt LOGX
+   Nul 10.1 200
+   Do r=400,600,100
+      Opt LINX
+      Null 100 [r]
+      Opt LOGX
+      Null 100 [r]
+   Enddo
+   Opt LINX
+   Sel 1
+   Text 0.5 14 'Linear and LOG scale must be the same' .5 90. C
+   Waiting
+*
+   Do r=0.01,0.1,0.01
+      Null 0 [r]
+   Enddo
+   Waiting
+*
+   Do r=0.1,1,0.1
+      Null 0 [r]
+   Enddo
+   Waiting
+*
+   Do r=1,10,1
+      Null 0 [r]
+   Enddo
+   Waiting
+*
+   Do r=10,100,10
+      Null 0 [r]
+   Enddo
+   Waiting
+*
+   Do r=100,1000,100
+      Null 0 [r]
+   Enddo
+   Waiting
+*
+   Do r=0.01,0.1,0.01
+      Null -[r] [r]
+   Enddo
+   Waiting
+*
+   Do r=0.1,1,0.1
+      Null -[r] [r]
+   Enddo
+   Waiting
+*
+   Do r=1,10,1
+      Null -[r] [r]
+   Enddo
+   Waiting
+*
+   Do r=10,100,10
+      Null -[r] [r]
+   Enddo
+   Waiting
+*
+   Do r=100,1000,100
+      Null -[r] [r]
+   Enddo
+   Waiting
+*
+   Null 0.0007  0.0008
+   Null 0.000799  0.0008
+   Null 0 0.00008
+   Null 0.5 2
+   Null -.000000123 .000000456
+   Null 9.999 10
+   Null 10.301442 10.304645
+   Null 0.301442 0.304645
+   Set ndvx 504
+   Null 2000000 2000001
+   Waiting
+*
+   set * ; opt *
+   zone 2 1
+   nul
+   nul 0 1 0 100000000 S
+   nul
+   opt LOGY
+   nul 0 1 0 100000000 S
+   Waiting
+*
+   set * ; opt *
+   zone
+   opt LOGY
+   null 10 11 100 3000
+   null 10 11 100 3000 S
+   Sel 1
+   Text 10 10 'Right labels should be aligned' 0.5 0 C
+   Waiting
+*
+   Return

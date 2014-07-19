@@ -1,0 +1,66 @@
+SRCS_F= amaxmu.F bitpos.F blow.F bunch.F ccopiv.F \ @@\
+	ccopyl.F ccopyr.F ccosub.F cenvir.F cfill.F cfromi.F cfweof.F
+	 
+SRCS_F= amaxmu.F bitpos.F blow.F bunch.F ccopiv.F \ @@\
+	ccopyl.F ccopyr.F ccosub.F cenvir.F cfill.F cfromi.F cfweof.F \ @@\
+	cleft.F cltou.F cright.F cross.F csetdi.F \ @@\
+	csetvi.F csetvm.F csqmbl.F csqmch.F ctrans.F \ @@\
+	cutol.F doti.F ffsize.F floarg.F flpsor.F \ @@\
+	gshow.F gshowf.F icdeci.F icequ.F icfila.F icfind.F \ @@\
+	icfmul.F icfnbl.F ichexi.F icinq.F icinql.F icinqu.F icloc.F \ @@\
+	iclocl.F iclocu.F icluns.F icnext.F icnth.F icnthl.F icnthu.F \ @@\
+	icnum.F icnuma.F icnumu.F icocti.F ictype.F ie3fod.F \ @@\
+	ie3tod.F ifromc.F intarg.F intsor.F \ @@\
+	iuback.F iubin.F iuchan.F iucola.F \ @@\
+	iuend.F iufila.F iufnbl.F iuforw.F iuhist.F \ @@\
+	iulast.F iulook.F iumode.F iunext.F \ @@\
+	kerngt.F loren4.F lorenb.F \ @@\
+	lorenf.F lvsdmi.F lvsdmx.F \ @@\
+	lvsimi.F lvsimx.F lvsmi.F lvsmx.F matin1.F \ @@\
+	mxequ.F mxmad.F \ @@\
+	mxmlrt.F mxtrp.F mxuty.F ncdeci.F nchexi.F ncocti.F \ @@\
+	poweze.F proxim.F pscale.F \ @@\
+	ranecq.F ranecu.F ranmar.F rannor.F rmmaq.F rmmar.F \ @@\
+	rot.F \ @@\
+	setfmt.F smxinv.F sorcha.F sortd.F sorti.F \ @@\
+	sortr.F sortx.F sortzv.F tcdump.F \ @@\
+	tlerr.F tlpiv.F tlres.F tls.F tlsc.F tlsmsq.F \ @@\
+	tlstep.F tlswop.F tluk.F traat.F traceq.F tral.F tralt.F \ @@\
+	tras.F trasat.F trata.F trats.F tratsa.F trchlu.F trchul.F trinv.F \ @@\
+	trla.F trlta.F trpck.F trqsq.F trsa.F trsat.F trsinv.F trsmlu.F \ @@\
+	trsmul.F trupck.F ubits.F ucocop.F udicop.F \ @@\
+	uleft.F uopt.F uoptc.F uright.F uset.F \ @@\
+	utrans.F vdist.F vdist2.F \ @@\
+	vizpri.F vlinco.F
+
+#if !defined(CERNLIB_DOS) || defined(CERNLIB_QFMSOFT)
+SRCS_F := $(SRCS_F) ckrack.F csethi.F csetoi.F incbyt.F iuweed.F locbyt.F
+#endif
+
+/* Mil Standard routines usually are availbale, if not add here */
+#if defined(CERNLIB_SUN) || defined(CERNLIB_SGI) 
+SRCS_F := $(SRCS_F) ibits.F mvbits.F  ishftc.F
+#endif
+
+#if defined(CERNLIB_DOS) && !defined(CERNLIB_QFMSOFT)
+SRCS_F := $(SRCS_F) ibits.F mvbits.F
+#endif
+
+#ifdef CERNLIB_VAX
+SRCS_F := $(SRCS_F) getarg.F lenocc.F 
+#endif
+#if defined(CERNLIB_DOS) || defined(CERNLIB_MPW) || defined(CERNLIB_LNX) || defined(CERNLIB_WINNT)
+SRCS_F := $(SRCS_F) lenocc.F 
+#endif
+#ifdef CERNLIB_HPUX
+SRCS_F := $(SRCS_F) getarg.F
+#endif
+
+/* IBM mainfarme has ebcdic chars, all other use ascii */
+#ifdef CERNLIB_IBM
+SRCS_F := $(SRCS_F) chtoig.F
+#else
+SRCS_F := $(SRCS_F) chtoi.F itoch.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

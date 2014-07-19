@@ -1,0 +1,53 @@
+DoIncludePackage(paw)
+#include "pilot.h"
+
+SRCS_C=	c_decl.c hash_int_table.c mstr.c npantup.c \ @@\
+	qp_command.c qp_compile.c qp_convert.c qp_cuts.c \ @@\
+	qp_dimension.c qp_dyn_check.c qp_execute.c qp_exec_evt.c qp_generate.c \ @@\
+	qp_mask.c qp_name.c qp_parser.c qp_plot_opt.c qp_query.c \ @@\
+	qp_report.c qp_scanner.c qp_segment.c qp_semantic.c \ @@\
+	qp_signature.c qp_st_init.c qp_symtab.c \ @@\
+	qp_tree.c qp_value.c qp_hbook_if.c qpflags.c smap.c str.c svec.c \ @@\
+	qp_vvec.c
+
+SRCS_F= ftnprn.F
+
+#if defined(CERNLIB_HPUX) ||  defined(CERNLIB_IBMRT)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Df2cFortran
+#endif
+
+#if defined(CERNLIB_HPUX)
+CCOPTIONS += -Wp,-H10000
+#endif
+
+#ifndef CERNLIB_VAXVMS
+EXTRA_INCLUDES := $(EXTRA_INCLUDES) -I$(VPATH)
+#endif
+
+#if defined(CERNLIB_SUN) && !defined(CERNLIB_SOLARIS)
+/* turn off optimisation */
+CDEBUGFLAGS=
+#endif
+
+#ifdef CERNLIB_WINNT
+/* turn off optimisation */
+CDEBUGFLAGS = NoOpCDebugFlags
+#endif
+
+#if defined(CERNLIB_VAXVMS) && !defined(CERNLIB_QMALPH)
+SpecialCObjectRule(NullParameter,qp_execute,qp_execute,/noopt)
+#endif
+
+CCOPTIONS := $(CCOPTIONS) CcAnsiMode
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#if defined(CERNLIB_LINUX) && defined(CERNLIB_PPC)
+SpecialObjectRule(archive/qp_execute.o,qp_execute.c archive/qp_execute.d,-O0 -o $@)
+SpecialObjectRule(debug/qp_execute.o,qp_execute.c debug/qp_execute.d,-O0 -o $@)
+SpecialObjectRule(shared/qp_execute.o,qp_execute.c shared/qp_execute.d,-O0 -o $@)
+#endif

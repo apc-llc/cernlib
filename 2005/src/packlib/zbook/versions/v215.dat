@@ -1,0 +1,13 @@
+*
+* $Id: v215.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v215.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.15  850709
+C            Two minor corrections for formatted banks: addition of
+C            hexadecimal print (ZPBANK), bug corrected in ZPTFOR
+C            (both only if F77 on).
+C

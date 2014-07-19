@@ -1,0 +1,30 @@
+SRCS_F= garndm.F gdebug.F gekbin.F gfinds.F gftrac.F ggckov.F \ @@\
+	ghelix.F ghelx3.F glsklt.F gltrac.F gnckov.F gpcxyz.F \ @@\
+	gpgkin.F gpjxyz.F granor.F grkuta.F grndm.F grndmq.F \ @@\
+	gsking.F gskpho.F gsstak.F gstord.F gstrac.F gsxyz.F \ @@\
+	gtckov.F gtelec.F gtgama.F gthadr.F gthion.F gtmuon.F \ @@\
+	gtneut.F gtnino.F gtrack.F gtreve.F
+
+#ifdef CERNLIB_OLD
+SRCS_F:= $(SRCS_F) ginvo2.F gtmed2.F gtnex2.F
+#else
+SRCS_F:= $(SRCS_F) ginvol.F gtmedi.F gtnext.F
+#endif
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+#if defined(CERNLIB_LNX) && !defined(CERNLIB_QMLXIA64)
+ FDEBUGFLAGS = -O0
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,46 @@
+SRCS_F= ie3fos.F ie3tos.F iucomp.F \ @@\
+	iufind.F iuhunt.F iusame.F jobnam.F jrsbyt.F \ @@\
+	lvmax.F lvmaxa.F lvmin.F lvmina.F \ @@\
+	msbit.F msbit0.F msbit1.F mbytet.F noarg.F \ @@\
+	pkchar.F rndm.F \ @@\
+	sbit.F sbit0.F sbit1.F sbytor.F sbytpk.F \ @@\
+	ublank.F ublow.F ubunch.F \ @@\
+	ucopiv.F ucopy.F ucopyn.F uctoh.F uctoh1.F \ @@\
+	ufill.F uh1toc.F uhtoc.F upkbyt.F uswop.F uzero.F \ @@\
+	vadd.F vasum.F vbias.F vblank.F vcopyn.F \ @@\
+	vdot.F vdotn.F vdotn2.F vexcum.F vfill.F vfix.F vfloat.F \ @@\
+	vline.F vmatl.F vmatr.F vmax.F vmaxa.F vmin.F vmina.F \ @@\
+	vmod.F vmul.F vscale.F vsub.F vsum.F vunit.F vzero.F
+
+#ifndef CERNLIB_DOS
+SRCS_F := $(SRCS_F) cbyt.F jbit.F jbyt.F jbytet.F jbytor.F jbytpk.F \ @@\
+	 mbytor.F mcbyt.F msbyt.F pkbyt.F sbyt.F upkch.F 
+#endif
+#if defined(CERNLIB_VAX) || defined(CERNLIB_DECS) || defined(CERNLIB_QMVAOS) \
+ || defined(CERNLIB_DOS) || defined(CERNLIB_LNX)  || defined(CERNLIB_WINNT)
+SRCS_F := $(SRCS_F) iucomh.F
+#endif
+
+/*
+ * ucopy2 has 2 implementations, one in f77, and calling the C memmove ( POSIX )
+ *  memmove was faster on DEC-OSF, AIX, Linux; on solaris about equal, but avoids
+ *    deoptimisation
+ *  G.F. Dec-96
+ */
+#if defined(CERNLIB_QMVAOS) || defined(CERNLIB_IBMRT) || defined(CERNLIB_SOLARIS) \
+ || defined(CERNLIB_LINUX) || defined(CERNLIB_SGI)
+
+SRCS_C = ucopy2c.c
+
+#else
+
+SRCS_F := $(SRCS_F) ucopy2.F
+
+#endif
+
+#if defined(CERNLIB_QMVAOS)
+SpecialFortranLibObjectRule(uhtoc,uhtoc,-O1,NullParameter)
+SpecialFortranLibObjectRule(uh1toc,uh1toc,-O1,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

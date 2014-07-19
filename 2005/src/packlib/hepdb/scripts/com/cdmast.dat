@@ -1,0 +1,60 @@
+*
+* $Id: cdmast.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdmast.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDMAST.COM
+$SET NOON
+$ !
+$ !   Master HEPDB command file
+$ !
+$     save_mess = f$environment("MESSAGE")
+$     set message/nofacility/noseverity/noid/notext
+$     write sys$output "CDMAST starting at ''f$time()'"
+$ !
+$ !   Ensure that FATMEN queue is started
+$ !
+$ if f$getqui("DISPLAY_QUEUE","QUEUE_STOPPED","SYS$FATMEN") .eqs. "TRUE" then -
+start/queue sys$fatmen
+$ !
+$ !   define list of servers
+$ !
+$     node = f$trnlnm("SYS$CLUSTER_NODE") - "::"
+$     if node .eqs. "" then node = f$trnlnm("SYS$NODE") - "::"
+$     if node .eqs. "VXCERN" .or. node .eqs. "VSCRNA" then -
+servers  = "CDHEPDB,CDCHORUS,CDCPLEAR,CDNOMAD" ! Separate by commas
+$     if node .eqs. "UXCP05" then  servers  = "CDCPLEAR"
+$ !
+$     wakeup :== 00:30:00                    ! Every 30 minutes
+$ !
+$ !   define symbols - this is VXCERN specific
+$ !   unless you put all servers on DISK$MF
+$ !
+$     n = 0
+$ loop:
+$     server    = f$element(n,",",servers)
+$     if server .eqs. "," then goto again
+$     'server' == "DISK$MF:[''server']"
+$     n         = n + 1
+$     goto loop
+$ again:
+$ !
+$ !   Run the command files that expect a complete list as argument
+$ !
+$     write sys$output ">>> CDPURGE..."
+$     @CERN_ROOT:[EXE]CDPURGE 'servers'  ! Purge old journal files
+$ !
+$     write sys$output ">>> CDCHECK..."
+$     @CERN_ROOT:[EXE]CDCHECK 'servers'  ! Check that servers are started
+$ !
+$     write sys$output ">>> Time is ''f$time()'. Waiting ''wakeup'..."
+$     wait 'wakeup'
+$     write sys$output ">>> Wakeup at ''f$time()'."
+$     goto again
+$     set message 'save_mess'
+$     exit
+#endif

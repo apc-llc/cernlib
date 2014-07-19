@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 cojver.F data.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

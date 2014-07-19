@@ -1,0 +1,42 @@
+#ifndef CERNLIB_CLD
+module cernlibcld
+#endif
+define verb CERNLIB
+#ifdef CERNLIB_CLD
+       image "CERN_ROOT:[exe]CERNLIB"
+#endif
+              parameter       P1,VALUE(NOCONCATENATE,LIST,TYPE=$FILE)
+              qualifier       INCLUDE,PLACEMENT=LOCAL,NONNEGATABLE
+                              VALUE(REQUIRED,LIST)
+              qualifier       LIBRARY,PLACEMENT=LOCAL,NONNEGATABLE
+              qualifier       SHAREABLE,PLACEMENT=LOCAL,
+                              VALUE(TYPE=COPY_TYPE)
+              qualifier       OPTION,PLACEMENT=LOCAL,NONNEGATABLE
+              qualifier       SELECTIVE_SEARCH,PLACEMENT=LOCAL,NONNEGATABLE
+              qualifier       HNEW,DEFAULT,PLACEMENT=GLOBAL
+              qualifier       HOLD,PLACEMENT=GLOBAL
+              qualifier       PLOT10,PLACEMENT=GLOBAL
+              qualifier       GTS2D,DEFAULT,PLACEMENT=GLOBAL
+              qualifier       GTS3D,PLACEMENT=GLOBAL
+              qualifier       GKS,PLACEMENT=GLOBAL
+              qualifier       X11,PLACEMENT=GLOBAL
+              qualifier       MOTIF,PLACEMENT=GLOBAL
+              qualifier       PHIGS,PLACEMENT=GLOBAL
+              qualifier       GPHIGS,PLACEMENT=GLOBAL
+              qualifier       DGKS,PLACEMENT=GLOBAL
+              qualifier       DECGKS,PLACEMENT=GLOBAL
+              qualifier       OLD,PLACEMENT=POSITIONAL
+              qualifier       PRO,PLACEMENT=POSITIONAL
+              qualifier       NEW,PLACEMENT=POSITIONAL
+              qualifier       USER,PLACEMENT=GLOBAL
+              qualifier       LOG,PLACEMENT=GLOBAL,DEFAULT
+              qualifier       DEBUG,PLACEMENT=GLOBAL
+              qualifier       CNL,PLACEMENT=POSITIONAL,NONNEGATABLE
+                              VALUE(REQUIRED,TYPE=$NUMBER)
+              disallow        (HNEW and HOLD) or (HOLD and GTS2D) or
+                              (HOLD and GTS3D) or (GTS2D and GTS3D) or
+                              (HNEW and PLOT10) or (PLOT10 and GTS2D) or
+                              (PLOT10 and GTS3D)
+ 
+  define type COPY_TYPE
+         keyword NOCOPY,NONNEGATABLE

@@ -1,0 +1,19 @@
+*
+* $Id: fatsrv.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatsrv.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+// JOB
+// EXEC PGM=FATSRV
+//JOBLIB DD DSN=FATLIB,DISP=SHR
+//* Following statements define Catalogue name, Group name
+//* wakeup interval (seconds) and loglevel.
+//SYSIN  DD *
+DESY
+H1
+60
+3
+//FT01F001 DD DSN=R01JDS.FATMEN.H1.DESY.FATRZ,DISP=SHR

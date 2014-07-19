@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 gtisaj.F gtisal.F gtisam.F gtisaq.F gtiscl.F gtisjt.F gtisp1.F \ @@\
+	 gtisp2.F gtisv1.F gtisv2.F gtpjet.F gtpjhd.F iszjet.F iszrun.F \ @@\
+	 iszusr.F prisab.F prisac.F prisae.F prisaf.F prisaj.F prisal.F \ @@\
+	 prisam.F prisaq.F priscl.F priscm.F prisjt.F prisp1.F prisp2.F \ @@\
+	 prisp3.F prisv1.F prisv2.F prpjet.F prpjhd.F prtevz.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

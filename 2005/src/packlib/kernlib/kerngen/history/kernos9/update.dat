@@ -1,0 +1,24 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:46 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:46  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNOS9)
+ 
+ 
+              Up-date record for the Pam-file  KERNOS9
+              ----------------------------------------
+  
+UP-DATE  1.01 :   29-sept-1994
+------------------------------
+
+Replacing file   KERNOS9 1.00  920521 16.28
+ 
+Correct:
+ 
+---------------------------------------------------------------------
+ 
+#endif

@@ -1,0 +1,81 @@
+*
+* $Id: cojplt.F,v 1.1.1.1 1996/01/11 14:15:05 mclareni Exp $
+*
+* $Log: cojplt.F,v $
+* Revision 1.1.1.1  1996/01/11 14:15:05  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE COJPLT(JTIN,JTLIS)
+C     *****************************
+C
+C          SKELETON OF A JOB TO ANALYSE COJETS EVENTS FROM TAPE JTIN
+C          HISTOGRAM RESULTS WITH CERN HBOOK.
+C          ALL PRINTING IS ON TAPE JTLIS.
+C
+C          COJETS COMMON BLOCKS
+#include "cojets/final.inc"
+#include "cojets/itapes.inc"
+#include "cojets/primar.inc"
+#include "cojets/rectp.inc"
+C
+C          COJPLT COMMON BLOCKS
+      COMMON/MXHIST/MXHIST,NHSHFT
+C
+C          HBOOK AND OTHER VARIABLES.
+C          NWMEMO = NUMBER OF WORDS FOR HISTOGRAMS; IT MAY HAVE TO BE
+C          INCREASED OR HDISKF OR HLCM3 USED.
+      PARAMETER (NWMEMO=10000)
+      COMMON//HMEMOR(NWMEMO)
+      LOGICAL HEXIST
+C
+C          INITIALIZE
+      CALL HLIMIT(NWMEMO)
+      ITLIS=ABS(JTLIS)
+      ITAPE=ABS(JTIN)
+      CALL HOUTPU(ITLIS)
+      CALL HERMES(ITLIS)
+C
+C          SET UP HISTOGRAMS
+      CALL SETUP
+C
+C          READ NEXT RECORD UNTIL EOF ENCOUNTERED
+      REWIND ITAPE
+1     CONTINUE
+      IFL=0
+      CALL RDTAPE(ITAPE,IFL)
+      IF(IFL.EQ.-1) GO TO 3
+      IF(IRECTP.EQ.200) THEN
+C
+C          CALL USERBG ROUTINE TO HANDLE BEGINNING RECORD
+        CALL USERBG
+        GO TO 1
+      ENDIF
+      IF(IRECTP.EQ.300) GO TO 2
+C
+C          EVENT RECORD
+      CALL USER
+      GO TO 1
+C
+C          END OF RUN RECORD. WEIGHT HISTOGRAMS, ACCUMULATE ON RESULTS
+C          FROM PREVIOUS EVENT SAMPLES (IF ANY)
+2     CONTINUE
+C
+      SIGWT=SIGF/FLOAT(NEVTAP)
+      IF(SIGWT.EQ.0.) SIGWT=1.
+      DO 100 I=1,MXHIST
+      IF(.NOT.HEXIST(I)) GO TO 100
+      CALL HOPERA(I,'+',I+NHSHFT,I+NHSHFT,SIGWT,1.)
+      CALL HRESET(I,' ')
+100   CONTINUE
+C
+C          CALL USEREN ROUTINE TO HANDLE FINAL RECORD
+      CALL USEREN
+      GO TO 1
+C
+C          END OF JOB
+C          OUTPUT HISTOGRAMS
+3     CALL EHIST
+      RETURN
+      END

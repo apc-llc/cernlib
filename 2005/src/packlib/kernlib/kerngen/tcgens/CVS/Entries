@@ -1,0 +1,89 @@
+/Imakefile/1.8/Tue Jan 20 17:15:50 1998//
+/cbyt.F/1.1.1.1/Thu Feb 15 17:50:10 1996//
+/ie3fos.F/1.1.1.1/Thu Feb 15 17:50:10 1996//
+/ie3tos.F/1.1.1.1/Thu Feb 15 17:50:10 1996//
+/iucomh.F/1.2/Tue Feb  4 17:36:24 1997//
+/iucomp.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/iufind.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/iuhunt.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/iusame.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/jbit.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/jbyt.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/jbytet.F/1.1.1.1/Thu Feb 15 17:50:11 1996//
+/jbytor.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/jbytpk.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/jobnam.F/1.3/Wed Nov  5 16:00:44 1997//
+/jrsbyt.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/lvmax.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/lvmaxa.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/lvmin.F/1.1.1.1/Thu Feb 15 17:50:12 1996//
+/lvmina.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/mbytet.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/mbytor.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/mcbyt.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/msbit.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/msbit0.F/1.1.1.1/Thu Feb 15 17:50:19 1996//
+/msbit1.F/1.1.1.1/Thu Feb 15 17:50:19 1996//
+/msbyt.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/noarg.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/pkbyt.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/pkchar.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/rndm.F/1.3/Thu Oct 23 16:37:04 1997//
+/sbit.F/1.1.1.1/Thu Feb 15 17:50:13 1996//
+/sbit0.F/1.1.1.1/Thu Feb 15 17:50:19 1996//
+/sbit1.F/1.1.1.1/Thu Feb 15 17:50:19 1996//
+/sbyt.F/1.1.1.1/Thu Feb 15 17:50:14 1996//
+/sbytor.F/1.1.1.1/Thu Feb 15 17:50:14 1996//
+/sbytpk.F/1.1.1.1/Thu Feb 15 17:50:14 1996//
+/ublank.F/1.1.1.1/Thu Feb 15 17:50:14 1996//
+/ublow.F/1.4/Fri Sep 25 09:32:02 1998//
+/ubunch.F/1.4/Fri Sep 25 09:32:06 1998//
+/ucopiv.F/1.1.1.1/Thu Feb 15 17:50:15 1996//
+/ucopy.F/1.1.1.1/Thu Feb 15 17:50:19 1996//
+/ucopy2.F/1.1.1.1/Thu Feb 15 17:50:15 1996//
+/ucopy2c.c/1.1/Fri Dec  6 08:49:18 1996//
+/ucopyn.F/1.1.1.1/Thu Feb 15 17:50:15 1996//
+/uctoh.F/1.2/Tue Apr  2 23:17:45 1996//
+/uctoh1.F/1.2/Tue Apr  2 23:17:46 1996//
+/ufill.F/1.1.1.1/Thu Feb 15 17:50:15 1996//
+/uh1toc.F/1.2/Tue Apr  2 23:17:48 1996//
+/uhtoc.F/1.2/Tue Apr  2 23:17:49 1996//
+/upkbyt.F/1.1.1.1/Thu Feb 15 17:50:15 1996//
+/upkch.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/uswop.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/uzero.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vadd.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vasum.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vbias.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vblank.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vcopyn.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vdot.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vdotn.F/1.1.1.1/Thu Feb 15 17:50:16 1996//
+/vdotn2.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vexcum.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vfill.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vfix.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vfloat.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vline.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vmatl.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vmatr.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vmax.F/1.1.1.1/Thu Feb 15 17:50:17 1996//
+/vmaxa.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vmin.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vmina.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vmod.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vmul.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vscale.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vsub.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vsum.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vunit.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+/vzero.F/1.1.1.1/Thu Feb 15 17:50:18 1996//
+D/allgs////
+D/dosgs////
+D/irtdgs////
+D/lnxgs////
+D/lnxppcgs////
+D/mpwgs////
+D/sungs////
+D/vaxgs////
+D/wntgs////

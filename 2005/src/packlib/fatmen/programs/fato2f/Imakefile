@@ -1,0 +1,3 @@
+SRCS_F=	 fato2f.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

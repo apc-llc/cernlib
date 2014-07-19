@@ -1,0 +1,10 @@
+#ifndef CERNLIB_FATMEN_FATVERI_INC
+#define CERNLIB_FATMEN_FATVERI_INC
+*
+*
+* fatlab.inc
+*
+      COMMON/FATVERI/IFMVER
+      INTEGER IFMVER 
+
+#endif

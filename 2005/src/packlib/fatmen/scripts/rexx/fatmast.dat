@@ -1,0 +1,133 @@
+*
+* $Id: fatmast.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatmast.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATMAST.EXEC */
+/*            FAT_MASTER Service machine exec             */
+wait:
+ 
+/*auth_users = 'JAMIE/CONSOLE/ORACLE/OPSSERVE/HRRCR/TNT/JULIAN/ONEALE/OPALSVR2/OPALFAT6'*/
+auth_users = 'JAMIE/CONSOLE/OPSSERVE/HRRCR/TNT/JULIAN/ONEALE/OPALSVR2/OPALFAT6'
+valid      = 'SHUTDOWN/HELLO/STARTUP/WHO/LOGOFF/ADDFAT/REMFAT'
+'ID(LIFO'
+Pull . . mynode .
+'DROPBUF'
+'CP SET MSG IUCV'
+deltim = '+00:01'
+  Do Forever
+ 
+ 'WAKEUP' deltim  '(IUCVMSG' /* Wakeup every 10 minutes */
+  code = rc
+  deltim = '+00:10:00'
+/* P r o c e s s   m e s s a g e */
+ 
+Select
+    When code = 2 then do /* Wakeup and see what's happening */
+       /* What's the time? */
+/*     ttime = time("M") /* Minutes past midnight */
+       if (ttime > 200) & (ttime < 550) then iterate*/
+       "EXEC QFAT"
+       end
+    When code = 5 then do /* New MSG */
+       Pull text
+       Parse var text . user text
+/*     Say 'New MSG received'*/
+       If user = XNAME("RSCSID") | user = "DECMCS" then do
+          Parse Var text . "FROM" user_node text
+          Parse Var user_node node "(" user ")" .
+          If user = "" | DATATYPE(user,"N") then Return 1
+          End
+          Else do
+          node = mynode
+/*        Say 'Message 'text 'from user 'user 'at 'node */
+          If Index(auth_users,user) = 0 then do
+/*           Say 'User not authorised'                  */
+             End
+             Else Do
+                Call Process Text
+                If rc = 999 then exit
+             End
+          Iterate
+          End
+ 
+       Say 'Message 'text 'from user 'user 'at 'node
+ 
+       end
+    When code = 6 then do /* Terminal input */
+       Leave
+       end
+    Otherwise nop
+  End
+ 
+End
+Exit
+ 
+/* Process message */
+Process: Procedure Expose Text Valid User Node
+Parse Arg Action Object
+Text = Strip(Text)
+ 
+if fexist(FATMEN MAILFILE A3) then 'ERASE FATMEN MAILFILE A3'
+'EXECIO 1 DISKW FATMEN MAILFILE A3 (STRING ** Request received from 'user 'AT' node
+'EXECIO 1 DISKW FATMEN MAILFILE A3 (STRING 'action object
+'EXEC MAIL FATMAN (NOEDIT NOLOG FILE FATMEN MAILFILE SUBJECT 'action object
+ 
+If Index('LOGOFF',Action) ^= 0 then do
+   "EXEC MFAT LOGOFF" object
+   Queue "CP LOGOFF"
+   Exit  999
+   End
+If Index('SHUTDOWN',Action) ^= 0 then do
+   "EXEC MFAT LOGOFF" object
+   End
+If Index('STARTUP',Action) ^= 0 then do
+   EXEC QFAT Text
+   End
+If Index('WHO',Action) ^= 0 then do
+   'GLOBALV SELECT *EXEC STACK FATMEN'
+   Pull FATMEN
+   nfat = words(fatmen)
+   "EXEC TELL "user "AT" node "There are "nfat" FATMEN..."
+   "EXEC TELL "user "AT" node FATMEN
+   End
+If Index('ADDFAT',Action) ^= 0 then do
+   'GLOBALV SELECT *EXEC STACK FATMEN'
+   Pull FATMEN
+   npos = wordpos(object,fatmen)
+   if npos = 0 then do
+      'EXEC DEFAULTS SET FATMEN 'object
+      'GLOBALV SELECT *EXEC STACK FATMEN'
+      Pull FATMEN
+      nfat = words(fatmen)
+      "EXEC TELL "user "AT" node "There are now "nfat" FATMEN..."
+      "EXEC TELL "user "AT" node FATMEN
+   end
+   else do
+      nfat = words(fatmen)
+      "EXEC TELL "user "AT" node object "is already a fatman"
+      "EXEC TELL "user "AT" node "There are currently "nfat" FATMEN..."
+      "EXEC TELL "user "AT" node FATMEN
+   end
+   End
+If Index('REMFAT',Action) ^= 0 then do
+   'GLOBALV SELECT *EXEC STACK FATMEN'
+   Pull FATMEN
+   nfat = words(fatmen)
+   npos = wordpos(object,fatmen)
+   "EXEC TELL "user "AT" node "There are currently "nfat" FATMEN..."
+   "EXEC TELL "user "AT" node FATMEN
+   if npos > 0 then do
+      fatmen = delword(fatmen,npos,1)
+      "EXEC TELL "user "AT" node "There are now "nfat" FATMEN..."
+      "EXEC TELL "user "AT" node FATMEN
+      'GLOBALV SELECT *EXEC SETPL FATMEN' fatmen
+   end
+   else do
+      "EXEC TELL "user "AT" node "and" object" is not one of them..."
+   end
+   End
+Return

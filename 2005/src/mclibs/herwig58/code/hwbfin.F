@@ -1,0 +1,103 @@
+*
+* $Id: hwbfin.F,v 1.1.1.1 1996/03/08 17:02:10 mclareni Exp $
+*
+* $Log: hwbfin.F,v $
+* Revision 1.1.1.1  1996/03/08 17:02:10  mclareni
+* Herwig58
+*
+*
+*CMZ :          29/08/94  11.51.46  by  Unknown
+*-- Author :
+CDECK  ID>, HWBFIN.
+*CMZ :-        -26/04/91  10.18.56  by  Bryan Webber
+*-- Author :    Bryan Webber
+C------------------------------------------------------------------------
+      SUBROUTINE HWBFIN(IHEP)
+C     DELETES INTERNAL LINES FROM SHOWER,
+C     MAKES A COLOUR CONNECTION INDEX AND
+C     COPIES INTO /HEPEVT/ IN COLOUR ORDER.
+C------------------------------------------------------------------------
+#include "herwig58/herwig58.inc"
+      INTEGER IHEP,ID,IJET,KHEP,IPAR,JPAR,NXPAR,IP,JP
+      IF (IERROR.NE.0) RETURN
+C---SAVE VIRTUAL PARTON DATA
+      NHEP=NHEP+1
+      ID=IDPAR(2)
+      IDHW(NHEP)=ID
+      IDHEP(NHEP)=IDPDG(ID)
+      ISTHEP(NHEP)=ISTHEP(IHEP)+20
+      JMOHEP(1,NHEP)=IHEP
+      JMOHEP(2,NHEP)=JMOHEP(1,IHEP)
+      JDAHEP(1,IHEP)=NHEP
+      JDAHEP(1,NHEP)=0
+      JDAHEP(2,NHEP)=0
+      CALL HWVEQU(5,PPAR(1,2),PHEP(1,NHEP))
+C---FINISHED FOR SPECTATOR OR NON-PARTON JETS
+      IF (ISTHEP(NHEP).GT.136) RETURN
+      IF (ID.GT.13.AND.ID.LT.209 .AND. ID.NE.59) RETURN
+      IF (ID.GT.220) RETURN
+      IF (.NOT.TMPAR(2).AND.ID.EQ.59) RETURN
+      IDHEP(NHEP)=94
+      IJET=NHEP
+      IF (NPAR.GT.2) THEN
+C---SAVE CONE DATA
+        NHEP=NHEP+1
+        IDHW(NHEP)=IDPAR(1)
+        IDHEP(NHEP)=0
+        ISTHEP(NHEP)=100
+        JMOHEP(1,NHEP)=IHEP
+        JMOHEP(2,NHEP)=JCOPAR(1,1)
+        JDAHEP(1,NHEP)=0
+        JDAHEP(2,NHEP)=0
+        CALL HWVEQU(5,PPAR,PHEP(1,NHEP))
+      ENDIF
+      KHEP=NHEP
+C---START WITH ANTICOLOUR DAUGHTER OF HARDEST PARTON
+      IPAR=2
+      JPAR=JCOPAR(4,IPAR)
+      NXPAR=NPAR/2
+      DO 20 IP=1,NXPAR
+      DO 10 JP=1,NXPAR
+      IF (JPAR.EQ.0) GO TO 15
+      IF (JCOPAR(2,JPAR).EQ.IPAR) THEN
+        IPAR=JPAR
+        JPAR=JCOPAR(4,IPAR)
+      ELSE
+        IPAR=JPAR
+        JPAR=JCOPAR(1,IPAR)
+      ENDIF
+   10 CONTINUE
+C---COULDN'T FIND COLOUR PARTNER
+      CALL HWWARN('HWBFIN',1,*999)
+   15 JPAR=JCOPAR(1,IPAR)
+      KHEP=KHEP+1
+      ID=IDPAR(IPAR)
+      IF (TMPAR(IPAR)) THEN
+        IF (ID.LT.14) THEN
+          ISTHEP(KHEP)=139
+        ELSEIF (ID.EQ.59) THEN
+          ISTHEP(KHEP)=139
+        ELSEIF (ID.LT.109) THEN
+          ISTHEP(KHEP)=130
+        ELSEIF (ID.LT.120) THEN
+          ISTHEP(KHEP)=139
+        ELSE
+          ISTHEP(KHEP)=130
+        ENDIF
+      ELSE
+        ISTHEP(KHEP)=ISTHEP(IHEP)+24
+      ENDIF
+      IDHW(KHEP)=ID
+      IDHEP(KHEP)=IDPDG(ID)
+      CALL HWVEQU(5,PPAR(1,IPAR),PHEP(1,KHEP))
+      JMOHEP(1,KHEP)=IJET
+      JMOHEP(2,KHEP)=KHEP+1
+      JDAHEP(1,KHEP)=0
+      JDAHEP(2,KHEP)=KHEP-1
+   20 CONTINUE
+      JMOHEP(2,KHEP)=0
+      JDAHEP(2,NHEP+1)=0
+      JDAHEP(1,IJET)=NHEP+1
+      JDAHEP(2,IJET)=KHEP
+      NHEP=KHEP
+  999 END

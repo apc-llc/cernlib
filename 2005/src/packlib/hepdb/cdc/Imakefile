@@ -1,0 +1,3 @@
+SRCS_C=	 cdhstc.c cduser.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

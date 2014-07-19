@@ -1,0 +1,106 @@
+*
+* $Id: bmcorr.F,v 1.1.1.1 1996/01/11 14:14:33 mclareni Exp $
+*
+* $Log: bmcorr.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:33  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE BMCORR(WZM,NP1,NP,IFLAG)
+C    ***********************************
+C--  CORRECTS Z/W JET DECAY PRODUCTS TO GET RIGHT MASS AND BALANCE
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/decpar.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+      DIMENSION PTOT(5),PJTOTS(2,4),AJMTSQ(2),COSHBJ(2),SINHBJ(2)
+      IFLAG=0
+      NP2=NP1+1
+      DO 1 J=1,4
+      PJTOTS(1,J)=0.
+      DO 2 I=1,NP1
+2     IF(IDB(K(I,2)).LE.0) PJTOTS(1,J)=PJTOTS(1,J)+P(I,J)
+      PJTOTS(2,J)=0.
+      DO 3 I=NP2,NP
+3     IF(IDB(K(I,2)).LE.0) PJTOTS(2,J)=PJTOTS(2,J)+P(I,J)
+      PTOT(J)=PJTOTS(1,J)+PJTOTS(2,J)
+1     CONTINUE
+C-- ROTATION AND BOOST TO GET BALANCE
+      PMTSQ=PTOT(1)**2+PTOT(2)**2
+      PMSQ=PMTSQ+PTOT(3)**2
+      PM=SQRT(PMSQ)
+      PTOT(5)=SQRT(ABS(PTOT(4)**2-PMSQ))
+      IF(PTOT(2).EQ.0.AND.PTOT(1).EQ.0) THEN
+        PHIP=0.
+      ELSE
+        PHIP=ATAN2X(PTOT(2),PTOT(1))
+      ENDIF
+      COSP=COS(PHIP)
+      SINP=SIN(PHIP)
+      IF(PM.GT.0.) THEN
+      COST=ABS(PTOT(3))/PM
+      SINT=SQRT(PMTSQ)/PM
+      ELSE
+        COST=1.
+        SINT=0.
+      ENDIF
+      EXPB=PTOT(5)/(PTOT(4)+PM)
+      IF(PTOT(3).LT.0.) EXPB=1./EXPB
+      COSHB=.5*(EXPB+1./EXPB)
+      SINHB=.5*(EXPB-1./EXPB)
+C-- FIND HOW JET 4-MOMENTA MODIFY
+      DO 4 I=1,2
+C-- INVERSE ROTATION 1-2 AXES -- PTOT IN 1-3 PLANE
+      P1=         PJTOTS(I,1)*COSP+PJTOTS(I,2)*SINP
+      PJTOTS(I,2)=-PJTOTS(I,1)*SINP+PJTOTS(I,2)*COSP
+      PJTOTS(I,1)= P1
+C-- INVERSE ROTATION 1-3 AXES -- PTOT ALONG 3RD AXIS -- PZ 1ST JET .GT.0
+      P3=         PJTOTS(I,3)*COST+PJTOTS(I,1)*SINT
+      PJTOTS(I,1)=-PJTOTS(I,3)*SINT+PJTOTS(I,1)*COST
+      PJTOTS(I,3)= P3
+C-- BOOST ALONG 3RD AXIS -- PTOT REST FRAME
+      E=         PJTOTS(I,4)*COSHB+PJTOTS(I,3)*SINHB
+      PJTOTS(I,3)=PJTOTS(I,4)*SINHB+PJTOTS(I,3)*COSHB
+      PJTOTS(I,4)=E
+      AJMTSQ(I)=MAX(REAL(PJTOTS(I,4)**2-PJTOTS(I,3)**2),0.)
+4     CONTINUE
+C-- FIND LONGITUDINAL MOMENTUM OF JETS FOR RIGHT MASS -- GET BOOSTS
+      PFLARG=(WZM**2-AJMTSQ(1)-AJMTSQ(2))**2-4.*AJMTSQ(1)*AJMTSQ(2)
+      IF(PFLARG.LT.0.) IFLAG=1
+      IF(IFLAG.EQ.1) RETURN
+      PFL=SQRT(PFLARG)
+     +    /(2.*WZM)
+      DO 6 I=1,2
+      EF=SQRT(AJMTSQ(I)+PFL**2)
+      EXPB=(EF+SIGN(PFL,PJTOTS(I,3)))/(PJTOTS(I,4)+PJTOTS(I,3))
+      COSHBJ(I)=.5*(EXPB+1./EXPB)
+6     SINHBJ(I)=.5*(EXPB-1./EXPB)
+C-- PERFORM CHAIN OF TRANSFORMATIONS ON PARTICLES
+      JBOOST=1
+      DO 5 I=1,NP
+C-- INVERSE ROTATION 1-2 AXES -- PTOT IN 1-3 PLANE
+      P1=     P(I,1)*COSP+P(I,2)*SINP
+      P(I,2)=-P(I,1)*SINP+P(I,2)*COSP
+      P(I,1)=P1
+C-- INVERSE ROTATION 1-3 AXES -- PTOT ALONG 3RD AXIS
+      P3=     P(I,3)*COST+P(I,1)*SINT
+      P(I,1)=-P(I,3)*SINT+P(I,1)*COST
+      P(I,3)=P3
+C-- BOOST ALONG 3RD AXIS -- PTOT REST FRAME
+      E=     P(I,4)*COSHB+P(I,3)*SINHB
+      P(I,3)=P(I,4)*SINHB+P(I,3)*COSHB
+      P(I,4)=E
+C-- BOOST THE TWO JETS SEPARATELY TO GET RIGHT MASS
+      IF(I.EQ.NP2) JBOOST=2
+      E=     P(I,4)*COSHBJ(JBOOST)+P(I,3)*SINHBJ(JBOOST)
+      P(I,3)=P(I,4)*SINHBJ(JBOOST)+P(I,3)*COSHBJ(JBOOST)
+      P(I,4)=E
+5     CONTINUE
+      RETURN
+      END

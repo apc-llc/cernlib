@@ -1,0 +1,18 @@
+*
+* $Id: v216.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v216.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.16  850911
+C            Character strings now working on NORD500
+C            FORTRAN 4 version is not supported anymore
+C            Modified ZPRINT (ZPBANK) routines:
+C            three or more identical lines printed only once.
+C            The call to ZPBANK is corrected.
+C            FORTRAN77 version made default, old version suppressed.
+C            NORD mods: RFILE and WFILE calls replaced by READ, WRITE.
+C            Patch ZCDES suppressed.
+C

@@ -1,0 +1,10 @@
+*
+* $Id: sqftn.dat,v 1.1.1.1 1996/02/15 17:53:55 mclareni Exp $
+*
+* $Log: sqftn.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:55  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_GUYFTN)
+#endif

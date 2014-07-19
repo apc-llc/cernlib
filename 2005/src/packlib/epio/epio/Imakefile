@@ -1,0 +1,4 @@
+INCLUDES=	 epapocom.inc epiocom.inc epvaxcom.inc wordsize.inc \ @@\
+	pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),epio)

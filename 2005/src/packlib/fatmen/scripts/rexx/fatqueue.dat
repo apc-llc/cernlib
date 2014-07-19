@@ -1,0 +1,68 @@
+*
+* $Id: fatqueue.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatqueue.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATQUEUE.EXEC */
+/*---------------------------------------------------------------------*/
+/*                   F A T Q U E U E  E X E C                          */
+/*                   ------------------------                          */
+/*                                                                     */
+/* Receive RDR files and add to local queue.                           */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+ 
+next    = "FIRST"
+fatque  = "193"
+fatmode = qdisk(fatque,"MODE")
+ 
+Do forever
+/* Anything in the RDR? */
+ 
+numrdr = qspool("RDR","NUMFILES")
+ 
+if numrdr = 0 then exit 1
+ 
+/* Enough disk space? */
+ 
+percent   = qdisk(fatque,"PERCENT")
+ 
+if percent > 90 then exit 2
+ 
+/* Can we receive this RDR file? */
+ 
+nrecs = qspool(NEXT,"RECNO")
+lrecl = qspool(NEXT,"LRECL")
+ 
+blksize = qdisk(fatque,"BLKSIZE")
+blkleft = qdisk(fatque,"BLKLEFT")
+ 
+nblks   = (nrecs*lrecl)/blksize
+ 
+if nblks > blkleft then exit 3
+ 
+/* OK, receive this file */
+ 
+fatfile  = QSPOOL(NEXT,"FILEID")
+spoolid  = QSPOOL(NEXT,"SPOOLID")
+ 
+parse var fatfile fatuser fatnode
+ 
+/* Append to local queue */
+ 
+"EXEC RECEIVE" spoolid "FATMEN QUEUE (REPLACE"
+ 
+"EXECIO * DISKR FATMEN QUEUE A"
+ 
+Do queued()
+ 
+   "EXECIO 1 DISKW "fatuser fatnode fatmode
+ 
+end
+ 
+NEXT = "NEXT"
+ 
+end

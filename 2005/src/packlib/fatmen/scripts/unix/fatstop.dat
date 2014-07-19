@@ -1,0 +1,81 @@
+*
+* $Id: fatstop.dat,v 1.2 1996/04/16 06:43:44 jamie Exp $
+*
+* $Log: fatstop.dat,v $
+* Revision 1.2  1996/04/16 06:43:44  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+stop=" "
+run=" "
+nolog=" "
+noscr=" "
+b="."
+d=`date`
+#
+#   Ensure that variables are defined...
+#
+if [ -f restart_fat ] 
+   echo Removing old restart_fat file...
+   then rm restart_fat
+fi
+
+for i in /fatmen/fm*
+   do
+
+typeset -u fatgrp
+typeset -l fatman
+fatpath=$i
+fatgrp=`basename $i`
+fatman=$fatgrp
+eval $fatgrp=$fatpath;export $fatgrp
+#
+# and stop those servers that are running...
+#
+if [ -x ${i}/fatserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /fatmen/${fatgrp}.log ]
+      then
+      echo Log file exists for ${fatgrp} - looking for existing process
+      log=${log}${b}${fatgrp}
+      pid=`cat /fatmen/${fatgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+         echo Looking for server process for $fatgrp
+         if(ps -ae  | grep -s $pid )
+            then
+            echo FATSRV running PID = $pid
+            run=${run}${b}${fatgrp}
+            echo rm /fatmen/${fatman}/todo/signal.stop >> restart_fat
+            echo Server stopped at $d > /fatmen/${fatman}/todo/signal.stop
+            else
+            echo No existing server found for $fatgrp 
+            echo Removing old log file...
+            rm   /fatmen/${fatgrp}.log
+            if [ -f ${i}/todo/signal.stop ]
+               then echo signal.stop file found!
+               rm ${i}/todo/signal.stop 
+               echo '(removed)'
+            fi
+         fi
+      fi
+   fi
+fi
+     
+done
+
+echo
+echo Log files found for $log | tr '.' ' '
+echo Servers already running for $run | tr '.' ' '
+echo fatstart >> restart_fat
+if [ -f restart_fat ]
+   then chmod +x restart_fat
+   echo restart reservers by typing restart_fat
+fi

@@ -1,0 +1,7 @@
+# Check all servers running at 08:00
+#
+0 11 * * * ( /bin/sh /u/cp/jamie/bin/cdchk ) > /dev/null 2>&1
+#
+# Check for backlogs
+#
+0 0 * * * ( /bin/sh /u/cp/jamie/bin/cdqueue ) > /dev/null 2>&1

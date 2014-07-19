@@ -1,0 +1,98 @@
+*
+* $Id: traceqx.F,v 1.1.1.1 1996/02/15 17:54:17 mclareni Exp $
+*
+* $Log: traceqx.F,v $
+* Revision 1.1.1.1  1996/02/15 17:54:17  mclareni
+* Kernlib
+*
+*
+#include "kerngen/pilot.h"
+#if defined(CERNLIB_QMCDC)||defined(CERNLIB_QMPDP)||defined(CERNLIB_QMUNO)
+      SUBROUTINE TRACEQ (LUNP,NP)
+C
+C CERN PROGLIB# N105    TRACEQ          .VERSION KERNFOR  4.23  891215
+C ORIG. 25/08/73 JZ
+C
+C-    SUBROUTINE TO PRINT ON UNIT LUN THE FORTRAN SUBROUTINE TRACE-BACK
+C-                 NP LEVELS DEEP
+C-    IT NEEDS A MACHINE LANGUAGE ROUTINE WITH 2 ENTRY-POINTS
+C-    TRAC1Q --    INITIALISE TRACE-BACK
+C-    TRAC2Q --    DELIVER NEXT STEP
+C-                 LOK   -VE  TRACE DESTROYED
+C-                       ZERO STEP OK,  NAME,LINE,LADR ARE SET READY
+C-                       +VE  STOP BECAUSE MAIN PROGRAM HAS BEEN DONE
+C-                 NAME  BCD NAME OF THE CALLING ROUTINE
+C-                 LINE  LINE NUMBER OF THE CALL IN THE CALLING ROUTINE
+C-                                   (IF NEEDED)
+C-                 LADR  ADDRESS OF THIS CALL
+C
+C---  SAMPLE OUTPUT
+C-    TRACEQ
+C-    CALLED FROM  SUB2    LINE   45   AT LOCATION 002531
+C-    CALLED FROM  SUB1    LINE  164   AT LOCATION 007524
+C-    CALLED FROM  MAIN    LINE   12   AT LOCATION 000632
+C
+#if !defined(CERNLIB_A6M)
+      COMMON /SLATE/ NAME(2),LINE,LADR,LOK,LWK(35)
+#endif
+#if defined(CERNLIB_A6M)
+      COMMON /SLATE/ NAME,   LINE,LADR,LOK,LWK(36)
+#endif
+C
+C
+      LUN = LUNP
+      N   = NP
+      IF (LUN.NE.0)         GO TO 21
+      LUN = 6
+#if defined(CERNLIB_QMCDC)
+      LUN = L"OUTPUT"
+#endif
+#if defined(CERNLIB_QMPDP)
+      LUN = 3
+#endif
+#include "kerngen/traceqlun.inc"
+* Ignoring t=pass
+
+   21 WRITE (LUN,9021)
+      LINE= 0
+      LOK = 0
+      CALL TRAC1Q
+C
+   24 N = N-1
+      CALL TRAC2Q
+      IF (LOK)   31,25,99
+   25 WRITE (LUN,9025) NAME,LINE,LADR
+      IF (N.GT.0)  GO TO 24
+      RETURN
+C
+   31 WRITE (LUN,9031)
+   99 RETURN
+C
+ 9021 FORMAT (7H0TRACEQ)
+#if (defined(CERNLIB_A6M))&&(!defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A7,   6H  LINE,I5,15H   AT LOCATION ,O6)
+#endif
+#if (defined(CERNLIB_A6M))&&(defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A7,   6H  LINE,I5,15H   AT LOCATION ,Z6)
+#endif
+#if (defined(CERNLIB_A5))&&(!defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A5,A2,6H  LINE,I5,15H   AT LOCATION ,O6)
+#endif
+#if (defined(CERNLIB_A5))&&(defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A5,A2,6H  LINE,I5,15H   AT LOCATION ,Z6)
+#endif
+#if (defined(CERNLIB_A4))&&(!defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A4,A3,6H  LINE,I5,15H   AT LOCATION ,O6)
+#endif
+#if (defined(CERNLIB_A4))&&(defined(CERNLIB_HEX))
+ 9025 FORMAT (13H CALLED FROM ,A4,A3,6H  LINE,I5,15H   AT LOCATION ,Z6)
+#endif
+ 9031 FORMAT (26H ******* TRACE ENDS BADLY.)
+      END
+#ifdef CERNLIB_TCGEN
+#undef CERNLIB_TCGEN
+#endif
+#ifdef CERNLIB_TRACEQ
+#undef CERNLIB_TRACEQ
+#endif
+#endif

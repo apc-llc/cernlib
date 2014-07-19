@@ -1,0 +1,415 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:52:59 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:59  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIBM)
+
+UP-DATE  2.34 :   9-Feb-1993
+----------------------------
+
+Replacing file   KERNIBM 2.33  920302 22.09
+
+Correct:      add definition +KEEP, Q$SBYT
+              P=QMIBMVF, D=RANECU          correct bug for vectors
+
+---------------------------------------------------------------------
+
+UP-DATE  2.33 :  29-Feb-1992
+----------------------------
+
+Replacing file   KERNIBM 2.32  910719 13.02
+
+Correct :     SLEEPF               to be a subroutine, not function
+
+---------------------------------------------------------------------
+
+UP-DATE  2.32 :  18-Jul-1991
+----------------------------
+
+Replacing file   KERNIBM 2.31  901108  8.45
+
+Change patch names :   QMIBMSI --> QMIBMFSI   Fortran Siemens
+                       QMIBMVS --> QMIBMFVS   Fortran VS
+
+New decks :   SLEEPF, DELAY        for MVS
+
+Correct :     P=SYOS, D=REENT      to run above the line
+
+---------------------------------------------------------------------
+
+UP-DATE  2.31 :   5-Nov-1990
+----------------------------
+
+Replacing file   KERNIBM 2.30  900508 21.00
+
+New decks :   TIMEXXA        new version of TIMEX for XA
+
+Correct :     P=IBM360, D=IE3FOS
+              P=QMIBMVF, D=RANECU
+
+Change :      all pilots select F77
+
+---------------------------------------------------------------------
+
+UP-DATE  2.30 :  8-May-1990
+----------------------------
+
+Replacing file   KERNIBM 2.28  891004 17.45
+
+New decks :   VCLOCQ,VCLOC   in P=QMIBMVF. Elapsed, CPU and Vector time
+
+Correct :     UBUNCH in P=QMIBMVF
+
+---------------------------------------------------------------------
+
+UP-DATE  2.29 :  20-Nov-1989
+----------------------------
+
+Replacing file   KERNIBM 2.28  891004 17.45
+
+New decks :   LOCB           return the byte adr of a variable
+
+---------------------------------------------------------------------
+
+UP-DATE  2.28 :   4-Oct-1989
+----------------------------
+
+Replacing file   KERNIBM 2.27  890628 18.34
+
+New :         TRACEQ         trace-back routine calling ERRTRA
+              UBUNCH in P=QMIBMVF    UBUNCH + UBLOW, vector version
+
+Correct :     DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+
+---------------------------------------------------------------------
+
+UP-DATE  2.27 :  28-June-1989
+----------------------------
+
+Replacing file   KERNIBM 2.26  890316 17.13
+
+New :         P=QMIBMVF      material using the Vector Facility
+              P=XVECTSI      moving XINB, XINBS for Siemens to here
+
+Correct :     XINB, XINBF, XINBS  of P=XVECTIBM
+                             change to use the NUM= parameter in
+                             the READ statements, so XSETIO is no
+                             longer needed
+
+              remove the SPLEVEL directives for XA
+              change AMODE 31 to AMODE ANY for XA
+              there are now new DATIME/DATIMH on KERNCMS
+
+Delete :      XINBML, XINBSML  of P=XVECTIBM
+                             reading is now pure Fortran for VS
+
+---------------------------------------------------------------------
+
+UP-DATE  2.26 :  16-Mar-1989
+----------------------------
+
+Replacing file   KERNIBM 2.25  881103 12.43
+
+Move the material of P=SYCERNV and P=SYVM to the new file KERNCMS
+
+New :         P=QMIBMVF             for the Vector Facility
+              KERNGT                to eventually replace GSHOW
+
+Change :      P=*KICERNV            remove +USE, QCMS4
+
+Correct :     P=IBM360, D=IE3xxx    new versions
+              P=IBM360, D=IUBACK, IULOOK   correct for /XA
+
+---------------------------------------------------------------------
+
+UP-DATE  2.25 :   3-Nov-1988
+----------------------------
+
+Replacing file   KERNIBM 2.24  880905 16.00
+
+Correct :     P=SYVM, D=ABUSER           new version
+              P=SYVM, D=INTRAC           new version
+              P=SYVM, D=VMBEEP           new version
+
+Delete :      P=SYCERNV, D=INTRAC
+
+Change :      P=*KICERNV     add +USE, QCMS4
+              P=*KIVM        add +USE, SYCERN, D=ABEND.
+
+---------------------------------------------------------------------
+
+UP-DATE  2.24 :   9-AUG-1988
+----------------------------
+
+Replacing file   KERNIBM 2.23  880425 20.54
+
+Correct :     P=SYOS, D=NOARG.      delete dummy in TCGEN
+              P=SYVM, D=VMREXX
+
+New Decks :   P=SYVM, D=ABUSER
+
+New feature:  option patch QMIBMXA  to select controls for XA
+
+---------------------------------------------------------------------
+
+UP-DATE  2.23 :  25-APR-1988
+----------------------------
+
+Replacing file   KERNIBM 2.22  870922 23.17
+
+Correct :     P=SYVM, D=GOPARM,VMREXX,VMRTRM   update
+
+New Decks :   P=SYVMOS, D=JUMPAD, JUMPX2
+
+---------------------------------------------------------------------
+
+UP-DATE  2.22 :  22-SEP-1987
+----------------------------
+
+Replacing file   KERNIBM 2.21  870703 12.00
+
+Correct :     P=IBM360, D=IBITS        bug fixed
+              P=SYVM, D=GOPARM         update for VS Fortran 2
+
+New Decks :   P=SYVM, D=VMRTRM         read a line from the terminal
+
+New Patch :   P=PRELIB                 Library creation program
+
+---------------------------------------------------------------------
+
+UP-DATE  2.21 :  3-JULY-1987
+----------------------------
+
+Replacing file   KERNIBM 2.20  870601 15.31
+
+Correct :     routine JOB$VM in P=SYCERNV upgraded for CP release 4 :
+              D=JOB$VM       contains now the routine for CP V4
+              D=JOB$VM3      is the old routine for CP V3
+                             this is inhibited from D=JOB$VM
+
+---------------------------------------------------------------------
+
+UP-DATE  2.20 :  1-JUNE-1987
+----------------------------
+
+Replacing file   KERNIBM 2.19  861204 21.06
+
+New Patches : P=QMIBMVS, QMIBMSI, QMIBM4
+
+New Decks :   P=IBM360, D=BITPOS, IANDETC, IBITS
+
+Correct :     P=SYVM,D=IOSPACK,C=120.             bug fixed
+              P=IBM360,D=IE3FOD,IE3FOD    use the new shift functions
+
+Modify the Pilot patches to select the right QMIBMx
+
+---------------------------------------------------------------------
+
+UP-DATE  2.19 :   4-DEC-1986
+----------------------------
+
+Replacing file   KERNIBM 2.18  860514 16.05
+
+New decks :   P=IBM360, D=IE3FOS, IE3TOS, IE3FOD, IE3TOD
+              P=SYVM, D=VMBEEP, VMSATN
+
+---------------------------------------------------------------------
+
+UP-DATE  2.18 :  14-MAY-1986
+----------------------------
+
+Replacing file   KERNIBM 2.17  860303 18.31
+
+New deck :    P=SYVM, D=IOSPACK
+
+---------------------------------------------------------------------
+
+UP-DATE  2.17 :  31-JAN-1986    (RE-DONE 3-MAR-86)
+----------------------------
+
+Replacing file   KERNIBM 2.16  860113 13.03
+
+Corrections : P=SYCERNV, D=JOBNAM        FIX SIZE OF BATLST
+              P=SYCERNV, D=INTRAC        FIX BUG
+              P=SYVM, D=VMCMS            NEW VERSION 2.00
+
+---------------------------------------------------------------------
+
+UP-DATE  2.16 :  13-JAN-1986
+----------------------------
+
+Replacing file   KERNIBM 2.15  851212 20.26
+
+Corrections : P=XVECTIBM, D=XINBMLJ,XINBSMLJ    FIX FAULTY USE T=INH.
+
+---------------------------------------------------------------------
+
+UP-DATE  2.15 :  12-DEC-1985
+----------------------------
+
+Replacing file   KERNIBM 2.14  851016 20.24
+
+New patch   : P=*KICERNV                 CERN PILOT FOR VM/CMS
+
+New decks   : P=XVECTIBM, D=XINBMLJ,XINBSMLJ  FOR SIEMENS ONLY, UNTIL
+                                              TRACE-BACK BUG FIXED
+              P=SYVM, D=VMCMS, VMREXX
+
+Corrections : P=IBM360, D=UBITS          FASTER CODE
+              P=SYVM, D=GOPARM           HOPEFULLY NOW WORKING
+
+---------------------------------------------------------------------
+
+UP-DATE  2.14 :  16-OCT-1985
+----------------------------
+
+Replacing file   KERNIBM 2.13  850702 21.42
+
+New decks   : P=IBM360, D= MBYTET, MBYTOR, MCBYT
+                        D= MSBIT, MSBIT0, MSBIT1, MSBYT.
+
+---------------------------------------------------------------------
+
+UP-DATE  2.13 :  2-JULY-1985
+----------------------------
+
+Replacing file   KERNIBM 2.12  850529 14.37
+
+Corrections : P=SYCERNV, D=JOB$VM, TIMEX
+
+---------------------------------------------------------------------
+
+UP-DATE  2.12 :  29-MAY-1985
+----------------------------
+
+Replacing file   KERNIBM 2.11  850320 20.50
+
+Corrections : P=SYCERNV, D=TIMEX
+              P=SYCERN, D=LINEPG
+
+---------------------------------------------------------------------
+
+UP-DATE  2.11 :  20-MAR-1985
+----------------------------
+
+Replacing file   KERNIBM 2.10  840827 16.03
+
+New patches : P=*KJCERNV               NEW PILOT
+              P=SYCERNV                VM SYSTEM ROUTINES FOR CERN
+
+New decks :   P=SYVM, D=INTRAC, GOPARM
+              P=SYOS, D=INTRAC
+
+Corrections : P=IBM360, D=MXMAD        GET TRACE-BACK ON FAILURE
+              P=SYVM, D=TIMEX
+              P=SYCERNJ, D=ABUSER
+
+Deleted :     P=SYCERNJ, D=FTRECL
+
+---------------------------------------------------------------------
+
+UP-DATE  2.10 :  27-AUG-1984
+----------------------------
+
+Replacing file   KERNIBM 2.09  840710 16.49
+
+New deck :    P=SYVMOS, D=QNEXTE        FOR 'NEXT EVENT'
+
+---------------------------------------------------------------------
+
+UP-DATE  2.09 :  10-JUL-1984
+----------------------------
+
+Replacing file   KERNIBM 2.08  840706 14.31
+
+New patch :   P=*KJCERN                 NEW PILOT FOR CERN FORTRAN 77
+Correction :  P=SYCERNJ, D=ABUSER       ONE MORE FIX
+
+---------------------------------------------------------------------
+
+UP-DATE  2.08 :   6-JUL-1984
+----------------------------
+
+Replacing file   KERNIBM 2.07  831205 22.16
+
+Correction :  P=SYCERNJ, D=ABUSER       FIX FOR CHANGE IN FORTRAN LIB
+
+---------------------------------------------------------------------
+
+UP-DATE  2.07 :   5-DEC-1983
+----------------------------
+
+Replacing file   KERNIBM 2.06  830901 17.40
+
+New decks :   P=IBM360,D=UHTOC,UH1TOC   NEW ML ROUTINES
+
+---------------------------------------------------------------------
+
+UP-DATE  2.06 :   1-SEP-1983
+----------------------------
+
+Replacing file   KERNIBM 2.05  830421 18.45
+
+New decks :   P=SYVM,D=TIMEX.           NEW ML ROUTINES
+
+Modified  :   P=IBM360,D=INTARG,FLOARG.  FORTRAN REPLACED BY BETTER ML
+
+---------------------------------------------------------------------
+
+UP-DATE  2.05 :  21-APR-1983
+----------------------------
+
+Replacing file   KERNIBM 2.04  830202 15.21
+
+New patches : P=*KIVM, SYVM, SYVMOS    FOR SYSTEM VM/CMS
+
+New decks :   P=IBM360,D=PKBYT,UPKBYT   NEW ML ROUTINES
+
+---------------------------------------------------------------------
+
+UP-DATE  2.04 :   2-FEB-1983
+----------------------------
+
+Replacing file   KERNIBM 2.03  821124 22.08
+
+New patch :   P=SYCERNJ              CERN SYSTEM ROUTINES
+                                          WITH SIEMENS COMPILER
+Modified  :   P=IBM360, D=UBITS      TO BE FASTER
+
+---------------------------------------------------------------------
+
+UP-DATE  2.03 :  24-NOV-1982
+----------------------------
+
+Replacing file   KERNIBM 2.02  821007 16.31
+
+Modified  :   D=ABEND, REENT           ADD  +USE,...,T=INH
+
+Deleted :     DUMMY D=ERF
+
+---------------------------------------------------------------------
+
+UP-DATE  2.02 :   7-OCT-1982
+----------------------------
+
+Replacing file   KERNIBM 2.01  820801 12.00
+
+Modified  :   D=LOCF, TIMEX            ADD  +USE,...,T=INH
+
+---------------------------------------------------------------------
+
+UP-DATE  2.01 :  26-JUL-1982
+----------------------------
+
+Replacing file   KERNIBM 2.00  820401 12.00
+
+Modified  :   P=IBM360, D=FLOARG,INTARG        TO BE FAST AND DIRTY
+
+---------------------------------------------------------------------
+
+#endif

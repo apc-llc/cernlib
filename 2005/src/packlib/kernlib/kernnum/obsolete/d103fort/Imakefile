@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 dgauss.F gauss.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

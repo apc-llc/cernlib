@@ -1,0 +1,16 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(libraries)
+
+LIBDIRS= code util
+SUBDIRS= $(LIBDIRS) tests epio
+
+TopOfPackage(epio)
+
+SubdirLibraryTarget(epio,$(LIBDIRS))
+
+TestSubdirs(tests)
+
+InstallIncludeSubdirs(epio)

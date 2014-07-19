@@ -1,0 +1,4 @@
++USE, ${PLINAME}.
++EXE, RUN,    D=NPATCH.
++USE, *PATCHY.
++PAM, 11, T=C,ATT   .patchy

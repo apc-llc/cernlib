@@ -1,0 +1,59 @@
+*
+* $Id: v4_14,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_14,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.14/05 21/03/92  10.52.54  by  Unknown
+*-- Author :    Rene Brun   22/10/91
+*
+*::>          VERSION  4.14/05   920321 10.52
+*
+*       Protection introduced in HPR1V (P.Lanius)
+*
+*
+*::>          VERSION  4.14/04   920309 23.16
+*       Ntuple saga again. The procedure to speed-up memory-resident
+*       ntuples had several consequences. Changes made in HGNPAR.
+*
+*
+*::>          VERSION  4.14/03   920308  8.33
+*
+*       Change logic in HRIN for memory-resident ntuples.
+*       Previous algorithm affected also disk-resident ntuples
+*
+*
+*::>          VERSION  4.14/02   920306 11.04
+*
+*       Bug corrected in HRIN for memory-resident ntuples (1 block)
+*
+*
+*::>          VERSION  4.14/01   920302 16.31
+*
+*       Bug corrected in HOPER1 for functions (A.Nathaniel)
+*       Changes in UNIX memory mapping routines.
+*       Note that HLIMAP cannot be used under HPUX with the current
+*       version of f77 (crash in MZSTOR).
+*
+*
+*::>          VERSION  4.14/00   911022  9.25
+*
+*       Protections in HRNDM1 and HRNDM2
+*       Changes in HFCNV
+*       Format change in HPTIT
+*       New routine HRENID to rename IDS on a RZ file
+*       Bug corrected in HFUNC (shift by 1 channel)
+*       Format change (I6 to I8) in HINDEX and HINPRX
+*       Mods in HPR1H for BIBBI case
+*       Bug corrected in HSTATI/HPRST in case of negative contents
+*       Save IQUEST(10) in HROPEN due to changes in RZOPEN
+*       New routine HGDIRE(LUN,CHDIR)  to return TOPDIR name corresponding
+*         to LUN.
+*
+*       Option 'I' changed to ' ' in all calls to MZPUSH
+*       Speed-up of HGN and HGNF
+*       Changes in HRIN to speed up HGN/HGNF
+*       New fast filling routine HF1N (called by PAW)
+*

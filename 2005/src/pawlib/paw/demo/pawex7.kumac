@@ -1,0 +1,18 @@
+MACRO PAWEX7
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 7                           *
+* Plot a few one-dimensional functions                                   *
+**************************************************************************
+Exec ALLDEF
+opt utit
+opt grid
+func/plot x*sin(x)*exp(-0.1*x)  -10. 10.
+set dmod 2
+func/plot (sin(x)+cos(x))**5    -10. 10. s
+set dmod 3
+func/plot (sin(x)/(x)-x*cos(x)) -10. 10. s
+set dmod 1
+opt htit
+opt ngri
+RETURN
+

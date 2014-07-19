@@ -1,0 +1,41 @@
+*
+* $Id: readne.s,v 1.1.1.1 1996/03/08 15:44:28 mclareni Exp $
+*
+* $Log: readne.s,v $
+* Revision 1.1.1.1  1996/03/08 15:44:28  mclareni
+* Cspack
+*
+*
+#if (defined(CERNLIB_IBMVM))&&(!defined(CERNLIB_TCPSOCK))
+         PRINT NOGEN
+READNE   CSECT
+*
+*       Read a line with echo turned off. Based on VMRTRM
+*
+        USING READNE,R15 ESTABLISH ADDRESSABILITY
+        DS    0H         ALIGN
+        B     READNEN    BRANCH AROUND THE NAME
+        DC    AL1(7)     LENGTH OF NAME
+        DC    C'READNE'  DEFINE THE NAME
+READNEN SAVE  (14,12)    SAVE THE REGS
+        LR    R12,R15    SET UP THE BASE
+        DROP  R15        ADDRESSABILITY REESTABLISHED
+        USING READNE,R12 ESTABLISH ADDRESSABILITY
+        L     R2,0(R1)   POINTER TO CHAR STRING ADDRESS
+        L     R3,=F'30'  FIX LENGTH OF CHAR VARIABLE (TCPAW is PASCAL)
+        LA    R6,LREAD   DEFAULT LENGTH OF STRING READ
+        TM    0(R1),X'80' IS THERE A SECOND ARG
+        BO    ENDARG2    BRANCH IF NO SECOND ARG
+        L     R6,4(R1)   POINT R6 AT LENGTH ADDRESS
+*                        NOW DO THE READ
+ENDARG2 LINERD DATA=((R2),(R3)),CASE=MIXED,TYPE=INVISIBLE,WAIT=YES
+*       ST    R0,0(R6)   SAVE THE LENGTH ACTUALLY READ
+        RETURN (14,12)   GO BACK TO THE FORTRAN
+*
+*       DATA AREAS
+LREAD   DS    1F         DUMMY LENGTH READ
+BLANKR5 DC    C' ',X'000000' BLANK CHAR OF ZERO LENGTH
+*
+        REGEQU
+        END
+#endif

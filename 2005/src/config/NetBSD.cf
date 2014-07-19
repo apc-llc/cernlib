@@ -1,0 +1,163 @@
+/* $Id: NetBSD.cf,v 1.2 2005/04/18 15:23:07 mclareni Exp $
+ *
+ * $Log: NetBSD.cf,v $
+ * Revision 1.2  2005/04/18 15:23:07  mclareni
+ * Mods submitted by Kevin B. McCarty to fix insecure Cernlib uses of /tmp.
+ *
+ * Revision 1.1.1.1  1995/12/20 15:26:45  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: NetBSD.cf,v 1.5 95/04/07 19:42:55 kaleb Exp $
+
+#define OSName		NetBSD
+#define	OSVendor	/**/
+XCOMM operating system:  OSName
+#define OSMajorVersion    0
+#define OSMinorVersion    9
+
+#define HasPutenv       YES
+#define HasBSD44Sockets YES
+
+#define CppCmd          /usr/libexec/cpp -traditional
+#define PreProcessCmd   /usr/libexec/cpp -traditional
+#undef  InstallCmd
+#define InstallCmd /usr/bin/install
+#undef	TblCmd
+#define	TblCmd /usr/bin/tbl
+#undef	EqnCmd
+#define	EqnCmd /usr/bin/eqn -Tascii
+          COL = /usr/bin/col
+         NEQN = /usr/bin/neqn
+        NROFF = /usr/bin/nroff
+
+#define UseGas		YES
+#ifndef GccUsesGas
+# define GccUsesGas	YES
+#endif
+
+#ifndef AsmDefines
+# define AsmDefines -DUSE_GAS
+#endif
+
+#if GccUsesGas
+# define GccGasOption -DGCCUSESGAS
+#else
+# define GccGasOption /**/
+#endif
+
+#ifndef HasGcc2
+# define HasGcc2 YES
+#endif
+
+#define CcCmd gcc
+#if UseInstalled
+#define DefaultCCOptions	/**/
+#else
+#define DefaultCCOptions	-ansi -Dasm=__asm
+#endif
+
+#ifdef i386Architecture
+#define OptimizedCDebugFlags	-m486 -O2
+#if OSMajorVersion < 1
+#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME -DXNO_SYSCONF
+#else
+#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME
+#endif
+#else
+#define OptimizedCDebugFlags	-O2
+# ifdef SparcArchitecture
+#  define ServerOSDefines	-DDDXOSINIT
+# else
+#  define ServerOSDefines	/**/
+# endif
+#endif
+#define ServerExtraDefines GccGasOption XFree86ServerDefines
+
+#define StandardDefines	-DCSRG_BASED
+#define XawI18nDefines	-DUSE_XWCHAR_STRING -DUSE_XMBTOWC
+
+#define TroffCmd        groff -Tps
+#define SetTtyGroup     YES
+#define DBMLibrary	/**/
+#define HasNdbm         YES
+#define HasShm          YES
+#define HasWChar32      YES
+
+#define HasLibCrypt	YES
+
+#define AvoidNullMakeCommand YES
+
+XCOMM Man pages need to be formatted when installed, so override the default
+XCOMM imake rules.
+
+#define ManSuffix	1
+#define FileManSuffix	5
+#define ManSourcePath	$(MANPATH)/cat
+
+#define InstallManPageLong(file,destdir,dest)                           @@\
+all:: file.0								@@\
+									@@\
+file.0:: file.man							@@\
+	@if [ -f file.man ]; \						@@\
+	then \								@@\
+	cat file.man | $(NEQN) | $(TBL) | $(NROFF) -man | $(COL) >file.0; \ @@\
+	fi 								@@\
+									@@\
+file.man::								@@\
+									@@\
+install.man::                                                           @@\
+	MakeDir($(DESTDIR)destdir)					@@\
+	-@if [ -f file.0 ]; \						@@\
+	then \								@@\
+	$(INSTALL) -c $(INSTMANFLAGS) file.0 $(DESTDIR)destdir/dest.0; \@@\
+	fi
+
+#define InstallMultipleManSuffix(list,dest,suff)                        @@\
+install.man:: 								@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	case '${MFLAGS}' in *[i]*) set +e;; esac; \			@@\
+	for i in list; do \                                             @@\
+	  (set -x; \							@@\
+	  TMP=$(DESTDIR)dest/$$$$.suff ; \				@@\
+	  cat $$i.suff | $(NEQN) | $(TBL) | $(NROFF) -man | $(COL) >$${TMP}; \ @@\
+	  $(INSTALL) -c $(INSTMANFLAGS) $${TMP} $(DESTDIR)dest/$$i.0; \	@@\
+	  $(RM) $${TMP} ); \						@@\
+	done
+
+#define InstallMultipleMan(list,dest)                                   @@\
+	InstallMultipleManSuffix(list,dest,man)
+
+#define InstallManPageAliases(file,destdir,aliases)                     @@\
+install.man:: 								@@\
+	@case '${MFLAGS}' in *[i]*) set +e;; esac; \                    @@\
+	for i in aliases; do \                                          @@\
+		(set -x; \						@@\
+		$(RM) $(DESTDIR)destdir/$$i.0;\  				@@\
+		$(LN) destdir/file.0 $(DESTDIR)destdir/$$i.0;\  @@\
+		); \							@@\
+	done
+
+#define NetBSDArchitecture
+
+#include <bsdLib.rules>
+
+#ifdef SparcArchitecture
+#ifndef Xsun24Server
+#define Xsun24Server	NO
+#endif
+#ifndef XsunServer
+#define XsunServer	YES
+#endif
+#ifndef XsunMonoServer
+#define XsunMonoServer	YES
+#endif
+#ifndef UseRgbTxt
+#define UseRgbTxt	YES
+#endif
+#endif
+
+#ifdef i386Architecture
+# include <xfree86.cf>
+#endif

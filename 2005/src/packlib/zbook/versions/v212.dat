@@ -1,0 +1,12 @@
+*
+* $Id: v212.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v212.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.12  840919
+C           New routine ZEPCLS
+C           Protection introduced in ZBFORM
+C

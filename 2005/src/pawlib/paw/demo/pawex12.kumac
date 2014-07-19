@@ -1,0 +1,22 @@
+MACRO PAWEX12
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 12                          *
+* Read histograms from file and plot                                     *
+**************************************************************************
+Exec ALLDEF
+histogram/file 1 pawhists.hbook
+hrin  *
+ldir
+opt grid
+hi/list
+zon 2 2
+hi/pl 100
+set htyp 244
+hi/pl 110
+zone 1 2 2 'S'
+hi/plot 200
+h/del 0
+close 1
+zone
+RETURN
+

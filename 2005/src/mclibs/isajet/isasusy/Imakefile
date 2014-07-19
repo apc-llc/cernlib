@@ -1,0 +1,21 @@
+SRCS_F= \ @@\
+	 ssalfs.F ssb0.F ssb1.F ssdhll.F ssdint.F ssdlam.F ssf0.F ssglbf.F \ @@\
+	 ssgwq1.F ssgwq2.F ssgwt1.F ssgwt2.F ssgwt3.F ssgwt4.F ssgwt5.F    \ @@\
+	 ssgwt6.F ssgwt7.F ssgwt8.F ssgx1.F                                \ @@\
+	 ssgx10.F ssgx11.F ssgx2.F ssgx3.F ssgx4.F ssgx5.F ssgx6.F ssgx7.F \ @@\
+	 ssgx8.F ssgx9.F ssgzg1.F ssgzg2.F ssgzg3.F ssgzt.F sshcc.F sshff.F \ @@\
+	 sshff1.F sshgl.F sshgm.F sshgm1.F sshhx.F sshibf.F sshnn.F sshsf.F \ @@\
+	 sshww.F sshww1.F sshww2.F ssl1st.F sslpbf.F sslrt1.F \ @@\
+	 ssmass.F ssmhc.F ssmhn.F \ @@\
+	 ssmqcd.F ssmssm.F ssn1st.F ssnorm.F sspole.F ssqkbf.F \ @@\
+	 sssave.F ssstbf.F sssvme.F \ @@\
+	 sstest.F sstpbf.F sswwf1.F sswzbf.F sswzf1.F sswzf2.F sswzf3.F \ @@\
+	 sswzf4.F sswzf5.F sswzf6.F sswzf7.F ssxint.F ssxlam.F sszhx.F \ @@\
+	 sszwf1.F sszzf1.F sszzf5.F \ @@\
+	 sszzf2.F sszzf3.F sszzf4.F sualfe.F sualfs.F sugeff.F sugfrz.F \ @@\
+	 ssme3.F sssnws.F sswibf.F sszibf.F \ @@\
+	 sugmas.F sugra.F sugrge.F surg06.F surg26.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

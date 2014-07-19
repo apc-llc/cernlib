@@ -1,0 +1,2 @@
+      COMMON /LUJETS/ N,K(4000,5),P(4000,5),V(4000,5)
+      SAVE /LUJETS/

@@ -1,0 +1,33 @@
+*
+* $Id: v4_10,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_10,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.10/06 10/02/91  16.53.12  by  Rene Brun
+*-- Author :    Rene Brun   07/11/90
+*
+*::>          VERSION  4.10/06   910210 16.53
+*
+*
+*::>          VERSION  4.10/05   901107 16.37
+*
+*         COMMON/HCDIRE/ modified. Number of possible directories
+*          has been changed from 20 to 100.
+*          This changes implies recompilation of HPLOT,PAW.
+*          Note that a similar change has been made in RZEBRA.
+*          Argument to user functions copied before calling
+*            the function in HBFUN1/HBFUN2 to prevent cases
+*            where a bad user is changing the argument.
+*          Bug corrected in HFIND for HBOOKB case
+*          Correction in HFITH in case of HFITGA (Sigma>0)
+*          Added IQUEST(1)=1 in HCDIR if directory not found (M.Guan..)
+*          Slight changes for OS9/RTF compiler (Equivalence order)
+*          Bug corrected in HSPLI2 (A.Nathaniel)
+*          Mods in HCOPYN calling a new routine HCOPYT (copy Ntuples)
+*          Mods in HSCALE and HMAXIM. HMAXIM may be called for a 2-Dim
+*              HMAXIM uses KSCAL2 word
+*
+*

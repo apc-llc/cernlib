@@ -1,0 +1,39 @@
+*
+* $Id: intro.doc,v 1.1.1.1 1996/01/11 14:14:59 mclareni Exp $
+*
+* $Log: intro.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:14:59  mclareni
+* Cojets
+*
+*
+[1] INTRODUCTION
+
+      COJETS is a Monte Carlo program which simulates pbar-p and p-p
+interactions at high energy. The interaction process is first calculated at
+the parton level by means of perturbative QCD and the Weinberg-Salam model for
+electro-weak interactions. Partons are then independently fragmented into jets
+of hadrons, according to the Field-Feynman  model, and the beam jets
+contribution is added, according to a longitudinal phase-space model. Multiple
+QCD radiation off initial and final partons is included.
+
+      The following processes are simulated:
+
+i) purely hadronic production, including particles with charm, bottom and top;
+
+ii) weak Drell-Yan production of the W and Z vector bosons;
+
+iii) electromagnetic Drell-Yan production of charged lepton pairs.
+
+      In leptonic decays of the W and Z bosons multiple QED radiation effects
+are calculated. Decays of top particles are treated for an arbitrary top quark
+mass, with multiple QCD radiation effects for decay jets and multiple QED
+radiation for decay leptons included.
+
+      COJETS is written in FORTRAN 77. It is maintained with the PATCHY code
+management system, which is part of the CERN Program Library. It is supported
+for CRAY, IBM and VAX machines. It is available on request from the author.
+
+Reference: Comp. Phys. Comm. 32 (1984) 139, 173.
+
+
+

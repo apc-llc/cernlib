@@ -1,0 +1,24 @@
+SRCS_F= \ @@\
+	 atomas.F captur.F casal0.F casaom.F casasm.F casasp.F casax0.F \ @@\
+	 casaxm.F casfrg.F cask0.F cask0b.F caskm.F caskp.F casl0.F casn.F \ @@\
+	 casnb.F casom.F casp.F caspb.F caspim.F caspip.F cassm.F cassp.F \ @@\
+	 casx0.F casxm.F cinema.F coranh.F coscat.F defs1.F dlpnuc.F \ @@\
+	 dlpsor.F dotes2.F dotnuc.F dpdnuc.F exnu.F fctcos.F fermi.F \ @@\
+	 fissio.F gdpdk.F genxpt.F gpdk.F kmabs.F nbanh.F nfac.F normal.F \ @@\
+	 nucrec.F pbanh.F phasp.F phpnuc.F pimabs.F pmltpc.F poisso.F \ @@\
+	 ranres.F rotes2.F rtmi.F selfab.F setcur.F settrk.F steep.F \ @@\
+	 steeq.F steer.F stees.F stpair.F tdelay.F twob.F twoclu.F \ @@\
+         add.F add3.F sub3.F cross3.F sub.F lor.F length.F ang.F defs.F trac.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

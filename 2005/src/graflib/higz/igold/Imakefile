@@ -1,0 +1,4 @@
+SRCS_F=	 golclo.F golini.F golwri.F iclrwk.F imfuwk.F mfotib.F \ @@\
+	mfotrb.F moutbf.F mputbf.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

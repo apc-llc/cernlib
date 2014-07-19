@@ -1,0 +1,28 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= hdiff hmerge hquad chbook fpclassc \ @@\
+	 hrz code hmcstat hntup
+
+#ifdef CERNLIB_VAX
+LIBDIRS := $(LIBDIRS) hglobal
+#endif
+
+#if defined(CERNLIB_UNIX) && !defined(CERNLIB_CRAY) \
+    && !defined(CERNLIB_IPSC) && !defined(CERNLIB_MSDOS)
+LIBDIRS := $(LIBDIRS) hmmap
+#endif
+
+SUBDIRS= $(LIBDIRS) tests examples hbook
+
+TopOfPackage(hbook)
+
+SubdirLibraryTarget(hbook,$(LIBDIRS))
+
+TestSubdirs(examples)
+
+/* in code/Imakefile, the pilot is included : */
+DoIncludePackage(hbook)
+
+InstallIncludeSubdirs(hbook)

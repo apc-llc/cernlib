@@ -1,0 +1,15 @@
+SRCS_F= cfopen.F cfstat.F
+
+SRCS_C= cfclos.c cfget.c cfopei.c cfperm.c cfput.c cfrew.c cfseek.c \ @@\
+	cfsize.c cfstati.c cftell.c
+
+#if defined(CERNLIB_WINNT) && defined(CERNLIB_MSSTDCALL)
+SRCS_C +=  cfputdummy.c cfgetdummy.c
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#ifdef CERNLIB_SHIFT
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+EXTRA_INCLUDES:= $(EXTRA_INCLUDES) -I/usr/local/include
+#endif

@@ -1,0 +1,5 @@
+SRCS_C=	bftp.c child.c codestr.c debuglog.c dump.c lists.c \ @@\
+	master.c msg.c slave.c sockio.c pfstagerd.c syscalls.c tcputil.c \ @@\
+	transfer.c util.c
+
+NormalProgramTarget(pfstagerd,$(OBJS),NullParameter,NullParameter,NullParameter)

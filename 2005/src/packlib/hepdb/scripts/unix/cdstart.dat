@@ -1,0 +1,117 @@
+*
+* $Id: cdstart.dat,v 1.2 1996/04/16 10:09:07 jamie Exp $
+*
+* $Log: cdstart.dat,v $
+* Revision 1.2  1996/04/16 10:09:07  jamie
+* bring in sync with /afs/cern.ch/project/hepdb/scripts, aix 4 upgrade
+*
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+start=" "
+stop=" "
+run=" "
+nolog=" "
+noscr=" "
+b="."
+me=`whoami`
+
+if [ "$me" != "root" ]
+   then
+      echo "This script should be run from root"
+      exit
+fi
+
+#
+#   Fix for CERNSP based fatcat server
+#
+this_host=`hostname`
+
+if [ $this_host = "sp019" ]
+   then export CDHOST=hepdb
+   echo ${0}: setting HEPDB hostname to $CDHOST
+fi
+
+#
+#   Ensure that variables are defined...
+#
+ 
+for i in /hepdb/cd*
+   do
+ 
+echo
+typeset -u cdgrp
+cdpath=$i
+cdgrp=`basename $i`
+echo Setting $cdgrp to $cdpath ...
+eval $cdgrp=$cdpath;export $cdgrp
+#
+# and start the servers
+#
+if [ -x ${i}/cdserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /hepdb/${cdgrp}.log ]
+      then
+      echo '>>> log file exists - looking for existing process'
+      log=${log}${b}${cdgrp}
+      pid=`cat /hepdb/${cdgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+         echo Looking for server process $pid for $cdgrp
+         if(ps -ae  | grep -s $pid )
+            then
+            echo CDSRV running PID = $pid
+            run=${run}${b}${cdgrp}
+            else
+            echo No existing server found for $cdgrp - starting server
+            if [ -f ${i}/todo/signal.stop ]
+               then echo but signal.stop file found!
+               else echo Starting server for $cdgrp
+               cd ${i}
+               nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+               start=${start}${b}${cdgrp}
+            fi
+         fi
+ 
+         else
+         echo No existing server found for $cdgrp - starting server
+         if [ -f ${i}/todo/signal.stop ]
+            then echo but signal.stop file found!
+            stop=${stop}${b}${cdgrp}
+            else echo Starting server for $cdgrp
+            cd ${i}
+            nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+            start=${start}${b}${cdgrp}
+         fi
+      fi
+      else
+      echo No server log found in $i
+      if [ -f ${i}/todo/signal.stop ]
+         then echo but signal.stop file found!
+         stop=${stop}${b}${cdgrp}
+         else echo Starting server for $cdgrp
+         cd ${i}
+         nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+         start=${start}${b}${cdgrp}
+      fi
+   fi
+   else
+   echo No cdserv script found in $i - cannot start server
+   scr=${scr}${b}${cdgrp}
+fi
+ 
+done
+ 
+echo
+echo Log files found for $log | tr '.' ' '
+echo Started servers for $start | tr '.' ' '
+echo Servers already running for $run | tr '.' ' '
+echo Servers stopped $stop | tr '.' ' '
+echo No scripts found for $scr | tr '.' ' '
+#endif

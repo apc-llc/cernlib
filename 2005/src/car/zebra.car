@@ -1,0 +1,1154 @@
+ZEBRA    3.77  960130 21.40             CERN PROGRAM LIBRARY Q100
+               Data structure management package
+
++PATCH, *ZEBRA.              Interface Zebra pilot
++USE, *ZALT,          IF=ALLIANT.
++USE, *ZAPO,          IF=APOLLO.
++USE, *ZCRU,          IF=CRAY.
++USE, *ZCVX,          IF=CONVEX, IF=-DOUBLE.
++USE, *ZCVY,          IF=CONVEX, IF=DOUBLE.
++USE, *ZVMI,          IF=DECS.
++USE, *ZHPX,          IF=HPUX.
++USE, *ZIBX,          IF=IBMAIX.
++USE, *ZIRT,          IF=IBMRT.
++USE, *ZIRTD,         IF=IBMRTD.
++USE, *ZIBM,          IF=IBM, IBMMVS, IBMVM.
++USE, *ZIBMD,         IF=IBMD, IBMMVSD, IBMVMD.
++USE,   QIBM_VM, T=INH,    IF=IBMMVS.
++USE,   IOPACK,  T=INH,    IF=IBMMVS, IF=NEWLIB.
++USE, *ZLNX,          IF=LINUX.
++USE, *ZMPW,          IF=MACMPW.
++USE, *ZDOS,          IF=MSDOS.
++USE, *ZDOS, QS_WNT,  IF=WINNT.
++USE, *ZNXT,          IF=NEXT.
++USE, *ZOS9,          IF=OS9.
++USE, *ZSGI,          IF=SGI.
++USE, *ZSUN,          IF=SUN.
++USE, *ZVAX,          IF=VAX, VAXVMS, VAXULX.
++USE, FZCONV, T=INH.
++PATCH, *ZEBRAT, T=JOIN.     Local Zebra test pilot
++USE,   *ZEBRAL, QCDETE.
++PATCH, *ZEBRAL, T=JOIN.     Local Zebra pilot
++USE,   *ZSUN.
++PATCH, *ZALT.               Pilot for ALLIANT
++USE, QCDE, QMALT.
++USE, QMUIX.
++USE, QUTYALT.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = IBITS (IZW,IZP-1,1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = IBITS (IZW,IZP-1,NZB)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = IAND (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = IOR  (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = IAND (IZW,
+     +           NOT(ishft (ISHFT(NOT(MZ),32-NZB),-33+IZP+NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = IOR (IZW,
+     +                    ishft (ISHFT(MZ,32-NZB),-33+IZP+NZB) )
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZAPO.               Pilot for APOLLO
++USE, QCDE, QMAPO.
++USE, QUTYAPO.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = LSHFT (IZW, NZB)
++KEEP, Q_SHIFTR.
+      ISHFTR (IZW,NZB) = RSHFT (IZW, NZB)
++KEEP, Q_AND.
+      IAND (IZV,IZW) = AND (IZV, IZW)
++KEEP, Q_OR.
+      IOR  (IZV,IZW) =  OR (IZV, IZW)
++KEEP, Q_XOR.
+      IEOR (IZV,IZW) = XOR (IZV, IZW)
++SELF.    NOT  is standard on APOLLO
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)    =   AND (RSHFT(IZW,IZP-1), 1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB)= RSHFT (LSHFT(IZW,33-IZP-NZB), 32-NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = AND (IZW, NOT(LSHFT(1,IZP-1)) )
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = OR  (IZW,     LSHFT(1,IZP-1)  )
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = OR (AND (IZW, NOT(LSHFT(1,IZP-1)) )
+     +                             , LSHFT(AND(MZ,1),IZP-1) )
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = OR (
+     +      AND (IZW, NOT(LSHFT (RSHFT(NOT(INT4(0)),32-NZB), IZP-1)))
+     +    , RSHFT (LSHFT(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = AND (MZ,
+     +                        RSHFT (LSHFT(IZW,33-IZP-NZB), 32-NZB) )
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = OR  (MZ,
+     +                        RSHFT (LSHFT(IZW,33-IZP-NZB), 32-NZB) )
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = AND (IZW, NOT(RSHFT (
+     +                          LSHFT(NOT(MZ),32-NZB), 33-IZP-NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = OR (IZW, RSHFT (
+     +                               LSHFT(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 5
+      IQPRNT = 6
+      IQPNCH = 3
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZLINK24.
+      LOCAR = RSHFT (IADDR(LAREA(1)),2) - LQSTOR
+      LOCR  = RSHFT (IADDR(LREF(1)),2)  - LQSTOR
+      LOCRL = RSHFT (IADDR(LREFL(1)),2) - LQSTOR
++KEEP, MZLINT14.
+      LOCAR = RSHFT (IADDR(LAREA(1)),2) - LQSTOR
++KEEP, MZLINT24.
+      LOCR  = RSHFT (IADDR(LREF(1)),2)  - LQSTOR
+      LOCRL = RSHFT (IADDR(LREFL(1)),2) - LQSTOR
++KEEP, MZWORK21.
+      NEWL  = RSHFT (IADDR(DFIRST(1)),2) - (LQSTOR+1)
+      NEWD  = RSHFT (IADDR(DLAST(1)),2)  - LQSTOR
++KEEP, MZLIFTLOCF.
+      KADR = RSHFT (IADDR(LSUPP(1)),2) - LQSTOR
++PATCH, *ZCRU.               Pilot for CRAY system UNICOS
++USE, *ZCRY, QMCRU.
++USE, QCFIO.                 C library I/O available
++PATCH, *ZCRY, T=JOIN.       Pilot for CRAY system COS
++USE, QCDE, QMCRY.
++USE, QUTYCRY.
++USE, B64, B36M, B48M, B60M.
++USE, A8, A5M, A6M, A8M.
++USE, HEX.
++USE, QZENORM.
++KEEP, ZMACHFIX.
+      PARAMETER      (IQBITW=64, IQBITC=8, IQCHAW=8)
++KEEP, Q_LOCF.
+      LOCF (IZLOC) = LOC (IZLOC)
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = SHIFTL (IZW, NZB)
++KEEP, Q_SHIFTR.
+      ISHFTR (IZW,NZB) = SHIFTR (IZW, NZB)
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = SHIFTR(IZW,IZP-1) .AND. MASK(127)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = SHIFTR(IZW,IZP-1) .AND. MASK(128-NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)       =  IZW .AND. SHIFT(MASK(65),IZP)
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)       =  IZW .OR.  SHIFT(MASK(1), IZP)
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP)     = (IZW .AND. SHIFT(MASK(65),IZP))
+     +                     .OR. SHIFT(MZ.AND.MASK(127),IZP-1)
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = (IZW .AND. SHIFT(MASK(64-NZB),IZP-1))
+     +                       .OR. SHIFT(MZ.AND.MASK(128-NZB),IZP-1)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = MZ .AND. SHIFTR(IZW,IZP-1)
+     +                             .AND. MASK(128-NZB)
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = MZ .OR. (SHIFTR(IZW,IZP-1)
+     +                             .AND. MASK(128-NZB) )
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = IZW .AND.
+     +                             SHIFT (MZ.OR. MASK(64-NZB), IZP-1)
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = IZW .OR.
+     +                             SHIFT (MZ.AND.MASK(128-NZB),IZP-1)
++KEEP, MZEMACH,    P=MQ, D=MZINCO.
+      IQNIL  = 0777770516040020000000B
++KEEP, MZEUNIT,    P=MQ, D=MZINCO, IF=-QMCRU.
+      IQREAD = 3L$IN
+      IQPRNT = 4L$OUT
+      IQPNCH = 6L$PUNCH
++KEEP, ZPOSTMTR, P=QEND, D=ZPOSTM.
+      CALL TRBK (IQLOG)
++PATCH, *ZCVX.               Pilot for Convex 64-bit mode native
++USE, QCDE, QMCVX, QMCV64.
++USE, QUTYCVX.
++USE, B64, B36M, B48M, B60M.
++USE, A8, A5M, A6M, A8M.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QCFIO, T=INH.          C library I/O not available
++USE, QZENORM.
++KEEP, ZMACHFIX.
+      PARAMETER      (IQBITW=64, IQBITC=8, IQCHAW=8)
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = IBITS (IZW,IZP-1,1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = IBITS (IZW,IZP-1,NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = IBCLR (IZW,IZP-1)
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = IBSET (IZW,IZP-1)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = MZ .AND. IBITS(IZW,IZP-1,NZB)
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = MZ .OR.  IBITS(IZW,IZP-1,NZB)
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, ZPOSTMTR, P=QEND, D=ZPOSTM.
+      CALL TRACEBACK
++PATCH, *ZCVY, T=JOIN.       Pilot for Convex 32-bit mode IEEE
++USE, QCDE, QMCVX, QMCV32.
++USE, QUTYCVY.
++USE, B32.
++USE, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QMUIX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = IBITS (IZW,IZP-1,1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = IBITS (IZW,IZP-1,NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = IBCLR (IZW,IZP-1)
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = IBSET (IZW,IZP-1)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = MZ .AND. IBITS(IZW,IZP-1,NZB)
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = MZ .OR.  IBITS(IZW,IZP-1,NZB)
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, ZPOSTMTR, P=QEND, D=ZPOSTM.
+      CALL TRACEBACK
++PATCH, *ZDOS.               Pilot for MS DOS
++USE, QF_DEC, IF=QS_WNT.
++USE, QF_F2C, IF=-QS_WNT.
++USE, QCDE, QMDOS.
++USE, QUTYDOS.
++USE, B32, A4.
++USE, HEX.
++USE, F77TRARG.              careful about char. argument transmission
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD, IF=QF_DEC.    ISA standard routines, ISHFT, IOR, etc
++USE, QMILSTD, IF=QF_DEC.    MIL standard routines, IBITS, MVBITS, ISHFTC
++USE, QISASTD, IF=QF_NDP.    ISA standard routines, ISHFT, IOR, etc
++USE, QMILSTD, IF=QF_NDP.    MIL standard routines, IBITS, MVBITS, ISHFTC
++USE, QHOLL.                 Hollerith constants exist
++USE, QORTHOLL, T=INH.       Hollerith storage not orthodox
++USE, QDEFAULT.
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, QMUIX.                 Normal Unix system machine
++USE, RZBYTES,  IF=-QF_DEC.
++USE, Q$BITSEQ, IF=QF_DEC.
++KEEP, IALL1S.     set a word of all ones
+      PARAMETER   (IALL11 = NOT(0))
++KEEP, Q_JBIT,     IF=QF_NDP.
+      JBIT (IZZW,IZZP)      = IBITS (IZZW,IZZP-1,1)
++KEEP, Q_JBYT,     IF=QF_NDP.
+      JBYT (IZZW,IZZP,NZZB) = IBITS (IZZW,IZZP-1,NZZB)
++KEEP, Q_SBIT0,    IF=QF_NDP.
+      MSBIT0 (IZZW,IZZP)   = IAND (IZZW, NOT(ISHFT(1,IZZP-1)) )
++KEEP, Q_SBIT1,    IF=QF_NDP.
+      MSBIT1 (IZZW,IZZP)   = IOR  (IZZW,     ISHFT(1,IZZP-1)  )
++KEEP, Q_SBIT,     IF=QF_NDP.
+      MSBIT (MZZ,IZZW,IZZP) = IOR (IAND (IZZW, NOT(ISHFT(1,IZZP-1)) )
+     +                              , ISHFT(IAND(MZZ,1),IZZP-1))
++KEEP, Q_SBYT,     IF=QF_NDP.
+      MSBYT (MZZ,IZZW,IZZP,NZZB) = IOR (
+     +         IAND (IZZW, NOT(ISHFT (ISHFT(NOT(0),-32+NZZB), IZZP-1)))
+     +       , ISHFT (ISHFT(MZZ,32-NZZB), -33+IZZP+NZZB) )
++KEEP, Q_JBYTET,   IF=QF_NDP.
+      JBYTET (MZZ,IZZW,IZZP,NZZB) = IAND (MZZ, IBITS(IZZW,IZZP-1,NZZB))
++KEEP, Q_JBYTOR,   IF=QF_NDP.
+      JBYTOR (MZZ,IZZW,IZZP,NZZB) = IOR  (MZZ, IBITS(IZZW,IZZP-1,NZZB))
++KEEP, Q_MBYTET,   IF=QF_NDP.
+      MBYTET (MZZ,IZZW,IZZP,NZZB) = IAND (IZZW,
+     +           NOT(ishft (ISHFT(NOT(MZZ),32-NZZB),-33+IZZP+NZZB)) )
++KEEP, Q_MBYTOR,   IF=QF_NDP.
+      MBYTOR (MZZ,IZZW,IZZP,NZZB) = IOR (IZZW,
+     +                    ishft (ISHFT(MZZ,32-NZZB),-33+IZZP+NZZB) )
++KEEP, Q_SHIFTL,   IF=QF_F2C.
+       ISHFTL(IZW,NZB) = LSHIFT(IZW,NZB)
++SELF. Note: RSHIFT is arithmetic with F2C, it cannot be used
++KEEP, Q_AND,      IF=QF_F2C.
+      IAND(IZV,IZW)  = AND(IZV,IZW)
++KEEP, Q_OR,       IF=QF_F2C.
+       IOR(IZV,IZW)  =  OR(IZV,IZW)
++KEEP, Q_XOR,      IF=QF_F2C.
+      IEOR(IZV,IZW)  = XOR(IZV,IZW)
++KEEP, Q_JBIT,     IF=QF_F2C.
+      JBIT (IZW,IZP)      = AND(RSHIFT(IZW,IZP-1),1)
++KEEP, Q_JBYT,     IF=QF_F2C.
+      JBYT (IZW,IZP,NZB) =  ISHFTR(LSHIFT(IZW,33-IZP-NZB),32-NZB)
++KEEP, Q_SBIT0,    IF=QF_F2C.
+      MSBIT0 (IZW,IZP)   = AND (IZW, NOT(LSHIFT(1,IZP-1)) )
++KEEP, Q_SBIT1,    IF=QF_F2C.
+      MSBIT1 (IZW,IZP)   = OR  (IZW,     LSHIFT(1,IZP-1)  )
++KEEP, Q_SBIT,     IF=QF_F2C.
+      MSBIT (MZ,IZW,IZP) = OR (AND (IZW, NOT(LSHIFT(1,IZP-1)) )
+     +                              , LSHIFT(AND(MZ,1),IZP-1))
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZHPX.               Pilot for HP UNIX
++USE, QCDE, QMHPX.
++USE, QMUIX.
++USE, QUTYHPX.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = IBITS (IZW,IZP-1,1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = IBITS (IZW,IZP-1,NZB)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = IAND (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = IOR  (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = IAND (IZW,
+     +           NOT(ishft (ISHFT(NOT(MZ),32-NZB),-33+IZP+NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = IOR (IZW,
+     +                    ishft (ISHFT(MZ,32-NZB),-33+IZP+NZB) )
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZIBMSI.             Pilot for IBM with FORTRAN 77 SIEMENS
++USE, *ZIBM, QMIBMFSI.
++SELF.    At CERN the Siemens compiler is used on system MVS
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = SHFTL (IZW, NZB)
++KEEP, Q_SHIFTR.
+      ISHFTR (IZW,NZB) = SHFTR (IZW, NZB)
++KEEP, Q_AND.
+      IAND (IZV,IZW) = LAND (IZV, IZW)
++KEEP, Q_OR.
+      IOR  (IZV,IZW) =  LOR (IZV, IZW)
++KEEP, Q_XOR.
+      IEOR (IZV,IZW) = LXOR (IZV, IZW)
++KEEP, Q_NOT.
+      NOT (IZW)      = LCOMPL (IZW)
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)    = SHFTR (SHFTL(IZW,32-IZP), 31)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB)= SHFTR (SHFTL(IZW,33-IZP-NZB), 32-NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = LAND (IZW, LCOMPL(SHFTL(1,IZP-1)) )
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = LOR  (IZW,        SHFTL(1,IZP-1)  )
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = LOR (LAND (IZW, LCOMPL(SHFTL(1,IZP-1)) )
+     +                                 , SHFTL(LAND(MZ,1),IZP-1) )
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = LOR (
+     +            LAND (IZW, LCOMPL(SHFTL (SHFTR(-1,32-NZB), IZP-1)))
+     +          , SHFTR (SHFTL(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = LAND (MZ,
+     +                        SHFTR (SHFTL(IZW,33-IZP-NZB), 32-NZB) )
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = LOR  (MZ,
+     +                        SHFTR (SHFTL(IZW,33-IZP-NZB), 32-NZB) )
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = LAND (IZW, LCOMPL(SHFTR (
+     +                       SHFTL(LCOMPL(MZ),32-NZB), 33-IZP-NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = LOR (IZW, SHFTR (
+     +                               SHFTL(MZ,32-NZB), 33-IZP-NZB) )
++PATCH, *ZIBM, T=JOIN.       Pilot for IBM
++USE, QMIBMFVS, IF=-QMIBMFSI.    VS compiler default
++USE, QIBM_VM.                   system VM/CMS default
++USE, QCDE, QMIBM.
++USE, QUTYIBM.
++USE, B32, A4.
++USE, QEBCDIC.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QZENORM.
++KEEP, ZPOSTMTR,   P=QEND, D=ZPOSTM.
+      CALL ERRTRA
++KEEP, QTOABEND.             FORCE LAST LINE TO BE OUT OF THE BUFFER
+      WRITE (IQLOG,9701)
+ 9701 FORMAT ('0GOING TO ABEND.'/ 20(1X,20(1H*)/) )
+      CALL ABEND
++PATCH, *ZIBMD,T=JOIN.       Pilot for IBM autodbl
++USE, AUTODBL.                   for Auto-double
++USE, QMIBMFVS, IF=-QMIBMFSI.    VS compiler default
++USE, QIBM_VM.                   system VM/CMS default
++USE, QCDE, QMIBMD.
++USE, QUTYIBM.
++USE, B32, A4.
++USE, QEBCDIC.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QZENORM.
++KEEP, ZPOSTMTR,   P=QEND, D=ZPOSTM.
+      CALL ERRTRA
++KEEP, QTOABEND.             FORCE LAST LINE TO BE OUT OF THE BUFFER
+      WRITE (IQLOG,9701)
+ 9701 FORMAT ('0GOING TO ABEND.'/ 20(1X,20(1H*)/) )
+      CALL ABEND
++PATCH, *ZIBX.               Pilot for IBM 3090 with AIX
++USE, QCDE, QMIBX.
++USE, QMUIX.
++USE, QUTYIBX.
++USE, B32, A4.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZIRT, T=JOIN.       Pilot for IBM /RT
++USE, QCDE, QMIRT.
++USE, QMUIX.
++USE, QUTYIRT.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
++PATCH, *ZIRTD,T=JOIN.       Pilot for IBM /RT autodbl
++USE, AUTODBL.                   for Auto-double
++USE, QCDE, QMIRTD.
++USE, QMUIX.
++USE, QUTYIRT.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
++PATCH, *ZLNX, T=JOIN.       Pilot for LINUX
++USE, QCDE, QMLNX.
++USE, QMUIX.
++USE, QUTYLNX.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QORTHOLL, T=INH.       Hollerith storage not orthodox
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = LSHIFT (IZW,NZB)
++KEEP, Q_AND.
+      IAND(IZV,IZW)  = AND(IZV,IZW)
++KEEP, Q_OR.
+       IOR(IZV,IZW)  =  OR(IZV,IZW)
++KEEP, Q_XOR.
+      IEOR(IZV,IZW)  = XOR(IZV,IZW)
++KEEP, Q_JBIT.
+      JBIT(IZW,IZP)     = AND(ISHFTR(IZW,IZP-1),1)
++KEEP, Q_JBYT.
+      JBYT(IZW,IZP,NZB) = ISHFTR(LSHIFT(IZW,33-IZP-NZB),32-NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = AND (IZW, NOT(LSHIFT(1,IZP-1)))
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = OR  (IZW,     LSHIFT(1,IZP-1))
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = OR (AND (IZW, NOT(LSHIFT(1,IZP-1)))
+     +                              ,LSHIFT(AND(MZ,1),IZP-1))
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = OR (
+     +       AND (IZW, NOT(LSHIFT (ISHFTR(NOT(0),32-NZB),IZP-1)))
+     +      ,ISHFTR (LSHIFT(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = AND (MZ,
+     +                        ISHFTR (LSHIFT(IZW,33-IZP-NZB),32-NZB) )
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = OR  (MZ,
+     +                        ISHFTR (LSHIFT(IZW,33-IZP-NZB),32-NZB) )
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = AND (IZW,
+     +           NOT(ISHFTR (LSHIFT(NOT(MZ),32-NZB),33-IZP-NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = OR (IZW,
+     +       ISHFTR (LSHIFT(MZ,32-NZB),33-IZP-NZB))
++KEEP, MZEUNIT.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZMPW.               Pilot for MAC II MPW & LSE FORTRAN
++USE, QCDE, QMMPW.
++USE, QUTYMPW.
++USE, B32, A4.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QIEEE.                 IEEE floating point
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZNXT.               Pilot for NeXT with ABSOFT-F77
++USE, QCDE, QMNXT.
++USE, QMUIX.
++USE, QUTYNXT.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZOS9.               Pilot for HP UNIX
++USE, QCDE, QMOS9.
++USE, QMUIX.
++USE, QUTYOS9.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     = IBITS (IZW,IZP-1,1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = IBITS (IZW,IZP-1,NZB)
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = IAND (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = IOR  (MZ, IBITS(IZW,IZP-1,NZB))
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = IAND (IZW,
+     +           NOT(ishft (ISHFT(NOT(MZ),32-NZB),-33+IZP+NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = IOR (IZW,
+     +                    ishft (ISHFT(MZ,32-NZB),-33+IZP+NZB) )
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZSGI.               Pilot for Silicon Graphics Iris
++USE, QCDE, QMSGI.
++USE, QMUIX.
++USE, QUTYSGI.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++USE, Q$BITSEQ.
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZSUN.               Pilot for SUN
++USE, QCDE, QMSUN.
++USE, QMUIX.
++USE, QUTYSUN.
++USE, B32, A4.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++KEEP, Q_SHIFTR,   IF=BUGLRSHFT.   temporary to avoid lrshft bug in ftn 3.0
+      ISHFTR (IZW,NZB) =  ishft (IZW,-NZB)
++KEEP, Q_JBIT,     IF=BUGLRSHFT.
++KEEP, Q_JBYT,     IF=BUGLRSHFT.
++KEEP, Q_JBYTET,   IF=BUGLRSHFT.
++KEEP, Q_JBYTOR,   IF=BUGLRSHFT.
++KEEP, Q_MBYTET,   IF=BUGLRSHFT.
++KEEP, Q_MBYTOR,   IF=BUGLRSHFT.
++SELF.
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = LSHIFT (IZW, NZB)
++KEEP, Q_SHIFTR.
+      ISHFTR (IZW,NZB) = lrshft (IZW, NZB)
++KEEP, Q_AND.
+      IAND (IZV,IZW) = AND (IZV, IZW)
++KEEP, Q_OR.
+      IOR  (IZV,IZW) =  OR (IZV, IZW)
++KEEP, Q_XOR.
+      IEOR (IZV,IZW) = XOR (IZV, IZW)
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)    = AND (lrshft(IZW,IZP-1), 1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB)= lrshft (LSHIFT(IZW,33-IZP-NZB),32-NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = AND (IZW, NOT(LSHIFT(1,IZP-1)) )
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = OR  (IZW,     LSHIFT(1,IZP-1)  )
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = OR (AND (IZW, NOT(LSHIFT(1,IZP-1)) )
+     +                             , LSHIFT(AND(MZ,1),IZP-1) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = AND (MZ,
+     +                       lrshft (LSHIFT(IZW,33-IZP-NZB), 32-NZB))
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = OR  (MZ,
+     +                       lrshft (LSHIFT(IZW,33-IZP-NZB), 32-NZB))
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = AND (IZW, NOT(lrshft (
+     +                          LSHIFT(NOT(MZ),32-NZB), 33-IZP-NZB)))
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = OR (IZW, lrshft (
+     +                               LSHIFT(MZ,32-NZB), 33-IZP-NZB))
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZVAX.               Pilot for VAX
++USE, QCDE, QMVAX.
++USE, QUTYVAX.
++USE, B32, A4.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QMILSTD.               MIL standard routines IBITS MVBITS ISHFTC
++USE, QORTHOLL, T=INH.       Hollerith storage not orthodox
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++SELF.  Q_AND, Q_OR, Q_XOR, Q_NOT :  IAND / IOR / IEOR / NOT  are standard on VAX
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZVMI, T=JOIN.       Pilot for Decstation VAX / MIPS
++USE, QCDE, QMVMI.
++USE, QMUIX.
++USE, B32, A4.
++USE, QUTYVMI.
++USE, HEX.
++USE, QIEEE.                 IEEE floating point
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QORTHOLL, T=INH.       Hollerith storage not orthodox
++USE, QCFIO.                 C library I/O available
++USE, QZENORM.
++SELF.  Q_AND, Q_OR, Q_XOR, Q_NOT :  IAND / IOR / IEOR / NOT  are standard on VMI
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 2
+      IQPRNT = 3
+      IQPNCH = 4
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 5
+      IQTYPE = 6
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, *ZVDS.               Pilot for vdSchmitt compiler
++USE, QCDE, QMVDS.
++USE, QUTYVDS.
++USE, B32, A4.
++USE, HEX.
++USE, QISASTD.               ISA standard routines ISHFT IOR etc
++USE, QERREND.               IOSTAT not possible in READ statements
++USE, QTRCHAR.               Trace-back with names of type CHARACTER
++USE, QZENORM.
++KEEP, Q_SHIFTL, T=NOL.    ISHFTL / ISHFTR  are intrinsics of vdS
++KEEP, Q_SHIFTR, T=NOL.
++KEEP, Q_JBIT.                       JBYT  is an intrinsic of vdS
+      JBIT (IZW,IZP)  =  JBYT (IZW,IZP,1)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = AND (IZW, NOT(LSHFT(1,IZP-1)) )
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = OR  (IZW,     LSHFT(1,IZP-1)  )
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = OR (AND (IZW, NOT(LSHFT(1,IZP-1)) )
+     +                             , LSHFT(AND(MZ,1),IZP-1) )
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = OR (
+     +            AND (IZW, NOT(LSHFT (RSHFT(NOT(0),32-NZB), IZP-1)))
+     +          , RSHFT (LSHFT(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = AND (MZ, JBYT(IZW,IZP,NZB))
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = OR  (MZ, JBYT(IZW,IZP,NZB))
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = AND (IZW, NOT(RSHFT (
+     +                          LSHFT(NOT(MZ),32-NZB), 33-IZP-NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = OR (IZW, RSHFT (
+     +                               LSHFT(MZ,32-NZB), 33-IZP-NZB) )
++KEEP, MZEUNIT,    P=MQ, D=MZINCO.
+      IQREAD = 5
+      IQPRNT = 6
+      IQPNCH = 3
++KEEP, MZEUNIT2,   P=MQ, D=MZINCO.
+      IQTTIN = 1
+      IQTYPE = 1
++KEEP, MZEBCD1.
+      CQALLC(48:64) = '#''!:"_]&@?[>< ^;%'
+      CQALLC(61:61) = CHAR(92)
++PATCH, Q$BITSEQ.
++KEEP, Q_JBIT.
+      JBIT (IZW,IZP)     =  IAND (ISHFT(IZW,1-IZP), 1)
++KEEP, Q_JBYT.
+      JBYT (IZW,IZP,NZB) = ISHFT (ISHFT(IZW,33-IZP-NZB), -32+NZB)
++KEEP, Q_SBIT0.
+      MSBIT0 (IZW,IZP)   = IAND (IZW, NOT(ISHFT(1,IZP-1)) )
++KEEP, Q_SBIT1.
+      MSBIT1 (IZW,IZP)   = IOR  (IZW,     ISHFT(1,IZP-1)  )
++KEEP, Q_SBIT.
+      MSBIT (MZ,IZW,IZP) = IOR (IAND (IZW, NOT(ISHFT(1,IZP-1)) )
+     +                              , ISHFT(IAND(MZ,1),IZP-1))
++KEEP, Q_SBYT.
+      MSBYT (MZ,IZW,IZP,NZB) = IOR (
+     +          IAND (IZW, NOT(ISHFT (ISHFT(NOT(0),-32+NZB), IZP-1)))
+     +        , ISHFT (ISHFT(MZ,32-NZB), -33+IZP+NZB) )
++KEEP, Q_JBYTET.
+      JBYTET (MZ,IZW,IZP,NZB) = IAND (MZ,
+     +                        ISHFT (ISHFT(IZW,33-IZP-NZB),-32+NZB) )
++KEEP, Q_JBYTOR.
+      JBYTOR (MZ,IZW,IZP,NZB) = IOR  (MZ,
+     +                        ISHFT (ISHFT(IZW,33-IZP-NZB),-32+NZB) )
++KEEP, Q_MBYTET.
+      MBYTET (MZ,IZW,IZP,NZB) = IAND (IZW,
+     +           NOT(ISHFT (ISHFT(NOT(MZ),32-NZB),-33+IZP+NZB)) )
++KEEP, Q_MBYTOR.
+      MBYTOR (MZ,IZW,IZP,NZB) = IOR (IZW,
+     +                    ISHFT (ISHFT(MZ,32-NZB),-33+IZP+NZB) )
++PATCH, QCDE.
++USE, QASCII, IF=-QEBCDIC.   Character set is ASCII
++USE, QPRINT.                Printing is possible
++USE, QHOLL.                 Hollerith constants exist
++USE, EQUHOLCH, IF=QHOLL.    EQUIVALENCE Hollerith/Character ok
++USE, QORTHOLL.              Orthodox Hollerith storage left to right
++USE, QTRHOLL,  IF=QHOLL.    Trace-back names Hollerith
++USE, QTRHOLL, T=INH, IF=QTRCHAR.  Trace-back names type Character
++KEEP, Q_SHIFTL.
+      ISHFTL (IZW,NZB) = ISHFT (IZW, NZB)
++KEEP, Q_SHIFTR.
+      ISHFTR (IZW,NZB) = ISHFT (IZW,-NZB)
++KEEP, Q_AND,    T=NOLIST.
++KEEP, Q_OR,     T=NOLIST.
++KEEP, Q_XOR,    T=NOLIST.
++KEEP, Q_NOT,    T=NOLIST.
++KEEP, Q_JBIT,   T=NOLIST.
++KEEP, Q_JBYT,   T=NOLIST.
++KEEP, Q_SBIT0,  T=NOLIST.
++KEEP, Q_SBIT1,  T=NOLIST.
++KEEP, Q_SBIT,   T=NOLIST.
++KEEP, Q_SBYT,   T=NOLIST.
++KEEP, Q_SHIFTL, T=NOLIST.
++KEEP, Q_SHIFTR, T=NOLIST.
++KEEP, Q_JBYTET, T=NOLIST.
++KEEP, Q_JBYTOR, T=NOLIST.
++KEEP, Q_MBYTET, T=NOLIST.
++KEEP, Q_MBYTOR, T=NOLIST.
++KEEP, Q_LOCF,   T=NOLIST.
++KEEP, Q$SHIFT.
++SEQ,  Q_SHIFTL, Q_SHIFTR.
++KEEP, Q$ANDOR.
++SEQ,  Q_AND, Q_OR, Q_XOR, Q_NOT.
++KEEP, Q$JBIT.
++SEQ,  Q_JBIT, Q_JBYT.
++KEEP, Q$SBIT.
++SEQ,  Q_SBIT0, Q_SBIT1, Q_SBIT.
++KEEP, Q$SBYT.
++SEQ,  Q_SBYT.
++KEEP, Q$JBYTET.
++SEQ,  Q_JBYTET, Q_JBYTOR, Q_MBYTET, Q_MBYTOR.
++KEEP, Q$LOCF.
++SEQ,  Q_LOCF.
++DECK, QCDE.
++SELF.  -------------   for general use   ---------------------------
++KEEP, ZBCD.                 BCD char. in CETA order with A1 format
+      COMMON /ZBCD/  IQNUM2(11),IQLETT(26),IQNUM(10),   IQPLUS,IQMINS
+     +,              IQSTAR,IQSLAS,IQOPEN,IQCLOS,IQDOLL,IQEQU, IQBLAN
+     +,              IQCOMA,IQDOT, IQNUMB,IQAPO, IQEXCL,IQCOLO,IQQUOT
+     +,              IQUNDE,IQCLSQ,IQAND, IQAT,  IQQUES,IQOPSQ,IQGREA
+     +,              IQLESS,IQREVE,IQCIRC,IQSEMI,IQPERC,  IQLOWL(26)
+     +,              IQCROP,IQVERT,IQCRCL,IQNOT, IQGRAV,  IQILEG
+     +,              NQHOL0,NQHOLL(95)
++KEEP, ZBCDCH.               BCD char. in CETA order as CHARACTER
+                      CHARACTER  CQALLC*96
+      COMMON /ZBCDCH/ CQALLC
+                      CHARACTER*1  CQLETT(96), CQNUM(10)
+                      EQUIVALENCE (CQLETT(1),CQALLC(1:1))
+                      EQUIVALENCE (CQNUM(1), CQALLC(27:27))
++KEEP, ZCETA.                CETA values in internal order
+      PARAMETER     (NQTCET=256)
+      COMMON /ZCETA/ IQCETA(256),IQTCET(256)
++KEEP, ZHEADP.               Page heading parameters
+      COMMON /ZHEADP/IQHEAD(20),IQDATE,IQTIME,IQPAGE,NQPAGE(4)
++KEEP, ZKRAKC.
+      COMMON /ZKRAKC/IQHOLK(120), IQKRAK(80), IQCETK(122)
++KEEP, ZKRAKCC, IF=EQUHOLCH.
+      COMMON /ZKRAKC/IQHOLK(120), IQKRAK(80), IQCETK(122)
+                     CHARACTER    CQHOLK*120
+                     EQUIVALENCE (CQHOLK,IQHOLK)
++KEEP, ZKRAKCC.
+      COMMON /ZKRAKC/IQHOLK(120), IQKRAK(80), IQCETK(122)
+      COMMON /ZCRAKC/CQHOLK
+                     CHARACTER    CQHOLK*120
++KEEP, ZLIMIT.               MZFLAG Limit parameters
+      COMMON /ZLIMIT/LQLIML,LQLIMH
++KEEP, ZMACHFIX.
+      PARAMETER      (IQBITW=32, IQBITC=8, IQCHAW=4)
++KEEP, ZMACH.                Machine parameters
++CDE, ZMACHFIX.
+      COMMON /ZMACH/ NQBITW,NQBITC,NQCHAW
+     +,              NQLNOR,NQLMAX,NQLPTH,NQRMAX,IQLPCT,IQNIL
++KEEP, ZNATUR.               Constants of Nature
+      COMMON /ZNATUR/QPI2,QPI,QPIBY2,QPBYHR
++KEEP, ZSTATE.               Program Status parameters
+      COMMON /ZSTATE/QVERSN,NQPHAS,IQDBUG,NQDCUT,NQWCUT,NQERR
+     +,              NQLOGD,NQLOGM,NQLOCK,NQDEVZ,NQOPTS(6)
++KEEP, ZUNIT.                Logical Unit Numbers
+      COMMON /ZUNIT/ IQREAD,IQPRNT,IQPR2,IQLOG,IQPNCH,IQTTIN,IQTYPE
+      COMMON /ZUNITZ/IQDLUN,IQFLUN,IQHLUN,  NQUSED
++KEEP, ZVFAUT.               Automatic verify parameters
+      COMMON /ZVFAUT/IQVID(2),IQVSTA,IQVLOG,IQVTHR(2),IQVREM(2,6)
++KEEP, QUEST.
+      COMMON /QUEST/ IQUEST(100)
++KEEP, QSTORE.
+      IF (JBYT(IXSTOR,27,6).NE.JQSTOR)  CALL MZSDIV (IXSTOR,-7)
++SELF.  -------------   for ZEBRA MZ   ------------------------------
++KEEP, MZBITS.
+      PARAMETER      (IQDROP=25, IQMARK=26, IQCRIT=27, IQSYSX=28)
++KEEP, MZCA, IF=QTRHOLL.     Process Master parameters
+      COMMON /MZCA/  NQSTOR,NQOFFT(16),NQOFFS(16),NQALLO(16), NQIAM
+     +,              LQATAB,LQASTO,LQBTIS, LQWKTB,NQWKTB,LQWKFZ
+     +,              MQKEYS(3),NQINIT,NQTSYS,NQM99,NQPERM,NQFATA,NQCASE
+     +,              NQTRAC,MQTRAC(48)
+                                       EQUIVALENCE (KQSP,NQOFFS(1))
++KEEP, MZCA, IF=-QTRHOLL.    Process Master parameters
+      COMMON /MZCA/  NQSTOR,NQOFFT(16),NQOFFS(16),NQALLO(16), NQIAM
+     +,              LQATAB,LQASTO,LQBTIS, LQWKTB,NQWKTB,LQWKFZ
+     +,              MQKEYS(3),NQINIT,NQTSYS,NQM99,NQPERM
+     +,              NQFATA,NQCASE,NQTRAC
+                                       EQUIVALENCE (KQSP,NQOFFS(1))
+      COMMON /MZCA2/ MQTRAC(44)
+                     CHARACTER  MQTRAC*8
++KEEP, MZCB.                 Current Store and Division
+      COMMON /MZCB/  JQSTOR,KQT,KQS,  JQDIVI,JQDIVR
+     +,              JQKIND,JQMODE,JQDIVN,JQSHAR,JQSHR1,JQSHR2,NQRESV
+     +,              LQSTOR,NQFEND,NQSTRU,NQREF,NQLINK,NQMINR,LQ2END
+     +,              JQDVLL,JQDVSY,NQLOGL,NQSNAM(6)
+                                       DIMENSION    IQCUR(16)
+                                       EQUIVALENCE (IQCUR(1),LQSTOR)
++KEEP, MZCC.                 Store Control Table (matrix)
+      COMMON /MZCC/  LQPSTO,NQPFEN,NQPSTR,NQPREF,NQPLK,NQPMIN,LQP2E
+     +,              JQPDVL,JQPDVS,NQPLOG,NQPNAM(6)
+     +,              LQSYSS(10), LQSYSR(10), IQTDUM(22)
+     +,              LQSTA(21), LQEND(20), NQDMAX(20),IQMODE(20)
+     +,              IQKIND(20),IQRCU(20), IQRTO(20), IQRNO(20)
+     +,              NQDINI(20),NQDWIP(20),NQDGAU(20),NQDGAF(20)
+     +,              NQDPSH(20),NQDRED(20),NQDSIZ(20)
+     +,              IQDN1(20), IQDN2(20),      KQFT, LQFSTA(21)
+                                       DIMENSION    IQTABV(16)
+                                       EQUIVALENCE (IQTABV(1),LQPSTO)
++KEEP, EQLQMRF.        MZ - 2 reference links
+C              Links  LQSYSR(1) and LQSYSR(2) are working links of MZ
++KEEP, EQLQMST.        MZ - 1 structural link (only)
+                   DIMENSION    LQMST(9)
+                   EQUIVALENCE (LQMST(1),LQSYSS(2))
++KEEP, EQLQT.          TZ - 1 structural link (only)
+                   DIMENSION    LQT(9)
+                   EQUIVALENCE (LQT(1),LQSYSS(3))
++KEEP, EQLQF.          FZ - 1 structural, 3 reference links
+                   EQUIVALENCE (LQFS,LQSYSS(4)), (LQFF,LQSYSR(4))
+     +,                        (LQFI,LQSYSR(5)), (LQFX,LQSYSR(6))
++KEEP, EQLQFORM.       MZFORM - 1 structural link
+                   EQUIVALENCE (LQFORM,LQSYSS(5))
++KEEP, EQLQR.          RZ - 1 structural link
+                   EQUIVALENCE (LQRS,LQSYSS(7))
++KEEP, EQLQRRF.        RZ - 1 reference link (only)
+                   DIMENSION    LQRRF(9)
+                   EQUIVALENCE (LQRRF(1),LQSYSR(7))
++KEEP, EQLQZEP.
+                   EQUIVALENCE (LQZEP,LQSYSS(10))
++KEEP, MZCL.                 Lift Name parameters
+      COMMON /MZCL/  NQLN,NQLS,NQNIO,NQID,NQNL,NQNS,NQND,NQIOCH(16)
+     +,              LQSUP,NQBIA, NQIOSV(3)
++KEEP, MZCN.                 Verify Name parameters
+      COMMON /MZCN/  IQLN,IQLS,IQNIO,IQID,IQNL,IQNS,IQND, IQNX,IQFOUL
++KEEP, MZCT.                 Memory Table parameters
+      COMMON /MZCT/  MQDVGA,MQDVWI,JQSTMV,JQDVM1,JQDVM2,NQDVMV,IQFLIO
+     +,              MQDVAC,NQNOOP,IQPART,NQFREE, IQTBIT,IQTVAL
+     +,              IQTNMV,JQGAPM,JQGAPR,NQGAPN,NQGAP,IQGAP(5,4)
+     +,              LQTA,LQTE, LQRTA,LQTC1,LQTC2,LQRTE
+     +,                         LQMTA,LQMTB,LQMTE,LQMTLU,LQMTBR
+     +,              LQMTC1,LQMTC2, NQFRTC,NQLIVE
++KEEP, MZCWK.                MQ Working area
+      PARAMETER            (NQWKTT=2560)
+      COMMON /MZCWK/ IQWKTB(NQWKTT), IQWKFZ(NQWKTT)
++KEEP, MZIOC.
+      COMMON /MZIOC/ NWFOAV,NWFOTT,NWFODN,NWFORE,IFOCON(3)
+     +,              MFOSAV(2),  JFOEND,JFOREP,JFOCUR,MFO(200)
++KEEP, ZVFWKC.               ZVERIF working area
+                     CHARACTER CHWARN*10, TEXTHD*50
+      COMMON /ZVFWKC/MASKST,IFLHD,NFATAL,NWARN, LFAILS,LFAILD,IXVSTO
+     +,              JVMODE,IFLST,IFLLA,IFLDV,IFLBK
+     +,              LSTOLO,LSTOHI, JDESLA,LOCAR,LOCARR,LOCARE,LATMP
+     +,              LDIVLO,LDIVHI,MASKTO
+     +,                     LBKLS,IDBK(2),NBKNN(4),LBKLN,LBKNX,IBKXX
+     +,              NAMEPR(2), CHWARN,TEXTHD
++KEEP, ZEBQ.
+      COMMON /ZEBQ/  IQFENC(4), LQ(100)
+                              DIMENSION    IQ(92),        Q(92)
+                              EQUIVALENCE (IQ(1),LQ(9)), (Q(1),IQ(1))
++KEEP, QEQU.
+              DIMENSION  LQLUP(99), LQLORG(98),IQWIDN(97),IQWIDH(96)
+     +,                  IQWNL(95), IQWNS(94), IQWND(93)
+            EQUIVALENCE (LQLUP(8),  LQLORG(7), IQWIDN(6), IQWIDH(5)
+     +,                  IQWNL(4),  IQWNS(3),  IQWND(2), IQ(1))
++KEEP, MQSYS.
++CDE, MZBITS.
++CDE, QUEST.
++CDE, ZEBQ, MZCA, MZCB, MZCC.
++KEEP, MQSYSH.
++CDE, MZBITS.
++CDE, QUEST.
++CDE, ZEBQ, MZCA, MZCB.
++KEEP, Q.
++CDE, ZEBQ, MZCA, MZCB.
++SELF.  -------------   for ZEBRA trace-back   ----------------------
++KEEP, QTRACE, IF=-QTRHOLL, A6M.        with check on capacity MQTRAC
+      MQTRAC(NQTRAC+1) = NAMESR
+      NQTRAC = NQTRAC + 1
+      IF (NQTRAC.GE.41)      CALL ZFATAL
++KEEP, QTRACE.
+      MQTRAC(NQTRAC+1) = NAMESR(1)
+      MQTRAC(NQTRAC+2) = NAMESR(2)
+      NQTRAC = NQTRAC + 2
+      IF (NQTRAC.GE.41)      CALL ZFATAL
++KEEP, QTRACEQ, IF=-QTRHOLL, A6M.       without check on capacity
+      MQTRAC(NQTRAC+1) = NAMESR
+      NQTRAC = NQTRAC + 1
++KEEP, QTRACEQ.
+      MQTRAC(NQTRAC+1) = NAMESR(1)
+      MQTRAC(NQTRAC+2) = NAMESR(2)
+      NQTRAC = NQTRAC + 2
++KEEP, QTRACE99, IF=-QTRHOLL, A6M.
+  999 NQTRAC = NQTRAC - 1
++KEEP, QTRACE99.
+  999 NQTRAC = NQTRAC - 2
++KEEP, QTOFATAL, IF=QTRHOLL, IF=A6M.
+      IQUEST(10)= NAMESR
+      CALL ZFATAL
++KEEP, QTOFATAL, IF=QTRHOLL.
+      IQUEST(9) = NAMESR(1)
+      IQUEST(10)= NAMESR(2)
+      CALL ZFATAL
++KEEP, QTOFATAL, IF=A6M.
+      CALL UCTOH (NAMESR,IQUEST(10),6,6)
+      CALL ZFATAL
++KEEP, QTOFATAL.
+      CALL UCTOH (NAMESR,IQUEST(9),4,8)
+      CALL ZFATAL
++SELF.  -------------   for ZEBRA FZ   ------------------------------
++KEEP, FZSTAT.
+      COMMON /FZSTAT/INFLUN, INFSTA, INFOFZ(40)
++KEEP, FZCF.
+      COMMON /FZCF/  LUNF, MSTATF,MEDIUF,IFIFOF,IDAFOF,IACMOF,IUPAKF
+     +,              IADOPF,IACTVF,INCBPF,LOGLVF,MAXREF, IOPTVF(24)
++KEEP, FZCI.
+      COMMON /FZCI/  LUNI,LUNNI,IXDIVI,LTEMPI,IEVFLI
+     +,              MSTATI,MEDIUI,IFIFOI,IDAFOI,IACMOI,IUPAKI
+     +,              IADOPI,IACTVI,INCBPI,LOGLVI,MAXREI,  ISTENI
+     +,              LBPARI, L4STOI,L4STAI,L4CURI,L4ENDI
+     +,              IFLAGI,NFASTI,N4SKII,N4RESI,N4DONI,N4ENDI
+     +,              IOPTIE,IOPTIR,IOPTIS,IOPTIA,IOPTIT,IOPTID
+     +,                     IOPTIF,IOPTIG,IOPTIH,IOPTI2(4)
+     +,              IDI(2),IPILI(4),NWTXI,NWSEGI,NWTABI,NWBKI,LENTRI
+     +,              NWUHCI,IOCHI(16),NWUMXI,NWUHI,NWIOI
+     +,              NWRDAI,NRECAI,LUHEAI,JRETCD,JERROR,NWERR
+      PARAMETER      (JAUIOC=50, JAUSEG=68, JAUEAR=130)
++KEEP, FZCX.
+      COMMON /FZCX/  LUNX,LUNNX,IXDIVX,LTEMPX,IEVFLX
+     +,              MSTATX,MEDIUX,IFIFOX,IDAFOX,IACMOX,IUPAKX
+     +,              IADOPX,IACTVX,INCBPX,LOGLVX,MAXREX
+     +,              NWFILX,ISTENX,LTEXTX,ICOPYX
+     +,              LBPARX,L4STOX,L4STAX,L4CURX,L4ENDX
+     +,              MODTBX,JFLGAX,IOPTXD,IOPTXI,IOPTXS,IOPTXZ,IOPTXM
+     +,              IOPTXL,IOPTXN,IOPTXP,IOPTXF,IOPTXT,IOPTXV(2)
+     +,              IDX(2),IPILX(4),NWTXX,NWSEGX,NWTABX,NWBKX,LENTRX
+     +,              NWUHCX,IOCHX(16),NWUHX,NWIOX,LUHEAX,JRUNX
++KEEP, FZCSEG.
+      COMMON /FZCSEG/NQSEG,IQSEGH(2,20),IQSEGD(20),IQSGLU,IQSGWK
++KEEP, FZCOCC.
+      COMMON /FZCOCC/NQOCC,IQOCDV(20),IQOCSP(20)
++SELF.  -------------   for ZEBRA JZ91 ------------------------------
++KEEP, JZUC.
+      COMMON /JZUC/  LQJZ,LQUP,LQDW,LQSV,LQAN, JQLEV,JQFLAG(10)
++SELF.  -------------   for ZEBRA RZ   ------------------------------
++KEEP, RZBUFF.
+      COMMON /RZBUFF/ ITEST(8704)
+C
++KEEP, RZCLUN.
+      COMMON /RZCLUN/LUN,LREC,ISAVE,IMODEX,IRELAT,NHPWD,IHPWD(2)
+     +,              IZRECL,IMODEC,IMODEH
+C
++KEEP, RZCH.
+      COMMON /RZCH/  CHWOLD,CHL
+      CHARACTER*255  CHWOLD,CHL
+C
++KEEP, RZDIR.
+      PARAMETER (NLPATM=100)
+      COMMON /RZDIRN/NLCDIR,NLNDIR,NLPAT
+      COMMON /RZDIRC/CHCDIR(NLPATM),CHNDIR(NLPATM),CHPAT(NLPATM)
+      CHARACTER*16   CHNDIR,    CHCDIR,    CHPAT
+C
++KEEP, RZK.
+      PARAMETER (KUP=5,KPW1=7,KNCH=9,KDATEC=10,KDATEM=11,KQUOTA=12,
+     +           KRUSED=13,KWUSED=14,KMEGA=15,KRZVER=16,KIRIN=17,
+     +           KIROUT=18,KRLOUT=19,KIP1=20,KNFREE=22,KNSD=23,KLD=24,
+     +           KLB=25,KLS=26,KLK=27,KLF=28,KLC=29,KLE=30,KNKEYS=31,
+     +           KNWKEY=32,KKDES=33,KNSIZE=253,KEX=6,KNMAX=100)
+C
++KEEP, RZCKEY.
+      COMMON/RZCKEY/IHEAD(3),KEY(100),KEY2(100),KEYDUM(50)
+C
++KEEP, RZCOUT.
+      COMMON /RZCOUT/IP1,IR1,IR2,IROUT,IRLOUT,IOPTRR
+C
++KEEP,RZCOUNT.               I/O counters
+      COMMON/RZCOUNT/RZXIO(2)
+C
++KEEP,RZCSTR.
+      PARAMETER     (MAXFILES=128, MAXSTRIP=21)
+      CHARACTER*128  RZNAMES(MAXFILES),RZSFILE(MAXSTRIP)
+      COMMON/RZCSTRC/RZNAMES,RZSFILE
+      COMMON/RZCSTRI/ISLAST,ISTRIP(MAXFILES),NSTRIP(MAXFILES),
+     +                      NRSTRIP(MAXFILES)
+C
++KEEP, RZCLXX.
+      COMMON /RZCL/  LTOP,LRZ0,LCDIR,LRIN,LROUT,LFREE,LUSED,LPURG
+     +,              LTEMP,LCORD,LFROM
++KEEP, RZCL.
++CDE, MQSYS.
+C
++CDE, RZCLXX, EQLQR.
+C
++SELF.  -------------   for ZEBRA CQ   ------------------------------
++KEEP, CQC.
+      COMMON /CQC/   IQCIN,IQCOPT(8),NQCF,IQCHEK
++KEEP, CQBKC.
+      COMMON /CQBKC/ MMBANK(9), MMBKD(9), IDVV(21)
++SELF.  -------------   for memory     ------------------------------
++KEEP, HZC,    IF=-QCDE.     HISTOGRAM MANIPULATION
+      COMMON /HZC/   NQHNH,NQHPAK(3),NQHGW,NQHNX,QHDX,QHXL,QHSTEP,NQHAND
+     +,              LQHH,LQHE,LQHC,LQHL,LQHLB,LQHLC,LQHD,LQHX,LQHT,LQHW
+     +,              IQHCUT,IQHXXX,IQHINT,NQHLAB,IQHFMT,IQHW(8)
+     +,              QHSMA,QHBIG,QHTOT,NQHNX2
+     +,              LQHCUT,NQHEXP,IQHOPT(7)
++SELF.  -------------   for defaults   ------------------------------
++KEEP, QCARDL,     T=NOLIST.
++SELF, IF=A4,A5,A6,A8,A10,     IF=A10,A8,A6,A5.
++SELF, IF=A5M,A6M,A8M,         IF=A6M,A8M,  IF=A8M.
++SELF, IF=B32,B36,B48,B60,B64, IF=B64,B60,B48,B36.
++SELF, IF=B36M,B48M,B60M,      IF=B48M,B60M, IF=B60M.
++PATCH,PAMEND.
+*

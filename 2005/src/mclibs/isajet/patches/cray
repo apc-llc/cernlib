@@ -1,0 +1,28 @@
+*
+* $Id: cray,v 1.10 2001/10/08 14:03:12 mclareni Exp $
+*
+* $Log: cray,v $
+* Revision 1.10  2001/10/08 14:03:12  mclareni
+* Version 7.58 from author
+*
+*
+*                      CRAY XMP OR 2.
+* This directory was created from /afs/cern.ch/user/m/mclareni/build_cernlib/isajet/isa758.car patch cray
+*                      SINGLE PRECISION.
+#ifndef CERNLIB_SINGLE
+#define CERNLIB_SINGLE
+#endif
+*                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+#ifndef CERNLIB_STDIO
+#define CERNLIB_STDIO
+#endif
+*                     FORTRAN REPLACEMENT FOR MOVLEV.
+#ifndef CERNLIB_MOVEFTN
+#define CERNLIB_MOVEFTN
+#endif
+*             NO CERN LIBRARY.
+#if !defined(CERNLIB_CERN)
+#ifndef CERNLIB_NOCERN
+#define CERNLIB_NOCERN
+#endif
+#endif

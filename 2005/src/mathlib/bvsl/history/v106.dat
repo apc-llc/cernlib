@@ -1,0 +1,12 @@
+*
+* $Id: v106.dat,v 1.1.1.1 1996/03/21 17:19:53 mclareni Exp $
+*
+* $Log: v106.dat,v $
+* Revision 1.1.1.1  1996/03/21 17:19:53  mclareni
+* Bvsl
+*
+*
+* Version 1.06   940207 10.58
+C- Introduce the following patches/flags:
+C   > WINNT for Windows/NT operating system
+C

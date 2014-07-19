@@ -1,0 +1,12 @@
+*
+* $Id: v102.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: v102.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+*  Version 1.02  910711  6.00
+C- Additions/changes
+C  > P=UMUIPIBM,D=UMLOG   suppress double logging of userid
+C

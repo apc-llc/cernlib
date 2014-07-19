@@ -1,0 +1,387 @@
+*
+* $Id: dz,v 1.1.1.1 1996/03/06 10:47:15 mclareni Exp $
+*
+* $Log: dz,v $
+* Revision 1.1.1.1  1996/03/06 10:47:15  mclareni
+* Zebra
+*
+*
+* This directory was created from zebra.car patch dzhist
+V 3.72/1  30 Nov  1993
+           - Change ERR= to IOSTAT= in DZBKHD to avoid problems when
+             edit descriptor is not large enough (e.g. large numeric IDN)
+             if=qmvax.
+V 3.62/2  19 Sep  1989
+           - Introduce routine DZZERO
+           - DZDATA - Hexidecimal printing Z16.16 not OK for Cray
+           - DZSTLA - QUESTPARQ added (bug)
+           - DZTYP  - QUEST corrected to IQUEST in UBLOW (bug)
+           - DZARE1, DZCHBK, DZCHST, DZDATA, DZFORP, DZIOPD, DZIOPH
+             DZSTDV, DZSTLA, DZSURF, DZTYP , DZSWAP data variables SAVEd
+           - DZBKUP, DZBKXR protect variables by SAVE statement
+V 3.61/1  04 Aug  1989
+           - FZHYLN: Correct problem in HYDRA/ZEBRA conversion routine
+             by specifying that default data type is floating point
+             Precedence should be: bit, integer, float (says J.Zoll)
+V 3.60/1  8 Mar 89
+           - Put in compilation directive in DVCHV1 (QMCRY)
+           - Change all C to * in column 1 (for Cray CDIR directive)
+           - DZAREA Entry statement moved
+           - DZFORM Equivalence statement moved
+           - DZMAP and DZSNAP now print for E, F or M option (HYDRA-like)
+V 3.59/3 14 Dec 88
+           - Eliminate reference to IQCUR and use NQSNAM instead
+             DZARE1, DZBKUP, DZSHOW, DZSNAP, DZSTOR
+           - Do not call DZTEXT in DZBKHD, DZIOPD and DZIOPH for
+             quiet option in DZSHOW (Q instead of S option) (bug)!!!
+             Only CQLINE output buffe filled (used by DZDOC for
+              for writing interactively with bank documentation)
+V 3.59/2 08 Nov 88
+           - Change explicit use of HEXMAP to -OCTMAP (default hex)
+             DZARE1, DZMAP, DZSHOW, DZSNAP, DZSTLA and DZSTOR
+           - Change explicit use of BYTEMAP to -WORDMAP (default bytes)
+             DZARE1, DZMAP, DZSHOW, DZSNAP, DZSTLA and DZSTOR
+           - Eliminate +USE sequences for machines w/o WORDMAP or OCTMAP
+V 3.59/1 10 Aug 88
+           - Do not call DZTEXT in DZBKHD, DZIOPD and DZIOPH for
+             quiet option in DZSHOW
+V 3.57/4  1 Jul 88
+           - Replace call from ZFATAL to ZFATAM in DZVERI
+V 3.57/3  8 May 88
+           - Eliminate tests for DEBUF with JFORT option
+           - Eliminate routine identification in DZOPT
+V 3.57/2  2 May 88
+           - Zero IQUEST(1) in all user callable routines
+V 3.57/1  1 May 88
+           - Eliminate alternative returns and put return code
+             different from 0 in IQUEST(1)
+           - Get rid of concatenation operator using dummy
+             character argument (problems on IBM VS compiler)
+V 3.56/2  7 Apr 88
+           - DZMAP make calling sequence DZSHPR compatible with
+             definition of routine (nb. of parameters)
+V 3.56/1 21 Mar 88
+           - Change 999 END to 999 RETURN and END
+           - Introduce condition code for ALLIANT
+V 3.55  10 Nov 87
+  DZARE1 : - Put in protection against invalid addresses in loops
+             IQTABV(KQT+13) contains lowest possible address and
+             IQTABV(KQT+14) contains highest possible address for store
+           - For LUP=0 still test OR link
+           - Save ID of mother bank into variable ID
+  DZBKHD : - Put in protection against invalid addresses (SEE DZARE1)
+           - If invalid address in origin link --> print '_'
+  DZBKUP : - Eliminate test on Division for UP bank
+           - Correct address of bank to LBANK
+  DZTEXT : - Adapt message printed to mod in DZBKUP
+V 3.54 /1   6 Nov 87
+  DZARE1 : - Do not print SYSTEM and WS data areas in 'ALL' mode
+           - Up links of banks in LA can be 0 or ANY valid bank address
+           - OR links of banks in LA can be pointing to any bank or a LA
+  DZBKHD : - Only test consistency for non-dropped banks (DZBKDV/UP/XR)
+           - Do not use the error return to prevent map entry from
+             being printed (DZBKUP/XR)
+  DZMAP  : - Only allow 7 entries for links in MAP entry with a
+             field width of 15 characters per link
+  DZTEXT : - Change text for error 3 in DZARE3
+V 3.53 /4  24 Sep 87
+  DZSHOW, DZSURV : Correct bug (call MZSDIV before test on dropped bank)
+  DZSTOR : Eliminate reference to 998 (no error return)
+V 3.53 /3  28 Jul 87
+  Introduce test for pseudo-stores in various routines
+  - Test on empty system division introduced in DZARE1, DZBKUP,
+    DZSTLA and DZSWAP
+V 3.53 /2   4 Jul 87
+  DZBKUP interference with ZEBRA stack LQWKTB in DZBKUP and DZSHPR
+         eliminated by introducing separate stack LASTAK
+  DZCHBK generalized to DZCHST (old DZCHBK kept for compatibility)
+  DZCHV1 changed (internal routine, parameter IXQUES added)
+  DZMAP  E and F options print banks 'D'ownwards
+  DZSHOW
+  - Correction to interrupt structure scan at LEVEL 1 (if not option 'L')
+  - Introduce test for dropped top bank or zero entry address
+  DZSURV
+  - Introduce test for dropped top bank or zero entry address
+V 3.53 /1  13 Feb 87
+  - Change MIN0 and MAX0 to generic MIN and MAX function calls
+  DZBKHD
+  - Call DZBKUP only for non-dropped banks
+  DZSNAP
+  - When store clobbered - Output corrupted area as data (JDFD = 1)
+                         - Maximum nb. of words printed < NQWCUT
+                         - Take out test on NQERR ( not 0) for print
+V 3.52 /1  26 Nov 86
+  - Update routine stack information
+  - Put more information into CQINFO for undocumented cases
+  - Better treatment of error conditions in DZSNAP
+  DZARE1
+  - Test on validity addresses in link area addresses (structural part)
+  - Mark banks as critical (T option of DZSNAP)
+  DZSHPR
+  - Correct treatment of print limits of DZSHOW
+  DZMAP
+  - Complete rewrite of DZMAP (using CQLINE)
+  SEVERAL
+  - Working space used is IQWKTB (pointed by LQWKTB)
+V 3.51 /4  19 Nov 86
+  - Introduce new trace back in DZSWAP
+  - Protection for small (<4 charactes) bank names in LZLOC
+  - Introduce check on links in structural part of link area
+    to see that the ORIG link of the bank pointed = address in the LA
+    (DZSNAP, DZTEXT, DZVERI)
+  - Put more information in message 'TOO MANY LA' in DZBKUP
+V 3.51 /3  26 Sep 86
+  - Correct call to ZPAGE in DZDATA (wrong number of arguments).
+  - Correct I80 (for I8) typing mistake in DZSNAP.
+V 3.51 /2   7 Aug 86
+  - Transmit CHOPT between DZAREA and DZARE1 (printing)
+  - Introduce double precision printing
+V 3.51 /1  30 Jul 86
+  - On WRITEs with ERR, put a IF=-QMIBM flag (JFORT bug)
+  - Complete rewrite of the I/O part.
+    All IO is performed in DZTEXT via CQMAP
+  - Options can be upper or lower case. They are treated in DZOPT
+  - Put the heading part of each routine in the correct DZDOC format
+  - Introduce sequence QUESTPARQ, describing error flag passing among
+              the various DZEBRA routines
+  - Eliminate USE flags HEXPRINT for Hexadecimal printing of binary info
+                        OCTPRINT for Octal       printing of binary info
+  - All bit information is now printed in hexadecimal
+  - All IO goes via variable CQLINE in /DZC1CH/
+  - DZAREA :  - Now calling DZARE1
+  - DZARE1 :  - New routine at lower level (from DZAREA and DZSNAP to
+                print link areas
+  - DZCHBK :  - Now calling DZCHC1
+  - DZBKDV :  - New routine to determine the division where a bank is
+  - DZBKHD :  - Call DZBKUP for checking correctness of OR and UP links
+              - If OR or UP link incorrect, output a second line
+                explaining problem
+  - DZBKUP :  - New routine to check the correctness of OR and UP links
+  - DZBKXR :  - New routine to check the division cross-reference matrix
+  - DZCHVC :  - Now calls DZCHV1 (low level)
+  - DZCHV1 :  - New routine at lower level (from DZCHVC and DZCHBK) to
+                calculate the checksum of a vector
+  - DZDATA :  - Change in Hexadecimal printout (force leading zeores)
+              - All hex is now printed full range (16 columns)
+  - DZMAP  :  - Banks are now printed horizontally
+              - D option protection moved to beginning of routine
+  - DZSHOW :  - 'L' option only applies to zeroeth level
+                (at other levels next's are always printed)
+              - Introduce call to DZBKUP to initialize link area
+                information and recode reserved space management part
+              - Introduce call to DZBKDV to calculate division of bank
+                The latter is now correct, since before the primary bank
+                at LBANK was always used instead of current bank at LCUR
+              - Calls to MZCHLS eliminated, since made in DZSHPR
+  - DZSHPR :  - Include calls to DZBKDV and DZBKXR to set up Xref in
+                IQUEST(31+..) to be used in checks in DZBKHD
+  - DZSNAP :  - Include call to DZBKUP to calculate LA limits
+              - Include call to DZBKXR to set up XREF matrix in IQUEST
+              - introduce call to DZARE1 (lower level than DZAREA)
+  - DZTEXT :  - Routine for printing error messages and text (new)
+              - It is actually the ONLY routine which prints anything
+  - DZTYP  :  - All hexadecimal is full range (type1-type0 abolished)
+  - DZVERI :  - Introduce call to DZBKUP to initialize link area
+                information and recode reserved space management part
+              - Call DZBKUP for checking correctness of OR and UP links
+              - Call DZBKXR for checking correctness XREF matrix
+              - Reorganize error handling with IQUEST
+              - Separate option 'U' eliminated (includes in 'L')
+V 3.50 /1  11 Jun 86
+  - DZMAP  :  - Define reserved area variable NDZRSV=0 before call
+                to DZSHPR ('C','D' and 'F' options)
+  - DZSNAP :  - Some cleaning up of code
+  - DZSURV :  - Eliminate reference to CHOPT
+V 3.41 /7  22 May 86
+  - DZC1   :  - NOFLIQ parameter was wrong (5 instead ot 8)
+  - DZCHBK :  - New routine calculating checksum for bank parts
+  - DZCHVC :  - New routine calculating checksum of array
+  - DZSNAP :  - Add test on MAP option for printing banks in division
+  - DZTYP  :  - Introduce protection for indefinite operands
+V 3.41 /6  12 May 86
+  - DZAREA :  - Introduce Q option which returns information via IQUEST
+  - DZSURV :  - Return information in IQUEST only if CHTEXT='-'
+V 3.41 /5   6 May 86
+  - DZSNAP :  - Protect options before call to DZAREA which resets them
+V 3.41 /4  30 Apr 86
+  - DZMAP  :  - Protect 'D' option (IQMARK bit set) between DZSHOW
+                series of routines and DZSNAP (variable IDOPT)
+  - FZZBOOK     ZBOOK and HYDRA to ZEBRA conversion
+  - FZHYDRA     patches reintroduced and made compatible with 3.40
+V 3.41 /3  24 Mar 86
+  - BKFOPARQ : - Introduce new parameter JFOSEQ in IO format definition
+               - Correct error in parameter definition
+  - ALL    :  - Make consistent with DZDOC program for writeup
+  - DZFORM :  - Indroduce code for correct line line numbering (NQUSED)
+  - DZFORP :        idem
+  - DZMAP  :  - Protect 'D' option (IQMARK bit set) between DZSHOW
+                series of routines and DZSNAP (variable IDOPT)
+  - DZSHOW :  - Small correction in layout of LEVEL line
+  - DZSNAP :  - Print line for empty division
+V 3.41 /2   5 Feb 86
+  - DZSTDV : - Count holes correctly as dropped banks
+  - DZVERI : - Put in protection for holes in test on bank links
+V 3.41 /1   3 Feb 86
+         Include several improvements suggested by J.Zoll
+  - DZAREA : - Replaces DZLINK, whose functionality is supplemented
+               by allowing the address of a link
+  - DZLINK : - Dummy === replaced by DZAREA
+  - DZMAP  : - Format of LINK part of map line changed
+               Align output with ID on header line (right shift 2 chars)
+             - Shift . + and F at beginning of MAP line
+  - DZSHOW : - Rename option 'H' (horizontal) to 'S' (sideways)
+               No actual FORTRAN code changed (since default option)
+             - At each level the store and division id's are printed
+                (and not anymore in DZSHPR for each bank)
+             - Add store and division number to title
+  - DZSHPR   - Move output of levels to DZSHOW
+  - DZSNAP : - Default divisions is 21+22 (user)
+             - Add store and division number to title
+  - DZVERI : - Default divisions is 21+22 (user)
+V 3.40 /6  24 Jan 86
+  - DZSNAP : - Print actual length of divisions and stores
+             - Verify the two words at end of store for IQNIL content
+             - Include code for flagging of 'critical banks' inline
+               recoding algorithm to cure indefinite loop (IQFOUL < 0)
+               (routine DZCRIT eliminated)
+  - DZSTDV : - Print actual length of division
+  - DZSTOR : - Print actual number of links
+  - DZTYP  : - Dummy out statement numbers 500 and 998 (not referenced)
+  - DZVERI : - Verify the two words at end of store for IQNIL content
+V 3.40 /5 22 Jan 86
+  - DZSHPR : - Bug corrected (LWORK off by 1 word -->
+                              overwrote last word of division 1)
+V 3.40 /4  19 Dec 85
+  - DZFORM : - Include the printing of NWIO (nb. of IO words)
+  - DZFORP : - Change variable IPOS at beginning of routine (see above)
+  - DZIOPD : - Dynamic sector of length 0 stops the printout of a bank
+  - DZIOPH : -  idem
+V 3.40 /3 10 Dec 85
+  - ALL    : - Change DEBUG output unit to IQPRNT
+  - DZFORM : - Introduce code for printing of all formats known to ZEBRA
+V 3.40 /2  5 Dec 85
+  - DZIOPD : - Fix bug for uninitialized variable
+             - harmonize printing of headings data part and link part
+  - DZIOPH : - Harmonize printing of headings with DZIOPD
+ -  DZSHPR : - Harmonize printing of headings with DZIOPD and DZIOPH
+V 3.40 /1 30 Nov 85
+  - ALL    : Changes reflecting new bank format
+             a) EQUIVALENCE for central part of bank
+             b) bank format IO characteristic completely different
+                use of MZIOCR in DZSHPR and DZTYP
+  - BKFOPARQ is a new sequence definition containing the format
+             descriptor for the IO characteristic
+  - DZBANK : eliminated (is replaced by DZSHOW)
+  - DZFORM : new routine to dump an IO descriptor in readable form
+  - DZIOPR : new routine to print the data part of banks according
+             to the IO descriptor
+  - DZTREE : eliminated (is replaced by DZSHOW)
+  - DZVERI : correct error in -calculation end of structural part of LA
+                              -loop over division cross-references
+             increase information content of error messages
+  - MZF    : PATCH eliminated (replaced by MZ routines of JZ)
+  - LZLOC  : New name for DZLOC and declare as function
+  - NZLEFT : Complete rewrite calling system routine MZRESV
+V 3.31.3/  4 Oct 85
+  - DZSURV : Print total number of banks present
+  - DZVERI : -IQUEST working area for inter-division references
+              starts at 30 (interference with error return eliminated)
+             -Skip dead banks in structural checks
+V 3.31.2/ 13 Sep 85
+  - DZBANK : Now calls routine DZSHOW
+  - DZMAP  : Now calls routine DZSHPR and tune 'D' option interference
+             between DZSNAP and DZSHOW
+  - DZTREE : Now calls routine DZSHOW
+V 3.31.1/ 30 Aug 85
+  - ZBLOC  : Entry (alias) to DZLOC
+  - ZDLEFT : Entry (alias) to DZLEFT
+V 3.30/ 25 Aug 85
+  - DZBANK : Put entry number before its contents
+             Bug fixed for case when VB option selected --> stack was
+             not treated properly.
+  - DZSHOW : Combines the DZTREE and DZBANK options
+             Suite of routines comprises DZSHFM, DZSHOW and DZSHPR
+  - DZVERI : Check that links comply to inter-division cross-reference
+             matrix (IQRTO) constraints
+  - Mask DEBUG options for JFORT and the VS compiler separate
+     JFORT is using DEBUGJF1 and DEBUGJF2 masked with JFORT flag
+     VFORT is using DEBUGVF1 and DEBUGVF2 masked with VFORT flag
+  - Introduce DZI USE flag to also include the ZI3DIT package
+    (ZEBRA Interactive Debug/Display/Documentation/Interrogation Tools)
+  - DZLEFT and DZLOC added
+V 3.22/ 11 Jul 85
+  - DZSURV Output store and address of bank as title
+  - DZTREE Take out dead code
+           Print level again (invalid reference to IFLOPT eliminated)
+  - DZTRFM Cosmetics in index printout of data part
+  - DZTRPR Cosmetics in index printout of link part
+  - DZVERI Return error information in IQUEST(11..)
+V 3.21/ 22 Jun 85
+  - DZLINK Bug corrected in addressing link area --> LQ(LQS + address
+  - DZSTLA Bug corrected in addressing link area --> LQ(LQS + address
+  - DZSTDV Initialize IQFOUL to zero for each division (empty included)
+  - DZTREE Series of routines introduced (more dense printing of banks)
+  - KEEPs  Make DEBROUT KEEP sequence dependent on QMIBM flag
+  - ZPAGE  Decrease page limit count by 2 (IBM) for C printer
+V 3.20/ 7 Jun 85
+  - Use of CDE sequence MQSYS thoughout
+  - Change routines treating LA for new MZ conventions (MQ 3.20)
+  - Change of JQSTOR --> JQSTOR+1
+V 3.12/ 3 Jun 85
+  - Define MSYSFQ, MSYSKQ and MSYSPQ in DZC1 KEEP sequence
+    (to include ZBOOK EPIO reading)
+  - Define IFORMA inside DZCKIO (DZBKPR, DZCKIO, DZSNAP)
+  - Optimization in DZTYP for out of bound index in ext. format case
+V 3.11/29 May 85
+  - Introduce flag IF=HISTORY for +PATCH,DZHIST.
+    Introduce flag IF=(-)TEXT for +KEEP sequences in +PATCH,PARADQ
+    with and w/o explanations (text) respectively.
+  - Uniformize use of reserve area in all routines
+    DZBANK, DZBKPR, DZMAP, DZSURV, DZVERI
+    When several routines in a sequence use the reserve area, the higher
+    level routine fences its space by setting NDZRSV in /DZC1/
+  - Eliminate redundant code in DZSTLA
+  - Include KEEP sequences DEBUGJF1 and DEBUGJF2 which have to be placed
+    at the beginning and end of a routine which has to be traced by the
+    TRACE dump package of the SIEMENS compiler
+  - Change of /DZC1/ common to treat extended bank descriptor
+    Inclusion of IFINDX, IFLEV0, LFORMA
+    Extension of NFBUFF
+  - Introduce USE flags HEXPRINT for Hexadecimal printing of binary info
+                        OCTPRINT for Octal       printing of binary info
+                        HEXMAP   for Hexidecimal load map
+                        OCTMAP   for Octal       load map
+                        BYTEMAP  for map addresses expressed in bytes
+  - DZCKIO :1) Add /ZUNIT/ IN DZCKIO to print message
+               when NFBUFF wrong (IQPRNT was undefined)
+            2) Introduce code to treat external bank descriptor
+  - DZDATA :   Uniform printing alignment introduced
+  - DZTYP  :1) Correct small bug in DZTYP (floating test)
+            2) Introduce code to treat external bank descriptor
+  - BANKPARQ   Introduce the NIO codes used by MZLIFT/MZBOOK
+               Introduce maximum number of fields for types in NIO
+               i.e. IIONBQ,IIONHQ,IIONIQ and IIONFQ in function of
+               the respective field lengths NION.Q
+
+V 3.10/15 April 85
+  - Change in ZPAGE (2 instead of 3 parameters)
+    Eliminate change of IQUEST(1) in ZPAGE (interference with DZSURV)
+  - Global change in all routines calling ZPAGE to bring number of
+    parameters in line with change above
+V 3.09/11 April 85
+  - Print a message when DZBANK detects an faulty bank
+  - Fix bug in DZBANK
+V 3.08/9 April 85
+  - Change to new CQLETT/CQNUM conventions
+V 3.07/21 March 85
+
+  Start from 3.04
+
+  - Make internal working compatible with MZ routines
+  - Options are 1 character modes.
+  - DZBANK: 'Z' print data part in hexadecimal
+  - DZLINK: ' ' option means all link areas
+  - DZSNAP: 'L' option means all link areas
+  -         'Z' print information in Hexadecimal
+  - DZTYP : Introduce forced HEX dump
+  - DZVERI: 'U' option checks up and sup links

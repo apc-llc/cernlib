@@ -1,0 +1,14 @@
+*
+* $Id: v211.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v211.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.11   940901  Minuit 94.09
+C     MNEMAT and MNPRIN  print one more digit of UP (G10.2 -> G10.3)
+C     MNMNOT   fix bug: sometimes returned wrong value with limits
+C     MNCOMD and MNEXCM  make error return codes consistent
+C     MNSEEK   avoid exponential overflows by using logs
+C     MNCROS   improve convergence criteria (for MNCONT, MINOS)

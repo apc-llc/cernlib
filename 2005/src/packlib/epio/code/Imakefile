@@ -1,0 +1,13 @@
+SRCS_F= epaddh.F epblin.F epbout.F epclos.F epdacr.F epdefu.F epdrop.F \ @@\
+	epend.F epeof.F eperrh.F epfhdr.F epfrd.F epgeta.F epgetc.F \ @@\
+	epgetw.F ephead.F epinit.F epiot.F epoutl.F \ @@\
+	epouts.F epread.F eprwnd.F epseta.F epsetc.F epsetw.F \ @@\
+	epstat.F epunit.F epupdh.F epuref.F 
+
+#ifndef CERNLIB_VAX
+SRCS_F:=$(SRCS_F) epopestf.F
+#else
+SRCS_F:=$(SRCS_F) epopevax.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

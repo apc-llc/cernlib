@@ -1,0 +1,35 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:52:31 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:31  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerncry.car patch kerncry
+#if !defined(CERNLIB_KERNCRY)
+
+              KERNLIB routines particular to the Cray
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KCRAY    Pilot-patch selecting KERNLIB for system COS
+*KCRU     Pilot-patch selecting KERNLIB for system UNICOS
+
+QMCRY     Machine patch  for system COS or UNICOS
+QMCRU     Machine patch  for system UNICOS only
+
+CRYGS     ML and Fortran versions of general KERNLIB routines
+
+CRYCOS    special routines for system COS
+
+CRYUNI    special routines for system UNICOS
+
+Options:  USADATE :  system routine DATE delivers the date
+                     in US format : mm/dd/yy
+                     else:          dd/mm/yy
+
+=====================================================================
+#endif

@@ -1,0 +1,57 @@
+/* $Id: Server.tmpl,v 1.1.1.1 1995/12/20 15:26:42 cernlib Exp $
+ *
+ * $Log: Server.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:42  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+/*
+ * Server imakefile info  - this contains any special redefinitions, etc.
+ * that Imakefiles in the server subtree will need.
+ */
+
+XCOMM $XConsortium: Server.tmpl,v 1.13 94/04/08 16:59:46 rws Exp $
+
+#define PassCDebugFlags CDEBUGFLAGS="$(CDEBUGFLAGS)" LDSTRIPFLAGS="$(LDSTRIPFLAGS)"
+
+#ifndef ServerCcCmd
+#define ServerCcCmd CcCmd
+#endif
+#ifndef ServerCCOptions
+#define ServerCCOptions DefaultCCOptions
+#endif
+#ifndef ServerDefines
+#define ServerDefines StandardDefines
+#endif
+#ifndef ServerCDebugFlags
+#define ServerCDebugFlags DefaultCDebugFlags
+#endif
+#ifndef DoThreadedServer
+#define DoThreadedServer NO
+#endif
+#ifndef InstallServerSetUID
+#define InstallServerSetUID NO
+#endif
+
+/*
+ * SetUIDServerTarget - compile, link, and relink a setuid server
+ */
+#ifndef SetUIDServerTarget
+#if InstallServerSetUID
+#define	SetUIDServerTarget(server,subdirs,objects,libs,syslibs)		@@\
+ServerTargetWithFlags(server,subdirs,objects,libs,syslibs,$(INSTUIDFLAGS))
+#else
+#define	SetUIDServerTarget ServerTarget
+#endif
+#endif /* SetUIDServerTarget */
+
+         CC = ServerCcCmd
+  CCOPTIONS = ServerCCOptions
+#if DoThreadedServer
+SERVER_THREAD_DEFINES = XThreadsDefines ThreadTypeDefines
+#endif
+STD_DEFINES = ServerDefines $(SERVER_THREAD_DEFINES)
+CDEBUGFLAGS = ServerCDebugFlags
+EXT_DEFINES = ExtensionDefines
+

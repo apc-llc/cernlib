@@ -1,0 +1,149 @@
+*
+* $Id: msprep.F,v 1.1.1.1 1996/04/01 15:03:19 mclareni Exp $
+*
+* $Log: msprep.F,v $
+* Revision 1.1.1.1  1996/04/01 15:03:19  mclareni
+* Mathlib gen
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_gen/pilot.h"
+      SUBROUTINE MSPREP(M,JJ,ID,NN,LL)
+C--- PREPARES DAYFILE MESSAGES FOR SUPRLAY
+      DIMENSION MM(6),MESS(6,9),NUM(11)
+      DIMENSION M(7),NIV(4)
+      DATA NUM/1,1,2,3,4,5,6,6,7,8,9/
+#if defined(CERNLIB_F4)
+      DATA L33/333333333333B/,M33,M55/33B,55B/
+      DATA MESS/
+     1 5L      ,10H STORED ON,4RSCM=,4R    ,4LLCM=,0,
+     2 10HSUPRLAY OV,10HERFLOW AT ,10HOVERLAY   ,5H      ,2*0,
+     + 10HSUPRLAY-UN,10HKNOWN OVER,3LLAY   ,3*0,
+     3 10HSUPRLAY-BA,10HD STRUCTUR,1LE,3*0,
+     4 10HSUPRLAY-SE,10HRIOUS PROB,10HLEM-NEED H,3LELP,2*0,
+     5 8LSUPRLAY-,10HM OVERFLOW,5L AT  ,4L BY ,7LB WORDS,0,
+     6 10HSUPRLAY-ER,10HROR IN LCM,10H MEMORY AL,10HLOCATION  ,5LAT   ,
+     7  0,
+     8 10HSUPRLAY-PO,10HSSIBLY OVE,10HRWRITING C,10HURRENT OVE,
+     9 10HRLAY LOADI,5LNG   ,
+#endif
+#if !defined(CERNLIB_F4)
+      DATA L33/O"333333333333"/,M33,M55/O"33",O"55"/
+      DATA MESS/
+     1 L"     "," STORED ON",R"SCM=",R"    ",L"LCM=",0,
+     2 "SUPRLAY OV","ERFLOW AT ","OVERLAY   ",L"       ",2*0,
+     + "SUPRLAY-UN","KNOWN OVER",L"LAY     ",3*0,
+     3 "SUPRLAY-BA","D STRUCTUR",L"E",3*0,
+     4 "SUPRLAY-SE","RIOUS PROB","LEM-NEED H",L"ELP",2*0,
+     5 L"SUPRLAY-","M OVERFLOW",L" AT   ",L" BY ",L"B WORDS",0,
+     6 "SUPRLAY-ER","ROR IN LCM"," MEMORY AL","LOCATION  ",L"AT   ",
+     7  0,
+     8 "SUPRLAY-PO","SSIBLY OVE","RWRITING C","URRENT OVE",
+     9 "RLAY LOADI",L"NG   ",
+#endif
+     * 10HSUPRLAY-IL,10HLEGAL LCM ,10H DECLARATI,10HON IN SECO,
+     * 10HNDARY OVER,10HLAY - EXIT/
+      JUMP=JJ+1
+      MM(1)=0
+      K=NUM(JUMP)
+      DO 1  I=1,6
+    1 MM(I)=MESS(I,K)
+      J=SHIFT(ID,48)
+      DO 2  I=1,4
+      J=SHIFT(J,3)
+    2 NIV(I)=AND(J,7)+M33
+      DO 3  I=1,3,2
+      IF(NIV(I).EQ.M33) NIV(I)=M55
+    3 CONTINUE
+      IDM=0
+      DO 4  I=1,4
+      IDM=OR(SHIFT(IDM,6),NIV(I))
+#if defined(CERNLIB_F4)
+      IF(I.EQ.2) IDM=OR(SHIFT(IDM,6),1R,)
+#endif
+#if !defined(CERNLIB_F4)
+      IF(I.EQ.2) IDM=OR(SHIFT(IDM,6),R",")
+#endif
+    4 CONTINUE
+      GOTO(10,20,30,35,40,50,60,70,80,90,100),JUMP
+   10 CONTINUE
+C--- OVERLAY STORED ON DISK
+#if defined(CERNLIB_F4)
+      MM(3)=OR(6L DISK ,MM(3))
+#endif
+#if !defined(CERNLIB_F4)
+      MM(3)=OR(L" DISK ",MM(3))
+#endif
+      GOTO 21
+   20 CONTINUE
+C--- OVERLAY STORED IN LCM
+#if defined(CERNLIB_F4)
+      MM(3)=OR(6L LCM  ,MM(3))
+#endif
+#if !defined(CERNLIB_F4)
+      MM(3)=OR(L" LCM  ",MM(3))
+#endif
+   21 MM(1)=OR(MM(1),IDM)
+      N=0
+      L=0
+      DO 22  I=45,60,3
+      N=OR(SHIFT(N,6),AND(SHIFT(NN,I),7))
+      L=OR(SHIFT(L,6),AND(SHIFT(LL,I),7))
+   22 CONTINUE
+      MM(4)=OR(MM(4),SHIFT(N+L33,24))
+      MM(5)=OR(MM(5),L+L33)
+      GOTO 500
+   30 CONTINUE
+C--- SUPRLAY OVERFLOW
+      MM(4)=OR(MM(4),IDM)
+      GOTO 500
+   35 CONTINUE
+C--- UNKNOWN OVERLAY REFERENCED
+      MM(3)=OR(MM(3),IDM)
+      GOTO 500
+   40 CONTINUE
+C--- BAD STRUCTURE
+      GOTO 500
+   50 CONTINUE
+C--- E.O.F. WHILE READING ABSOLUTE BINARY FROM DISK
+      GOTO 500
+   60 CONTINUE
+C--- SCM OVERFLOW
+#if defined(CERNLIB_F4)
+      MM(1)=OR(MM(1),2RSC)
+#endif
+#if !defined(CERNLIB_F4)
+      MM(1)=OR(MM(1),R"SC")
+#endif
+      GOTO 71
+   70 CONTINUE
+C--- LCM OVERFLOW
+#if defined(CERNLIB_F4)
+      MM(1)=OR(MM(1),2RLC)
+#endif
+#if !defined(CERNLIB_F4)
+      MM(1)=OR(MM(1),R"LC")
+#endif
+   71 MM(3)=OR(MM(3),IDM)
+      N=0
+      DO 72  I=45,60,3
+      N=OR(SHIFT(N,6),AND(SHIFT(NN,I),7))
+   72 CONTINUE
+      MM(4)=OR(MM(4),N+L33)
+      GOTO 500
+   80 CONTINUE
+C--- ERROR IN LCM DYN. MEM. MAMAGEMENT
+      MM(5)=OR(MM(5),IDM)
+      GOTO 500
+   90 CONTINUE
+C--- ATTEMPT TO OVERWRITE CURRENT OVERLAY
+      MM(6)=OR(MM(6),IDM)
+      GOTO 500
+  100 CONTINUE
+C--- USER DEFINES LCM IN SECONDAR OVERLAY
+  500 CONTINUE
+      DO 501  I=1,6
+  501 M(I)=MM(I)
+      M(7)=0
+      RETURN
+      END

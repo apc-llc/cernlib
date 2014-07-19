@@ -1,0 +1,220 @@
+#!/bin/sh
+# **********************************************************************
+# * @(#) cernlib
+# * @(#) $Header: /afs/cern.ch/asis/share/cern/CVS/scripts/cernlib_shift,v 1.1 2004/07/29 14:11:01 mclareni Exp $
+# *                                                                    *
+# * Attachment of CERN Libraries for link step                         *
+# *                                                                    *
+# * Author: M.Marquina 91/05/10                                        *
+# * Change history is in CVS log files and in source 1.27 ( and older)
+# **********************************************************************
+ 
+  SHOPT="G:Psuv:"
+#SEQ,GETOPTD.
+ 
+  [ -z "$CERN"       ] && CERN="/cern"
+  [ -z "$CERN_LEVEL" ] && gver="pro" || gver="$CERN_LEVEL"
+ 
+  _P=0  ; _p=0 ;   _u=0 ; Gsys=""
+  while [ $# -gt 0 ]
+  do case $1 in
+       -G) Gsys=$2   ; shift ;;
+       -P) _P=1              ;;
+       -s) _s="is an obsolete option"     ;;
+       -u) _u=1 ; _p=1       ;;
+       -v) gver=$2   ; shift ;;
+       --) shift ; break     ;;
+        *)         break     ;;
+     esac
+     shift
+  done
+ 
+  
+ 
+  CERNLIB=""
+ 
+  liblist=`echo $* | sed -e 's/,/ /g'`
+  for lib in $liblist
+  do
+      case $lib in
+	shift)  continue ;;
+           -*)  CERNLIB="$CERNLIB $lib" ; continue ;;
+      esac
+      lver=$gver
+      val=`echo $lib | sed -e "s?\/? ?g"`
+      set - $val
+      [ $# -eq 2 -a $1 != "graflib" ] && lver=$2
+      dir=$CERN/$lver/lib
+         ln=$1
+      if [ $1 = "kernlib" -o $1 = "packlib" ] ; then
+         _p=1
+      fi
+         [ $1 = "genlib"  ] && ln="mathlib.a $dir/libphtools"
+         [ $1 = "bvsl"    ] && ln="mathlib"
+         [ $1 = "mpalib"  ] && ln="mathlib"
+         [ $1 = "lapack"  ] && ln="lapack3.a $dir/libblas"
+	 [ $1 = "pawlib"  ] && ln="pawlib.a $dir/liblapack3.a $dir/libblas"
+         [ $1 = "pythia"  ] && ln="jetset"
+      if [ $1 = "GKS" -o $1 = "gks" ] ; then
+         drv="X11" ; glib="$1" ; dir="$CERN/gks/$lver/lib"
+      fi
+         [ $1 = "naglib"  ] && dir="$CERN/nag/$lver/lib"
+      if [ $1 = "graflib" ] ; then
+         [ -z "$Gsys" ] && Gsys="X11"
+            drv="$Gsys"
+         if [ $# -gt 1 ] ; then
+            drv="$2" ; Gsys="$2"
+         fi
+         [ $# -eq 3 ] && dir="$CERN/$3/lib"
+         [ $drv = "Motif" ] && drv="X11"
+         ln="$ln.a $dir/libgraf$drv"
+      fi
+         CERNLIB="$CERNLIB $dir/lib$ln.a"
+  done
+  [ $_p -eq 0 ] && CERNLIB="$CERNLIB $CERN/$gver/lib/libpacklib.a"
+
+#  get system name
+  [ -d /NextAdmin ] && Msys="NeXT" || Msys=`uname -s`
+  case $Msys in
+      SunOS)    [ `uname -r | awk '{ print substr($1,1,1) }'` -ge 5 ] \
+                        && Msys="SunSol"
+                ;;
+          *)    ;;
+  esac
+
+ 
+  if [ -n "$Gsys" ] ; then
+     case $Msys in
+      AIX)     SYSGGL="-lfgl -lgl" ;
+               [ -f /usr/lib/libgP.a ] && \
+               SYSGGKS="-lgksco -lgP -lX11" ;
+               SYSGMOTIF="-lXm -lXt -lX11 -lPW" ;;
+      ALLIANT) SYSGX11="-lX11 -lcurses -lm" ;;
+      HP-UX)   if [ -d /usr/lib/X11R5 -a -d /usr/lib/Motif1.2 ] ; then
+		  X11="/usr/lib/X11R5"
+		  Motif="/usr/lib/Motif1.2"
+		  SYSGMOTIF="-L$Motif -lXm -L$X11 -lXt -lX11 -lm -lc -lPW"
+	       else
+		  X11="/usr/lib/X11R4"
+                  Motif="/usr/lib/Motif1.1"
+#                      Xm must appear late, else you get unresolved extrernals
+                  SYSGMOTIF="-L$Motif -L$X11 -lXm -lXt -lX11 -lm -lc -lPW"
+	       fi
+               SYSGX11="-L$X11 -lX11 -lm";;
+      IBMAIX)  SYSGX11="-lX11 -lm" ;;
+      IRIX)    SYSGX11="-lX11 -lbsd" ;
+               SYSGGL="-lfgl -lgl_s -lm -lbsd" ;
+               SYSGMOTIF="-lXm -lXt -lX11 -lPW"
+	       ;;
+      IRIX64)  SYSGX11="-lX11 -lbsd" ;
+               SYSGGL="-lfgl -lgl_s -lm -lbsd" ;
+               SYSGMOTIF="-lXm -lXt -lX11 -lPW"
+	       ;;
+      Linux)   [ -d /usr/X386/lib ] && SYSGX11="-L/usr/X386/lib -lX11"
+	       [ -d /usr/X11/lib ] && SYSGX11="-L/usr/X11/lib -lX11"
+	       [ -d /usr/X11R6/lib ] && SYSGX11="-L/usr/X11R6/lib -lX11"
+	       [ -d /usr/X11R6/lib ] && SYSGMOTIF="-L/usr/X11R6/lib -lXm -lXt -lXp -lXext -lX11"
+	       [ `uname -m` = ppc ] && SYSGMOTIF="$SYSGMOTIF -lSM -lICE -lXpm"
+	       ;;
+      NeXT)    SYSGX11="/usr/lib/X11/libX11.r" ;
+               SYSGMOTIF="-lXm -lXt /usr/lib/X11/libX11.r" ;;
+      OSF1)    SYSGX11="-lX11 -ldnet_stub" ;
+               SYSGMOTIF="-lXm -lXt -lX11 -ldnet_stub -lPW -lXmu" ;;
+      SunOS)   [ -d /usr/motif/lib ] && Motif="-L/usr/motif/lib" || Motif=" "
+	       if [ -d /usr/motif12/usr/lib ] ; then
+		  Motif="-L/usr/motif12/usr/lib"
+#                               motif12 needs X11R5 from usr/local/lib
+		  X11="-L/usr/local/lib"
+	       else
+		  X11=""
+	       fi
+	       SYSGMOTIF="$Motif -lXm $X11 -lXt -lX11"
+	       [ -f /usr/lib/libgks77.a ] && \
+               SYSGGKS="-lgks77 -lgks -lsuntool -lsunwindow -lpixrect -lm" ;;
+      SunSol)  [ -d /usr/motif/lib ] && Motif="-L/usr/motif/lib" || Motif=" "
+               [ -d /usr/motif12/usr/lib ] && Motif="-L/usr/motif12/usr/lib"
+               [ -d /usr/dt/lib ] && \
+				Motif="-L/usr/dt/lib -R/usr/dt/lib -Bdynamic"
+               [ -d /usr/openwin/lib ] && X11="-L/usr/openwin/lib" || X11=""
+               SYSGX11="$X11 -Bdynamic -lX11"
+               SYSGMOTIF="$Motif -lXm $X11 -Bdynamic -lXt -lX11"
+               [ -f /usr/lib/libgks77.a ] && \
+               SYSGGKS="-lgks77 -lgks -lsuntool -lsunwindow -lpixrect -lm"
+                ;;
+      ULTRIX)  [ -f /usr/lib/libGKS3D.a ] && \
+        SYSGGKS="-lGKS3Dforbnd -lGKS3D -lddif -ldwt -lc -lX11 -lcursesX -lm" ;;
+      DomainOS) SYSGX11="" ;
+               SYSGMOTIF="-L/usr/lib/X11 -lXm -lXt -lX11 -lm" ;;
+     esac
+ 
+            [ -z "$SYSGX11" ]   && SYSGX11="-lX11"
+     case $Gsys in
+       X11) CERNLIB="$CERNLIB $SYSGX11" ;;
+     Motif) [ -z "$SYSGMOTIF" ] && SYSGMOTIF="-lXm -lXt $SYSGX11" ;
+            CERNLIB="$CERNLIB $SYSGMOTIF" ;;
+     GPHIGS) [ -z "$SYSGPHIGS" ] && \
+            SYSGPHIGS="-L$CERN/phigs/$gver/lib -lgphigsf2c -lgphigsc" ;
+            CERNLIB="$CERNLIB $SYSGPHIGS" ;;
+       GKS) [ -z "$SYSGGKS" ] && \
+            SYSGGKS="-L$CERN/gks/$gver/lib -lGKS -lGKSdriv $SYSGX11" ;
+            CERNLIB="$CERNLIB $SYSGGKS" ;;
+        GL) CERNLIB="$CERNLIB $SYSGGL"  ;;
+       GPR) CERNLIB="$CERNLIB $SYSGGPR" ;;
+        --) break  ;;
+         *) break  ;;
+     esac
+  fi
+ 
+  if [ $_u -eq 0 ] ; then
+  
+         CERNLIB="$CERNLIB -L/usr/local/lib -lshift"
+  
+#     SGI needs -lsun, to see yellow pages 
+#   As of 5.x, the yp version is in libc, so -lsun is no longer needed.
+#     GF. 18-7-96
+#     [ -f /usr/lib/libsun.a    -o -f /usr/lib/libsun.so    ] \
+#					&& CERNLIB="$CERNLIB -lsun"
+     [ -f /usr/lib/libulsock.a -o -f /usr/lib/libulsock.so ] \
+					&& CERNLIB="$CERNLIB -lulsock"
+#     Solaris, many things won't link without -lsocket -lnsl
+     if [ "$Msys" = "SunSol" ] ; then
+        [ -f /usr/lib/libw.so -o -f /usr/lib/libw.a ] \
+                                                && CERNLIB="$CERNLIB -lw"
+        [ -f /usr/ccs/lib/libgen.so -o -f /usr/ccs/lib/libgen.a ] \
+                                                && CERNLIB="$CERNLIB -lgen"
+        [ -f /usr/lib/libsocket.so -o -f /usr/lib/libsocket.a ] \
+                                                && CERNLIB="$CERNLIB -lsocket"
+        [ -f /usr/lib/libnsl.so -o -f /usr/lib/libnsl.a ] \
+                                                && CERNLIB="$CERNLIB -lnsl"
+        [ -f /usr/lib/libintl.so -o -f /usr/lib/libintl.a ] \
+                                                && CERNLIB="$CERNLIB -lintl"
+        [ -f /lib/librt.so ] \
+                                                && CERNLIB="$CERNLIB -lrt"						
+        echo $CERNLIB | grep pawlib >/dev/null && \
+               CERNLIB="$CERNLIB -ldl"
+ 
+     fi
+     if [ "$Msys" = "HP-UX" ] ; then
+	if [ -f /usr/lib/libU77.a -o -f /usr/lib/libU77.sl ] ; then
+		CERNLIB="$CERNLIB -lU77"
+        elif [  -f /opt/fortran/lib/libU77.a ] ; then
+		 CERNLIB="$CERNLIB /opt/fortran/lib/libU77.a"
+	elif [ -f /opt/fortran/lib/libU77.sl ] ; then
+		CERNLIB="$CERNLIB /opt/fortran/lib/libU77.sl"
+	fi
+
+	echo $CERNLIB | grep pawlib >/dev/null && \
+				      CERNLIB="$CERNLIB /usr/lib/libdld.sl"
+	echo $CERNLIB | grep packlib >/dev/null && \
+	       [ -f /lib/pa1.1/libm.a ] && CERNLIB="$CERNLIB /lib/pa1.1/libm.a"
+     fi
+     if [ "$Msys" = "AIX" ] ; then
+        echo $CERNLIB | grep pawlib >/dev/null &&   CERNLIB="$CERNLIB -lld"
+     fi
+     if [ "$Msys" = "Linux" ] ; then
+        CERNLIB="$CERNLIB -lnsl -lcrypt -ldl"
+     fi
+  fi
+ 
+
+  echo $CERNLIB ; export CERNLIB

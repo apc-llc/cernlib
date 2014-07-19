@@ -1,0 +1,64 @@
+*
+* $Id: history,v 1.1.1.1 1996/03/08 16:58:50 mclareni Exp $
+*
+* $Log: history,v $
+* Revision 1.1.1.1  1996/03/08 16:58:50  mclareni
+* Eurodec
+*
+*
+* This directory was created from eurodec.car patch history
+C EURODEC 2.05/02 950504 17:20 CERN Program Library        W5048 EURODEC
+C
+C Fix compilation warnings/informationals from DEC Fortran 6.2
+C
+C EURODEC 2.05/01 920721 13.00 CERN Program Library        W5048 EURODEC
+C.------------------------------------------------------------------------------
+C.
+C.    Eurodec is a general purpose Monte Carlo program for the
+C.    fragmentation and decay of quarks, di-quarks, heavy leptons etc.
+C.    Written by:
+C.
+C.                    A. Ali            (DESY)
+C.                    B. van Eijk       (CERN)
+C.
+C.    This patch contains the update history of CERN modifications
+C.    and additions.  Please consult long write-up W5048 for details!
+C.
+C.------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+|         |          |     |                                                   |
+| Version |   Date   | Who |   *****   Comments   *****                        |
+|         |          |     |                                                   |
+|------------------------------------------------------------------------------|
+| 0.02/04+| 21/07/92 | DD  | Extend  addded to simplify program installation:  |
+| 0.02/04 | 12/09/89 | DD  | Patches addded to simplify program installation:  |
+|         |          |     | EUDTXT:  User information (text only), not yet    |
+|         |          |     |          completed !!!                            |
+|         |          |     | EUDDAT:  EUROJET particle / particle decay tables,|
+|         |          |     | EUDTIT:  Sample title file.                       |
+|------------------------------------------------------------------------------|
+| 0.01/03 | 14/10/86 | BVE | First released version, no writeup.               |
+| 0.02/01 | 15/11/88 | BVE | New version, completely replaces all previous     |
+|         |          |     | versions. Please consult writeup for details.     |
+|         |          |     | The writeup can be requested from:                |
+|         |          |     | A. Ali      - DESY (Hamburg, FRG),                |
+|         |          |     | B. van Eijk - CERN (Geneva, Switzerland).         |
+| 0.02/02 | 01/02/89 | BVE | New random number generator (Period: 2**144!)     |
+|         |          |     | with: 0 <= iseed(1) < 31328, 0 <= iseed(2) < 30081|
+|         |          |     | Modifications in routines DETVTX, EUDTAB, EUDTIT, |
+|         |          |     | NAMPOI (now contains binary search for particle   |
+|         |          |     | name).  Minor modifications for secondary vertex  |
+|         |          |     | calculation. Routine ICHARG replaced by PCHARG for|
+|         |          |     | non integer parton charges, example jobs added.   |
+| 0.02/03 | 19/06/89 | BVE | Major modifications in FRAGMT and JETS.  Make sure|
+|         |          |     | that you drop Q0 from the argument list in the    |
+|         |          |     | call to FRAGMT. In order to treat polarization    |
+|         |          |     | correctly, make sure that FRAGMT is called with   |
+|         |          |     | parton/particle momenta given in the lab. frame!  |
+|         |          |     | Conversion routines for PDG particle codes added, |
+|         |          |     | Particle and particle decay table not backwards   |
+|         |          |     | compatible! Toponium decays added.  Minor bugs    |
+|         |          |     | fixed for Apollo and in INIBRN.                   |
+| 0.02/04 | 12/10/89 | BVE | Modifications concerning toponium decays.  Default|
+|         |          |     | toponium mass now 60 GeV/c2.                      |
+--------------------------------------------------------------------------------

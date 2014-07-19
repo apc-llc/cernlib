@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 jobinfo.F nodeid.F userid.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

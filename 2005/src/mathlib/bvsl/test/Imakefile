@@ -1,0 +1,12 @@
+SRCS_F=	 copy.F dot.F intg.F iyeqx.F iygex.F iygtx.F iylex.F \ @@\
+	iyltx.F iynex.F scal.F smod3.F sxpy.F sxy.F vset.F \ @@\
+	vxpy.F xypwz.F yeqx.F ygex.F ygtx.F ylex.F yltx.F ynex.F
+
+SubdirLibraryTarget(bvsltst,NullParameter)
+
+DefinePackageLibrary(bvsltst)
+
+CernlibFortranProgramTarget(bvslt,tsbvsl.o,$(PACKAGE_LIB),$(PACKAGE_LIB),mathlib kernlib)
+
+TestTarget(bvslt,NullParameter,NullParameter)
+

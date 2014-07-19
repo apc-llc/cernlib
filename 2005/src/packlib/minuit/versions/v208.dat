@@ -1,0 +1,11 @@
+*
+* $Id: v208.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v208.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.08   930803 14.00
+C     MNHELP   new help facility
+C     trivial fix in MNCONT

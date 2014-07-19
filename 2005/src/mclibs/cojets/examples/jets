@@ -1,0 +1,81 @@
+*
+* $Id: jets,v 1.1.1.1 1996/01/11 14:15:06 mclareni Exp $
+*
+* $Log: jets,v $
+* Revision 1.1.1.1  1996/01/11 14:15:06  mclareni
+* Cojets
+*
+*
+* This directory was created from cojets.car patch jets
+#ifndef CERNLIB_COJCONV
+#define CERNLIB_COJCONV
+#endif
++ADD,COJCONV,MAIN,38
+C-
+C-
+C- SET UP FOR JET PRODUCTION
+C-
+      ITDKY=1
+      ITLIS=6
+      NLEAVE=10
+      IEVTYP=1
+      ECM=630.
+      ALAMB=0.2
+      IEICHT=1
+      PTMGE=50.
+C-
+C- STOP DECAYS OF PI0 AND K0S
+      CALL STOPD(110)
+      CALL STOPD(20)
+C-
+C-
++ADD,COJCONV,BOOKH,9
+C-
+C-
+C- SET UP FOR JET PRODUCTION
+      COMMON//B(10000)
+      CALL HLIMIT(10000)
+      CALL HOUTPU(ITLIS)
+      CALL HERMES(ITLIS)
+C-
+C- BOOK HISTOGRAMS
+      CALL HBOOK1(1,'PTHARD   $',100,0.,100.)
+C-
+      CALL HBOOK1(11,'PT JETS     $',100,0.,200.)
+      CALL HBOOK1(21,'PT PARTICLES$',100,0.,200.)
+C-
+C-
++ADD,COJCONV,FILLH,15
+C-
+C-
+C- SET UP FOR JET PRODUCTION
+C-
+C
+C- MONITOR PTHARD
+      CALL HFILL(1,PTHARD,0.,1.)
+C
+C- JETS
+      IF(NQUA.EQ.0) GO TO 21
+      DO 20 IQ=1,NQUA
+      PTQ=SQRT(PARQUA(IQ,1)**2+PARQUA(IQ,2)**2)
+      CALL HFILL(11,PTQ,0.,1.)
+20    CONTINUE
+C
+C- PARTICLES
+C
+21    IF(NPART.EQ.0) RETURN
+      DO 30 IP=1,NPART
+      PT=SQRT(PARHAD(IP,1)**2+PARHAD(IP,2)**2)
+      CALL HFILL(21,PT,0.,1.)
+30    CONTINUE
+C-
+C-
++ADD,COJCONV,OUTH,10
+C-
+C-
+C- SET UP FOR JET PRODUCTION
+C-
+C
+      CALL HISTDO
+C-
+C-

@@ -1,0 +1,19 @@
+SRCS_F=	 dzdase.F dzdb01.F dzdbi1.F dzdbit.F dzdbnk.F dzdbok.F \ @@\
+	dzdbox.F dzdcdi.F dzdcfz.F dzdckc.F dzdcld.F dzdcrz.F dzdcti.F \ @@\
+	dzddad.F dzddaw.F dzddec.F dzddhp.F dzddiv.F dzddoc.F dzddtr.F \ @@\
+	dzddwd.F dzdedd.F dzdent.F dzdfio.F dzdfla.F dzdfll.F dzdfnt.F \ @@\
+	dzdfzi.F dzdfzs.F dzdgdo.F dzdgds.F dzdgdv.F dzdgen.F dzdget.F \ @@\
+	dzdgfl.F dzdgiv.F dzdgky.F dzdglk.F dzdgnz.F dzdgpl.F dzdgr1.F \ @@\
+	dzdgrc.F dzdgrz.F dzdgst.F dzdgtr.F dzdhea.F dzdhlp.F dzdhlr.F \ @@\
+	dzdhlv.F dzdhtm.F dzdibr.F dzdifa.F dzdinb.F dzdioc.F dzdird.F \ @@\
+	dzdirz.F dzdisp.F dzdlbx.F dzdlft.F dzdlfx.F dzdli2.F dzdlnk.F \ @@\
+	dzdlpe.F dzdmnt.F dzdmrz.F dzdnbk.F dzdndi.F dzdnfz.F dzdntd.F \ @@\
+	dzdoco.F dzdorf.F dzdpar.F dzdpdl.F dzdpev.F dzdpin.F dzdpla.F \ @@\
+	dzdpln.F dzdprv.F dzdprw.F dzdpsc.F dzdpto.F dzdpuv.F dzdra1.F \ @@\
+	dzdra2.F dzdraw.F dzdrot.F dzdrwf.F dzdsbx.F dzdsdo.F dzdsfb.F \ @@\
+	dzdsfk.F dzdsh1.F dzdsha.F dzdshd.F dzdskd.F dzdspi.F dzdsrs.F \ @@\
+	dzdst1.F dzdstk.F dzdsvp.F dzdsy1.F dzdsyw.F dzdtm1.F dzdtmp.F \ @@\
+	dzdtre.F dzdtxt.F dzdudd.F dzdurz.F dzdwcs.F dzdwtr.F dzdzeb.F \ @@\
+	dze2ht.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

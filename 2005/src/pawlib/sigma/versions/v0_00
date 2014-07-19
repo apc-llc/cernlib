@@ -1,0 +1,428 @@
+*
+* $Id: v0_00,v 1.1.1.1 1995/12/12 14:36:22 mclareni Exp $
+*
+* $Log: v0_00,v $
+* Revision 1.1.1.1  1995/12/12 14:36:22  mclareni
+* Imported sources
+*
+*
+* This directory was created from sigma.car patch history
+*CMZ :  1.09/03 28/09/93  09.37.43  by  Carlo E. Vandoni
+*-- Author :
+*::>          VERSION  1.09/00   930801 09.00
+* ********************
+* September 20 1993
+*
+*   Matrix inversion (INV)
+*   Matrix determinant (DET)
+*
+* ********************
+* August 1 1993
+* Major revision of the package
+* Revision of common blocks
+* Elimination of unused and dead code
+* (Re-)Implementation of features
+*
+*   Hooks for Matrix inversion and determinant
+*
+*
+*   The following functions have been reactivated
+*
+*          DAWSON       Dawson's Integral
+*          DILOG        Dilogarithm Function
+*
+*
+*   The following functions are now accessible
+*
+*
+*          ADIGAM       Digamma or Psi Function
+*          ASINH        Hyperbolic Arcsine
+*          ATANI        Arctangent integral
+*          FRSIN        Fresnel Integrals
+*          FRCOS        Fresnel Integrals
+*          GAMMF        Gamma Function for Real Argument
+*          GAUSIN       Inverse of Gaussian Distribution
+*          RANGAM       Random Numbers in Gamma or Chisquare Distribution
+*          STRH0        Struve Functions of Order Zero
+*          STRH1        Struve Functions of Order One
+*
+*
+* Nominal speed up (5%)
+*
+* *********************
+
+*::>          VERSION  1.07/01   921118 09.00
+* *********************
+* November 18 1992
+* Bug in SIORDE fixed
+* Input string extended to 500 characters
+* *********************
+*::>          VERSION  1.07/00   920825 09.00
+* *********************
+* August 25 1992
+* Strings manipulation fully implemanted for the
+* PAW Ntuple new types
+* *********************
+*
+*::>          VERSION  1.07/00   920825 09.00
+*
+*     Bug fix for CRAY version in routine SICMPL
+*                VERSION 1.05/00 (18/10/90)
+* *********************
+* August 19 1991
+* Hooks for strings manipulation are now in
+* Still to be fully tested
+* *********************
+* *********************
+* About 250 modifications (differ file is 1800 lines long)
+* Mostly clean up and optimization
+* *********************
+*
+* *********************
+* Modif. 18/10/90
+* Correct formal errors: unused assignments, no path to statement
+* *********************
+* *********************
+* Modif. 20/09/90
+* Correct interface to the new modified
+* KU... routines in KUIP.
+* *********************
+* *********************
+* Modif. 14/08/90
+* Corrections of formal errors as requested by the PL
+* just a first lot. Not finished yet.
+* *********************
+* *********************
+* Modif. 06/07/90
+* Correction on complex power
+* *********************
+* *********************
+* Modif. 25/06/90
+* Elimination of arithmetic IFs.
+* *********************
+* *********************
+* Modif. 21/05/90
+* Handling of KUIP integer vectors.
+* Correction to function calls.
+* *********************
+* *********************
+* Modif. 21/02/90
+* Cleaning of redundant code.
+*   not finished yet.
+* 14410 lines
+* 122 DECKS ONLY
+* *********************
+* *********************
+* Modif. 19/02/90
+* Cleaning of Common and redundant code.
+*   not finished yet.
+* 14710 lines
+* *********************
+* *********************
+* Modif. 16/02/90
+* COMPLEX CODE check.
+* Cleaning of Common and redundant code.
+*   not finished yet.
+* 14820 lines
+* *********************
+* *********************
+* Modif. 06/02/90
+* COMPLEX CODE check.
+* Major Cut in COMMON.
+* 15174 lines
+* *********************
+* *********************
+* Modif. 05/02/90
+* COMPLEX CODE REDONE AFTER DISK CRASH
+* Major Cleaning up started.
+* 15174 lines
+* *********************
+* *********************
+* Modif. 19/12/1989
+* Modifications for UNIX introduced.
+* Essentially double backslash under IF=UNIX
+* *********************
+* *********************
+* Modif. 05/10//1989
+* A bug in SIARRA (creation of alrge arrays)
+* corrected. Minor cleaning of the code.
+* *********************
+* *********************
+* Modif. 27/09//1989
+* Incompatibility with the new  KUIP feature (i.e.
+* the possibility to call APPL within a macro) removed
+* *********************
+* *********************
+* Modif. 14/08/1989
+* KUIP COMMON REMOVED
+* *********************
+* *********************
+* Modif. 04/08/1989
+* KUIP COMMON STILL TO BE REMOVED
+* Precedence of unary minus CHANGED.
+* A number of obsolete routines eliminated
+* Number of decks now 138.
+* 14584 lines of code.
+* *********************
+* *********************
+* Modif. 31/07/1989
+* KUIP COMMON STILL TO BE REMOVED
+* Errors in errors handling corrected
+* Precedence of unary minus CHANGED IN SIGMACORR ONLY.
+* A number of obsolete routines eliminated
+* Number of decks now 138.
+* 14660 lines of code.
+* *********************
+* *********************
+* Modif. 25/07/1989
+* SIGSEE changed, and KUIP COMMON to be removed.
+* Errors in handling multidim arrays corrected
+* Precedence of unary minus NOT changed.
+* Number of decks now 138.
+* 15154 lines of code.
+* *********************
+* *********************
+* Modif. 20/07/1989
+* All code simulating KUIP functions removed. Basic
+* KUIP routines called instead.
+* SIGSEE still to be changed, and KUIP COMMON to be removed.
+* Careful!! all MZ (e.g. SIGINT)!!
+* Precedence of unary minus NOT changed.
+* *********************
+* *********************
+* Modif. 14/07/1989
+* Corrected erroneous common block interfacing KUIP.
+* Precedence of unary minus NOT changed.
+* *********************
+**********************
+* Modif. 14/06/1989
+*
+* A ROUNDING ERROR CORRECTED IN SINMCD (DECODING OF NUMBERS)
+*
+* The following SIGMA functions are now active:
+*
+* DEL    DELta Function
+* DIFF   Forward DIFFerence
+* LS     R=LS(A,N) shifts index of A to the left by N steps (cyclic)
+* NCO    R=NCO(A) Number of COmponent vector of A
+* ORDER  R=ORDER(A,P) finds a permutation that brings
+*              P in a non&hyphen.desecending order
+*              and applies it to A to generate R.
+* PROD   Generates the running product
+* MINV   V1=MINV(V) set each element of V1 equal to the minimum value in V
+* MAXV   V1=MAXV(V) set each element of V1 equal to the maximum value in V
+* MIN    V3=MIN(V1,V2) set each element of V3 equal to the minimum
+*                     of the corresponding elements in V1 and V2
+* MAX    V3=MAX(V1,V2) set each element of V3 equal to the maximum
+*                      of the corresponding elements in V1 and V2
+* VMIN   S1=VMIN(V1) set S1 equal to the minimum value in V1
+* VMAX   S1=VMAX(V1) set S1 equal to the maximum value in V1
+* LVMIN  S1=LVMIN(V1) set S1 equal to the index (location) of the
+*                     minimum value in V1
+* LVMAX  S1=LVMAX(V1) set S1 equal to the index (location) of the
+*                       maximum value in V1
+* SUMV   V2=SUMV(V1) running sum of V (Vector result)
+* VSUM   S1=VSUM(V) sum of all components of V (Scalar result)
+* DIFFV  V2=DIFFV(V) forward difference of V (Vector result)
+*
+* Available library functions
+*
+* ABS     ABSolute value
+* ACOS    ArCOSine
+* ALOGAM  LOGarithm of the GAMma Function (C341)
+* ASIN    ArcSINe
+* ATAN    ArcTANgent
+* ATAN2   ArcTANgent2 (2 arguments)
+* BESI0   Mod. Bessel Function I0 (C313)
+* BESI1   Mod. Bessel Function I1 (C313)
+* BESJ0   Bessel Function J0 (C312)
+* BESJ1   Bessel Function J1 (C312)
+* BESK0   Mod. Bessel Function K0 (C313)
+* BESK1   Mod. Bessel Function K1 (C313)
+* BESY0   Bessel Function Y0 (C312)
+* BESY1   Bessel Function Y1 (C312)
+* COS     COSine
+* COSH    Hyperbolic COSine
+* COSINT  COSine INTegral     (C336)
+* DILOG   DILOGarithm Function  (C304)
+* EBESI0  exp(-|x|)I0(x) (C313)
+* EBESI1  exp(-|x|)I1(x) (C313)
+* EBESK0  exp(x)K0(x) (C313)
+* EBESK1  exp(x)K1(x) (C313)
+* ELLICK  Complete Elliptic Integral K (C308)
+* ELLICE  Complete Elliptic Integral E (C308)
+* ERF     Error Function ERF (C300)
+* ERFC    Error Function ERFC (C300)
+* EXP     EXPonential
+* EXPINT  EXPonential INTegral (C337)
+* FREQ    Normal Frequency Function FREQ (C300)
+* GAMMA   GAMMA Function (C305)
+* INT     takes INTegral part of decimal number
+* LOG     Natural LOGarithm
+* LOG10   Common LOGarithm
+* MOD     Remaindering
+* RNDM    Random Number Generator - generates random numbers between 0 and 1.
+*                    R=RNDM(X), where NCO(R)=NCO(X)
+* SIGN    Transfer of SIGN R=SIGN(X,Y), R=|X|*Y/|Y|
+* SIN     SINe Function
+* SINH    Hyperbolic SINe
+* SININT  SINe INTegral       (C336)
+* TAN     TANgent
+* TANH    Hyperbolic Tangent
+* SQRT    SQuare RooT
+*
+* Note that ill defined functions (e.g. SQRT(-2)) will give 0. as result.
+*
+**********************
+* Modif. 01/06/1989
+*
+* In order to be more consistent with a number of routines already
+* existing in the CERN  Program Library, the names of a number of
+* SIGMA functions has been changed,according to the following list:
+*
+* New name and meaning
+*
+* V1=MINV(V)      Each element of V1 is set equal to the minimum value in V
+*
+* V1=MAXV(V)      Each element of V1 is set equal to the maximum value in V
+*
+* V3=MIN(V1,V2)   Each element of V3 is set equal to the minimum
+*                  of the corresponding elements in V1 and V2
+*
+* V3=MAX(V1,V2)   Each element of V3 is set equal to the maximum
+*                 of the corresponding elements in V1 and V2
+*
+* S1=VMIN(V1)     S1 is set equal to the minimum value in V1
+*
+* S1=VMAX(V1)     S1 is set equal to the maximum value in V1
+*
+* S1=LVMIN(V1)    S1 is set equal to the index (location) of the
+*                 minimum value in V1
+*
+* S1=LVMAX(V1)    S1 is set equal to the index (location) of the
+*                 maximum value in V1
+*
+* V2=SUMV(V1)     running sum of V  (Vector result)
+*
+* S1=VSUM(V)      sum of all components of V (Scalar result)
+*
+* V2=DIFFV(V1)     forward difference of V  (Vector result)
+*
+* This replace the modifications in date 24/05/89.
+* ****************************************************
+* Modif. 24/05/1989
+* Implemented MIN2,MAX2,MINV2,MAXV2 (SEE below)
+* 15160 lines of code.
+*
+*
+* MIN(V)--->V
+* MAX(V)--->V
+*
+* SMIN(V)--->S      alias VMIN
+* SMAX(V)--->S      alias VMAX
+*
+* LVMIN((V)--->S    alias IMIN
+* LVMAX(V)--->S     alias IMAX
+*
+*-------------------------------------
+*  New functions:
+*
+* MIN2(S,S)--->S
+* MAX2(S,S)--->S
+*
+* MINV(V,V)--->V     min and max componentwise
+* MAXV(V,V)--->V
+*
+* *********************
+*************************************************
+*                                               *
+*            W A R N I N G                      *
+*                                               *
+*  when moving lines containing ^ from          *
+*  SIGMACORR to SIGMA.CAR, remove the @ !!!!    *
+*                                               *
+*************************************************
+* *********************
+* Modif. 16/05/1989
+* Implemented .CT. (Close To)
+* Cleaning
+* Number of decks now 143.
+* 15039 lines of code.
+* *********************
+* Modif. 08/05/1989
+* Removed more NH in non-FORMAT statements.
+* Number of decks now 145.
+* 15086 lines of code.
+* *********************
+* Modif. 07/02/1989
+* Implented QUAD.
+* Removed all NH in FORMAT statements.
+* Number of decks now 145.
+* 15178 lines of code.
+* *********************
+* Modif. 06/02/1989
+* Removed almost all nnH.
+* Number of decks now 147.
+* 15235 lines of code.
+* *********************
+* Modif. 23/01/1989
+* INTRODUCED: VMAX(SMAX),VMIN(SMIN),LVMAX(IMAX),LVIMIN(IMIN).
+* Number of decks now 147.
+* 15443 lines of code.
+* *********************
+* Modif. 19/01/1989
+* More redundant code and common blocks removed.
+* Number of decks now 147.
+* 15443 lines of code.
+* *********************
+* Modif. 18/01/1989
+* More redundant coded removed.
+* Number of decks now 148.
+* 15965 lines of code.
+* Two new functions implemented: IMIN and IMAX
+* *********************
+* Modif. 06/01/1989
+* Common block reduction.
+* More redundant code removed.
+* Number of decks now 148.
+* 15950 lines of code.
+* *********************
+* Modif. 05/01/1989
+* Common block reduction.
+* More redundant code removed.
+* Number of decks now 150.
+* 16090 lines of code.
+* *********************
+* Modif. 03/01/1989
+* Further cleaning.
+* Number of decks now 152.
+* **********************
+* Modif. 21/12/1988
+*
+* Six redundant/obsolete routines eliminated.
+* Original number of decks was 160.
+* Total number decks is now 154.
+* Offending statement is now displayed after
+* an error message.
+*
+* MANY DIIFERENT ROUTINES  MODIFICATION TO HANDLE
+*          ERRORS DUE TO VM
+* SIPUL    DUMMY
+*
+* MAXIMUM INPUT STRING IS NOW 255 CHARS.
+*
+* SEVERAL LARGE ARRAYS TAKEN OUT
+*
+*
+* SILBC7   25/07/88
+*        * DUMMY CALL TO CWERF
+* SILBC5
+*        * DUMMY CALL TO DAWSON
+* SILBC1
+*        * DUMMY CALL TO DILOG
+* SIERRO
+*        * FIRST MODIFICATION TO HANDLE ERRORS (VM!)
+* SILBC7   ET ALII
+*        * DUMMY CALLSTO BESCJ, CDIGAM, CGAMMA
+*        * DUMMY CALL TO WHIT, CLOGAM
+

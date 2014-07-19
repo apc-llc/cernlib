@@ -1,0 +1,22 @@
+#define IHaveCDF
+
+SRCS_F=	cdcdrc.F cdclsh.F cdclsr.F cdexit.F cdextq.F cdfilc.F \ @@\
+	cdkali.F cdkhlp.F cdkpak.F cdkpwd.F cdktxt.F cdkupk.F cdldc.F \ @@\
+	cdlogc.F cdlsc.F cdmerg.F cdmkdr.F cdobjc.F cdopnc.F cdoutp.F \ @@\
+	cdpwd.F cdquit.F cdrmc.F cdrmdc.F cdrmtc.F cdrzld.F cdrzop.F \ @@\
+	cdrzst.F cdseac.F cdsele.F cdtree.F cdverc.F cdwind.F cdzoom.F \ @@\
+	zabend.F
+
+SRCS_CDF=cdcdf.cdf
+
+SubdirLibraryTarget(dbmodule,NullParameter)
+
+DefinePackageLibrary(dbmodule)
+
+#ifdef CERNLIB_HPUX
+SpecialFortranObjectRule(hepdb,hepdb,'-WF,-P',NullParameter)
+#endif
+
+CernlibFortranProgramTarget(hepdb,hepdb.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+InstallProgram(hepdb,$(CERN_BINDIR))

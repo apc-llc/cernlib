@@ -1,0 +1,58 @@
+#
+#  double.exp  --
+#
+#  Original:  3-Jul-1995 11:54
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Valid formats
+#
+
+literal_test	double	-1.7976931348623157d+308	-1.79769313486232d+308
+literal_test	double	-2.2250738585072014d-308	-2.22507385850720d-308
+literal_test	double	0.0000000000000000d+000		0.00000000000000d+00
+literal_test	double	2.2250738585072014d-308		2.22507385850720d-308
+literal_test	double	1.7976931348623157d+308		1.79769313486232d+308
+
+literal_test	double	0d0				0.00000000000000d+00
+literal_test	double	-0d0				0.00000000000000d+00
+literal_test	double	0D0				0.00000000000000d+00
+literal_test	double	-0D0				0.00000000000000d+00
+
+literal_test	double	5.d0			5.00000000000000d+00
+literal_test	double	-5.d0			-5.00000000000000d+00
+literal_test	double	.75d0			7.50000000000000d-01
+literal_test	double	-.75d0			-7.50000000000000d-01
+literal_test	double	123.625d0		1.23625000000000d+02
+literal_test	double	-123.625d0		-1.23625000000000d+02
+literal_test	double	8d10			8.00000000000000d+10
+literal_test	double	-8d10			-8.00000000000000d+10
+literal_test	double	8d+10			8.00000000000000d+10
+literal_test	double	-8d+10			-8.00000000000000d+10
+literal_test	double	8d-10			8.00000000000000d-10
+literal_test	double	-8d-10			-8.00000000000000d-10
+
+#
+#
+# Invalid formats
+#
+
+untested "Literal test Double: Invalid formats not tested"
+
+paw_cmd { close 4 }

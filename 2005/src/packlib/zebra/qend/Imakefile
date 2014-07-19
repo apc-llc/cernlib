@@ -1,0 +1,9 @@
+SRCS_F=	 zabend.F zend.F zfatal.F zfatam.F zphase.F zpostm.F \ @@\
+	ztell.F ztelus.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(zpostm,zpostm,'-WF,-P',NullParameter)
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,40 @@
+
+#define CERNLIB_BLDLIB
+
+DoIncludePackage(geant321)
+#include "pilot.h"
+
+SRCS_F= gbhsta.F getnum.F getver.F gffgo.F gfhead.F gfhsta.F gfrung.F \ @@\
+	ghclos.F ginit.F glast.F glook.F gmail.F gphead.F gprint.F \ @@\
+	gprung.F grun.F gshead.F gsrung.F gtrig.F gtrigc.F gtrigi.F \ @@\
+	gwork.F gzebra.F gzinit.F
+
+#if defined(CERNLIB_MONITOR)
+SRCS_F:= $(SRCS_F) geamon.F 
+#endif
+
+#if defined(CERNLIB_OLD)
+SRCS_F:= $(SRCS_F) ggclo2.F 
+#else
+SRCS_F:= $(SRCS_F) ggclos.F 
+#endif
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+#if defined(CERNLIB_SOLARIS)
+/* otherwise IABAN/DPHYS1 get not ste properly. Could be corrected in source too
+ */
+SpecialFortranLibObjectRule(gffgo,gffgo,-O1,NullParameter)
+#endif
+
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

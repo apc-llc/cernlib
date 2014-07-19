@@ -1,0 +1,32 @@
+*
+* $Id: blo32wva.F,v 1.1.1.1 1996/03/08 15:21:48 mclareni Exp $
+*
+* $Log: blo32wva.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:48  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_VAX)||defined(CERNLIB_APOLLO)
+      SUBROUTINE BLO32W(SOURCE,N1,TARGET,N2,N3)
+C.+++++++ VAX AND APOLLO VERSION ++++++++++
+C. NO SWAPPING IS DONE HERE
+C. MOVES 32 BIT WORDS INTO 32 BIT WORDS. STARTS ON ANY
+C. 16 BIT WORD IN SOURCE.
+C.
+C. +++ IMPORTANT +++ COUNTS PARTLY IN 16 BIT WORDS
+C.
+C. INPUT
+C. SOURCE    SOURCE ARRAY
+C. N1        FIRST 16 BIT WORD IN SOURCE
+C. TARGET    TARGET ARRAY
+C. N2        FIRST COPIED WORD IS TARGET(N2)
+C. N3        NO. OF WORDS TO COPY
+      INTEGER*2 SOURCE(1),TARGET(1)
+        DO 10 I=1,N3
+        TARGET(2*N2-3+2*I) = SOURCE(N1+2*I-2)
+        TARGET(2*N2-2+2*I) = SOURCE(N1+2*I-1)
+   10   CONTINUE
+      RETURN
+      END
+#endif

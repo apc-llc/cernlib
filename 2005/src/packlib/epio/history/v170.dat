@@ -1,0 +1,16 @@
+*
+* $Id: v170.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v170.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.70  930624  9.00
+C- Use cfio for real random access using EPDACR
+C   Routines modified;
+C  P=EPIO  ,EPBLIN  to call cfseek and return IERR=25 if trouble.
+C          ,EPDACR  not to set status word 33.
+C
+C- Disable bad block test for UNIX in test 3
+C

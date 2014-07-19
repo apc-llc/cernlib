@@ -1,0 +1,10 @@
+MACRO PAWEX10 1=100
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 10                          *
+* Calculate and plot (BOX option) Mandel distribution                    *
+**************************************************************************
+Exec ALLDEF
+fun2 10 mandel.f [1] -2.4 .8 [1] -1.2 1.2 ' '
+hi/pl 10 BOX
+RETURN
+

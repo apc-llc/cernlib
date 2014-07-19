@@ -1,0 +1,14 @@
+SRCS_S= \ @@\
+	 cbyt.s ie3fos.s ie3tos.s iucomh.s iucomp.s iufind.s iuhunt.s \ @@\
+	 iusame.s jbit.s jbyt.s jbytet.s jbytor.s jbytpk.s jobnam.s jrsbyt.s \ @@\
+	 locb.s locf.s lvmax.s lvmaxa.s lvmin.s lvmina.s mbytet.s mbytor.s \ @@\
+	 mcbyt.s msbit.s msbyt.s noarg.s pkbyt.s pkchar.s qnexte.s rndm.s \ @@\
+	 sbit.s sbyt.s sbytor.s sbytpk.s swbl16.s swbu16.s ublank.s ublow.s \ @@\
+	 ubunch.s ucopiv.s ucopy2.s ucopyn.s uctoh.s uctoh1.s ufill.s \ @@\
+	 uh1toc.s uhtoc.s upkbyt.s upkch.s uswop.s uzero.s vadd.s vasum.s \ @@\
+	 vbias.s vblank.s vcopyn.s vdot.s vdotn.s vdotn2.s vexcum.s vfill.s \ @@\
+	 vfix.s vfloat.s vline.s vmatl.s vmatr.s vmax.s vmaxa.s vmin.s \ @@\
+	 vmina.s vmod.s vmul.s vscale.s vsub.s vsum.s vunit.s vxinvb.s \ @@\
+	 vxinvc.s vzero.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

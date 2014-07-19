@@ -1,0 +1,5 @@
+SRCS_F=	 mzfgap.F mzgar1.F mzgarb.F mzgsta.F mzmove.F mzrelb.F \ @@\
+	mzrell.F mzrelx.F mztabc.F mztabf.F mztabh.F mztabm.F mztabr.F \ @@\
+	mztabs.F mztabx.F mzwipe.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

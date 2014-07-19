@@ -1,0 +1,5 @@
+#define IHaveCDF
+
+SRCS_CDF= cdcdf.cdf
+
+SubdirLibraryTarget(NullParameter,NullParameter)

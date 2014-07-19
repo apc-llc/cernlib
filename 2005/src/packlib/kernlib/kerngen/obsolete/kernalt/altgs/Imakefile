@@ -1,0 +1,11 @@
+SRCS_F= \ @@\
+	 kerngt.F lenocc.F locff.F ucopy.F ucopy2.F ucopyn.F uctoh.F \ @@\
+	 uctoh1.F uh1toc.F uhtoc.F vblank.F vfill.F vzero.F xinb.F xinbs.F
+
+SRCS_C= \ @@\
+	 lenoci.c
+
+SRCS_S= \ @@\
+	 locb.s locf.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

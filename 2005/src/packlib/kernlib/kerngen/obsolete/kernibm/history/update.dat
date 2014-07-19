@@ -1,0 +1,31 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:52:59 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:59  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIBM)
+
+
+       UP-DATE RECORD FOR THE PAM-FILE  KERNIBM, VERSION 2
+       ---------------------------------------------------
+
+
+UP-DATE  2.35 :  24-Feb-1994
+----------------------------
+
+Replacing file   KERNIBM  2.34  930209 23.37
+
+Standardize:  QMIBMFVS -> QF_IBM   VS compiler
+              QMIBMFSI -> QF_SIEM  Siemens compiler
+
+Correct:      delete usage of Fortran 4, remove the F77 flag
+
+Delete:       P=*KICERN, P=QMIBM4
+              P=SYOS, D=FIO999
+
+---------------------------------------------------------------------
+
+#endif

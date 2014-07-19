@@ -1,0 +1,3 @@
+SRCS_F=	 genbod.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

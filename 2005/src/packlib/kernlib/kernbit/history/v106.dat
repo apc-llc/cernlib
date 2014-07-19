@@ -1,0 +1,15 @@
+*
+* $Id: v106.dat,v 1.1.1.1 1996/02/15 17:47:45 mclareni Exp $
+*
+* $Log: v106.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:45  mclareni
+* Kernlib
+*
+*
+*  Version 1.06  910408  4.40
+C- Additions:
+C  > M233         Moved from GENLIB  as it is needed by CSPACK
+C  > Z265 SLEEPF  MVS version, to join KERNIBM next CNL
+C  > Z037 VAXAST  VAX version, to join KERNVAX next CNL
+C  > T000 INITC   Initialize C from Fortran (only on IBM)
+C

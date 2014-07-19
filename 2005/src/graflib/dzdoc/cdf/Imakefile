@@ -1,0 +1,5 @@
+#define IHaveCDF
+
+SRCS_CDF = zbrcdf.cdf
+
+SubdirLibraryTarget(NullParameter,NullParameter)

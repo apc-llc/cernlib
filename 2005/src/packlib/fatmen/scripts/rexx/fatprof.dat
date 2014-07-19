@@ -1,0 +1,42 @@
+*
+* $Id: fatprof.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatprof.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATPROF.EXEC */
+/**********************************************************************/
+   Address Command
+ 
+   news='NONEWS'
+ 
+   'ACCESS 193 B'
+   'ID (STACK'
+   pull me . node
+   if node = 'CERNVM' then do
+      'EXEC GIME ORACLE'
+      'EXEC DB OPS (NONEWS)'
+      end
+ 
+   If QCONSOLE("DISCO") then do
+      exper = userid()
+      spool_nick = 'PM' || substr(exper,3)
+      'NAMEFIND :NICK' spool_nick '(LIFO'
+       If rc ^= 0 then spool_to = 'JAMIE'
+           else do
+              Pull .
+              Pull . spool_to
+              Pull .
+              end
+ 
+      'CP SPOOL CONSOLE START TO' spool_to
+ 
+      'EXEC TELL JAMIE 'userid() ' starting up, log spooled to 'spool_to
+      'EXEC FATSTART'
+      end
+      else do
+      say "Type FATSTART to start FATMEN server"
+      say "followed by #CP DISC"
+      end

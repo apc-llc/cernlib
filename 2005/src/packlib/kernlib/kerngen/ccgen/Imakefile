@@ -1,0 +1,58 @@
+#ifndef CERNLIB_VAXVMS
+
+SRCS_F= accessf.F chdirf.F getenvf.F getwdf.F lstatf.F perrorf.F \ @@\
+	readlnf.F renamef.F setenvf.F statf.F systemf.F tmpro.F \ @@\
+	tmproi.F toslat.F unlinkf.F
+
+SRCS_C= abend.c accesi.c chdiri.c ctimef.c datime.c datimh.c exitf.c \ @@\
+	geteni.c getgidf.c getpidf.c getuidf.c getwdi.c gmtimef.c intrac.c \ @@\
+	jmplong.c jmpset.c jumptn.c jumpxn.c kervers.c killf.c locb.c locf.c \ @@\
+	perroi.c qnexte.c readlni.c renami.c seteni.c setjmpf.c  \ @@\
+	sleepf.c signalf.c sigprnt.c sigunbl.c stati.c systei.c \ @@\
+	tminit.c unlini.c tmread.c
+
+#ifndef CERNLIB_OS9
+SRCS_C += timel.c lstati.c
+#endif
+
+#ifdef CERNLIB_QFAPOGEE
+SRCS_C += apofsz.c
+#endif
+
+#if defined(CERNLIB_WINNT)
+SRCS_C += lnblnk.c
+#endif
+
+#if defined(CERNLIB_WINNT) && defined(CERNLIB_MSSTDCALL)
+SRCS_C +=  locbdummy.c locfdummy.c
+#endif
+
+#if defined(CERNLIB_DECS) || defined(CERNLIB_QMVAOS) \
+ || defined(CERNLIB_HPUX) || defined(CERNLIB_IBMRT) || defined(CERNLIB_IBMRTD) \
+ || defined(CERNLIB_OS9)  || defined(CERNLIB_LINUX)
+SRCS_C += lenocc.c lnblnk.c
+#endif
+
+#if defined(CERNLIB_SGI) || defined(CERNLIB_SUN)
+SRCS_C += lenocc.c
+#endif
+
+#else    /* VMS */
+
+SRCS_F= accessf.F chdirf.F getenvf.F getwdf.F perrorf.F statf.F toslat.F \ @@\
+	renamef.F  systemf.F  tmpro.F
+
+SRCS_C= accesi.c datime.c datimh.c perroi.c stati.c
+
+#ifdef CERNLIB_QMALPH
+SRCS_C := $(SRCS_C) qnexte.c vxinvb.c vxinvc.c
+#endif
+
+#endif
+
+
+#ifndef CERNLIB_DOS
+SRCS_C := $(SRCS_C) vxinvb.c vxinvc.c
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

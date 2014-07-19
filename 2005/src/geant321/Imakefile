@@ -1,0 +1,59 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(geant321)
+
+LIBDIRS= block cdf cgpack fiface fluka gbase gcons gdraw \ @@\
+         geocad ggeom gheisha ghits ghrout ghutils giface \ @@\
+	 giopa gkine gphys gscan gstrag gtrak guser gxint \ @@\
+	 miface miguti neutron peanut
+
+
+SUBDIRS= $(LIBDIRS) data examples gxuser geant321
+
+#if defined(CERNLIB_UNIX)
+SUBDIRS+=gparal
+#endif
+
+TopOfPackage(geant321)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(geant321,$(LIBDIRS))
+
+InstallLibrary(geant321,$(CERN_LIBDIR))
+InstallLibraryAlias(geant321,geant,$(CERN_LIBDIR))
+
+SubdirDataFile($(LIBRARY),flukaaf.dat,data)
+
+InstallNonExecFileTarget(install.lib,flukaaf.dat,$(CERN_LIBDIR))
+
+/* This will install the correct link for xsneut95.dat at CERN;
+ * If you want a local copy of the file, just copy it there
+ * GF, Jan 97
+ */
+#if defined(CERNLIB_UNIX)
+install.lib:: $(CERN_LIBDIR)/xsneut95.dat
+
+$(CERN_LIBDIR)/xsneut95.dat:
+	cd $(@D);$(LN) ../share/lib/$(@F) $(@F)
+
+#endif
+#if defined(CERNLIB_VAXVMS)
+install.lib:: $(CERN_LIBDIR)xsneut95.dat
+
+$(CERN_LIBDIR)xsneut95.dat: [.data]xsneut95.dat
+	copy $< $@
+	purge/log $@
+
+#endif
+
+
+InstallLibSubdirs(gxint)
+
+InstallIncludeSubdirs(geant321)
+
+TestSubdirs(examples)
+
+DoIncludePackage(geant321)

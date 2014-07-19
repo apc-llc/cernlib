@@ -1,0 +1,138 @@
+#
+#  unix-paw.exp  --
+#	Dejagnu startup commands for paw on unix
+#
+#  Original: 23-Feb-1995 15:57
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# paw_version -- extract and print the version number of paw
+#
+proc paw_version { } {
+	global paw_version_info
+
+	clone_output "\n$paw_version_info\n"
+}
+
+
+#
+# paw_load -- loads the program.
+#
+proc paw_load {} {
+    verbose "\n*** Load PAW\n" 1
+}
+
+
+#
+# paw_exit -- exit the test driver for paw
+#
+proc paw_exit {} {
+
+	verbose "\n*** Exit PAW\n" 1
+
+	#
+	# Cleanup
+	#
+
+	exp_send "exit\r"
+
+	set ret [wait]
+
+	clone_output	"wait returned: $ret\n"
+
+	exec rm -f last.kumacold last.kumac paw.metafile
+}
+
+
+#
+# paw_start -- start paw
+#
+proc paw_start {} {
+	global verbose
+	global spawn_id
+	global subdir
+	global srcdir
+	global objdir
+	global PAW
+	global paw_use_window
+	global timeout
+	global paw_version_info
+
+	set timeout_save $timeout
+	set timeout [ expr $timeout_save * 2 ]
+
+	verbose "\n*** Starting PAW\n" 1
+
+	if {[which $PAW] != 0} then {
+		spawn $PAW -w $paw_use_window -n
+	} else {
+		error "Can't find $PAW"
+	}
+
+	expect {
+		-gl "PAW > " {
+			verbose "Started the child PAW." 1
+		}
+		timeout {
+			error "Timed out starting PAW."
+		}
+	}
+
+	exp_send "version\r"
+
+	expect {
+		-indices -re "(Package.*)PAW > " {
+		    set paw_version_info $expect_out(1,string)
+		}
+		timeout {
+		    error "Timed out getting paw version."
+		}
+	}
+
+	set timeout $timeout_save
+
+	return $spawn_id
+}
+
+#
+#  Start the thing !
+#
+
+if [ info exist PAW_BATCH ]  {
+	set paw_use_window 0
+} else {
+	set paw_use_window 1
+}
+
+clone_output "paw_use_window = $paw_use_window\n"
+
+if [ info exist PAW_TIMEOUT ]  {
+	set timeout $PAW_TIMEOUT
+} else {
+	set timeout 60
+}
+
+clone_output "timeout = $timeout\n"
+
+
+if { ! [ info exist PAW ] }  {
+	set PAW ../programs/pawX11
+}
+
+load_lib paw_util.exp
+
+clone_output "Using $PAW\n" 
+
+paw_start
+
+# Switch off all qp messages
+
+qp_flags quiet
+
+if { [ info exist PAW_PTO ] }  {
+	paw_cmd { option pto }
+}
+

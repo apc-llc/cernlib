@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 caldat.F cdmon.F cleap.F cydiy.F cyear4.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,9 @@
+
+SRCS_F= test.F
+
+DefinePackageLibrary(NullParameter)
+
+
+CernlibFortranProgramTarget(pythiat,test.o,$(PACKAGE_LIB),$(PACKAGE_LIB),pdflib804 mathlib)
+
+TestTarget(pythiat,NullParameter,NullParameter)

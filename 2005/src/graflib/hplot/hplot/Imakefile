@@ -1,0 +1,5 @@
+INCLUDES=	 hpl0.inc hpl1.inc hpl11.inc \ @@\
+	hpl12.inc hpl13.inc hpl14.inc hpl2.inc hpl3.inc hpl4.inc \ @@\
+	hpl6.inc hpl9.inc hplstr.inc quest.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),hplot)

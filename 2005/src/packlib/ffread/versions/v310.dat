@@ -1,0 +1,22 @@
+*
+* $Id: v310.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v310.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.10   910408  7.00
+C
+C- New patches/flags
+C     SFFREAD: Source patch
+C     FFFREAD: Flags  patch
+C     DFFREAD: Documentation patch (originally in P=HISTORY + P=INFORM)
+C              segmenting version updates in decks
+C     HPUX   : For HP/UX
+C     MIPS   : For MIPS machine
+C
+C- Routine changes:
+C  > P=SFFREAD ,D=FFGO     : Enable reading of RECFM=V input files
+C  > P=TFFREAD ,D=FUREAD   : Move DATA statement before SAVE
+C

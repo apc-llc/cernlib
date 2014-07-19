@@ -1,0 +1,35 @@
+SRCS_F=	cbis.F copymp.F copypm.F csetc.F \ @@\
+	cssetc.F mddef.F mdelim.F mdexl.F mdexp.F mdfh.F mdfree.F \ @@\
+	mdhini.F mdigit.F mdinit.F mdlh.F mdloc.F mdpaus.F mhdef.F \ @@\
+	mhfree.F mhloc.F mident.F mimpjw.F mjbges.F mjfges.F mjsins.F \ @@\
+	mkblan.F mkdigi.F mlbeqs.F mlbinp.F mlbsrp.F mlbxsp.F mldef.F \ @@\
+	mldigi.F mleqs.F mlfeqs.F mlnumb.F mlsear.F mlstrt.F \ @@\
+	mnblan.F movemp.F movepm.F mpdef.F mpdsk.F mpirec.F mpsetw.F
+
+DoIncludePackage(comis)
+#include "pilot.h"
+
+
+#if !defined(CERNLIB_UNIX)
+SRCS_F:= $(SRCS_F) ccopys.F
+#endif
+
+#if defined(CERNLIB_QMVAOS)
+SRCS_F:= $(SRCS_F) ccopysa.F
+#endif
+
+#if defined(CERNLIB_LIB)
+/* I know no place this was selected, still keep it... GF. */
+SRCS_F:= $(SRCS_F) mlseqs.F mlsges.F
+#endif
+
+#if defined(CERNLIB_QMVAOS)
+FORTRANOPTIONS += -assume dummy_aliases
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+FORTRANOPTIONS := $(FORTRANOPTIONS) /assume=dummy
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,16 @@
+*
+* $Id: fat.dat,v 1.1.1.1 1996/03/07 15:17:52 mclareni Exp $
+*
+* $Log: fat.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+for i in /fatmen/fm*
+   do
+     typeset -u fatgrp
+     fatpath=$i
+     fatgrp=`basename $i`
+     echo Setting $fatgrp to $fatpath ...
+     eval $fatgrp=$fatpath;export $fatgrp
+   done

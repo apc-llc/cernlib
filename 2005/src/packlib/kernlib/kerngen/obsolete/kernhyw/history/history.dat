@@ -1,0 +1,85 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:52:58 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:58  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernhyw.car patch kernhyw
+#if !defined(CERNLIB_KERNHYW)
+ 
+              KERNLIB ROUTINES PARTICULAR TO THE HONEYWELL-BULL
+ 
+---------------------------------------------------------------------
+ 
+             THIS FILE CONTAINS THE FOLLOWING PATCHES :
+ 
+*KHYWGC   PILOT TO MAKE GENERAL KERNLIB FOR SYSTEM GCOS
+ 
+QMHYWGC   MACHINE PATCH FOR SYSTEM GCOS
+ 
+HYWGC     ML / FORTRAN VERSIONS OF KERNLIB ROUTINES FOR GCOS
+ 
+*KHYWMX   PILOT TO MAKE GENERAL KERNLIB FOR SYSTEM MULTIX
+ 
+QMHYWMX   MACHINE PATCH FOR SYSTEM MULTIX
+ 
+HYWMX     ML / FORTRAN VERSIONS OF KERNLIB ROUTINES FOR MULTIX
+ 
+HYWPL1    PL-ONE       VERSIONS OF KERNLIB ROUTINES FOR MULTIX
+ 
+=====================================================================
+ 
+ 
+              UP-DATE RECORD FOR THE PAM-FILE  KERNHYW
+              ----------------------------------------
+ 
+ 
+UP-DATE  1.07 :  24-JUN-1987
+----------------------------
+ 
+REPLACING FILE   KERNHYW 1.06  870613 11.12
+ 
+NEW DECKS :     P=HYWGC, D=ABEND        Provisional routine for ABEND
+                         D=HYW8T9,HYW9T8    Byte transformations
+                         D=XINBF            to use IOSTAT
+CORRECT :       P=HYWGC, D=LOCF         Fortran Comment line removed
+                         D=XINB,XINBS       to use IOSTAT
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.06 :  12-JUN-1987
+----------------------------
+ 
+REPLACING FILE   KERNHYW 1.05  870602 19.01
+ 
+NEW DECKS :     P=HYWGC,D=IE3FOS,IE3FOD,IE3TOS,IE3TOD  convert IEEE
+                        D=IUFORW, PKBYT, UPKBYT
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.05 :  2-JUNE-1987
+----------------------------
+ 
+REPLACING FILE   KERNHYW 1.04  870522 10.22
+ 
+NEW DECKS :     P=HYWGC, D=JBYTOR, MBYTET, MBYTOR, MCBYT
+                         D=MSBIT,  MSBIT0, MSBIT1, MSBYT
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.04 :  22-MAY-1987
+----------------------------
+ 
+REPLACING FILE   KERNHYW 1.03  841023 18.55
+ 
+Re-order the Pam file to completely separate GCOS / MULTIX
+ 
+---------------------------------------------------------------------
+ 
+          FIRST RELEASE OF THE KERNHYW  PAM :  12-SEPT-84
+ 
+---------------------------------------------------------------------
+ 
+#endif

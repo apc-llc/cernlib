@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:46 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:46  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSGI)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNSGI
+              ----------------------------------------
+
+
+UP-DATE  1.05 :  11-May-1994
+----------------------------
+
+Replacing File   KERNSGI  1.04  930120 11.39
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+---------------------------------------------------------------------
+
+#endif

@@ -1,0 +1,34 @@
+*
+* $Id: cdchk.dat,v 1.1.1.1 1996/02/28 16:24:01 mclareni Exp $
+*
+* $Log: cdchk.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:01  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /hepdb/cd*
+ 
+   do
+ 
+      typeset -u cdgrp
+      cdpath=$i
+      cdgrp=`basename $i`
+      eval $cdgrp=$cdpath;export $cdgrp
+#
+# Look for startable servers (cdserv exists)
+#
+      if [ -x ${i}/cdserv ]
+      then
+         if [ -f ${i}/todo/signal.stop ]
+         then
+            ls -l ${i}/todo/signal.stop | mail -s $cdgrp hepdb-mgr@zfatal.cern.ch
+         fi
+      fi
+   done
+ 
+#endif

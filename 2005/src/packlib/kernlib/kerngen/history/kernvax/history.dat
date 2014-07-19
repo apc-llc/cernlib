@@ -1,0 +1,36 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernvax.car patch kernvax
+
+            KERNLIB ROUTINES PARTICULAR TO THE VAX
+
+---------------------------------------------------------------------
+
+          This file contains the following Patches :
+
+*KVAX     Pilot-patch selecting Kernlib for VAX system VMS
+*KALPH    Pilot-patch selecting Kernlib for ALPHA system VMS
+
+QMVAX     VAX and ALPHA machine patch
+
+VAXUTIL   Utility programs for VAX or ALPHA
+
+VAXMLAN   VAX only machine language versions of Kernlib routines
+
+VAXGS     VAX Fortran versions of some standard Kernlib routines
+
+VAXSYS    Routines specific to VAX operating system VMS
+
+          And the following option patches are used :
+
+QMALPH    ALPHA only machine patch
+
+QMVAXCC   if the C compiler is available
+
+=====================================================================

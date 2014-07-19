@@ -1,0 +1,217 @@
+*
+* $Id: ibm,v 1.1.1.1 1996/03/01 11:39:28 mclareni Exp $
+*
+* $Log: ibm,v $
+* Revision 1.1.1.1  1996/03/01 11:39:28  mclareni
+* Paw
+*
+*
+#if defined(CERNLIB_IBM)
+*CMZ :  2.06/08 12/01/95  15.52.59  by  O.Couet
+*-- Author :    M.Marquina   08/24/89
+/*DEFAULTS_SUPPORTED*/
+/**********************************************************************
+ *                                                                    *
+ * PAW EXEC v1.21                                                     *
+ *                                                                    *
+ * Exec to drive PAW supporting versions                              *
+ *                                                                    *
+ * Author: M.Marquina 89/08/24                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ * MARQUINA 90/05/25 Preserve user filedefs before running PAW        *
+ * MARQUINA 90/05/28 Enable transmission of options                   *
+ *          90/07/13 Introduce GDDM option                            *
+ *          90/08/24 Use new XCPUSH/XCPOP, monitor with UMLOG         *
+ *          90/10/10 Support shared version of PAW with option SHARED *
+ *          90/11/13 Add GKS option                                   *
+ *          91/02/17 Support PF-keys and defaults (TERM,DRIVER)       *
+ *          91/03/04 Introduce X11 via X11 and HOST options           *
+ *          91/03/21 Preserve user TXTLIBs via CPUSH/CPOP             *
+ *          91/04/04 Issue a message when the module is missing       *
+ *          91/04/19 Stop exec monitoring of PAW                      *
+ *          91/04/19 Give meaningful messages for rc=-2,-4            *
+ *          91/07/29 Set C-libs to run X11 module in XA mode          *
+ *          91/11/22 Add option TCPIP                                 *
+ *          92/02/28 Remove protection on GDDM segment. Now at 9M     *
+ *          92/03/10 Move up the lower limit to run PAW               *
+ *          92/12/09 Use NEW as replacement for missing DEV modules   *
+ *                   Replace XCPUSH/XCPOP by new RXLOCFN functionality*
+ *                   Enable TCPIP version as default,set min-stor 9M  *
+ *          93/03/18 Add DISPLAY as synonym to HOST                   *
+ *          93/06/01 Check XC mode to run GDDM version                *
+ *          93/09/17 Increase minimum required storage                *
+ * N.Watson 93/10/21 Remove eventual trailing parenthesis             *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg parms "(" options ")"
+   Parse Source . . xfn .
+
+   f.list  ='FIND'(options,"LIST" )>0
+   f.set   ='FIND'(options,"SET"  )
+   f.reset ='FIND'(options,"RESET")>0
+
+   If f.reset Then Do
+      'GLOBALV SELECT *EXEC SETLP' xfn
+      Call ERROR 3 4
+   End
+
+   'GLOBALV SELECT *EXEC GET' xfn
+   optd='VALUE'(xfn) ; If optd="" Then optd="DRIVER GKS TERM ?"
+
+   If f.list Then Do
+     'CLRSCRN'
+     vs='SOURCELINE'(4) ; Parse Var vs . . . vs .
+     Say '               ____________________________________________'
+     Say '                     ' xfn vs ': Default options'
+     Say '               ____________________________________________'
+     Say '                     ' optd
+     Exit
+   End
+
+   Parse Var optd . "DRIVER" drvd . ; drv=drvd
+   Parse Var optd . "TERM "  trmd . ; trm=trmd
+
+   f.term  ='FIND'(options,"TERM " )
+   f.driv  ='FIND'(options,"DRIVER")
+   f.gks   ='FIND'(options,"GKS"   )
+   f.gddm  ='FIND'(options,"GDDM"  )
+   f.x11   ='FIND'(options,"X11"   )
+
+   f.local ='FIND'(options,"LOCAL" )
+   f.shared='FIND'(options,"SHARED")
+
+   If f.term>0 Then Do
+    trm='WORD'(options,f.term+1) ; options='DELWORD'(options,f.term,2)
+   End
+   If f.driv>0 Then Do
+    drv='WORD'(options,f.driv+1) ; options='DELWORD'(options,f.driv,2)
+   End
+   If f.gks>0 Then Do
+    drv='GKS'                     ;options='DELWORD'(options,f.gks,1)
+   End
+   If f.gddm>0 Then Do
+    drv='GDDM'                    ;options='DELWORD'(options,f.gddm,1)
+   End
+   If f.x11>0 Then Do
+    drv='X11'                     ;options='DELWORD'(options,f.x11,1)
+   End
+
+   If f.set>0 Then Do
+      'GLOBALV SELECT *EXEC SETLP' xfn "DRIVER" drv "TERM" trm
+      'EXEC DEFAULTS LIST' xfn
+      Exit
+   End
+
+   If ^'QSTOR'("11M") Then Call ERROR 1 8 "11M"
+   If ^'XFLAG'("CMSXA") & drv="GDDM" Then Call ERROR 2 8
+
+      vn='GETVER'(options,"LINK")
+      vv=""
+   If vn^="PRO" Then Do
+      vv='LEFT'(vn,1)"_"
+                        vtext="TCPIP"
+      If f.local>0 Then vtext="Local"
+      Say
+      Say "Calling" vn "version of" xfn"-"drv"/"vtext"..."
+      Say
+   End
+   If f.shared>0 Then Do
+      vv=vv"S"   ; options='DELWORD'(options,f.shared,1)
+   End
+      pgm=vv||xfn
+   If f.local >0 Then Do
+      pgm=pgm"L" ; options='DELWORD'(options,f.local,1)
+   End
+      pgm='LEFT'(pgm||drv,8)
+
+   'ESTATE' pgm 'MODULE'
+   If rc^=0 Then Call ERROR 5 rc pgm vn
+
+   prc='CPUSH'("FILEDEF","CLEAR","PFK","SET","TXTLIB","LOADLIB")
+
+   nw='FIND'(options,vn)
+   If nw>0 Then options='DELWORD'(options,nw,1)
+
+   If f.shared>0 Then 'EXEC CERNLIB PAWLIB GRAFLIB ( SHARED'
+
+   nw='FIND'(options,"HOST")+'FIND'(options,"DISPLAY") ; host=""
+   If nw>0 Then Do
+     host='WORD'(options,nw+1)
+     options='DELWORD'(options,nw,2)
+   End
+   If drv="GDDM" Then 'GLOBAL TXTLIB ADMNLIB ADMGLIB ADMRLIB'
+
+/* With the new KUIP all PAW modules need the IBMLIB library */
+
+   'EXEC CERNLIB ( TCPIP USER QUIET'
+
+   If drv="X11" & host^="" Then ,
+      'GLOBALV SELECT CENV SETPL DISPLAY' host':0'
+
+   If options^="" Then parms=parms "("options
+   'FILEDEF 6 TERM (LRECL 133'
+
+   'IDENTIFY ( LIFO' ; Pull . . site .
+   If site="CERNVM" Then 'EXEC UMLOGDEV * 0' vn pgm parms
+
+   'EXECIO 1 CP ( LIFO STRING QUERY CONSOLE'  /* Run in batch? */
+   Pull . . console . ; _b= console^="ON"
+
+   If ^_b Then Do
+    'EXEC USERPF PAW'          /* Set PAW PF-keys */
+    If trm^="?" Then Do        /* Get Workstation type */
+        tlist="" ; wlist=""
+     Select
+      When drv="GKS" Then Do
+        tlist="ALPHA  PSP    PSL    T4010  T4012  T4014  T4014E" ,
+              "T4107  T4109  T4111  T4113  T4115  T4207  PG    " ,
+              "MX2000 MX8000 MG200  MG600  FALCO  VT240  VT340 "
+        wlist="0      -111   -112   101    102    101    103   " ,
+              "121    122    123    125    127    121    7878  " ,
+              "121    127    7800   7800   7878   1020   1030  "
+      End
+      When drv="X11" Then Do
+        tlist="ALPHA  PSP    PSL    EPS    PSCP   PSCL   LATEX " ,
+              "LATEX"
+        wlist="0      -111   -112   -113   -114   -115   -777  " ,
+              "-778"
+      End
+      Otherwise Nop
+     End
+      nw='FIND'(tlist,trm) ; If nw>0 Then trm='WORD'(wlist,nw)
+      Push trm
+    End
+   End
+   If vn="DEV" Then Do
+      'ESTATE' pgm 'MODULE' ; If rc^=0 Then pgm="N_"'SUBSTR'(pgm,3)
+   End
+   pgm parms
+   cc=rc
+   If site="CERNVM" Then 'EXEC UMLOGDEV * 1' vn pgm parms
+
+   If prc=0 Then rc='CPOP'("FILEDEF","PFK","SET","TXTLIB","LOADLIB")
+   If cc=-2 Then Call ERROR 4 cc pgm vn
+   If cc=-4 Then Call ERROR 6 cc pgm vn
+   Exit cc
+/* ------------------------------------------------------------------ */
+   ERROR:
+   Procedure Expose xfn
+   Arg ne cc vv v2 .
+
+   src="CRN"xfn
+   err.1 ="001E Insufficient storage. Get at least" vv ,
+               "with the command: CP DEFINE STORAGE" vv
+   err.2 ="002E PAW/GDDM may only run in XC mode;" ,
+               "use the command: IPL CMSXC"
+   err.3 ="003W Defaults reset for" xfn "command"
+   err.4 ="004W Module" vv "cannot run in SUBSET mode"
+   err.5 ="005W Module" vv "not available in the" v2 "area"
+   err.6 ="006W Module" vv "cannot load. IPL or LOGOFF to clear" ,
+               "the memory"
+   err.99="900E Uninitialised variable encountered on line" vv
+
+   'EXECIO 1 EMSG (STRING' src||err.ne
+   Exit cc
+#endif

@@ -1,0 +1,47 @@
+#if 0
+* This pilot patch was created from epio.car patch _epio
+#endif
+#if 0
+*   Pilot  patch
+#endif
+#if !defined(CERNLIB_TEST)
+#ifndef CERNLIB_SEPIO
+#define CERNLIB_SEPIO
+#endif
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_1S)||defined(CERNLIB_1L))
+#ifndef CERNLIB_PTEST1
+#define CERNLIB_PTEST1
+#endif
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_2S)||defined(CERNLIB_2L))
+#ifndef CERNLIB_PTEST2
+#define CERNLIB_PTEST2
+#endif
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_3S)||defined(CERNLIB_3L))
+#ifndef CERNLIB_PTEST3
+#define CERNLIB_PTEST3
+#endif
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_4S))
+#ifndef CERNLIB_PTEST4
+#define CERNLIB_PTEST4
+#endif
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_1L)||defined(CERNLIB_2L)||defined(CERNLIB_3L))
+#ifndef CERNLIB_PH32BIT
+#define CERNLIB_PH32BIT
+#endif
+#endif
+#ifndef CERNLIB_FEPIO
+#define CERNLIB_FEPIO
+#endif
+#if (defined(CERNLIB_TEST))&&(defined(CERNLIB_HLESS)||defined(CERNLIB_HSPAN)||defined(CERNLIB_ULENG))
+#ifndef CERNLIB_EPIO_EPBOUT
+#define CERNLIB_EPIO_EPBOUT
+#endif
+#ifndef CERNLIB_EPIO_EPOUTL
+#define CERNLIB_EPIO_EPOUTL
+#endif
+#endif

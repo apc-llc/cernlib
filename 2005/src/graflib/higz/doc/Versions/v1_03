@@ -1,0 +1,21 @@
+*
+* $Id: v1_03,v 1.1.1.1 1996/02/14 13:10:20 mclareni Exp $
+*
+* $Log: v1_03,v $
+* Revision 1.1.1.1  1996/02/14 13:10:20  mclareni
+* Higz
+*
+*
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.03/00   880906
+*
+*    Changes in IGINIT and IGEND
+*    Structure for GMR,UISDC,DI3000 versions introduced.
+*    New patches IGKS,IGMR,IGKS3D
+*    New PILOT patches for master versions.
+*    ZEBRA flag introduced (if Z option not wanted)
+*    The new attribute: Axis Wire Length is reachable via IGSET
+*    PATCH,HIGZEXAM introduced
+*

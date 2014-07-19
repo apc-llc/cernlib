@@ -1,0 +1,47 @@
+*
+* $Id: fat2vm.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fat2vm.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FAT2VM.COM
+$SET NOON
+$ !
+$ ! Retry sending updates to VM
+$ !
+$ if p1 .eqs. "" then exit
+$ fatmen =  p1
+$ count  = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$ node   = f$getsyi("NODENAME")
+$loop:
+$ fatman = f$element(count,",",fatmen)
+$ if fatman .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''fatman'..."
+$ ON WARNING THEN GOTO UNDEFINED
+$ fatdir = &fatman
+$ fatfil = f$extract(0,f$length(fatdir)-1,fatdir) + ".TOVM]*.*;*"
+$ ON WARNING THEN CONTINUE
+$ loop$f:
+$ current_file = f$search(fatfil)
+$ if current_file .eqs. "" then goto loop
+$ write sys$output "Processing ''current_file'..."
+$ if f$locate(fatvm,current_file).lt.f$length(current_file)
+$    then
+$    delete/nolog/noconfirm 'current_file'
+$    goto loop$f
+$ endif
+$ copy/log 'current_file' -
+cernvm::"rscs$''fatvm':[''fatman']''fatman'.''node'"
+$ if $severity .eq. 1 then delete/nolog/noconfirm 'current_file'
+$ goto loop$f
+$ undefined:
+$ write sys$output "Warning: symbol ''fatman' is not defined"
+$ goto loop
+$ end:
+$ set message 'save_mess'
+$ exit

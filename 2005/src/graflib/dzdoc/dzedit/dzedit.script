@@ -1,0 +1,46 @@
+#!/bin/sh
+# **********************************************************************
+# * DZEDIT SHELL v1.02                                                 *
+# *                                                                    *
+# * Shell driver to the different versions of DZEDIT                   *
+# *                                                                    *
+# * Author: M.Marquina 91/04/10                                        *
+# * Mods       Date   Commments                                        *
+# * MARQUINA 91/08/15 Access DZEDIT-GKS directly from GKS_ROOT         *
+# *          91/12/14 Correct local SUN host                           *
+# *                                                                    *
+# **********************************************************************
+ 
+  SHOPT="d:h:v:"
+#SEQ,GETOPTD.
+                          drv="X11" ; hst="0"
+  [ -z "$CERN"       ] && CERN="/cern"
+  [ -z "$CERN_LEVEL" ] && ver="pro" || ver="$CERN_LEVEL"
+ 
+  while [ $# -gt 0 ]
+  do case $1 in
+       -d) drv=$2 ; shift      ;;
+       -h) hst=$2 ; shift      ;;
+       -v) ver=$2 ; shift      ;;
+       --) shift ; break       ;;
+        *)         break       ;;
+     esac
+     shift
+  done
+ 
+     GDIR=$CERN/$ver/bin
+  if [ "$drv" = "GKS" ] ; then
+     [ -z "$GKS_ROOT" ] && GKS_ROOT="$CERN/gks/$ver"
+     [ -z "$GKS"      ] && . $CERN/gks/$ver/mgr/gksstart.sh
+#    inlib $GKS_INLIB
+     GDIR=$CERN/gks/$ver/bin
+  fi
+  if [ "$drv" = "X11" ] ; then
+     DISPLAY="$hst:0" ; export DISPLAY
+  fi
+  if [ "$ver" != "pro" ] ; then
+     echo
+     echo " Calling $ver version of dzedit-$drv..."
+     echo
+  fi
+  $GDIR/dze$drv $*

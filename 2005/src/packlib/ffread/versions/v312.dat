@@ -1,0 +1,14 @@
+*
+* $Id: v312.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v312.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.12   911217 12.00
+C
+C- Routine changes:
+C  > P=SFFREAD ,D=FFGO     : Change for compatibility with f90-NAG
+C  > P=SFFREAD ,D=FFKEY    : Change for compatibility with f90-NAG
+C

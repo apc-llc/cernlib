@@ -1,0 +1,91 @@
+*
+* $Id: c312ch.F,v 1.1.1.1 1996/02/15 17:48:40 mclareni Exp $
+*
+* $Log: c312ch.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:40  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+#if defined(CERNLIB_NEVER)
+          SUBROUTINE C312CH(OK)
+          LOGICAL         OK, OKJ0, OKJ1, OKY0, OKY1
+          CHARACTER*4     ERRCNT
+#include "kernnumt/sysdat.inc"
+          EXTERNAL         BESJ0, BESJ1, BESY0, BESY1
+          REAL             BESJ0, BESJ1, BESY0, BESY1, RF
+#if defined(CERNLIB_NUMLOPRE)
+          EXTERNAL         DBESJ0,DBESJ1,DBESY0,DBESY1
+          DOUBLE PRECISION DBESJ0,DBESJ1,DBESY0,DBESY1,DF
+#endif
+          PARAMETER(KOUNTX  =  2)
+          DOUBLE PRECISION X(KOUNTX)
+          DOUBLE PRECISION BJ0(KOUNTX),BJ1(KOUNTX)
+          DOUBLE PRECISION BY0(KOUNTX),BY1(KOUNTX)
+          DATA X   / 2.D0,                 10.D0 /
+          DATA BJ0 / 0.22389 07791 4124D0, -0.24593 57644 5135D0 /
+          DATA BJ1 / 0.57672 48077 5687D0,  0.43472 74616 8861D-1 /
+          DATA BY0 / 0.51037 56726 4974D0,  0.55671 16728 3600D-1 /
+          DATA BY1 /-0.10703 24315 4094D0,  0.24901 54242 0695D0  /
+          TRUNC   =  1E-12
+#if defined(CERNLIB_NUMHIPRE)
+          RROUND  =  RELPRT(1)*10.
+          CALL RFEQDY(KOUNTX,X,BESJ0, BJ0,TRUNC,RROUND,OKJ0)
+          CALL RFEQDY(KOUNTX,X,BESJ1, BJ1,TRUNC,RROUND,OKJ1)
+          CALL RFEQDY(KOUNTX,X,BESY0, BY0,TRUNC,RROUND,OKY0)
+          CALL RFEQDY(KOUNTX,X,BESY1, BY1,TRUNC,RROUND,OKY1)
+          OK  =  OKJ0 .AND. OKJ1 .AND. OKY0 .AND. OKY1
+#endif
+#if defined(CERNLIB_NUMLOPRE)
+          RROUND  =  RELPRT(1)
+          DROUND  =  RELPRT(2)*10.
+          CALL DFEQDY(KOUNTX,X,DBESJ0,BJ0,TRUNC,DROUND,OKJ0)
+          CALL DFEQDY(KOUNTX,X,DBESJ1,BJ1,TRUNC,DROUND,OKJ1)
+          CALL DFEQDY(KOUNTX,X,DBESY0,BY0,TRUNC,DROUND,OKY0)
+          CALL DFEQDY(KOUNTX,X,DBESY1,BY1,TRUNC,DROUND,OKY1)
+          OK  =  OKJ0 .AND. OKJ1 .AND. OKY0 .AND. OKY1
+          CALL RFEQDF(KOUNTX,X,BESJ0, DBESJ0,TRUNC,RROUND,OKJ0)
+          CALL RFEQDF(KOUNTX,X,BESJ1, DBESJ1,TRUNC,RROUND,OKJ1)
+          CALL RFEQDF(KOUNTX,X,BESY0, DBESY0,TRUNC,RROUND,OKY0)
+          CALL RFEQDF(KOUNTX,X,BESY1, DBESY1,TRUNC,RROUND,OKY1)
+          OK  =  OK .AND. OKJ0 .AND. OKJ1 .AND. OKY0 .AND. OKY1
+#endif
+#if defined(CERNLIB_NUMHIPRE)
+          ERRCNT  =  ' TWO'
+#endif
+#if defined(CERNLIB_NUMLOPRE)
+          ERRCNT  =  'FOUR'
+#endif
+          IF(      ERPRNT .AND.       ERSTOP) WRITE(*,101) ERRCNT
+          IF(      ERPRNT .AND. .NOT. ERSTOP) WRITE(*,102) ERRCNT
+          IF(.NOT. ERPRNT .AND.       ERSTOP) WRITE(*,103) ERRCNT
+          RF  =  BESY0(0.)
+          IF(RF .NE. 0.)  THEN
+          OK  =  .FALSE.
+          WRITE(*,104) 'BESY0 ', 'BESY0 ', RF, 'C312.1'
+          ENDIF
+          RF  =  BESY1(-1.001)
+          IF(RF .NE. 0.)  THEN
+             OK  =  .FALSE.
+             WRITE(*,104) 'BESY1 ', 'BESY1 ', RF, 'C312.1'
+          ENDIF
+#if defined(CERNLIB_NUMLOPRE)
+          DF  =  DBESY0(0.D0)
+          IF(DF .NE. 0.D0)  THEN
+             OK  =  .FALSE.
+             WRITE(*,104) 'DBESY0', 'DBESY0', DF, 'C312.1'
+          ENDIF
+          DF  =  DBESY1(-1.001D0)
+          IF(DF .NE. 0.D0)  THEN
+             OK  =  .FALSE.
+             WRITE(*,104) 'DBESY1', 'DBESY1', DF, 'C312.1'
+          ENDIF
+#endif
+          RETURN
+  101 FORMAT(/2X,A4,' ERROR AND ABEND MESSAGES SHOULD NOW FOLLOW ...')
+  102 FORMAT(/2X,A4,' ERROR MESSAGES SHOULD NOW FOLLOW ...')
+  103 FORMAT(/2X,A4,' ABEND MESSAGES SHOULD NOW FOLLOW ...')
+  104 FORMAT(/' ????? TEST OF ',A6,' ... ',A6,' =', E20.10,
+     +       ' ERROR CONDITION ', A6, ' NOT DETECTED.')
+      END
+#endif

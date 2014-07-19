@@ -1,0 +1,68 @@
+*
+* $Id: v4_24,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_24,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :          24/10/95  14.32.46  by  Julian Bunn
+*-- Author :    Unknown   05/05/95
+*
+* 24/10/95  14.32.19
+*
+* Remove redundant option in HRENID
+*
+* 11/10/95  19.56.41
+*
+* Correct bug in HFILPR that was causing X values equal to the
+* end of the scale not to be filled in the overflow bin correctly.
+*
+* 11/10/95  17.51.27
+*
+* Modify HUWFUN so that option I does not cause calls to HBNAME to appear.
+*
+* 26/09/95  11.16.42
+*
+* Correction in hoper1 which previously was accessing non-existant
+* error banks for some histogram operations. (Sent by Mike Redmond)
+*
+* Removal of trigraph ???' in routines HLATTR HLNEXT and HLNXTG1
+*
+* Correction in HMCMLL for wrong number of args in call to MNEXCM
+*
+* 30/06/95
+*
+* Correction by Rene in HBIN for "big integers".
+*
+* 21/06/95
+*
+* Add test program for FPCLASSC patch. New directory TESTS for HBOOK
+* test programs ...
+*
+* 17/05/95
+*
+* Mod to HMDIR so that identically named sub-directories are not
+* created in memory.
+*
+* 16/05/95  10.30.55
+* Mods in HMINIM and HMAXIM to reset the min and the max when
+* the min is greater than the max for 2d histos (it was implemented
+* only for 1D).
+*
+* 05/05/95  14.57.05
+* FPCLASSC selected in *HBOOK
+*
+*::>          VERSION  4.24/00   05/05/95 11.48.44
+*
+*
+*    New patch FPCLASSC by Francois Dardare. This interfaces to the
+*    system routines on the various platforms that identify the
+*    IEEE NaNs (where appropriate), and classifies them in a general
+*    way. The routines are called in HFILL, HFN and HFNT2 to check
+*    user arguments, and warnings are issued where appropriate.
+*
+*    New routine HNFORM for assiting users in creating the character
+*    string that describes CW nTuple variables that is used as an
+*    argument to HBNAME or HBNAMC.
+*

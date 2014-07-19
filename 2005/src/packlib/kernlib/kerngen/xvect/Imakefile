@@ -1,0 +1,3 @@
+SRCS_F= xinb.F xinbf.F xinbs.F xincf.F xoutb.F xoutbf.F xoutbs.F xoutcf.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

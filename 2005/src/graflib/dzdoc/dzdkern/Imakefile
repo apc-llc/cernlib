@@ -1,0 +1,5 @@
+SRCS_F=	 dzd00t.F dzd0nt.F dzd0tt.F dzdbk1.F dzdbkc.F dzdcar.F \ @@\
+	dzdco1.F dzdcod.F dzdcrd.F dzdeos.F dzdggi.F dzdini.F dzdlin.F \ @@\
+	dzdlo1.F dzdndc.F dzdnum.F dzdocm.F dzdsco.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

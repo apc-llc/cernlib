@@ -1,0 +1,290 @@
+*
+* $Id: hparam.F,v 1.1.1.1 1996/01/16 17:07:45 mclareni Exp $
+*
+* $Log: hparam.F,v $
+* Revision 1.1.1.1  1996/01/16 17:07:45  mclareni
+* First import
+*
+*
+#include "hbook/pilot.h"
+*CMZ :  4.22/08 04/07/94  08.57.13  by  Rene Brun
+*-- Author :
+      SUBROUTINE HPARAM (IDH,ICONTR,R2MINI,MAXPOW,COEFFI,ITERM,NCOEF)
+*.==========>
+*.      MULTIDIMENSIONAL FIT PACKAGE - AUTHOR:  D. LIENART
+*.==========>
+*.                  1. COMMON /HCPAR1/
+*.
+*.      IOPT    SELECTS VARIOUS OPTIONS FOR THE FIT
+*.           1  ENABLES/DISABLES SUPERPOSITION OF PARAMETRI-
+*.              ZATION ON HISTOGRAM
+*.           2  AMOUNT OF OUTPUT DESIRED
+*.           3  TYPE OF WEIGHTING
+*.           4  STANDARD ELEMENTARY FUNCTION TYPE
+*.           5  SELECTS BASIC FUNCTIONS CLASS
+*.           6  BASIC FUNCTION SELECTION MODE
+*.           7  REGRESSION MODE
+*.           8  NORMALIZATION TYPE
+*.      ND      NUMBER OF VARIABLES (DIM OF X-SPACE)
+*.      NP      NUMBER OF POINTS TO FIT
+*.      NPMAX   FIRST DIMENSION OF ARRAY X
+*.      NBF     NUMBER OF BASIC FUNCTIONS AFTER SELECTION
+*.      NBFMAX  NUMBER OF BASIC FUNCTIONS BEFORE SELECTION
+*.      NEF     NUMBER OF USER-DEFINED ELEMENTARY FUNCTIONS
+*.      NCO     NUMBER OF REGRESSORS
+*.      NCOMAX  MAXIMUM ALLOWED NUMBER OF REGRESSORS
+*.
+*.
+*.                  2. COMMON /HCPAR2/
+*.
+*.      COEFF   COEFFICIENTS OF THE REGRESSORS
+*.      IBASFT  BASIC FUNCTIONS TABLE: IBASFT(I,J) GIVES THE
+*.              NUMBER OF THE ELEMENTARY FUNCTION IN VARIABLE I
+*.              AND REGRESSOR J FOLLOWED BY THE FUNCTION CLASS
+*.              EACH BASIC FUNCTION IS EITHER A USER-GIVEN BASIC
+*.              FUNCTION OR A PRODUCT OF ND ELEMENTARY FUNCTIONS
+*.      XMIN    MINIMUM X-VALUE FOR EACH VARIABLE (DIM)
+*.      XMAX    MAXIMUM     "        "         "
+*.      ALIM    LOWER BOUNDS OF NORMALIZATION INTERVALS
+*.      BLIM    UPPER   "          "             "
+*.
+*.
+*.                  3. COMMON /HCPOUT/
+*.
+*.      IFLAG   STATUS FLAG
+*.      RSSS    RESIDUAL SUM OF SQUARES
+*.      R2S     MULTIPLE CORRELATION COEFFICIENT
+*.      SECO    STANDARD DEVIATIONS OF THE ESTIMATED COEFFICIENTS
+*.      COMIN   LOWER BOUND OF CONFIDENCE INTERVAL FOR COEFFICIENT
+*.      COMAX   UPPER   "          "          "            "
+*.
+*.
+*.                  4. OTHER IMPORTANT DATA
+*.
+*.      X       INDEPENDENT VARIABLES
+*.      Y       DEPENDENT VARIABLE
+*.      R2MIN   MINIMUM ACCEPTABLE R2 (GOODNESS OF FIT TEST)
+*.      EY      ERRORS ON Y VARIABLE
+*.      MAXPOW  MAXIMUM DEGREE OF STANDARD POLYNOMIAL IN
+*.              VARIABLE I
+*.      SELLIM  LIMITS THE NUMBER OF BASIC FUNCTIONS SELECTED BY
+*.              LIMITING THE DEGREES OF THE STANDARD POLYNOMIALS
+*.              WHICH MAKE UP A BASIC FUNCTION
+*.      FLEVEL  F-SIGNIFICANCE LEVEL USED FOR TESTING REJECTANCE OF
+*.              ALREADY INCLUDED REGRESSORS (STEPWISE PROCEDURE)
+*.=========>
+*.      CALLING SEQUENCE FOR 1- AND 2-DIM HISTOGRAMS
+*.      MAIN ROUTINE, ORGANIZES WORKING SPACE IN /PAWC/ AND
+*.      CONTROLS THE SUCCESSIVE STAGES OF THE FIT
+*..=========> ( R.Brun ,D.Lienart )
+      DIMENSION MAXPOW(1),COEFFI(1),ITERM(1,1)
+#include "hbook/hcflag.inc"
+#include "hbook/hcbook.inc"
+#include "hbook/hcbits.inc"
+#include "hbook/hcunit.inc"
+#include "hbook/hcpar0.inc"
+#include "hbook/hcpar1.inc"
+#include "hbook/hcpar2.inc"
+#include "hbook/hcpout.inc"
+      DIMENSION DQ(2)
+#if defined(CERNLIB_DOUBLE)
+      DOUBLE PRECISION DQ,COEFF,COEFFI,HRVAL
+#endif
+      EQUIVALENCE (Q(1),DQ(1))
+      EXTERNAL HRVAL
+*
+*
+*  INITIALIZATIONS
+*
+      IFLAG=-1
+      CALL HFIND (IDH,'HPARAM')
+      IF (LCID.EQ.0) THEN
+         IFLAG=6
+         RETURN
+      ENDIF
+      IF (IQ(LCONT+KNOENT).EQ.0) THEN
+         IFLAG=6
+         CALL HBUG('Empty histogram','HPARAM',ID)
+         RETURN
+      ENDIF
+      CALL HDCOFL
+      ND=1
+      NX=IQ(LCID+KNCX)
+      NY=1
+      IF (I1.EQ.0) THEN
+         ND=2
+         NY=IQ(LCID+KNCY)
+      ENDIF
+      NPMAX=NX*NY
+      NBF=0
+      NBFMAX=500
+      NEF=0
+      NCOMAX=50
+      ITAP=0
+      ICONT=ICONTR
+      DO 5 I=1,8
+         IOPT(I)=ICONT-(ICONT/10)*10
+         ICONT=ICONT/10
+    5 CONTINUE
+      ISUP=0
+      IF (IOPT(1).EQ.1.AND.ND.EQ.1) ISUP=1
+      SELLIM=1.
+      FLEVEL=1.
+      R2MIN=R2MINI
+      IF (IOPT(7).EQ.2) THEN
+         R2MIN=1.5
+      ELSE IF (R2MIN.GE.1.) THEN
+         R2MIN=2.
+      ENDIF
+      IF (IOPT(5).GE.1) NEF=PNEF
+      IF (IOPT(5).EQ.2.OR.IOPT(6).EQ.2) NBF=PNBF
+      IF (PSEL.GT.0..AND.PSEL.LE.ND) SELLIM=PSEL
+      IF (PFLV.GT.0..AND.PFLV.LT.1000.) FLEVEL=PFLV
+      IF (PLUN.GT.0..AND.PLUN.LT.100.) ITAP=PLUN
+      IF (PNBX.GT.0..AND.PNBX.LE.2000.) NBFMAX=PNBX
+      IF (PNCX.GT.0..AND.PNCX.LE.50.) NCOMAX=PNCX
+      NV=1
+#if !defined(CERNLIB_DOUBLE)
+      IF (ISUP.EQ.1) CALL HFUNC (IDH,HRVAL)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IF (ISUP.EQ.1) CALL HSUPIM (HRVAL)
+#endif
+      NV=2
+*
+*  RESERVE WORKING SPACE IN /PAWC/: SET START ADDRESSES
+*
+      LXYE=(ND+2)*NPMAX
+#if !defined(CERNLIB_DOUBLE)
+      LAHPAR=NPMAX+(ND+1)*NBFMAX+(3*NCOMAX+NPMAX+6)*NCOMAX+LXYE
+#endif
+#if defined(CERNLIB_DOUBLE)
+      LAHPAR=2*NPMAX+(ND+1)*NBFMAX+(6*NCOMAX+2*NPMAX+11)*NCOMAX+LXYE
+#endif
+      CALL HWORK (LAHPAR,ICO,'HPARAM')
+      IF (ICO.EQ.0) THEN
+         IFLAG=6
+         RETURN
+      ENDIF
+#if defined(CERNLIB_DOUBLE)
+      IF ((ICO/2)*2.EQ.ICO) ICO=ICO+1
+      IBF=ICO+(10+2*NPMAX+6*NCOMAX)*NCOMAX+2*NPMAX
+      ICO=(ICO+1)/2
+#endif
+      ICT=ICO+NCOMAX
+      IW=ICT+NCOMAX
+      IWT=IW+NPMAX*NCOMAX
+      IWY=IWT+NPMAX
+      IV=IWY+NCOMAX
+      IVT=IV+NCOMAX*NCOMAX
+      IVTT=IVT+NCOMAX*NCOMAX
+      IDD=IVTT+NCOMAX*NCOMAX
+      IFF=IDD+NCOMAX
+#if !defined(CERNLIB_DOUBLE)
+      IBF=IFF+NCOMAX
+#endif
+      IMB=IBF+ND*NBFMAX
+      IBM=IMB+NBFMAX
+      IX=IBM+NCOMAX
+      IY=IX+ND*NPMAX
+      IE=IY+NPMAX
+*
+*  COPY HISTOGRAM INTO X,Y,E
+*
+      CALL HHXYE (Q(IX),Q(IY),Q(IE))
+      IF (IFLAG.EQ.6) RETURN
+*
+*  PRINT OUT FIT OPTIONS AND CHARACTERISTICS
+*
+      WRITE (LOUT,100)
+      IF (IOPT(2).GE.1) THEN
+         WRITE (LOUT,110) ID,ND,LAHPAR,NBF,NEF,NCOMAX,(MAXPOW(I),
+     +   I=1,ND)
+         WRITE (LOUT,120) (IOPT(I),I=2,8),SELLIM,FLEVEL
+         IF (ISUP.EQ.1) WRITE (LOUT,160)
+         IF (ITAP.NE.0) WRITE (LOUT,170) ITAP
+         IF (R2MIN.EQ.1.5) THEN
+            WRITE (LOUT,130)
+         ELSE
+            IF (R2MIN.EQ.2.) THEN
+               WRITE (LOUT,140)
+            ELSE
+               WRITE (LOUT,150) R2MIN
+            ENDIF
+         ENDIF
+      ENDIF
+      IF (IOPT(2).EQ.2) CALL HCORRL (Q(IX),Q(IY))
+*
+*
+      IF (IOPT(3).EQ.0) THEN
+         DO 10 I=1,NP
+            Q(IY+I-1)=Q(IY+I-1)/Q(IE+I-1)
+   10    CONTINUE
+      ENDIF
+*
+*
+      IF (IOPT(8).GT.0) CALL HXNORM (Q(IX))
+*
+*  SET UP BASIC FUNCTIONS TABLE
+*
+      IF (IOPT(6).EQ.2) THEN
+         CALL UCOPY (ITERM(1,1),IQ(IBF),ND*NBF)
+      ELSE
+         CALL HSETBF (IQ(IBF),MAXPOW,SELLIM)
+         IF (IFLAG.EQ.5) RETURN
+      ENDIF
+*
+*
+#if !defined(CERNLIB_DOUBLE)
+      CALL HMUFIT (Q(IX),Q(IY),Q(IE),IQ(IBF),Q(IW),Q(IWT),Q(IWY),Q(IV),
+     +             Q(IVT),Q(IVTT),Q(IDD),Q(IFF),Q(ICO),Q(ICT),IQ(IMB),
+     +             IQ(IBM),R2MIN,FLEVEL)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      CALL HMUFIT (Q(IX),Q(IY),Q(IE),IQ(IBF),DQ(IW),DQ(IWT),DQ(IWY),
+     +             DQ(IV),DQ(IVT),DQ(IVTT),DQ(IDD),DQ(IFF),DQ(ICO),
+     +             DQ(ICT),IQ(IMB),IQ(IBM),R2MIN,FLEVEL)
+#endif
+      NCOEF=NCO
+      DO 20 I=1,NCO
+#if !defined(CERNLIB_DOUBLE)
+         COEFF(I)=Q(ICO+I-1)
+#endif
+#if defined(CERNLIB_DOUBLE)
+         COEFF(I)=DQ(ICO+I-1)
+#endif
+         COEFFI(I)=COEFF(I)
+         DO 15 K=1,ND
+            IBASFT(K,I)=IQ(IBF+ND*(I-1)+K-1)
+   15    CONTINUE
+   20 CONTINUE
+      CALL UCOPY (IQ(IBF),ITERM(1,1),ND*NCO)
+      IF (ITAP.NE.0) CALL HWRITF (ITAP)
+#if !defined(CERNLIB_DOUBLE)
+      IF (ISUP.EQ.1) CALL HFUNC (IDH,HRVAL)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IF (ISUP.EQ.1) CALL HSUPIM (HRVAL)
+#endif
+  100 FORMAT (///,1X,40('*'),/,' *',38X,'*',/,' *   MULTIDIMENSIONAL'
+     +        ,' PARAMETRIZATION   *'/,' *',38X,'*'/,1X,40('*'))
+  110 FORMAT (//' FIT CHARACTERISTICS AND OPTIONS'/,1X,31('*'),/
+     +      /' ID = ',I3,/,' DIM = ',I2,/,' WORKING SPACE IN /PAWC/ = '
+     +        ,I7,/,1X,I2,' USER-DEFINED BASIC FUNCTIONS'/,1X,I2,
+     +        ' USER-DEFINED ELEMENTARY FUNCTIONS'/,' MAX NUMBER OF',
+     +        ' REGRESSORS = ',I2,/,' MAX POWERS OF POLYNOMIALS IN ',
+     +        ' EACH DIM = ',10(I2,2X))
+  120 FORMAT (' AMOUNT OF OUTPUT = ',I1,/,' WEIGHTING TYPE = '
+     +        ,I1,/,' CLASS OF POLYNOMIALS = ',I1,/,' CLASS OF BASIC'
+     +        ,' FUNCTIONS = ',I1,/,' BASIC FUNCTION SELECTION MODE = ',
+     +        I1,/,' REGRESSION MODE = ',I1,/,' X-NORMALIZATION TYPE = '
+     +        ,I1,/,' POWER LIMITOR = ',F5.2,/,' F-TEST LEVEL = ',F6.2)
+  130 FORMAT (/' FITTING PROCESS WILL STOP WHEN ALL CANDIDATE ',
+     +        'BASIC FUNCTIONS ARE INCLUDED')
+  140 FORMAT (/' FITTING PROCESS WILL STOP WHEN THE RESIDUAL VARIANCE'
+     +        ,' HITS A MINIMUM')
+  150 FORMAT (/' FITTING PROCESS WILL STOP WHEN THE MULTIPLE ',
+     +        'CORRELATION COEFFICIENT GETS HIGHER THAN ',F7.4)
+  160 FORMAT (' PARAMETRIZATION SUPERIMPOSED ON HISTOGRAM')
+  170 FORMAT (' FORTRAN CODE FPARAM WRITTEN ON UNIT ',I2)
+      END

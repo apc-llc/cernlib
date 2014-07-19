@@ -1,0 +1,42 @@
+*
+* $Id: uh1toc.s,v 1.1.1.1 1996/02/15 17:54:50 mclareni Exp $
+*
+* $Log: uh1toc.s,v $
+* Revision 1.1.1.1  1996/02/15 17:54:50  mclareni
+* Kernlib
+*
+*
+       MODULE M_UH1TOC
+%
+% CERN PROGLIB# M409    UH1TOC          .VERSION KERNNOR  1.13  811202
+% ORIG.  H.OVERAS, CERN, 811201
+%
+% CALL UH1TOC(A1,CHAR,NCH)     CONVERT HOLLERITH A1 TO CHARACTER
+%
+       EXPORT UH1TOC
+       ROUTINE UH1TOC
+       LIB UH1TOC
+VBAS:  STACK FIXED
+PAR:   W BLOCK 3
+       ENDSTACK
+UH1TOC:  ENTF VBAS
+       W1:=0
+       W2:=IND(B.PAR+8)
+       IF<=GO OUT
+       W2-1
+       W RLADDR IND(B.PAR+4)
+       W MOVE R.4,B.PAR+4  %CHANGE POINTER TO STRING ITSELF
+       W4:=R2
+       W4/4
+       W3:=10020040B
+       W3 PUTBF IND(B.PAR+4)(R4),0,24  %TRAILING BALNKS IN LAST BYTES
+BEGLP: W3:=IND(B.PAR)(R1)
+       W SHR R3,8
+       BY3=:IND(B.PAR+4)(R1)
+       W LOOPI R1,R2,BEGLP
+OUT:   RET
+       ENDROUTINE
+       ENDMODULE
+#ifdef CERNLIB_TCGEN_UH1TOC
+#undef CERNLIB_TCGEN_UH1TOC
+#endif

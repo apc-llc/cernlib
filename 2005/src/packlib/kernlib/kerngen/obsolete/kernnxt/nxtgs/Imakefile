@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 kerngt.F ublow.F
+
+SRCS_C= \ @@\
+	 abend.c datime.c datimh.c getarg.c intrac.c jumpxn.c locb.c \ @@\
+	 locf.c qnexte.c timest.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

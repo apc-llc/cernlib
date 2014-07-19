@@ -1,0 +1,23 @@
+MACRO PAWEX24
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 24                          *
+* Operations on histograms (Keep and Update)                             *
+**************************************************************************
+Exec ALLDEF
+histogram/file 1 pawhists.hbook
+Zone 1 2
+opt grid
+set grid 1003
+set htyp 245
+h/pl 120 k
+set grid
+set htyp 254
+h/pl 110
+set htyp
+h/pl 110 +
+set htyp 144
+hi/pl 130 +
+zone
+close 1
+RETURN
+

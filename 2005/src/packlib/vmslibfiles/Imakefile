@@ -1,0 +1,75 @@
+#ifdef CERNLIB_VAXVMS
+
+/*  These are files needed on VMS and which need to be installed in 
+ *  the bin and lib directory
+ */
+
+/* cernlib for vms; rules for msg and cld are needed ONLY here. */
+
+/* There is a switch CERNLIB_CLD which you may set.
+ *  I think then you need to install cernlib with cld ?
+DEFINES=-DCERNLIB_CLD.
+ * GF 
+ */
+ 
+cernlibmsg.obj: cernlibmsg.msg
+	message/object=$@ $<
+
+cernlibcld.obj: cernlibcld.cld
+	set command/object=$@ $<
+
+cernlibcld.cld: cernlibcld.$$cld
+	fpp $(CERNDEFINES) $(DEFINES) $< $@
+
+/* Avoid traceback */
+LINK:=$(LINK)/NOTRACE
+
+NormalProgramTarget(cernlib,cernlib.o cernlibmsg.obj cernlibcld.obj,$(CERN_LIBDIR)kernlib.olb,$(CERN_LIBDIR)kernlib/lib,NullParameter)
+
+InstallProgram(cernlib,$(CERN_BINDIR))
+
+/*  Various .opt files */
+
+#ifndef CERNLIB_QMALPH
+InstallNonExecFileTarget(install.lib,grafx11_decw.opt,$(CERN_LIBDIR))
+CopyFile(vmslib_u.opt_vax,vmslib_u.opt)
+#endif
+
+InstallNonExecFileTarget(install.lib,gphigs.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,grafdgks.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,grafmotif.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,grafmotif12.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,grafx11.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,kuip.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,packlib.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,squeeze.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,sysexe.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,tcpmod.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,vmslib_m.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,vmslib_u.opt,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,vmslib_w.opt,$(CERN_LIBDIR))
+
+/*
+ *  Sources for some .obj files ( see below )
+ */
+
+InstallNonExecFileTarget(install.lib,ctldummy.for,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,mndummy.for,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,getservbyname.c,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,xxint.c,$(CERN_LIBDIR))
+
+/* ... and the objects 
+ */
+InstallNonExecFileTarget(install.lib,ctldummy.obj,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,mndummy.obj,$(CERN_LIBDIR))
+InstallNonExecFileTarget(install.lib,getservbyname.obj,$(CERN_LIBDIR))
+/* InstallNonExecFileTarget(install.lib,xxint.obj,$(CERN_LIBDIR)) */
+
+
+
+#else
+
+install.lib::
+
+#endif
+

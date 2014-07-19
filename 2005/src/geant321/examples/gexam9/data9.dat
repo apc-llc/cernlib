@@ -1,0 +1,30 @@
+*
+* $Id: data9.dat,v 1.1.1.1 1995/10/24 10:22:24 cernlib Exp $
+*
+* $Log: data9.dat,v $
+* Revision 1.1.1.1  1995/10/24 10:22:24  cernlib
+* Geant
+*
+*
+LIST
+C  Example input data cards to make frozen file of electron
+DEBU         1       10
+SWIT         1       10
+PAIR 1
+COMP 1
+PHOT 1
+PFIS 1
+DRAY 1
+ANNI 1
+BREM 1
+MUNU 1
+HADR 1
+LOSS 2
+MULS 2
+RNDM    2345 12384
+XYZ0 0.0 0.0 11.07
+ESHO 0.010 0.020  0.040 0.080  0.160 0.320 0.640
+NSHO   500   400    300    200   200   100   100
+CUTS 0.0001 0.0001 0.0001 0.001 0.001
+PRIN 'VERT' 'KINE'  'HITS'
+END

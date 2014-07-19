@@ -1,0 +1,23 @@
+*
+* $Id: fat2vax.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fat2vax.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FAT2VAX.EXEC */
+/**/
+ 
+Parse arg fn ft remote_user remote_node
+ 
+"ID(STACK"
+ 
+Pull user . node .
+ 
+"RENAME "fn ft "A "user node "A"
+ 
+"EXEC SENDFILE "user node" TO "remote_user " AT "remote_node
+ 
+ 
+"RENAME "user node "A " fn ft "A"

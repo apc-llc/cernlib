@@ -1,0 +1,11 @@
+SRCS_F=	cmmla.F cmmls.F cmmlt.F cmmltc.F cmnma.F cmnms.F \ @@\
+	dmmla.F dmmls.F dmmlt.F dmnma.F dmnms.F \ @@\
+	rmmla.F rmmls.F rmmlt.F rmnma.F rmnms.F
+
+#if defined(CERNLIB_DECS) && ! defined(CERNLIB_QMVAOS)
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

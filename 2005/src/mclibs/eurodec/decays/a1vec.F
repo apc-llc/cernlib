@@ -1,0 +1,63 @@
+*
+* $Id: a1vec.F,v 1.1.1.1 1996/03/08 16:58:52 mclareni Exp $
+*
+* $Log: a1vec.F,v $
+* Revision 1.1.1.1  1996/03/08 16:58:52  mclareni
+* Eurodec
+*
+*
+#include "eurodec/pilot.h"
+      FUNCTION A1VEC(IP,INIT)
+C.----------------------------------------------------------------------
+C.
+C.    MATRIX ELEMENT FOR:
+C.    A1 ---> RHO + PI ---> PI PI PI                       (MATRIX = 6)
+C.    POLARIZATION IS ONLY TAKEN INTO ACCOUNT IN TAU ---> NEUTRINO A1
+C.    LAST UPDATE: 01/03/89
+C.
+C.----------------------------------------------------------------------
+#include "eurodec/result.inc"
+      SAVE NTP1,NTP2,NTP3,AM16
+      DATA NTP1,NTP2,NTP3,AM16/ 0, 0, 0, 0./
+C--
+C--   CALCULATE SOME QUANTITIES ONLY ONCE
+      IF (INIT.EQ.0) THEN
+        INIT=INIT+1
+C--
+C--   CHECK WHETHER PARENT OF DECAYING PARTICLE IS TAU
+        A1VEC=1.
+        IOR=ABS(IORIGT(IP))
+        IF (IOR.EQ.0) RETURN
+        JET=IOR/10000
+        IOR=IOR-10000*JET
+        IF (IOR.EQ.0) RETURN
+        IF (ABS(INDEXT(IOR)).EQ.95) THEN
+          NTP1=NTEIL+1
+          NTP2=NTEIL+2
+          NTP3=NTEIL+3
+          AM16=137.14/PTEIL(5,IP)**6
+        ELSE
+          RETURN
+        ENDIF
+      ENDIF
+C--
+C--   CALCULATE MATRIX ELEMENT FOR SPECIFIC A1 HELICITY
+      IF (ITHEL(IP).NE.0) THEN
+        QQ1X=PTEIL(2,NTP2)*PTEIL(3,NTP3)-PTEIL(3,NTP2)*PTEIL(2,NTP3)
+        QQ2X=PTEIL(2,NTP3)*PTEIL(3,NTP1)-PTEIL(3,NTP3)*PTEIL(2,NTP1)
+        QQ3X=PTEIL(2,NTP1)*PTEIL(3,NTP2)-PTEIL(3,NTP1)*PTEIL(2,NTP2)
+        QQ1Y=PTEIL(3,NTP2)*PTEIL(1,NTP3)-PTEIL(1,NTP2)*PTEIL(3,NTP3)
+        QQ2Y=PTEIL(3,NTP3)*PTEIL(1,NTP1)-PTEIL(1,NTP3)*PTEIL(3,NTP1)
+        QQ3Y=PTEIL(3,NTP1)*PTEIL(1,NTP2)-PTEIL(1,NTP1)*PTEIL(3,NTP2)
+        ARE=PTEIL(4,NTP1)*QQ1X+PTEIL(4,NTP2)*QQ2X+PTEIL(4,NTP3)*QQ3X
+        AIM=PTEIL(4,NTP1)*QQ1Y+PTEIL(4,NTP2)*QQ2Y+PTEIL(4,NTP3)*QQ3Y
+        A1VEC=(ARE**2+AIM**2)*AM16
+      ELSE
+        QQ1Z=PTEIL(1,NTP2)*PTEIL(2,NTP3)-PTEIL(2,NTP2)*PTEIL(1,NTP3)
+        QQ2Z=PTEIL(1,NTP3)*PTEIL(2,NTP1)-PTEIL(2,NTP3)*PTEIL(1,NTP1)
+        QQ3Z=PTEIL(1,NTP1)*PTEIL(2,NTP2)-PTEIL(2,NTP1)*PTEIL(1,NTP2)
+        D0 =-PTEIL(4,NTP1)*QQ1Z-PTEIL(4,NTP2)*QQ2Z-PTEIL(4,NTP3)*QQ3Z
+        A1VEC=D0**2*AM16
+      ENDIF
+      RETURN
+      END

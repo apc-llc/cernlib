@@ -1,0 +1,9 @@
+SRCS_F=	cdalia.F cddinf.F cdeali.F cdehlp.F cdenam.F cdgali.F \ @@\
+	cdgnam.F cdgpid.F cdhelp.F cdmdic.F cdname.F cdrali.F \ @@\
+	cdrdic.F cdrhlp.F cdrnam.F cdsnam.F cdudic.F
+
+#if !defined(CERNLIB_P3CHILD)
+SRCS_F := $(SRCS_F) cdcdic.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

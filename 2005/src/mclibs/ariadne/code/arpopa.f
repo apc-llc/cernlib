@@ -1,0 +1,2 @@
+      COMMON /ARPOPA/ TOTSIG,PPOW,CA(3),PB(3),CF(0:6),XA(0:6),NB(0:6)
+      SAVE /ARPOPA/ 

@@ -1,0 +1,26 @@
+*
+* $Id: w16movcd.F,v 1.1.1.1 1996/03/08 15:21:52 mclareni Exp $
+*
+* $Log: w16movcd.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:52  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_CDC)||defined(CERNLIB_UNIVAC)
+      SUBROUTINE W16MOV(SOURCE,N1,TARGET,N2,N3)
+C.+++++++ CDC AND UNIVAC VERSION ++++++++++
+C.  MOVES 16 BIT WORDS IN PACKED FORM.
+C.
+C. INPUT
+C. SOURCE     SOURCE ARRAY
+C. N1         STARTING 16 BIT WORD IN SOURCE
+C. TARGET     TARGET ARRAY
+C. N2         STARTING 16 BIT WORD IN TARGET
+C. N3         NO. OF 16 BIT WORDS TO MOVE
+C.
+      INTEGER SOURCE(2),TARGET(2)
+      CALL BTMVEP(SOURCE,16*(N1-1)+1,TARGET,16*(N2-1)+1,16*N3)
+      RETURN
+      END
+#endif

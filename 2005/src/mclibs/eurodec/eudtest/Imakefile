@@ -1,0 +1,14 @@
+SRCS_F= main.F steerd.F steerf.F testd.F testf.F
+
+DefinePackageLibrary(NullParameter)
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+CernlibFortranProgramTarget(eudtest,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+TestTarget(eudtest,eurodec.dat,eutitle.dat)
+
+CopyFile(eutitle.data,eutitle.dat)
+
+LinkFileFromDir($(TOP)$(PACKAGETOP),eurodec.dat)
+

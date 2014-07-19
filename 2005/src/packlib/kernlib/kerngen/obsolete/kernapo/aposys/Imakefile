@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 datime.F datimh.F floper.F getarg.F iargc.F intrac.F traceq.F
+
+SRCS_C= \ @@\
+	 signalf.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

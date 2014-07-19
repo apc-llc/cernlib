@@ -1,0 +1,15 @@
+*
+* $Id: v213.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v213.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.13  841125
+C            Protections in ZFCONV for the IBM VS compiler
+C            Protections in ZPTFOR for the SIEMENS compiler
+C            ZTRAP/ZJUMP implemented on APOLLO (A.Petrilli)
+C            ZNAMSR modified to use type CHARACTER for binary search
+C            New routine ZGFORM returning a bank format (see documentation)
+C

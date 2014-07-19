@@ -1,0 +1,14 @@
+*
+* $Id: cdabend.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdabend.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#
+# This is for HEPDB. Modify at will
+#
+echo HEPDB server $CDSERV abending | mail hepdb-mgr@zfatal.cern.ch
+#endif

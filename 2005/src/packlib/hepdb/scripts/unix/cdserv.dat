@@ -1,0 +1,48 @@
+*
+* $Id: cdserv.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdserv.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+#
+# Example CDSERV script.
+#
+#trap 'rm -f $new $old; exit 1' 1 2 15  #clean up
+t=`date`
+h=`hostname`
+echo
+echo CDSERV starting at $t on $h PID = $$
+echo
+echo $1 starting at $t on $h PID = $$ > /hepdb/${1}.log
+typeset -l cdpath
+cdpath=/hepdb/${1}
+#
+# Save old logfiles
+#
+if [ -f ${cdpath}/cdserv.log ]
+then
+   cat ${cdpath}/cdserv.log >> cdserv.oldlog
+   echo $1 starting at $t on $h PID = $$ >> cdserv.oldlog
+fi
+ 
+if [ -f ${cdpath}/log/hepdb.log ]
+then
+   cat ${cdpath}/log/hepdb.log >> ${cdpath}/log/hepdb.oldlog
+fi
+#
+# Now start server
+#
+${cdpath}/cdsrv
+#
+# Remove lock file
+#
+if [ -f  /hepdb/${1}.log ]
+then
+   rm -f  /hepdb/${1}.log
+fi
+ 
+#endif

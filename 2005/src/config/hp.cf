@@ -1,0 +1,177 @@
+/* $Id: hp.cf,v 1.13 2001/02/14 17:15:22 mclareni Exp $
+ *
+ * $Log: hp.cf,v $
+ * Revision 1.13  2001/02/14 17:15:22  mclareni
+ * CFIO needs the C compiler cc -Ae option for a Castor header file.
+ *
+ * Revision 1.12  1999/01/08 13:36:07  cernsoft
+ * add options +Z for PIC and +DA1.1 for portability
+ *
+ * Revision 1.11  1997/06/05 08:51:11  mclareni
+ * Old and new compilers seem to accept OptimisedFortranFlags +O2
+ *
+ * Revision 1.10  1997/04/18 06:49:14  mclareni
+ * New compiler needs OptimisedFortranFlags -O2, default -O is not Posix compliant
+ *
+ * Revision 1.9  1996/11/13 13:20:52  cernlib
+ * Add #define SharedLibraryExtension  .sl
+ *
+ * Revision 1.8  1996/05/01 11:54:43  gunter
+ * Introduce new way of building libraries.
+ * CVS:----------------------------------------------------------------------
+ *
+ * Revision 1.7  1996/03/08 17:12:11  cernlib
+ * *** empty log message ***
+ *
+ * Revision 1.6  1996/03/06 11:04:19  cernlib
+ * Imake.tmpl : Correct rule to run kuipc
+ * fortran.rules: echo makedepend
+ * site.def: undef MakeCmd before #define ( Sun has this defined to ..openwin...)
+ * *.cf : small mods
+ *
+ * Revision 1.5  1996/03/04 17:30:41  cernlib
+ * Parametrize Ansi C compiel options. other small mods
+ *
+ * Revision 1.4  1996/02/23  17:16:43  cernlib
+ * add provsions for X11/ Motfid include files.
+ * and some other small corrections
+ *
+ * Revision 1.3  1996/02/08  08:28:23  cernlib
+ * hp.cf:remove +ESlit from cc options
+ * imake.rules: new rules to get name of package lib ( incomplete )
+ * biglib.rules: add ranlib
+ *
+ * Revision 1.2  1995/12/21  11:32:20  cernlib
+ * Imake files end 1995
+ *
+ * Revision 1.1.1.1  1995/12/20  15:26:42  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: hp.cf,v 1.70 94/10/28 20:47:55 dpw Exp $
+
+#define OSName                 HP-UX 9.1
+XCOMM operating system:  OSName
+#define OSMajorVersion         9
+#define OSMinorVersion         1
+#define OSTeenyVersion         0
+
+
+/*
+ * C++ compiler setup.  This file knows what options to use with 
+ * certain compilers, including HP C++ and CenterLine C++.
+ * 
+ * For HP C++, define HasHPCplusplus to YES in site.def.  
+ * For CenterLine C++, define HasCenterLineCplusplus to YES in site.def.
+ * For other compilers, define HasCplusplus to YES in site.def, and 
+ *    check to see if you need to provide values for CplusplusOptions
+ *    and/or DefaultCplusplusOptions.
+ *
+ * In any case, you may also need to set CplusplusDependIncludes.
+ */
+
+#if HasHPCplusplus
+#ifndef HasCplusplus
+#define HasCplusplus YES
+#endif
+#ifndef DefaultCplusplusOptions
+#define DefaultCplusplusOptions -Aa
+#endif
+#ifndef CplusplusOptions
+#define CplusplusOptions -Aa
+#endif
+#ifndef CplusplusDependIncludes 
+#define CplusplusDependIncludes -I/usr/include/CC
+#endif
+#endif
+
+#if HasCenterLineCplusplus
+#ifndef HasCplusplus
+#define HasCplusplus YES
+#endif
+#ifndef OptimizedCplusplusDebugFlags
+#define OptimizedCplusplusDebugFlags -O
+#endif
+#ifndef CplusplusDependIncludes 
+#define CplusplusDependIncludes -I/usr/local/CenterLine/clc++/pa-hpux8/incl
+#endif
+#endif
+
+
+#define SystemV                YES
+#define Malloc0ReturnsNull     YES
+
+#ifdef __hp9000s800
+#define OptimizedCDebugFlags   +O1
+#define DefaultCCOptions       -Aa +ESlit
+#define SharedLibraryCCOptions -Aa
+#define StandardDefines        -Dhpux -DSYSV -D_HPUX_SOURCE
+#define ServerExtraDefines -DXOS -DBSTORE -DSOFTWARE_CURSOR -DNO_ALLOCA -DSCREEN_PIXMAPS -DMERGE_SAVE_UNDERS -DR5 -DHAS_IFREQ -DFORCE_SEPARATE_PRIVATE
+#include <hpLib.rules>
+#else
+#define StandardDefines        -Dhpux -DSYSV
+#if OSMajorVersion < 8
+#define DefaultCCOptions       -Wc,-Nd4000,-Ns4100,-Ne700,-Np200,-Nw300
+#define PexCCOptions           -Wp,-H150000 -Wc,-Nd4000,-Ns8100,-Ne700,-Np200
+#else
+#define OptimizedCDebugFlags   +O1
+#define PexCCOptions           -Wp,-H250000
+#endif
+#define PexShmIPC              NO
+#define LintOpts               -ax -Nd4000 -Ns8000 -Ne700 -Np200 -Na25000
+#endif
+#define MvCmd                  mv -f
+#define LdCombineFlags -r
+#define ExecableScripts        YES
+#define HasVFork               YES
+#define HasPoll                YES
+#define RemoveTargetProgramByMoving YES
+#define ExpandManNames         YES
+#define HasPutenv              YES
+#define HasNdbm		       YES
+#define DBMLibrary	       /usr/lib/libdbm.a
+#define PrimaryScreenResolution	91
+#define ExtensionOSDefines     -DHPINPUT -DXTESTEXT1
+#define XhpServer              YES
+#define ServerExtraSysLibs     -ldld
+#ifndef BuildXInputExt
+#define BuildXInputExt         YES
+#endif
+#define HPFastScrolling        YES
+#define BuildServer            __hp9000s700
+#define NeedBerklib            (BuildServer|BuildFontServer)
+#define XawI18nDefines	       -DHAS_WCHAR_H -DHAS_ISW_FUNCS
+
+#if OSMajorVersion < 6 || (OSMajorVersion == 6 && OSMinorVersion < 2)
+#define ConnectionFlags		-DTCPCONN	/* no unix sockets */
+#endif
+
+#if OSMajorVersion > 8
+#define HasWChar32             YES
+#endif
+
+/*  CERNlib modifications below */
+
+#undef DefaultCCOptions
+#define DefaultCCOptions       -Ae +Z +DA1.1
+
+#define FortranCmd             fort77
+/*                   +ppu to add trailing underscore; +B to treat \ as escape
+ *						      like all other Unixes do
+ */
+#define DefaultFCOptions       +ppu +B +Z +DA1.1
+#define OptimisedFortranFlags  +O2
+#define FortranSaveFlags       -K
+#define CernlibSystem	       -DCERNLIB_HPUX -DCERNLIB_UNIX
+#define CERNLIB_HPUX
+#define CERNLIB_UNIX
+
+#define CcAnsiMode		-Ae
+#define CcStrictAnsiMode	-Aa
+#define MotifIncludes		-I/usr/include/Motif1.2
+#define X11Includes		-I/usr/include/X11R5
+
+#define SedCmd			gsed	/* sed is broken, returns 0 even 
+					 * if cannot open input file     */
+#define SharedLibraryExtension  .sl

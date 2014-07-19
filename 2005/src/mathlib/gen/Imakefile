@@ -1,0 +1,21 @@
+
+DoIncludePackage(gen)
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+LIBDIRS= a b c d divon e f g h j m n s u v x
+
+SUBDIRS= $(LIBDIRS) gen tests
+
+TopOfPackage(gen)
+
+SubdirLibraryTarget(gen,$(LIBDIRS))
+
+TestSubdirs(tests)
+
+InstallIncludeSubdirs(gen)

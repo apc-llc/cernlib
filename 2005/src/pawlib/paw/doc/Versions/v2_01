@@ -1,0 +1,26 @@
+*
+* $Id: v2_01,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_01,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :          29/04/93  08.23.38  by  Rene Brun
+*-- Author :    Rene Brun   26/02/93
+*
+*::>          VERSION  2.01/01   930305 14.57
+*
+*      Bug fixes in PAFITH, PAFITV and PAMASK (CALL CLTOU).
+*      Fixed the 25+ bugs reported by Rick Jones concerning Paw++.
+*      Added extensive help on Paw++ user definable resources.
+*      Added Paw++ About box (accessable via Kxterm).
+*
+*::>          VERSION  2.01/00   930226  8.53
+*
+*      Implement calls to KUGETF instead of KUGETC to take into account
+*      the new KUIP command FILECASE.
+*      Implement option 'D' in Histo/File
+*      Change Histo/Scratch to Histo/Hscratch in CDF.
+*      Bug fixed in PAWSEL for Graphical cuts
+*      NeXT version available (Bernardino Ferreira).

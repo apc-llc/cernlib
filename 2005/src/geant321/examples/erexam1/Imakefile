@@ -1,0 +1,3 @@
+SRCS_F=	 ertest.F gukine.F gustep.F main.F ugeom.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

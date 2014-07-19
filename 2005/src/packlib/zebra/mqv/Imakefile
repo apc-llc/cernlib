@@ -1,0 +1,4 @@
+SRCS_F=	 zvauto.F zvautu.F zvautx.F zvauty.F zvdo1.F zvdo2.F \ @@\
+	zvdobk.F zvdola.F zverif.F zvfpri.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

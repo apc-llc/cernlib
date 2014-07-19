@@ -1,0 +1,32 @@
+*
+* $Id: v1_13,v 1.1.1.1 1996/02/26 17:16:37 mclareni Exp $
+*
+* $Log: v1_13,v $
+* Revision 1.1.1.1  1996/02/26 17:16:37  mclareni
+* Comis
+*
+*
+*CMZ :  1.13/03 15/07/92  09.36.36  by  Rene Brun
+*-- Author :    Rene Brun   06/04/92
+*
+*::>          VERSION  1.13/03   920715  9.36
+*
+*     Size of common/MDPOOL/ increased from 25000 words to 50000.
+*     This change requested by W.Koellner.
+*
+*
+*::>          VERSION  1.13/02   920629 14.20
+*
+*     MSDOS version introduced (V.Fine)
+*
+*
+*::>          VERSION  1.13/01   920613 15.57
+*
+*     Flag SUN corrected in CSKCAL
+*
+*
+*::>          VERSION  1.13/00   920406  8.44
+*
+*     Changes in Pilot patch for CRAY (QXCAPT added)
+*     QXCAPT flag added in CASCALI,CSCALR and CSCALD (M.Marquina)
+*

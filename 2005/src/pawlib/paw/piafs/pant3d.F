@@ -1,0 +1,41 @@
+*
+* $Id: pant3d.F,v 1.1.1.1 1996/03/01 11:39:26 mclareni Exp $
+*
+* $Log: pant3d.F,v $
+* Revision 1.1.1.1  1996/03/01 11:39:26  mclareni
+* Paw
+*
+*
+#include "paw/pilot.h"
+*CMZ :  2.04/00 25/10/93  12.51.16  by  Rene Brun
+*-- Author :    Alfred Nathaniel   02/05/93
+      SUBROUTINE PANT3D(XLO,XHI,YLO,YUP,ZLO,ZHI,TLO,THI
+     +,                 CHXVAR,CHYVAR,CHZVAR,CHOPT)
+      CHARACTER*(*) CHXVAR,CHYVAR,CHZVAR,CHOPT
+#include "paw/gplotst.inc"
+
+      CHARACTER*80 CHTITL,CHTVAR,CHMAIL
+
+      CHTITL=' '
+      CHTVAR=' '
+      CHMAIL='PANT3D'//CHOPT
+      CALL CZPUTA(CHMAIL,ISTAT)
+      CALL CZPUTA(CHTITL,ISTAT)
+      WRITE(CHMAIL,'(4E16.8)') XLO,XHI,YLO,YUP
+      CALL CZPUTA(CHMAIL,ISTAT)
+      WRITE(CHMAIL,'(4E16.8)') ZLO,ZHI,TLO,THI
+      CALL CZPUTA(CHMAIL,ISTAT)
+      CALL CZPUTA(CHXVAR,ISTAT)
+      CALL CZPUTA(CHYVAR,ISTAT)
+      CALL CZPUTA(CHZVAR,ISTAT)
+      CALL CZPUTA(CHTVAR,ISTAT)
+*
+* receive /GPLOTST/
+*
+      CALL CZGETA(CHMAIL,ISTAT)
+      READ(CHMAIL,'(4E16.8,I12)') (RMINP(I),I=1,4),ISTCNT
+      CALL CZGETA(CHMAIL,ISTAT)
+      READ(CHMAIL,'(4E16.8,I12)') (RMAXP(I),I=1,4),INEW
+      NEW=INEW.NE.0
+
+      END

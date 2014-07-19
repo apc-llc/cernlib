@@ -1,0 +1,223 @@
+/*
+ *  This file defines:
+ *
+ *  - FortranCmd
+ *  - FortranFlags
+ *  - FortranDebugFlags
+ *  - Fsuf
+ *  - FsufF  
+ *  - FortranTargetName(fortranname)
+ *  - FortranTargetNameSuffix(fortranname,suffix)
+ *  - FortranDoesCpp
+ *  - FortranLinkRule(program,options,objects,libraries) 
+ *  - NormalFortranProgramTarget(program,objects,deplibs,locallibs,syslibs)
+ *  - SimpleFortranProgramTarget(program)
+ *  - ComplexFortranProgramTarget(program)
+ *  - MakeFortranSource(src,dst)
+ *  - ObjectFortranCompile(options)
+ *  - SetLibraryTargetDir(dirs,libname)
+ *  - CreateNormalLibrary(libname,objs)
+ *  - 
+ *  - 
+ *  - 
+ *  - 
+ *  - 
+ * ==========
+ *  #include <fortran.rules> 
+ */
+
+/*
+ * Concat - concatenates two strings.
+ */
+#ifndef Concat
+#if (__STDC__ && !defined(UnixCpp)) || defined(AnsiCpp)
+#define Concat(a,b)a##b
+#else
+#define Concat(a,b)a/**/b
+#endif
+#endif
+
+#ifdef _DF90_
+# define FortranCmd f77
+# elif _IRC_
+# define FortranCmd ifl
+# else
+# define FortranCmd fl32
+#endif
+
+#define CernlibFCDefines        CpuDefines 
+
+# define FortranFlags $(FFLAGS)
+/*
+ *# define FortranDebugFlags $(fdebugflags)
+ */
+
+lib = lib
+/*
+ *  Define a suffix for the Fortran compiler
+ */
+#ifndef Fsuf
+#define Fsuf F
+#endif
+
+#ifdef fsuf 
+# undef fsuf
+#endif 
+
+#define FsufF for
+#define fsuf FsufF
+
+#define FortranTargetName(fortranname)fortranname.FsufF
+
+#define FortranTargetNameSuffix(fortranname,suffix)Concat(fortranname,suffix.FsufF)
+
+#define FortranDoesCpp NO
+
+#ifdef LibObjCompile
+# undef LibObjCompile
+#endif
+
+#ifndef LibObjCompile
+#define LibObjCompile(dir,options) RemoveFile($@)                       @@\
+        $(CC) -c options $(CCOPTIONS) $(ALLDEFINES) Win32Path(Concat(-Fo,$@)) Win32Path($<)
+/*      $(CC) -c options $(CCOPTIONS) $(ALLDEFINES) Win32Path(Concat(-Fo,$@)) Win32Path(Concat(-Fd,$(TOP)$(PACKAGETOP)$(PACKAGE_NAME))) Win32Path($<) */
+#endif
+
+/*
+ *  create a list of dependency libraries for libraries from cernlib
+ *
+ */
+#ifndef CernlibDependLibrary
+#define CernlibDependLibrary(cernlibs) /* void */
+#endif
+
+/* Helper top use cernlb command
+ */
+#ifndef CernlibCmd
+#define CernlibCmd(libraries)libraries
+#endif
+
+#ifndef CernlibFortranLinkRule
+#define CernlibFortranLinkRule(pgm,ldoptions,objs,libs,cernlibs)\
+        @cernlib cernlibs                                               @@\
+        FortranLinkRule(pgm,ldoptions,objs,libs @cernlib)
+#endif
+
+
+
+#define FortranLinkRule(program,options,objects,libraries) \
+        $(FCLINK) Win32Path(Concat(-Fe,program)) options Win32Path(SetWin32ObjSuffix(objects)) Win32Path(libraries) $(FC_EXTRA_LOAD_FLAGS)
+
+#define NormalFortranProgramTarget(program,objects,deplibs,locallibs,syslibs)\  @@\
+XVARdef0 = objects                                                      @@\
+                                                                        @@\
+ProgramTargetName(program): SetWin32ObjSuffix($(XVARuse0)) deplibs      @@\
+        RemoveTargetProgram($@)                                         @@\
+        FortranLinkRule($@,$(FCLDOPTIONS),SetWin32ObjSuffix($(XVARuse0)),locallibs syslibs) @@\
+                                                                        @@\
+clean::                                                                 @@\
+        RemoveFile(ProgramTargetName(program))
+
+/*      FortranLinkRule($@,$(FCLDOPTIONS),$(XVARuse0:.o=.obj),locallibs $(LDLIBS) syslibs) */
+/* NormalFortranProgramTarget */
+
+#ifdef MS_NMAKE
+#define SimpleFortranProgramTarget(program)                             @@\
+OBJS = program.Osuf                                                     @@\
+SRCS = program.Fsuf                                                     @@\
+                                                                        @@\
+ComplexFortranProgramTarget(program)
+#endif
+/* SimpleFortranProgramTarget */
+
+
+#ifdef MS_NMAKE
+#define ComplexFortranProgramTarget(program)                            @@\
+PROGRAM = ProgramTargetName(program)                                    @@\
+                                                                        @@\
+AllTarget(ProgramTargetName(program))                                   @@\
+                                                                        @@\
+FortranProgramTargetHelper(program,SRCS,OBJS,DEPLIBS,$(LOCAL_LIBRARIES),NullParameter) @@\
+                                                                        @@\
+DependTarget()                                                          @@\
+                                                                        @@\
+clean::                                                                 @@\
+        RemoveFile($(PROGRAM))
+#endif /* MS_NMAKE */
+
+/*
+ * MakeFortranSource(src,dst) - apply either Cpp or a simple copy 
+ *                              command to create a "real" Fortran file
+ *                              when "native" Fortran has a lack of CPP features
+ *                              and/or treats another file-extension.
+ */
+#ifndef MakeFortranSource                                               
+#if     !FortranDoesCpp
+#define MakeFortranSource(src,dst) RemoveFiles(dst)                     @@\
+        $(FPP) $(FORTRANALLDEFINES) Win32Path(Concat(-Tc,src))  >Win32Path(dst)                         
+#endif
+#endif
+
+
+/* -------------- Start of the rule RunFortranCompile ----------------- */
+#define RunFortranCompile(options,source)\
+        $(FC) -c options Win32Path(Concat(-Fo,$@)) Win32Path(Concat(-Tf,source))
+
+/*  It is old rule to compile with PDB  */ 
+/*      $(FC) -c options Win32Path(Concat(-Fo,$@)) Win32Path(Concat(-Tf,source)) \ @@\ */
+/*                Win32Path(Concat(-Fd,$(TOP)$(PACKAGETOP)$(PACKAGE_NAME))) */
+
+/* -------------- End of the rule RunFortranCompile ----------------- */
+
+#define NormalFortranObjectRule() CppFortranObjectRule()
+
+#define SetLibraryTargetDir(dirs,libname)                               @@\
+dirs::                                                                  @@\
+                                                                        @@\
+library:: dirs                                                          @@\
+        !$(MAKE) $(MFLAG)  LIBRARY_NAME=libname library -f Concat3($**,\,Makefile)      @@\
+
+#define CreateNormalLibrary(libname,objs)                               @@\
+XVARdef0 = objs                                                         @@\
+                                                                        @@\
+LibraryTargetName(libname):: /* Here is empty rules to keep the "make" happy */ @@\
+                                                                        @@\
+library:: SetWin32ObjSuffix($(XVARuse0)                                 @@\
+        MakeLibrary(LibraryTargetName(libname),$**)                     @@\
+                                                                        @@\
+clean::                                                                 @@\
+        RemoveFile(LibraryTargetName(libname))
+
+#define MakeDepend(dir,flags)\
+        if not exist Win32Path(dir)\NUL mkdir Win32Path(dir)            @@\
+        @echo.> $@                                                      @@\
+         $(DEPEND) -f$@ -M -p dir/ -- flags $<                          
+
+
+/*
+ * CernlibCcProgramTarget - rule to link program using
+ *   cernlib utility to find give all required libraries ( ie. no extra
+ *   syslibs needed.
+ */
+#ifndef CernlibCcProgramTarget
+#define CernlibCcProgramTarget(program,objects,deplibs,locallibs,cernlibs)\
+Concat(program,_deplibs)=@cernlib                                       @@\
+                                                                        @@\
+ProgramTargetName(program): objects deplibs $(Concat(program,_deplibs)) @@\
+        RemoveTargetProgram($@)                                         @@\
+        @echo "Linking with cern libraries"                             @@\
+        @cernlib cernlibs                                               @@\
+        CernlibLinkRule($@,$(LDOPTIONS),objects,locallibs $(LDLIBS),cernlib cernlibs) @@\
+                                                                        @@\
+clean::                                                                 @@\
+        RemoveFile(ProgramTargetName(program))                          @@\
+
+#endif /*CernlibCcProgramTarget */
+
+
+#include <fortran.rules> 
+
+
+
+
+

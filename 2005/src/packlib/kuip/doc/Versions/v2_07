@@ -1,0 +1,103 @@
+*
+* $Id: v2_07,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_07,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.07/08 24/01/96  17.26.56  by  Gunter Folger
+*-- Author :    Gunter Folger   06/03/95
+*
+*::>          VERSION  2.07/08   24/01/96 17.26.56
+*
+*
+* 21/11/95  17.23.46
+*
+*
+* 21/11/95  11.26.07
+*
+* NC. Change in KMENU (CKUIP) :
+*     1) in command mode, in HELP, put a "*" before real commands
+*        (not sub-menus).
+*     2) bug correction for VMS ("HELP", and "HELP NULL").
+*
+* 06/11/95  16.42.31
+*
+* NC. Change in mkdpan (CMOTIF) : bug correction for panel, e.g.:
+*     panel 0
+*     panel 1.01 'vec/pri-' 'print vector'
+*     panel 1.02 'vec/pri-' 'print -'
+*     panel 1.03 'vec/pri-'
+*     panel 0 d
+*
+* 22/06/95  14.53.05
+*
+*  NC. Change in KUXLISHLP iand $MKUXLIHLP (code generated from Architect)
+*  in order to avoid problem with "km_listSBox" (previously it was
+*  defined "extern" in 2 different include files).
+*
+*::>          VERSION  2.07/07   22/06/95 14.51.58
+*
+*
+* 16/06/95  16.09.58
+*
+*  GF. Protect for a NULL pointer in kmenu/interactive_find
+*
+*::>          VERSION  2.07/06   14/06/95 15.33.42
+*
+*  GF. Change definition/declaration of cdf_text, cdf_value
+*
+*::>          VERSION  2.07/05   12/06/95 17.52.08
+*
+*
+* 12/06/95  17.32.31
+*  GF. fixed problem with recursive vaiable assignment in
+*       kalias/*subst_var_alias
+*
+*
+*::>          VERSION  2.07/04   23/05/95 15.34.19
+*
+*  NC. Change logic for "new help machanism" (KMENU):
+*  For "HELP xxx" : if xxx is a valid command name and command is unique,
+*  then  print help as before (do not look for keywords "xxx" but add
+*  a "See also" message at the end for other commands with that keyword).
+*  In that case to have all commands (valid command name + keyword)
+*  do "HELP xxx -K(EYWORD)". if xxx is a valid command name but not
+*  unique do the same as "HELP xxx -K(EYWORD)" (print all commands,
+*  valid + keyword).
+*
+*  GF. Fixed problem with mod(); kmath_y affected.
+*      added ku_qcas() identicalto its fortran version
+*
+*::>          VERSION  2.07/03   09/05/95 17.27.59
+*
+*  GF. -fix several problems in kuvec
+*      -add check for trailing blanks to fill_arg_list (kexec); this avoids
+*         problems when an alias with trailing blanks is at the end of cmd.
+*      -make kxmexec aware of filecase setting in unix ( \ msdos).
+*
+*  NC.  Correction in "new" HELP for option EDIT/NOEDIT.
+*  Suppress all reference to /KUIP/CHELP and replace them by
+*  /KUIP/HELP.
+*
+*  NC. Put a more explicit message in "check_version" when the CDF
+*  has to be re-compiled (indicating which CDF causes the problem).
+*
+*::>          VERSION  2.07/02   03/04/95 14.28.00
+*
+*  NC. bug correction for popup menus in the graphics window with sub-menus
+*  (mkdgra).
+*
+*
+*::>          VERSION  2.07/01   07/03/95 15.53.53
+*
+*  NC. change resource "centerCommand" to an integer value (before it was
+*  a boolean) : 0 (False) means "normal" (cursor position), 1 (True)
+*  means "center" and -1 (new) means position (0,0).
+*
+*::>          VERSION  2.07/00   06/03/95 12.08.12
+*
+*  NC. New find comand. Is actually descibed in 2.06/08.
+
+

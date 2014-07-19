@@ -1,0 +1,15 @@
+*
+* $Id: v1_12,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v1_12,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :          03/03/92  14.15.24  by  O.Couet
+*-- Author :    Rene Brun   02/09/91
+*
+*::>          VERSION  1.12/00   910902 11.17
+*
+*       Changes in PAFITH to add option E in fit commands
+*

@@ -1,0 +1,19 @@
+*
+* $Id: data1.dat,v 1.1.1.1 1996/03/06 15:36:26 mclareni Exp $
+*
+* $Log: data1.dat,v $
+* Revision 1.1.1.1  1996/03/06 15:36:26  mclareni
+* Add geane321 examples
+*
+*
+LIST
+C    GET  'INIT'
+TRIG  10
+KINE  5 (type)  20. (momentum)   90. (teta)   0. (phi)
+DEBUG 1  1
+SWIT  0  1  3
+CUTS  5*0.00010   5*10000.
+LOSS  4
+MULS  0
+TIME  2=3.
+END

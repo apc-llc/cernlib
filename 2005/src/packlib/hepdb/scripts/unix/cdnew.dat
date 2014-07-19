@@ -1,0 +1,79 @@
+*
+* $Id: cdnew.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdnew.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#
+# Setup the directory and file structure for a new
+# server
+#
+iam=`whoami`
+#
+# Are we root?
+#
+if [ "$iam" != "root" ]
+then
+   echo $0: This script must be run from root
+   exit
+fi
+#
+# Did we get any arguments?
+#
+if [ $# != 1 ]
+then
+   echo $0: usage $0 group
+   exit
+fi
+#
+# Does this directory exist?
+#
+if [ -d /hepdb/$1 ]
+then
+   echo $0: Directory /hepdb/$1 already exists
+   exit
+fi
+#
+# No, so make it
+#
+mkdir /hepdb/$1
+#
+# and the subdirectories...
+#
+mkdir /hepdb/$1/bad
+mkdir /hepdb/$1/log
+mkdir /hepdb/$1/queue
+chmod o+w /hepdb/$1/queue
+mkdir /hepdb/$1/todo
+mkdir /hepdb/$1/save
+ls -F /hepdb/$1
+#
+# now create the names file
+#
+echo :nick.config > /hepdb/$1/hepdb.names
+echo :list.aa     >> /hepdb/$1/hepdb.names
+echo :log./hepdb/$1/log >> /hepdb/$1/hepdb.names
+echo :queue./hepdb/$1/queue >> /hepdb/$1/hepdb.names
+echo :todo./hepdb/$1/todo >> /hepdb/$1/hepdb.names
+echo :save./hepdb/$1/save >> /hepdb/$1/hepdb.names
+echo :bad./hepdb/$1/bad >> /hepdb/$1/hepdb.names
+echo :loglevel.3 >> /hepdb/$1/hepdb.names
+echo :wakeup.60 >> /hepdb/$1/hepdb.names
+echo :nick.aa >> /hepdb/$1/hepdb.names
+echo :file./hepdb/$1/aa.dbs >> /hepdb/$1/hepdb.names
+echo :desc.Description of the database >> /hepdb/$1/hepdb.names
+echo :servers. >> /hepdb/$1/hepdb.names
+cat /hepdb/$1/hepdb.names
+#
+# Link the server script
+#
+ln -s /cern/new/bin/cdserv.sh /hepdb/$1/cdserv
+#
+# and the server module
+#
+ln -s /cern/new/bin/cdserv /hepdb/$1/cdsrv
+ 
+#endif

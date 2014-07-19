@@ -1,0 +1,17 @@
+*
+* $Id: v308.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v308.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.08  920722  2.20
+C-  Introduce MSDOS,IPSC flags
+C
+C-  New patches/flags:
+C   > NUMMS1C
+C
+C-  Corrections:
+C   > P=NUMCHK0  ,D=CHECK    : CRAY floating point numbers were too big
+C

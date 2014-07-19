@@ -1,0 +1,133 @@
+*
+* $Id: table.doc,v 1.1.1.1 1996/01/11 14:14:59 mclareni Exp $
+*
+* $Log: table.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:14:59  mclareni
+* Cojets
+*
+*
+[16] PARTICLE AND DECAY TABLE, IDENT CODES FOR PARTICLES
+
+      COJETS uses an external table for particles and decay modes. It is
+contained in PATCH COJTABLE. (Differently from ISAJET where particle data
+are specified internally in the program.). Its content has been taken
+from ISAJET 6.00.
+
+      The particle table should not be altered, apart from mass values and
+particle LABELs. Mass values of Z and W bosons and hadrons left blank or
+zero are set internally: i) Z and W masses to their Weinberg-Salam values,
+depending on sin(THw), with the W mass corrected by a 1/sqrt(.9304) factor
+(Marciano and Sirlin), ii) hadron masses to the sum of their quark masses
+corrected by  a term (-.03+.04*JSPIN), with JSPIN=0/1 for pseudoscalar/vector
+mesons and spin (1/2)/(3/2) baryons.
+
+      The IDENT particle code of ISAJET is used. Quarks and leptons are
+numbered in order of mass:
+         UP     = 1             NUE    = 11
+         DN     = 2             E-     = 12
+         ST     = 3             NUM    = 13
+         CH     = 4             MU-    = 14
+         BT     = 5             NUT    = 15
+         TP     = 6             TAU-   = 16
+with a negative sign for antiparticles. Arbitrary conventions are:
+         GL     = 9
+         GM     = 10
+         KS     = 20
+         KL     =-20
+         W+     = 80
+         Z0     = 90
+The code for a meson is a compound integer +-JKL, where J.LE.K are the
+quarks and L is the spin. The sign is for the J quark. Flavor singlet
+mesons are ordered by mass,
+         PI0    = 110
+         ETA    = 220
+         ETAP   = 330
+         ETAC   = 440
+Similarly, the code for a baryon is a compound integer +-IJKL formed from
+the three quarks I,J,K and a spin LABEL L=0,1. The code for a diquark is
++-IJ00
+
+      The complete list of ident codes is in PATCH COJTABLE.
+
+      Internal particle id's, used within the program (for efficient data
+packing) or optionally by the user with IOCON, are listed in the
+particle-decay table printed by the program.
+
+      The decay table can be arranged with decay particles put into the
+table in arbitrary order, but all modes for each particle  must be grouped
+together. The table is rewound and read in before each  run with a READ*
+format. Each entry must have the form
+
+IDENT,ITYPE,CBR,ID1,ID2,ID3,ID4,ID5/
+
+where IDENT is the code for the parent particle, ITYPE specifies the
+type of decay (it is never used in the program),
+      ITYPE=1 for strong,
+      ITYPE=2 for electromagnetic,
+      ITYPE=3 for weak,
+CBR is the cumulative branching ratio, and ID1,...,ID5 are the IDENT
+codes for the decay products. The parent IDENT must be positive; the
+charge conjugate mode is used for the antiparticle. The values of CBR
+must of course be positive and monotonically increasing for each mode,
+with the last value being 1.00 for each parent IDENT. The last parent
+IDENT code must be zero. Care should be taken in adding new modes,
+since there is no checking for validity.
+
+      The order of decay secondaries is irrelevant, if the decay distribution
+is determined by pure phase-space. Otherwise order may be important.
+
+      For decays governed by V-A matrix elements, secondaries originated by
+the decay of the virtual W should appear first. They are internally reordered
+so that the V-A matrix element is entered properly. The final order can be
+checked by having the particle-decay table printed by the program. The V-A
+matrix element is taken as (PP,P2)*(P1,P3) , where PP is the 4-momentum of the
+parent, P1, P2, P3 are the 4-momenta of the three ordered secondaries, and
+( , ) denotes the scalar product.
+
+      The number of quarks/diquarks in a particle decay must comply with the
+model treatment of such decay modes. For decays of particles WITHOUT TOP, a
+decay model can be optionally used which recombines a quark with an
+antiquark or a diquark, thus the number of quarks must be equal to the number
+of antiquarks and diquarks, for a maximum number of 2 quarks. For decays of
+particles WITH TOP, a jet development model is used, with formation of a
+Breit-Wigner shaped virtual W as an intermediate step. In this case, the total
+number of secondaries must be three. The first two represent the lepton pair
+or the quark-antiquark pair originated by the virtual W, and the last one is
+an antiquark or a diquark, for meson and baryon decays, respectively.
+
+      Examples of decay table entries with quark/diquark secondaries for
+particles without top:
+
+1)    SB --> E+ + NUE + st + cb
+
+in the table should be set as
+
+      350,   3,   (cbr),   -12,   11,   3,   -4,   0/
+
+2)    SB --> up + db + st + cb
+
+in the table should be set as
+
+      350,   3,   (cbr),     1,   -2,   3,   -4,   0/
+
+3)    DUB --> E- + ANUE + dn-up + ch
+
+in the table should be set as
+
+      2150,   3,   (cbr),   12,   -11,   1200,   4,   0/
+
+4)    DUB --> dn + ub + dn-up + ch
+
+in the table should be set as
+
+      2150,   3,   (cbr),    2,    -1,   1200,   4,   0/
+
+      A bug present in the ISAJET 6.00 table has been eliminated: top baryons
+coded 3160 and 3260, which were left undecayed, are assigned decay modes
+similar to those of other top baryons. For semileptonic decays, the relative
+order of the two leptons in the table does not satisfy any fixed criterion.
+That led to several errors when applying the V-A matrix element in ISAJET
+5.00, which have been corrected by inserting program modifications in ISAJET
+6.00. We have preferred to leave the decay table in its original form, and
+to cope with the vagaries of the lepton pair order in the program, as
+indicated above.

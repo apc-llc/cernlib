@@ -1,0 +1,132 @@
+/*
+ *   rules to build a library from objects in subdirs 
+ *   VF  180897  ArchiveLibraryBuild has been introduced
+ *   VF  180897  SubdirLibraryBuild2 has been removed
+ *   GF. 180895
+ *   VF. 111195  for Windows NT 3.51
+ *   VF. 200596  for Windows NT 3.51
+ *
+ * use this rules with:
+ * Imakefile:
+ *  SubdirLibraryTarget(libname,subdirlist)
+ *  where:   libname:	  name of library to make
+ *  	     subdirlist:  list of subdirectories to take $(OBJS) files from
+ * 
+ * and invoke make with : 
+ *   make library 
+ * to get library libname up to date.
+ *
+ *  At the moment ONLY one library per Imakefile/Makefile is allowed.
+ * 
+ *
+ *  make library does:
+ *   1) in rule library:
+ *      through dependency make shure that libhelp rules is always
+ *      followed
+ *      when this is back, relaunch make to check if the actual LIBRARY
+ *      needs to be rebuild; this cannot be done in the original make,
+ *      as checking of stamps is done before the rules are followed,
+ *      ie. the library would always be recreated, as we have to follow
+ *	the subdirectory rules always. 
+ *   2) in rule libhelp:
+ *	intermediate thing to allow submake to start at this place
+ *   3) in rule LOCALSTAMP:
+ *	check if local $(OBJS) need recompilation (implicit)
+ *	if any object was changed, remove $(STAMP) and 
+ *	touch local stamp "LOCALSTAMP".
+ *      side effect if there are no objects: create local stamp LOCALSTAMP
+ *	
+ *   4)	in rule SUBDIRSTAMP:
+ *      visit all sub directories and start at 2). $(STAMP) is set to 
+ *      "directory/SUBDIRSTAMP" to allow the submake to commucate any
+ *	changes back.
+ *      if stamp SUBDIRSTAMP was deleted by any of the sub-makes,
+ *	remove the $(STAMP), ie, communicate changes back up, and 
+ *	touch SUBDIRSTAMP. Note that at the top level
+ *      $(STAMP)=LOCALSTAMP, ie. any change in a subdirectory cause
+ *	this fiel to disappear, and in turn the $(LIBRARY) to be
+ *      recreated through rule 1) and 5)
+ *   5) rule $(LIBRARY)
+ *      receate $(LIBRARY) when LOCALSTAMP is newer from objects in
+ *      subdirs. This may run LOCALSTAMP rule again to create
+ *      LOCALSTAMP, if this was deleted.
+ *           
+ */
+
+/* --------------------------------------------------------------------- */
+
+#define ArchiveLibraryBuild(libname,version)				@@\
+LibraryTargetName(libname): version/objects.list			@@\
+	@echo rebuild version library $@ in $(CURRENT_DIR)		@@\
+	RemoveFile($@)							@@\
+	MakeLibrary($@,$(indirectfile)$(VERDIR)objects.list)	
+
+/* --------------------------------------------------------------------- */
+
+#define SubdirLibraryObjects2old(dirs)					@@\
+ifeq ($(MAKEOBJECTLIST),1)						@@\
+$(VERDIR)objects.list:: $(basename $($(VEROBJS)))			@@\
+									@@\
+$(basename $($(VEROBJS))):: ;	 @if NOT Quote($@) == "" echo $(addsuffix .Osuf, Win32Path($@)) >> Win32Path( $(VERDIR)objects.list)	@@\
+else									@@\
+									@@\
+$(VERDIR)objects.list:: $(foreach dir,dirs,$(dir)/Makefile)		@@\
+									@@\
+$(VERDIR)objects.list::	$($(VEROBJS)) Makefile \			@@\
+			           $(foreach dir,dirs,$(dir)/$(VERDIR)objects.list) @@\
+	@if NOT "$(VERSION)" == "" if NOT EXIST $(VERSION)\NUL  mkdir $(VERSION)	@@\
+ 	RemoveFile($@)							@@\
+	$(MAKE) MAKEOBJECTLIST=1 VERSION=$(VERSION) $(VERDIR)objects.list @@\
+        if NOT Quote($(firstword dirs)) == ""		\		@@\
+	 for %d in ( Win32Path(dirs) ) do 	\			@@\
+	    ( pushd %d &  			\			@@\
+	       SedCmd -e "\=^[^\\]=s=^.=%d\\&=" $@ >> Win32Path( ../$@ ) &  \ @@\
+	    popd)							@@\
+									@@\
+$(foreach dir,dirs,$(dir)/$(VERDIR)objects.list)::			@@\
+	@ echo checking $(CURRENT_DIR)/FirstDir($@)			@@\
+	@ $(MAKE) -C FirstDir($@) VERSION=$(VERSION)	\		@@\
+		   $(VERDIR)objects.list				@@\
+endif
+
+/* --------------------------------------------------------------------- */
+
+#define SubdirLibraryObjects2(dirs)					@@\
+$(foreach ver,Libversions,$(ver)/objects.list):: \			@@\
+		$(foreach dir,dirs,$(dir)/Makefile)			@@\
+									@@\
+define build-object-list						@@\
+if NOT Quote($(@D))=="" if NOT EXIST Win32Path($(@D))NUL mkdir Win32Path($(patsubst %/,%,$(@D)))    	@@\
+@RemoveFile($@)								@@\
+if NOT $(QUOTE)$(strip $(word 1,$($(patsubst %/,%,$(@D))_OBJS)))$(QUOTE) == "" \       @@\
+for %f in (Win32Path($($(patsubst %/,%,$(@D))_OBJS))) do echo %f >> Win32Path($@)  	@@\
+@if NOT $(QUOTE)$(strip $(firstword dirs))$(QUOTE) == ""        		      \		@@\
+      for %d in ( Win32Path(dirs) ) do                        \        	@@\
+       ( pushd %d & 				              \		@@\
+         SedCmd -e "\=^[^\\]=s=^.=%d\\&=" Win32Path($@) >> Win32Path( ../$@ ) & \ 	@@\
+         popd )                                                       	@@\
+endef									@@\
+									@@\
+ifeq ($(strip $(VERSION)),archive)					@@\
+archive/objects.list:: Makefile $(archive_OBJS) \			@@\
+		$(foreach dir,dirs,$(dir)/archive/objects.list)		@@\
+	$(build-object-list)						@@\
+									@@\
+else									@@\
+archive/objects.list::							@@\
+	$(MAKE) VERSION=archive archive/objects.list			@@\
+									@@\
+endif									@@\
+debug/objects.list:: Makefile $(debug_OBJS) \				@@\
+		$(foreach dir,dirs,$(dir)/debug/objects.list) 		@@\
+	$(build-object-list)						@@\
+									@@\
+shared/objects.list:: Makefile $(shared_OBJS) \				@@\
+		$(foreach dir,dirs,$(dir)/shared/objects.list) 		@@\
+	$(build-object-list)						@@\
+									@@\
+$(foreach dir,dirs,$(foreach ver,Libversions,$(dir)/$(ver)/objects.list))::@@\
+	@ echo checking $(CURRENT_DIR)/FirstDir($@)			@@\
+	@ $(MAKE) -C FirstDir($@) VERSION=$(filter Libversions,$(subst /, ,$@))	\		@@\
+		   $(patsubst FirstDir($@)/%,%,$@)
+

@@ -1,0 +1,29 @@
+SRCS_F=	cdacl.F cdaclc.F cdalarm.F cdbfor.F cdcdir.F cdchar.F \ @@\
+	cdcoun.F cddtrn.F cdend.F cdfixf.F cdflun.F cdglun.F \ @@\
+	cdhost.F cdinct.F cdinfo.F cdinic.F cdlast.F cdldir.F \ @@\
+	cdlist.F cdlkey.F cdlls.F cdlmod.F cdlogl.F cdls.F cdlupp.F \ @@\
+	cdlupu.F cdmovf.F cdmtch.F cdnwrd.F cdobjx.F cdopnf.F cdoptc.F \ @@\
+	cdpaff.F cdpktm.F cdpkts.F cdpref.F cdrand.F cdscan.F \ @@\
+	cdselp.F cdsetu.F cdshow.F cdstat.F cdsumy.F cdtext.F cdtrek.F \ @@\
+	cduniq.F cduptm.F cdupts.F cdvalid.F cdvect.F \ @@\
+	cdword.F cdzoo1.F
+
+#if defined(CERNLIB_UNIX)
+SRCS_F := $(SRCS_F) cdgetp.F 
+#else
+SRCS_F := $(SRCS_F) cduser.F 
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) cdgtlg.F 
+#endif
+
+#if defined(CERNLIB_OLD)
+SRCS_F := $(SRCS_F) cdsave.F 
+#endif
+
+#if defined(CERNLIB_HPUX)
+SpecialFortranLibObjectRule(cdopnf,cdopnf,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

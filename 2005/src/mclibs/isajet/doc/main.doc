@@ -1,0 +1,319 @@
+\newpage
+\section{Main Program\label{MAIN}}
+
+      A main program for ISAJET is not supplied in the \verb|isajet.car|
+file. To generate events and write them to disk, the user should provide
+a main program which opens the files and then calls subroutine ISAJET.
+In the following sample, i,j,m,n are arbitrary unit numbers.
+
+      Main program for VMS:
+\begin{verbatim}
+      PROGRAM RUNJET
+C
+C          MAIN PROGRAM FOR ISAJET ON BNL VAX CLUSTER.
+C
+      OPEN(UNIT=i,FILE='$2$DUA14:[ISAJET.ISALIBRARY]DECAY.DAT',
+     $STATUS='OLD',FORM='FORMATTED',READONLY)
+      OPEN(UNIT=j,FILE='myjob.dat',STATUS='NEW',FORM='UNFORMATTED')
+      OPEN(UNIT=m,FILE='myjob.par',STATUS='OLD',FORM='FORMATTED')
+      OPEN(UNIT=n,FILE='myjob.lis',STATUS='NEW',FORM='FORMATTED')
+C
+      CALL ISAJET(+-i,+-j,m,n)
+C
+      STOP
+      END
+\end{verbatim}
+
+      Main program for IBM (VM/CMS)
+\begin{verbatim}
+      PROGRAM RUNJET
+C
+C          MAIN PROGRAM FOR ISAJET ON IBM ASSUMING FILES HAVE BEEN
+C          OPENED WITH FILEDEF.
+C
+      CALL ISAJET(+-i,+-j,m,n)
+C
+      STOP
+      END
+\end{verbatim}
+
+      Main program for Unix; this is created by the standard 
+\verb|Makefile|:
+\begin{verbatim}
+      PROGRAM RUNJET
+C
+C          Main program for ISAJET on Unix
+C
+      CHARACTER*60 FNAME
+C
+C          Open user files
+      READ 1000, FNAME
+1000  FORMAT(A)
+      PRINT 1020, FNAME
+1020  FORMAT(1X,'Data file      = ',A)
+      OPEN(2,FILE=FNAME,STATUS='NEW',FORM='UNFORMATTED')
+      READ 1000, FNAME
+      PRINT 1030, FNAME
+1030  FORMAT(1X,'Parameter file = ',A)
+      OPEN(3,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+      READ 1000, FNAME
+      PRINT 1040, FNAME
+1040  FORMAT(1X,'Listing file   = ',A)
+      OPEN(4,FILE=FNAME,STATUS='NEW',FORM='FORMATTED')
+C          Open decay table
+      READ 1000, FNAME
+      OPEN(1,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+C
+C          Run ISAJET
+      CALL ISAJET(-1,2,3,4)
+C
+      STOP
+      END
+\end{verbatim}
+
+      The arguments of ISAJET are tape numbers for files, all of which
+should be opened by the main program.
+
+      \verb|TAPEi|: Decay table (formatted). A positive sign prints
+the decay table on the output listing. A negative sign suppress
+printing of the decay table.
+
+      \verb|TAPEj|: Output file for events (unformatted). A positive
+sign writes out both resonances and stable particles. A negative sign
+writes out only stable particles.
+
+      \verb|TAPEm|: Commands as defined in Section 6 (formatted).
+
+      \verb|TAPEn|: Output listing (formatted).
+
+\noindent In the sample jobs in Section 3, TAPEm is the default
+Fortran input, and TAPEn is the default Fortran output.
+
+\subsection{Interactive Interface}
+
+      To use the interactive interface, replace the call to ISAJET in
+the above main program by
+\begin{verbatim}
+      CALL ISASET(+-i,+-j,m,n)
+      CALL ISAJET(+-i,+-j,m,n)
+\end{verbatim}
+ISASET calls DIALOG, which prompts the user for possible commands,
+does a limited amount of error checking, and writes a command file on
+TAPEm. This command file is rewound for execution by ISAJET. A main
+program is included in patch ISARUN to open the necessary files and to
+call ISASET and ISAJET.
+
+\subsection{User Control of Event Loop}
+
+      If the user wishes to integrate ISAJET with another program and
+have control over the event generation, he can call the driving
+subroutines himself. The driving subroutines are:
+
+      \verb|ISAINI(+-i,+-j,m,n)|: initialize ISAJET. The arguments are
+the same as for subroutine ISAJET.
+
+      \verb|ISABEG(IFL)|: begin a run. IFL is a return flag: IFL=0
+for a good set of commands; IFL=1001 for a STOP; any other value means
+an error.
+
+      \verb|ISAEVT(I,OK,DONE)| generate event I. Logical flag OK
+signifies a good event (almost always .TRUE.); logical flag DONE
+signifies the end of a run.
+
+      \verb|ISAEND|: end a run.
+
+\noindent There are also subroutines provided to write standard ISAJET
+records, or Zebra records if the Zebra option is selected:
+
+      \verb|ISAWBG| to write a begin-of-run record, should be called
+immediately after ISABEG
+
+      \verb|ISAWEV| to write an event record, should be called
+immediately after ISAEVT
+
+      \verb|ISAWND| to write an end-of-run record, should be called
+immediately after ISAEND
+
+      The control of the event loop is somewhat complicated to
+accomodate multiple evolution and fragmentation as described in
+Section 11. Note in particular that after calling ISAEVT one should
+process or write out the event only if OK=.TRUE. The check on the DONE
+flag is essential if one is doing multiple evolution and
+fragmentation. The following example indicates how events might be
+generated, analyzed, and discarded (replace \verb|&| by \verb|+|
+everywhere):
+\begin{verbatim}
+      PROGRAM SAMPLE
+C
+&SELF,IF=IMPNONE
+      IMPLICIT NONE
+&SELF
+&CDE,ITAPES
+&CDE,IDRUN
+&CDE,PRIMAR
+&CDE,ISLOOP
+C
+      INTEGER JTDKY,JTEVT,JTCOM,JTLIS,IFL,ILOOP
+      LOGICAL OK,DONE
+      SAVE ILOOP
+C--------------------------------------------------------------------- 
+C>         Open files as above
+C>         Call user initialization
+C--------------------------------------------------------------------- 
+C
+C          Initialize ISAJET
+C
+      CALL ISAINI(-i,0,m,n)
+    1 IFL=0
+      CALL ISABEG(IFL)
+      IF(IFL.NE.0) STOP
+C
+C          Event loop
+C
+      ILOOP=0
+  101 CONTINUE
+        ILOOP=ILOOP+1
+C          Generate one event - discard if .NOT.OK
+        CALL ISAEVT(ILOOP,OK,DONE)
+        IF(OK) THEN
+C--------------------------------------------------------------------- 
+C>         Call user analysis for event
+C--------------------------------------------------------------------- 
+        ENDIF
+      IF(.NOT.DONE) GO TO 101
+C
+C          Calculate cross section and luminosity
+C
+      CALL ISAEND
+C--------------------------------------------------------------------- 
+C>         Call user summary
+C--------------------------------------------------------------------- 
+      GO TO 1
+      END
+\end{verbatim}
+
+\subsection{Multiple Event Streams}
+
+      It may be desirable to generate several different kinds of events
+simultaneously to study pileup effects. While normally one would want
+to superimpose minimum bias or low-pt jet events on a signal of
+interest, other combinations might also be interesting. It would be
+very inefficient to reinitialize ISAJET for each event. Therefore, a
+pair of subroutines is provided to save and restore the context, i.e.
+all of the initialization information, in an array. The syntax is
+\begin{verbatim}
+      CALL CTXOUT(NC,VC,MC)
+      CALL CTXIN(NC,VC,MC)
+\end{verbatim}
+where VC is a real array of dimension MC and NC is the number of words
+used, about 20000 in the standard case. If NC exceeds MC, a warning is
+printed and the job is terminated. The use of these routines is
+illustrated in the following example, which opens the files with names
+read from the standard input and then superimposes on each event of
+the signal sample three events of a pileup sample. It is assumed that
+a large number of events is specified in the parameter file for the
+pileup sample so that it does not terminate.
+\begin{verbatim}
+      PROGRAM SAMPLE
+C
+C          Example of generating two kinds of events.
+C
+      CHARACTER*60 FNAME
+      REAL VC1(20000),VC2(20000)
+      LOGICAL OK1,DONE1,OK2,DONE2
+      INTEGER NC1,NC2,IFL,ILOOP,I2,ILOOP2
+C
+C          Open decay table
+      READ 1000, FNAME
+1000  FORMAT(A)
+      OPEN(1,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+C          Open user files
+      READ 1000, FNAME
+      OPEN(3,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+      READ 1000, FNAME
+      OPEN(4,FILE=FNAME,STATUS='NEW',FORM='FORMATTED')
+      READ 1000,FNAME
+      OPEN(13,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+      READ 1000,FNAME
+      OPEN(14,FILE=FNAME,STATUS='NEW',FORM='FORMATTED')
+C
+C          Initialize ISAJET
+      CALL ISAINI(-1,0,3,4)
+      CALL CTXOUT(NC1,VC1,20000)
+      CALL ISAINI(-1,0,13,14)
+      IFL=0
+      CALL ISABEG(IFL)
+      IF(IFL.NE.0) STOP1
+      CALL CTXOUT(NC2,VC2,20000)
+      ILOOP2=0
+      CALL user_initialization_routine
+C
+1     IFL=0
+      CALL CTXIN(NC1,VC1,20000)
+      CALL ISABEG(IFL)
+      CALL CTXOUT(NC1,VC1,20000)
+      IF(IFL.NE.0) GO TO 999
+      ILOOP=0
+C
+C          Main event
+C
+101   CONTINUE
+        ILOOP=ILOOP+1
+        CALL CTXIN(NC1,VC1,20000)
+        CALL ISAEVT(ILOOP,OK1,DONE1)
+        CALL CTXOUT(NC1,VC1,20000)
+        IF(.NOT.OK1) GO TO 101
+        CALL user_analysis_routine
+C
+C          Pileup
+C
+        CALL CTXIN(NC2,VC2,20000)
+        I2=0
+201     CONTINUE
+          ILOOP2=ILOOP2+1
+          CALL ISAEVT(ILOOP2,OK2,DONE2)
+          IF(OK2) I2=I2+1
+          IF(DONE2) STOP2
+          CALL user_analysis_routine
+        IF(I2.LT.3) GO TO 201
+        CALL CTXOUT(NC2,VC2,20000)
+C
+      IF(.NOT.DONE1) GO TO 101
+C
+C          Calculate cross section and luminosity
+C
+      CALL CTXIN(NC1,VC1,20000)
+      CALL ISAEND
+      GO TO 1
+C
+999   CALL CTXIN(NC2,VC2,20000)
+      CALL ISAEND
+      CALL user_termination_routine
+      STOP
+      END
+\end{verbatim}
+It is possible to superimpose arbitrary combinations of events,
+including events of the same reaction type with different parameters.
+In general the number of events would be selected randomly based on the
+cross sections and the luminosity.
+
+      At this time CTXOUT and CTXIN cannot be used with the Zebra
+output routines.
+
+\subsection{Main Programs for ISASUSY and ISASUGRA\label{sugrun}}
+
+     In addition to the event generator, \verb|isajet.car| contains two
+programs to calculate SUSY masses and decay modes: ISASUSY, which
+accepts weak scale parameters, and ISASUGRA, which calculates the weak
+scale parameters from those at some high scale. The main programs, SSRUN
+and SUGRUN respectively, are included. They both prompt for interactive
+input and then call the appropriate ISAJET subroutines. The output is
+formatted and printed by SSPRT and SUGPRT respectively. Executables for
+ISASUSY and ISASUGRA are built by the Unix \verb|Makefile| and VMS
+\verb|isamake.com|. 
+
+     It is fairly straightforward to modify these routines to scan SUSY
+parameters, but given the variety of possible scans, no attempt has been
+made to provide code for this. If only masses are needed, SSMSSM can be
+modified to remove the calls to the routines that calculate branching
+ratios.

@@ -1,0 +1,40 @@
+#
+#  int.exp  --
+#
+#  Original: 30-Jun-1995 15:52
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Valid formats
+#
+
+literal_test	int	-2147483648	-2147483648
+literal_test	int	-0		0
+literal_test	int	0		0
+literal_test	int	+0		0
+literal_test	int	2147483647	2147483647
+literal_test	int	+2147483647	2147483647
+
+
+#
+# Invalid formats
+#
+
+untested "Literal test Int: Invalid formats not tested"
+
+paw_cmd { close 4 }

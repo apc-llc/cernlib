@@ -1,0 +1,84 @@
+*
+* $Id: patchy_flags,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: patchy_flags,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* This directory was created from ffread.car patch fffread
+#if defined(CERNLIB_IBMMVS)||defined(CERNLIB_IBMVM)
+#ifndef CERNLIB_IBM
+#define CERNLIB_IBM
+#endif
+#endif
+#if defined(CERNLIB_ALLIANT)||defined(CERNLIB_APOLLO)||defined(CERNLIB_CONVEX)||defined(CERNLIB_IBMAIX)||defined(CERNLIB_NECSX)||defined(CERNLIB_UNISYS)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_DECS)||defined(CERNLIB_HPUX)||defined(CERNLIB_IBMRT)||defined(CERNLIB_SGI)||defined(CERNLIB_SUN)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_AMIGAUX)||defined(CERNLIB_CDCUX)||defined(CERNLIB_GOULD)||defined(CERNLIB_IPSC)||defined(CERNLIB_MACMPW)||defined(CERNLIB_MACAUX)||defined(CERNLIB_MIPS)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_MSDOS)||defined(CERNLIB_IBMUX)||defined(CERNLIB_NEXT)||defined(CERNLIB_LINUX)||defined(CERNLIB_WINNT)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_VAXVMS)||defined(CERNLIB_VAXULX)
+#ifndef CERNLIB_VAX
+#define CERNLIB_VAX
+#endif
+#endif
+#if defined(CERNLIB_CDC)||defined(CERNLIB_CRAY)
+#ifndef CERNLIB_SINGLE
+#define CERNLIB_SINGLE
+#endif
+#endif
+#if defined(CERNLIB_IBM)||defined(CERNLIB_VAX)||defined(CERNLIB_NORD)
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+#endif
+#if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_SINGLE))
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+#endif
+#if defined(CERNLIB_IBM)
+#ifndef CERNLIB_QMIBMXA
+#define CERNLIB_QMIBMXA
+#endif
+#endif
+#if defined(CERNLIB_UNIX)
+#ifndef CERNLIB_SAVE
+#define CERNLIB_SAVE
+#endif
+#endif
+#if !defined(CERNLIB_CDC)
+#ifndef CERNLIB_UPLOW
+#define CERNLIB_UPLOW
+#endif
+#endif
+#if defined(CERNLIB_IBM)
+#ifndef CERNLIB_EBCDIC
+#define CERNLIB_EBCDIC
+#endif
+#endif
+#if defined(CERNLIB_VAX)||defined(CERNLIB_DECS)
+#ifndef CERNLIB_TABS
+#define CERNLIB_TABS
+#endif
+#endif
+#if (!defined(CERNLIB_VAX))&&(!defined(CERNLIB_CDC))&&(!defined(CERNLIB_DECS))
+#ifndef CERNLIB_LUNF77
+#define CERNLIB_LUNF77
+#endif
+#endif

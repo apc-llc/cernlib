@@ -1,0 +1,44 @@
+C.
+C.       CERN TC LIBRARY MICKY PAM.
+C--------------------------------------------------------------------
+C.
+C.       A PROGRAM FOR TESTING OF ROUTINES CONTAINED IN THE CERN TC
+C.       LIBRARY GENERAL SECTION PAM WITH AN OPTION TO MEASURE THEIR
+C.       EXECUTION TIME.
+C.
+C.       THE PAM-FILE CONTAINS PILOT PATCHES FOR A NUMBER OF DIFFERENT
+C.       COMPUTERS LIKE
+C.
+C.       P=*MAPO             APOLLO
+C.       P=*MIBM             IBM 360 SERIES
+C.       P=*MVAX             DIGITAL VAX
+C.
+C.       A RUN OF MICKY TO TEST ALL ROUTINES CATERED FOR IS OBTAINED BY
+C.       REQUESTING THE APPROPRIATE PILOT PATCH.
+C.       NO TIMING IS DEFAULT (ITIMES=0).
+C.
+C.       EXAMPLE
+C.                 +EXE.
+C.                 +USE, *MVAX.
+C.                 +PAM.
+C.
+C.       TIMING IS OBTAINED BY GIVING
+C.
+C.                 +KEEP, TIMING.
+C.                       ITIMES = 1
+C.
+C.
+C.       HOW TO TEST AN INDIVIDUAL ROUTINE UCOPY WITH TIMING,
+C.       ALL TIMING-LOOPS MADE 10 TIMES LONGER, IS SHOWN
+C.       BY THE FOLLOWING EXAMPLE:
+C.
+C.                 +USE, *MVAX.
+C.                 +EXE, MICKY.
+C.                 +EXE, PUTIL, D=TUCOPY.
+C.                 +KEEP, EXECUTION.
+C.                       ITIMES = 10
+C.                       CALL TUCOPY
+C.                 +PAM.
+C.
+C.
+C********************************************************************

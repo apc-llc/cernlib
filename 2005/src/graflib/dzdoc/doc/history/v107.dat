@@ -1,0 +1,12 @@
+*
+* $Id: v107.dat,v 1.1.1.1 1996/03/04 16:12:53 mclareni Exp $
+*
+* $Log: v107.dat,v $
+* Revision 1.1.1.1  1996/03/04 16:12:53  mclareni
+* Dzdoc/Zebpack
+*
+*
+*  Version 1.07  950221 11.00
+C- Introduction of DZDOC v5.94  on 950221 11.00
+C- HTML output implemented in DZEDIT
+C

@@ -1,0 +1,96 @@
+*
+* $Id: v5_17,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_17,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.17/12 22/10/93  11.24.18  by  O.Couet
+*-- Author :    O.Couet   05/07/93
+*
+*::>          VERSION  5.17/12   22/10/93 11.24.18
+*
+*     Bug fixed in HPLF. The filled area was not good in of
+*        histogram subrange drawing.
+*
+*::>          VERSION  5.17/11   12/10/93 16.39.20
+*
+*     Mods in HPLTAB to manage more than 1000 channels.
+*     Improvment in HPLFRA: when the X1=X2 or Y1=Y2 the frame is
+*        drawn with X1-1,X2+1,Y1-1,Y2+1.
+*
+*::>          VERSION  5.17/10   11/10/93 12.39.47
+*
+*     Optimization for alphanuneric labels removed in HPLAXI
+*        (now done in IGAXIS).
+*     Improvment in HPLCHA: If nothing is picked inside the picture
+*        the HPLOT stucture, to retrieve the IDH, is used.
+*
+*::>          VERSION  5.17/09   01/10/93 10.53.26
+*
+*     Improvments in the error bars with edges marks drawing:
+*        1) If the error bars are smaller than the KSIZ, the edges
+*           marks are not drawn.
+*        2) If the edges marks are bigger than the error bars,
+*           the mimimum of the two is taken.
+*     New options in HPLSET:
+*        SMGR: define the Rigth Margin between the STAT/FIT boxes
+*              and the histogram box (in % of the histogram box width).
+*        SMGU: define the Up Margin between the STAT/FIT boxes and the
+*              histogram box (in % of the histogram box heigh).
+*        This implies mods in HPLSET, HPLSTA and HPLFIT.
+*
+*::>          VERSION  5.17/08   29/09/93 12.15.31
+*
+*     Statistics, Fit parameters, Date, File and additional tick
+*        marks are now drawn in HPLTAB for 2D histograms. This
+*        simplify PAW where duplicated code was added in PAPLOT
+*        ans PAHIST and it makes these options working for commands
+*        like CONTOUR.
+*
+*::>          VERSION  5.17/07   27/09/93 11.54.02
+*
+*     Change in HPLAER. The option E1 was not correct if the
+*        marker type was "."
+*     Two new routines:
+*        HPLSEL do a CALL ISELNT and the NTWIN.
+*        HPLWN  set the window parameters taking care with LOG scale.
+*
+*::>          VERSION  5.17/06   15/09/93 12.12.52
+*
+*     New routine HPLFR3 (frame 3d).
+*
+*::>          VERSION  5.17/05   24/08/93 18.08.07
+*
+*     Bug fixed in HPLAER and HPLERR. The input vectors where
+*        dimensionned with N, and N can be 0. Now they are dimensioned
+*        with 1.
+*
+*::>          VERSION  5.17/04   24/08/93 15.45.13
+*
+*     The attributes are stored at the begininig of HPLFRA
+*        and reset at the end (call to IZSAVA IZSETA).
+*
+*::>          VERSION  5.17/03   930722 12.35
+*
+*     The HPLAER options are now called 0,1,2,3,4 to avoid
+*        ambiguities when it is invoked from HPLOT.
+*     New option W in HPLAER.
+*     The routines HPLER and HPLE are now obsolete.
+*
+*::>          VERSION  5.17/02   930720 11.24
+*
+*     New options B,L,R,F and S in HPLAER.
+*
+*::>          VERSION  5.17/01   930713 15.48
+*
+*     Bug fixed in HPLZON: if IW<=0 it is changed to 1.
+*
+*::>          VERSION  5.17/00   930705 12.40
+*
+*     Protection added in HPLFRA.
+*     Improvments in HPLTAB to allows histograms with more
+*        than 1000 bins.
+*     New routine HPLAER to draw asymetric error bars.
+*

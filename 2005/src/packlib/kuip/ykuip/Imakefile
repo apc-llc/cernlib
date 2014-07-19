@@ -1,0 +1,3 @@
+SRCS_F=	 kmath_y.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

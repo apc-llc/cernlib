@@ -1,0 +1,197 @@
+/* $Id: sgi.cf,v 1.16 2001/04/04 14:46:32 mclareni Exp $
+ *
+ * $Log: sgi.cf,v $
+ * Revision 1.16  2001/04/04 14:46:32  mclareni
+ * SGI cc does not have a -static option
+ *
+ * Revision 1.15  1999/11/19 09:17:37  mclareni
+ * Add -static to the Fortran and C default options
+ *
+ * Revision 1.14  1999/03/09 13:46:34  cernsoft
+ * For SGI 6.5 set -mips3 for portability
+ *
+ * Revision 1.12  1998/01/22 16:14:57  mclareni
+ * Introduce cpp flag CERNLIB_QMIRIX64 for IRIX64 systems
+ *
+ * Revision 1.11  1998/01/09 17:03:03  mclareni
+ * Add options for Irix 6.4, keeping 5.3 as Pre64
+ *
+ * Revision 1.10  1996/05/15 13:40:32  cernlib
+ * Comment ExtraLibraries, such that we don't put -lmalloc ... before cernlib
+ *
+ * Revision 1.9  1996/05/09 14:30:55  cernlib
+ * use xargs as XargsCmd
+ *
+ * Revision 1.8  1996/05/01 11:56:59  cernlib
+ * make possible to split cpp from f77 on sgi
+ *
+ * Revision 1.7  1996/04/11 15:23:17  cernlib
+ * Add possiblity to build optimised for mips2
+ *
+ * Revision 1.6  1996/03/08 17:12:14  cernlib
+ * *** empty log message ***
+ *
+ * Revision 1.5  1996/03/06 11:04:21  cernlib
+ * Imake.tmpl : Correct rule to run kuipc
+ * fortran.rules: echo makedepend
+ * site.def: undef MakeCmd before #define ( Sun has this defined to ..openwin...)
+ * *.cf : small mods
+ *
+ * Revision 1.4  1996/03/04 17:31:00  cernlib
+ * Parametrize Ansi C compiel options. other small mods
+ *
+ * Revision 1.3  1996/02/12  14:21:31  cernlib
+ * a library now depends (indirectly) on all the objects therein
+ *
+ * Revision 1.2  1995/12/21  11:32:33  cernlib
+ * Imake files end 1995
+ *
+ * Revision 1.1.1.1  1995/12/20  15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: sgi.cf,v 1.43 94/06/03 21:38:45 matt Exp $
+
+#define OSName			IRIX 6.5
+XCOMM operating system:  OSName
+#define OSMajorVersion		6
+#define OSMinorVersion		5
+#define OSTeenyVersion          0
+
+#if OSMajorVersion < 4
+/* We do not guarantee this will work */
+#define BootstrapCFlags   -DX_WCHAR -DX_LOCALE -DX_USEBFUNCS -DSYSV
+#define StandardDefines   -DX_WCHAR -DX_LOCALE -DX_USEBFUNCS -DSYSV
+#endif
+
+#define SystemV			YES
+#define HasPutenv		YES
+#define ExecableScripts		YES
+#if OSMajorVersion > 3
+#define SetTtyGroup		YES
+#else
+#define SetTtyGroup		NO
+#endif
+#define HasNdbm			YES
+#define HasPoll                 YES
+#define Malloc0ReturnsNull	YES
+#define ExpandManNames          YES
+#define BuildXInputExt		YES
+
+#if OSMajorVersion > 3 || (OSMajorVersion == 3 && OSMinorVersion > 2)
+#define NeedVarargsPrototypes	YES
+#define NeedConstPrototypes	YES
+#define NeedWidePrototypes	NO
+#endif
+
+#if OSMajorVersion > 4
+#define HasWChar32              YES
+#define XawI18nDefines		-DHAS_WCTYPE_H
+#endif
+
+/* Extra libraries provide : yp, sysV malloc, shared libc, and widechar */
+/*#define ExtraLibraries -lsun -lmalloc -lc_s -lw */
+
+/* #include <sgiLib.rules> */
+
+#define SymbolTables -Wf,-XNp9000,-XNd8000,-XNh2000
+#define PexSymbolTables -Wf,-XNp15000,-XNd15000,-XNh2000
+#define ServerSymbolTables -Wf,-XNp8000,-XNh2000,-XNd8000
+
+/* this is for floating point, ANSI cpp */
+#define sgiCCOptions -xansi -D__STDC__=1 -float
+#define DefaultCCOptions sgiCCOptions SymbolTables
+#define PexCCOptions sgiCCOptions PexSymbolTables
+#define ServerCCOptions sgiCCOptions ServerSymbolTables
+
+/* For SGI C++ compiler, need to search extra dirs in make depend */
+#ifndef CplusplusDependIncludes
+#define CplusplusDependIncludes -I/usr/include/CC
+#endif
+
+/* At SGI, we don't need this */
+/* at Cern we do...
+ *#define ConstructMFLAGS		NO	/* build MFLAGS from MAKEFLAGS */
+
+/* Used only for compressed fonts */
+#define UNCOMPRESSPATH /usr/bsd/uncompress
+
+/* Normally used only to conditionally chose the default font path order */
+#define PrimaryScreenResolution 96
+
+/* Override Imake.tmpl's "-X" flag */
+#define LdCombineFlags -r
+
+/* Installation Build Parameters */
+#define InstKmemFlags -m 2755 -g sys
+
+#define ArCmd ar scq
+
+/* for xdm or anyone else to use */
+#define DefaultUserPath :/usr/sbin:/usr/bsd:/usr/bin:/bin:$(BINDIR):/etc:/usr/etc
+#define DefaultSystemPath /usr/sbin:/usr/bsd:/bin:/etc:/usr/bin:/usr/etc:$(BINDIR)
+
+#define BuildServer             NO
+#define ServerOSDefines -DDDXTIME
+/* only need this for binary compatibility with their ddx */
+#define ServerExtraDefines -DNEED_LINEHELPER
+
+/* Changed to a single shell command for pmake/smake */
+/*
+ * NormalLibObjCompile - compile fragment for a library object file
+ * 	do ld -x to remove line number symbols for libraries
+ */
+#define	NormalLibObjCompile(options) $(RM) $@ $*.os \			@@\
+	&& $(CC) -c options $(CFLAGS) $*.c \				@@\
+	&& $(LD) $(LDSTRIPFLAGS) -r $@ -o $*.os \			@@\
+	&& $(MV) $*.os $@
+
+#define	LibObjCompile(dir,options) $(RM) $@ dir/$@ \			@@\
+	&& $(CC) -c $(CCOPTIONS) $(ALLDEFINES) options $*.c \		@@\
+	&& $(MV) $@ dir/$@
+
+/*   Cernlib additions  */
+
+#define XargsCmd		xargs
+
+#undef DefaultCCOptions
+
+#ifdef IsMips2
+#define DefaultCCOptions	-mips2
+#define DefaultFCOptions	-mips2 -align32
+#define FortranCppCmd		f77 -P
+#define OptimisedFortranFlags  -O -Olimit 2000
+#define FortranSaveFlags       -static
+#define CernlibSystem          -DCERNLIB_SGI -DCERNLIB_UNIX
+#define CERNLIB_SGI
+#define CERNLIB_UNIX
+
+#elif defined(Pre64)
+#define DefaultCCOptions	/**/
+#define DefaultFCOptions       
+#define FortranCppCmd		f77 -P
+#define OptimisedFortranFlags  -O -Olimit 2000
+#define FortranSaveFlags       -static
+#define CernlibSystem          -DCERNLIB_SGI -DCERNLIB_UNIX
+#define CERNLIB_SGI
+#define CERNLIB_UNIX
+
+#else
+
+#define DefaultCCOptions        -n32 -mips3 -OPT:Olimit=0
+#define DefaultFCOptions        -static -n32 -mips3 -OPT:Olimit=0
+#define FortranCppCmd           f77 -P
+#define OptimisedFortranFlags  -O
+#define FortranSaveFlags       -static
+#define InstallCmd             /usr/local/bin/gnu/install
+#define CernlibSystem          -DCERNLIB_QMIRIX64 -DCERNLIB_SGI -DCERNLIB_UNIX
+#define CERNLIB_QMIRIX64
+#define CERNLIB_SGI
+#define CERNLIB_UNIX
+
+#endif
+#define CcAnsiMode              -xansi
+#define CcStrictAnsiMode        -ansi
+
+

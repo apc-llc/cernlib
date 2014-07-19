@@ -1,0 +1,12 @@
+*
+* $Id: dmmlt.s,v 1.1.1.1 1996/02/15 17:48:10 mclareni Exp $
+*
+* $Log: dmmlt.s,v $
+* Revision 1.1.1.1  1996/02/15 17:48:10  mclareni
+* Kernlib
+*
+*
+          IDENT     DMMLT
+#include "mmlt.inc"
+          MAIN      DTYPE
+          END

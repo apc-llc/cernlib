@@ -1,0 +1,60 @@
+*
+* $Id: fatjourn.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatjourn.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATJOURN.EXEC */
+/*---------------------------------------------------------------------*/
+/*                   F A T J O U R N  E X E C                          */
+/*                   ------------------------                          */
+/*                                                                     */
+/* EXEC to store FATMEN journal files.                                 */
+/* Input:  None                                                        */
+/* Output: New journal (FZ) file                                       */
+/* Action: Copy FATMEN RDRFILE A -> journal file                       */
+/*---------------------------------------------------------------------*/
+ 
+'STATE FATMEN RDRFILE A'
+If RC ^=0 then Do
+   Say 'FATMEN RDRFILE not found - cannot create journal file'
+   Exit 999
+   End
+/* Get new filename */
+ 
+retry:
+ 
+fat_date = date("JULIAN")
+fat_time = remove(time(),':')
+fat_file = "FAT"||fat_date || " FZ" || fat_time
+ 
+If fexist(fat_file) then do
+   'CP SLEEP 1 SEC'
+   signal retry
+   end
+ 
+b_left = QDISK("B","BLKLEFT")
+b_size = QDISK("B","BLKSIZE")
+b_used = QDISK("B","PERCENT")
+a_size = QDISK("A","BLKSIZE")
+f_size = QFILE("FATMEN RDRFILE A","BLKNO")
+if f_size*a_size*2 < b_left*b_size & b_used < 90 then do
+ 
+   'COPYFILE FATMEN RDRFILE A 'fat_file 'B (TYPE'
+   'ERASE    FATMEN RDRFILE A'
+    end
+ 
+    else do
+ 
+/*  'EXEC MESS JAMIE No space free for journal file, need 'f_size,
+                    ' have ' b_left' blocks left, used 'b_used '%'   */
+ 
+    'LISTFILE FAT* FZ* B (E'
+ 
+    'CMS EXEC FATPURGE'
+    'COPYFILE FATMEN RDRFILE A 'fat_file 'B (TYPE'
+    'ERASE    FATMEN RDRFILE A'
+ 
+    end

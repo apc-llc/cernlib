@@ -1,0 +1,21 @@
+DoIncludePackage(paw)
+#include "pilot.h"
+
+#if defined(CERNLIB_MOTIF)
+SRCS_C=	angleformdialog.c attributesformdialog.c \ @@\
+	axisformdialog.c chaintree.c closefbdialog.c colordialog.c \ @@\
+	columnselection.c cuteditor.c cutexpr.c dateformdialog.c \ @@\
+	definecolordialog.c dynamiccedialog.c execdialog.c \ @@\
+	fileformdialog.c fitformdialog.c fontdialog.c \ @@\
+	fontsettingsdialog.c generalattributesdialog.c \ @@\
+	geometrydialog.c hatchstyledialog.c helpdialog.c histostyle.c \ @@\
+	indentcedialog.c labelformdialog.c maildialog.c \ @@\
+	ntuplebrowser.c ntuplescan.c ntuplework.c opencedialog.c \ @@\
+	openfbdialog.c orientationformdialog.c rangeformdialog.c \ @@\
+	saveascedialog.c statformdialog.c styleopendialog.c \ @@\
+	stylesavedialog.c zoneformdialog.c
+#endif
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)

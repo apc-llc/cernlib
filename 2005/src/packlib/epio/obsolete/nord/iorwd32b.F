@@ -1,0 +1,33 @@
+*
+* $Id: iorwd32b.F,v 1.1.1.1 1996/03/08 15:21:59 mclareni Exp $
+*
+* $Log: iorwd32b.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:59  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B32)
+      SUBROUTINE IORWND(LUNIT,IRET)
+C     *****************************
+C--  NORD 100 32-BIT VERSION
+C--  82-07-15  USE STANDARD FORTRAN REWIND
+C--  JOP
+C   REWIND
+C   LUNIT  = LOGICAL DEVICE NUMBER
+C   IRET   = RETURN STATUS
+      INTEGER*4 LUNIT,IRET,ZERO,IORCNV
+      DATA ZERO/0/
+C--  CONVERT TO LOCAL MACHINE WORD SIZE
+       LUN=LUNIT
+       REWIND LUN
+C-- GET FILE SYSTEM ERROR CODE
+       IRET=ERRCODE
+C--  WAIT FOR FTN77  !!
+CCCC   IF(IRET.NE.ZERO)IRET=1
+       IRET=0
+ 77777 RETURN
+       END
+77777 RETURN
+      END
+#endif

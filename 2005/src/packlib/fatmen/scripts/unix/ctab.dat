@@ -1,0 +1,28 @@
+#
+# Start FATMEN backups at 02:00
+#
+0 2 * * * /afs/cern.ch/project/fatmen/scripts/fatback.sh >> /fatmen/fatback/logs 2>&1
+#
+# Check all servers running at 08:00
+#
+0 8 * * * /afs/cern.ch/project/fatmen/scripts/fatchk > /dev/null 2>&1
+#
+# Check for backlogs
+#
+0 0 * * * /afs/cern.ch/project/fatmen/scripts/fatqueue > /dev/null 2>&1
+#
+# Check that filesystems are not too full
+#
+0 0 * * * /afs/cern.ch/project/fatmen/scripts/fatdf > /dev/null 2>&1
+#
+# Check that none of the servers have died
+#
+0 * * * * /afs/cern.ch/project/fatmen/scripts/fatok > /dev/null 2>&1
+#
+# Special check for fmsend
+#
+30 * * * * /afs/cern.ch/project/fatmen/scripts/fatsendchk > /dev/null 2>&1
+#
+# Remove old ZZ files
+#
+0 6 * * * /afs/cern.ch/project/fatmen/scripts/fatzz > /dev/null 2>&1

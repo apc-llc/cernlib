@@ -1,0 +1,3 @@
+SRCS_F=	 fmztor.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

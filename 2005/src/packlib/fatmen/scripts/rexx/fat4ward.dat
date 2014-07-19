@@ -1,0 +1,138 @@
+*
+* $Id: fat4ward.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fat4ward.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FAT4WARD.EXEC */
+/*---------------------------------------------------------------------*/
+/*                   F A T 4 W A R D  E X E C                          */
+/*                   ------------------------                          */
+/*                                                                     */
+/* EXEC to forward FATMEN updates to remote FAT servers.               */
+/* Input: Generic-name                                                 */
+/*                                                                     */
+/* The generic-name will be matched against tags DIR1-DIR16 for each   */
+/* server in the list FATSERVERS.                                      */
+/* DIR1-DIR16 are generic name patterns, e.g.                          */
+/*    //CERN/ALEPH                                                     */
+/*    //CERN/DELPHI/SIMD/RAWD                                          */
+/*                                                                     */
+/* Each element of the generic name patterns may be a full directory   */
+/* name of an asterisk. Other combinations are not currently supported.*/
+/*---------------------------------------------------------------------*/
+ 
+Parse upper arg generic_name .
+ 
+If generic_name = '' then do
+   Say 'Error - no generic name specified'
+   Exit 999
+End /* No generic name */
+ 
+Say 'Processing generic name: ' generic_name
+gname = translate(generic_name,' ','/')
+g     = words(gname)
+'IDENTIFY (STACK'
+Pull me . mynode .
+'GLOBALV SELECT *EXEC STACK FATADDR'
+Pull fatuser fatnode
+ 
+/* Find out the names of the FATMEN servers */
+ 
+'MAKEBUF'
+'NAMEFIND :NICK FATSERVERS (STACK'
+code = rc
+If code ^= 0 then do
+   Say 'Error from NAMEFIND - RC = 'code
+   exit
+End /* No FATSERVERS */
+Pull .
+Pull servers
+'DROPBUF'
+ 
+Do i=2 to words(servers)
+   server = word(servers,i)
+   say 'Processing server: ' server
+   'NAMEFIND :NICK 'server ':USERID :NODE (STACK'
+   Pull remote_user
+   If remote_user = '' then remote_user = server
+   Pull remote_node
+   If remote_node = '' then remote_node = mynode
+ 
+   If remote_user = fatuser & remote_node = fatnode then do
+      say 'Skipping sender ('fatuser 'at' fatnode ')'
+      iterate
+   End /* Don't send update back to originator */
+ 
+   If remote_user = me & remote_node = mynode then do
+      say 'Skipping myself...'
+      iterate
+   end /* Don't send update to ourselves */
+ 
+   'NAMEFIND :NICK 'server ' :EXEC (STACK'
+   Pull send_exec
+ 
+   'NAMEFIND :NICK 'server ' :GATEWAY (STACK'
+   Pull gateway
+ 
+   if strip(gateway)^= '' then do
+ 
+      if words(gateway) = 1 then do
+         gateway = gateway " AT " mynode
+      end /* Assume gateway machine is on this node if node not defined */
+ 
+      parse upper var gateway gateuser " AT " gatenode
+ 
+      if (fatuser=gateuser) & (fatnode=gatenode) then do
+         say 'Skipping sender ('fatuser 'at' fatnode ')'
+         iterate
+      end /* Skip updates from a gateway machine */
+ 
+   end /* End gateway ^= '' */
+ 
+   Do j=1 to 16
+/* Try to match this directory against generic name */
+/* If ok, send this file to server and leave        */
+   tag = ':DIR'||j
+   'NAMEFIND :NICK ' server tag' (STACK'
+      If Rc^= 0 then leave /* No such tag */
+      Pull match
+      If strip(match) ^= '' then do
+         match = translate(match,' ','/')
+         m = words(match)
+         ok = 1
+         if m > g then iterate  /* Match is longer than generic-name */
+         do k=1 to m
+            if (word(match,k) ^= word(gname,k)) & ,
+               (word(match,m) ^= '*') then do
+                  ok = 0
+                  leave /* One failure compare and we're out */
+            end /* Check each element of generic name */
+         end
+         if ok then do
+            say 'Match found for 'server
+            /* Process this entry */
+            If strip(gateway) = '' then do
+               If strip(send_exec) = '' then do
+                  'EXEC SENDFILE FATMEN RDRFILE' server
+               end /* no special send exec - sendfile directly */
+               else do
+                  'EXEC 'send_exec' FATMEN RDRFILE' remote_user remote_node
+               end /* use special send exec */
+            end /* No gateway machine */
+            else do
+ 
+/* Send to gateway machine. First rename file, then send, then rename back */
+ 
+                  'RENAME FATMEN RDRFILE A 'remote_user remote_node 'A'
+                  'EXEC SENDFILE' remote_user remote_node gateway
+                  'RENAME 'remote_user remote_node 'A FATMEN RDRFILE A'
+            end /* Sendfile to gateway machine */
+ 
+            leave /* Don't look for another match... */
+         end /* We had a match */
+      end /* Non-blank tags */
+   end /* Loop over tags DIR1 .. DIR16 */
+end /* Loop over FATSERVERS */

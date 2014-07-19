@@ -1,0 +1,19 @@
+*
+* $Id: addsql.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: addsql.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Create the SQL commands to create the tables for a new
+#   FATMEN group.
+#   Template file is "addsql.sql"
+#
+typeset -l group
+typeset -u ugroup
+group=$1
+ugroup=$1
+sed "s/THRONG/${ugroup}/g" $HOME/sql/addfat.sql > $HOME/sql/${group}.sql

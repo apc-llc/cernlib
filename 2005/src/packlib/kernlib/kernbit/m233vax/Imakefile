@@ -1,0 +1,3 @@
+SRCS_S= tra0e0.s tre0a0.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

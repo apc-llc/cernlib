@@ -1,0 +1,6 @@
+INCLUDES=	 bkfoparq.inc bknuparq.inc bkstparq.inc bktgdatq.inc \ @@\
+	bktgparq.inc bkwrp.inc bslash1.inc bslash2.inc docparq.inc \ @@\
+	dzdocc.inc dzdocobk.inc linout.inc nonewl1.inc nonewl2.inc \ @@\
+	tapes.inc title.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),dzdoc)

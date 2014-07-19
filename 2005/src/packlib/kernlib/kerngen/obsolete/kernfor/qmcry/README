@@ -1,0 +1,39 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:11 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:11  mclareni
+* Kernlib
+*
+*
+*               for Cray
+* This directory was created from kernfor.car patch qmcry
+#ifndef CERNLIB_B64
+#define CERNLIB_B64
+#endif
+#ifndef CERNLIB_B60M
+#define CERNLIB_B60M
+#endif
+#ifndef CERNLIB_B48M
+#define CERNLIB_B48M
+#endif
+#ifndef CERNLIB_B36M
+#define CERNLIB_B36M
+#endif
+#ifndef CERNLIB_A8
+#define CERNLIB_A8
+#endif
+#ifndef CERNLIB_A6M
+#define CERNLIB_A6M
+#endif
+#ifndef CERNLIB_A5M
+#define CERNLIB_A5M
+#endif
+*               running Unix
+#ifndef CERNLIB_QS_UNIX
+#define CERNLIB_QS_UNIX
+#endif
+*                external names capital
+#ifndef CERNLIB_QXCAPT
+#define CERNLIB_QXCAPT
+#endif

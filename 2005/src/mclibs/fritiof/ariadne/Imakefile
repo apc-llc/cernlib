@@ -1,0 +1,15 @@
+SRCS_F= \ @@\
+	 araddg.F arangl.F arbocm.F arcasc.F archem.F archki.F arclus.F \ @@\
+	 arcopa.F arcopj.F arcrdi.F ardata.F ardump.F arduph.F ardyre.F \ @@\
+	 arecoi.F aremit.F arerrm.F arexec.F arexma.F argpt2.F argqcd.F \ @@\
+	 argqed.F argtyp.F arinit.F aript2.F arjoin.F armade.F armas2.F \ @@\
+	 armas3.F armass.F armcdi.F armipt.F arndx1.F arndx2.F arndx3.F \ @@\
+	 arndy1.F arndy2.F arndy3.F arndy4.F arnofl.F arobo1.F arobo2.F \ @@\
+	 arobo3.F arobo4.F arobo5.F arordj.F arorie.F arpars.F arprda.F \ @@\
+	 arradg.F arradp.F arradq.F arreca.F arrobo.F arsmpt.F arsplg.F \ @@\
+	 arstor.F artest.F artune.F arupdj.F arvet1.F arvet2.F arvet3.F \ @@\
+	 arvet4.F arvet5.F arveth.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

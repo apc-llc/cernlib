@@ -1,0 +1,11 @@
+*
+* $Id: v114.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v114.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+C- Modifications: (GF)
+C  > Z268 SYSTEMS  new routine
+C  > Add OS9 flags, and in M433 for OS9 a C strut for the COMMON.

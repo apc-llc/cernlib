@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 getbyt.F setbyt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

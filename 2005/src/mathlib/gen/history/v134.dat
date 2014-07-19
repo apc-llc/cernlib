@@ -1,0 +1,43 @@
+*
+* $Id: v134.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v134.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.34  901107 15.10
+C  Global changes:
+C  ----------------
+C- rename GEFLAGS to FGEN, USES to SGEN, INFORM to DGEN
+C- initialize variables which are used as internal arguments to implicit
+C  functions, to prevent compiler warning (flagged as C*IA)
+C
+C  Routine changes:
+C  ----------------
+C  B100 BINOM    Fix bug in logics
+C  C200 ZEROX    Declare EXTERNAL F
+C  C208 RTEQ4    Fix bug in logics
+C  C306 GAMMA    CGAMMA: C*IA D
+C  C307 DIGAM    CDIGAM: C*IA D
+C  C309 CCLBES   Enable code for UNIX, change PAR CIH=CI/TWO to HALF*CI
+                 to help xlf (IBMRT), Do not use REAL*16 in UNIX
+C  C328 CWHITM   Enable code for UNIX, change PAR IH=I/2 to I=HALF*I
+C  C331 FCONC    CFCONC: C*IA CRG
+C  C333 CLOGAM   CLOGAM: C*IA D
+C  C335 CWERF    CWERF : C*IA D
+C  C338 CEXPIN   CEXPIN: C*IA T, use same DATA cards for CEXPIN+WEXPIN
+                 Exit properly on error condition (high accuracy)
+C  C342 STRH0    Introduce new SINGLE PRECISION version, recode routine
+C  D110 RGMLT    Use FSUB3 in call of DGMLT3
+C  D300 EPDE1    Recode STOP at the end of EPDCHN
+C  D600 FRED1    Replace call to MATRIX by equivalent code
+C  E410 CPSC     CPSC  : C*IA CO,RE
+C  G101 CHISIN   Do not stop after error conditions
+C  J509 CONPRT   FREARG: C*IA X1,Y1,X2,Y2,XIN
+C  M429 NUMBIT   Add FORTRAN version for UNIX
+C  U110 CLEBSG   CLEBSG: C*IA Q
+C  V101 NORRAN   Enable UNIX version (from Alliant)
+C  W100 TRAMP1   Obsolete routine deleted from source and binary
+C  W505 FOWL     GENEV : C*IA Y,Z
+C

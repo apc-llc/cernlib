@@ -1,0 +1,22 @@
+MACRO PAWEX28
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 28                          *
+**************************************************************************
+Exec ALLDEF
+Mess '**********************************************'
+Mess '*                COMIS test (1)              *'
+Mess '**********************************************'
+Mess
+Mess The next line should be "1"
+Mess
+call comis1.f(1)
+Mess
+Mess The next two lines should be ".8414710"
+Mess
+call comis2.f
+Mess
+Mess Now is drawn LOG(X) between 0 and 1
+Mess
+fun/plot log(x) 0 1
+RETURN
+

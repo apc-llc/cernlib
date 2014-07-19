@@ -1,0 +1,19 @@
+*
+* $Id: fatabend.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatabend.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATABEND.EXEC */
+/*-------------------------------------------------------------*/
+/*                                                             */
+/*                       F A T A B E N D                       */
+/*                                                             */
+/*-------------------------------------------------------------*/
+'ID (STACK'
+Pull user . node .
+if fexist(FATMEN MAILFILE A3) then 'ERASE FATMEN MAILFILE A3'
+'EXECIO 1 DISKW FATMEN MAILFILE A3 (STRING 'user node
+'EXEC MAIL FATMAN (NOEDIT NOLOG FILE FATMEN MAILFILE SUBJECT FATSRV abend'

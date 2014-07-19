@@ -1,0 +1,18 @@
+*
+* $Id: cdvars.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdvars.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+for i in /hepdb/cd*
+   do
+     typeset -u cdgrp
+     cdpath=$i
+     cdgrp=`basename $i`
+     echo Setting $cdgrp to $cdpath ...
+     eval $cdgrp=$cdpath;export $cdgrp
+   done
+#endif

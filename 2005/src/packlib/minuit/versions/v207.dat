@@ -1,0 +1,26 @@
+*
+* $Id: v207.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v207.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.07   930723 12.00
+C
+C- Introduce the following decks:
+C     MNPARS   new routine, user-callable, to define a parameter
+C                  specified only by a character-string
+C     MNINPU   new routine, user-callable, to change input unit
+C     MNCOMD   new routine, user-callable, to execute a command
+C                  specified only by a character-string
+C- Major changes in:
+C     MNREAD   which now calls MNPARS instead of MNPARM (then
+C                  MNPARS calls MNPARM, so where is the big deal?)
+C- Small but important changes in:
+C     MNCROS  to keep points inside limits in ALL cases.
+C     MNMNOT  to keep points inside limits in ALL cases.
+C     MNCONT  to get the error flag right
+C     all routines using ISW(6) which can now take on values 1,0,-1
+C- Very Minor changes in many routines
+C

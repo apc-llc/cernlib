@@ -1,0 +1,23 @@
+MACRO PAWEX16
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 16                          *
+* Creation of an Ntuple and first look at its contents                   *
+**************************************************************************
+Exec ALLDEF
+Ntuple/create 10 'CERN Population' 11 ' ' 3500  _
+Category Division Flag Age Service Children Grade Step Nation Hrweek Cost
+Ntuple/read 10 aptuple.dat
+Histo/file 1 aptuple.hbook 1024 N
+hrout 10
+ntuple/print 10
+zone 1 2
+opt stat
+set stat 110
+set htyp 244
+Ntuple/plot 10.Age
+Ntuple/plot 10.Cost
+Close 1
+zone
+hi/de 10
+RETURN
+

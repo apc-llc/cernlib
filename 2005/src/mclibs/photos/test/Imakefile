@@ -1,0 +1,7 @@
+SRCS_F= phodem.F pseudo_jetset.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(photost,phodem.o pseudo_jetset.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+TestTarget(photost,NullParameter,NullParameter)

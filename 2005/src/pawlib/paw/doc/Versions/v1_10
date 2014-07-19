@@ -1,0 +1,33 @@
+*
+* $Id: v1_10,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v1_10,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.10/00   901107 14.12
+*
+*       Option LOGX and LOGY available for 2D histos and Ntuples
+*       The command MAX works now on 2D histograms
+*       Bug corrected in PAGPRI (command HIST in case of non
+*           equidistants bins)
+*       New application : SLIDE
+*       Mods in installation craddle
+*       Bug corrected in FUN/PLOT in case of option same
+*       New commands:
+*          /FUNCTION/DRAW  UFUNC [ CHOPT ]
+*          /FUNCTION/ANGLE  [ THETA PHI ]
+*          /FUNCTION/RANGE  [ XLOW XUP YLOW YUP ZLOW ZUP ]
+*          /GRAPHICS/ATTRIBUTES/PALETTE  PALNB [ NEL LIST ]
+*          /GRAPHICS/WORKSTATION  IWKID [ CHOPT IWTYP ]
+*          /NTUPLE/LINTRA  IDN [ CHOPT NEVENT IFIRST NVARS VARLIS ]
+*       Commands modified, in order to take care of the new 3D
+*          plots facilities of HIGZ:
+*          /HISTOGRAM/2D_PLOT/LEGO  [ ID THETA PHI CHOPT ]
+*          /HISTOGRAM/2D_PLOT/SURFACE  [ ID THETA PHI CHOPT ]
+*          /HISTOGRAM/PLOT  [ ID CHOPT ]
+*

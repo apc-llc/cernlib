@@ -1,0 +1,26 @@
+*
+* $Id: sigc.inc,v 1.1.1.1 1995/12/12 14:36:22 mclareni Exp $
+*
+* $Log: sigc.inc,v $
+* Revision 1.1.1.1  1995/12/12 14:36:22  mclareni
+* Imported sources
+*
+*
+#ifndef CERNLIB_SIGMA_SIGC_INC
+#define CERNLIB_SIGMA_SIGC_INC
+*
+*
+* sigc.inc
+*
+*CMZ :  1.10/00 26/10/93  12.21.28  by  Carlo E. Vandoni
+*-- Author :
+C---  SIGMA MAIN COMMON
+      COMMON/SIGC/IPOINT,ISTAPO,LSTAPO,ITAM,MISIDX,ISTRI,ITYPE,KIT,
+     , LENGTH,NDIM,IERR,IND,IT2NAM,KLASS,NPRINT,I8LEN,I8DGT,INAME(6),
+     , LSTACK(6,128),MSTACK(2,128),IZAD(3),IZMOD(3),SITRAK(60),KTRL,
+     , MAINKT(6),CPLA,CPLB,CPLX,IERRNO
+      COMPLEX CPLA,CPLB,CPLX
+      COMMON/SICPLX/CMPCOM(32),ICMPI
+      INTEGER SITRAK
+
+#endif

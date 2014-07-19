@@ -1,0 +1,42 @@
+
+C **********************************************************************
+
+      SUBROUTINE LMINTO(PINT)
+
+C...This is the MINUIT routine INTOEX.
+CC        TRANSFORMS FROM INTERNAL COORDINATES (PINT) TO EXTERNAL
+CC        PARAMETERS (U).   THE MINIMIZING ROUTINES WHICH WORK IN
+CC        INTERNAL COORDINATES CALL THIS ROUTINE BEFORE CALLING FCN.
+
+      COMMON
+     1/LMMINE/ ERP(30)  ,ERN(30)
+     2/LMPARI/ X(15)    ,XT(15)   ,DIRIN(15) ,MAXINT     ,NPAR
+     3/LMPARE/ U(30)              ,WERR(30)  ,MAXEXT     ,NU
+     4/LMLIMI/ ALIM(30) ,BLIM(30) ,LCODE(30) ,LCORSP(30) ,LIMSET
+     5/LMVARI/ V(15,15)
+     7/LMFIX / IPFIX(15),XS(15)   ,XTS(15)   ,DIRINS(15) ,NPFIX
+     7/LMFIX2/ GRDS(15) ,G2S(15)  ,GSTEPS(15),ABERFS(15)
+     C/LMCASC/ Y(16)    ,JH       ,JL
+     F/LMDERI/ GIN(30)  ,GRD(15)  ,G2(15)    ,GSTEP(15)  ,ABERF(15)
+     G/LMSIMV/ P(15,16) ,PSTAR(15),PSTST(15) ,PBAR(15)   ,PRHO(15)
+     J/LMVART/ VT(15,15)
+      COMMON
+     6/LMUNIT/ ISYSRD   ,ISYSWR   ,ISYSPU
+     8/LMTITL/ TITLE(13),DATE(2)  ,ISW(7)    ,NBLOCK
+     9/LMCONV/ EPSI     ,APSI     ,VTEST     ,NSTEPQ     ,NFCN ,NFCNMX
+     A/LMCARD/ CWORD    ,CWORD2   ,CWORD3    ,WORD7(7)
+     B/LMMINI/ AMIN     ,UP       ,NEWMIN    ,ITAUR      ,SIGMA,EPSMAC
+
+      DIMENSION PINT(2)
+      DO 100 I= 1, NU
+      J = LCORSP(I)
+      IF ( J )  100,100,50
+   50 CONTINUE
+      IF (LCODE(I) .EQ. 1)  GO TO 80
+      AL = ALIM(I)
+      U(I) = AL + 0.5 *(SIN(PINT(J)) +1.0) * (BLIM(I) -AL)
+      GO TO 100
+   80 U(I) = PINT(J)
+  100 CONTINUE
+      RETURN
+      END

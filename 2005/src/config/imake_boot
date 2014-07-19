@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ "$CVSCOSRC" = "" ] ; then
+        echo YOU must set CVSCOSRC first
+        echo " try : setenv CVSCOSRC
+ /afs/.cern.ch/asis/share/cern/97a/src"
+        echo " or :
+ CVSCOSRC=/afs/.cern.ch/asis/share/cern/97a/src;export CVSCOSRC"
+        exit 1
+fi
+if [ -f Imakefile ] ; then
+	imake -DUseInstalled -I$CVSCOSRC/config \
+		-DTOPDIR=`/bin/pwd` -DCURDIR= -fImakefile
+else
+	imake -DUseInstalled -I$CVSCOSRC/config \
+		-DTOPDIR=`/bin/pwd` -DCURDIR= -f$CVSCOSRC/Imakefile
+fi

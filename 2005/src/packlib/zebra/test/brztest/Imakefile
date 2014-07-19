@@ -1,0 +1,3 @@
+SRCS_F=	 btest1.F btest2.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

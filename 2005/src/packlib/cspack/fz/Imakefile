@@ -1,0 +1,3 @@
+SRCS_F=	 fzclos.F fzopen.F fzrmio.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

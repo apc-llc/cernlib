@@ -1,0 +1,30 @@
+*
+* $Id: fat2sql.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fat2sql.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Run fat2sql program - take all entries from FATMEN
+#   catalogue and add to ORACLE database.
+#   Argument 1 is the group name (required)
+#   Argument 2 is the system name (defaults to CERN)
+#
+#   Check if FATMEN group is given...
+#
+: ${1:?FATMEN group missing - Usage: $0 group [system]}
+#
+#   Avoid trick using tr to get uppercase variables
+#
+typeset -u FATSYS
+typeset -u FATGRP
+export FATSYS=${2:-CERN}
+export FATGRP=$1
+export PWD=...... # Set to ORACLE password
+#
+#   Run program
+#
+./fat2sql

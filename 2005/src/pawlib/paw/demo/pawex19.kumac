@@ -1,0 +1,39 @@
+MACRO PAWEX19
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 19                          *
+*  Use of Ntuple masks and loop construct                                *
+**************************************************************************
+Exec ALLDEF
+hi/file 2 aptuple.hbook
+set xtic 0.0001
+1dhisto 20 'Distribution by grade' 12 3 15
+opt stat
+SET STAT 101
+Opt BAR
+Set BARW 0.8
+Set BARO 0.1
+Max 20 700
+Set NDVX -12.05
+Set NDVY -507
+Set HTYP 245
+Ntuple/plot 10.grade IDH=20
+Set HTYP 254
+*  Define via a mask those people which are at the end of their grade
+mask/file stmask N
+ntuple/loop 10 step=15>>stmask(1)
+ntuple/loop 10 grade>4.and.step=13>>stmask(2)
+timing all
+ntuple/loop 10 (grade=13.and.step=10).or.(grade=14.and.step=7)>>stmask(3)
+ntuple/loop 10 stmask(3)
+timing off
+Ntuple/plot 10.grade _
+            stmask(1).or.stmask(2).or.stmask(3)>>stmask(4) OPTION=S IDH=20
+mask/list
+mask/close stmask
+set CHHE 0.35
+Exec Legend 245 9.3 10.3 610 640 'All Staff'
+Exec Legend 244 9.3 10.3 560 590 'Staff at end of grade'
+set CLIP 0
+ATITLE 'Grade' 'Number of Staff'
+close 2
+RETURN

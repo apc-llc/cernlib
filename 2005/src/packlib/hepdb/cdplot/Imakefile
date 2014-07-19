@@ -1,0 +1,4 @@
+SRCS_F=	 cdioty.F cdntpl.F cdplbk.F cdplob.F cdplov.F cdplti.F \ @@\
+	cdtimc.F cdtimm.F cdtims.F cdusin.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

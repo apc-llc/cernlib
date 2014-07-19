@@ -1,0 +1,12 @@
+*
+* $Id: v113.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v113.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+C- Modifications:
+C  > M231 CVTIB   - mod for AXP compatibility
+C  > Disable Z264 for VAX - now in KERNVAX.
+C  > Add WINNT flag

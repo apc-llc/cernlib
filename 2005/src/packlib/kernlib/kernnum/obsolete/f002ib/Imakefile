@@ -1,0 +1,10 @@
+SRCS_S= \ @@\
+	 cvadd.s cvcpy.s cvdiv.s cvmpa.s cvmpac.s cvmpy.s cvmpyc.s cvmul.s \ @@\
+	 cvmula.s cvmuna.s cvran.s cvsca.s cvscl.s cvscs.s cvset.s cvsub.s \ @@\
+	 cvsum.s cvxch.s dvadd.s dvcpy.s dvdiv.s dvmpa.s dvmpy.s dvmul.s \ @@\
+	 dvmula.s dvmuna.s dvran.s dvsca.s dvscl.s dvscs.s dvset.s dvsub.s \ @@\
+	 dvsum.s dvxch.s rvadd.s rvcpy.s rvdiv.s rvmpa.s rvmpy.s rvmul.s \ @@\
+	 rvmula.s rvmuna.s rvran.s rvsca.s rvscl.s rvscs.s rvset.s rvsub.s \ @@\
+	 rvsum.s rvxch.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

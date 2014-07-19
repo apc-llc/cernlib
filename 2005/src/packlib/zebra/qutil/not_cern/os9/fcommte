@@ -1,0 +1,22 @@
+*
+* $Id: fcommte,v 1.1.1.1 1996/03/06 10:47:16 mclareni Exp $
+*
+* $Log: fcommte,v $
+* Revision 1.1.1.1  1996/03/06 10:47:16  mclareni
+* Zebra
+*
+*
+*             Fortran Test COMMONs for OS9
+* This directory was created from zebra.car patch fcommte
+      SUBROUTINE CQC1_NOOP
+#include "cqc1.inc"
+      END
+      SUBROUTINE TESTLA_NOOP
+#include "testla.inc"
+      END
+      SUBROUTINE FQTLUN_NOOP
+#include "fqtlun.inc"
+      END
+      SUBROUTINE FQMBUF_NOOP
+#include "fqmbuf.inc"
+      END

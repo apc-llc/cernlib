@@ -1,0 +1,24 @@
+#
+# Backup database files
+#
+0 23 * * * /afs/cern.ch/project/hepdb/scripts/cdbackup.sh > /dev/null 2>&1
+#
+# Look for servers that are stopped
+#
+0 8 * * * /afs/cern.ch/project/hepdb/scripts/cdchk > /dev/null 2>&1
+#
+# More powerful check
+#
+20 * * * * /afs/cern.ch/project/hepdb/scripts/cdcheck > /dev/null 2>&1
+#
+# Check for backlogs
+#
+# TGB - fixed syntax error
+#
+0 0 * * * /u/cp/jamie/bin/cdqueue > /dev/null 2>&1
+#
+#
+# Special check for cdmove
+#
+30 * * * * /afs/cern.ch/project/hepdb/scripts/cdmovechk >> /var/log/cdmovechk.log 2>&1
+42 8,0 * * * ( /usr/lpp/adsm/scripts/cron_adsm.pl ) >/dev/null 2>&1

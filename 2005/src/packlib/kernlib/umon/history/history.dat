@@ -1,0 +1,14 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+* This directory was created from umon.car patch history
+C UMON     1.03/03   950509 15:00 CERN Program Library     Z020 UMON
+* 09-May-95 Disable UMLOGUX for MSDOS, use dummy UMLOG
+C UMON     1.03/02   050217 11:50 CERN Program Library     Z020 UMON
+* 17-FEB-95 Massage format statement in UMCOM
+C UMON     1.03/01   930506 11:00 CERN Program Library     Z020 UMON

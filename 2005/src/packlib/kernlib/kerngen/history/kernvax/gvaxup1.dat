@@ -1,0 +1,170 @@
+*
+* $Id: gvaxup1.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: gvaxup1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+
+          UP-DATE RECORD FOR GENVAX VERSIONS 1.01 TO 1.99
+          -----------------------------------------------
+
+
+          FIRST RELEASE OF THE GENVAX MINI-PAM :  10-NOV-79
+
+---------------------------------------------------------------------
+
+UPDATE  1.02 :   7-DEC-79
+-------------------------
+
+REPLACING FILE  GENVAX 1.01  791110 12.37
+
+NEW DECKS:      P=VAXGS,   D=IUMODE, TIMED
+
+---------------------------------------------------------------------
+
+UPDATE  1.03 :  17-APR-80
+-------------------------
+
+REPLACING FILE  GENVAX 1.02  791207 15.45
+
+CORRECTIONS:    P=VAXGS,   D=IUMODE
+
+---------------------------------------------------------------------
+
+UPDATE  1.04 : 21-JULY-80
+-------------------------
+
+REPLACING FILE  GENVAX 1.03  800417 15.54
+
+CORRECTIONS:    P=VAXGS,   D=UBLOW, UBUNCH
+
+---------------------------------------------------------------------
+
+UPDATE  1.05 : 30-JULY-80
+-------------------------
+
+REPLACING FILE  GENVAX 1.04  800721  16.03
+
+CORRECTIONS:    P=VAXGS,   D=IUMODE      CALLING SEQUENCE CHANGED
+
+---------------------------------------------------------------------
+
+UPDATE  1.06 :   3-NOV-80
+-------------------------
+
+REPLACING FILE  GENVAX 1.05  800730  17.25
+
+CORRECTIONS:    P=VAXGS,   D=UCOPY       RE-WRITE FOR BUG
+
+---------------------------------------------------------------------
+
+UPDATE  1.07 :  17-NOV-80
+-------------------------
+
+REPLACING FILE  GENVAX 1.06  801103  18.57
+
+NEW DECK :      P=VAXGS,   D=IUCOMH      COMPARE HOLLERITH
+
+---------------------------------------------------------------------
+
+UPDATE  1.08 :  29-JAN-81
+-------------------------
+
+REPLACING FILE  GENVAX 1.07  801117  18.51
+
+NEW DECKS :   P=VAXGS, D=SWBL16, SWBU16  BLOW/BUNCH WITH BYT SWOPPING
+
+---------------------------------------------------------------------
+
+UPDATE  1.09 :  26-FEB-81
+-------------------------
+
+REPLACING FILE  GENVAX 1.08  810129  15.59
+
+CHANGE ALL '+DEL ...' INTO '+USE,..., T=INH'
+
+---------------------------------------------------------------------
+
+UPDATE  1.10 :  26-NOV-81
+-------------------------
+
+REPLACING FILE  GENVAX 1.09  810226  18.24
+
+NEW DECKS :   P=VAXGS, D=ABEND
+
+---------------------------------------------------------------------
+
+UPDATE  1.11 :  12-FEB-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.10  811127  12.08
+
+NEW DECKS :   P=VAXGS, D=GSHOW
+
+---------------------------------------------------------------------
+
+UPDATE  1.12 :  4-JUNE-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.11  820212  11.15
+
+FORMAL TRANSLATION FOR KERNLIB (COMMENT CARDS ONLY)
+
+---------------------------------------------------------------------
+
+UPDATE  1.13 :  6-JUNE-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.12  820604  19.30
+
+CORRECTIONS:    P=XVECTVAX,D=XINB,XINBS      ADD LENGTH PROTECTION
+                P=VAXGS,   D=SBIT,SBYT       PROTECT 0/-VE BIT COUNT
+NEW DECKS:      P=VAXGS,   D=UCTOH1,UH1TOC   IN MACHINE LANGUAGE
+
+---------------------------------------------------------------------
+
+UPDATE  1.14 :   1-JUL-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.13  820606  22.07
+
+NEW DECKS :     P=VAXGS, D=AKMULT    FOR MULTI-ROUTINE ASSEMBLY
+
+---------------------------------------------------------------------
+
+UPDATE  1.15 :  21-JUL-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.14  820701  12.14
+
+NEW DECKS :     P=VAXGS, D=DATIMH, NOARG, RNDM
+
+---------------------------------------------------------------------
+
+UPDATE  1.16 :  22-JUL-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.15  820721   9.39
+
+NEW DECKS :     P=VAXGS, D=FLOARG, INTARG, UCOPY2, UFLINT
+
+                          THE NEW UCOPY2 CONTAINS UCOPY
+
+---------------------------------------------------------------------
+
+UPDATE  1.17 :  27-JUL-82
+-------------------------
+
+REPLACING FILE  GENVAX 1.16  820722  13.10
+
+NEW DECKS :     P=VAXGS, D=TIMEL, TIMEX
+
+CORRECTIONS:    P=VAXGS, D=TIMED
+
+---------------------------------------------------------------------
+
+              KERNVAX 2.00  =  GENVAX 1.17
+
+---------------------------------------------------------------------

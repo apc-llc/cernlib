@@ -1,0 +1,60 @@
+#
+#  float.exp  --
+#
+#  Original: 30-Jun-1995 15:52
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Valid formats
+#
+
+literal_test	float	-3.40282347e+38		-3.402823e+38
+literal_test	float	-1.17549435e-38		-1.175494e-38
+literal_test	float	0.00000000e+00		0.000000e+00
+literal_test	float	1.17549435e-38		1.175494e-38
+literal_test	float	3.40282347e+38		3.402823e+38
+
+literal_test	float	0.			0.000000e+00
+literal_test	float	-0.			0.000000e+00
+literal_test	float	.0			0.000000e+00
+literal_test	float	-.0			0.000000e+00
+literal_test	float	0e0			0.000000e+00
+literal_test	float	-0e0			0.000000e+00
+literal_test	float	0E0			0.000000e+00
+literal_test	float	-0E0			0.000000e+00
+
+literal_test	float	5.			5.000000e+00
+literal_test	float	-5.			-5.000000e+00
+literal_test	float	.75			7.500000e-01
+literal_test	float	-.75			-7.500000e-01
+literal_test	float	123.625			1.236250e+02
+literal_test	float	-123.625		-1.236250e+02
+literal_test	float	8e10			8.000000e+10
+literal_test	float	-8e10			-8.000000e+10
+literal_test	float	8e+10			8.000000e+10
+literal_test	float	-8e+10			-8.000000e+10
+literal_test	float	8e-10			8.000000e-10
+literal_test	float	-8e-10			-8.000000e-10
+
+#
+# Invalid formats
+#
+
+untested "Literal test Float: Invalid formats not tested"
+
+paw_cmd { close 4 }

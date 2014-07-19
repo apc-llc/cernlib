@@ -1,0 +1,23 @@
+*
+* $Id: hdbstart.dat,v 1.1.1.1 1996/02/28 16:23:59 mclareni Exp $
+*
+* $Log: hdbstart.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:59  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, HDBSTART.EXEC */
+/*                      H D B _ S T A R T                     */
+   If QCONSOLE("DISCO") then nop
+                        else do
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        end
+'IDENTIFY (STACK'
+Parse pull . . locnode .
+ 
+   'EXEC CERNLIB CDLIB PACKLIB!NEW'
+   'LOAD CDSERV NAMEFD (NOMAP NOAUTO CLEAR START)'
+#endif

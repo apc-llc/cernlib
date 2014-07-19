@@ -1,0 +1,76 @@
+MAKE=make
+/* gmake has options which we must drop for make */
+override MAKEFLAGS=
+MFLAGS := $(subst w,,$(MFLAGS))
+ifeq ($(strip $(MFLAGS)),-)
+MFLAGS:=
+endif
+
+ifeq ($(strip $(VERSION)),)
+VERSION=archive
+endif
+
+.PRECIOUS: archive/tree archive/imake/imake
+.PRECIOUS: debug/tree debug/imake/imake
+.PRECIOUS: shared/tree shared/imake/imake
+
+%/objects.list: %/lib/libshift.a
+	[ ! -d $(@D) ] && mkdir $(@D) || true
+	cd $(@D)/lib;ar x libshift.a
+	RemoveFile($@)
+	(cd $(@D)/lib;ls *.o | sed -e "s=^.=$(@D)/lib/&="  )  > $@
+
+archive/stamp debug/stamp: $(@D)/tree $(@D)//lib/libshift.a
+	[ ! -d $(@D) ] && mkdir $(@D) || true
+	cd $(@D);ar x lib/libshift.a
+	touch $@
+
+%/tree:: shift.tar
+	[ -d $(@D) ] && rm -rf $(@D) || true
+	echo testing ... tree
+	mkdir $(@D)
+	cp $< $(@D)/$(<F)
+	cd $(@D);tar xf $(<F)
+	rm $(@D)/$(<F)
+	cd $(@D);ln -s h shift
+	cd $(@D);ln -s h/shift.h shift.h
+	touch $@
+
+libaddobjects:
+	echo adding $(VERSION) objects from $(CURRENT_DIR)/$(VERSION)
+	cd ./$(VERSION);$(AR) $(LIBPATH)/$(LIBNAME) *.o
+
+clean::
+	rm -r archive shared debug
+
+
+make_debug=make CC=$(QUOTE)$(CC) DebuggableCDebugFlags $(QUOTE) FC=$(QUOTE)$(FC) DebuggableFortranDebugFlags $(QUOTE)
+make_debug:='$(make_debug)'
+
+make_shared='make CC="$(CC) $(PICFLAGS)" FC="$(FC) $(PIFFLAGS)"'
+
+archive/lib/libshift.a: archive/Makefile
+	. ./archive/setosflags;cd $(patsubst %/lib,%,$(@D));$(MAKE) $(MFLAGS) cernlib
+
+debug/lib/libshift.a: debug/Makefile
+	MAKE=$(make_debug);export MAKE; . ./archive/setosflags;	\
+	cd $(patsubst %/lib,%,$(@D));$(MAKE) $(MFLAGS) cernlib
+
+shared/lib/libshift.a: shared/Makefile
+	MAKE=$(make_shared);export MAKE; . ./archive/setosflags;	\
+		cd $(patsubst %/lib,%,$(@D));$(MAKE) $(MFLAGS) cernlib
+
+%/Makefile: %/imake/imake
+	. ./archive/setosflags;cd $(@D);imake/imake -Iconfig $@
+	. ./archive/setosflags;cd $(@D);$(MAKE) $(MFLAGS) Makefiles
+
+%/imake/imake: %/tree
+	echo MFLAGS are $(MFLAGS)
+	echo MAKEFLAGS are $(MAKEFLAGS)
+	. ./archive/setosflags;cd $(@D);		\ 
+		$(MAKE) $(MFLAGS) -f Makefile.ini  BOOTSTRAPCFLAGS="$$BOOTSTRAPCFLAGS"
+
+install.include:
+
+test:
+	@echo "No test for shift software available"

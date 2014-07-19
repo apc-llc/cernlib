@@ -1,0 +1,38 @@
+#!/bin/sh
+# **********************************************************************
+#@(#) * yexpand $Header: /afs/cern.ch/asis/share/cern/CVS/patchy/yexpand.script,v 1.2 2005/04/18 15:23:11 mclareni Exp $
+# *                                                                    *
+# * Expand environment variables in PATCHY cradles                     *
+# *                                                                    *
+# * Author: M.Marquina 91/12/10                                        *
+# * Mods         Date   Commments                                      *
+# * M.Marquina 92/03/11 Display syntax if no arguments are given       *
+# *                     Place by default the output in ./, exit with rc*
+# * M.Marquina 93/12/09 Prefix always CERN_ROOT with ":" in order to   *
+# *                     get ypatchy respecting the pam-filename case   *
+# *            93/12/21 Translate CERN_ROOT as CERN/CERN_LEVEL in order*
+# *                     to use the correct LEVEL in the cradle         *
+# * G.Folger   94/09/26 make .yexp script run in /bin/sh. 
+# *                                                                    *
+# **********************************************************************
+  if [ $# -eq 0 ] ; then
+     echo "usage: yexpand input_cradle [output_cradle]"
+     exit
+  fi
+  ifile=$1
+  tfile=`echo $ifile | awk -F/ '{ print $NF }'`
+  [ $# -eq 1 ] && ofile=$tfile || ofile=$2
+
+# CERN_ROOT=":$CERN_ROOT" ; export CERN_ROOT 
+  CERN_ROOT=":$CERN/$CERN_LEVEL" ; export CERN_ROOT 
+
+  tfile="$HOME/$tfile.yexp"
+  echo "#!/bin/sh"    >$tfile
+  echo "  cat <<EOI" >>$tfile
+  cat <$ifile        >>$tfile
+  cc=$?
+  echo "EOI"         >>$tfile
+  chmod a+x $tfile
+  $tfile    >$ofile
+  rm $tfile
+  exit $cc

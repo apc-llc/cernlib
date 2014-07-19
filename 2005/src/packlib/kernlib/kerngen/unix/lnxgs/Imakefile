@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 btest.F iand.F ibclr.F ibset.F ieor.F ior.F irndm.F \ @@\
+	 qnext.F rdmin.F
+
+SRCS_C= \ @@\
+	 ishft.c ishftr.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,9 @@
+SRCS_F= \ @@\
+	 a1vec.F ampvec.F dalitz.F decays.F dot.F fermi.F jets.F omephi.F \ @@\
+	 on2gga.F ongqbq.F onh0ga.F oni2g.F oni3g.F onisqd.F pardec.F \ @@\
+	 parfra.F tausca.F tauvec.F triang.F vecpar.F virhvy.F vmina.F \ @@\
+	 wadkro.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

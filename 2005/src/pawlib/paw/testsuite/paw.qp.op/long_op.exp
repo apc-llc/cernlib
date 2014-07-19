@@ -1,0 +1,129 @@
+#
+#  long_op.exp  --
+#
+#  Original: 29-Mar-1996 12:02
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+untested	"Int64 operators"
+
+# 
+# #
+# # Comment only the symmetric range -2147483647 ... 2147483647
+# # is tested
+# #
+# 
+# #
+# # Scalar -
+# #
+# 
+# expr_test	int	1	0-ival			2147483647
+# expr_test	int	2	0-ival			12345
+# expr_test	int	3	0-ival			0
+# expr_test	int	4	0-ival			-12345
+# expr_test	int	5	0-ival			-2147483647
+# 
+# expr_test	int	1	-2147483647-ival	0
+# expr_test	int	2	-12345-ival		0
+# expr_test	int	3	0-ival			0
+# expr_test	int	4	12345-ival		0
+# expr_test	int	5	2147483647-ival		0
+# 
+# expr_test	int	1	i2-1500			500
+# 
+# 
+# #
+# # Scalar +
+# #
+# 
+# expr_test	int	1	0+ival			-2147483647
+# expr_test	int	2	0+ival			-12345
+# expr_test	int	3	0+ival			0
+# expr_test	int	4	0+ival			12345
+# expr_test	int	5	0+ival			2147483647
+# 
+# expr_test	int	1	2147483647+ival		0
+# expr_test	int	2	12345+ival		0
+# expr_test	int	3	0+ival			0
+# expr_test	int	4	-12345+ival		0
+# expr_test	int	5	-2147483647+ival	0
+# 
+# expr_test	int	1	i2+1500			3500
+# 
+# 
+# #
+# # Scalar *
+# #
+# 
+# expr_test	int	1	1*ival			-2147483647
+# expr_test	int	2	1*ival			-12345
+# expr_test	int	3	1*ival			0
+# expr_test	int	4	1*ival			12345
+# expr_test	int	5	1*ival			2147483647
+# 
+# expr_test	int	1	0*ival			0
+# expr_test	int	2	0*ival			0
+# expr_test	int	3	0*ival			0
+# expr_test	int	4	0*ival			0
+# expr_test	int	5	0*ival			0
+# 
+# expr_test	int	1	i2*1500			3000000
+# 
+# 
+# #
+# # Scalar /
+# #
+# 
+# expr_test	int	1	ival/1			-2147483647
+# expr_test	int	2	ival/1			-12345
+# expr_test	int	3	ival/1			0
+# expr_test	int	4	ival/1			12345
+# expr_test	int	5	ival/1			2147483647
+# 
+# expr_test	int	1	0/ival			0
+# expr_test	int	2	0/ival			0
+# expr_test	int	3	0/ival			{Divide by zero}
+# expr_test	int	4	0/ival			0
+# expr_test	int	5	0/ival			0
+# 
+# expr_test	int	1	-2147483647/ival	1
+# expr_test	int	2	-12345/ival		1
+# expr_test	int	3	0/ival			{Divide by zero}
+# expr_test	int	4	12345/ival		1
+# expr_test	int	5	2147483647/ival		1
+# 
+# expr_test	int	1	i2/10			200
+# 
+# 
+# #
+# # Scalar unary -
+# #
+# 
+# expr_test	int	1	-ival			2147483647
+# expr_test	int	2	-ival			12345
+# expr_test	int	3	-ival			0
+# expr_test	int	4	-ival			-12345
+# expr_test	int	5	-ival			-2147483647
+# 
+# 
+# #
+# # Cleanup after tests
+# #
+# 
+
+paw_cmd { close 4 }

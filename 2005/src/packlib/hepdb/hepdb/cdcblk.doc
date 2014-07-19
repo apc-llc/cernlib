@@ -1,0 +1,145 @@
+*
+* $Id: cdcblk.doc,v 1.1 1997/01/22 16:56:57 gunter Exp $
+*
+* $Log: cdcblk.doc,v $
+* Revision 1.1  1997/01/22 16:56:57  gunter
+* rename files with % to be .doc files
+*
+* Revision 1.1.1.1  1996/02/28 16:24:06  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#ifndef CERNLIB_HEPDB_CDCBLK%_INC
+#define CERNLIB_HEPDB_CDCBLK%_INC
+*
+*
+* cdcblk%.inc
+*
+#if defined(CERNLIB__DOC)
+/GCBANK/          (For definition of the Q/IQ/LQ vectors)
+ LQ,IQ,Q         Dynamic memory used inside the program
+ FENCCD          Fence words used
+/QUEST/           (For communication with user; error code etc.)
+ IQUEST          Error code and other information
+/CDUSCM/          (Most commonly used ZEBRA pointers and other indices)
+    IDEBCD       Debug level (default set at 0 in DBINIT)
+    IDISCD       Division index of DBL3 system division
+    IDIVCD       Division index of DBL3 user   division
+    IHKYCD       Hollerith bank name of Key banks
+    IKDRCD       Internal pointer to the first key in current directory
+    IONOCD       IO descriptor of the node bank
+    KOFSCD       Offset of the store containing ZEBRA system division
+    KOFUCD       Offset of the store containing DBL3 divisions relative
+                 to /GCBANK/
+    LBADCD  -|
+    LBAFCD   |
+    LBDACD   |
+    LBFXCD   |
+    LBFYCD   |   Relocatable ZBERA addresses
+    LBKYCD   |     Key bank
+    LBNOCD   |     Current node bank
+    LFIXCD   |
+    LREFCD   |
+    LSAVCD   |
+    LTOPCD  -|     First Top level bank (saved for all operations)
+    LPRTCD       Logical unit number of the standard output file
+    NTOPCD       Number of top level directories
+    NDMXCB       Maximum number of data words to store a text file
+                  (Offsets and mnemonics)
+    IKTYCD       Key descriptor in the directory bank
+    KNSDCD       Number of subdirectories
+    KLSDCD       Pointer to the first subdirectory
+    NWNOCD       Number of fixed words in the node bank (containing IO
+                 descriptor of the Key banks)
+    NWITCD       Number of words/directory in the Dictionary bank
+    NPUSCD       Number of directories to be added in one go in the
+                 Dictionary bank (per push)
+    MAXLCD       Maximum number of characters in the path name
+    JRZUCD       Bit in flag to tell if no packing/updating is done
+    JIGNCD                   to tell the current object is to be ignored
+    JPRTCD                   to tell the current directory is partitiond
+    JASFCD                   to tell the current object is a text file
+    KLKYCD       Offset of the Key bank w.r.t. the node bank
+    KLDACD       Offset of the Data bank w.r.t. the key bank
+    KLNOCD       Reference link offset of the node bank from key bank
+    KLUPCD                 link offset of the top  bank from key bank
+    KLDICD       Offset of the dictionary bank w.r.t. the top bank
+    KLFZCD              of the FZDB bank (conatining list of directories
+                        to be updated from Journal file) w.r.t. top bank
+    MFZTOP       Offset of top directory name in FZDB bank
+    MFZDIR              of directory name     in FZDB bank
+    MXLWCD       Maximum number of words in the directory name in FZDB
+    MUPLUN       Offset in UPCD of logical unit number of RZ file
+    MUPFLG                      of flag if D.B. to be updated
+    MUPJFL                      of logical unit number of journal file
+    MUPBAK                      of logical unit number of backup file
+    MUPDIC                      of identifier of the top directory
+    MUPNCH                      of number of characters in top name
+    MUPSRV                      of the shared/server flag
+    MUPKY7                      of maximum Key7 value for retrieval
+    MUPNAM                      of name of the top directory
+    MNDNWK       Offset in NOCD of the number of key elements
+    MNDNWD                      of total number of words in Key bank
+    MNDNCH                      of number of characters in the name
+    MNDDIC                      of unique identifier of the node
+    MNDIOF                      of IO descriptor of the key bank
+    MNDNAM                      of name of the path to the node
+    NLKYCD       Number of links in the KYCD bank
+    NSKYCD       Number of structural links in the KYCD bank
+    MKYRID       Offset in KYCD of number of physical reads from disk
+    MKYCEV       (from end)     of number of calls to DBUSE in 1 event
+    MKYCRU                      of number of calls to DBUSE in 1 run
+    MKYPRE                      of precision used to store the object
+    MKYFRI                      of FREE flag
+    NLUPCD       Number of links in the UPCD bank
+    NSUPCD       Number of structural links in the UPCD bank
+    NDUPCD       Number of data words in the UPCD bank
+    MDCNTM       Offset in DICT of the number of nodes in the dictionary
+    MDCITM                      of unique identifier of the node
+    MDCNCH                      of number of characters in the path name
+    MDCLUP                      of last update to the node
+    MDCALI                      of the alias name
+    MDCNAM                      of the path name to the node
+    NARGCD       Maximum dimension of IARGCD used for printing
+    LUFMCD       Logical unit number for the server file (in P mode)
+    IDHKSN       Offset in key vector of serial number of the object
+    IDHPTR                            of reference to the master object
+    IDHUSI                            of source identifier (Prog Vsn)
+    IDHFLG                            of flag
+    IDHINS                            of insertion time
+    MPSRCD                            of partition number
+    MXKPCD                            of maximum number per partition
+    MOBJCD                            of lowest serial number (-1) in
+                                      current partition
+    MHFMCD       Offset in   | of height of the frame
+    MLEVCD       the bank    |    level number
+    MNAMCD       created in  |    node name
+    MNCHCD       DBFPAT of   |    number of characters in node name
+    MNDWCD       directory   |    number of down nodes
+    MNFNCD       information |    upward node number
+    MNLVCD       used for    |    number of levels
+    MNNUCD       display etc.|    node number
+    MNODCD                        number of nodes in the level
+    MPNNCD                        pointer to the first node
+    MPNLCD                        pointer to next level/node
+    MPPLCD                        pointer to previous level
+    MXOFCD                        X-offset of the level
+    MXWDCD                        X-width  of the level
+    MYFLCD                        Y-offset of the level
+    MYFNCD                        Y-offset of the node
+/CDCBLK/          (Additional flags and pointers)
+    LCDRCD  -|   ZEBRA pointers in the | Current directory
+    LJNKCD  -|   ZEBRA system divsion  |
+    IBIGCD       Maximum end validity range value
+    INSRCD       Initialization flag in server mode
+    IODICD       IO descriptor of the Dictionary bank
+    IOFDCD                     of the FDDB bank
+    IOFZCD                     of the FZDB bank
+    IOVRCD       Overwrite flag in DBFZUP
+    KYENCD       Logical end validity of the current object
+    MXINCD       Maximum allowed insertion time for data retrieval
+    IOKYCD       IO descriptor of the Key bank
+    IARGCD       Buffer for printout
+#endif
+
+#endif

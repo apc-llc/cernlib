@@ -1,0 +1,9 @@
+SRCS_F=	 cdacpl.F cdacti.F cdaird.F cdaiwr.F cdauxi.F cdchti.F \ @@\
+	cdclfl.F cdconc.F cdcrdr.F cdctob.F cdctor.F cddckh.F cddckv.F \ @@\
+	cddisd.F cddish.F cddisp.F cddisv.F cddkyh.F cddkyv.F cddprg.F \ @@\
+	cdedas.F cdedky.F cdftio.F cdhead.F cdinxi.F cdjoin.F cdlook.F \ @@\
+	cdopfl.F cdpeek.F cdpres.F cdproc.F cdrdda.F cdrdio.F cdrgck.F \ @@\
+	cdrgcv.F cdrvnt.F cdrvpl.F cdsget.F cdtemp.F cdupky.F cdvhea.F \ @@\
+	cdview.F cdvwpr.F cdwrdp.F cdxini.F cdxopt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,6 @@
+SRCS_F=	 circf.F circi.F color.F cursof.F draw2i.F icrawl.F \ @@\
+	linewi.F mapcol.F marker.F move2i.F outtext.F polf2i.F \ @@\
+	poly2i.F sboxfi.F sboxi.F scrmas.F setlin.F setpat.F setpix.F \ @@\
+	strwid.F winclo.F winope.F winpop.F winset.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

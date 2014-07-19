@@ -1,0 +1,14 @@
+*
+* $Id: v171.dat,v 1.1.1.1 1996/03/08 15:21:46 mclareni Exp $
+*
+* $Log: v171.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:46  mclareni
+* Epio
+*
+*
+*  Version 1.71  930902  9.00
+C- Correct problem with EPDROP for Vax, Apollo and Unix when EPDEFU is
+C  is not called by the user.
+C
+C- Add flag NEXT.
+C

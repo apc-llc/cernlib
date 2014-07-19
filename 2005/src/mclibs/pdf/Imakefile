@@ -1,0 +1,21 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+AllTarget(pdflib804)
+
+SUBDIRS= spdf npdf tpdf pdf
+
+TopOfPackage(pdflib804)
+
+SubdirLibraryTarget(pdflib804,spdf npdf)
+
+InstallLibrary(pdflib804,$(CERN_LIBDIR))
+
+TestSubdirs(tpdf)
+
+InstallIncludeSubdirs(pdf)

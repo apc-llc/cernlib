@@ -1,0 +1,73 @@
+/*
+ * $Id: mkuxsc.h,v 1.1.1.1 1996/03/08 15:33:13 mclareni Exp $
+ *
+ * $Log: mkuxsc.h,v $
+ * Revision 1.1.1.1  1996/03/08 15:33:13  mclareni
+ * Kuip
+ *
+ */
+/*******************************************************************************
+       kuipScroll.h
+       This header file is included by kuipScroll.c
+
+*******************************************************************************/
+
+#ifndef        _KUIPSCROLL_INCLUDED
+#define        _KUIPSCROLL_INCLUDED
+
+
+#include <stdio.h>
+#include <Xm/Xm.h>
+#include <Xm/MwmUtil.h>
+#include <Xm/DialogS.h>
+#include <Xm/MenuShell.h>
+/* #include "UxXt.h" */
+#include "mkuxxt.h"
+
+#include <Xm/Text.h>
+#include <Xm/ScrolledW.h>
+#include <Xm/SeparatoG.h>
+#include <Xm/PushBG.h>
+#include <Xm/Form.h>
+
+/*******************************************************************************
+       The definition of the context structure:
+       If you create multiple copies of your interface, the context
+       structure ensures that your callbacks use the variables for the
+       correct copy.
+
+       For each swidget in the interface, each argument to the Interface
+       function, and each variable in the Interface Specific section of the
+       Declarations Editor, there is an entry in the context structure.
+       and a #define.  The #define makes the variable name refer to the
+       corresponding entry in the context structure.
+*******************************************************************************/
+
+typedef        struct
+{
+        Widget        UxkuipScroll;
+        Widget        UxscrollSep;
+        Widget        UxScWindow;
+        Widget        UxscrollText;
+        swidget        UxscrollParent;
+} _UxCkuipScroll;
+
+#ifdef CONTEXT_MACRO_ACCESS
+static _UxCkuipScroll          *UxKuipScrollContext;
+#define kuipScroll              UxKuipScrollContext->UxkuipScroll
+#define scrollSep               UxKuipScrollContext->UxscrollSep
+#define ScWindow                UxKuipScrollContext->UxScWindow
+#define scrollText              UxKuipScrollContext->UxscrollText
+#define scrollParent            UxKuipScrollContext->UxscrollParent
+
+#endif /* CONTEXT_MACRO_ACCESS */
+
+extern Widget        km_scrollOK;
+
+/*******************************************************************************
+       Declarations of global functions.
+*******************************************************************************/
+
+Widget        create_kuipScroll();
+
+#endif        /* _KUIPSCROLL_INCLUDED */

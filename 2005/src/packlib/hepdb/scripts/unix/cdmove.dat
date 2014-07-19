@@ -1,0 +1,36 @@
+*
+* $Id: cdmove.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdmove.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+#
+# Example CDMOVE script. On HEPDB, this is stored as
+# /hepdb/cdmove/cdserv.
+# /hepdb/cdmove/cdsrv is a link to ~jamie/hepdb/cdmove
+#
+# This allows CDMOVE to be started by CDSTART as if it
+# were a normal database server.
+#
+#trap 'rm -f $new $old; exit 1' 1 2 15  #clean up
+t=`date`
+h=`hostname`
+echo
+echo CDMOVE starting at $t on $h
+echo
+echo $1 starting at $t on $h PID = $$ > /hepdb/${1}.log
+typeset -l cdpath
+cdpath=/hepdb/${1}
+export CDGROUPS="CDCPLEAR,CDCHORUS,CDCNDIV,CDWA97"
+export CDCPLEAR=/hepdb/cdcplear
+export CDCHORUS=/hepdb/cdchorus
+${cdpath}/cdsrv
+if [ -f  /hepdb/${1}.log ]
+then
+   rm -f  /hepdb/${1}.log
+fi
+#endif

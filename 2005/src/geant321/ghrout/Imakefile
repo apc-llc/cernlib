@@ -1,0 +1,20 @@
+SRCS_F= \ @@\
+	 cohert.F ghepec.F ghetun.F higclu.F highab.F higsel.F higxpt.F \ @@\
+	 sverl2.F svgam7.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+#ifdef CERNLIB_SGI
+ SpecialFortranLibObjectRule(higclu,higclu,NullParameter,NullParameter)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

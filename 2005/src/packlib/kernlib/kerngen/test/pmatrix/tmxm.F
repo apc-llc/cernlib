@@ -1,0 +1,282 @@
+*
+* $Id: tmxm.F,v 1.1.1.1 1996/02/15 17:54:57 mclareni Exp $
+*
+* $Log: tmxm.F,v $
+* Revision 1.1.1.1  1996/02/15 17:54:57  mclareni
+* Kernlib
+*
+*
+#include "kerngent/pilot.h"
+      SUBROUTINE TMXM
+
+#include "kerngent/mkcde.inc"
+
+      DIMENSION    ZER(12),ACT(6), BCT(8),DMIN(12)
+     +,            APLUS(12),AMIN(12),APLUS1(9),AMIN2(9)
+      EQUIVALENCE (ZER(1),B(1)),     (ACT(1),B(100))
+     +,           (BCT(1),B(200)),   (DMIN(1),B(700))
+     +,           (APLUS(1),B(300)), (AMIN(1),B(400))
+     +,           (APLUS1(1),B(500)),(AMIN2(1),B(600))
+      DIMENSION    AC(6),BC(8),C1C(12),C2C(9),D(12)
+      INTEGER TINF(4), TINFY1, TINFY2, TINFY3
+     +,       TINFA  , TINFA1, TINFA2, TINFA3
+     +,       TINFU  , TINFU1, TINFU2, TINFU3
+
+      DATA  AC/ 0., 1., 2., 3., 4., 5./
+      DATA  BC/ 10., 20., 30., 40., 50., 60., 70., 80./
+      DATA  C1C/50.,60.,70.,80.,170.,220.,270.,320.,290.,380.,470.,560./
+      DATA  C2C/ 3., 4., 5., 9., 14., 19., 15., 24., 33./
+      DATA  D/2.,4.,6.,8.,102.,104.,106.,108.,202.,204.,206.,208./
+      DATA  TINF/1000,4HXMPY,0,4H324 /
+      DATA   TINFA /4HXMAD/,   TINFU /4HXMUB/,   TINFY1 /4HMPY1/
+     +,      TINFA1 /4HMAD1/,   TINFU1 /4HMUB1/,   TINFY2 /4HMPY2/
+     +,      TINFA2 /4HMAD2/,   TINFU2 /4HMUB2/,   TINFY3 /4HMPY3/
+     +,      TINFA3 /4HMAD3/,   TINFU3 /4HMUB3/
+
+      ZERLEV = ZEROV(2)
+      CALL UZERO (ZER,1,12)
+      CALL MXTRP (BC,BCT,2,4)
+      CALL MXTRP (AC,ACT,3,2)
+
+C        TEST FOR MXMPY-1-2-3
+      CALL NEWGUY ('MXMPY-1-2-3.','TMXM    ')
+
+      CALL MXMPY (AC,BC,A,3,2,4)
+      CALL MVERIF ( 1,A,C1C,12)
+
+      CALL MXMPY1 (AC,BCT,A,3,2,4)
+      CALL MVERIF (11,A,C1C,12)
+
+      CALL MXMPY2 (ACT,BC,A,3,2,4)
+      CALL MVERIF (21,A,C1C,12)
+
+      CALL MXMPY3 (ACT,BCT,A,3,2,4)
+      CALL MVERIF (31,A,C1C,12)
+
+      CALL MXMPY (AC,BC,A,3,0,4)
+      CALL MVERIF ( 10,A,ZER,12)
+
+      CALL MXMPY1 (AC,BCT,A,3,0,4)
+      CALL MVERIF (110,A,ZER,12)
+
+      CALL MXMPY2 (ACT,BC,A,3,0,4)
+      CALL MVERIF (210,A,ZER,12)
+
+      CALL MXMPY3 (ACT,BCT,A,3,0,4)
+      CALL MVERIF (310,A,ZER,12)
+
+      CALL MXMPY (AC,AC,A,3,2,3)
+      CALL MVERIF ( 12,A,C2C,9)
+
+C--      TIMING
+      IF (ITIMES.EQ.0) GO TO 100
+      NTIMES = ITIMES*TINF(1)
+      TINF(1) = NTIMES
+      CALL TIMED (TIMERD)
+
+      DO 80 J=1,NTIMES
+   80 CALL MXMPY (AC,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFY1
+      CALL TIMED (TIMERD)
+
+      DO 81 J=1,NTIMES
+   81 CALL MXMPY1 (AC,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFY2
+      CALL TIMED (TIMERD)
+
+      DO 82 J=1,NTIMES
+   82 CALL MXMPY2 (ACT,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFY3
+      CALL TIMED (TIMERD)
+
+      DO 83 J=1,NTIMES
+   83 CALL MXMPY3 (ACT,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+
+C        TEST FOR MXMAD-12-3-
+
+  100 CALL NEWGUY ('MXMAD-1-2-3.','TMXM    ')
+
+      CALL UCOPY (C1C,A,12)
+      CALL VADD (A,D,APLUS,12)
+      CALL VSUB (A,D,AMIN,12)
+      CALL MXMPY (AC,AC,A,3,2,3)
+      CALL VADD (A,D,APLUS1,9)
+      CALL VSUB (A,D,AMIN2,9)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMAD (AC,BC,A,3,2,4)
+      CALL MVERIF ( 1,A,APLUS,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMAD1 (AC,BCT,A,3,2,4)
+      CALL MVERIF (11,A,APLUS,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMAD2 (ACT,BC,A,3,2,4)
+      CALL MVERIF (21,A,APLUS,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMAD3 (ACT,BCT,A,3,2,4)
+      CALL MVERIF (31,A,APLUS,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMAD (AC,BC,A,3,0,4)
+      CALL MVERIF ( 10,A,D,12)
+
+      CALL MXMAD1 (AC,BCT,A,3,0,4)
+      CALL MVERIF (110,A,D,12)
+
+      CALL MXMAD2 (ACT,BC,A,3,0,4)
+      CALL MVERIF (210,A,D,12)
+
+      CALL MXMAD3 (ACT,BCT,A,3,0,4)
+      CALL MVERIF (310,A,D,12)
+
+      CALL UCOPY (D,A,9)
+      CALL MXMAD (AC,AC,A,3,2,3)
+      CALL MVERIF ( 12,A,APLUS1,9)
+
+      CALL UCOPY (D,A,9)
+
+C--      TIMING
+      IF (ITIMES.EQ.0) GO TO 200
+      TINF(2)=TINFA
+      CALL TIMED (TIMERD)
+
+      DO 180 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  180 CALL MXMAD (AC,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFA1
+      CALL TIMED (TIMERD)
+
+      DO 181 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  181 CALL MXMAD1 (AC,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFA2
+      CALL TIMED (TIMERD)
+
+      DO 182 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  182 CALL MXMAD2 (ACT,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFA3
+      CALL TIMED (TIMERD)
+
+      DO 183 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  183 CALL MXMAD3 (ACT,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+
+C        TEST FOR MXMUB-1-2-3
+  200 CALL NEWGUY ('MXMUB-1-2-3.','TMXM    ')
+
+      CALL VCOPYN(D,DMIN,12)
+      CALL UCOPY (D,A,12)
+      CALL MXMUB (AC,BC,A,3,2,4)
+      CALL MVERIF ( 1,A,AMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB1 (AC,BCT,A,3,2,4)
+      CALL MVERIF (11,A,AMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB2 (ACT,BC,A,3,2,4)
+      CALL MVERIF (21,A,AMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB3 (ACT,BCT,A,3,2,4)
+      CALL MVERIF (31,A,AMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB (AC,BC,A,3,0,4)
+      CALL MVERIF ( 10,A,DMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB1 (AC,BCT,A,3,0,4)
+      CALL MVERIF (110,A,DMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB2 (ACT,BC,A,3,0,4)
+      CALL MVERIF (210,A,DMIN,12)
+
+      CALL UCOPY (D,A,12)
+      CALL MXMUB3 (ACT,BCT,A,3,0,4)
+      CALL MVERIF (310,A,DMIN,12)
+
+      CALL UCOPY (D,A,9)
+      CALL MXMUB (AC,AC,A,3,2,3)
+      CALL MVERIF ( 12,A,AMIN2,9)
+
+      IF (ITIMES.EQ.0) GO TO 300
+
+      TINF(2)=TINFU
+      CALL TIMED (TIMERD)
+
+      DO 280 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  280 CALL MXMUB (AC,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFU1
+      CALL TIMED (TIMERD)
+
+      DO 281 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  281 CALL MXMUB1 (AC,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFU2
+      CALL TIMED (TIMERD)
+
+      DO 282 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  282 CALL MXMUB2 (ACT,BC,A,3,2,4)
+
+      CALL TIMING (TINF)
+      TINF(2)=TINFU3
+      CALL TIMED (TIMERD)
+
+      DO 283 J=1,NTIMES
+      CALL UCOPY (D,A,12)
+  283 CALL MXMUB3 (ACT,BCT,A,3,2,4)
+
+      CALL TIMING (TINF)
+
+C--                TEST FOR MXMLRT - MXMLTR
+  300 CALL NEWGUY ('MXMLRT - MXMLTR.','TMXM    ')
+      CALL MXMPY (AC,C2C,A,2,3,3)
+      CALL MXMPY1 (A,AC,B,2,3,2)
+
+      CALL MXMPY1 (C2C,AC,A(101),3,3,2)
+      CALL MXMPY (AC,A(101),B(101),2,3,2)
+      CALL MVERIF (0,B,B(101),4)
+
+      CALL MXMLRT (AC,C2C,A,2,3)
+      CALL MVERIF (1,A,B,4)
+
+      CALL MXMPY2 (C1C,C2C,A,4,3,3)
+      CALL MXMPY (A,C1C,B,4,3,4)
+
+      CALL MXMPY (C2C,C1C,A(101),3,3,4)
+      CALL MXMPY2 (C1C,A(101),B(101),4,3,4)
+      CALL MVERIF (10,B,B(101),16)
+
+      CALL MXMLTR (C1C,C2C,A,4,3)
+      CALL MVERIF (11,A,B,16)
+      RETURN
+
+      END

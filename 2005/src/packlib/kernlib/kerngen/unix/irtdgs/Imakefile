@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 adredkd.F adwrtk.F adwrtkd.F \ @@\
+	 pack.F upack.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

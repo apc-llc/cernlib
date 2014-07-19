@@ -1,0 +1,12 @@
+*
+* $Id: v216.dat,v 1.1.1.1 1996/03/08 11:40:54 mclareni Exp $
+*
+* $Log: v216.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:40:54  mclareni
+* Kapack
+*
+*
+* Version 2.16   930902 11.20
+C- Introduce the following patches/flags:
+C   > NEXT,LINUX
+C

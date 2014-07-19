@@ -1,0 +1,7 @@
+INCLUDES=	 comis.inc csbuf.inc cscbwl.inc csdpvs.inc csfmt.inc \ @@\
+	csfres.inc cshfill.inc cshlnm.inc csichv.inc cskeys.inc \ @@\
+	cskucs.inc cslun.inc csopen.inc cspanm.inc cspar.inc \ @@\
+	cspnts.inc csrec.inc cssysd.inc cstab.inc cstabps.inc csinc.inc \ @@\
+	cstbls.inc cstvrs.inc cswpar.inc dlfcn.inc mdpool.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),comis)

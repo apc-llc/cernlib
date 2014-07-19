@@ -1,0 +1,6 @@
+#define IHaveCDF
+
+SRCS_CDF= \ @@\
+	 g321m.cdf g321x.cdf
+
+SubdirLibraryTarget(NullParameter,NullParameter)

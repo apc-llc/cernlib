@@ -1,0 +1,20 @@
+SRCS_F= kbhdr.F m433t.F m442t.F m443t.F z100t.F z265t.F z268t.F z009t.F
+
+
+#if defined(CERNLIB_VAXVMS) || defined(CERNLIB_IBMVM)
+SRCS_F:= $(SRCS_F) z313t.F
+#endif
+
+#if defined(CERNLIB_IBMVM)
+SRCS_F:= $(SRCS_F) m444t.F z305t.F z307t.F
+#endif
+
+SubdirLibraryTarget(kernbitt,NullParameter)
+
+DefinePackageLibrary(kernbitt)
+
+NormalFortranProgramTarget(kbtest,kbtest.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(kbtest,fatmen.names,NullParameter)
+
+CopyFile(namefd.input,fatmen.names)

@@ -1,0 +1,130 @@
+#!/bin/ksh
+
+me=`whoami`
+
+if [ "$me" != "root" ]
+   then
+      echo "This script should be run from root"
+      exit
+fi
+
+#
+#   Ensure that variables are defined...
+#
+ 
+for i in /hepdb/cd*
+   do
+ 
+typeset -u cdgrp
+cdpath=$i
+cdgrp=`basename $i`
+eval $cdgrp=$cdpath;export $cdgrp
+#
+# and start the servers
+#
+if [ -x ${i}/cdserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /hepdb/${cdgrp}.log ]
+      then
+#
+# log file exists - looking for existing proces'
+#
+      log=${log}${b}${cdgrp}
+#
+# change to $14 for more modern AIX
+#
+      pid=`cat /hepdb/${cdgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+#
+# Looking for server process $pid for $cdgrp
+#
+         if (ps -ae  | grep -qs $pid )
+            then
+#
+# OK! server found
+#
+               :
+            else
+#
+# No existing server found for $cdgrp - starting server
+#
+            if [ -f ${i}/todo/signal.stop ]
+               then 
+#
+# Send warning mail for stopped servers
+#
+                  subject=`echo Warning: server stopped for group ${cdgrp}`
+                  ls -l ${i}/todo/signal.stop | \
+                  mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+               else
+#
+# Send warning mail for "dead" servers (process not found)
+# (Start server for $cdgrp)
+#
+                  cd ${i}
+                  subject=`echo Error: no process found for group ${cdgrp}`
+                  ls -lm ${i}/cdserv.log | \
+                  mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+#                 nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+
+            fi # End loop over "stopped" servers
+
+         fi 
+#
+# Could not find PID in log file
+#
+         else
+         if [ -f ${i}/todo/signal.stop ]
+            then 
+#
+# Send warning mail for stopped servers
+#
+               subject=`echo Warning: server stopped for group ${cdgrp}`
+               ls -l ${i}/todo/signal.stop | \
+               mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+            else 
+#
+# Send warning mail for "dead" servers (process not found)
+# (Start server for $cdgrp)
+#
+               cd ${i}
+               subject=`echo Error: no process found for group ${cdgrp}`
+               ls -lm ${i}/cdserv.log | \
+               mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+#              nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+
+         fi # End loop over "stopped" servers
+
+      fi
+
+      else
+#
+# Server stopped cleanly or has never been started...
+#
+      if [ -f ${i}/todo/signal.stop ]
+
+         then 
+#
+# Send warning mail for stopped servers
+#
+            subject=`echo Warning: server stopped for group ${cdgrp}`
+            ls -l ${i}/todo/signal.stop | \
+            mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+         else 
+            cd ${i}
+            subject=`echo Error: no process found for group ${cdgrp}`
+            ls -lm ${i}/cdserv.log | \
+            mail -s " ${subject} " hepdb-mgr@zfatal.cern.ch
+#        nohup ${i}/cdserv ${cdgrp} > $i/cdserv.log &
+
+      fi # End loop over "stopped" servers
+
+   fi # End loop over servers for which a log file (/hepdb/CDxxx.log) was found
+
+fi # End loop over servers with CDSERV script
+ 
+done

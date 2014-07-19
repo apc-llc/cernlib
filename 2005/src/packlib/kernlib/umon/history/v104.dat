@@ -1,0 +1,12 @@
+*
+* $Id: v104.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: v104.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+*  Version 1.04  930506 11.00
+C- Additions/changes
+C  > P=UMONFTN ,D=UMLOG   Correct activation for MVS (H.Keller/Desy)
+C

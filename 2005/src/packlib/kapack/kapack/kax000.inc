@@ -1,0 +1,70 @@
+*
+* $Id: kax000.inc,v 1.1.1.1 1996/03/08 11:40:53 mclareni Exp $
+*
+* $Log: kax000.inc,v $
+* Revision 1.1.1.1  1996/03/08 11:40:53  mclareni
+* Kapack
+*
+*
+#ifndef CERNLIB_KAPACK_KAX000_INC
+#define CERNLIB_KAPACK_KAX000_INC
+*
+*
+* kax000.inc
+*
+#if (defined(CERNLIB_UNIX))&&(defined(CERNLIB_DOUBLE))
+      PARAMETER  ( ISYSRD=5, ISYSWR=6, IWAIT=500,
+     +             LBUF=1500, LLINE=79, LMQ=9, LWORD=4,
+     +             MAXINT=2147483647, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=500, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+#if defined(CERNLIB_CDC)
+      PARAMETER  ( ISYSRD=5, ISYSWR=6, IWAIT=500,
+     +             LBUF=1500, LLINE=79, LMQ=9, LWORD=1,
+     +         MAXINT=281474976710655, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=500, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+#if (defined(CERNLIB_CRAY)||defined(CERNLIB_QMCOS)||defined(CERNLIB_UNIX))&&(!defined(CERNLIB_DOUBLE))
+      PARAMETER  ( ISYSRD=5, ISYSWR=6, IWAIT=500,
+     +             LBUF=1500, LLINE=79, LMQ=9, LWORD=8,
+     +         MAXINT=281474976710655, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=274, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+#if defined(CERNLIB_IBM)
+      PARAMETER  ( ISYSRD=5, ISYSWR=6, IWAIT=500,
+     +             LBUF=1500, LLINE=79, LMQ=9, LWORD=4,
+     +             MAXINT=2147483647, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=500, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+#if defined(CERNLIB_NORD)
+      PARAMETER  ( ISYSRD=1, ISYSWR=1, IWAIT=500,
+     +             LBUF=2048, LLINE=79, LMQ=9, LWORD=4,
+     +             MAXINT=2147483647, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=256, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+#if defined(CERNLIB_VAX)
+      PARAMETER  ( ISYSRD=5, ISYSWR=6, IWAIT=500,
+     +             LBUF=1500, LLINE=79, LMQ=9, LWORD=1,
+     +             MAXINT=2147483647, MAXLUN=99, MAXNAM=100, MAXTRY=5 )
+*
+      PARAMETER  ( KAVRSN=2, LLOCKQ=10, LXAQ=3, LXDQ=3, MAXC=49,
+     +             MAXMSG=500, NBCW=12, NBCW1=24, NRCW=1, THRESH=0.5 )
+*
+#endif
+
+#endif

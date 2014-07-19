@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+arinit.F araddg.F arangl.F arbocm.F arcasc.F archem.F arclus.F arcopa.F arcopj.F arcrdi.F ardump.F arduph.F ardyre.F aremit.F arerrm.F arexec.F argpt2.F argqcd.F argqed.F argtyp.F aript2.F arjoin.F armade.F armass.F armcdi.F armipt.F arnofl.F arordj.F arorie.F arpars.F arradg.F arradp.F arradq.F arreca.F arupdj.F arrndx.F arrndy.F arrobo.F arsplg.F arstor.F artest.F arveto.F artune.F arprda.F archki.F arexma.F arphas.F arlept.F argdis.F arpyth.F arptqq.F arinqq.F arsume.F arzcms.F arpcms.F arstra.F arscan.F arremn.F arpoki.F arposf.F arupom.F lnstrf.F pystfu.F arniqq.F armtqq.F arging.F aradig.F arearr.F arputr.F arthrw.F aruthr.F ar4frm.F
+ 
+SubdirLibraryTarget(NullParameter,NullParameter)

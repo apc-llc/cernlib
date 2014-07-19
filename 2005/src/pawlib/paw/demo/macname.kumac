@@ -1,0 +1,23 @@
+MACRO MACNAME
+   Mess
+   Mess '            >>>>>>>>>>   Starting MACRO '//[2]//[1]
+   Mess
+*
+   If BATCH = 'YES' Then
+      system = $LOWER($machine)
+      name   = $LOWER([2][1])
+      Fortran/File 66 [system]/[name].ps
+      Metafile -66 -111
+   Endif
+*
+   Exec [2][1]
+*
+   Selnt 1
+   Text 0.02 0.02 [2]//[1] .25 0.
+*
+   If BATCH = 'YES' Then
+      Close 66
+   Endif
+*
+   Waiting
+Return

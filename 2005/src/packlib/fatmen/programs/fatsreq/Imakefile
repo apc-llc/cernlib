@@ -1,0 +1,3 @@
+SRCS_F=	 fatsreq.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

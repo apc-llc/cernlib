@@ -1,0 +1,136 @@
+*
+* $Id: fmhost.F,v 1.1.1.1 1996/03/07 15:18:16 mclareni Exp $
+*
+* $Log: fmhost.F,v $
+* Revision 1.1.1.1  1996/03/07 15:18:16  mclareni
+* Fatmen
+*
+*
+#include "fatmen/pilot.h"
+#if !defined(CERNLIB_IBMMVS)
+      INTEGER FUNCTION FMHOST(HNAME,HTYPE,HSYS)
+#if defined(CERNLIB_VAXVMS)
+      INTEGER SYS$GETSYIW
+#endif
+#if defined(CERNLIB_VAXVMS)||defined(CERNLIB_UNIX)
+      CHARACTER*8 CHHOST
+#include "fatmen/slate.inc"
+#endif
+#if defined(CERNLIB_UNIX)
+      INTEGER     FMHSTC
+#endif
+      CHARACTER*8 HNAME,HTYPE,HSYS
+#if defined(CERNLIB_IBMVM)
+      CHARACTER*80 WRK
+      CHARACTER*4 HT
+C
+C         CALL CP COMMAND "QUERY USERID" AND PUT ANSWER IN THE STACK
+C
+      CALL VMCMS('QUERY USERID (STACK LIFO',IND)
+      IF (IND.EQ.0) GOTO 1
+      FMHOST=1
+      RETURN
+C
+C                    READ FROM STACK TO "WRK"
+C
+ 1    CALL VMRTRM(WRK,LENWRK)
+ 
+C                    READ THE NAME OF THE SYSTEM
+*     The format of the reply has changed in CMS 7!
+*
+      LB = INDEXB(WRK(1:LENWRK),' ') + 1
+      HNAME = WRK(LB:LENWRK)
+*     READ (WRK,'(12X,A8)') HNAME
+C
+C                   READ THE NAME OF THE COMPUTER
+C
+      CALL VMCMS('QUERY CPUID (STACK LIFO',IND)
+      IF (IND.EQ.0) GOTO 2
+      FMHOST=1
+      RETURN
+ 2    CALL VMRTRM(WRK,LEN)
+      HTYPE='        '
+      READ (WRK,'(16X,A4)') HT
+      HTYPE = 'IBM' // HT
+C
+C                 READ THE NAME AND VERSION OF THE CMS
+C
+      CALL VMCMS('QUERY CMSLEVEL (STACK LIFO',IND)
+      IF (IND.EQ.0) GOTO 3
+      FMHOST=1
+      RETURN
+ 3    CALL VMRTRM(WRK,LENWRK)
+*
+*     Modified for CMS 7 - Nov 27 91
+*
+      ILEVEL = INDEX(WRK(1:LENWRK),'CMS Level')
+      IF(ILEVEL.EQ.0) THEN
+         READ (WRK,'(6X,A7)') HSYS
+      ELSE
+         HSYS = 'CMS '//WRK(ILEVEL+10:INDEX(WRK,',')-1)
+      ENDIF
+#endif
+#if defined(CERNLIB_VAXVMS)
+C   HERE WE HAVE TO CALL VAX VMS SYSTEM SERVICE .               !
+      INCLUDE '($SYIDEF)'
+      INCLUDE '($SSDEF)'
+      CHARACTER*4 NODE_SWTYPE
+      CHARACTER*31 HW_NAME
+      CHARACTER*15 NODENAME
+      CHARACTER*64 TEMP
+      INTEGER HW_RETLEN,VER_RETLEN
+C
+      STRUCTURE /GETSYI_STR/
+       INTEGER*2 BUFLEN,ITMCOD /0/
+       INTEGER*4 BUFADR,RETLEN /0/
+      END STRUCTURE
+C
+      RECORD /GETSYI_STR/ LIST (4)
+C
+      LIST(1).ITMCOD=SYI$_HW_NAME
+      LIST(1).BUFADR=%LOC(HW_NAME)
+      LIST(1).RETLEN=%LOC(HW_RETLEN)
+      LIST(1).BUFLEN=31
+C
+      LIST(2).ITMCOD=SYI$_NODE_SWTYPE
+      LIST(2).BUFADR=%LOC(NODE_SWTYPE)
+      LIST(2).RETLEN=%LOC(NODE_RETLEN)
+      LIST(2).BUFLEN=4
+C
+      LIST(3).ITMCOD=SYI$_VERSION
+      LIST(3).BUFADR=%LOC(HSYS)
+      LIST(3).RETLEN=%LOC(VER_RETLEN)
+      LIST(3).BUFLEN=8
+C
+      LIST(4).ITMCOD=SYI$_NODENAME
+      LIST(4).BUFADR=%LOC(NODENAME)
+      LIST(4).RETLEN=%LOC(LHOST)
+      LIST(4).BUFLEN=15
+C
+C                        PERFORM SYSTEM CALL
+C
+      ISTAT=SYS$GETSYIW(,,,LIST,,,)
+      IF (ISTAT.NE.SS$_NORMAL) FMHOST=1
+C
+      TEMP  = NODE_SWTYPE // HSYS
+      LSYS  = MIN(8,LENOCC(TEMP))
+      HSYS  = TEMP(1:LSYS)
+      LTYPE = MIN(8,LENOCC(HW_NAME))
+      HTYPE = HW_NAME(1:LTYPE)
+      LNAME = MIN(8,LHOST)
+      HNAME = NODENAME(1:LNAME)
+#endif
+#if defined(CERNLIB_UNIX)
+      FMHOST = FMHSTC(HNAME,HTYPE,HSYS)
+#endif
+#if defined(CERNLIB_VAXVMS)||defined(CERNLIB_UNIX)
+*
+*     Use value of environmental variable FMHOST if set
+*
+      CALL GETENVF('FMHOST',CHHOST)
+      IF(IS(1).GT.0) HNAME = CHHOST
+C
+#endif
+      RETURN
+      END
+#endif

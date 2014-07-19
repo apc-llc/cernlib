@@ -1,0 +1,274 @@
+*
+* $Id: jetgen.F,v 1.1.1.1 1996/01/11 14:14:39 mclareni Exp $
+*
+* $Log: jetgen.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:39  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE JETGEN(N)
+C     ********************
+C--  JET GENERATION ROUTINE ACCORDING TO THE FIELD-FEYNMAN MODEL.
+C-- ORIGINARY ROUTINE BY T.SJOSTRAND, UNIV. LUND LU TP 79-8 (1979),
+C-- COMPLETELY REFORMULATED TO ENSURE FORWARD MOTION, ENERGY
+C-- CONSERVATION, PT BALANCE.
+C-- ALSO INCLUDED: INPUT AND GENERATED DIQUARKS (FOR DEACTIVATION:
+C-- SET PBARYO = 0 IN /PAR/), SEAGULL BY BIDDULPH AND THOMPSON (FOR
+C-- ACTIVATION: SET FRGTHO=.TRUE. IN /PAR/).
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/data1.inc"
+#include "cojets/decpar.inc"
+#include "cojets/edpar.inc"
+#include "cojets/event.inc"
+#include "cojets/forcsl.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+#include "cojets/maxn.inc"
+#include "cojets/nflav.inc"
+#include "cojets/par.inc"
+      REAL SIGMA,CX2
+      DIMENSION TG(100),TGV(100,3)
+      INTEGER LG(100),LGV(100,3)
+      INTEGER IQV(3)
+      DATA ICALL/0/
+C
+C-- QUARK/GLUON SET-UP
+      IF(IFLBEG.EQ.0) THEN
+        SIGMA=SIGMAG
+        CX2=CX2G
+      ELSE
+        SIGMA=SIGMAQ
+        CX2=CX2Q
+      ENDIF
+      IF(IFLBEG.EQ.0) IFLBEG=(INT(3*CJRN(0))+1)*(-1)**(INT(2*CJRN(1))+1)
+C
+      IF(ICALL.GT.0) GO TO 50
+C-- PREPARE TABLES FOR HEAVY QUARK FRAGMENTATION
+      ICALL=1
+      CALL SBLOCK
+      NG=100
+      DG=1./FLOAT(NG)
+      HDG=DG/2.
+      DO 10 JG=1,3
+      TTG=0.
+      DO 11 IG=1,NG
+      XG=DG*FLOAT(IG-1)+HDG
+      TG(IG)=1./(XG*(1.-1./XG-EPSPET(JG)/(1.-XG))**2)
+11    TTG=TTG+TG(IG)
+      DO 12 IG=1,NG
+12    TG(IG)=TG(IG)/TTG
+      CALL ALIAS(LG,TG,NG)
+      DO 13 IG=1,NG
+      TGV(IG,JG)=TG(IG)
+13    LGV(IG,JG)=LG(IG)
+10    CONTINUE
+C
+      PUDI=1./PUD
+50    CONTINUE
+C
+C-- INITIAL VALUES, PT FOR FIRST QUARK
+      PUDIC=PUDI
+      KEYBAR=1
+      KEYSPN=1
+      KEYETA=1
+      QMSBEG=QMAS(ABS(MOD(IFLBEG,10)))
+      W=EBEG+SQRT(ABS(EBEG**2-QMSBEG**2))
+      WET=EBEG*SIN(THETA)
+      EMAX=EBEG
+      IFL1=IFLBEG
+      IF(FRGTHO) THEN
+        PT1=0.
+        PX1=0.
+        PY1=0.
+      ELSE
+        PT1SQX=MAX(0.,REAL(EBEG**2-QMSBEG**2))
+        ARGEXP=PT1SQX/SIGMA**2
+      EX=0.
+        IF(ARGEXP.LT.10.) EX=EXP(-ARGEXP)
+71      PT1SQ=SIGMA**2*(-LOG((1.-EX)*CJRN(0)+EX))
+        IF(PT1SQ.GT.PT1SQX) GO TO 71
+        PT1=SQRT(MAX(0.,REAL(PT1SQ)))
+        PHI1=6.2832*CJRN(0)
+        PX1=PT1*COS(PHI1)
+        PY1=PT1*SIN(PHI1)
+      ENDIF
+      I=0
+      IPD=0
+C
+C-- FLAVOUR FOR NEXT ANTIQUARK
+  100 I=I+1
+      IQHI1=ABS(MOD(IFL1,10))
+      ITER=1
+C-- 2ND CONSTITUENT CAN BE DIQUARK IF 1ST IS NOT
+702   IF(ABS(IFL1).LT.10) THEN
+        PRBARY=PBARYO
+        IF(CJRN(0).LT.PRBARY.AND.KEYBAR.GT.0) THEN
+C-- QUARK + DIQUARK
+          IQV(1)=ABS(IFL1)
+          IQV(2)=1+INT(CJRN(0)*PUDIC)
+          IQV(3)=1+INT(CJRN(0)*PUDIC)
+          IFL2=SIGN(10*MIN(IQV(2),IQV(3))+MAX(IQV(2),IQV(3)),IFL1)
+          CALL BARYO(IQV,ISBARY)
+          ISBARY=SIGN(ISBARY,IFL1)
+          IQHI2=IQV(3)
+          K(I,1)=1
+          K(I,2)=INTID(ISBARY)
+        ELSE
+C-- QUARK + ANTIQUARK
+C-- MESON FORMED, SPIN ADDED AND FLAVOUR MIXED
+          IFL2=SIGN(1+INT(CJRN(0)*PUDIC),-IFL1)
+          IQHI2=ABS(IFL2)
+          K(I,1)=MESO(6*(MAX(IFL1,IFL2)-1)-MIN(IFL1,IFL2))
+          ISPIN=INT(PS1(MAX(IQHI1,IQHI2))+CJRN(0))*KEYSPN
+          K(I,2)=20+40*ISPIN+K(I,1)
+          IF(K(I,1).GE.31.AND.K(I,1).LE.33) THEN
+            TMIX=CJRN(0)*FLOAT(KEYETA)
+            KM=K(I,1)-30+3*ISPIN
+            K(I,2)=51+40*ISPIN+INT(TMIX+CMIX(KM,1))
+     *            +INT(TMIX+CMIX(KM,2))
+          ENDIF
+        ENDIF
+      ELSE
+C-- DIQUARK + QUARK
+        IFL2=SIGN(1+INT(CJRN(0)*PUDIC),IFL1)
+        IQV(1)=ABS(IFL1)/10
+        IQV(2)=MOD(ABS(IFL1),10)
+        IQV(3)=ABS(IFL2)
+        CALL BARYO(IQV,ISBARY)
+        ISBARY=SIGN(ISBARY,IFL1)
+        IQHI2=IQV(3)
+        K(I,1)=1
+        K(I,2)=INTID(ISBARY)
+      ENDIF
+C
+C-- PARTICLE MASS FROM TABLE
+      P(I,5)=PMAS(K(I,2))
+C-- MAKE SURE MASS AND PT1 ARE CONSISTENT WITH FORWARD MOTION
+C-- IF NOT, PROGRESSIVELY REDUCE GENERATION OF MASSIVE PARTICLES UP
+C-- TO A MAXIMUM OF 10 ITERATIONS -- BEYOND THAT TERMINATE
+      PMTSC=P(I,5)**2+PT1**2
+      IF(EMAX**2-PMTSC.LT.0.) THEN
+        ITER=ITER+1
+        IF(ITER.LE.10) THEN
+          IF(ABS(IFL2).GT.10) THEN
+            KEYBAR=0
+          ELSEIF(KEYSPN.GT.0) THEN
+            KEYSPN=0
+            KEYBAR=0
+          ELSE
+            PUDIC=2.
+            KEYETA=0
+          ENDIF
+          GO TO 702
+        ELSE
+          IF(I.GT.1) THEN
+C-- TERMINATE
+            I=I-1
+            GO TO 720
+          ELSE
+C-- REDUCE TO ONE PARTICLE JET
+            P(I,1)=0.
+            P(I,2)=0.
+            P(I,3)=SQRT(MAX(0.,REAL(EBEG**2-P(I,5)**2)))
+            P(I,4)=SQRT(P(I,5)**2+P(I,3)**2)
+            X=1.
+            GO TO 62
+          ENDIF
+        ENDIF
+      ENDIF
+C
+C-- X GENERATION
+  110 CONTINUE
+      IF(I.EQ.1.AND.IQHI1.GT.3) GO TO 51
+C-- FF SCALING FUNCTION FOR LIGHT CONSTITUENTS
+      X=CJRN(0.)
+      IF(CJRN(0.).LT.CX2) X=1.-X**(1./3.)
+      GO TO 60
+C-- FRAGMENTATION A LA PETERSON ET AL. FOR INITIAL HEAVY CONSTITUENT
+51    X=CJRN(0)
+      JG=IQHI1-3
+      IXG=X*FLOAT(NG)+1.
+      IF(CJRN(0.).GT.TGV(IXG,JG)) IXG=LGV(IXG,JG)
+      X=DG*FLOAT(IXG-1)+HDG
+C-- CORRECT FOR KINEMATIC LIMITS
+60    CONTINUE
+      XMIN=SQRT(PMTSC)/W
+      XMAX=(EMAX+SQRT(ABS(EMAX**2-PMTSC)))/W
+      IF(XMAX.GT.1.) XMAX=1.
+      X=XMIN+(XMAX-XMIN)*X
+C
+C-- PT OF 2ND CONSTITUENT
+C-- GENERATE PT ONLY UP TO KINEMATICALLY ALLOWED VALUE
+      PT2SQX=X*W*MIN(2.*EMAX-X*W,X*W)-PMTSC
+      IF(PT2SQX.LT.0.) PT2SQX=0.
+      ITPT=0
+      ARGEXP=PT2SQX/SIGMA**2
+      EX=0.
+      IF(ARGEXP.LT.10.) EX=EXP(-ARGEXP)
+72    PT2SQ=SIGMA**2*(-LOG((1.-EX)*CJRN(0)+EX))
+      IF(PT2SQ.GT.PT2SQX) GO TO 72
+      PT2=SQRT(MAX(0.,REAL(PT2SQ)))
+      PHI2=6.2832*CJRN(0)
+      PX2=PT2*COS(PHI2)
+      PY2=PT2*SIN(PHI2)
+C
+C-- COMPLETE KINEMATICS
+      P(I,1)=PX1+PX2
+      P(I,2)=PY1+PY2
+      IF(FRGTHO) THEN
+      IF(X.GT.1.) X=1.
+        RTHOMP=SQRT((1.-X)/(1.-.5*X)*2.*FTHOMP
+     *  /MAX(REAL(EBEG),REAL(ETHOMP))*X*W)
+        P(I,1)=RTHOMP*P(I,1)
+        P(I,2)=RTHOMP*P(I,2)
+      ENDIF
+      PMTS=P(I,1)**2+P(I,2)**2+P(I,5)**2
+      P(I,3)=(X*W-PMTS/(X*W))/2.
+      ITPT=ITPT+1
+      IF(P(I,3).LT.0..AND.ITPT.LT.100) GO TO 72
+      P(I,4)=(X*W+PMTS/(X*W))/2.
+C-- IF UNSTABLE, DECAY CHAIN INTO STABLE PARTICLES
+62    CONTINUE
+      ESPENT=P(I,4)
+      IL=I
+  120 IPD=IPD+1
+      KDEC(IPD,1)=I+1
+      IF(IDB(K(IPD,2)).GT.0) CALL DECAY(IPD,I)
+      IF(WEIGHT.LT.1.E-30) RETURN
+      KDEC(IPD,2)=I
+      IF(IFORSL.EQ.-1) RETURN
+      IF(IPD.LT.I.AND.I.LT.(MAXJTP-5)) GOTO 120
+C-- PREPARE FOR NEXT STEP
+      IFL1=-IFL2
+      PT1=PT2
+      PX1=-PX2
+      PY1=-PY2
+C-- IF ENOUGH ENERGY LEFT KEEP ON CASCADING
+      IF(I.GT.(MAXJTP-6)) GO TO 500
+      W=(1.-X)*W
+      WET=(1.-X)*WET
+      EMAX=EMAX-ESPENT
+      IF(EMAX.GT.EFGMIN.AND.W.GT.0.) GOTO 100
+720   N=I
+      MNJTP=MAX(MNJTP,N)
+      CALL JETCOR(N)
+      RETURN
+C
+C-- ABNORMAL EXIT
+500   CONTINUE
+      WRITE(ITLIS,501) MAXJTP,IFLBEG,EBEG,NEVENT
+501   FORMAT(5(/),' NO. OF PARTICLES IN P( ,5) (/JET/) EXCEEDS',I10
+     1//1X,7HFLAVOR   ,I10,10X,4HE = ,E10.3
+     2//1X,11HEVENT NO. =   ,I10
+     4//' INCREASE MAXJTP'
+     4//1X,'EXECUTION TERMINATED'
+     5)
+      CALL OVERDM
+      RETURN
+      END

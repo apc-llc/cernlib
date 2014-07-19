@@ -1,0 +1,11 @@
+SRCS_F= abend.F accessf.F exitf.F \ @@\
+	intrac.F jumpxn.F lnblnk.F locb.F locf.F qnexte.F unlinkf.F
+
+#ifndef CERNLIB_OS9
+SRCS_F := $(SRCS_F) timed.F timel.F timex.F 
+#ifndef CERNLIB_VAXVMS
+SRCS_F := $(SRCS_F) timest.F
+#endif
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

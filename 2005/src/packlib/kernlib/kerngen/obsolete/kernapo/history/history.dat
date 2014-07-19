@@ -1,0 +1,49 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:58 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:58  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernapo.car patch kernapo
+#if !defined(CERNLIB_KERNAPO)
+
+              KERNLIB ROUTINES PARTICULAR TO THE APOLLO
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KAPO     Pilot-patch selecting the standard KERNLIB for Apollo
+
+*KAPOL    Pilot-patch selecting a KERNLIB not used
+          together with the C library (for Patchy)
+
+QMAPO     Apollo machine patch
+
+APOPROGS  Utility programs to run on Apollo
+
+APOGS     Apollo versions of general KERNLIB routines
+
+APOSYS    Apollo versions of KERNLIB system routines
+
+             The following option can be selected :
+
+QMAPO10   if the DN 10000 is the target machine
+
+QF_APO   = QMAPOFTN
+          the compiler to be used is "/com/ftn", note:
+          Apollo default filenames .ftn and .bin;
+          hidden character length variable passed
+          as 2-byte integer by address.
+
+QF_APO77 = QMAPOF77
+          the compiler to be used is "/bin/f77", note:
+          appended underscore to subprogram and common block names;
+          UNIX default filenames .f and .o;
+          hidden character length variable passed
+          as 4-byte integer by value.
+
+=====================================================================
+#endif

@@ -1,0 +1,14 @@
+*
+* $Id: fatdone.dat,v 1.1.1.1 1996/03/07 15:17:52 mclareni Exp $
+*
+* $Log: fatdone.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#
+#   Delete old backup files
+#
+find /fatmen/fm*/done -name '*.*' -mtime +60 -exec rm -f {} \;
+ 
+ 

@@ -1,0 +1,9 @@
+SRCS_F= \ @@\
+	 phcork.F phint.F phlupa.F phoan1.F phoan2.F phobo3.F phobos.F phocha.F \ @@\
+	 phochk.F phocin.F phocor.F phodo.F phoene.F phoerr.F phofac.F \ @@\
+	 phoin.F phoinf.F phoini.F phomak.F phooma.F phoout.F phopre.F \ @@\
+	 phoran.F phorep.F phorin.F phoro2.F phoro3.F phospi.F photos.F \ @@\
+	 photri.F photwo.F phtype.F                  \ @@\
+	 photos_get.F photos_make.F photos_set.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

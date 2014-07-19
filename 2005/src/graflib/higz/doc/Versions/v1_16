@@ -1,0 +1,137 @@
+*
+* $Id: v1_16,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_16,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.16/13 01/02/93  14.50.45  by  Rene Brun
+*-- Author :    O.Couet   23/07/92
+*
+*::>          VERSION  1.16/13   930201 14.50
+*
+*
+*     Inprovments in the X11 fonts management. 4 fonts are kept in
+*        memory in order to avoid too many fonts loading.
+*
+*::>          VERSION  1.16/12   930126 10.15
+*
+*     Bug fixed in IPDLIN. Some line where missing in PS file
+*        if they were too small.
+*     Improvements in IPTEXT. The PostScript text was always visible
+*        even if the text position was outside the paper.
+*
+*::>          VERSION  1.16/11   930122  9.40
+*
+*     Bug fix in IPZONE for the marker type 1 size.
+*
+*::>          VERSION  1.16/10   930118 15.57
+*
+*     Mods in IPTEXT in the ' ' and \040 management.
+*     Improvments in the intermediate label drawing in case of
+*        LOG axis. the rule is now: If  1 =< WMIN <100 and
+*        Log(WMAX/WMIN) <2, some intermediate label are drawn.
+*
+*::>          VERSION  1.16/09   930112 11.26
+*
+*    Changes in IKFNTX: on IBM/VM only non proportional fonts are
+*       used in the X11 version because for the proportional fonts
+*       the text width is not correctly computed.
+*    Bug fixed in IZPM: In PostScript files, invalid marker types
+*       produce points.
+*    Improvments in IGTAB5 in order to have the size of the axis
+*       value, the size of the axis tick marks and the offset of the
+*       values independant of the viewing angles in the surface and
+*       lego plots drawing.
+*    Bug fixed in IGTAB2: in case of LOGZ option the position of the
+*       contour plot was not correct with the SURF3 option of IGTABL.
+*
+*::>          VERSION  1.16/08   930106 11.16
+*
+*    A few bugs fixed in the DI3000 PATCH <MARRAFINO@FNPSP>
+*    Mods in x11int in the graphics context used to draw the
+*       rubberbanding cursor: it is now more portable
+*       jank@sunra1.cern.ch or jank@cernvm (Werner Jank)
+*    Mods in the PostScript driver for EPS files: a new dictionnary
+*       is defined in order to be included in WORD.<SCHRODER@CERNVM>
+*    Mods in the PostScript driver for EPS files: the new dictionnary
+*       was too small.
+*    Changes in IZPICT. The options C, O, and D can be invoked in the
+*       same CALL to IZPICT.
+*    Mods in IGHIST. The 1Dim histogram with 1 or 2 bins are not plotted
+*       with a marker or with a line but according to the current
+*       option choosen.
+*
+*::>          VERSION  1.16/07   921126 11.40
+*
+*    Bug corrected in IZHIST: The value give to IZPUSH was not
+*       correct in case of non equidistant bins.
+*    New version of the routine ixmotif. New routine ixminit to
+*       initialize the Motif call backs from IOPWK.
+*    Mods in IHSDRL (IH) to avoid precision problems on NEXT.
+*    New version of the routine IGMESS calling the routine IGXMES
+*       which allows a more flexible usage of the X11 windows.
+*    Mod in ixopnwi: if the window name begins with '-' the extension
+*       ' @ machine_name' is not added to the window title.
+*    Mods in the MSDOS driver in the routines  IGWKTY, IGSG, IOPWK
+*       and MAPCOL to support SuperVGA 800x600 with 16 colors screen
+*       (Dr.Valery Fine LCTA/JINR Dubna).
+*
+*::>          VERSION  1.16/06   921030 11.04
+*
+*    Changes in IGAXIS. With LOG scale, intermediate division
+*      are ploted if one one decade is visible. This implies also
+*      mods in IZRTOC.
+*    Bug fixed in IPTEXT. The @ mechanism to escape control characters
+*       was wrong for <, >, ", #, ?, !, & and $.
+*    New sequence HIPICK use in IGPID and IGPICK.
+*    Default FONT and PRECISION change to 0,2 in IGSET.
+*
+*::>          VERSION  1.16/05   921013 16.26
+*
+*   Changes in IGAXIS secondary and tertiary axis divisions are
+*      optimized like the primary divisions.
+*   Changes in the MacIntosh driver (fill area management) (C.Delaat).
+*   Bug fixed in the IKERNEL PATCH: With the FALCO driver, some
+*      attributes (FACI, FAIS etc...) where not correctly stored in
+*      the ZEBRA data structure.
+*
+*::>          VERSION  1.16/04   921009 13.53
+*
+*   Some fixes in the Macintosh driver (Cees Delaat).
+*   New option 'Q' in IZPICT.
+*   Changes in the X11 interface. The routine ixmotif allows to
+*      manage several window in a motif program. The routine ixopnwi
+*      has one additional parameter IFLAG.
+*   New flag APOF77 for the f77 apollo compiler.
+*   New flag QX_SC and QXNO_SC to add or not an "_" in the C routines.
+*   Bug fixed: the PostScript marker size is now reset in IPZONE.
+*   Some changes in IGAXI3 in order to get a better automatic
+*      labeling of the axis.
+*   Changes in IPTEXT: the control characters can be escaped with '@'.
+*
+*::>          VERSION  1.16/03   920824  9.44
+*
+*   Bug fixed in IZSELN: the graphics editor didn't work. This
+*      was a side effect of the introduction of IGPID (Lee Roberts).
+*   Bug fixed in the routine IRQST for GL: the blank was forgotten.
+*      (Lee Roberts).
+*
+*::>          VERSION  1.16/02   920820 10.06
+*
+*   Mods in x11int. The window is raised by ixupdwi only
+*      if necessary.
+*   New version of PostScript text (routine IPTEXT in PATCH IPOST)..
+*       (P.Juillot CRN Strasbourg <JUILLOT@CERNVM).
+*
+*::>          VERSION  1.16/01   920818 11.03
+*
+*   Mods in the Mac interface (Cees de Laat)
+*   Bug fixed in x11int (ixsetco) the RGB value were not stored.
+*   Bug fixed in IGAXIS in the optimization of the secondary divisions.
+*
+*::>          VERSION  1.16/00   920723 13.57
+*
+*   Change in IGAXIS for the TOP->DOWN labels.
+*

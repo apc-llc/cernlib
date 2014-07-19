@@ -1,0 +1,29 @@
+*
+* $Id: cbsrvr.doc,v 1.1 1997/01/22 16:56:56 gunter Exp $
+*
+* $Log: cbsrvr.doc,v $
+* Revision 1.1  1997/01/22 16:56:56  gunter
+* rename files with % to be .doc files
+*
+* Revision 1.1.1.1  1996/02/28 16:24:06  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#ifndef CERNLIB_HEPDB_CBSRVR%_INC
+#define CERNLIB_HEPDB_CBSRVR%_INC
+*
+*
+* cbsrvr%.inc
+*
+#if defined(CERNLIB__DOC)
+/CBSRVR/           (For carrying information of Cache etc of VAX server)
+    CACHCB       Name of the cache used by the server and the client
+    FILECB       Complete filename of the MAPCOM file
+    DIRECB       Directory name of the MAPCOM files
+/CBSRVRN/          (For giving some information back to the VAX server)
+ PNUPCB          The directory name last updated
+ LPNUCB          Length of the directory name
+ IAUPCB          Action code used in that directory
+#endif
+
+#endif

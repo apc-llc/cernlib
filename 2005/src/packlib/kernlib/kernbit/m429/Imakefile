@@ -1,0 +1,8 @@
+#if defined(CERNLIB_VAX) && !defined(CERNLIB_QMALPH)
+SRCS_S= numbitvx.s
+#else
+SRCS_F= numbit.F
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,52 @@
+*
+* $Id: v135.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v135.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.35  910304 21.10
+C
+C  Global changes:
+C  ----------------
+C- remove unused labels (flagged as C*UL)
+C- split IBM flag into IBMVM, IBMMVS.
+C- add HPUX,MIPS,VAXVMS,VAXULX.
+C
+C  Routine changes:
+C  ----------------
+C  C306 GAMMA    WGAMMA: C*UL 9
+C  C307 DIGAM    WDIGAM: C*UL 9
+C  C309 CCLBES   Enable IBMAIX,CONVEX versions
+C  C311 LEGFN    LEGFN : C*UL 30 , LEGV  : C*UL 6 , CLOGOK: C*UL 80
+C  C328 CWHITM   Bug fixed (results were scaled by a factor 4)
+C  C333 CLOGAM   WLOGAM: C*UL 9  , CLOGAM: C*UL 9
+C  D111 GPINDP   GPINDP: C*UL 290,300
+C  D114 RIWIAD   RIWIAD: C*UL 7
+C  D115 CHEBQU   CHEBQU: C*UL 1000,1020,1125,1126,1128
+C  D151 DIVON4   GENPNT: C*UL 10
+C  D300 EPDE1    EPDE1 : C*UL 41 , EPDCHN: C*UL 71,10,20
+C  D302 ELPAHY   ESOLVE: C*UL 224
+C  D507 MINSQ    MINSQ : C*UL 37
+C  E206 TRICOF   TRICOF: C*UL 1000,1080,1105,1120
+C  E207 TRISUM   TRISUM: C*UL 1000
+C  E209 SPLIN3   SPLIN3: C*UL 1000,1050,1120,1130
+C  E221 CHEB     Set BIG=10**37 / 10**307 for CONVEX-DOUBLE, SINGLE
+                     BIG=10**37 for SGI,DECS,IBMRT
+C  F106 SPXINV   SPXINV: C*UL 40
+C  F220 EISPAC   COMLR : C*UL 180
+C  G103 TKOLMO   New
+C  H100 SIMPLE   SPLX  : C*UL 50,550
+C  H300 ASSIGN   ASSIGN: C*UL 40
+C  M429 NUMBIT   Split machine versions, rearrange code
+C  M439 GETBYT   GETBYT: C*UL 21,22,24,42 , SETBYT: C*UL 21,22,24,42
+C  U100 CLEBS    Rename internal entries DIVIDE,PRIME ,PRMTOD,FCTRAL
+                 to                      U100DV,U100PR,U100PM,U100FC
+C  U110 CLEBSG   CLEBSG: C*UL 510,910,550
+C  V101 NORRAN   Split machine versions
+C  V401 GRAPH    GRAPH : C*UL 112
+C  W505 FOWL     Inhibit routine START in UNIX (this produces a clash
+                 with COMMON/START/ of D151 DIVON4 in shareable libraries
+                 FMASS : C*UL 400 , HISTEY:155,FOWLPR:1000,REDAT2:320
+C

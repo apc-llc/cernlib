@@ -1,0 +1,25 @@
+#define IHaveCDF
+
+MotifDependantMakeVar(SRCS_CDF, kuipmcdf.cdf)
+
+MOTIF_SRCS_C=iconbox.c iconwidget.c kmbfdi.c kmbfil.c kmbmac.c		\ @@\
+	kmbmdi.c kmbrow.c kmdial.c kmfile.c kmiout.c kmpopp.c		\ @@\
+	kmumen.c kmutif.c kmutim.c kuwham.c kuxbro.c kuxcmp.c		\ @@\
+	kuxfse.c kuxgra.c kuxlis.c kuxlishlp.c kuxolt.c	kuxpab.c	\ @@\
+	kuxpal.c kuxpan.c kuxpap.c kuxsc1.c kuxscr.c kuxsel.c 		\ @@\
+	kuxxt.c mkdcmp.c mkdgra.c mkdpan.c mkmpan.c mkuip.c
+
+MotifDependantMakeVar(SRCS_C,$(MOTIF_SRCS_C))
+	
+SRCS_C:= $(SRCS_C) kmutil.c
+
+#if defined(CERNLIB_VAXVMS)
+
+SRCS_C := $(SRCS_C) vmsqio.c
+EXTRA_DEFINES=-DCERNLIB_VMS
+
+#endif
+ 
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,33 @@
+#define IHaveCDF
+
+SRCS_F=	fmcd.F fmclr.F fmcopc.F fmcpc.F fmdumc.F \ @@\
+	fmedit.F fmexit.F fmextr.F fmfc.F fmfndc.F fmgime.F fminic.F \ @@\
+	fmkadd.F fmkadt.F fmkatt.F fmkcpl.F fmkdst.F fmkend.F fmklcc.F \ @@\
+	fmkloc.F fmkmod.F fmkmtp.F fmksrc.F fmkuwd.F fmkver.F \ @@\
+	fmld.F fmlnc.F \ @@\
+	fmlogc.F fmlogn.F fmlokk.F fmlsc.F fmmakc.F fmmkdr.F fmmvc.F \ @@\
+	fmnikk.F fmpwd.F fmquit.F fmrmc.F fmrmdc.F fmrmlc.F fmrmtc.F \ @@\
+	fmrzld.F fmscat.F fmscpl.F fmsdst.F fmseac.F fmskan.F fmslcc.F \ @@\
+	fmsloc.F fmsmdk.F fmsmtp.F fmssrc.F fmstat.F fmsupd.F fmsuwd.F \ @@\
+	fmsver.F fmtagc.F fmtchc.F fmthrg.F fmtrek.F fmulcc.F \ @@\
+	fmupdc.F fmzoom.F \ @@\
+	zabend.F
+
+SRCS_CDF= fmcdf.cdf
+
+SubdirLibraryTarget(fmkuip,NullParameter)
+
+DefinePackageLibrary(fmkuip)
+
+#ifdef CERNLIB_HPUX
+SpecialFortranObjectRule(fatmen,fatmen,-O,'-WF,-P')
+#endif
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+NeedSysexe
+#endif
+
+CernlibFortranProgramTarget(fatmen,fatmen.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+InstallProgram(fatmen,$(CERN_BINDIR))

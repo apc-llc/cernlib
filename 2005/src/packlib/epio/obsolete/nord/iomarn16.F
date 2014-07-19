@@ -1,0 +1,29 @@
+*
+* $Id: iomarn16.F,v 1.1.1.1 1996/03/08 15:21:57 mclareni Exp $
+*
+* $Log: iomarn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:57  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+      SUBROUTINE IOMARK(LUNIT,IRET)
+C     *****************************
+C  82-04-19  USE STANDARD FORTRAN ENDFILE    J.O.PETERSEN
+C   WRITE EOF
+C   LUNIT  = LOGICAL DEVICE NUMBER
+C   IRET   = RETURN STATUS
+      INTEGER*2 LUNIT,IRET,ZERO,IORCNV
+      DATA ZERO/0/
+       ENDFILE LUNIT
+C--  ERRCODE NO GOOD WITH NORD-FORTRAN REW/ENDFILE
+C--  WAIT FOR FTN77
+C--  GET FILE SYSTEM ERROR CODE
+       IRET=ERRCODE
+       IF(IRET.EQ.ZERO)GO TO 77777
+CCCCCC IRET=IORCNV(IRET)
+       IRET=0
+77777  RETURN
+       END
+#endif

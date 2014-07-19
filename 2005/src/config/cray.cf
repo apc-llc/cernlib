@@ -1,0 +1,51 @@
+/* $Id: cray.cf,v 1.1.1.1 1995/12/20 15:26:42 cernlib Exp $
+ *
+ * $Log: cray.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:42  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: cray.cf,v 1.49 94/04/04 21:28:10 rws Exp $
+
+#define OSName			UNICOS 8.0
+XCOMM operating system:  OSName
+#define OSMajorVersion		8
+#define OSMinorVersion		0
+
+#define SystemV			YES
+#define Malloc0ReturnsNull	YES
+#define RemoveTargetProgramByMoving YES
+#define ArCmd			bld cr
+#define StandardDefines		-DSYSV -DUSG
+#define ExecableScripts		NO
+#define HasPoll			NO
+#define HasXServer		NO
+#define BuildPex		NO
+#define ConnectionFlags		-DTCPCONN
+#define HasShm			NO
+#define PexNativeFPFormat	PEXCRAY_Floating
+#define NativeFPFormat		CRAY_Float
+#ifdef UseInstalled
+#define InstallCmd              install
+#else
+#define InstallCmd              $(SHELL) $(CONFIGSRC)/util/install.sh
+#endif
+
+#ifdef _CRAY2
+#define DefaultCCOptions	-hpagelm -hlimitlm
+#endif
+
+#if OSMajorVersion >= 6
+#define PreProcessCmd 		/lib/pcpp
+#define CppCmd	 		/lib/pcpp
+#else
+#  if OSMajorVersion == 5
+#  define PreProcessCmd 	/lib/cpp
+#  define CppCmd	 	/lib/cpp
+#  define ExtraLoadFlags        -lnet
+#  endif
+#endif
+
+/* XKB library code does not work here yet */
+#define BuildXKBlib NO

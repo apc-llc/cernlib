@@ -1,0 +1,62 @@
+SRCS_F= h1evli.F h2page.F harith.F harray.F hauto.F hbandx.F \ @@\
+	hbandy.F hbar2.F hbarx.F hbary.F hbasft.F hbcd.F hbcdf.F  \ @@\
+	hbcdi.F hbfun1.F hbfun2.F hbigbi.F hbin.F hbinsz.F hblack.F  \ @@\
+	hbook1.F hbook2.F hbookb.F hbookn.F hbooknc.F hbpro.F  \ @@\
+	hbprof.F hbprox.F hbproy.F hbslix.F hbsliy.F hbstat.F  \ @@\
+	hbtit.F hbuff.F hbug.F hcdir.F hchnam.F hcmom.F hcompa.F  \ @@\
+	hconvol.F hcopy.F hcopym.F hcopyn.F hcopyr.F hcopyt.F  \ @@\
+	hcopyu.F hcorrl.F hcovw.F hcx.F hcxy.F hdcofl.F hddir.F  \ @@\
+	hdelet.F hderi1.F hderi2.F hderin.F hderiv.F hdexpo.F  \ @@\
+	hdipkl.F hdummy.F hdump.F heleft.F hermes.F herror.F \ @@\
+	hexda1.F hexdat.F hexist.F hf1.F hf1aut.F hf1e.F hf1n.F  \ @@\
+	hf2.F hfact.F hfc1.F hfc2.F hfcn.F hfcnh.F hfcnv.F hfcnv1.F  \ @@\
+	hfcx.F hfcxy.F hfetc1.F hfetch.F hff1.F hff2.F hfidp.F  \ @@\
+	hfill.F hfilpf.F hfilpr.F hfinam.F hfind.F hfinop.F hfit.F  \ @@\
+	hfit1.F hfitex.F hfitf.F hfitga.F hfith.F hfith1.F hfithc.F  \ @@\
+	hfithn.F hfitl.F hfitn.F hfitpo.F hfits.F hfitv.F hfn.F  \ @@\
+	hfnov.F hforma.F hfpak1.F hfpbug.F hframe.F hfumil.F hfunc.F \ @@\
+	hgaus.F hgdire.F hgetff.F hgetfl.F hgfit.F hgive.F hgiven.F \ @@\
+	hgn.F hgnf.F hgnpar.F hgstat.F hhipar.F hhxye.F hi.F \ @@\
+	hictoi.F hid1.F hid2.F hidall.F hidopt.F hidpos.F hie.F  \ @@\
+	hif.F hij.F hije.F hijxy.F hindex.F hinprx.F hinteg.F  \ @@\
+	hipak1.F histdo.F histgo.F hix.F hkf1.F hkf1q.F hkf2.F  \ @@\
+	hkff1.F hkff2.F hkffi1.F hkfi1.F hkfil2.F hkfill.F hkfilpf.F \ @@\
+	hkind.F hknul1.F hknuli.F hlabel.F hlabeq.F hlabnb.F \ @@\
+	hlattr.F hlccmp.F hldir.F hldir1.F hldir2.F hldirt.F \ @@\
+	hlgnxt.F hlhcmp.F hlimit.F hllsq.F hlnext.F hlocat.F \ @@\
+	hlogar.F hloop.F hlpos.F hlshft.F hlsort.F hlsq.F hlswap.F  \ @@\
+	hmachi.F hmax.F hmaxim.F hmconv.F hmdir.F hmedia.F hmin.F  \ @@\
+	hminim.F hminui.F hminut.F hmonit.F hmufit.F hnoent.F  \ @@\
+	hnorma.F hobsol.F hoper1.F hoper1a.F hopera.F houtpu.F  \ @@\
+	hp1dim.F hp1rot.F hpaff.F hpagsz.F hpak.F hpakad.F hpake.F  \ @@\
+	hpakes.F hparam.F hparmn.F hpath.F hpchan.F hpchar.F \ @@\
+	hpcont.F hpdir.F hphist.F hphs.F hphst.F hpkr32.F hpolyn.F  \ @@\
+	hponce.F hpr1h.F hpr1v.F hpr2.F hprcha.F hprcon.F hprerr.F  \ @@\
+	hprfun.F hprhis.F hprint.F hprlow.F hprntu.F hprof2.F  \ @@\
+	hproj1.F hproj2.F hprot.F hprst.F hprsta.F hpsca.F  \ @@\
+	hpscat.F hpstat.F hpta.F hptab.F hptit.F hrdir.F hread.F  \ @@\
+	hrebin.F hrename.F hrep1.F hreset.F hrez0.F hrndm.F hrndm1.F \ @@\
+	hrndm2.F hrngpf.F hrotat.F hrval.F hscale.F hselbf.F  \ @@\
+	hseqnr.F hsetbf.F hsetpr.F hsgz.F hsifla.F hsmoof.F \ @@\
+	hspace.F hspfun.F hspli1.F hspli2.F hsquez.F hstaf.F  \ @@\
+	hstar.F hstati.F hstelf.F hsum.F hsupim.F hsupin.F hsupis.F  \ @@\
+	htable.F htfunc.F htitle.F hunpak.F hunpke.F huoptc.F  \ @@\
+	hupkrd.F hwork.F hwritf.F hx.F hxe.F hxi.F hxnorm.F hxy.F  \ @@\
+	hxye.F hxyij.F hinq.F
+
+#if defined(CERNLIB_VAXVMS)
+IMAKE_INCLUDES=-i$(TOP)$(PACKAGETOP).hbook] 
+#else
+IMAKE_INCLUDES=-I$(TOP)$(PACKAGETOP)/hbook -I$(PROJECTROOT)$(LOCALTOP)$(PACKAGETOP)/hbook
+#endif
+#include "pilot.h"
+
+#ifdef CERNLIB_MACMPW
+SRCS_F += h0mpw.F
+#endif
+
+#if defined(CERNLIB_CZ)
+SRCS_F := $(SRCS_F) hlogpf.F hinpf.F houtpf.F hoptpf.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

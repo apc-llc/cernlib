@@ -1,0 +1,31 @@
+*
+* $Id: iomar32b.F,v 1.1.1.1 1996/03/08 15:21:59 mclareni Exp $
+*
+* $Log: iomar32b.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:59  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B32)
+      SUBROUTINE IOMARK(LUNIT,IRET)
+C     *****************************
+C--  NORD 100  32-BIT VERSION
+C  82-07-15  USE STANDARD FORTRAN ENDFILE  JOP
+C   WRITE EOF
+C   LUNIT  = LOGICAL DEVICE NUMBER
+C   IRET   = RETURN STATUS
+      INTEGER*4 LUNIT,IRET,ZERO,IORCNV
+      DATA ZERO/0/
+C-- CONVERT TO LOCAL MACHINE WORD SIZE
+       LUN=LUNIT
+       ENDFILE LUN
+C-- GET FILE SYSTEM ERROR CODE
+       IRET=ERRCODE
+       IF(IRET.EQ.ZERO)GO TO 77777
+C--  WAIT FOR FORTRAN 77 !!
+CCCCC  IRET=IORCNV(IRET)
+       IRET=0
+77777 RETURN
+      END
+#endif

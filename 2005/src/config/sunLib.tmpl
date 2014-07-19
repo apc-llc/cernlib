@@ -1,0 +1,57 @@
+/* $Id: sunLib.tmpl,v 1.1.1.1 1995/12/20 15:26:44 cernlib Exp $
+ *
+ * $Log: sunLib.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:44  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: sunLib.tmpl,v 1.38 95/07/06 14:06:11 kaleb Exp $
+
+/*
+ * SunOS shared library template
+ */
+
+#if OSMajorVersion <= 4
+
+#if SunPost411FCSLd
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLLIB) $(XLIB)
+#endif
+
+#ifndef SharedX11Rev
+#define SharedX11Rev 4.20
+#endif
+#ifndef SharedOldXRev
+#define SharedOldXRev 4.20
+#endif
+#ifndef SharedXtRev
+#define SharedXtRev 4.20
+#endif
+#ifndef SharedXmuRev
+#define SharedXmuRev 4.20
+#endif
+#ifndef SharedXextRev
+#define SharedXextRev 4.20
+#endif
+#ifndef SharedXiRev
+#define SharedXiRev 4.20
+#endif
+#ifndef SharedXtstRev
+#define SharedXtstRev 1.10
+#endif
+#ifndef SharedPexRev
+#define SharedPexRev 1.10
+#endif
+
+#else				/* else it's Solaris */
+
+#if ThreadedX
+#if OSMinorVersion > 3
+#define SharedX11Reqs /**/
+#endif
+#endif
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLLIB) $(XLIB)
+#define FixupLibReferences() /**/
+#include <sv4Lib.tmpl>
+
+#endif

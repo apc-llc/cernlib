@@ -1,0 +1,25 @@
+*
+* $Id: content.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: content.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+C UMON     0.00      000000 00.00 CERN Program Library     Z020 UMON
+C
+C          Usage Monitoring Facility
+C          Authors: F.Carminati, M.Marquina, B.Pollermann
+C
+C- Components:
+C  > P=UMONFTN  FORTRAN-callable version
+C               VAX/VMS by F.Carminati  (moved out of KERNVAX)
+C               UNIX    by G.Folger
+C               IBMVM   by M.Marquina
+C  > P=UMUIPxxx UMON user interface procedures
+C  > P=UMSRVxxx UMON Server + auxiliaries
+C               IBMVM   by B.Pollermann
+C
+C- Patchy flags:
+C  > ON         To activate monitoring code. Default is off
+C

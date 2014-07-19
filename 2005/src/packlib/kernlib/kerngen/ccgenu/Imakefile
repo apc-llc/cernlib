@@ -1,0 +1,3 @@
+SRCS_C= fchput.c fchtak.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

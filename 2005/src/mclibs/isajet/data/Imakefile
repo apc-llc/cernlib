@@ -1,0 +1,9 @@
+
+.SUFFIXES:
+
+CopyFile(decay.cpp,decay.cin)
+
+CppFileTarget(isajet.dat,decay.cin,NullParameter,NullParameter)
+
+PackageDirFileTarget(isajet.dat)
+

@@ -1,0 +1,396 @@
+*
+* $Id: v2_05,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_05,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.05/22 09/11/94  12.26.44  by  Gunter Folger
+*-- Author :    Alfred Nathaniel   25/03/94
+*
+*::>          VERSION  2.05/22   09/11/94 12.26.44
+*
+*  Undo correction to fexpand, and move the fix into KMACRO; ie. KMACRO checks
+*   if the macro name starts with a -, and then strips this - off, and ignores
+*   the search path.
+*
+*::>          VERSION  2.05/21   19/10/94 15.41.52
+*
+*  Correct fexpand; it now also checks if the ftype needs to appended if the
+*   filename starts with -.
+*
+*::>          VERSION  2.05/20   17/10/94 12.19.43
+*
+*  Take corrections from Fons for problem in kxterm ( after a command
+*    the cursor went to column1 )
+*  routines affected: /cmotif/kuwham,kmiout /kxterm/kxterm
+*
+*::>          VERSION  2.05/19   11/10/94 17.25.32
+*
+* Fix kmacro to compile ok after correcting missing endcase/endif/.. in a macro
+*::>          VERSION  2.05/18   07/10/94 10.33.38
+*
+* Correct mkdcmp (Nicole)
+* Fix reading from file on AIX, OSF, and Ultrix.
+
+*
+*::>          VERSION  2.05/17   19/09/94 14.21.30
+*
+* getline() on VMS didn't realize when the terminal connection was dropped.
+*
+* $UNQUOTE did not work as intended.
+*
+* Fixed problems with edit server on VMS.
+*
+* Bug correction in multi_panel: panel 0 d title ' '.
+* Give possibility to open a panel "closed" (PalB) inside a palette:
+*      panel 0 d title c
+*   or
+*      panel 0 d title c:200x200+0+0 (e.g. when specifying the button size)
+* Add "File" entries: "Close" and "Exit" in palettes.
+* --> MKMPAN, $MKUXPL, KUXPAB, KUXPAL.
+*
+* Add cursors km_help_cursor, km_busy_cursor, km_blck_cursor, km_selc_cursor
+*
+* Possibility to set "echo off" even with no kxterm (Ged)
+* (--> Kuwham, init_motif in KUWHAM).
+*
+* Multi_panels (Motif) : implement possibility to specify the panel size
+* with "panel 0 d name geometry" (or km_panel_display(name,geometry)
+* geometry = wxh+0+0 (position is ignored)
+* (km_panel_add --> $MKUTFM, KUWHAT, MKMPAN)
+*
+*::>          VERSION  2.05/16   17/08/94 13.54.40
+*
+* Solve compilation problem on Apollo (true and false are cpp defines).
+*
+*::>          VERSION  2.05/15   15/08/94 11.18.39
+*
+* Panels (Motif) : implement possibility to give an option
+*      "panel x.y command [label] [pixmap] [opts]"
+* implement option "T" for "Toggle" behavior (button stays pressed
+* until another button is selected).
+* --> C user callable routine: km_panel_key_opt(
+*     int row,int col,char *command,char *alias_label,char *pixmap,char *opt);
+* ($MKUTFM, $KFLAG_H, $KMPANEL, KUWHAT, MKDPAN)
+*
+* Bug correction for panels with icons (KICON)
+*
+* Allow APPLICATION terminator to be indented.
+*
+* In MACRO header allow default values as "[1]=0" in addition to "1=0".
+*
+* New INTEGER FUNCTION KUQKEY() returning 1 if user has hit the return key
+* or 0 otherwise.
+*
+* Provide KUCLOS entry point for KICLOS to make naming more consistent.
+*
+*::>          VERSION  2.05/14   28/07/94 12.17.25
+*
+* SHELL: on VMS write command line into DCL file because LIB$SPAWN
+* does not do symbol substitution like in "LINK main,'LIB$'".
+*
+* Fortran callable entry for browser initialization (km_browser_set) :
+* KMBRSET(BRNAME, PATH)
+*
+* Browser initialization :
+* - user routine km_browser_set (char *br_name, char *path) (KMBROW)
+*   --> to give initial values for opening the browser
+* - KUIP command "BROWSER br_name path" (execution at run time) (KUIPMCDF)
+*
+*::>          VERSION  2.05/13   21/07/94 12.56.33
+*
+* Improve option list in command panels (MKDCMP)
+*
+* Reinstate strdup() for Ultrix.
+*
+*::>          VERSION  2.05/12   15/07/94 16.19.42
+*
+* Fix in KUIPC.
+*
+*::>          VERSION  2.05/11   15/07/94 14.59.04
+*
+* Correct bug when resizing the graphics windoe (MKDGRA)
+*
+*::>          VERSION  2.05/10   15/07/94 09.46.11
+*
+* Fix in KUIPC.
+*
+*::>          VERSION  2.05/09   14/07/94 15.10.11
+*
+* General cleanup of archaic stuff.  From now on non-ANSI C compilers
+* are not supported anymore.
+*
+* Preparations for a "kuip.h" header file.
+*
+* Fix problem with same button label in different panels, for example,
+* "blue" button in two panels p1 and p2.  One has to give a name to
+* the panel at the very beginning, e.g.
+*     panel 0 r p1
+*     panel 3.04 'blue/panel1' 'blue'
+*     etc...
+* and panel 0 r p2
+*     panel 3.04 'blue/panel2' 'blue'
+*     etc...
+*
+* New resource "noKxterm" for suppressing kxterm creation and display.
+* Same can be achived by e.g. CALL KUINIM('Ged(-nokxterm)').
+*
+* New command "Browser browsable_name" to open a browsable (without having
+* to click with the mouse).  Provided also as user callable routine:
+* km_set_browser(browsable_name).
+* E.g. "Browse Commands" opens the browsable class "Commands" defined
+* in the CDF. (N.B. the browsable_name is case sensitive).
+*
+* Restructuring of MKDGRA.
+*
+* Correction for char '~' (to be recognized as the home directory
+* in browser (decks KMBFIL, KMBMAC).
+* Correction for expanding correctly the Path with / when ~ is the first
+* character (deck KMBROW).
+* Correction for correctly execute "delete file" menu item in the
+* browser (cmmand 'KUIP/SHELL rm filename', deck MKDCMP)
+*
+* Implement parameter type KmTYPE_FILE for Motif (FileSelectionBox)
+* Add resources for cursor fonts: XmNmainCursor, XmNgraphCursor,
+* XmNinputCursor, XmNwaitCursor.
+* change disp_prompt_C from km_prompt to km_prompt_answer where the CANCEL
+* button (which was not meaningful) is suppressed.
+*
+* EXEC: on VM search all disks for .kumac files.
+*
+* KUSPY('OFF') now goes back to the argument position marked by KUSPY('ON')
+* instead of simply rewinding to the very first argument.
+*
+* KUGETH deleted.  It was unsafe and could overwrite storage.
+* Hopefully nobody uses it.
+*
+* KUGETQ deleted.
+*
+*::>          VERSION  2.05/08   27/06/94 15.07.11
+*
+* Fixed problem with blanks in CASE label list.
+*
+* Fixed compilation problem for VMS6.1 DECC.
+*
+*::>          VERSION  2.05/07   16/06/94 14.39.41
+*
+* Added $SHELL(cmd,sep).
+*
+* New system function $EXEC.
+*
+*::>          VERSION  2.05/06   06/06/94 12.40.01
+*
+* $SHELL(cmd) and $SHELL(cmd,' ') now return the complete output with
+* newlines replaced by blanks.
+*
+*::>          VERSION  2.05/05   06/06/94 11.55.32
+*
+* MACRO/DEFAULTS -auto did not work because of case mismatch.
+* MACRO/DEFAULTS ~/dir did not work on some systems because default shell
+* does not understand ~ (reported by Maarten Litmaath).
+*
+* Macros: use checksum instead of file modification date to test if
+* .kumac file has changed.  File system stamp have a granularity of
+* one second which could lead to problems.
+*
+* New system function $SHELL(cmd) and $SHELL(cmd,n) to return first or
+* n'th line of command output (for Unix only).
+*
+*::>          VERSION  2.05/04   30/05/94 17.17.10
+*
+* Macros: variable indirection did not work.
+*
+* VAXC: go back to (much slower) standard malloc() routines.
+* The VAXC$MALLOC_OPT routines have a serious flaw:
+*   for( n = 1; n < 100000; n++ ) buf = realloc( buf, n );
+* will exhaust the virtual address space?!?
+*
+* READ statement: show default value also if prompt is user supplied.
+*
+*
+*::>          VERSION  2.05/03   26/05/94 09.41.07
+*
+* Fix for STOPM statement and ";&" logic in macros.
+*
+*
+*::>          VERSION  2.05/02   24/05/94 16.31.33
+*
+* Rewrite of the KUMAC interpreter in C.  The main difference is that
+* EXEC inside a macro is treated like any other command.  This solves
+* a number of outstanding problems:
+*
+* -- "EXE", "M/EXEC", or any other abbreviation of the command path
+*    "/MACRO/EXEC" is now allowed.  Before this would lead to undefined
+*    behaviour due to a recursive Fortran call.
+*
+* -- Defining an alias for an EXEC call or changing the MACRO/DEFAULT
+*    path during macro execution has now the expected effect.  Before
+*    aliases and .kumac search where done at macro compilation time
+*    rather than execution time.
+*
+* -- It is now possible to execute a macro containing EXEC calls to
+*    non-existing .kumac files --- provided, of course, that the EXEC
+*    is never reached, e.g. in a "CASE $OS IN ..." construct.
+*
+* -- It is now possible to create or to modify a .kumac file during
+*    macro execution and call the macros in the new file.
+*
+* -- Mixed-case path names of .kumac files are possible now.
+*
+* The response time should be better than in the previous version:
+*
+* -- The new compiler needs only one pass rather than two passes over
+*    the .kumac file.
+*
+* -- A macro calling other macros will compiler the other .kumac files
+*    when needed rather than compiling everything up-front.
+*
+* -- Macros are cached --- if a .kumac file has been envoked already
+*    beforehand and it hasn't been changed then it is not recompiled
+*    when it is used again.
+*
+* In addition the following bugs are fixed in the new version:
+*
+* -- ON ERROR GOTO works now also for nested EXEC calls.
+*
+* -- Undefined numbered variables are now set to ' ' as documented.
+*
+* -- Depending on the length of the .kumac file name the use of several
+*    variables in an expression could lead to truncation due to the
+*    fixed length of a Fortran character string.
+*
+* The new version provides the following new features:
+*
+* -- The READ statement allows to specify the prompt string.
+*
+* -- The NEXTL statement allows to continue with the next loop iteration,
+*    similar to the "continue" statement in C.
+*
+* -- BREAKL and NEXTL allow to specify how many levels of nested loops
+*    should be skipped.
+*
+* -- The STOPM statement allows to stop macro execution, i.e. unwind
+*    nested EXEC calls and return to the command line prompt immediately.
+*
+* -- The RETURN statement allows to specify the return value.
+*
+* -- The variable "[0]" contains the fully qualified macro name, i.e.
+*    "/path/file.kumac#macro".
+*
+* -- ON ERROR handling allows now the following choices:
+*      ON ERROR CONTINUE
+*      ON ERROR GOTO label
+*      ON ERROR EXITM value
+*      ON ERROR STOPM
+*
+* -- The spelling "OFF ERROR" instead of "OF ERROR" is now allowed.
+*
+* -- Block constructs can now be written on a single line using ";"
+*    as line separator, e.g. "cmd1 ; IF ... THEN ; cmd2 ; ENDIF".
+*
+* -- The macro constructs are now documented in the on-line help ---
+*    try "HELP SYNTAX".  Thanks to Mike Kelsey for editing the text.
+*
+* -- "!" as macro argument will now use the default value given in
+*    the MACRO definition.
+*
+* The new version contains the following known incompatibilities:
+*
+* -- The command /MACRO/RECURSION has been deleted --- all macros are
+*    recursive now.
+*
+* -- ":=" as alternative to the assignment operator "=" is not supported
+*    anymore.  NB: "LET var = expr" is still allowed.
+*
+* Special thanks to Robert Franchisseur, Mike Kelsey, and Andrea Parri
+* for beta-testing the new macro interpreter.
+*
+* --------------------------------------------------------------------
+*
+* Correction for char '~' (to be recognized as the home directory
+* in browser (decks KMBFIL, KMBMAC).
+*
+* Correction for expanding correctly the Path with / when ~ is the first
+* character (deck KMBROW).
+*
+* Correction for correctly execute "delete file" menu item in the
+* browser (KUIP/SHELL rm filename, deck MKDCMP)
+*
+* getline(): ^Z did not work on SunOS and other BSD based systems because
+* there getpgrp() needs pid as argument (in contrast to SysV and Posix)
+* (reported by Maarten Ballintijn).
+*
+* SHELL command: on Unix interpret command line by HOST_SHELL shell.
+* Before the command was passed to whatever shell was spawned by system().
+*
+* KUCMD would still create menus with identical names (reported by Sunanda
+* Banerjee).
+*
+* New system functions $FEXIST(filename).
+*
+* New command SET/DOLLAR to enable/disable the substitution of "$var" as
+* environment variables.
+*
+* New system function $ENV(var) to get environment variable independent of
+* DOLLAR setting.
+*
+*
+*::>          VERSION  2.05/01   07/04/94 08.56.31
+*
+- Correction for compilation on VM
+- Bug correction in the browser on Sun (popup menus)
+- Give access to specific resources in the browser
+  (e.g. fileScWindow.bottomOffset, etc...) for adjusting the browser
+  "inside geometry" when using very big fonts (for the Geant demo
+  at CHEP ...)
+*::>          VERSION  2.05/00   25/03/94 16.34.38
+*
+- Complete redesign of the "Panel" interface :
+  *  menu-bar with "File", "View" and "Help" (instead of buttons "Save",
+     "Close" and "Help" at the bottom).
+  *  possibility to have key with labels (aliases), commands or pixmaps.
+     The general command for key definition is:
+       "panel x.y command [label] [pixmap]"
+  * In "View" menu, possibility to view:
+    -> By Name
+    -> By Icon
+    -> By Name and Icon (not yet implemented).
+    -> By Command (normal)
+    -> By Command (1 col.)
+  * Implement "context help" on all panel buttons (user defined).
+  * Command "Panel 0 c" to close a panel in command mode.
+
+- Implement "Palette" interface silmilar to UIMX (command /MOTIF/MULTI_PANEL).
+
+- Provide a C callable interface for panels & palettes definition and display
+instead of using the macro language (Jamie's request for Ged).
+
+- Implement the possibility (user callable entries in C) to display a list and
+return one selection in a user-defined command (action routine) - User
+request -.
+
+- new routine "interactive_help_motif" to display a Motif selection box
+with all possible choices when typing "HELP" without any argument.
+
+- add fallback for "fileScWindow.width" (default 80) for changing ratio
+in the browser between the dir - and file - lists of objects (requested by
+Sven for Geant demo with big fonts).
+
+- Implement the possibility to have an "All Cycles" view option in the
+browser on VMS (at the moment it is commented). Change  "XmNradioBehavior"
+to FALSE (to make combination of several view options possible).
+
+- Implement the possibility to specify "IconBoxTITLES" as a resource in
+.Xdefaults, e.g. "Paw++*iconType: 4" - User request -.
+
+- add resource "panelInteractive" (True by default, or False to inhibit
+"close" panel, and supress possibility for panel editing) - User request -.
+
+- Prevent the HELP window(s) to disappear under kxterm.
+
+- Store the "Paw++ Locate" window (km_HigzOutput) into the list of possible
+windows to be raised  - User request -.
+
+- bug correction for empty strings inside command argument panels.

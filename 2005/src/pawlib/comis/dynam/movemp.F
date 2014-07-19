@@ -1,0 +1,16 @@
+*
+* $Id: movemp.F,v 1.1.1.1 1996/02/26 17:16:59 mclareni Exp $
+*
+* $Log: movemp.F,v $
+* Revision 1.1.1.1  1996/02/26 17:16:59  mclareni
+* Comis
+*
+*
+#include "comis/pilot.h"
+*CMZ :  1.11/01 24/01/91  11.37.02  by  Rene Brun
+*-- Author : V.Berezhnoi
+      SUBROUTINE MOVEMP(IPAG,IBUF,IADR,N)
+      CALL COPYMP(IPAG,IBUF,IADR,N)
+      IADR=IADR+N
+      RETURN
+      END

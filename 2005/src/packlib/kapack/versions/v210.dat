@@ -1,0 +1,13 @@
+*
+* $Id: v210.dat,v 1.1.1.1 1996/03/08 11:40:54 mclareni Exp $
+*
+* $Log: v210.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:40:54  mclareni
+* Kapack
+*
+*
+* Version 2.10
+C- APOLLO CODE CHANGED IN KACOPY AND KA1TO2
+C- BUG CORRECTED IN KAMAKE
+C- INSTALL PATCH REMOVED - SEE INSTALL PAM
+C

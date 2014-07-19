@@ -1,0 +1,27 @@
+*
+* $Id: ctoibmcd.F,v 1.1.1.1 1996/03/08 15:21:52 mclareni Exp $
+*
+* $Log: ctoibmcd.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:52  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_CDC)||defined(CERNLIB_UNIVAC)
+      SUBROUTINE CTOIBM(ARRAY,NW,MODE)
+C.+++++++ CDC AND UNIVAC VERSION ++++++++++
+C. CONVERTS THE FIRST NW WORDS OF ARRAY INTO IBM FORMAT.
+C. MODE = 1 : CONVERT TO 16 BIT INTEGERS
+C.      = 2 : CONVERT TO 32 BIT INTEGERS
+C.      = 3 : CONVERT TO 32 BIT FLOATING
+C. ON RETURN,THE CONVERTED NUMBERS ARE IN ARRAY, RIGHT ADJ., ZERO FILLED
+      DIMENSION ARRAY( 1)
+C
+      IF(NW.LE.0)    RETURN
+C
+      IF(MODE.EQ.1)  CALL I16CTI(ARRAY,NW)
+      IF(MODE.EQ.2)  CALL FTO360(ARRAY,NW,1)
+      IF(MODE.EQ.3)  CALL FTO360(ARRAY,NW,0)
+      RETURN
+      END
+#endif

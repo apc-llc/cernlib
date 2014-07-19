@@ -1,0 +1,491 @@
+CDECK  ID>, HWUINC.
+*CMZ :-        -26/04/91  11.11.56  by  Bryan Webber
+*-- Author :    Bryan Webber
+C-----------------------------------------------------------------------
+      SUBROUTINE HWUINC
+C-----------------------------------------------------------------------
+C     COMPUTES CONSTANTS AND LOOKUP TABLES
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG59.INC'
+      DOUBLE PRECISION HWBVMC,HWUALF,HWUPCM,XMIN,XMAX,XPOW,QR,DQKWT,
+     & UQKWT,SQKWT,DIQWT,QMAX,PMAX,PTLIM,ETLIM,PGS,PTELM,X,QSCA,UPV,DNV,
+     & USEA,DSEA,STR,CHM,BTM,TOP,GLU,VAL(20),CLMXPW,RCLPOW
+      INTEGER ISTOP,I,J,IQK,IDB,IDT,ISET,IOP1,IOP2,IP2
+      LOGICAL FIRST,FSTPDF
+      CHARACTER*20 PARM(20)
+      EXTERNAL HWBVMC,HWUALF,HWUPCM
+      COMMON/HWRPIN/XMIN,XMAX,XPOW,FIRST
+      COMMON/W50516/FSTPDF
+      IPRO=MOD(IPROC/100,100)
+      IQK=MOD(IPROC,100)
+C---SET UP BEAMS
+      CALL HWUIDT(3,IDB,IPART1,PART1)
+      CALL HWUIDT(3,IDT,IPART2,PART2)
+      EBEAM1=SQRT(PBEAM1**2+RMASS(IPART1)**2)
+      EBEAM2=SQRT(PBEAM2**2+RMASS(IPART2)**2)
+C---PHOTON CUTOFF DEFAULTS TO ROOT S
+      PTLIM=SQRT(HALF*(EBEAM1*EBEAM2+PBEAM1*PBEAM2))
+      ETLIM=TWO*PTLIM
+      IF (VPCUT.GT.ETLIM) VPCUT=ETLIM
+      IF (Q2MAX.GT.ETLIM**2) Q2MAX=ETLIM**2
+C---PRINT OUT MOST IMPORTANT INPUT PARAMETERS
+      IF (IPRINT.EQ.0) GOTO 50
+      WRITE (6,10) PART1,PBEAM1,PART2,PBEAM2,IPROC,NFLAV,NSTRU,
+     & AZSPIN,AZSOFT,QCDLAM,(RMASS(I),I=1,6),RMASS(13)
+      IF (ISPAC.LE.1) THEN
+        WRITE (6,20) VQCUT,VGCUT,VPCUT,CLMAX,QSPAC,PTRMS
+      ELSE
+        WRITE (6,30) VQCUT,VGCUT,VPCUT,CLMAX,QSPAC,PTRMS
+      ENDIF
+      IF (NOSPAC) WRITE (6,40)
+  10  FORMAT(/10X,'INPUT CONDITIONS FOR THIS RUN'//
+     &        10X,'BEAM 1 (',A8,') MOM. =',F10.2/
+     &        10X,'BEAM 2 (',A8,') MOM. =',F10.2/
+     &        10X,'PROCESS CODE (IPROC)   =',I8/
+     &        10X,'NUMBER OF FLAVOURS     =',I5/
+     &        10X,'STRUCTURE FUNCTION SET =',I5/
+     &        10X,'AZIM SPIN CORRELATIONS =',L5/
+     &        10X,'AZIM SOFT CORRELATIONS =',L5/
+     &        10X,'QCD LAMBDA (GEV)       =',F10.4/
+     &        10X,'DOWN     QUARK  MASS   =',F10.4/
+     &        10X,'UP       QUARK  MASS   =',F10.4/
+     &        10X,'STRANGE  QUARK  MASS   =',F10.4/
+     &        10X,'CHARMED  QUARK  MASS   =',F10.4/
+     &        10X,'BOTTOM   QUARK  MASS   =',F10.4/
+     &        10X,'TOP      QUARK  MASS   =',F10.4/
+     &        10X,'GLUON EFFECTIVE MASS   =',F10.4)
+  20  FORMAT(10X,'EXTRA SHOWER CUTOFF (Q)=',F10.4/
+     &       10X,'EXTRA SHOWER CUTOFF (G)=',F10.4/
+     &       10X,'PHOTON SHOWER CUTOFF   =',F10.4/
+     &       10X,'CLUSTER MASS PARAMETER =',F10.4/
+     &       10X,'SPACELIKE EVOLN CUTOFF =',F10.4/
+     &       10X,'INTRINSIC P-TRAN (RMS) =',F10.4)
+  30  FORMAT(10X,'EXTRA SHOWER CUTOFF (Q)=',F10.4/
+     &       10X,'EXTRA SHOWER CUTOFF (G)=',F10.4/
+     &       10X,'PHOTON SHOWER CUTOFF   =',F10.4/
+     &       10X,'CLUSTER MASS PARAMETER =',F10.4/
+     &       10X,'PDF FREEZING CUTOFF    =',F10.4/
+     &       10X,'INTRINSIC P-TRAN (RMS) =',F10.4)
+  40  FORMAT(10X,'NO SPACE-LIKE SHOWERS')
+  50  ISTOP=0
+C---INITIALIZE ALPHA-STRONG
+      IF ( QLIM.GT.ETLIM)  QLIM=ETLIM
+      QR=HWUALF(0,QLIM)
+C---DO SOME SAFETY CHECKS ON INPUT PARAMETERS
+C Check beam order for point-like photon/QCD processes
+      IF (IPRO.GE.50.AND.IPRO.LE.59.AND.
+     &     IDB.NE.22.AND.ABS(IDB).NE.11.AND.ABS(IDB).NE.13) THEN
+         WRITE(6,60)
+  60     FORMAT(1X,'WARNING: require FIRST beam to be a photon/lepton')
+         ISTOP=ISTOP+1
+      ENDIF
+      QG=HWBVMC(13)
+      QR=QG/QCDL3
+      IF (QR.GE.2.01) GOTO 80
+      WRITE (6,70) QG,QCDLAM,QCDL3
+  70  FORMAT(//10X,'SHOWER GLUON VIRTUAL MASS CUTOFF =',F8.5/
+     &         10X,'TOO SMALL RELATIVE TO QCD LAMBDA =',F8.5/
+     &         10X,'CORRESPONDS TO  3-FLAV MC LAMBDA =',F8.5)
+      ISTOP=ISTOP+1
+  80  QV=MIN(HWBVMC(1),HWBVMC(2))
+      IF (QV.GE.QG/(QR-1.)) GOTO 100
+      ISTOP=ISTOP+1
+      WRITE (6,90) QV,QCDLAM,QCDL3
+  90  FORMAT(//10X,'SHOWER QUARK VIRTUAL MASS CUTOFF =',F8.5/
+     &         10X,'TOO SMALL RELATIVE TO QCD LAMBDA =',F8.5/
+     &         10X,'CORRESPONDS TO  3-FLAV MC LAMBDA =',F8.5)
+  100 IF (ISTOP.NE.0) THEN
+        WRITE (6,110) ISTOP
+  110   FORMAT(//10X,'EXECUTION PREVENTED BY',I2,
+     &  ' ERRORS IN INPUT PARAMETERS.')
+        STOP
+      ENDIF
+      DO 120 I=1,6
+  120 RMASS(I+6)=RMASS(I)
+      RMASS(199)=RMASS(198)
+C---A PRIORI WEIGHTS FOR QUARK AND DIQUARKS
+      DQKWT=PWT(1)
+      UQKWT=PWT(2)
+      SQKWT=PWT(3)
+      DIQWT=PWT(7)
+      PWT(10)=PWT(4)
+      PWT(11)=PWT(5)
+      PWT(12)=PWT(6)
+C
+      PWT(4)=UQKWT*UQKWT*DIQWT
+      PWT(5)=UQKWT*DQKWT*DIQWT*HALF
+      PWT(6)=DQKWT*DQKWT*DIQWT
+      PWT(7)=UQKWT*SQKWT*DIQWT*HALF
+      PWT(8)=DQKWT*SQKWT*DIQWT*HALF
+      PWT(9)=SQKWT*SQKWT*DIQWT
+      QMAX=MAX(PWT(1),PWT(2),PWT(3))
+      PMAX=MAX(PWT(4),PWT(5),PWT(6),PWT(7),PWT(8),PWT(9),
+     &         PWT(10),PWT(11),PWT(12),QMAX)
+      PMAX=1./PMAX
+      QMAX=1./QMAX
+      DO 130 I=1,3
+  130 QWT(I)=PWT(I)*QMAX
+      DO 140 I=1,12
+  140 PWT(I)=PWT(I)*PMAX
+C  MASSES OF DIQUARKS (ASSUME BINDING NEGLIGIBLE)
+      RMASS(109)=RMASS(2)+RMASS(2)
+      RMASS(110)=RMASS(1)+RMASS(2)
+      RMASS(111)=RMASS(1)+RMASS(1)
+      RMASS(112)=RMASS(2)+RMASS(3)
+      RMASS(113)=RMASS(1)+RMASS(3)
+      RMASS(114)=RMASS(3)+RMASS(3)
+      DO 150 I=109,114
+  150 RMASS(I+6)=RMASS(I)
+C  MASSES OF TOP HADRONS (ASSUME BINDING NEGLIGIBLE)
+      RMASS(232)=RMASS(6)+RMASS(5)
+      RMASS(233)=RMASS(6)+RMASS(1)
+      RMASS(234)=RMASS(6)+RMASS(2)
+      RMASS(235)=RMASS(6)+RMASS(3)
+      RMASS(236)=RMASS(6)+RMASS(2)+RMASS(2)
+      RMASS(237)=RMASS(6)+RMASS(1)+RMASS(2)
+      RMASS(238)=RMASS(6)+RMASS(1)+RMASS(1)
+      RMASS(239)=RMASS(6)+RMASS(2)+RMASS(3)
+      RMASS(240)=RMASS(6)+RMASS(1)+RMASS(3)
+      RMASS(241)=RMASS(6)+RMASS(3)+RMASS(3)
+      RMASS(242)=RMASS(6)+RMASS(4)
+      RMASS(243)=RMASS(6)+RMASS(5)
+      RMASS(244)=RMASS(6)+RMASS(6)
+      RMASS(232)=RMASS(243)
+      DO 160 I=233,242
+  160 RMASS(I+22)=RMASS(I)
+C Set up an array of cluster mass threholds
+      CLMXPW=CLMAX**CLPOW
+      RCLPOW=ONE/CLPOW
+      CALL HWVZRO(144,CTHRPW(1,1))
+      DO 170 I=1,6
+      DO 170 J=1,6
+      CTHRPW(I ,J  )=(CLMXPW+(RMASS(I    )+RMASS(J+6  ))**CLPOW)**RCLPOW
+      CTHRPW(I ,J+6)=(CLMXPW+(RMASS(I    )+RMASS(J+108))**CLPOW)**RCLPOW
+  170 CTHRPW(I+6,J )=(CLMXPW+(RMASS(I+114)+RMASS(J+6  ))**CLPOW)**RCLPOW
+C Decay length conversion factor GEV2MM hbar.c/e
+      GEV2MM=1.D-15*SQRT(10.*GEV2NB)
+C Plank's constant/2pi (GeV.s)
+      HBAR=GEV2MM/(10.*CSPEED)
+C---IMPORTANCE SAMPLING
+      FIRST=.TRUE.
+      IF (IPRO.EQ.5) THEN
+        IF (EMMAX.GT.ETLIM)  EMMAX=ETLIM
+        IF (PTMAX.GT.PTLIM)  PTMAX=PTLIM
+      ELSEIF (IPRO.EQ.13) THEN
+        IF (EMMIN.EQ.0)      EMMIN=10
+        IF (EMMAX.GT.ETLIM)  EMMAX=ETLIM
+        IF (IQK.GT.0.AND.IQK.LE.6) EMMIN=MAX(EMMIN,2*RMASS(IQK))
+        XMIN=EMMIN
+        XMAX=EMMAX
+        XPOW=-EMPOW
+      ELSEIF (IPRO.EQ.15.OR.IPRO.EQ.17.OR.IPRO.EQ.18.OR.IPRO.EQ.21
+     &    .OR.IPRO.EQ.22.OR.IPRO.EQ.23.OR.IPRO.EQ.24.OR.IPRO.EQ.50
+     &    .OR.IPRO.EQ.51.OR.IPRO.EQ.53.OR.IPRO.EQ.55) THEN
+        IF (PTMAX.GT.PTLIM)  PTMAX=PTLIM
+        IF (IQK.NE.0.AND.IQK.LT.7.AND.IPRO.NE.23) THEN
+          XMIN=2.*SQRT(PTMIN**2+RMASS(IQK)**2)
+          XMAX=2.*SQRT(PTMAX**2+RMASS(IQK)**2)
+          IF (XMAX.GT.ETLIM)  XMAX=ETLIM
+        ELSE
+          XMIN=2.*PTMIN
+          XMAX=2.*PTMAX
+        ENDIF
+        XPOW=-PTPOW
+      ELSEIF (IPRO.EQ.52) THEN
+         PTELM=PTLIM-RMASS(IQK)**2/(4.*PTLIM)
+         IF (PTMAX.GT.PTELM) PTMAX=PTELM
+         XMIN=PTMIN
+         XMAX=PTMAX
+         XPOW=-PTPOW
+      ELSEIF (IPRO.EQ.90) THEN
+        XMIN=SQRT(Q2MIN)
+        XMAX=SQRT(Q2MAX)
+        XPOW=1.-2.*Q2POW
+      ELSEIF (IPRO.EQ.91) THEN
+        IF (EMMAX.GT.ETLIM) EMMAX=ETLIM
+      ENDIF
+C---CALCULATE HIGGS WIDTH
+      IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.16.OR.IPRO.EQ.19
+     &.OR.IPRO.EQ.23.OR.IPRO.EQ.95) THEN
+        GAMH=RMASS(201)
+        CALL HWDHIG(GAMH)
+      ENDIF
+C---IF Q**2 CAN BE TOO SMALL, BREIT FRAME MAKES NO SENSE
+      IF ((IPRO/10.EQ.9.AND.Q2MIN.LE.1.D-2).OR.
+     &    (IPRO.EQ.91.AND.IQK.EQ.7)) BREIT=.FALSE.
+      IF (IPRINT.NE.0) THEN
+        IF (PBEAM1.NE.PBEAM2) WRITE (6,180) USECMF
+        IF (IPRO.EQ.91.OR.IPRO.EQ.92)
+     &      WRITE (6,190) PTMIN
+        IF (IPRO.EQ.90.OR.(IPRO.EQ.91.AND.IQK.NE.7).OR.IPRO.EQ.92)
+     &      WRITE (6,200) Q2MIN,Q2MAX,BREIT
+        IF (IPRO.EQ.90.OR.(IPRO.EQ.91.AND.IQK.NE.7).OR.IPRO.EQ.92)
+     &      WRITE (6,210) YBMIN,YBMAX
+        IF (IPRO.EQ.91.AND.IQK.EQ.7)
+     &      WRITE (6,220) Q2WWMN,Q2WWMX,BREIT,ZJMAX
+        IF (IPROC/10.EQ.11) WRITE (6,230) THMAX
+        IF (IPRO.EQ.13) WRITE (6,240) EMMIN,EMMAX
+        IF (IPRO.EQ.15.OR.IPRO.EQ.17.OR.IPRO.EQ.18.OR.IPRO.EQ.21
+     &  .OR.IPRO.EQ.22.OR.IPRO.EQ.23.OR.IPRO.EQ.24.OR.IPRO.EQ.50
+     &  .OR.IPRO.EQ.51.OR.IPRO.EQ.52.OR.IPRO.EQ.53.OR.IPRO.EQ.55)
+     &      WRITE (6,250) PTMIN,PTMAX
+        IF (IPRO.EQ. 3.OR.IPRO.EQ. 4.OR.IPRO.EQ.16.OR.IPRO.EQ.19
+     &  .OR.IPRO.EQ.23.OR.IPRO.EQ.95)
+     &      WRITE (6,260) RMASS(201),GAMH,
+     &      GAMMAX,RMASS(201)+GAMMAX*GAMH,(BRHIG(I)*100,I=1,12)
+        IF (IPRO.EQ.91) WRITE (6,270) BGSHAT,EMMIN,EMMAX
+        IF (IPRO.EQ.5.AND.IQK.LT.50)
+     &      WRITE (6,280) EMMIN,EMMAX,PTMIN,PTMAX,CTMAX
+        IF (IPRO.EQ.5.AND.IQK.GE.50)
+     &      WRITE (6,290) EMMIN,EMMAX,Q2MIN,Q2MAX,PTMIN
+        IF (IPRO.GT.10.AND.
+     &    (IPRO.LT.90.AND.(ABS(IDB).EQ.11.OR.ABS(IDB).EQ.13).OR.
+     &                    (ABS(IDT).EQ.11.OR.ABS(IDT).EQ.13))) THEN
+          WRITE (6,300) Q2WWMN,Q2WWMX,YWWMIN,YWWMAX
+          IF (PHOMAS.GT.ZERO) WRITE (6,310) PHOMAS
+        ENDIF
+        IF (IPROC/10.EQ.10.OR.IPRO.EQ.90)
+     &      WRITE (6,320) HARDME,SOFTME
+        IF (IPRO.LE.3 .AND. ZMXISR.GT.0) WRITE (6,330) TMNISR,ONE-ZMXISR
+        IF (WHMIN.GT.ZERO .AND. IPRO.GT.10.AND.(IPRO.EQ.90.OR.
+     &       (ABS(IDB).EQ.11.OR.ABS(IDB).EQ.13).OR.
+     &       (ABS(IDT).EQ.11.OR.ABS(IDT).EQ.13))) WRITE (6,340) WHMIN
+  180   FORMAT(10X,'USE BEAM-TARGET C.M.F. =',L5)
+  190   FORMAT(10X,'MIN P-T FOR O(AS) DILS =',F10.4)
+  200   FORMAT(10X,'MIN ABS(Q**2) FOR DILS =',E10.4/
+     &         10X,'MAX ABS(Q**2) FOR DILS =',E10.4/
+     &         10X,'BREIT FRAME SHOWERING  =',L5)
+  210   FORMAT(10X,'MIN BJORKEN Y FOR DILS =',F10.4/
+     &         10X,'MAX BJORKEN Y FOR DILS =',F10.4)
+  220   FORMAT(10X,'MIN ABS(Q**2) FOR J/PSI=',E10.4/
+     &         10X,'MAX ABS(Q**2) FOR J/PSI=',E10.4/
+     &         10X,'BREIT FRAME SHOWERING  =',L5/
+     &         10X,'MAX Z FOR J/PSI        =',F10.4)
+  230   FORMAT(10X,'MAX THRUST FOR 2->3    =',F10.4)
+  240   FORMAT(10X,'MIN MASS FOR DRELL-YAN =',F10.4/
+     &         10X,'MAX MASS FOR DRELL-YAN =',F10.4)
+  250   FORMAT(10X,'MIN P-TRAN FOR 2->2    =',F10.4/
+     &         10X,'MAX P-TRAN FOR 2->2    =',F10.4)
+  260   FORMAT(10X,'HIGGS BOSON MASS       =',F10.4/
+     &         10X,'HIGGS BOSON WIDTH      =',F10.4/
+     &         10X,'CUTOFF = EMH +',F4.1,'*GAMH=',F10.4/
+     &         10X,'HIGGS          D DBAR  =',F10.4/
+     &         10X,'BRANCHING      U UBAR  =',F10.4/
+     &         10X,'FRACTIONS      S SBAR  =',F10.4/
+     &         10X,'(PER CENT)     C CBAR  =',F10.4/
+     &         10X,'               B BBAR  =',F10.4/
+     &         10X,'               T TBAR  =',F10.4/
+     &         10X,'              E+ E-    =',F10.4/
+     &         10X,'             MU+ MU-   =',F10.4/
+     &         10X,'            TAU+ TAU-  =',F10.4/
+     &         10X,'               W W     =',F10.4/
+     &         10X,'               Z Z     =',F10.4/
+     &         10X,'           GAMMA GAMMA =',F10.4)
+  270   FORMAT(10X,'SCALE FOR BGF IS S-HAT =',L5/
+     &         10X,'MIN MASS FOR BGF       =',F10.4/
+     &         10X,'MAX MASS FOR BGF       =',F10.4)
+  280   FORMAT(10X,'MIN MASS FOR 2 PHOTONS =',F10.4/
+     &         10X,'MAX MASS FOR 2 PHOTONS =',F10.4/
+     &         10X,'MIN PT OF 2 PHOTON CMF =',F10.4/
+     &         10X,'MAX PT OF 2 PHOTON CMF =',F10.4/
+     &         10X,'MAX COS THETA IN CMF   =',F10.4)
+  290   FORMAT(10X,'MIN MASS FOR GAMMA + W =',F10.4/
+     &         10X,'MAX MASS FOR GAMMA + W =',F10.4/
+     &         10X,'MIN ABS(Q**2)          =',E10.4/
+     &         10X,'MAX ABS(Q**2)          =',E10.4/
+     &         10X,'MIN PT                 =',F10.4)
+  300   FORMAT(10X,'MIN Q**2 FOR WW PHOTON =',F10.4/
+     &         10X,'MAX Q**2 FOR WW PHOTON =',F10.4/
+     &         10X,'MIN MOMENTUM FRACTION  =',F10.4/
+     &         10X,'MAX MOMENTUM FRACTION  =',F10.4)
+  310   FORMAT(10X,'GAMMA* S.F. MASS PARAM =',F10.4)
+  320   FORMAT(10X,'HARD M.E. MATCHING     =',L5/
+     &         10X,'SOFT M.E. MATCHING     =',L5)
+  330   FORMAT(10X,'MIN MTM FRAC FOR ISR   =',1PE10.4/
+     &         10X,'1-MAX MTM FRAC FOR ISR =',1PE10.4)
+  340   FORMAT(10X,'MINIMUM HADRONIC MASS  =',F10.4)
+        IF (LWEVT.LE.0) THEN
+          WRITE (6,350)
+        ELSE
+          WRITE (6,360) LWEVT
+        ENDIF
+  350   FORMAT(/10X,'NO EVENTS WILL BE WRITTEN TO DISK')
+  360   FORMAT(/10X,'EVENTS WILL BE OUTPUT ON UNIT',I4)
+      ENDIF
+C Verify and print beam polarisations
+      IF (IPRO.EQ.1.OR.IPRO.EQ.3) THEN
+C Set up transverse polarisation parameters for e+e-
+        IF ((EPOLN(1)**2+EPOLN(2)**2)
+     &     *(PPOLN(1)**2+PPOLN(2)**2).GT.0.) THEN
+          TPOL=.TRUE.
+          COSS=EPOLN(1)*PPOLN(1)-EPOLN(2)*PPOLN(2)
+          SINS=EPOLN(2)*PPOLN(1)+EPOLN(1)*PPOLN(2)
+        ELSE
+          TPOL=.FALSE.
+        ENDIF
+C print out lepton beam polarisation(s)
+        IF (IPRINT.NE.0) THEN
+          IF (IPART1.EQ.121) THEN
+            WRITE (6,370) PART1,EPOLN,PART2,PPOLN
+          ELSE
+            WRITE (6,370) PART1,PPOLN,PART2,EPOLN
+          ENDIF
+ 370      FORMAT(/10X,A8,'Beam polarisation=',3F10.4/
+     &            10X,A8,'Beam polarisation=',3F10.4)
+        ENDIF
+      ELSEIF (IPRO.GE.90.AND.IPRO.LE.99) THEN
+        IF (IDB.GE.11.AND.IDB.LE.16) THEN
+          CALL HWVZRO(3,PPOLN)
+C Check neutrino polarisations for DIS
+          IF (IDB.EQ. 12.OR.IDB.EQ. 14.OR.IDB.EQ. 16.AND.
+     &        EPOLN(3).NE.-1.) EPOLN(3)=-1.
+          IF (IPRINT.NE.0) WRITE(6,380) PART1,EPOLN(3)
+        ELSE
+          CALL HWVZRO(3,EPOLN)
+C Check anti-neutrino polarisations for DIS
+          IF (IDB.EQ.-12.OR.IDB.EQ.-14.OR.IDB.EQ.-16.AND.
+     &        PPOLN(3).NE. 1.) PPOLN(3)=+1.
+          IF (IPRINT.NE.0) WRITE(6,380) PART1,PPOLN(3)
+        ENDIF
+ 380    FORMAT(/10X,A8,1X,'Longitudinal beam polarisation=',F10.4/)
+      ENDIF
+      IF (IPRINT.NE.0) THEN
+        IF (ZPRIME) THEN
+          WRITE(6,390) RMASS(200),RMASS(202),GAMZ,GAMZP
+          WRITE(6,400) (RNAME(I),VFCH(I,1),AFCH(I,1),VFCH(I,2),
+     &                  AFCH(I,2),I=1,6)
+          WRITE(6,400) (RNAME(110+I),VFCH(I,1),AFCH(I,1),
+     &                  VFCH(I,2),AFCH(I,2),I=11,16)
+  390     FORMAT(/10X,'MASSIVE NEUTRAL VECTOR BOSON PARAMS'/
+     &            10X,'Z   MASS=',F10.4,7X,'Z-PRIME MASS=',F10.4/
+     &            10X,'   WIDTH=',F10.4,7X,'       WIDTH=',F10.4/
+     &            10X,'FERMION COUPLINGS: e.(V.1+A.G_5)G_mu'/
+     &            10X,'FERMION:  VECTOR     AXIAL',6X,
+     &                'VECTOR     AXIAL'/)
+  400     FORMAT(10X,A8,2X,F10.4,1X,F10.4,1X,F10.4,1X,F10.4)
+        ENDIF
+        IF (MIXING) THEN
+          WRITE(6,410) XMIX(2),YMIX(2),XMIX(1),YMIX(1)
+  410     FORMAT(/10X,'B_d: Delt-M/Gam =',F6.4,
+     &                ' Delt-Gam/2*Gam =',F6.4,/
+     &            10X,'B_s: Delt-M/Gam =',F6.2,
+     &                ' Delt-Gam/2*Gam =',F6.4)
+        ENDIF
+        IF (CLRECO) WRITE(6,420) PRECO,EXAG
+  420   FORMAT(/10X,'Colour rearrangement ALLOWED, probability =',F6.4,/
+     &          10x,'Weak boson life-time exaggeration factor =',F10.6)
+C---PDF STRUCTURE FUNCTIONS
+        WRITE (6,'(X)')
+        DO 450 I=1,2
+          IF (MODPDF(I).GE.0) THEN
+            WRITE (6,430) I,MODPDF(I),AUTPDF(I)
+          ELSE
+            WRITE (6,440) I
+          ENDIF
+ 430      FORMAT(10X,'PDFLIB USED FOR BEAM',I2,': SET',I3,' OF ',A20)
+ 440      FORMAT(10X,'PDFLIB NOT USED FOR BEAM',I2)
+ 450    CONTINUE
+C---GET THE UGLY INITIALISATION MESSAGES OVER AND DONE WITH NOW TOO
+        DO 460 I=1,2
+          IF (MODPDF(I).GE.0) THEN
+            PARM(1)=AUTPDF(I)
+            VAL(1)=MODPDF(I)
+            FSTPDF=.TRUE.
+            X=0.5
+            QSCA=10
+C---FIX TO CALL SCHULER-SJOSTRAND CODE
+            IF (AUTPDF(I).EQ.'SaSph') THEN
+              ISET=MOD(MODPDF(I),10)
+              IOP1=MOD(MODPDF(I)/10,2)
+              IOP2=MOD(MODPDF(I)/20,2)
+              IP2=MODPDF(I)/100
+              IF (ISET.EQ.1) THEN
+                WRITE (6,'(10X,A)')'SCHULER-SJOSTRAND PHOTON PDF SET 1D'
+              ELSEIF (ISET.EQ.2) THEN
+                WRITE (6,'(10X,A)')'SCHULER-SJOSTRAND PHOTON PDF SET 1M'
+              ELSEIF (ISET.EQ.3) THEN
+                WRITE (6,'(10X,A)')'SCHULER-SJOSTRAND PHOTON PDF SET 2D'
+              ELSEIF (ISET.EQ.4) THEN
+                WRITE (6,'(10X,A)')'SCHULER-SJOSTRAND PHOTON PDF SET 2M'
+              ELSE
+                WRITE (6,'(10X,A)')'UNKNOWN SCHULER-SJOSTRAND PDF SET'
+                CALL HWWARN('HWUINC',500,*999)
+              ENDIF
+              IF (IOP1.EQ.1) THEN
+                WRITE (6,'(10X,A)') 'WITH DIRECT COMPONENT IN DIS'
+                IF (IPRO.NE.90) WRITE (6,'(10X,A)')
+     $               'NOT RECOMMENDED FOR NON-DIS PROCESSES'
+              ENDIF
+              IF (IOP2.EQ.1) THEN
+                WRITE (6,'(10X,A)') 'WITH P**2 DEPENDENCE INCLUDED'
+                IF (PHOMAS.GT.0)
+     $          WRITE (6,'(10X,A)') 'NOT RECOMMENDED WITH PHOMAS.GT.0'
+                IF (IP2.GT.0)
+     $          WRITE (6,'(10X,A,I2)') 'WITH IP2 OPTION EQUAL TO',IP2
+              ENDIF
+            ELSEIF (AUTPDF(I).EQ.'SSph') THEN
+              WRITE (6,'(10X,A)') 'THE ACRONYM FOR SCHULER-SJOSTRAND'
+              WRITE (6,'(10X,A)') 'HAS CHANGED TO SaSph ACCORDING TO'
+              WRITE (6,'(10X,A)') 'THEIR WISHES.  SSph NO LONGER WORKS'
+              STOP
+            ELSE
+              CALL PDFSET(PARM,VAL)
+              CALL STRUCTM(X,QSCA,UPV,DNV,USEA,DSEA,STR,CHM,BTM,TOP,GLU)
+            ENDIF
+          ENDIF
+ 460    CONTINUE
+        WRITE (6,'(X)')
+      ENDIF
+C Set up neutral B meson mixing parameters
+      IF (MIXING.AND..NOT.(RSTAB(223).AND.RSTAB(247))) THEN
+        XMRCT(1)=XMIX(1)*RMASS(223)/(CSPEED*RLTIM(223))
+        YMRCT(1)=YMIX(1)*RMASS(223)/(CSPEED*RLTIM(223))
+      ENDIF
+      IF (MIXING.AND..NOT.(RSTAB(221).AND.RSTAB(245))) THEN
+        XMRCT(2)=XMIX(2)*RMASS(221)/(CSPEED*RLTIM(221))
+        YMRCT(2)=YMIX(2)*RMASS(221)/(CSPEED*RLTIM(221))
+      ENDIF
+C---B DECAY PACKAGE
+      IF (BDECAY.EQ.'EURO') THEN
+        IF (IPRINT.NE.0) WRITE (6,470) 'EURODEC'
+      ELSEIF (BDECAY.EQ.'CLEO') THEN
+        IF (IPRINT.NE.0) WRITE (6,470) 'CLEO'
+      ELSE
+        BDECAY='HERW'
+      ENDIF
+  470 FORMAT (10X,A,' B DECAY PACKAGE WILL BE USED')
+C---COMPUTE PARTICLE PROPERTIES FOR HADRONIZATION
+      CALL HWURES
+C Prepare internal decay tables and do diagnostic checks
+      CALL HWUDKS
+C Print particle decay tables here
+      IF (IPRINT.GE.2) CALL HWUDPR
+C---MISCELLANEOUS DERIVED QUANTITIES
+      TMTOP=2.*LOG(RMASS(6)/30.)
+      PXRMS=PTRMS/SQRT(2.)
+      ZBINM=0.25/ZBINM
+      PSPLT=1./PSPLT
+      NDTRY=2*NCTRY
+      NGSPL=0
+      PGSMX=0.
+      DO 480 I=1,4
+      PGS=HWUPCM(RMASS(13),RMASS(I),RMASS(I))
+      IF (PGS.GE.0.) NGSPL=I
+      IF (PGS.GE.PGSMX) PGSMX=PGS
+  480 PGSPL(I)=PGS
+      CALL HWVZRO(6,PTINT)
+      IF (IPRO.NE.80) THEN
+C---SET UP TABLES OF SUDAKOV FORM FACTORS, GIVING
+C   PROBABILITY DISTRIBUTION IN VARIABLE Q = E*SQRT(XI)
+        NSUD=NFLAV
+        CALL HWBSUD
+C---SET PARAMETERS FOR SPACELIKE BRANCHING
+        DO 500 I=1,NSUD
+        DO 490 J=2,NQEV
+        IF (QEV(J,I).GT.QSPAC) GOTO 500
+  490   CONTINUE
+  500   NSPAC(I)=J-1
+      ENDIF
+      EVWGT=AVWGT
+      ISTAT=1
+  999 END

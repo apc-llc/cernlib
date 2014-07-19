@@ -1,0 +1,19 @@
+*
+* $Id: sbytor.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: sbytor.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+sbytor   : proc (a, x, lx, nbits);
+ 
+dcl (a, x, lx, nbits) bin fixed (35);
+ 
+          substr (unspec (x), 38-lx-nbits, nbits) =
+          substr (unspec (x), 38-lx-nbits, nbits)
+  | substr (unspec (a), 37-nbits, nbits);
+     END sbytor;
+#ifdef CERNLIB_TCGEN_SBYTOR
+#undef CERNLIB_TCGEN_SBYTOR
+#endif

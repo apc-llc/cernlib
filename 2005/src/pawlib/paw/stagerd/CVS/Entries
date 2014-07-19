@@ -1,0 +1,18 @@
+/Imakefile/1.2/Tue Apr  2 21:57:34 1996//
+/bftp.c/1.2/Tue Apr  2 22:00:13 1996//
+/codestr.c/1.2/Tue Apr  2 22:00:17 1996//
+/debuglog.c/1.2/Tue Apr  2 22:00:18 1996//
+/dump.c/1.2/Tue Apr  2 22:00:20 1996//
+/lists.c/1.2/Tue Apr  2 22:00:22 1996//
+/master.c/1.2/Tue Apr  2 22:00:24 1996//
+/msg.c/1.1.1.1/Fri Mar  1 11:39:30 1996//
+/pfstagerd.c/1.1/Tue Apr  2 22:00:27 1996//
+/pfstagerd.h/1.1/Tue Apr  2 22:00:40 1996//
+/slave.c/1.2/Tue Apr  2 22:00:29 1996//
+/sockio.c/1.2/Tue Apr  2 22:00:32 1996//
+/syscalls.c/1.2/Tue Apr  2 22:00:34 1996//
+/tcputil.c/1.2/Tue Apr  2 22:00:35 1996//
+/transfer.c/1.2/Tue Apr  2 22:00:37 1996//
+/util.c/1.2/Tue Apr  2 22:00:38 1996//
+/child.c/1.3/Mon Apr 18 15:41:14 2005//
+D

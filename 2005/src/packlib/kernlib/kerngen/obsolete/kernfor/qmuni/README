@@ -1,0 +1,25 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:15 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:15  mclareni
+* Kernlib
+*
+*
+*       for Univac, Fortran 4
+* This directory was created from kernfor.car patch qmuni
+#ifndef CERNLIB_B36
+#define CERNLIB_B36
+#endif
+#ifndef CERNLIB_B36M
+#define CERNLIB_B36M
+#endif
+#ifndef CERNLIB_A6
+#define CERNLIB_A6
+#endif
+#ifndef CERNLIB_A6M
+#define CERNLIB_A6M
+#endif
+#ifndef CERNLIB_A5M
+#define CERNLIB_A5M
+#endif

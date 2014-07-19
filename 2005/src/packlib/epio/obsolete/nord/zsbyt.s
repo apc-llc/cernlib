@@ -1,0 +1,26 @@
+*
+* $Id: zsbyt.s,v 1.1.1.1 1996/03/08 15:21:56 mclareni Exp $
+*
+* $Log: zsbyt.s,v $
+* Revision 1.1.1.1  1996/03/08 15:21:56  mclareni
+* Epio
+*
+*
+#if defined(CERNLIB_ND100B32)
+% VERSION 770414. SOURCE & BRF OK FOR N-10 2+3W.
+% SUBROUTINE ZSBYT(IFR,XTO,NB)
+% COPIES THE RIGHTMOST 8-BIT BYTE OF IFR INTO THE BYTE NB,
+% COUNTED FROM LEFT TO RIGHT WITH THE LEFTMOST BYTE OF XTO AS BYTE 0.
+)9BEG
+)9LIB ZSBYT
+)9ENT ZSBYT
+ZSBYT,COPY SB DD
+      COPY SA DB
+      LDA I ,B 0
+      LDT   ,B 1
+      LDX I ,B 2
+      SBYT
+      COPY SD DB
+      EXIT
+)9END;)9EOF;)9TSS
+#endif

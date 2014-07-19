@@ -1,0 +1,53 @@
+*
+* $Id: title.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: title.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+
+
+
+                              COJETS 5.15
+
+      A MONTE CARLO SIMULATION PROGRAM FOR PBAR-P AND P-P COLLISIONS
+      --------------------------------------------------------------
+
+                            Roberto Odorico
+              University of Bologna, Department of Physics
+                  Via Irnerio 46, 40126 Bologna, Italy
+
+
+
+
+
+E-MAIL: M6ZBOX51 AT ICINECA2 (BITNET), CINECA::M6ZBOX51 (DECNET).
+TEL. +39-51-351001 (switchboard), +39-51-242018 (room).
+TELEX 520634 INFNBO I, FAX +39-51-247244
+
+
+
+
+Contents:
+
+[1] INTRODUCTION
+[2] PHYSICS
+[3] GENERALITIES ON USAGE
+[4] BACKWARD COMPATIBILITY
+[5] PATCHY
+[6] EXTERNAL ROUTINES USED BY COJETS
+[7] USAGE WITH THE CONVENTIONAL I/O INTERFACE (IOCON)
+[8] MAIN PROGRAM AND USER ROUTINES FOR IOCON
+[9] INPUT FOR IOCON
+[10] OUTPUT COMMON BLOCKS WITH IOCON
+[11] USAGE WITH THE ISAJET TYPE I/O INTERFACE (IOISA)
+[12] MAIN PROGRAM FOR IOISA
+[13] INPUT FOR IOISA
+[14] OUTPUT TAPE FOR IOISA
+[15] TAPE READING (FOR IOISA OUTPUT)
+[16] PARTICLE AND DECAY TABLE, IDENT CODES FOR PARTICLES
+
+
+
+

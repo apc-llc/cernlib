@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 aldata.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

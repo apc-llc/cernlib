@@ -1,0 +1,238 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:43 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:43  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernfor.car patch kernfor
+#if !defined(CERNLIB_KERNFOR)
+
+
+              KERNLIB FORTRAN ROUTINES FOR ALL MACHINES
+
+---------------------------------------------------------------------
+
+              This file contains the following Patches
+
+
+QM...     Machine type patches to select assembly options
+
+UTYGEN    General Utility programs
+
+CCGEN     General C routines
+CCGENCF   the CF package of C routines
+CCGENU    utility C routines used by CCGEN or CCGENCF
+
+XVECT     XIN / XOUT routines
+
+TCGEN     all standard Fortran routines for KERNLIB,
+          except the ones found on KERNNUM Pam
+
+TCNUM     routines inherited from KERNNUM to make sure that
+          GENSEC remains complete; this is not to be used for making
+          a complete KERNLIB on machines where KERNNUM is ready;
+
+TCGENR    obsolete GENSEC routines
+
+---------------------------------------------------------------------
+
+     The following Patch-names may be used with IF-parameters
+         on Patchy control-cards for conditional assembly
+
+
+Computer types
+--------------
+
+      QMNNB32  for an unknown 32-bit machine
+
+      QMALT    Alliant
+      QMAMX    Amiga Unix
+
+      QMAPO    Apollo
+      QMAPO10  Apollo DPS 10000
+
+      QMCDCV   CDC 6000/7000/Cyber  with Fortran 5
+      QMCDC    CDC 6000/7000/Cyber  with Fortran 4
+
+      QMDOS    MS-DOS and Windows/NT
+
+      QMCRY    CRAY systems COS or UNICOS
+      QMCRU    CRAY system UNICOS only
+
+      QMCV64   Convex 64-bit mode
+      QMCV32   Convex 32-bit mode
+      QMCVX    Convex either mode
+
+      QMDGE    Data General, ECLIPSE
+      QMHPX    Hewlett Packard HP Unix
+
+      QMIBM    IBM 360 / 370
+      QMIBMVF  IBM Vector facility
+      QMIBMXA  IBM Xtended Adressing
+
+      QMIBX    IBM 3090 with system AIX
+      QMIRT    IBM / RT and 6000 with xlf compiler
+
+      QMND3    NORD 500
+      QMNXT    Next
+      QMOS9    Microware OS-9
+      QMPDP    DEC PDP 10
+
+      QMSGI    Silicon Graphics
+      QMSUN    SUN
+
+      QMTMO    Transputer with Meiko compiler
+      QMUNI    UNIVAC 1100  with earlier compilers
+      QMUNO    UNIVAC 1100  with FTN compiler
+
+      QMVAX    Digital VAX
+      QMVMI    Digital VAX with MIPS processor - DECstation
+      QMVAO    Digital Alpha with OSF, + S for 32-bit
+                                       (+ L for 64-bit later)
+Fortran dialects
+----------------
+
+      QF_APO   Apollo Fortran for /com/ftn
+      QF_APO77                for /bin/f77
+      QF_DEC   DEC Fortran
+      QF_F2C   compilation through "f2c"
+      QF_IBM   IBM VS Fortran
+      QF_SIEM  Siemens Fortran on IBM
+      QF_MSOFT Microsoft Fortran
+
+Operating systems
+-----------------
+
+      QS_UNIX  Unix
+      QS_VMS   for DEC system VMS
+
+Word capacity
+-------------
+
+      B32      number of bits in one computer word
+      B36
+      B48
+      B60
+      B64
+
+      B36M     36 bits  or  more per word
+      B48M
+      B60M
+
+      A4       number of characters in 1 computer word
+      A5
+      A6
+      A8
+      A10
+
+      A5M      5 characters  or  more per word
+      A6M
+      A8M
+
+Other computer or Fortran features
+----------------------------------
+
+      QASCII     Character set is ASCII
+      QEBCDIC    Character set is EBCDIC
+
+      QIEEE      Floating point representation is IEEE
+
+      QISASTD    ISA standard intrinsic functions available :
+                 IAND, IOR, NOT, ISHFT
+      QMILSTD    MIL standard intrinsic functions available :
+                 IBITS, MVBITS, ISHFTC
+
+      QHOLL      Hollerith constants exist
+      EQUHOLCH   EQUIVALENCE Hollerith/Character ok
+      QORTHOLL   orthodox Hollerith storage left to right in word
+
+      QSYSBSD    Unix system BSD (system 5 otherwise)
+      QSIGJMP    Posix sigsetjmp/siglongjmp for setjmp/longjmp
+      QENVBSD    BSD setenv is available
+      QGETCWD    BSD getwd is not available, but getcwd is available
+      QSIGBSD    signal handling with BSD   sigvec
+      QSIGPOSIX  signal handling with Posix sigaction
+
+      QX_SC      external names are lower case with underscore
+      QXNO_SC    external names are lower case without underscore
+      QXCAPT     external names are capital
+
+      QCCINDAD   routine entry adr are passed double indirect
+                 in Fortran calls (needed in C routines)
+
+      INTDOUBL   use double precision for some internal calculations
+                 (used at present only in the TR routines)
+
+      QINTCOPY   copy vectors as integers (in UCOPY et al.)
+
+      NOSHIFT    left/right shift is not available,
+                 sequence Q$SHIFT cannot be defined
+
+      HEX        dumps must be done in hexadecimal representation
+                 else: dumps are in octal
+
+      ENTRET     multiple entry functions must return by entry name
+                 else: return by function name works ok
+
+      ENTRCDC    CDC Fortran 4 syntax for ENTRY statement
+                 else: ENTRY statement contains argument list
+
+Flags inherited from KENRNUM  -  only used in P=TCNUM
+----------------------------
+
+      NUMLOPRE floating point precision for 32-bit machines
+
+      NUMHIPRE =-NUMLOPRE
+
+      NUME293  maximum exponent = 10**293
+
+      NUME75   maximum exponent = 10**75
+
+      NUME38   maximum exponent = 10**38
+
+
+The USE-selection of the machine-type is done on the
+KERNLIB Pam-file of the particular machine;
+the selection of the others is done by the machine-type patch
+on the present Pam.
+
+---------------------------------------------------------------------
+
+KERNLIB routines in machine language or otherwise special
+for individual machines are found on the following PAM-files:
+
+      KERNALT    for  Alliant
+      KERNAPO    for  APOLLO
+      KERNCDC    for  CDC 7600 / 6000
+      KERNCRY    for  CRAY RESEARCH INC.
+      KERNCVX    for  Convex
+      KERNDGE    for  DATA GENERAL
+      KERNHPX    for  HP Unix
+      KERNIBM    for  IBM 3090 with systems MVS or VM
+      KERNIBX    for  IBM 3090 with system AIX
+      KERNIRT    for  IBM / RT
+      KERNNOR    for  NORD 500
+      KERNOS9    for  Microware OS-9
+      KERNPDP    for  DEC PDP 10
+      KERNSGI    for  Silicon Graphics
+      KERNSUN    for  SUN
+      KERNTMO    for  Transputer with Meiko compiler
+      KERNUNI    for  UNIVAC 1100 SERIES
+      KERNVAX    for  Digital VAX 11
+      KERNVMI    for  Digital VAX with MIPS processor
+      KERNDOS    for  MSDOS and Windows/NT
+
+These contain also the deletes of the unwanted Fortran routines,
+and hence must pass trough YPATCHY just before the present Pam.
+
+---------------------------------------------------------------------
+
+A program to test a large number of the KERNLIB routines is
+found on a separate Pam-file :
+
+      MICKY      test program, verify expected results
+
+=====================================================================
+#endif

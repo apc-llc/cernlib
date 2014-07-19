@@ -1,0 +1,47 @@
+*
+* $Id: fatbank.inc,v 1.1.1.1 1996/03/07 15:17:58 mclareni Exp $
+*
+* $Log: fatbank.inc,v $
+* Revision 1.1.1.1  1996/03/07 15:17:58  mclareni
+* Fatmen
+*
+*
+#ifndef CERNLIB_FATMEN_FATBANK_INC
+#define CERNLIB_FATMEN_FATBANK_INC
+*
+*
+* fatbank.inc
+*
+      COMMON /FABANK/FATFEN(22),LQ(9)
+      DIMENSION       IQ(2), Q(2)
+      EQUIVALENCE     (IQ(1),Q(1),LQ(9))
+*
+      COMMON /QUEST/  IQUEST(100)
+*
+      PARAMETER       (IKTYFA=33, KNSDFA=23, KLSDFA=26, MAXLFA=128)
+*     top directory fan-out bank    "UPFA"
+      PARAMETER       (MNOPFA=1, MLUNFA=2, MFLGFA=3, MTOTFA=4)
+      PARAMETER       (MCRDFA=5, MINPFA=6, MOUTFA=7, MTOPFA=8)
+      PARAMETER       (MNCHFA=9, MCHRFA=10, NDUPFA=MCHRFA+31)
+      PARAMETER       (NSLUFA=2)
+*     Book keeping "BKFA"
+      PARAMETER       (KLBKFA=1)
+      PARAMETER       (MSTAFA=1,MPNTFA=2,MCGNFA=3)
+      PARAMETER       (NWBKFA=3)
+*     Generic names bank
+      PARAMETER       (KLGNFA=2)
+*
+      COMMON /FATSTO/ LDIRFA, LBOUT,  LJNKFA
+      COMMON /FATUSE/ IDEBFA, IDIVFA, IKDRFA, KOFSFA, KOFUFA, LBFXFA
+     +              , LSAVFA, LTOPFA, LBBKFA, LBGNFA, LTDSFA, LBDSFA
+     +              , LPRTFA, NTOPFA, LUFZFA, IOUPFA, IOBKFA, IODSFA
+     +              , LLNLFA, LLNHFA
+      COMMON /FATSER/ LNEWFA, LOLDFA, LCOMP1, LCOMP2, LBANKR
+      COMMON /FATBNK/ LBKLUN(99)
+*
+      PARAMETER       (MXDMFA=100)
+*     COMMON /FATKYS/ IOTYFA(MXDMFA), KEYVFA(MXDMFA), NKEYFA, NWKYFA
+      COMMON /FATKYS/ IOTYFA(MXDMFA), KEYVFA(MXDMFA), NWKYFA
+*
+
+#endif

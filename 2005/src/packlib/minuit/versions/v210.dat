@@ -1,0 +1,13 @@
+*
+* $Id: v210.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v210.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.10   931125  Minuit 93.11
+C     MNCOMD   fix serious bug in converting command to upper case
+C     MNEXCM, MNLIMS, MNMNOT   removed unused variable references
+C     MNFREE   suppress print message when print level .lt. 1
+C     MNPARM, MNPARS, MNREAD  print header line when appropriate

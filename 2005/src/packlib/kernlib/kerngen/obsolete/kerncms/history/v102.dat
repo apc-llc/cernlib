@@ -1,0 +1,23 @@
+*
+* $Id: v102.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v102.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.02  890608 09.32
+Replace:      P=SYCERNV, D=JOB$VM        Rewritten for public release
+              P=SYCERNV, D=JOBNAM        Altered for change to JOB$VM
+              P=SYCERNV, D=TIMEX         Altered for change to JOB$VM
+              P=SYVM   , D=VMRTRM        Change for XA compatibility
+              P=SYVM   , D=VMSATN        Change for XA compatibility
+              P=SYVM   , D=VMCMS         Change for XA compatibility
+              P=SYVM   , D=VMREXX        Extra code for XA capability
+              P=SYVM   , D=VMBEEP        Extra code for XA capability
+ 
+Add:          P=SYVM   , D=DATIME        VM timer calls
+              P=SYVM   , D=DATIMH        VM timer calls
+              P=SYVM   , D=IOSPAK2       Screen Handling Routines
+              P=SYVM   , D=JOB$VM        Fortran version for non-HepVM
+ 

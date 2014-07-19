@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 atg.F erf.F fint.F freq.F prob.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

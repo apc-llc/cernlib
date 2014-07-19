@@ -1,0 +1,26 @@
+*
+* $Id: fatsql.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatsql.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+rm fatsql.fortsql
+ypatchy fatmen.cards fatsql.fortsql :go <<!
+&EXE.
+&ASM, 21,R=!.CDECK  ID>, !.fortsql
+&USE,*FATSQL,ORACLE.
+&USE,IBMRT.
+&PAM,11,T=C,A. fatmen.cards
+&QUIT.
+!
+fcasplit fatsql.fortsql
+rm fatsql.fortsql
+for i in *.fortsql
+   do
+   pcc iname=$i host=fortran
+   j=`basename $i .fortsql`
+   xlf -q charlen=32756 -c $j.f
+   done
+ 

@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 iucomh.F kerngt.F qnexte.F rndm.F ublow.F ubunch.F vxinvb.F \ @@\
+	 vxinvc.F xinb.F xinbs.F
+
+SRCS_S= \ @@\
+	 jumpxn.s longjmp.s setjmp.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

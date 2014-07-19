@@ -1,0 +1,590 @@
+*
+* $Id: topdcy.F,v 1.1.1.1 1996/01/11 14:14:43 mclareni Exp $
+*
+* $Log: topdcy.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:43  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE TOPDCY
+C     *****************
+C-- PICKS UP TOP PSEUDOSCALAR PARTICLES FROM PARHAD, DECAYS THEM AND ADD
+C-- DECAY PRODUCTS TO PARHAD, PARQUA, /JETSET/
+C-- CREATED: 88/05/08
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/boflag.inc"
+#include "cojets/bopar.inc"
+#include "cojets/boson.inc"
+#include "cojets/ctopdc.inc"
+#include "cojets/cutoff.inc"
+#include "cojets/data1.inc"
+#include "cojets/data2.inc"
+#include "cojets/decpar.inc"
+#include "cojets/edpar.inc"
+#include "cojets/event.inc"
+#include "cojets/forcsl.inc"
+#include "cojets/fstate.inc"
+#include "cojets/iflghv.inc"
+#include "cojets/intype.inc"
+#include "cojets/isjetn.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+#include "cojets/jetnpc.inc"
+#include "cojets/jetset.inc"
+#include "cojets/keybre.inc"
+#include "cojets/parqua.inc"
+#include "cojets/qcds.inc"
+#include "cojets/quaor.inc"
+#include "cojets/quaor2.inc"
+#include "cojets/radlep.inc"
+#include "cojets/stable.inc"
+#include "cojets/zwpar.inc"
+      LOGICAL SKPRES
+      DIMENSION IFRSLP(2)
+      DIMENSION WMIN(6),V1(4),V2(4),SETIN(6),PBOOST(4),NPIF(3,2)
+      DATA WMIN/.5,.5,2.5,6.,10.,0./
+      PAWT(A,B,C)=SQRT((A**2-(B+C)**2)*(A**2-(B-C)**2))/(2.*A)
+C
+      IF(KYTQCD.NE.0.AND.KYTQCD.NE.1.AND.KYTQCD.NE.3) THEN
+        WRITE(ITLIS,81) KYTQCD
+81      FORMAT(/' ***',I3,' IS BAD INPUT FOR KYTQCD'
+     *  ,' (ACCEPTED VALUES: 0,1,3) -- JOB IS ABORTED')
+        STOP
+      ENDIF
+      IF(KYTQED.NE.0.AND.KYTQED.NE.1) THEN
+        WRITE(ITLIS,82) KYTQED
+82      FORMAT(/' ***',I3,' IS BAD INPUT FOR KYTQED'
+     *  ,' (0: NO QED RADIATION; 1: MULTIPLE QED RADIATION WITH LLA)'
+     *  /' ***JOB IS ABORTED')
+        STOP
+      ENDIF
+      IBOFLA=1
+      KEYBRL=KEYBRE
+      IRADLL=IRADLP
+      KEYBRE=KYTQCD
+      IRADLP=KYTQED
+C-- FORCE SL - PRELIMINARIES
+      IFLGHV=0
+      IFRSLP(1)=0
+      IFRSLP(2)=0
+      IF(LFORSL.NE.0.AND.KFORSL.EQ.6) THEN
+        IFORX=0
+        DO 301 L=1,NFORSL
+        PTP2X=0.
+        DO 300 I=1,NPART
+        IF(RDECAY(INT(PARHAD(I,6))).GE.0.) GO TO 300
+        IF(I.EQ.IFORX) GO TO 300
+        PTP2=PARHAD(I,1)**2+PARHAD(I,2)**2
+        IF(PTP2.LE.PTP2X) GO TO 300
+        IFRSLP(L)=I
+        PTP2X=PTP2
+300     CONTINUE
+        IFORX=IFRSLP(L)
+301     CONTINUE
+      ENDIF
+C-- LOOP ON ALL PARTICLES LOOKING FOR JSPIN=0 TOP
+      NTOP=0
+1     NTOP=NTOP+1
+      IF(NTOP.GT.NPART) GO TO 120
+      KTOP=INT(PARHAD(NTOP,6))
+      IF(ABS(KTOP).GE.1000) GO TO 1
+      IDTOP=IDENTF(KTOP)
+      IDTOPA=ABS(IDTOP)
+      IF(IDTOPA.LT.100.OR.MOD(IDTOPA,100).NE.60) GO TO 1
+      IF(IDB(KTOP).EQ.0) GO TO 1
+      JET=ABS(IORIG(NTOP))/IPACK
+C-- GENERATE DECAY CHANNEL
+      TBR=CJRN(0.)
+      IFORSL=0
+      IF(NTOP.EQ.IFRSLP(1).OR.NTOP.EQ.IFRSLP(2)) IFORSL=1
+      IF(IFORSL.EQ.1) THEN
+C-- FORCE SL
+        IF(CJRN(0.)*BRXFSL.GT.-MOD(RDECAY(KTOP),1.)) THEN
+C-- REJECT EVENT (CORRECTION FOR DIFFERENCES IN TOTAL PARTICLE SL BR)
+          IFLGHV=1
+          NHVREJ=NHVREJ+1
+          GO TO 120
+        ENDIF
+        IDC=-INT(RDECAY(KTOP))-1
+      ELSE
+        IDC=ABS(IDB(KTOP))-1
+      ENDIF
+100   IDC=IDC+1
+      IF(IFORSL.EQ.1) THEN
+        IF(TBR.GT.CBRF(IDC)) GO TO 100
+        IDC=IKDP(IDC)
+      ELSE
+        IF(TBR.GT.CBR(IDC)) GO TO 100
+      ENDIF
+C-- RECORD TOP PRIMARY DECAY STUFF (KINEMATICS DEALT WITH LATER)
+      IPI=NPART+1
+      IPF=NPART+3
+      DO 110 IP=IPI,IPF
+      IPR=IP-NPART
+      NTOPD(IPR)=IP
+      KIP=KDP(IDC,IPR)
+      PARHAD(IP,5)=0.
+      PARHAD(IP,6)=KIP
+      PARHAD(IP,7)=PARHAD(NTOP,7)
+      IORIG(IP)=IPACK*JET+NTOP
+      IDCAY(IP)=0
+      KIPA=ABS(KIP)
+      IF(KIPA.LT.1000) PARHAD(IP,5)=PMAS(KIP)
+      IDENT(IP)=IDEXT(KIP)
+110   CONTINUE
+C-- IF TOP ID IS NEGATIVE, CHARGE CONJUGATE DECAY PRODUCTS
+      IF(IDTOP.GT.0) GO TO 111
+      DO 112 IP=IPI,IPF
+      IDINA=ABS(PARHAD(IP,6))
+      IF(IDINA.LT.1000) THEN
+        IDENA=ABS(IDENT(IP))
+        IF(IDENA.LE.100) THEN
+          IF(LCHARG(IDINA).EQ.0) GO TO 112
+        ELSEIF(IDENA.LT.1000) THEN
+          IQ1=IDENA/100
+          IQ2=MOD(IDENA/10,10)
+          IF(IQ1.EQ.IQ2) GO TO 112
+        ENDIF
+        IDENT(IP)=-IDENT(IP)
+        PARHAD(IP,6)=INTID(IDENT(IP))
+      ELSE
+        IDENT(IP)=-IDENT(IP)
+        PARHAD(IP,6)=-PARHAD(IP,6)
+      ENDIF
+112   CONTINUE
+111   CONTINUE
+      IDCAY(NTOP)=IPACK*IPI+IPF
+C-- DECAY PRELIMINARIES
+      TMASS=PARHAD(NTOP,5)
+      LTOP=MOD(IDTOP,100)/10
+      IF(ABS(IDTOP).LT.1000) LTOP=-LTOP
+      IF(LTOP.GT.0) PBOS(6)=3
+      IF(LTOP.LT.0) PBOS(6)=4
+      K1=PARHAD(NTOPD(1),6)
+      IF(K1.EQ. 9.OR.K1.EQ.10) ICHDB=IDB(3)
+      IF(K1.EQ.13.OR.K1.EQ.14) ICHDB=IDB(3)+1
+      IF(K1.EQ.17.OR.K1.EQ.18) ICHDB=IDB(3)+2
+      IF(ABS(K1).EQ.1000)      ICHDB=IDB(3)+3
+      IF(ABS(K1).EQ.4000)      ICHDB=IDB(3)+4
+      IQUAO1=JET
+      IQUAO2=JET
+      IFLABJ=MOD(INT(PARHAD(NTOPD(3),6))/1000,10)
+      DO 3 J=1,3
+3     PBOS(J)=0.
+      DO 4 L=1,3
+      DO 4 IF=1,2
+4     NPIF(L,IF)=NPART+L
+      NPART=IPF
+C-- WORKING REF. FRAME IS VIRTUAL 'W' REST FRAME
+C-- PHASE SPACE AND MATRIX ELEMENT FACTORS TREATED IN THE APPROXIMATION
+C-- OF MASSLESS 'W' DECAY LEPTONS/QUARKS AND B-JET MASS GIVEN BY QCD
+C-- RADIATION ONLY
+C-- GENERATE 'W' MASS
+      ICHR=ICHDB-(IDB(3)-1)
+      WMASS=PMAS(3)
+      WPHSPX=PAWT(TMASS,WMIN(ICHR),QZFL(5))
+      WMATX=TMASS**4/16.
+      ADRMIN=ATAN((WMIN(ICHR)**2-WMASS**2)/(WMASS*WGAM))
+      ADRMAX=ATAN(((TMASS-QZFL(5))**2-WMASS**2)/(WMASS*WGAM))
+11    DR=TAN((ADRMAX-ADRMIN)*CJRN(0.)+ADRMIN)
+      WVRM=SQRT(DR*WMASS*WGAM+WMASS**2)
+C-- GENERATE B JET VIRTUALITY FOR PHASE SPACE, MATRIX ELEMENT CALCS.
+C-- (ACTUAL B JET MASS, FOR KINEMATICS, CALCULATED AFTER FRAGMENTATION)
+      XQSQB=(TMASS-WVRM)**2
+      CALL PSQGEN(5,XQSQB,QSQB,IGO)
+      BJMASS=SQRT(QSQB)
+      IF(WVRM+BJMASS.GE.TMASS) GO TO 11
+C-- MODULATION BY PHASE SPACE FACTOR
+      PBTCM=PAWT(TMASS,WVRM,BJMASS)
+      WPHSP=PBTCM
+      IF(CJRN(0.)*WPHSPX.GT.WPHSP) GO TO 11
+C-- MODULATION BY MATRIX ELEMENT ('W' REST FRAME)
+      PB=PBTCM*TMASS/WVRM
+      PBSQ=PB**2
+      EB=SQRT(BJMASS**2+PBSQ)
+      ET=SQRT(TMASS**2+PBSQ)
+      CTHWRF=-1.+2.*CJRN(0.)
+      WMAT=WVRM**2/4.*(ET+PB*CTHWRF)*(EB-PB*CTHWRF)
+      IF(CJRN(0.)*WMATX.GT.WMAT) GO TO 11
+C-- HANDLE 'W' DECAY
+      PBOS(5)=WVRM
+      NQWI=NQUA+1
+      NJWI=NJSET+1
+      SKPRES=.FALSE.
+      IF(ICHR.LE.3) THEN
+C-- LEPTONIC DECAYS
+        NP1=1
+        NQWF=NQUA
+        NJWF=NJSET
+        IDCAY(NTOPD(1))=0
+        IDCAY(NTOPD(2))=0
+        IF(IRADLP.EQ.0) THEN
+          CALL BLEPT
+C-- ROTATION OF 'W' DECAY PRODUCTS
+          THETA=ACOSX(CTHWRF)
+          PHI=PI2*CJRN(0.)
+          CALL EDITP(NP)
+          DO 7 I=1,2
+          DO 7 J=1,5
+7         PARHAD(NTOPD(I),J)=P(I,J)
+          SKPRES=.TRUE.
+        ELSE
+          CALL BRADLP
+C-- ROTATION DONE IN BRADLP
+          DO 9 J=1,5
+9         PARHAD(NTOPD(1),J)=P(1,J)
+          IF(NPRIMR.GT.2) THEN
+            NPIF(2,1)=NPART+1
+      NPIF(2,2)=NPART+NP-1
+      IDCAY(NTOPD(2))=IPACK*(NPART+1)+(NPART+NPRIMR-1)
+            DO 13 I=2,NPRIMR
+            IP=NPART+I-1
+            IORIG(IP)=IPACK*JET+NTOPD(2)
+            IDCAY(IP)=0
+            IF(KDEC(I,2).GE.KDEC(I,1))
+     *      IDCAY(IP)=IPACK*(KDEC(I,1)+NPART-1)+(KDEC(I,2)+NPART-1)
+            IDENT(IP)=IDENTF(K(I,2))
+            DO 10 J=1,5
+10          PARHAD(IP,J)=P(I,J)
+            PARHAD(IP,6)=K(I,2)
+13          PARHAD(IP,7)=PARHAD(NTOP,7)
+          ELSE
+            DO 8 J=1,5
+8           PARHAD(NTOPD(2),J)=P(2,J)
+            SKPRES=.TRUE.
+          ENDIF
+        ENDIF
+C-- TAU DECAYS, COMPLETE
+        IF(NP.EQ.NPRIMR) GO TO 71
+        NS=1
+        IF(NPRIMR.EQ.2) THEN
+          NS=2
+          NPIF(2,1)=NPART+1
+          NPIF(2,2)=NPART+NP-NS
+          IDCAY(NTOPD(2))=IPACK*(KDEC(2,1)+NPART-NS)
+     *                         +(KDEC(2,2)+NPART-NS)
+        ENDIF
+        NPRIM1=NPRIMR+1
+        DO 73 I=NPRIM1,NP
+        IP=NPART+I-NS
+        IF(K(I,1).EQ.-2) IORIG(IP)=IPACK*JET+NTOPD(2)
+        IF(K(I,1).NE.-2) IORIG(IP)=IPACK*JET
+     *  +(-K(I,1)+NPART-NS)
+        IDCAY(IP)=0
+        IF(KDEC(I,2).GE.KDEC(I,1))
+     *  IDCAY(IP)=IPACK*(KDEC(I,1)+NPART-NS)+(KDEC(I,2)+NPART-NS)
+        IDENT(IP)=IDENTF(K(I,2))
+        DO 70 J=1,5
+70      PARHAD(IP,J)=P(I,J)
+        PARHAD(IP,6)=K(I,2)
+73      PARHAD(IP,7)=PARHAD(NTOP,7)
+71      IF(NPRIMR.GT.2) NPART=NPART+NP-1
+        IF(NPRIMR.EQ.2) NPART=NPART+NP-2
+      ELSE
+C-- TWO JET DECAYS
+        CALL BJETS
+        NQWF=NQUA
+        NJWF=NJSET
+        NPIF(1,1)=NPART+1
+        NPIF(1,2)=NPART+NP1
+        NPIF(2,1)=NPART+NP1+1
+        NPIF(2,2)=NPART+NP
+C-- ROTATION OF 'W' DECAY PRODUCTS
+        THETA=ACOSX(CTHWRF)
+        PHI=PI2*CJRN(0.)
+        CALL EDITP(NP)
+        IDCAY(NTOPD(1))=IPACK*(NPART+1)+(NPART+NP1)
+        IDCAY(NTOPD(2))=IPACK*(NPART+NP1+1)+(NPART+NP)
+        DO 14 I=1,NP
+        IP=NPART+I
+        DO 14 J=1,5
+14      PARHAD(IP,J)=P(I,J)
+        NPART=NPART+NP
+      ENDIF
+C-- RESET MASSES OF TOP PRIMARY DECAY PRODUCTS - 'W' PART
+      DO 16 L=1,2
+      IF(NPIF(L,1).LE.NTOPD(3).OR.SKPRES) GO TO 16
+      DO 15 J=1,4
+      V1(J)=0.
+      NPI=NPIF(L,1)
+      NPF=NPIF(L,2)
+      DO 15 I=NPI,NPF
+15    IF(IDCAY(I).EQ.0) V1(J)=V1(J)+PARHAD(I,J)
+      PARHAD(NTOPD(L),5)=SQRT(ABS(V1(4)**2-V1(1)**2-V1(2)**2-V1(3)**2))
+16    CONTINUE
+C-- HANDLE B JET
+      V1(1)=0.
+      V1(2)=0.
+      V1(3)=PB
+      V1(4)=EB
+      IORPRQ=INT(PARQUA(INT(PARHAD(NTOP,7)),7))
+      CALL INSET(V1,IFLABJ,QSQB,IORPRQ,SETIN)
+      NQBI=NQUA+1
+      NJBI=NJSET+1
+      IQUAOR=JET
+      JETN=JET
+      CALL JETQCD(SETIN)
+      JORIG(NJBI)=-(JPACK*JET+NTOPD(3))
+      NQBF=NQUA
+      NJBF=NJSET
+      IFLAQB=INT(PARHAD(NTOPD(3),6))/1000
+      IF(ABS(IFLAQB).LT.10) GO TO 18
+      IFLAJB=IFLAQB*100
+      JS=NJBI
+61    JTYPE(JS)=IFLAJB
+      IF(JDCAY(JS).EQ.0) GO TO 60
+      NJD1=JDCAY(JS)/JPACK
+      JS=NJD1-1
+62    JS=JS+1
+      IF(JTYPE(JS).NE.IFLABJ) GO TO 62
+      GO TO 61
+60    CONTINUE
+      DO 17 JQ=NQBI,NQBF
+      IF(INT(PARQUA(JQ,6)).NE.IFLABJ) GO TO 17
+      JS=JETQUA(JQ)
+      IF(ABS(JTYPE(JS)).LT.100) GO TO 17
+      PARQUA(JQ,6)=IFLAQB
+      GO TO 18
+17    CONTINUE
+18    CONTINUE
+      NPIF(3,1)=NPART+1
+      CALL HADRON(NQBI,NQBF,0)
+      NPIF(3,2)=NPART
+      IDCAY(NTOPD(3))=IPACK*NPIF(3,1)+NPIF(3,2)
+C-- RESET MASSES OF TOP PRIMARY DECAY PRODUCTS - BOTTOM QUANTUM
+      L=3
+      DO 19 J=1,4
+      V1(J)=0.
+      NPI=NPIF(L,1)
+      NPF=NPIF(L,2)
+      DO 19 I=NPI,NPF
+19    IF(IDCAY(I).EQ.0) V1(J)=V1(J)+PARHAD(I,J)
+      PARHAD(NTOPD(L),5)=SQRT(ABS(V1(4)**2-V1(1)**2-V1(2)**2-V1(3)**2))
+      IF(NQBF.LE.NQBI) GO TO 20
+C-- ALIGN B-JET ALONG 3RD AXIS
+      IF(V1(2).EQ.0..AND.V1(1).EQ.0) THEN
+        PHIP=0.
+      ELSE
+        PHIP=ATAN2X(V1(2),V1(1))
+      ENDIF
+      CP=COS(PHIP)
+      SP=SIN(PHIP)
+      SP=-SP
+      PMT2=V1(1)**2+V1(2)**2
+      PMT=SQRT(PMT2)
+      PM=SQRT(PMT2+V1(3)**2)
+      CT=V1(3)/PM
+      ST=PMT/PM
+      ST=-ST
+      NPI=NPIF(3,1)
+      NPF=NPIF(3,2)
+      DO 121 IP=NPI,NPF
+      P1          =PARHAD(IP,1)*CP-PARHAD(IP,2)*SP
+      PARHAD(IP,2)=PARHAD(IP,1)*SP+PARHAD(IP,2)*CP
+      PARHAD(IP,1)=P1
+      P3          =PARHAD(IP,3)*CT-PARHAD(IP,1)*ST
+      PARHAD(IP,1)=PARHAD(IP,3)*ST+PARHAD(IP,1)*CT
+      PARHAD(IP,3)=P3
+121   CONTINUE
+20    CONTINUE
+C-- RESET 4-MOMENTA OF TOP PRIMARY DECAY PRODUCTS
+      DO 31 L=1,3
+      NPI=NPIF(L,1)
+      NPF=NPIF(L,2)
+      IF((NPI.LE.NTOPD(3).OR.SKPRES).AND.L.NE.3) GO TO 31
+      NPL=NTOPD(L)
+      DO 32 J=1,4
+32    PARHAD(NPL,J)=0.
+      DO 34 IP=NPI,NPF
+      IF(IDCAY(IP).NE.0) GO TO 34
+      DO 33 J=1,4
+33    PARHAD(NPL,J)=PARHAD(NPL,J)+PARHAD(IP,J)
+34    CONTINUE
+31    CONTINUE
+C-- SET FINAL KINEMATICS
+      EBF=EB
+      PBF=SQRT(ABS(EBF**2-PARHAD(NTOPD(3),5)**2))
+      ETF=SQRT(TMASS**2+PBF**2)
+C-- BOOST BACK TO TOP REST FRAME
+C-- ARBITRARY PHI, COS(THETA) ROTATION IN TOP REST FRAME
+C-- FINAL BOOST TO LABORATORY (TOP MOMENTUM)
+      CHR= ETF/TMASS
+      SHR=-PBF/TMASS
+      CT=-1.+2.*CJRN(0.)
+      ST=SQRT(ABS(1.-CT**2))
+      PHIP=PI2*CJRN(0.)
+      CP=COS(PHIP)
+      SP=SIN(PHIP)
+      DO 21 J=1,4
+      SETIN(J)=0.
+21    PBOOST(J)=PARHAD(NTOP,J)
+      NEW=1
+      DO 22 IP=NTOPD(1),NPART
+      DO 23 J=1,4
+23    V1(J)=PARHAD(IP,J)
+      ER   =V1(4)*CHR+V1(3)*SHR
+      V1(3)=V1(4)*SHR+V1(3)*CHR
+      V1(4)=ER
+      P3   =V1(3)*CT-V1(1)*ST
+      V1(1)=V1(3)*ST+V1(1)*CT
+      V1(3)=P3
+      P1   =V1(1)*CP-V1(2)*SP
+      V1(2)=V1(1)*SP+V1(2)*CP
+      V1(1)=P1
+      CALL CJLORN(PBOOST,V1,V2,NEW)
+      NEW=0
+      DO 24 J=1,4
+24    PARHAD(IP,J)=V2(J)
+22    CONTINUE
+C
+C-- REARRANGE PARTICLE STREAM CONSISTENTLY WITH IDCAY REQUIREMENTS
+      DO 80 L=1,3
+      IF(IDCAY(NTOPD(L)).EQ.0) GO TO 80
+      NPI=NPIF(L,1)
+      NPF=NPIF(L,2)
+      NBASE=NPI-1
+      MP=0
+C-- COLLECT PRIMARY PARTICLES FROM JET FRAGMENTATION
+      DO 91 IPD=NPI,NPF
+      IF(IORIG(IPD).GT.0) GO TO 91
+      MP=MP+1
+      IF(MP.GT.MAXJTP) GO TO 500
+      DO 92 J=1,5
+92    P(MP,J)=PARHAD(IPD,J)
+      K(MP,1)=PARHAD(IPD,6)
+      K(MP,2)=PARHAD(IPD,7)
+      KDEC(MP,1)=IORIG(IPD)
+      KDEC(MP,2)=IDCAY(IPD)
+91    CONTINUE
+      IF(MP.EQ.0) GO TO 80
+      MPRIM=MP
+      IDCAY(NTOPD(L))=NPI*IPACK+(NBASE+MPRIM)
+C-- SECONDARY PARTICLES
+      DO 83 M=1,MPRIM
+      IF(KDEC(M,2).EQ.0) GO TO 83
+      MBASC=MP
+      IP1=KDEC(M,2)/IPACK
+      IP2=MOD(KDEC(M,2),IPACK)
+      IPBAS=IP1-1
+      NLDIFF=NBASE+MBASC-IPBAS
+      NLDFPK=NLDIFF*IPACK+NLDIFF
+      KDEC(M,2)=KDEC(M,2)+NLDFPK
+      IG1=-KDEC(M,1)/IPACK
+      IG=IG1*IPACK+(NBASE+M)
+      IP=IPBAS
+84    IP=IP+1
+      IF(IP.GT.NPF) GO TO 83
+      IF(IORIG(IP).LT.0) GO TO 83
+      MP=MP+1
+      IF(MP.GT.MAXJTP) GO TO 500
+      DO 95 J=1,5
+95    P(MP,J)=PARHAD(IP,J)
+      K(MP,1)=PARHAD(IP,6)
+      K(MP,2)=PARHAD(IP,7)
+      KDEC(MP,1)=IORIG(IP)
+      KDEC(MP,2)=IDCAY(IP)
+      IF(IP.LE.IP2) THEN
+        KDEC(MP,1)=IG
+      ELSE
+        KDEC(MP,1)=KDEC(MP,1)+NLDIFF
+      ENDIF
+      IF(IDCAY(IP).NE.0) KDEC(MP,2)=KDEC(MP,2)+NLDFPK
+      GO TO 84
+83    CONTINUE
+C-- PUT BACK IN PARHAD
+      DO 87 M=1,MP
+      IP=NBASE+M
+      DO 86 J=1,5
+86    PARHAD(IP,J)=P(M,J)
+      PARHAD(IP,6)=K(M,1)
+      PARHAD(IP,7)=K(M,2)
+      IORIG(IP)=KDEC(M,1)
+      IDCAY(IP)=KDEC(M,2)
+      IDENT(IP)=IDEXT(K(M,1))
+87    CONTINUE
+80    CONTINUE
+C
+C-- SET OUTPUT TO EXACT ISAJET FORMAT
+      IF(INTYPE.EQ.1.AND.KTPFRM.EQ.1) THEN
+        NQUA=NQWI-1
+        NJSET=NJWI-1
+        NPI=NPIF(1,1)
+        DO 25 I=NPI,NPART
+        IF(IORIG(I).LT.0) THEN
+          JET=-IORIG(I)/IPACK
+          JOR=MOD(-IORIG(I),IPACK)
+26        JOR=JORIG(JOR)
+          JOR=MOD(JOR,JPACK)
+          IF(JOR.GT.0) GO TO 26
+          IORIG(I)=IPACK*JET-JOR
+          PARHAD(I,7)=PARHAD(-JOR,7)
+        ELSE IF(IORIG(I).GT.0) THEN
+          IOR=MOD(IORIG(I),IPACK)
+          PARHAD(I,7)=PARHAD(IOR,7)
+        ENDIF
+25      CONTINUE
+        GO TO 1
+      ENDIF
+C
+C-- RESET PARQUA FOR DECAY QUANTA
+      DO 40 NQ=NQWI,NQBF
+      DO 41 J=1,4
+41    PARQUA(NQ,J)=0.
+      NPI=NPIF(1,1)
+      NPF=NPIF(3,2)
+      DO 42 IP=NPI,NPF
+      IQ=ABS(PARHAD(IP,7))
+      IF(IQ.NE.NQ) GO TO 42
+      IF(IDCAY(IP).NE.0) GO TO 42
+      DO 43 J=1,4
+43    PARQUA(NQ,J)=PARQUA(NQ,J)+PARHAD(IP,J)
+42    CONTINUE
+      PARQUA(NQ,5)=SQRT(ABS(PARQUA(NQ,4)**2-PARQUA(NQ,1)**2
+     1                     -PARQUA(NQ,2)**2-PARQUA(NQ,3)**2))
+C-- 1ST STEP PJSET
+      JQ=JETQUA(NQ)
+      DO 44 J=1,5
+44    PJSET(J,JQ)=PARQUA(NQ,J)
+40    CONTINUE
+C-- PJSET
+      DO 55 JQ=NJWI,NJBF
+55    JDCAY(JQ)=-ABS(JDCAY(JQ))
+51    IFLAG=0
+      JQ=NJWI-1
+52    JQ=JQ+1
+      IF(JQ.GT.NJBF) GO TO 53
+      IF(JDCAY(JQ).GE.0) GO TO 52
+      JQ1=ABS(JDCAY(JQ))/JPACK
+      IF(JDCAY(JQ1).LT.0) GO TO 52
+      JQ2=MOD(ABS(JDCAY(JQ)),JPACK)
+      IF(JDCAY(JQ2).LT.0) GO TO 52
+      IFLAG=1
+      JDCAY(JQ)=ABS(JDCAY(JQ))
+      DO 54 J=1,4
+54    PJSET(J,JQ)=PJSET(J,JQ1)+PJSET(J,JQ2)
+      PJSET(5,JQ)=SQRT(ABS(PJSET(4,JQ)**2-PJSET(1,JQ)**2
+     1                    -PJSET(2,JQ)**2-PJSET(3,JQ)**2))
+      GO TO 52
+53    IF(IFLAG.EQ.1) GO TO 51
+      GO TO 1
+120   KEYBRE=KEYBRL
+      IRADLP=IRADLL
+      RETURN
+C
+C-- ABNORMAL EXIT
+500   CONTINUE
+      WRITE(ITLIS,501) MAXJTP,NEVENT
+501   FORMAT(5(/),' NO. OF PARTICLES IN P( ,5) (/JET/) EXCEEDS',I10
+     1//1X,'(SUB. TOPDCY)'
+     2//1X,11HEVENT NO. =   ,I10
+     4//' INCREASE MAXJTP'
+     5)
+      CALL OVERDM
+      RETURN
+      END

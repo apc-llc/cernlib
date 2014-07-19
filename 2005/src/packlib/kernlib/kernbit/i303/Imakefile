@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 ralph.F rdendb.F rdigi.F rdint.F rdload.F rdmant.F rdmode.F \ @@\
+	 rdname.F rdnext.F rdskip.F rdskpb.F rdupch.F rdupst.F rdwdat.F \ @@\
+	 rdword.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

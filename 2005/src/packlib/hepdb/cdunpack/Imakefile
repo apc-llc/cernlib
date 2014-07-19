@@ -1,0 +1,8 @@
+SRCS_F= cdchfi.F cditoc.F cdtous.F cducmp.F cducmz.F \ @@\
+	cduncp.F cdupck.F cdupfz.F cdupiz.F
+
+#if !defined(CERNLIB_P3CHILD)
+SRCS_F := $(SRCS_F) cdlind.F 
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

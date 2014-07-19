@@ -1,0 +1,13 @@
+*
+* $Id: v213.dat,v 1.1.1.1 1996/03/08 11:40:54 mclareni Exp $
+*
+* $Log: v213.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:40:54  mclareni
+* Kapack
+*
+*
+* Version 2.13   900212 18.30
+C- Introduce *KAPACK patch
+C- Rename patch CDES > KACDES, TEST > KATEST
+C- Add FORTRAN versions of KAXAGE, KAXRCL (for IBM/XA)
+C

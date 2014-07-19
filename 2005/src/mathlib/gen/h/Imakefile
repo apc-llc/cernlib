@@ -1,0 +1,14 @@
+SRCS_F=	 assndx.F dsmplx.F h101s1.F h101s2.F rsmplx.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+/* turn off optimsation, this is needed at least in h101s2, as this depends 
+ *  critically on equality of floating numbers. GF. 
+ */
+FDEBUGFLAGS = NoOpFortranDebugFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

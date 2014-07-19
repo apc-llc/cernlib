@@ -1,0 +1,43 @@
+*
+* $Id: v104.dat,v 1.1.1.1 1996/04/01 15:01:44 mclareni Exp $
+*
+* $Log: v104.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:44  mclareni
+* Mathlib gen
+*
+*
+*         G.Folger     93/09/08               Changes for LINUX
+* 1.04    G.Folger     93/06/03               Changes for LINUX/MSDOS
+C         B.Damgaard   93/05/24               Add D503 test
+C         B.Damgaard   93/03/08               Add -VAX flags in C331
+C         B.Damgaard   93/02/20               Revise D104
+C         B.Damgaard   93/01/26               Introduce NOQUAD/QUAD flags
+C         B.Damgaard   92/12/14               Revise C344
+C         B.Damgaard   92/12/11               Revise C343
+C         B.Damgaard   92/12/09               Revise tests and introduce
+C                                             test for B300.
+C         B.Damgaard   92/12/07               Revise tests
+C         B.Damgaard   92/11/27               Revise tests
+C         B.Damgaard   92/11/13               Introduce C302Q (rev C302M)
+C         B.Damgaard   92/11/04               Revise test C321M
+C         B.Damgaard                          Corrections at C313M
+C         B.Damgaard   92/11/03               Corrections for -DOUBLE
+C         B.Damgaard   92/10/28               Disable D103Q on IBMRS
+C                                             until solved the problem.
+C         B.Damgaard   92/10/27               Introduce IMP128 sequence
+C       introduce test for GAUSS128 (QGAUSS or DGAUSS for CRAY and alike)
+C   and introduce G2S in this test like G1S in the previous to avoid
+C   problems on the IBM6000.
+          B.Damgaard   92/10/25               Introduce QIEEE flags
+          B.Damgaard   92/10/19               Improve DEF128, DEFC64
+C  and IMPC64 sequence definitions
+          B.Damgaard   92/10/09               Avoid underflows in C333M
+          B.Damgaard   92/10/07               Revise tests
+          B.Damgaard   92/08/20               Correct GTOPEN for IBM-6000
+          B.Damgaard   92/08/24               Revise tests
+          B.Damgaard   92/08/24
+C  Introduce F90 flag to mark f90-specific code
+C  Introduce GCMPFUN sequence to represent generic complex functions.
+C  Introduce IMPC64, DEF64, DEF128, and DEFC64 sequences
+          B.Damgaard   92/08/24               Correct DATA EXACT(5) in
+C                                             C330M.

@@ -1,0 +1,3 @@
+SRCS_F=	 cdexam08.F cdonuv.F cdptes.F cexam08.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

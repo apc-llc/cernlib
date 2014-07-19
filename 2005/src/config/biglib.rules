@@ -1,0 +1,405 @@
+/* $Id: biglib.rules,v 1.16 2000/04/19 10:51:01 mclareni Exp $
+ *
+ * $Log: biglib.rules,v $
+ * Revision 1.16  2000/04/19 10:51:01  mclareni
+ * In gmake 3.79, strip fails if it is given 0 arguments
+ *
+ * Revision 1.15  1997/02/28 10:38:29  gunter
+ * add a WNT on UseXargs...
+ *
+ * Revision 1.14  1996/12/16 15:10:08  cernlib
+ * Correct logic bug with nested foreach
+ *
+ * Revision 1.13  1996/11/13 13:24:42  cernlib
+ * Changes for shared libraries on OSF: build these from .a and force
+ * that .a is up-to-date
+ *
+ * Revision 1.12  1996/10/29 13:46:48  cernlib
+ * building shared libs in progress. Works for HP. AIX and OSF not yet.
+ *
+ * Revision 1.11  1996/05/09 14:30:03  cernlib
+ * Reorder targets such that the targets are:
+ * - if the library name is set, this is the first target
+ * - if there library name is NIL, then the rules updating objects is first.
+ *
+ * Use tr instead of sed "-y..." to break lines.
+ *
+ * Revision 1.10  1996/05/01 13:39:05  cernlib
+ * $(VERDIR)/object.list must also depend on the Makefile itsself as a changed
+ * makefile could have different LIBDIRS
+ *
+ * Revision 1.9  1996/05/01 11:54:42  gunter
+ * Introduce new way of building libraries.
+ * CVS:----------------------------------------------------------------------
+ *
+ * Revision 1.8  1996/04/11 15:24:01  cernlib
+ * small mods
+ *
+ * Revision 1.7  1996/04/01 15:37:16  cernlib
+ * Add _debug and _shared versions of lib to  .PHONY
+ * make libname target a :: rule; this was needed to build the data files
+ *   together with the library.
+ *
+ * Revision 1.6  1996/03/14 08:27:21  cernlib
+ * Make dependency files depend on Makefile; This forces a recomile if the
+ *  Makefile is changed.
+ *
+ * Revision 1.5  1996/02/14 11:03:35  cernlib
+ * add provisions for running tests
+ *
+# Revision 1.4  1996/02/12  14:21:24  cernlib
+# a library now depends (indirectly) on all the objects therein
+#
+# Revision 1.3  1996/02/08  08:28:18  cernlib
+# biglib.rules: add ranlib
+#
+# Revision 1.2  1996/01/25  11:22:59  cernlib
+# Values for IMAKE and MAKEDEPEND are used from env. variables if defined, else
+#    from command search path.
+# Correct fortran options for local (not archive,..) compilation.
+#
+# Revision 1.1  1995/12/21  14:07:14  cernlib
+# files as of end 1995
+#
+ *
+ */
+/*
+ *   rules to build a library from objects in subdirs 
+ *   GF. 180895
+ *   mod: 081195 more transparent, add debug libraries
+ *
+ * use this rules with:
+ * Imakefile:
+ *  SubdirLibraryTarget(libname,subdirlist)
+ *  where:   libname:	  name of library to make
+ *  	     subdirlist:  list of subdirectories to take $(OBJS) files from
+ * 
+ * and invoke make with : 
+ *   make libname  -or- make libname_debug 
+ *   or on Unix : gmake liblibname.a   NOTE: This will not work for
+ *                                           _debug/_shared
+ * to get library libname up to date.
+ *
+ *  At the moment ONLY one library per Imakefile/Makefile is allowed.
+ * 
+ *
+ *  make library does:
+ *   in rule libname/libname_debug:
+ *       i) update stamp/object.list files, this implies that all compiled
+ *	    files are up to date, 
+ *	ii) rebuild library, if anything changed.
+ *          this rebuild is either done: 
+ *	      - using the object.list file; this lists all objects for this 
+ * 		library. xargs is used to make shure we do not overflow 
+ * 		the command line.
+ * 	      - visiting all subdirectries recursively, and adding in each 
+ * 		directory the objects of this directory.
+ *           
+ */
+
+/*  the order of SubdirLibrary... is such that 
+ *   - if a library is defined, this will be the first target generated
+ *   - if NO library is defined, a target updating all objects is first
+ */
+#ifndef SubdirLibraryTarget
+#define Libversions archive debug shared
+#if (defined(UseXargs) && UseXargs) || defined(CERNLIB_WINNT)
+#define SubdirLibraryTarget(libname,subdirlist)				@@\
+SubdirLibraryVariables(libname,subdirlist)				@@\
+SubdirLibraryObjects2(subdirlist)					@@\
+SubdirLibraryBuild2(libname)						@@\
+									@@\
+ifneq ($($(VEROBJS)),)							@@\
+$($(VEROBJS):.Osuf=.d): Makefile					@@\
+include $($(VEROBJS):.Osuf=.d)						@@\
+									@@\
+endif									@@\
+									@@\
+clean:: 								@@\
+	RemoveFiles($(LIBRARY) $(VERDIR)stamp $(VERDIR)objects.list)
+#else
+#define SubdirLibraryTarget(libname,subdirlist)				@@\
+SubdirLibraryVariables(libname,subdirlist)				@@\
+SubdirLibraryObjects(subdirlist)					@@\
+SubdirLibraryBuild(libname)						@@\
+SubdirLibraryAddObjects(subdirlist)					@@\
+									@@\
+ifneq ($($(VEROBJS)),)							@@\
+$($(VEROBJS):.Osuf=.d): Makefile					@@\
+include $($(VEROBJS):.Osuf=.d)						@@\
+									@@\
+endif									@@\
+									@@\
+clean:: 								@@\
+	RemoveFiles($(LIBRARY) $(VERDIR)stamp $(VERDIR)objects.list)
+#endif
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryVariables
+#define SubdirLibraryVariables(libname,subdirlist)			@@\
+ifeq ($(strip $(VERSION)),)						@@\
+VERSION=archive								@@\
+endif									@@\
+ifneq ($(strip $(VERSION)),archive)					@@\
+LIBRARY=Concat(libname,_$(VERSION))					@@\
+else									@@\
+LIBRARY=libname								@@\
+endif									@@\
+LIBPATH=$(TOP)$(CURRENT_DIR)						@@\
+SUBDIRLIST=subdirlist							@@\
+SUBDIRSTAMPS=$(foreach dir,subdirlist,$(dir)/$(VERSION)/stamp)		@@\
+ifeq ($(strip $(PACKAGE_LIB)),)						@@\
+override PACKAGE_LIB=$(LIBPATH)/LibraryTargetName($(LIBRARY))		@@\
+endif									@@\
+									@@\
+ifneq (libname,)							@@\
+.PHONY: libname Concat(libname,-debug) Concat(libname,-shared)		@@\
+									@@\
+libname:: 								@@\
+	@$(MAKE) VERSION=archive LibraryTargetName($@)			@@\
+									@@\
+Concat(libname,-debug)::						@@\
+	@$(MAKE) VERSION=debug LibraryTargetName($@)			@@\
+									@@\
+Concat(libname,-shared)::						@@\
+	@$(MAKE) VERSION=shared SharedLibraryTargetName(libname)	@@\
+									@@\
+endif									@@\
+									@@\
+archive_OBJS=$(foreach obj,$(OBJS),archive/$(obj))			@@\
+debug_OBJS=$(foreach obj,$(OBJS),debug/$(obj))				@@\
+shared_OBJS=$(foreach obj,$(OBJS),shared/$(obj))			@@\
+									@@\
+									@@\
+ifeq ($(VERSION),archive)						@@\
+VEROBJS:=archive_OBJS							@@\
+									@@\
+endif									@@\
+									@@\
+ifeq ($(VERSION),debug)							@@\
+VEROBJS:=debug_OBJS							@@\
+									@@\
+endif									@@\
+									@@\
+ifeq ($(VERSION),shared)						@@\
+VEROBJS:=shared_OBJS							@@\
+									@@\
+endif									@@\
+									@@\
+ifeq ($(VERSION),nil)							@@\
+VERDIR=									@@\
+VEROBJS=								@@\
+endif									@@\
+									@@\
+ifneq ($(strip $(VERSION)),)						@@\
+VERDIR=$(VERSION)/							@@\
+else									@@\
+VERDIR=									@@\
+VEROBJS=								@@\
+endif
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryBuild2
+#define SubdirLibraryBuild2(libname)					@@\
+ifneq ($(strip $(QUOTE) libname $(QUOTE)),$(QUOTE)$(QUOTE))		@@\
+ArchiveLibraryBuild(libname,archive)					@@\
+									@@\
+ArchiveLibraryBuild(libname-debug,debug)				@@\
+									@@\
+SharedLibraryBuild(libname,shared)					@@\
+									@@\
+endif
+#endif
+
+#ifndef ArchiveLibraryBuild
+#define ArchiveLibraryBuild(libname,version)				@@\
+LibraryTargetName(libname): version/objects.list			@@\
+	@echo rebuild version library $@ in $(CURRENT_DIR)		@@\
+	@$(RM) $@							@@\
+	@date								@@\
+	@cat version/objects.list | \					@@\
+	   $(XARGS) $(AR) $@					 	@@\
+	@date								@@\
+	RanLibrary($@)
+#endif
+
+#if defined(HPArchitecture)
+
+#ifndef SharedLibraryTargetName
+#define SharedLibraryTargetName(name)Concat(lib,name.sl)
+#endif
+#ifndef SharedLibraryBuild
+#define SharedLibraryBuild(libname,version)				@@\
+SharedLibraryTargetName(libname): version/objects.list			@@\
+	@echo rebuild version library $@ in $(CURRENT_DIR)		@@\
+	@$(RM) $@							@@\
+	@date								@@\
+	ld -b -o$@ -c version/objects.list				@@\
+	@date
+#endif
+
+#elif defined(AIXArchitecture)
+
+#ifndef SharedLibraryTargetName
+#define SharedLibraryTargetName(name)Concat(lib,name-s.a)
+#endif
+#ifndef SharedLibraryBuild
+#define SharedLibraryBuild(libname,version)				@@\
+SharedLibraryTargetName(libname): version/objects.list			@@\
+	@echo rebuild version library $@ in $(CURRENT_DIR)		@@\
+	@$(RM) $@							@@\
+	@date								@@\
+	@cat version/objects.list | \					@@\
+	   $(XARGS) $(AR) shr.a					 	@@\
+	dump -g shr.a \							@@\
+	| sed -n -e 's/^[ 	]*[0-9][0-9]*[	 ]*\([^	 .][^	 ]*\)$$/\1/p' > $@.syms	@@\
+	$(LD) -o shr.o shr.a -H512 -T512 -bM\:SRE -bE\:$@.syms		@@\
+	$(RM) shr.a							@@\
+	$(AR) $@ shr.o							@@\
+	$(RM) $@.syms shr.o						@@\
+	@date
+#endif
+
+#elif defined(AlphaArchitecture)
+
+#ifndef SharedLibraryTargetName
+#define SharedLibraryTargetName(name)Concat(lib,name.so)
+#endif
+
+#ifndef SharedLibraryBuild
+#define SharedLibraryBuild(libname,version)				@@\
+SharedLibraryTargetName(libname): LibraryTargetName(libname)		@@\
+	@echo rebuild version library $@ in $(CURRENT_DIR)		@@\
+	@$(RM) $@							@@\
+	@date								@@\
+	ld -shared -o $@ -all LibraryTargetName(libname) -none \	@@\
+		-lUfor -lfor -LFutil -lm -lots -lc			@@\
+	@date
+#endif
+
+#elif 1 
+#ifndef SharedLibraryBuild
+#define SharedLibraryBuild(libname,version)				@@\
+SharedLibraryTargetName(libname):					@@\
+	@echo No shared library available yet for  `uname`
+#endif
+#endif
+#ifndef SharedLibraryTargetName
+#define SharedLibraryTargetName(name)Concat(lib,name.sl)
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryBuild
+#define SubdirLibraryBuild(libname)					@@\
+ifneq ($(strip libname),)						@@\
+LibraryTargetName($(LIBRARY)): $(VERDIR)stamp 				@@\
+	@$(SHELL) -ec 'if [ -z "$(LIBRARY)" ]; then		\	@@\
+		echo No library specified in $(CURRENT_DIR);	\	@@\
+		false;						\	@@\
+	fi'						 		@@\
+	@echo rebuild $(VERSION) library $(LIBRARY) in $(CURRENT_DIR)	@@\
+	@$(RM) LibraryTargetName($(LIBRARY))				@@\
+	@$(MAKE)  --no-print-directory				\	@@\
+		LIBPATH=$(LIBPATH) LIBRARY=$(LIBRARY)		\	@@\
+	        VERSION=$(VERSION)			\		@@\
+		libaddobjects						@@\
+	RanLibrary($@)							@@\
+									@@\
+endif
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryAddObjects
+#define SubdirLibraryAddObjects(subdirlist)				@@\
+libaddobjects:								@@\
+	@if [ -n "$(OBJS)" ]; then				\	@@\
+		echo adding $(VERSION) objects from $(CURRENT_DIR)/$(VERSION);\ @@\
+		(cd ./$(VERSION);\
+		$(AR) $(LIBPATH)/LibraryTargetName($(LIBRARY)) $(OBJS));\ @@\
+	else							\	@@\
+		true;						\	@@\
+	fi								@@\
+	@ $(SHELL) -ec '					\	@@\
+	subdirs="$(SUBDIRLIST)";				\	@@\
+	if [ -n "$(SUBDIRLIST)" ]; then				\	@@\
+	 for dir in $$subdirs; do				\	@@\
+	   (cd $$dir;						\	@@\
+		$(MAKE) --no-print-directory			\	@@\
+			LIBPATH=$(LIBPATH) LIBRARY=$(LIBRARY)	\	@@\
+			VERSION=$(VERSION)			\	@@\
+			$@ );					\	@@\
+	 done;  						\	@@\
+	fi;'
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryObjects
+#define SubdirLibraryObjects(subdirlist)				@@\
+$(SUBDIRSTAMPS):: $(foreach dir,subdirlist,$(dir)/Makefile)		@@\
+									@@\
+$(SUBDIRSTAMPS)::							@@\
+	@ echo checking $(CURRENT_DIR)/FirstDir($@)			@@\
+	@ $(MAKE) -C FirstDir($@) VERSION=$(VERSION) $(VERDIR)stamp	@@\
+									@@\
+$(VERDIR)stamp:: $($(VEROBJS)) $(SUBDIRSTAMPS)				@@\
+	-@if [ -n "$(VERSION)" -a ! -d "$(VERSION)" ] ; then \		@@\
+		mkdir $(VERSION);fi					@@\
+	@ $(TOUCH) $@
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef SubdirLibraryObjects2
+#define SubdirLibraryObjects2(dirs)					@@\
+$(foreach ver,Libversions,$(ver)/objects.list):: \			@@\
+		$(foreach dir,dirs,$(dir)/Makefile)			@@\
+									@@\
+define build-object-list						@@\
+@[ -n "$(@D)" -a ! -d "$(@D)" ] && mkdir $(@D) || true		@@\
+@RemoveFile($@)							@@\
+@echo $(strip $($(@D)_OBJS)) | tr ' ' '\012' > $@		@@\
+@ (set -e;\							@@\
+	 case '${MFLAGS}' in *[i]*) set +e;; esac; \		@@\
+	 subdirs=Quote(dirs);\					@@\
+	 list=`/bin/pwd`/$@;\					@@\
+	 for dir in $$subdirs; do \				@@\
+	  (set -e;cd $$dir;SedCmd -e "\=^[^/]=s=^.=$$dir/&=" $@ >> $$list);\@@\
+	 done) || (rm $@; exit 1)				@@\
+endef									@@\
+									@@\
+ifeq ($(strip $(VERSION)),archive)					@@\
+archive/objects.list:: Makefile $(archive_OBJS) \			@@\
+		$(foreach dir,dirs,$(dir)/archive/objects.list)		@@\
+	$(build-object-list)						@@\
+									@@\
+else									@@\
+archive/objects.list::							@@\
+	$(MAKE) VERSION=archive archive/objects.list			@@\
+									@@\
+endif									@@\
+debug/objects.list:: Makefile $(debug_OBJS) \				@@\
+		$(foreach dir,dirs,$(dir)/debug/objects.list) 		@@\
+	$(build-object-list)						@@\
+									@@\
+shared/objects.list:: Makefile $(shared_OBJS) \				@@\
+		$(foreach dir,dirs,$(dir)/shared/objects.list) 		@@\
+	$(build-object-list)						@@\
+									@@\
+$(foreach dir,dirs,$(foreach ver,Libversions,$(dir)/$(ver)/objects.list))::@@\
+	@ echo checking $(CURRENT_DIR)/FirstDir($@)			@@\
+	@ $(MAKE) -C FirstDir($@) VERSION=$(filter Libversions,$(subst /, ,$@))	\		@@\
+		   $(patsubst FirstDir($@)/%,%,$@)
+#endif
+
+/* --------------------------------------------------------------------- */
+
+#ifndef FirstDir
+#define FirstDir(dir)$(firstword $(subst /, ,dir))
+#endif

@@ -1,0 +1,264 @@
+*
+* $Id: rzdoc.doc,v 1.1.1.1 1996/03/06 10:47:05 mclareni Exp $
+*
+* $Log: rzdoc.doc,v $
+* Revision 1.1.1.1  1996/03/06 10:47:05  mclareni
+* Zebra
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_zebra/pilot.h"
+*                       ********************************
+*                       *  Directory Data Structure    *
+*                       ********************************
+*
+*      - Each LUN has a control bank in the linear chain pointed
+*        by LQRS (system link 7). This bank is pointed by LTOP.
+*
+*      - STATUS word description
+*          - bit 1 =1  if no authorisation to modify directory
+*          - bit 2 =1  if directory has been modified
+*          - bit 3 =1  if file locked by 'RZFILE'
+*          - bit 4 =1  if ORGANIZATION='RELATIVE' on VAX
+*          - bit 5 =1  if C file access routine used
+*          - bit 11-17 LOG level (default taken from MZ)
+*
+*      - LTOP description
+*
+*        *********************************************************
+*        * -10*       *  Free reference link                     *
+*        * -9 *       *  Free                                    *
+*        * -8 * LCORD *  Pointer to odered cycles (RZCOPY)       *
+*        * -7 * LRIN  *  Pointer to input buffer                 *
+*        * -6 * LROUT *  Pointer to output buffer                *
+*        * -5 * LPURG *  Pointer to list of purged records       *
+*        * -4 * LFROM *  Pointer to copied directory             *
+*        * -3 * LUSED *  pointer to list of used records         *
+*        * -2 * LFREE *  Pointer to list of free records         *
+*        * -1 * LSDIR *  Pointer to first subdirectory           *
+* LTOP==>*IIII*       *  Status word                             *
+*        * +1 * IDNAME*                                          *
+*        * +2 *       *   A , B , S , K , C  areas               *
+*        * +3 *       *                                          *
+*        * .. *       *       See below                          *
+*        *LREC*       *                                          *
+*        *********************************************************
+*
+*                       ************************************
+*                       *  - A-    DIRECTORY CONSTANTS     *
+*                       ************************************
+*        *******************************************************************
+*        * WORD  *   TAG   *                 CONTENT                       *
+*        *******************************************************************
+*        *   1   *         *      Directory name  (up to 16 characters)    *
+*        *   2   * IDNAME  *                "                              *
+*        *   3   *         *                "                              *
+*        *   4   *         *                "                              *
+*KUP     *   5   *         *      Record number of the mother directory,   *
+*        *   6   *         *      or C file pointer (words 5 and 6)        *
+*KPW1    *   7   *  IWPW1  *      Write password (1st part)                *
+*        *   8   *  IWPW2  *                     (2nd part)                *
+*        *   9   * NCHDRW  *      No. of char. DIR(1:5),WPW(6:10), and     *
+*        *       *         *      bit 12 eXchange mode                     *
+*KDATEC  *  10   *  IDATEC *      Creation date/time                       *
+*KDATEM  *  11   *  IDATEM *      Last mod date/time                       *
+*KQUOTA  *  12   * NQUOTA  *      Maximum number of records QUOTA          *
+*KRUSED  *  13   * NRUSED  *      Number of used records                   *
+*KWUSED  *  14   * NWUSED  *      Number of words used MOD 1000000         *
+*KMEGA   *  15   * NMEGA   *      Number of megawords used                 *
+*KRZVER  *  16   * RZVER   *      Version of _this_ structure              *
+*KIRIN   *  17   *   IRIN  *      Record number currently in LRIN          *
+*KIROUT  *  18   *   IROUT *      Record number currently in LROUT         *
+*KRLOUT  *  19   *   IRLOUT*      Number of the last record written        *
+*KIP1    *  20   *   IP1   *      Pointer to first free word in IRLOUT     *
+*        *  21   *   ICONT *      Record number continuation               *
+*KNFREE  *  22   *   NFREE *      Number of words free in F                *
+*KNSD    *  23   *   NSD   *      Number of subdirectories                 *
+*KLD     *  24   *   LD    *      Pointer to directory records             *
+*KLB     *  25   *   LB    *      Pointer to file descriptor (only for TOP)*
+*KLS     *  26   *   LS    *      Pointer to first subdirectory S          *
+*KLK     *  27   *   LK    *      Pointer to first KEY   K                 *
+*KLF     *  28   *   LF    *      Pointer to free space  F                 *
+*KLC     *  29   *   LC    *      Pointer to last cycle  C                 *
+*KLE     *  30   *   LE    *      Pointer to end of directory              *
+*KNKEYS  *  31   *   NKEYS *      Number of keys in that directory         *
+*KNWKEY  *  32   *   NWKEY *      Number of elements in one key            *
+*KKDES   *  33   *   KDES  *      KEYS descriptor (3 bits per element)     *
+*        *       *   ...   *      10 keys per word                         *
+*KTAGS   *  34+. *   TAG11 *      First part of CHTAG(1) 4 characters      *
+*        *  35+. *   TAG12 *      Second part                              *
+*        *  ..   *         *      ....                                     *
+*        *       *   TAGN1 *      First part of CHTAG(NWKEY)               *
+*        *       *   TAGN2 *      Second part                              *
+* LD->   *  +0   *   NRD   *      Number of records to describe this dir.  *
+*        *  +1   *   IREC  *      Record number 1 of directory             *
+*        *  +2   *         *                    2                          *
+*        *  ..   *         *                    ..                         *
+*        *  +NRD *         *                   NRD                         *
+*        *******************************************************************
+*
+*
+*
+*
+*                       *****************************************
+*                       *  - B-   FILE DESCRIPTOR STRUCTURE     *
+*                       *****************************************
+*
+*        LB=IQ(KQSP+LTOP+25)
+*
+*        *******************************************************************
+*        * WORD  *   TAG   *                 CONTENT                       *
+*        *******************************************************************
+* LB->   *   1   *  NWREC  *    Number of words for bitmap descriptor      *
+*        *   2   *  LREC   *    Physical record length (in words)          *
+*        *   3   *  IDATE  *    Creation date of the file                  *
+*        *   4   *         *             BITMAP                            *
+*        *   5   *         *       1 bit per record on the file            *
+*        *   .   *         *               ..                              *
+*        *       *         *    etc...                                     *
+*        *******************************************************************
+*
+*
+*
+*
+*                       ********************************************
+*                       *  - S- SUBDIRECTORY DESCRIPTOR STRUCTURE  *
+*                       ********************************************
+*
+*        LS=IQ(KQSP+LTOP+26)
+*
+*        *******************************************************************
+*        * WORD  *   TAG   *                 CONTENT                       *
+*        *******************************************************************
+* LS->   *   1   *  NAM1   *    Name of 1st subdirectory                   *
+*        *   2   *  NAM2   *    "                                          *
+*        *   3   *  NAM3   *    "                                          *
+*        *   4   *  NAM4   *    "                                          *
+*        *   5   *  NCHSD  *    Number of characters in subdirectory name  *
+*        *   6   *  IRECSD *    Record number of this subdirectory         *
+*        *   7   *  IDTIME *    Date and Time of creation of subdirectory  *
+*        *   8   *  NAM1   *    Name of 2nd subdirectory                   *
+*        *   9   *  NAM2   *    "                                          *
+*        *  10   *  NAM3   *    "                                          *
+*        *  11   *  NAM4   *    "                                          *
+*        *  12   *  NCHSD  *    Number of characters in subdirectory name  *
+*        *  13   *  IRECSD *    Record number of this subdirectory         *
+*        *  14   *  IDTIME *    Date and Time of creation of subdirectory  *
+*        *   .   *         *               ..                              *
+*        *       *         *    etc...                                     *
+*        *******************************************************************
+*
+*
+*
+*                       **********************************
+*                       *  - K-   KEYS  STRUCTURE        *
+*                       **********************************
+*
+*        LK=IQ(KQSP+LTOP+27)
+*
+*        *******************************************************************
+*        * WORD  *   TAG   *                 CONTENT                       *
+*        *******************************************************************
+* LK->   *   1   *  LCYC   *    Pointer to highest cycle in C for key 1    *
+*        *   2   *  KEYS(1)*    First element of key 1                     *
+*        *   3   *  KEYS(2)*    Second element of key 1 (if any)           *
+*        *   .   *         *    ...........                                *
+*        *NWKEY+1*  KEYS() *    NWKEYth element of key 1                   *
+*        *   .   *  LCYC   *    Pointer to highest cycle in C for key 2    *
+*        *   .   *         *    First element of key 2                     *
+*        *   .   *         *    Second element of key 2 (if any)           *
+*        *   .   *         *    ...........                                *
+*        *   .   *         *    NWKEYth element of key 2                   *
+*        *   .   *         *    ...........                                *
+*        *   .   *         *    ...........                                *
+*        *   .   *         *    ...........                                *
+*        *   .   *  LCYC   *    Pointer to highest cycle in C for key NKEYS*
+*        *   .   *         *    First element of key NKEYS                 *
+*        *   .   *         *    Second element of key NKEYS (if any)       *
+*        *   .   *         *    ...........                                *
+*        *   .   *         *    NWKEYth element of key NKEYS               *
+*        *******************************************************************
+*
+*
+*
+*                       **********************************
+*                       *  LOCK record  STRUCTURE        *
+*                       **********************************
+*
+*        *******************************************************************
+*        * WORD  *   TAG   *                 CONTENT                       *
+*        *******************************************************************
+*        *   1   *  NLOCK  *    Number of locks                            *
+*        *   2   *  IFREE  *    Pointer to first free word in record       *
+*        *   3   *  FLAG   *    LOCK flag                                  *
+*        *   4   *  NWLOCK *    Number of words for 1st lock               *
+*        *   5   *  LOCK1  *    First part of the lock ID                  *
+*        *   6   *  LOCK2  *    Second part of the lock ID                 *
+*        *   7   *  DATE/T *    Date and time of the lock                  *
+*        *   8   *  IRECD  *    Record number of the locked directory      *
+*        *   9   *  ND     *    Number of couples (first,last)             *
+*        *  10   *  IR1    *    1st record locked                          *
+*        *  11   *  IRL    *    last record locked                         *
+*        *  12   *  IR1    *    "                                          *
+*        *  13   *  IRL    *    "                                          *
+*        *  14   *  ..     *                                               *
+*NWLOCK+4*       *  NWLOCK *    Number of words for second lock            *
+*        *   .   *         *               ..                              *
+*        *       *         *    etc...                                     *
+*IFREE   *   .   *    0    *    First free word (content=0)                *
+*        *   .   *         *               ..                              *
+*        *******************************************************************
+*
+*
+*
+*                       **********************************
+*                       *  - C-   CYCLES  STRUCTURE      *
+*                       **********************************
+*
+*
+*      For each cycle (version 0)
+*
+*       WORD 1   - Pointer to previous cycle of KEY (bits 1 to 16)(0 if no)
+*                - Second record (if there)  (bits 17 to 32)
+*
+*       WORD 2   - Creation date relative to 1986   (bits 9 TO 32)
+*                - Creation time. 1minute precision
+*                - RZKEEP                           (bit 5)
+*                - Append mode                      (bit 4)
+*                - Vector format (if RZVOUT)        (bits 1 to 3)
+*
+*       WORD 3   - Record number where data str. starts (bits 17 to 32)
+*                - Offset in record (bits 1 to 16)
+*
+*       WORD 4   - Number of words in data structure (bits 1 to 20)
+*                - Cycle number  (bits 21 to 32)
+*
+*      For each cycle (version 1)
+*
+*       WORD 1   - Pointer to previous cycle of KEY (0 if no)
+*
+*       WORD 2   - Creation date relative to 1986   (bits 9 TO 32)
+*                - Creation time. 1minute precision
+*                - RZKEEP                           (bit 5)
+*                - Append mode                      (bit 4)
+*                - Vector format (if RZVOUT)        (bits 1 to 3)
+*
+*       WORD 3   - Record number where data str. starts
+*
+*       WORD 4   - Offset in record (bits 1 to 20)
+*                - Cycle number  (bits 21 to 32)
+*
+*       WORD 5   - Number of words in data structure
+*
+*       WORD 6   - Second record (if there)
+*
+*       WORD 7   - Key number to which the cycle belongs
+*                  (This is in fact KEY(1) of the corresponding key
+*                   and so is only a soft cross-check - the absolute
+*                   key number will change if entries are deleted).
+*
+*
+*            The pointer LCYC in structure K points to WORD 1
+*
+*
+*Last line of RZ PAM

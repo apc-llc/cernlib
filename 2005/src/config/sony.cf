@@ -1,0 +1,88 @@
+/* $Id: sony.cf,v 1.1.1.1 1995/12/20 15:26:43 cernlib Exp $
+ *
+ * $Log: sony.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: sony.cf,v 1.57 94/04/02 08:40:51 kaleb Exp $
+
+#ifdef SonyBsdArchitecture
+
+#define OSName                  NEWS-OS 4.2.1C
+#define OSMajorVersion          4
+#define OSMinorVersion          2
+#define OSTeenyVersion          1
+#define SetTtyGroup             YES
+#define HasVoidSignalReturn     NO
+#define HasNdbm                 YES
+#define DirFailPrefix -
+#define InstKmemFlags		-g kmem -m 2755
+#define DefaultUserPath :/bin:/usr/bin:$(BINDIR):/usr/ucb:/usr/sony/bin:
+#define DefaultSystemPath /etc:/usr/etc:/bin:/usr/bin:$(BINDIR):/usr/ucb:/usr/sony/bin:
+#ifdef MipsArchitecture
+#define ExtraLibraries		-lmld
+#define LintOpts		-ax
+#define LintLibFlag		-o
+#define DefaultCCOptions	-Wf,-XNh2000,-XNd6000,-XNp10000 -Olimit 2000
+#define PexCCOptions		-Wf,-XNh2000,-XNd15000,-XNp15000 -Olimit 2000
+#else
+#define HasFortran		YES
+#endif
+#if OSMajorVersion >= 4
+#define HasShm			YES
+#define HasPutenv		YES
+#define HasSecureRPC		YES
+#define XdmDir			/etc/xdm
+#if OSMinorVersion >= 1
+#define HasBsearch		YES
+#else
+#define HasBsearch		NO
+#endif
+#else
+#define StandardDefines		-DNOSTDHDRS
+#define HasBsearch		NO
+#endif
+
+#else
+
+#define OSName			NEWS-OS 6.0
+#define OSMajorVersion		6
+#define OSMinorVersion		0
+#define BootstrapCFlags		-Dsony
+#define SystemV4		YES
+#define CcCmd			/usr/bin/cc
+#if OSMajorVersion >= 6
+#define DefaultCCOptions	-Xc -Wf,-XNp9000,-XNd6000
+#define PexCCOptions		-Xc -Wf,-XNp15000,-XNd15000
+#define SharedLibraryLoadFlags -G -rpath $(USRLIBDIR)
+#define PositionIndependentCFlags -K PIC -Wx,-G 0
+#define PositionIndependentCplusplusFlags -K PIC -Wx,-G 0
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLLIB)
+#define FixupLibReferences() /**/
+#include <sv4Lib.rules>
+#else
+#define DefaultCCOptions	-Wf,-XNp9000,-XNd6000
+#define PexCCOptions		-Wf,-XNp15000,-XNd15000
+#endif
+
+#endif
+
+/*
+ * SONY C++ compiler is based on vanilla cfront, which means it
+ * refuses to compile files unless their names end in ".C".  We
+ * have to completely override .SUFFIXES to avoid using the builtin
+ * .C to .o rule in cases where the link to foo.C is already there,
+ * because the builtin rule doesn't use the right compilation flags.
+ */
+
+.SUFFIXES:
+.SUFFIXES: .o .c .y .l .s .sh .h .f .Y .L .cxx
+
+#define NormalLibObjCplusplusCompile(options) test -r $*.C || $(LN) $*.CCsuf $*.C @@\
+	$(CXX) -c $(CXXFLAGS) options $*.C
+
+XCOMM operating system:  OSName
+
+#define BuildServer             NO

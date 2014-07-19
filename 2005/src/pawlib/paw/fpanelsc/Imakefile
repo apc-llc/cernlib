@@ -1,0 +1,9 @@
+SRCS_C=	adjust.c busy.c cfort.c contpanel.c defaults.c \ @@\
+	errordb.c examenu.c filemenu.c fileselpanel.c helpmenu.c \ @@\
+	hfpanel.c lexer.c mainclbs.c mainpanel.c minimenu.c mutil.c \ @@\
+	parhdrform.c parline.c parlineform.c scanmenu.c scanpanel.c \ @@\
+	text.c transmenu.c vectpanel.c vfpanel.c viewmenu.c
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)

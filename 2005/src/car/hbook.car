@@ -1,0 +1,2162 @@
++TITLE.
+HBOOK    4.24/00  05/05/95  11.48.44  PROGRAM LIBRARY HBOOK  = Y250
++PATCH,$VERSION.
++DECK,V4_24.
+*CMZ :          24/10/95  14.32.46  by  Julian Bunn
+*-- Author :    Unknown   05/05/95
+*
+* 24/10/95  14.32.19
+*
+* Remove redundant option in HRENID
+*
+* 11/10/95  19.56.41
+*
+* Correct bug in HFILPR that was causing X values equal to the
+* end of the scale not to be filled in the overflow bin correctly.
+*
+* 11/10/95  17.51.27
+*
+* Modify HUWFUN so that option I does not cause calls to HBNAME to appear.
+*
+* 26/09/95  11.16.42
+*
+* Correction in hoper1 which previously was accessing non-existant
+* error banks for some histogram operations. (Sent by Mike Redmond)
+*
+* Removal of trigraph ???' in routines HLATTR HLNEXT and HLNXTG1
+*
+* Correction in HMCMLL for wrong number of args in call to MNEXCM
+*
+* 30/06/95
+*
+* Correction by Rene in HBIN for "big integers".
+*
+* 21/06/95
+*
+* Add test program for FPCLASSC patch. New directory TESTS for HBOOK
+* test programs ...
+*
+* 17/05/95
+*
+* Mod to HMDIR so that identically named sub-directories are not
+* created in memory.
+*
+* 16/05/95  10.30.55
+* Mods in HMINIM and HMAXIM to reset the min and the max when
+* the min is greater than the max for 2d histos (it was implemented
+* only for 1D).
+*
+* 05/05/95  14.57.05
+* FPCLASSC selected in *HBOOK
+*
+*::>          VERSION  4.24/00   05/05/95 11.48.44
+*
+*
+*    New patch FPCLASSC by Francois Dardare. This interfaces to the
+*    system routines on the various platforms that identify the
+*    IEEE NaNs (where appropriate), and classifies them in a general
+*    way. The routines are called in HFILL, HFN and HFNT2 to check
+*    user arguments, and warnings are issued where appropriate.
+*
+*    New routine HNFORM for assiting users in creating the character
+*    string that describes CW nTuple variables that is used as an
+*    argument to HBNAME or HBNAMC.
+*
++DECK,V4_23.
+*CMZ :          27/07/95  17.22.32  by  Julian Bunn
+*-- Author :    Rene Brun   05/11/94
+*
+*::>          VERSION  4.23/02   05/05/95 11.19.28
+*
+*
+*::>          VERSION  4.23/01   22/02/95 14.34.06
+*
+*    New user routines HIJE and HXYE for returning errors on cells in
+*    2D histograms a la HIE,HXE.
+*
+*    New routine HBVERS in the C patch, that returns the version string.
+*
+*    Some error checking and extra calls to HBUG in the HFNT tree.
+*
+*    Modification to HCX to fix a bug produced when the routine was
+*    called with option 2 (get error) for a histogram without the
+*    required bank.
+*
+*    Extra argument IOPT added to HCXY in order to allow the caller
+*    to specify whether the contents (IOPT=1) or the error (IOPT=2)
+*    on the given cell is returned.
+*
+*    Bug corrected in HROUT. Problem was appearing in case of many
+*    subdirectories. Variable NLCDIR was not correctly set when returning
+*    to the parent level.
+*
+*    Deck HNTDUP: declare IDUM to be REAL*8 to make it double-word aligned.
+*
+*    Introduce DOUBLE PRECISION in HCX for Profile histograms
+*
+*    Adjust HREBIN to allow for non-equiwidth bins.
+*
+*::>          VERSION  4.23/00   05/11/94 09.36.29
+*
+*    HLDIR with CHOPT='N' works now also for disk directories.
+*
+*    Protect HMINUT when option Z is given (LINEAR was set to zero)
+*
+*    Protection in HFN in case HGIVEN is called immediatly before.
+*       LCONT pointer is now always recomputed.
+*
+*    Implement ../ style in HPATH.
++DECK,V4_22.
+*CMZ :  4.22/14 14/10/94  12.20.44  by  Rene Brun
+*-- Author :    Rene Brun   30/03/94
+*
+*::>          VERSION  4.22/14   14/10/94 12.20.44
+*
+*    Due to some early design mistake PAW expects all character columns to
+*    be returned in character*32 variables instead of in variables of the
+*    original size. For single character variables this was fine, however
+*    character array columns were not restored correctly (unless they had
+*    an original size of 32). To fix this HBOOK has to know if the Ntuple
+*    is read back by PAW. Bit 3 in the status word of the first block is
+*    set in this case (in HBNAM). HGNT2 and HGNTF check this bit in case
+*    of character arrays. Routines modified: HBNAM, HGNT2, HGNTF, HNTGET,
+*    HRIN.
+*
+*::>          VERSION  4.22/13   28/09/94 08.40.30
+*
+*    Change in HBUG. When LERR.LE.0 error messagse are not printed.
+*
+*    HNTDEL: fix UHTOC call (don't multiply NCHRZ by 4).
+*
+*    Change default quota to 32000 records in HRFILE
+*
+*::>          VERSION  4.22/12   19/09/94 11.16.36
+*
+*    Move VIDQQ sattement in HLIMAP to avoid problem with F2C.
+*
+*::>          VERSION  4.22/11   05/09/94 13.36.29
+*
+*    Many decks indented.
+*
+*    New option in HLIMAP.
+*    When the first parameter LIMIT=0, an existing shared memory
+*    is attached as the current directory. In this case, HLIMIT must have been
+*    called before.
+*
+*    Changes in HDIFF to solve numerical problems (precision).
+*
+*    Extend range of formats in HINDEX and HINPRX.
+*
+*    Bug corrected in HRESETM1 and HREZ0M in case of profile histograms
+*    or histograms with error bars (bug reported by W.Brueckner)
+*
+*    Protection in HFCXY for large real numbers
+*
+*::>          VERSION  4.22/10   04/08/94 14.58.02
+*
+*    Routine HALLOC:
+*    Free all Ntuple buffers or all buffers belonging to Ntuples in
+*    the same unit.
+*    If lun<0 free all Ntuple buffers that are in use (do this from an
+*    exception handler in case the filling of the buffers was
+*    interrupted).
+*
+*    Modification in HREBIN. If IFIRST<0 then do not normalize Y values
+*
+*    Bug corrected in HMINUT when option 'E' is specified.
+*      NARGS must be set to 0 before calling MNEXCM in this case.
+*      (Problem reported by Marcos Dracos)
+*
+*    Profile histograms can be filled with weights (mods in HFILPF)
+*
+*::>          VERSION  4.22/09   27/07/94 18.45.44
+*
+*    Implement calculation of errors in HOPERA for 2-D histograms
+*
+*    Deck HALLOC: force refill of Ntuple cache also when event range changes.
+*                 added new routine HBFREEC to free cache associated
+*                 with chains.
+*
+*    Routine HBALLOC: pass also first event (to define event range).
+*
+*    Routine HGNT1: accepts dynamic buffer offsets as argument (used by
+*    HGNTBF).
+*
+*    Routines HGNT, HGNTV, HGNTB: changed call to HGNT1 accordingly.
+*
+*    Routine HGNT2: check for the usage of the cache for each variable
+*    instead of only once.
+*
+*    Routine HGNTBF: completely re-written. Does not read a whole column
+*    in cache anymore. Is now a convenient front-end for HGNT2 with the
+*    IVOFF cache offsets set.
+*
+*    New routine HCPOFF: copy cache offsets into an array IVOFF. This array
+*    is used in case of chains in PAW to continue filling the cache in the
+*    place where the last call to HGNTF stoped.
+*
+*::>          VERSION  4.22/08   15/07/94 09.31.43
+*
+*    Modify calling sequence of HNTDUP (new convention for NEWBUF)
+*
+*    New routine HBGMAX in HALLOC to return the maximum amount of memory
+*    that may be malloced.
+*
+*    Protection in HSCR in file in READ only mode
+*
+*    New routine HCONVOL introduced (Per Steinar Iversen)
+*    See comments in routine
+*
+*    Modify dummy calls to HFUNC,HSUPIM,HSUPIS to avoid intercompilation
+*    analysis message on Alpha/VMS.
+*
+*::>          VERSION  4.22/07   28/06/94 17.44.26
+*
+*    New routine HMERGE(Nfiles,Files,Filout)
+*    New Routine HMERGIN calls HMERGE
+*
+*::>          VERSION  4.22/06   28/06/94 08.25.18
+*
+*    Mods in HRFILE to take into account possible new option 'N' in RZMAKE
+*
+*    HRESET can reset ntuples
+*    New routine HNTRSET called by HRESET for CWNtuples
+*
+*    Implement new option 'K' in HMINUT
+*
+*::>          VERSION  4.22/05   21/06/94 18.38.39
+*
+*    Deck HALLOC: fix in case malloc and realloc fail.
+*
+*    Routine HMERGE: need option X in HROPEN for auto-record length
+*    detection to work on Alpha/OSF/VMS.
+*
+*    Routine HNTDUP: updated some comments.
+*
+*    Mods in HMINUT.
+*    Set the FNIX and FEPS parameters in agreement with the MINUIT definition.
+*    Defaults are unchanged. FNIX and FEPS can be modified via
+*    the routine HSETPR or PAW command HSETPR.
+*
+*    New routine HBAR2 to store errors for 2-D histograms
+*    Routines HF2,HPAKE,HUNPKE,HFITH1 modified in consequence
+*
+*    hfithc - protection against deviation being 0 is introduced
+*
+*    hminut - correction MINUIT save file ISAV=7
+*
+*    Protection in HNTNAM in case of misalignement (INTEGER*4 mixed
+*    with REAL*8 variables in the same block).
+*
+*::>          VERSION  4.22/04   08/06/94 11.38.01
+*
+*    Routine HRENAME: works now also for CWN's.
+*
+*    Routine HBNT: in case of memory resident Ntuple set IQ(LCID+ZNCHRZ)=0.
+*
+*    Routine HUWFUN: cosmetic change.
+*
+*    New routine HNTDUP: duplicates a complete Ntuple header. Works for
+*    CWN's as well as RWN's.
+*
+*    New routine HNTVDEF: returns a complete variable definition. Used
+*    by HNTDUP (works for CWN's and RWN's).
+*
+*    New patch HMERGE: this patch contains the program HMERG that can merge
+*    hbook files with identical objects. Histograms are added and
+*    Ntuples are combined. Works for CWN's and RWN's.
+*    HMERG is the main program (to be selected with option MAIN). It calls
+*    the main control routine HMERGE (user callable).
+*
+*    Implement proposal from Stephane Coutu for the computation of errors
+*    for profile histograms (see routine HBPROF)
+*
+*    Add TYPE declaration to several sequences
+*
+*    Changes in HIDOPT for option SHOW
+*       Options PROS or PROE are displayed with option SHOW
+*
+*    Mods in HCX for the computation of errors for profile histograms.
+*    With the previous versions, channels with one entry only had
+*    an error=0. Now the error is teh sqrt(abs(content)).
+*
+*    Mystyping in HWPDCL  (PAWR8 instead of PAWCR8
+*
+*::>          VERSION  4.22/03   30/05/94 14.10.33
+*
+*    Routine HLNEXT supports RLOGIN directories
+*
+*    New routine HRENAME(ID,CHOLD,CHNEW) to rename columns of ntuples
+*
+*    Bug fixed in HCDIR in case of subdirectories (hrout, option T, then HREND)
+*
+*::>          VERSION  4.22/02   19/05/94 12.07.56
+*
+*    Several changes in patch HMCSTAT (Christine Beeston)
+*    >1) I've fixed the bug with the number of entries - I now use HSUM instead
+*    >of HNOENT to get the number of entries in a histogram, since including
+*    >the underflows and overflows messes up the normalisation of the result.
+*    >
+*    >2) The user can now do multiple simultaneous fits (this was requested and
+*    >seems useful) - to do this they must call HMCINI once for each set of
+*    >histograms (each fit will have a data histogram and a set of monte carlo
+*    >and weight histograms), and then
+*    >HMCLNL must be called with the histogram identifiers and number of MC
+*    >sources, as well as the fractions.
+*    >
+*    >HMCMLL already uses the new HMCLNL, I have left the old HMCLNL as HMCLNO,
+*    >but will delete it in a couple of months.
+*    >
+*    >HMCINI and the new and old versions of HMCLNL both contain a banner
+*    >announcing the change, as it's not backwards compatible.
+*    >
+*    >The weight histograms may be used for more than one of the
+*    >fits if necessary - a check is made to make sure that they are not
+*    >normalised more than once.
+*
+*    Minor change in HRENDC (nchmax=nchtop before loop)
+*
+*    Mods in HMINUT to compute an equivalent chisquare in case
+*    of a log-likelihood fit
+*
+*    Bug fixed in HPAK in case weights <1.e-5 (number of entries was wrong)
+*
+*    Protection in HREND (NCHTOP was changed in the loop)
+*
+*::>          VERSION  4.22/01   07/04/94 09.04.32
+*
+*    Bug corrected in HFC1 in case of empty histograms with one bin only
+*
+*::>          VERSION  4.22/00   30/03/94 09.53.07
+*
+*    Bug fixed in HBOOKN (IQ(LCIDN+5) set to ID) for disk-resident tuples
+*    This bug affected HBOOK jobs calling HPROJ1,HPROJ2, HGN or HGNF when
+*    the ntuple header was not written to the file
+*
++DECK,V4_21.
+*CMZ :  4.21/13 17/03/94  10.36.58  by  Rene Brun
+*-- Author :    Rene Brun   26/10/93
+*
+*::>          VERSION  4.21/13   17/03/94 10.36.57
+*
+*    Routine HNTDEL has been rewritten (cannot call HLOOP if HDELET is called)
+*
+*::>          VERSION  4.21/12   16/03/94 17.42.29
+*
+*    Correct bug in HNTDEL (see after HDELET the 2 lines commented)
+*
+*    Mods in HGIVE to return TITLE in case of ntuples
+*
+*    HRESET can reset memory resident ntuples
+*
+*::>          VERSION  4.21/11   12/03/94 15.48.34
+*
+*    New routine HRENDC
+*    C I/O option implemented in HRFILE/HROPEN
+*
+*::>          VERSION  4.21/10   03/03/94 16.00.31
+*
+*    Maximum size of PAWCR4 increased from 5000 to 50000 words
+*
+*::>          VERSION  4.21/09   28/02/94 18.55.39
+*
+*    Option 'W' can be specified with option 'L' (log likelihood)
+*     When option W is given, bins with errors=0 are not used in the fit.
+*
+*    New option 'Z' added in HFITV.
+*    When option 'Z' is given, UFCN is the user fitting model
+*    UFCN is a subroutine with the calling sequence:
+*       Subroutine UFCN(N,X,Y,EY,NPAR,IFLAG,NPFITS)
+*     where X(N),Y(N),EY(N) are the input vectors,
+*           NPAR the number of parameters
+*           NPFITS is an output parameter= Number of points used in the fit
+*     The user must declare the common/HCFITD/FITPAD(24),FITFUN in UFCN
+*
+*    Change name of routine HBIBNIT to HBINIT1 to avoid clash with OPAL.
+*
+*    New routine HKIND returning the type of ID.
+*
+*    Bug corrected in HFITV: variable BINWID not set. (Reported by W.Mueller)
+*
+*    Argument missing in CALL MZPUSH in routine HRZKEY.
+*
+*    bug corrected in HGNTBF:
+*      return as negative error the number of columns that we load from disk
+*
+*::>          VERSION  4.21/08   17/02/94 16.41.07
+*
+*    Change DLOG, DSIGN and DABS to SIGN,LOG and ABS in patch HMCSTAT.
+*
+*    New routines HKFILL, HKF1, HKFF1, HKF2, HKFF2, HKFILPF,HKFI1,HKFFI1.
+*    These routines are fast filling routines called in teh context of PAW	
+*    by the new COMIS translator facility.
+*
+*    Packing of floating points in CWN was not correct.
+*    Fixes are in routines HFNT2, HGNT2, HGNTF, HNTNAM.
+*
+*    Set IQUEST(1) in HRZIN/HRZOUT.
+*
+*    Clear buffers in HREND.
+*
+*    Changes in HCDIR/HLDIR and HLNEXT for PIAF files.
+*
+*    Changes in HROUT and HNTRD:
+*     Status word should be 0 when buffer comes from disk. However, in one
+*     strange case (when coming from Piaf) it was not 0.
+*
+*    New routine HF1E(id,x,w,e) to fill a 1-D histogram
+*        ID contents incremented by W
+*        ID errors incremented by E**2
+*
+*    New routine HBOOKNC. This new routine has a calling sequence
+*    very close to HBOOKN and creates a CWN instead.
+*
+*    Changes in pilot patch for WINNT and MSDOS versions.
+*
+*    Don't reset LBUF and LTMP in HCDIR and HROUT. Only update the
+*    master pointer LBUFM and LTMPM. Other routines involved: HNBUF,
+*    HNBUFD, HNBUFR, HNTMP, HNTMPD. This fixed a bug reported
+*    by M. Dahlinger.
+*
+*    New routine HNTDEL. This routine is called by HREND and deletes
+*    all Ntuple headers of non-memory resident Ntuples related to the
+*    closed unit from //PAWC.
+*
+*    In HRZCD used sequence $CZSOCK.
+*
+*    Compute binomial errors in HOPERA if option B is given.
+*
+*    New routines HBONT,HFONT,HFONTR,HFONTCX to create and fill
+*       an Omnipurpose Column-Wise-ntuple.
+*    NEW sequence /HCBONT/
+*
+*    Optimisation in HRZKEY
+*
+*    In HNTNAM a protection was missing
+*    and in HBSET ierror was not initialized
+*
+*::>          VERSION  4.21/07   20/12/93 13.01.27
+*
+*    Changes in HRDIR for Unix shared memory.
+*    New routine HRDIRM in patch HMMAP called by HRDIR.
+*
+*    Bug corrected in HLATTR for global sections
+*
+*    Bug corrected in HBNT and HROUT for CWN memory-resident ntuples in
+*    the case of subdirectories in RZ file.
+*    Same bug in HNBFWR and HNTRD.
+*
+*    Bug corrected in HPAKAD
+*
+*    Bug fixed in HGNTF in case of packing and multiple ntuples
+*
+*    Protection in HBNAME (HNTNAM)
+*
+*::>          VERSION  4.21/06   09/12/93 08.56.15
+*
+*    Bug found in the hmcstats code and fixed. The bug would have
+*    caused slightly different results for people using VERY low monte carlo
+*    statistics, with lots of empty bins (Christine Beeston).
+*
+*    New routines HLNXTG and HLNXTG1 in HGLOBAL.
+*    New routines HLNXTM and HLNXTM1 in HMMAP.
+*    New routines HRZING and HRZINM called from HLATTR.
+*    These new routines are called by HLNEXT to return the next
+*    object from a global section or shared memory.
+*
+*::>          VERSION  4.21/05   29/11/93 17.23.14
+*
+*    New routine HOPTPF to send /HCOPT/ to PIAF.
+*
+*::>          VERSION  4.21/04   29/11/93 08.15.23
+*
+*    New routine HSTAF(CHOPT).
+*       If CHOPT='YES' ststistics are computed at filling time.
+*    routines modified: HBOOK1, HBOOK2, HBPROF, HMACHI.
+*    new sequence /HCOPT/
+     HSTAF is automatically called by the HPLOT options 'HSTA' and 'HNST'
+*
+*::>          VERSION  4.21/03   25/11/93 15.47.53
+*
+*    New routine HRZKEY called by HRIN. The new routine may speed up
+*    considerably the routines HGN and HGNF. It computes the serial key
+*    number for each ntuple extension and stores it in a bank which
+*    is the next of LCONT.
+*    Routines HGN and HGNF modified accordingly.
+*
+*::>          VERSION  4.21/02   17/11/93 13.06.05
+*
+*    Problem in HCDIR preventing the RLOGIN command in PAW is fixed.
+*
+*    Modify HRENID to process old/new RWNs and CWNs
+*
+*    Changes in HCREATEG to support ALPHA/VMS global sections.
+*
+*::>          VERSION  4.21/01   16/11/93 08.52.59
+*
+*    Add type declarations in HUWFUN
+*
+*    In HINDEX, change format from I6 to I7.
+*
+*    Mods in HCDIR for the old PIAF/PAWSERV.
+*
+*    Mods in HDELET/HIDPOS for PIAF (add new sequence $HCACHE).
+*
+*    Implement possibility to add 1-D histograms with alphanumeric labels
+*    Mods in HOPERA. New routine HOPER1A.
+*
+*    Protection in routine HDBCOP (R.J.Genik). See comments in routine.
+*
+*    Set bit 5 to 0 in HLABEL
+*
+*::>          VERSION  4.21/00   26/10/93 15.39.39
+*
+*    Unused parameters deleted in the following routines:
+*        HRESETM1,HREZ0M,HCOPYN,HCOPYT.
+*
+*    The following obsolete routines from HBOOK version 3 have been deleted:
+*        HCORE,HDISKF,HFNEXT,HISTGO,HLCM,HLCM3,HLOK,HSTORE,HUNLOK,HWRITE.
+*
+*    Change format in HFNT2 error message (mail from Yves Roblin)
+*
+*    Remove unused variables or common blocks
++DECK,V4_20.
+*CMZ :  4.20/14 22/10/93  11.19.43  by  Rene Brun
+*-- Author :    Rene Brun   21/06/93
+*
+*::>          VERSION  4.20/14   22/10/93 11.19.43
+*
+*    Remove IOFSET limitation in HRIN for ntuples
+*
+*::>          VERSION  4.20/13   21/10/93 15.10.39
+*
+*    Introduce WINNT flag in nearly all routines with the LINUX flag.
+*
+*    Large array T removed in HMCLNL (C.Beeston)
+*
+*::>          VERSION  4.20/12   18/10/93 17.48.08
+*
+*
+*::>          VERSION  4.20/11   15/10/93 16.56.03
+*
+*
+*     Routine HGNTBF: fixed bug in case an index variable fit in memory
+*     while the variable depending on that index variable did not fit in
+*     memory.
+*
+*::>          VERSION  4.20/10   13/10/93 18.01.16
+*
+*
+*     Implement possibility to list/plot histograms in a subdirectory
+*       of a shared memory section. Mods in HCOPYU and HPLISM.
+*
+*     Routine HMCMLL: put DATA statement after declarations.
+*
+*     Routine HCDIR: don't allow to CD to server connection point (like
+*     cd //piaf1) this does not make sense plus it causes conflicts when
+*     a chain is named piaf1.
+*
+*     Routine HNBUF: first word of contents back must be zeroed. Fixes bug
+*     when filling different Ntuples with index variables in the same job.
+*
+*     KEEP,HCMPCM contained +SELFs: OK for CMZ not for Patchy.
+*          New KEEPs,HCMPCM1 and 2.
+*
+*::>          VERSION  4.20/09   28/09/93 16.39.40
+*
+*
+*     New PATCH,HMCSTAT from Christine Beeston, R.Barlow from OPAL.
+*      Fits the given Monte Carlo distributions to the data distribution, using
+*      a binned maximum likelihood fit which includes the effect of both data
+*      and Monte Carlo statistics, and allows weights to be
+*      provided for each Monte Carlo distribution.  The data and Monte Carlo
+*      distributions must be presented in 1 dimensional histograms.
+*      The best estimate of the fraction of each Monte
+*      Carlo distribution present in the data distribution is returned, with an
+*      error estimate where required.
+*
+*     Common /PAWIDN/ : X(512) changed to X(522)
+*
+*     New routines HPLISG,HPLISG1 in patch HGLOBAL.
+*     Routine HLDIR modified to call new routine HPLISG (VAX only).
+*     HPLISH can do a Histo/List in Global sections.
+*
+*     Replace line with TEST.GT.1.5 by TEST.GE.0. in HFCN
+*
+*::>          VERSION  4.20/08   12/09/93 18.57.43
+*
+*
+*     Histogram directory bank LTAB created and MZPUSHed with 500 words
+*        and links instead of 50. This speeds up considerably programs
+*        using a large number of histograms.
+*
+*     New deck HRNGPF in patch HBOOK
+*     New deck HNDESC in patch HNTUP
+*     Corrections in CWN filling and GET routines for character type columns
+*
+*     Ulrich Mueller changes for IEEE computers in filling routines.
+*     There is an unpleasant feature in HBOOK on computers with IEEE 754
+*     floating point arithmetic (in our case on DECstations under Ultrix
+*     4.3a, CERNLIB 93b or 93d).
+*
+*     Calculations on these machines can give as result Infinity or
+*     Not-a-Number (NaN). If one tries to fill these numbers into histograms
+*     (and this happens in real-world applications, especially during the
+*     development phase of a program), some problems may arise:
+*
+*     1) Filling of +/- infinity as value. This case is handled properly by
+*        the checks for over/underflow and the value is counted as such.
+*
+*     2) Filling of NaN as value. The over/underflow checks fail because
+*        relations like .LT. or .GE. are always false if one of the operands
+*        is NaN. Then the value is converted to a bin address, which is an
+*        undefined integer and finally results in either a segmentation
+*        fault or an overwriting of memory somewhere.
+*
+*        However, this could easily be fixed, for example in HF1 (the other
+*        routines are analogous):
+*
+*           IF(X.LT.Q(LPRX+1))THEN
+*              ICHAN=0
+*           ELSEIF(.NOT.(X.LT.Q(LPRX+2)))THEN
+*              ICHAN=IQ(LPRX)+1
+*           ELSE
+*              ... calculate bin address ...
+*           ENDIF
+*
+*        By changing the overflow check from .GE. to .NOT. .LT. the NaN
+*        value will be counted as overflow. Another approach would be a
+*        separate check for NaN, something like
+*           IF (.NOT. (X.LT.0. .OR. X.GE.0.))
+*        together with an appropriate error message.
+*     ====>      This changes has been made in all filling routines
+*
+*     3) Filling of Infinity or NaN as a weight. This is maybe the worst
+*        case. The value is added to the bin, and this results in a crash
+*        when the ZEBRA structure is written to a file, or in a crash of PAW
+*        if one tries to plot the bad histogram.
+*
+*        I propose to add a check for the finiteness of the weight. On most
+*        machines a (C-)function "finite" is available for that purpose.
+*     =====> This suggested change is not yet implemented.
+*     Ulrich Mueller       Exp. WA89, Div. PPE, CERN, CH-1211 Geneva 23
+*     ulm@vsnhd1.cern.ch   Phone +41-22-767-8658, FAX +41-22-7850314
+*
+*::>          VERSION  4.20/07   07/09/93 12.09.33
+*
+*     Optimization in HGNTBF in case of running on Piaf slave server
+*
+*     Introduced the deck HRNGPF (formerly PFRANGE in the Paw source)
+*
+*     Optimize logic of HCDIR for PIAF connections
+*
+*::>          VERSION  4.20/06   06/09/93 12.20.45
+*
+*     Optimize logic for sorting IDs in HRSORT
+*
+*::>          VERSION  4.20/05   29/08/93 10.08.32
+*
+*
+*     New routine HRSORT(CHOPT) to sort IDs in a RZ directory
+*     HRSORT is automatically called by HLDIR if option 'S' given
+*     Routine HLNEXT automatically sorts IDs in increasing order
+*     HLNEXT is the routine called by the PAW++ browser
+*
+*     New definition of $HCPIAF for parallel PIAF
+*     Changes in HLOGPF,HINPF,HOUTPF for parallel PIAF
+*
+*     Changes in LINUX version in HSHM
+*
+*     Changes for Windows/NT (HMMAP in particular)
+*
+*     Sequence/common/HCRECO renamed HCRECV to avoid clash with L3 programs
+*
+*::>          VERSION  4.20/04   05/08/93 15.06.25
+*
+*     Protections introduced in case of empty arrays in HGNT2,HGNTBF.
+*
+*     Changes in Unix mapping memory routines.
+*     SGI moved from BSD to SYS5 class.
+*
+*::>          VERSION  4.20/03   03/08/93 15.30.17
+*
+*
+*     Bug fix in HGNTBF for indexed variables in ntuples.
+*
+*     Protection in HRESET to not reset ntuples.
+*
+*     Protection in HRIN if IOFSET is not 0 for RWN ntuples.
+*
+*     Changes in sequence HCNTPAW. MAXCOL=1000 replaced by:
+*          MAXCR8=1000, MAXCR4=5000, MAXC32=1000
+*
+*     Maximum number of files extended to 50.
+*
+*     New routine HPROF2 to make profile histograms from 2-D histograms
+*
+*     Mods in HMINUT to call a user routine (via JUMPX2) to read
+*     MINUIT commands. (In paw the user routine is PMNCOMD)
+*
+*     Decks HCDIR and HROUT: update LBUF and LTMP when switching between
+*     different directories in memory.
+*
+*     New routines HRESETM,HRESETM1,HREZ0M to reset histograms
+*     in shared memory (from W.Bruckner).
+*     New routines HPLISM,HPLISM1 to list histograms in shared memory (W.B.)
+*     Mods in HLDIR to call HPLISM.
+*
+*     Remove WARNING in HDIFFB in case of identical histograms (HDBINI)
+*
+*::>          VERSION  4.20/02   23/07/93 10.44.48
+*
+*     Mods in HRESET to reset HFIT structure
+*
+*     Deck HFNT2: when value is out of range substitute max or min value,
+*     also check range when only number of bits is specified.
+*
+*     Deck HALLOC: moved code from PVMEM (PAW) into HBPRNT.
+*
+*::>          VERSION  4.20/01   28/06/93 11.48.27
+*
+*      Mods in HMINUT to call the new MINUIT routine MNCOMD.
+*      The new routine MNCOMD is temporarily introduced as a DECK,MNCOMND
+*      in the HBOOK file. This should be removed for the next release.
+*      In particular MNCOMD will not work as it is on CRAYs.
+*
+*
+*::>          VERSION  4.20/00   21/06/93 18.17.17
+*
+*      Fix problem in HRIN (IOFSET moved to 1st statement)
+*
+*      Deck HNTNAM: correct call to HBUG.
+*
+*      Save in word 12 (ZID) of the CWN header the Ntuple ID used
+*      to write the Ntuple extensions on disk. This ID necessary when an
+*      Ntuple has been loaded in memory with on offset. Decks changed:
+*      HRIN, HBNT, HNBUFR, HNTRD.
+*
+*      Deck HGNTF: changed some error checks.
+*
+*      Deck HNTMPF: forgot to set LTMP1 (caused problems reading and
+*      writing CWN's at the same time).
+*
+*      Deck HRECOV: set NTCUR=0 and fixed special case of endless loop.
+*
+*      Fixed bug in HALLOC (block names of 8 characters were overwriting
+*      on VMS systems the first character of the column name)
++DECK,V4_19.
+*CMZ :  4.19/05 08/06/93  12.17.57  by  Rene Brun
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  4.19/05   08/06/93 12.17.57
+*
+*
+*      Add new sequence /CZCBUF/IZCBUF
+*      Changes in HMACHI,HRDIR and HLOGPF to use JUMPT2 to call CZGETC
+*
+*::>          VERSION  4.19/04   07/06/93 08.48.10
+*
+*
+*      Changes in HLNEXT (implement client/server for PIAF)
+*      Routine HCREATEM modified for SYSV systems (ICOMAD(1) set to 0)
+*      HRECOV improved for CWN. Recovery time faster.
+*      Problem fixed in handling of chains (1st event was missed occasionally)
+*
+*::>          VERSION  4.19/03   27/05/93 15.28.21
+*
+*      LINUX version introduced (from V.Balashov and A.Lomov)
+*
+*      Changes to HRECOV. New routines HRECO1 and HRECO2
+*
+*::>          VERSION  4.19/02   26/05/93 16.00.03
+*
+*
+*      New routine HRECOV to recover ntuples missing the last header info.
+*      HRECOV attempts to read the latest saved header. From the header
+*      information, it looks at all ntuple extensions to reconstruct
+*      the maximum number of blocks/events.
+*      If successful, the new header is written to the file
+*      Header of CWM Ntuple is written the first time a content buffer
+*      is written. The header is written again whenever a column has
+*      been added to the Ntuple. After every HFNT2 call that caused
+*      buffers to be written the RZ directory structure is flushed to disk.
+*      These intermediate Ntuple headers are used by the HRECOV routine.
+*      They can be recognized by the fact that IQ(LCID+ZNOENT) = -1.
+*
+*      Protection added in HBFUN2 (for HRNDM2) (O.Perdereau)
+*
+*      Improvements to HQSIG1/2/3. (J.Allison)
+*
+*      Mods in HROPEN. An already open file in U mode cannot be attached
+*      if another process is also attaching the file in U mode. RZEND now
+*      called to delete the ZEBRA structure.
+*
+*::>          VERSION  4.19/01   11/05/93 15.19.34
+*
+*      New sequences $CZBUFF and $CZSOCK in HCDES
+*      Changes in HCDIR, HRDIR and HLOGPF for the PIAF server case
+*
+*      Routine HFN saves now the ntuple header and calls RZSAVE everytime
+*      the RZ buffer is written to the file. This changes enables recovery
+*      in case the job writing the ntuple crashes before HROUT/HREND.
+*
+*      HRIN modified for the ADD option (IOFSET=99999)
+*      A user reported a case where ID1+IOFSET=ID of an existing histogram.
+*      When IOFSET=99999, the internal offset is now chosen to avoid a conflict.
+*
+*      Bug corrected in HXE for variable bin size histograms
+*
+*      Mods in Memory mapping routines HCREATEM and HALLOC
+*
+*::>          VERSION  4.19/00   930429  8.34
+*
+*      WARNING!!!. Patch HCDES split into individual sequences.
+*
+*      New sequences JBYT3,JBYT4 introduced for MSDOS.
+*      New sequence HCRLF (Carriage Return, Line Feed).
+*      Several routines modified to introduce the flags MSDOS,NDP and GNU.
+*      In printing formats, several '1' replaced by CRLF from HCRLF.
+*
+*      Sequence $HCK modified. Parameters KBWIDX,KBWIDY deleted.
+*      Parameters KMIN,KMAX renamed KMIN1 and KMIN2.
+*      New Parameters KMIN2,KMAX2.
+*      Logic to support HMINIM AND HMAXIM for 2-DIM implemented.
+*      As a consequence the inverse of the binwidth is not stored
+*      anymore in the LCID structure.
+*      The position Q(LCID+KBWIDX) is now occupied by Q(LCID+KMIN2)
+*      The position Q(LCID+KBWIDY) is now occupied by Q(LCID+KMAX2)
+*      Routines HMAXIM/HMINIM modified.
+*      All HBOOK/HPLOT routines dealing with the binwidth are changed.
+*
+*      Bug fixed in HMINUT. In case of loglikelihood fits, the
+*      MINUIT ERRDEF was incorrectly set to 0.5
+*
+*      Sequence /HCFITD/ has been modified to FITPAD(24),FITFUN
+*      When the option 'U' is given in the fit routines, the application
+*      must store the value of the function in FITFUN (Double Precision).
+*      By default, HFITGA,PO,EX use the 'U' option.
+*
+*      Change in routine HOPER1 to prevent INTEGER Overflows in HFCX.
+*      Number of entries in LC3 set to -1
+*
+*      Logic to handle ntuple chains introduced.
+*
+*      Bug corrected in HRZFRA (VAX version only)
+*
+*      Changes in HBUG (CHMESS(1:1)=+ prints Warning instead of Error
+*
+*      KEEP,HCFITR modified (added IFYLOW,IFYUP, renamed IFXLOW,IFXUP)
+*      Introduce subrange in Y in all fitting routines
+*
+*      HBFUN1: Change LCONT to LFUNC. LCONT recomputed if user function
+*         calls HFIND.
+*      HRZIN: Change LBANK-JBIAS to LBANK+JBIAS
+*      New routines for chains
+*      New option 'A' in HDIFFB
++DECK,V4_18.
+*CMZ :  4.18/00 26/02/93  08.35.02  by  Rene Brun
+*-- Author :    Rene Brun   26/02/93
+*
+*::>          VERSION  4.18/00   930226  8.35
+*
+*      Routine HLATTR rewritten
+*      New version of routine HQWAVE by John Allison
+*      Mods in HFNT2
+*
++DECK,V4_17.
+*CMZ :  4.17/09 16/02/93  10.01.47  by  Rene Brun
+*-- Author :    Rene Brun   31/07/92
+*
+*::>          VERSION  4.17/09   930216 10.01
+*
+*      Names of some ZEBRA banks modified. DDL implemented.
+*      Mods in routines to list directories.
+*      Bug fixed in HFNT2 in case a CWN is filled again (Dave Rees)
+*
+*::>          VERSION  4.17/08   930204 11.57
+*
+*      Nasty bug found in HNTWRT. When routine HCDIR is called,
+*         then IDLAST is reset to 0. If HNTWRT was called again,
+*         in the same call to HFNT, then IDRZ(1)=0 !
+*
+*      Bug fixed in HLABEL and HLPOS (found by M.Goossens).
+*
+*::>          VERSION  4.17/07   930201 14.06
+*
+*      Changes in the Ntuple handling routines for ntuples with arrays
+*      and substructures.
+*
+*::>          VERSION  4.17/06   930126 18.16
+*
+*      Changes in HGNT2 and HGNTF for ntuples with arrays.
+*      Protection in case of large ntuples that could not be processed
+*      by PAW.
+*
+*::>          VERSION  4.17/05   930124 13.19
+*
+*      Protections in HROPEN if filename already attached.
+*      Change in HRFILE for option 'O' (exchange mode not used)
+*      Bug fix in HRMDIR, HMDIR, HGN and HGNF.
+*      Bug fix in HALLOC (wrong memory allocation when the new buffer
+*         is bigger than the previous one for the same column)
+*
+*::>          VERSION  4.17/04   930120  8.10
+*
+*      The following problems fixed after the release:
+*      Implement option 'O' in HRFILE to create old format files
+*      Corresponding changes in HREND,HRIN,HRMDIR,HMDIR,HFN
+*      Bug fixes when merging old-format with new-format ntuples
+*      Bug fixed in HLABEL for 2-D case.
+*      Bug fixed in HLNEXT,HLDIR2 to access the first key of a file.
+*      Replace BIGP in HBOOKN by 1.E30 to avoid overflow on IBM.
+*
+*
+*::>          VERSION  4.17/03   930115 17.09
+*
+*     Version released for cernlib 93a
+*
+*
+*::>          VERSION  4.17/02   921221 17.56
+*
+*     Implement option 'E' in HOPERA.
+*
+*     Changes in HSCR to delete ntuples
+*
+*     New routine HDDIR to delete directories (memory or RZ)
+*
+*     Bug fixed in HMINUT when option 'E' given
+*     COMMON/HCFITD/FITPAD(25) may be used in user fcn routine (DOUBLE P)
+*
+*     New example HEXAM8 in patch,HEXAM
+*     Example HEXAM6 modified.
+*     New ZEBRA pointers LHFIT,LFUNC,LHFCO,LHFNA introduced in HCBOOK
+*     Changes in HSUPIN,HSUPIS
+*
+*::>          VERSION  4.17/01   921207 16.54
+*
+*
+*
+*     New set of routines to store alphanumeric labels on the axes.
+*     Corresponding routines (HFC1,HFC2) to fill histograms with labels
+*         (implementation by P.Aubert)
+*
+*     New routine HFINAM to store the names of the parameters after HFIT..
+*
+*     Modifications in HRZIN for PAWSERV
+*
+*     Reorganization of LHBOOK and LCDIR links (See HLIMIT)
+*     Link 8 of LHBOOK/LCDIR reserved for HPLTAB (instead of link 4)
+*
+*     New Patch,HDIFF introduced (Rich Genik from D0)
+*       New routine HDIFFB to compare histograms bin by bin
+*       Existing routine HDIFF moved to this patch from patch,HBOOK.
+*
+*     New Patch,HQUAD introduced (Author John Allison Manchester)
+*     HQUAD (see routine HQUAD) performs a fit with multiquadric radial
+*     basis functions on 1- and 2-D histograms and ntuples with up to
+*     NDMAX variables.
+*
+*::>          VERSION  4.17/00   920731 15.54
+*
+*
+*     New PATCH,HNTUP introduced
+*     All routines referencing ntuples modified, including I/O routines.
+*     See new HBOOK manual for a complete description of the new ntuples.
+*     Sequences /HCBOOK/, /HCDIRE/ modified.
+*     Same sequences used by HPLOT and PAW (must be recompiled).
+*
+*
+*      Protection in HOPER1 (divide by 0) (D.Sanders)
+*
+*      Routine HFITHC modified. DOUBLE PRECISION added.
+*      Option 'L' added in HFITHN
+*
+*      Changes in HPAK,HFCX,HFCXY to increment the number of entries
+*        following the sum of the contents in case of integer contents
+*
+*      Bug corrected in HGNPAR for memory-resident ntuples (title garbled)
+*      Bug corrected in HRIN for memory-resident ntuples (title garbled)
+*
+*      Bug in output format in routine HWRITF corrected (Janusz Chwastowski)
+*
+*
+*               ! ! ! !  W A R N I N G  ! ! ! !
+*
+*      HBOOK/RZ file format is changed. New version of HBOOK can still read
+*      old format files. The change consists in adding a new key.
+*      KEY(1)=ID as in old format
+*      KEY(2)=ntuple extension  number (0 for histograms)
+*      The new array ICHTYP(20) in HCDIRE contains the type of HBOOK file.
+*        ICHTYP(ICDIR)=1 for old format HBOOK files
+*                     =5 for new files
+*      The new HBOOK files are machine independent and can be transported
+*      across all architectures with normal binary FTP.
+*      Maximum number of records in HBOOK file changed from 4000 to 16000
+*      'X' EXchange mode is now set automatically
+*
++DECK,V4_16.
+*CMZ :  4.16/00 24/07/92  08.20.42  by  Rene Brun
+*-- Author :    Rene Brun   24/07/92
+*
+*::>          VERSION  4.16/00   920724  8.20
+*
+*       New routine HLNEXT to scan the content of a HBOOK, RZ directory
+*
++DECK,V4_15.
+*CMZ :          02/06/92  17.55.07  by  Rene Brun
+*-- Author :    Rene Brun   17/04/92
+*
+*::>          VERSION  4.15/00   920417 17.05
+*
+*
+*     Bug fixed in HCREATEM/HMAPM (SYS5) by Chip Watson Cebaf.
+*
+*     Bug fixed in HRESET in case of ntuples (J.Colas)
+*
+*     Set error criterion properly for Chi**2 or Liklihood fits
+*     routine HMINUT corrected (John Marraffino)
+*
+*     Changes in HCDES. New sequence HCFITD.
+*     HCFITD introduced in HFCNH,HFCNV,HGAUS,HDEXPO and HPOLYN.
+*     COMMON/HCFITD/FITPAD(25) may be used in user routine FUTIL
+*     instead of single precision parameters.
+*
+*     Bug fixed in HFITHN (return array PARAM) Ian Scott
+*
++DECK,V4_14.
+*CMZ :  4.14/05 21/03/92  10.52.54  by  Unknown
+*-- Author :    Rene Brun   22/10/91
+*
+*::>          VERSION  4.14/05   920321 10.52
+*
+*       Protection introduced in HPR1V (P.Lanius)
+*
+*
+*::>          VERSION  4.14/04   920309 23.16
+*       Ntuple saga again. The procedure to speed-up memory-resident
+*       ntuples had several consequences. Changes made in HGNPAR.
+*
+*
+*::>          VERSION  4.14/03   920308  8.33
+*
+*       Change logic in HRIN for memory-resident ntuples.
+*       Previous algorithm affected also disk-resident ntuples
+*
+*
+*::>          VERSION  4.14/02   920306 11.04
+*
+*       Bug corrected in HRIN for memory-resident ntuples (1 block)
+*
+*
+*::>          VERSION  4.14/01   920302 16.31
+*
+*       Bug corrected in HOPER1 for functions (A.Nathaniel)
+*       Changes in UNIX memory mapping routines.
+*       Note that HLIMAP cannot be used under HPUX with the current
+*       version of f77 (crash in MZSTOR).
+*
+*
+*::>          VERSION  4.14/00   911022  9.25
+*
+*       Protections in HRNDM1 and HRNDM2
+*       Changes in HFCNV
+*       Format change in HPTIT
+*       New routine HRENID to rename IDS on a RZ file
+*       Bug corrected in HFUNC (shift by 1 channel)
+*       Format change (I6 to I8) in HINDEX and HINPRX
+*       Mods in HPR1H for BIBBI case
+*       Bug corrected in HSTATI/HPRST in case of negative contents
+*       Save IQUEST(10) in HROPEN due to changes in RZOPEN
+*       New routine HGDIRE(LUN,CHDIR)  to return TOPDIR name corresponding
+*         to LUN.
+*
+*       Option 'I' changed to ' ' in all calls to MZPUSH
+*       Speed-up of HGN and HGNF
+*       Changes in HRIN to speed up HGN/HGNF
+*       New fast filling routine HF1N (called by PAW)
+*
++DECK,V4_13.
+*CMZ :  4.13/01 06/09/91  13.59.22  by  Rene Brun
+*-- Author :    Rene Brun   02/09/91
+*
+*::>          VERSION  4.13/01   910906 13.59
+*
+*       Routines HPROJ1 and HPROJ2 changed with the correct /PAWIDN/
+*
+*::>          VERSION  4.13/00   910902 17.07
+*
+*
+*       This version of HBOOK requires ZEBRA version 3.66/8
+*       Changes in PILOT,PATCH for IBMMVS and NEWLIB.
+*       Changes in HEXAM for IBMMVS.
+*       Changes in HMAXIM/HMINIM
+*       SET EPS changed to 1.E-14 in HMINUT
+*       New option 'E' in Fitting routines
+*          Option 'E' selects a better error evaluation
+*       New routine HGFIT returning fit parameters
+*       Changes in HPR1H,HPR1V (reset I20,I21 for 2-Dim case)
+*       New PATCH,CHBOOK (in C) for memory mapping)
+*       Routine HLDIR can list a RZ tree in histo format.
+*       Mods in HLDIR to call RZSCAN (new ZEBRA routine) and HLDIRT
+*       Routine HLDIR2 deleted.
+*       Protection in HPDIR when trying to print a RZ directory.
+*       Routine HMDIR modified to allow creation of a directory
+*       in a directory which is not the current directory
+*       Bug corrected in HFUNC
+*       Protection in HPAFF (same as RZPAFF by M.Marquina)
+*
++DECK,V4_12.
+*CMZ :  4.12/00 17/04/91  08.17.57  by  Rene Brun
+*-- Author :    Rene Brun   17/04/91
+*
+*::>          VERSION  4.12/00   910417  8.17
+*
+*       Changes in FORMAT in routine HDIFF
+*
++DECK,V4_11.
+*CMZ :  4.11/01 15/02/91  18.07.12  by  Rene Brun
+*-- Author :    Rene Brun   10/02/91
+*
+*::>          VERSION  4.11/01   910215 18.07
+*
+*      Flag NEWLIB introduced in HMACHI
+*
+*::>          VERSION  4.11/00   910210 16.55
+*
+*
+*         Remove the test in HFCNV on TEST (same as HFCNH)
+*         Bugs corrected in HFETCH and HREAD
+*         Bug corrected in HLDIR2 (IOFSET not initialized: W.Brueckner)
+*         Bug corrected in HX/HPR1H for non-equidistant bins (G.Maringer)
+*         SAVE statement added in HFF2 (W.Brueckner)
+*         Correction in HAUTO (LW not computed)
+*         Introduce HPUX version
+*
+ 
++DECK,V4_10.
+*CMZ :  4.10/06 10/02/91  16.53.12  by  Rene Brun
+*-- Author :    Rene Brun   07/11/90
+*
+*::>          VERSION  4.10/06   910210 16.53
+*
+*
+*::>          VERSION  4.10/05   901107 16.37
+*
+*         COMMON/HCDIRE/ modified. Number of possible directories
+*          has been changed from 20 to 100.
+*          This changes implies recompilation of HPLOT,PAW.
+*          Note that a similar change has been made in RZEBRA.
+*          Argument to user functions copied before calling
+*            the function in HBFUN1/HBFUN2 to prevent cases
+*            where a bad user is changing the argument.
+*          Bug corrected in HFIND for HBOOKB case
+*          Correction in HFITH in case of HFITGA (Sigma>0)
+*          Added IQUEST(1)=1 in HCDIR if directory not found (M.Guan..)
+*          Slight changes for OS9/RTF compiler (Equivalence order)
+*          Bug corrected in HSPLI2 (A.Nathaniel)
+*          Mods in HCOPYN calling a new routine HCOPYT (copy Ntuples)
+*          Mods in HSCALE and HMAXIM. HMAXIM may be called for a 2-Dim
+*              HMAXIM uses KSCAL2 word
+*
+*
++PATCH,HISTORY.
++DECK,BLANKDEK.
+*CMZ :  4.10/05 16/08/90  10.35.58  by  Rene Brun
+*-- Author :
+*
+*                VERSION 4.10 (16/08/90)
+*
+*         COMMON/HCDIRE/ modified. Number of possible directories
+*          has been changed from 20 to 100.
+*          This changes implies recompilation of HPLOT,PAW.
+*          Note that a similar change has been made in RZEBRA.
+*          Argument to user functions copied before calling
+*            the function in HBFUN1/HBFUN2 to prevent cases
+*            where a bad user is changing the argument.
+*          Bug corrected in HFIND for HBOOKB case
+*          Correction in HFITH in case of HFITGA (Sigma>0)
+*          Added IQUEST(1)=1 in HCDIR if directory not found (M.Guan..)
+*          Slight changes for OS9/RTF compiler (Equivalence order)
+*          Bug corrected in HSPLI2 (A.Nathaniel)
+*          Mods in HCOPYN calling a new routine HCOPYT (copy Ntuples)
+*          Mods in HSCALE and HMAXIM. HMAXIM may be called for a 2-Dim
+*              HMAXIM uses KSCAL2 word
+*
+*
+*                VERSION 4.09 (11/04/90)
+*
+*         Mods in HDIFF (for HPAK case)
+*         New routine HPAKAD
+*         Changes in machine PATCHY flags
+*         Routine HROPEN based on new ZEBRA routine RZOPEN
+*         New routine HFNOV to fill a "cyclic Ntuple"
+*         Double precision variables in HSTATI and HPRST
+*         Bug corrected in HOPER1 for Number of equivalent events
+*         Changes in HFN (HCDIR+RZCDIR) when RZ is used together
+*           with HBOOK.
+*         Changes in HCREATEG
+*         New DECK H0MPW introduced for MACMPW to force a new segment
+*         Bug fixed in HLDIR (M.Guanziroli)
+*
+*                VERSION 4.08 (18/12/89)
+*
+*         SET EPS=0.0000002 in HMINUT
+*         New routine HFITHN introduced
+*          + internal routines HICTOI,HFITF,HFITHC
+*          + new Patchy sequence HCFITF
+*         Bug corrected in HINDEX for slices
+*         Changes in HFITH1 and HSUPIS to take care of histograms
+*           with non-equidistant bins
+*         In HCOPY set bit 5 =0
+*         In HRIN look at bit 5 before deleting histogram in memory
+*         In HIDOPT, option SHOW implemented
+*
+*                VERSION 4.07 (29/09/89)
+*
+*         Mods in HHIPAR. Do not force IWEIGH=1 if HPAKE.
+*         Mods in HMINUI. (if PARAM=0.)
+*         Mods in HFCN
+*         Protection in HMDIR against CHDIR with more than 16 characters
+*         Sequences HCFIT4,HCFIT5 deleted.
+*         Bug corrected in HRNDM2
+*         MAXLEN changed to 110 in HPAFF
+*         HGN returns IERROR=-1 if event nr > number of events
+*         Mods in HCREATEG (Jim Loken)
+*         Protection in HDIPKL
+*         Minor change in HMINUI
+*         Minor change in HEXAM5
+*         Maximum number of variables in a Ntuple changed to 512
+*         Change in HFITGA. Parameter COEFF in phase with documentation
+*         HDIFF writes on LOUT instead of 6.
+*         Text of message changed in HUNPAK/HUNPKE
+*         Bug corrected in HFINOP for BANY
+*         SAVE statement added in HRNDM1/HRNDM2
+*         Array FITDER added in sequence /HCFITS/.
+*         Variable EPSIH renamed EPSIF in /HCFIT6/.
+*         Format changed in HPTIT (I4 instead of I3)
+*         DEFT changed to SETD in HIDOPT.
+*         Epsil shift (1.e-6) in booking routines removed.
+*         Change in HDELET (clear link for HCOPYM)
+*         Change in HSIFLA (status word bit 5 set for PAW)
+*         Changes in all routines modifying histogram structure
+*           (call sbit0(iq(lcid),5) for PAW
+*         Set IQUEST(1)=0 in HSPACE (problems with the ZEBRA server)
+*         Correct HCOPYN for profile histograms with option S
+*         New version of HCREATEG from J.Loken
+*         Changes in HINDEX for printing limits of slices and bands*
+*         New fitting routines HFITH and HFITV introduced
+*         Routines HFITPO,HFITEX,HFITGA interfaced to HFITH
+*         Added calls to interactive Minuit if option 'M'
+*         Examples modified
+*         Fit parameters now stored with histogram data structure.
+*         Variable IOFIT in /HCFORM/
+*
+*                VERSION 4.06 (30/06/89)
+*
+*         INOT replaced by INNOT in printing routines
+*         Current Directory set to //PAWC at the end of HREND
+*         Bug corrected in HNORMA (C.ERD)
+*         Bug corrected in HSTATI
+*         HRDIR implemented for subdirs of a global section
+*         Change to standard intrinsic functions of Fortran 77
+*         CONVEX version introduced
+*         Version of HROPEN for IBMMVS introduced.
+*         New routine HDERIV (user callable)
+*            HDERIV is a replacement for the dummy routines
+*            HDERI1,HDERI2,HDERIN
+*         HEXAM modified
+*         Report bug in HBOOKN for ID>9999
+*         Bug corrected in HRZIN for Ntuples (CZ mode)
+*
+*         New interface to MINUIT introduced (with E.Lessner FNAL)
+*         Changes in fitting routines for IWEIGH.NE.0
+*
+*         Changes in HBARX/HBARY
+*         When HBARX/Y is called, the routine fills the sum of
+*         the square of the weights from the actual contents
+*         This is introduced to make easier the computation
+*         of error bars by HOPERA.
+*
+*                VERSION 4.05 (29/03/89)
+*
+*         Sequence JBIT replaced for Apollo
+*         Unused sequences removed
+*         Bugs corrected in HPROJ1(2) ISEL not used
+*         Routines HRZIN/HRZOUT changed (New CZ and ZS)
+*         New routine HRDIR
+*         Bug corrected in HPR1H
+*         Remove limitation for CHRZPA<3 in HBOOKN
+*         Protection added in HFILPF (overflows)
+*         DOUBLE PRECISION kept on CRAY in HF1,HPRST and HSTATI
+*         Bug corrected in HPR1V for INTE and many parts
+*         Bug corrected in HARRAY
+*         Bug corrected in HF1AUT
+*         Bug corrected in HMONIT
+*         sequence HCDIRE modified. New array HFNAME containing
+*         the file name
+*         Mods in HBOOKN. 80 characters always allocated to CHRZPA.
+*         Mods in HRIN to change CHRZPA to current directory.
+*         Bug corrected in HBCDI (RETURN missing)
+*         Patchy flag SAVE removed (default)
+*
+*         Mods in HBOOKN (Limit to 120)
+*         Protection in HTERM
+*         Mods in HCOPYN (add profiles)
+*         Mods in HRZIN
+*         Mods in HRGET and HRPUT when CHFILE=' '
+*         Add option 'A' in HRGET (JOFSET=99999 in HRIN)
+*         Bug corrected in HLDIR2
+*         Bug corrected in HEXAM5 (array EY not defined)
+*         Unused variables removed (FTN on DN10000)
+*         Calls to UCTOH1 replaced by UCTOH
+*         Bug corrected in HSPFUN (Annette Frenkel)
+*         HSPLI1 always return CHISQ
+*         New options 'F1 and F2' in HDIFF
+*         Routine HISTDO now calls HPDIR('//PAWC','TI')
+*         Option 'I' added in HPDIR
+*         Routines HRZFIL and HRZEND removed
+*         Changes in HRFILE,HRZCD for communication mode
+*         Change IQUEST(1)=0 in HCDIR
+*         Bug corrected in HSTATI (LCONT set to IFW removed)
+*         IDLAST always set to 0 in HLOOP
+*         Bug corrected in HPHIST/HPROT for slices in X
+*         Routines for Vax Global sections rewritten by J.Loken
+*
+*                VERSION 4.04 (10/11/88)
+*
+*         Changes in all booking routines (31-->16)
+*         Mods in HROUT
+*         Mods in HFF1,HIPAK1,HF1,HF2
+*         Patchy flag SAVE introduced
+*         New routines HGNPAR and HGNF
+*         Routines HPROJ1 and HPROJ2 modified
+*
+*                VERSION 4.03 (05/09/88)
+*
+*         Routine HCX modified to solve a CRAY compiler problem
+*         Routines HFETCH,HFETC1 corrected for same problem as HCX
+*         Routine HF1 corrected for non-equidistant bins histograms
+*         Argument IDD added in HSPACE
+*         Argument KCASE in HUNPAK declared type CHARACTER
+*         Argument KNAME in HPHIST and HPROT declared type CHARACTER
+*         NOARG removed from HPHIST and HPROT
+*         Bug corrected in HPHIST affecting HPR1V
+*         Routines HPROJ1,HPROJ2 modified to handle MASK logic in PAW
+*             and HGN
+*         Routine HFILPF changed to take W into account
+*         COMMON/PAWIDN/IDNEVT,X(127) added.
+*         UNIX version introduced.
+*         Changes in HMACHI,HPCHAN,HPATH.
+*         Bugs corrected in HFILPR and HPR1V.
+*         Bank LHBOOK changed to 50 links (10 struct.)
+*         Automatic binning algorithm modified (HF1AUT)
+*         Routine HROUT accepts option 'T'
+*         New routines HROPEN,HRGET and HRPUT
+*         Routine HRIN modified to simulate option 'T'
+*           If ICYCLE>1000 and ID=0 implies option 'T'
+*         Routines HBOOK1 and HF1 changed. Accumulate the 100 first
+*           entries instead of just 50.
+*         Mods in all routines using NBIT
+*         Check for space left in HLDIR
+*         Changes in HMAPG (J.Loken)
+*
+*                VERSION 4.02 (28/04/88)
+*
+*         Bugs  corrected in routine HFF1,HFF2,HIPAK1,HIPAK2 (Kevin Einsweiler)
+*         Bugs corrected in HIDOPT (Helmut Burkhardt)
+*         Bugs corrected in HPROJ1,HPROJ2 (V.Journe)
+*         Option I implemented in HLDIR (HINDEX format)
+*         New routine HUNPKE to unpack errors (same calling as HUNPAK)
+*         Bug corrected in HSTATI(C.Onions)
+*         Bug corrected in HOPER1 (calculation of errors)(V.Gibson,A.Parker)
+*         Bugs corrected in HSPFUN,HSPLI1,HSPLI2
+*         Bug corrected in HFETCH (D.Schlatter)
+*         ALLIANT version introduced
+*         New facility to access remote files across a network
+*           An implementation with TCP/IP is available
+*           (Works together with the new option FZCHANNEL of ZEBRA)
+*         Correction in HFETCH (problem on NORD) (A.Read)
+*         Changes in HRFILE for global sections (IQUEST)
+*         LOUT changed to 6 for Apollo and Alliant
+*         Y scale factor better computed when HMAXIM is called (V.Palladino)
+*         Operations between profile histograms implemented (suggested by H.Chan
+*         Modification of algorithm to print integrated contents (P.O.Hulth)
+*         Routine HGN optimized
+*         New routine HGIVEN (same as HGIVE for N-tuples) (R.Namjoshi)
+*         Routine HSCR implemented as described in the documentation
+*         Mods in HBANDX and HBANDY (reverse booking order)
+*         Set a limitation for NVAR<129 in HBOOKN
+*         Changes in HFN and HCDIR for N-tuples in memory
+*         Protection in booking routines in case HDELET is called
+*         IDLAST reset in all printing routines
+*         Bugs corrected in HLDIR and HPDIR
+*
+*                VERSION 4.01 (18/02/88)
+*
+*         Bugs corrected in routine HGN (Rohit + Iversen)
+*         Bug  corrected in HFINOP (affected HSTATI and HUNPAK)
+*         Bugs corrected in HPROJ1,HPROJ2
+*         Protection in HROUT
+*
+*                VERSION 4.00 (08/02/88)
+*
+*         New version based on ZEBRA. (version 3.54 needed)
+*         Storage area is the COMMON/PAWC/H(ispace)
+*         The user has to dimension this common block and
+*         initialize the HBOOK package by CALL HLIMIT(ispace)
+*
+*         Only character strings or variables are accepted for titles
+*
+*         With the new version one must always specified
+*         the correct number of arguments in subroutine calls. The
+*         facility to miss some arguments will be withdrawn from HBOOK
+*         in a few monthes.
+*         HFILL must have 4 arguments
+*         HSTORE and HFETCH are dummy. Use HRFILE,HRIN,HROUT,HREND instead
+*
+*         A set of new routines is available for
+*           - Structuring IDs in memory.
+*           - Statistical comparison of histograms (HDIFF)
+*           - Give options
+*           - Sequential I/O
+*           - Random access I/O (PATCH,HRZ)
+*           - N-tuples
+*           - New routine HFILPR to fill existing projections
+*           - New routine HGSTAT to get statistics
+*           - New routines HBPROF and HFILPF to book and fill
+*             profile histograms
+*           - New functionality for HLIMIT
+*             without initialization of ZEBRA
+*           - New routine HBUG to print error messages
+*           - Using shared areas (Online) HCOPYM
+*           - New routine HBOOKB (histos with non-equidistant bins)
+*           - New routine HREP1 to replace contents of one channel
+*           - New routine HGN to return one event from a N-tuple
+*           - New routine HPSTAT to print statistics about ID
+*           - PATCH,HGLOBAL for shared global sections on VAX
+*          (See new documentation)
+*
++PATCH,*HBOOK
++DECK,BLANKDEK.
+*CMZ :          05/05/95  14.56.58  by  Unknown
+*-- Author :
++USE,HBOOK,HDIFF,HNTUP,HQUAD,HMCSTAT,HRZ,HMERGE,HCDES.
++USE,HGLOBAL,IF=VAX.
++USE,   ALPHA_OSF,        IF=QMVAOS.
++USE,   IBM,     IF=IBMMVS,NEWLIB.
++USE,   UNIX,    IF=IBMRT, SGI, SUN, APOLLO, HPUX, AIX370, LINUX,NEXT.
++USE,   UNIX,    IF=ALLIANT, MACMPW, CONVEX, DECS, IPSC,MSDOS,WINNT.
++USE,   QF2C,    IF=MSDOS.
++USE,   DOUBLE,  IF=IBM, VAX, NORD, UNIVAC.
++USE,   DOUBLE,  IF=UNIX, IF=-SINGLE.
++USE,   BSLASH,  IF=SGI, IBMRT, SUN,DECS,IPSC,APOF77,GNU,LINUX,QMALPH.
++USE,   BSLASH,  IF=WINNT, QF2C.
++USE,   CZ,      IF=APOLLO,VAX,UNIX,IBM,IF=-IPSC,IF=-MSDOS,IF=-WINNT.
++USE,   QX_SC,   IF=SUN, SGI, DECS, CONVEX, IBMRT, HPUX, AIX370,IPSC.
++USE,   QX_SC,   IF=NEXT,MSDOS,LINUX,WINNT.
++USE,   QX_SC,   IF=APOLLO, IF=APOF77.
++USE,   QXNO_SC, IF=APOLLO, IF=-APOF77.
++USE,   BSD,     IF=APOLLO,SUN,CONVEX.
++USE,   SYS5,    IF=IBMRT,DECS,HPUX,SGI,AIX370,IPSC,LINUX.
++USE,   HMMAP,   IF=APOLLO,UNIX,IF=-CRAY,IF=-IPSC,IF=-MSDOS.
++USE,   CHBOOK,FPCLASSC.
++USE,   NO_IEEE, IF=IBM,VAX,AIX370,NORD,UNIVAC.
++PATCH,*HMERGE.
++DECK,BLANKDEK.
+*CMZ :  4.22/04 07/06/94  09.11.09  by  Rene Brun
+*-- Author :    Fons Rademakers   06/06/94
++USE,MAIN,HMERGE,HCDES.
++PATCH,*HEXAM
++DECK,BLANKDEK.
+*CMZ :  4.20/13 21/10/93  15.01.08  by  Rene Brun
+*-- Author :
++USE,HEXAM,HCDES,EXAMPLES.
++USE,   UNIX,    IF=IBMRT, SGI, SUN, APOLLO,HPUX,AIX370,LINUX.
++USE,   UNIX,    IF=ALLIANT, MACMPW, CONVEX, DECS, MSDOS, WINNT.
++USE,   DOUBLE,  IF=IBM, VAX, NORD, UNIVAC.
++USE,   DOUBLE,  IF=UNIX, IF=-SINGLE.
++USE,   BSLASH,  IF=SGI, IBMRT, SUN, F2C, LINUX, WINNT.
+ 
++PATCH,HCDES
++KEEP,hchoptm.
+*CMZ :  4.22/11 24/08/94  17.54.34  by  Rene Brun
+*-- Author :    Rene Brun   24/08/94
+      CHARACTER*16 CHOPTM
+      COMMON/HCHOPTM/CHOPTM
+*
++KEEP,HCFAST.
+*CMZ :  4.21/08 14/02/94  17.19.04  by  Rene Brun
+*-- Author :    Rene Brun   14/02/94
+      PARAMETER (NIDMAX=1000)
+      COMMON/HCFAST/NID(NIDMAX)
+ 
++KEEP,HCBONT.
+*CMZ :  4.21/10 01/03/94  11.54.50  by  Rene Brun
+*-- Author :    Rene Brun   10/01/94
+*
+*-- ATTENTION: when changing anything in these common blocks check
+*--            also $HCNTPAW.
+*
+      PARAMETER      (MAXNP = 1000, MAXNC = 8000)
+      PARAMETER      (MAXDUM=50007-4*MAXNP-3)
+      REAL           XONT(MAXNP), YONT(MAXNP), ZONT(MAXNP), WONT(MAXNP)
+      REAL           DUMCR4(MAXDUM)
+      INTEGER        KONTYP, NONT,NCHONT
+      CHARACTER*4    CHONT(MAXNC)
+*
+      COMMON /PAWCR4/KONTYP,NONT,XONT,YONT,ZONT,WONT,NCHONT,DUMCR4
+      COMMON /PAWC32/ CHONT
+*
++KEEP,HCOPT.
+*CMZ :  4.21/05 29/11/93  14.10.46  by  Fons Rademakers
+*-- Author :    Rene Brun   27/11/93
+      COMMON/HCOPT/ICOPT(10)
+*
+      EQUIVALENCE (ISTAF, ICOPT(1))
+*
++KEEP,HCACHE.
+*CMZ :  4.21/01 01/11/93  18.20.48  by  Fons Rademakers
+*-- Author :    Fons Rademakers   01/11/93
+      PARAMETER (IDMXNT = 100)
+      COMMON /HCACHE/ IDNOT(IDMXNT), IDTNOT
++KEEP,HCMCPM1.
+*CMZ :  4.20/10 30/09/93  08.15.34  by  Rene Brun
+*-- Author :
+       REAL BJ(NSRCMX)
++KEEP,HCMCPM2.
+*CMZ :  4.20/10 30/09/93  08.15.34  by  Rene Brun
+*-- Author :
+       DOUBLE PRECISION BJ(NSRCMX)
++KEEP,HCMCPM.
+*CMZ :  4.20/13 19/10/93  15.38.13  by  Roger Barlow, Christine Beeston
+*-- Author :    Christine Beeston   24/09/93
+ 
+C some maximum values - max number of bins and dimensions
+       INTEGER NSRCMX,NSRCMN,NOPTS
+       PARAMETER(NSRCMX=20,NSRCMN=2,NOPTS=7)
+ 
+C Numbers of monte carlo and data events, links to data, MC and weight
+C histograms, Number of mc sources, options, total number of bins.
+C normalisation constants for weight histograms
+ 
++SEQ,HCMCPM1,IF=-DOUBLE.
++SEQ,HCMCPM2,IF=DOUBLE.
+       INTEGER NDATEV,NMCEV(NSRCMX),
+     + NMCSRC,IOPT(NOPTS),NTOT
+       COMMON/HINPUTS/NDATEV,NMCEV,NMCSRC,IOPT,NTOT,BJ
+C Histogram IDs
+       INTEGER IDD,IDM(NSRCMX),IDW(NSRCMX)
+       COMMON/HMCIDS/IDD,IDM,IDW
+ 
++KEEP,HCRECV.
+*CMZ :  4.20/05 19/08/93  11.48.32  by  Rene Brun
+*-- Author :    Fons Rademakers   25/05/93
+      LOGICAL         NRECOV
+      COMMON /HCRECV/ NRECOV
+*
++KEEP,HCMINPU.
+*CMZ :  4.20/03 28/07/93  09.34.19  by  Rene Brun
+*-- Author :    Rene Brun   18/06/93
+      INTEGER NCMINP,IADINP
+      COMMON/HCMINP1/NCMINP,IADINP
+      PARAMETER (MCHINP=50)
+      CHARACTER*80 CHINPU(MCHINP)
+      COMMON/HCMINPU/CHINPU
+*
++KEEP,CZCBUF.
+*CMZ :  4.19/05 08/06/93  10.43.23  by  Rene Brun
+*-- Author :    Rene Brun   08/06/93
+      COMMON/CZCBUF/IZCBUF
+*
++KEEP,HCSAVE.
+*CMZ :  4.19/02 14/05/93  12.46.14  by  Fons Rademakers
+*-- Author :    Fons Rademakers   14/05/93
+      LOGICAL         NTSAVE
+      COMMON /HCSAVE/ NTSAVE
+*
++KEEP,CZSOCK.
+*CMZ :  4.22/04 02/06/94  08.46.59  by  Rene Brun
+*-- Author :    Fons Rademakers   06/05/93
+      INTEGER       LUNCZ,IADTCP,LBUFCZ,ISKIN,ISKOUT,IPROT
+      COMMON/CZSOCK/LUNCZ,IADTCP,LBUFCZ,ISKIN,ISKOUT,IPROT
++KEEP,CZBUFF.
+*CMZ :  4.20/03 28/07/93  10.57.50  by  Rene Brun
+*-- Author :    Fons Rademakers   06/05/93
+      CHARACTER*512 CHBUF
+      COMMON/CZBUFC/CHBUF
+*
++KEEP,HCRLF1.
+*CMZ :  4.19/00 19/04/93  10.16.13  by  Rene Brun
+*-- Author :    Rene Brun   19/04/93
+         PARAMETER (CRLF='1')
++KEEP,HCRLF2.
+*CMZ :  4.19/00 19/04/93  10.16.13  by  Rene Brun
+*-- Author :    Rene Brun   19/04/93
+         PARAMETER (CRLF=CHAR(12))
++KEEP,HCRLF.
+*CMZ :  4.20/13 21/10/93  15.01.47  by  Rene Brun
+*-- Author :    Rene Brun   19/04/93
+      CHARACTER*1 CRLF
++SEQ,HCRLF1,IF=-MSDOS,IF=-WINNT.
++SEQ,HCRLF2,IF=MSDOS,WINNT.
++KEEP,HCPIAF.
+*CMZ :  4.21/08 01/02/94  11.41.10  by  Fons Rademakers
+*-- Author :    Fons Rademakers   15/04/93
+*--- shared between HBOOK and PAW
+      PARAMETER  (MXSLPF = 32)
+      COMMON/HCPIAF/NTPIAF
+     +             ,CONNPF,SERVPF,MASTPF,SLAVPF,CLINPF,CLUTPF,LOGLPF
+     +             ,NSLAVE,NSLBAD,NSLVPF,SLINPF(MXSLPF),SLUTPF(MXSLPF)
+     +             ,NGSIZE, MYSID, SMASK, SRIN, SROUT, SVMIO, STUSER
+     +             ,STCPU, MASPID
+      COMMON/HCPIA1/SLHOPF(MXSLPF), SLHBAD(MXSLPF), PIAFRC
+*--- flag set by HGETNT if the current Ntuple is on Piaf server
+      LOGICAL NTPIAF
+*--- flag if Piaf server is connected
+      LOGICAL CONNPF
+*--- flag if this is a server (master or slave)
+      LOGICAL SERVPF
+*--- flag if this is the master server
+      LOGICAL MASTPF
+*--- flag if this is a slave server
+      LOGICAL SLAVPF
+*--- sockets between client and master server
+      INTEGER CLINPF, CLUTPF
+*--- log level of diagnostic output
+      INTEGER LOGLPF
+*--- number of active slaves and mask used by the select (PSELCT) function
+      INTEGER NSLAVE, SMASK
+*--- number of running slave servers and sockets between master and slaves
+      INTEGER NSLVPF, SLINPF, SLUTPF
+*--- hosts on which slaves are running
+      CHARACTER*16 SLHOPF
+*--- number hosts on which no slaves can be run
+      INTEGER NSLBAD
+*--- hosts on which no slaves can be run
+      CHARACTER*16 SLHBAD
+*--- current slave group view: group size and unique slave id
+      INTEGER NGSIZE, MYSID
+*--- pid of the master server (used by slave servers)
+      INTEGER MASPID
+*--- authentication record
+      CHARACTER*64 PIAFRC
+*--- IO and CPU usage of all slaves
+      REAL SRIN, SROUT, SVMIO, STUSER, STCPU
+*--- Work space
+      COMMON/HCPIAC/CHSMPF,    CHLMPF
+      CHARACTER     CHSMPF*80, CHLMPF*256
+*
++KEEP,HCK
+*CMZ :  4.19/00 26/04/93  12.34.29  by  Rene Brun
+*-- Author :
+      INTEGER   KNCX   ,KXMIN  ,KXMAX  ,KMIN1  ,KMAX1 ,KNORM  , KTIT1,
+     +          KNCY   ,KYMIN  ,KYMAX  ,KMIN2  ,KMAX2 ,KSCAL2 , KTIT2,
+     +          KNBIT  ,KNOENT ,KSTAT1 ,KNSDIR  ,KNRH ,
+     +          KCON1  ,KCON2  ,KBITS  ,KNTOT
+      PARAMETER(KNCX=3,KXMIN=4,KXMAX=5,KMIN1=7,KMAX1=8,KNORM=9,KTIT1=10,
+     +          KNCY=7,KYMIN=8,KYMAX=9,KMIN2=6,KMAX2=10,KSCAL2=11,
+     +          KTIT2=12,KNBIT=1,KNOENT=2,KSTAT1=3,KNSDIR=5,KNRH=6,
+     +          KCON1=9,KCON2=3,KBITS=1,KNTOT=2)
+*
++KEEP,HCBOOK.
+*CMZ :  4.19/01 30/04/93  17.22.15  by  Rene Brun
+*-- Author :
+      INTEGER     NWPAW,IXPAWC,IHDIV,IXHIGZ,IXKU,        LMAIN
+      REAL                                       FENC   ,      HCV
+      COMMON/PAWC/NWPAW,IXPAWC,IHDIV,IXHIGZ,IXKU,FENC(5),LMAIN,HCV(9989)
+      INTEGER   IQ        ,LQ
+      REAL            Q
+      DIMENSION IQ(2),Q(2),LQ(8000)
+      EQUIVALENCE (LQ(1),LMAIN),(IQ(1),LQ(9)),(Q(1),IQ(1))
+      INTEGER       HVERSN,IHWORK,LHBOOK,LHPLOT,LGTIT,LHWORK,
+     +LCDIR,LSDIR,LIDS,LTAB,LCID,LCONT,LSCAT,LPROX,LPROY,LSLIX,
+     +LSLIY,LBANX,LBANY,LPRX,LPRY,LFIX,LLID,LR1,LR2,LNAME,LCHAR,LINT,
+     +LREAL,LBLOK,LLBLK,LBUFM,LBUF,LTMPM,LTMP,LTMP1,LHPLIP,LHDUM,
+     +LHFIT,LFUNC,LHFCO,LHFNA,LCIDN
+      COMMON/HCBOOK/HVERSN,IHWORK,LHBOOK,LHPLOT,LGTIT,LHWORK,
+     +LCDIR,LSDIR,LIDS,LTAB,LCID,LCONT,LSCAT,LPROX,LPROY,LSLIX,
+     +LSLIY,LBANX,LBANY,LPRX,LPRY,LFIX,LLID,LR1,LR2,LNAME,LCHAR,LINT,
+     +LREAL,LBLOK,LLBLK,LBUFM,LBUF,LTMPM,LTMP,LTMP1,LHPLIP,LHDUM(9),
+     +LHFIT,LFUNC,LHFCO,LHFNA,LCIDN
+*
++SEQ,HCK
++KEEP,HCFORM
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON/HCFORM/IODIR,IOH1,IOH2,IOHN,IOCF1,IOCF2,IOCB1,IOCB2,
+     +              IOCF4,IOFIT,IONT,IOBL,IJUNK
+*
++KEEP,HCFLAG
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      INTEGER       ID    ,IDBADD,LID   ,IDLAST,IDHOLD,NBIT  ,NBITCH,
+     +       NCHAR ,NRHIST,IERR  ,NV
+      COMMON/HCFLAG/ID    ,IDBADD,LID   ,IDLAST,IDHOLD,NBIT  ,NBITCH,
+     +       NCHAR ,NRHIST,IERR  ,NV
+*
++KEEP,HCDIRE.
+*CMZ :  4.20/03 28/07/93  09.33.32  by  Rene Brun
+*-- Author :
+      PARAMETER (NLPATM=100, MXFILES=50)
+      COMMON /HCDIRN/NLCDIR,NLNDIR,NLPAT,ICDIR,NCHTOP,ICHTOP(MXFILES)
+     +              ,ICHTYP(MXFILES),ICHLUN(MXFILES)
+      CHARACTER*16   CHNDIR,    CHCDIR,    CHPAT    ,CHTOP
+      COMMON /HCDIRC/CHCDIR(NLPATM),CHNDIR(NLPATM),CHPAT(NLPATM)
+     +              ,CHTOP(NLPATM)
+      CHARACTER*80 HFNAME
+      COMMON /HCFILE/HFNAME(MXFILES)
+*
++KEEP,HCVERS
+*CMZ :  4.22/04 02/06/94  08.50.52  by  Rene Brun
+*-- Author :
+      INTEGER       INSTAL(20),IVERS(5),IDATE(8)
+      COMMON/HCVERS/INSTAL,IVERS,IDATE
+*
++KEEP,HCUNIT
+*CMZ :  4.20/00 17/06/93  13.11.59  by  Rene Brun
+*-- Author :
+      INTEGER       LOUT,LERR,LINFIT
+      COMMON/HCUNIT/LOUT,LERR,LINFIT
+*
++KEEP,HCBITS
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      INTEGER           I1,   I2,   I3,   I4,   I5,   I6,   I7,   I8,
+     +                  I9,   I10,  I11,  I12,  I13,  I14,  I15,  I16,
+     +I17,  I18,  I19,  I20,  I21,  I22,  I23,  I24,  I25,  I26,  I27,
+     +I28,  I29,  I30,  I31,  I32,  I33,  I34,  I35,  I123, I230
+      COMMON / HCBITS  / I1,   I2,   I3,   I4,   I5,   I6,   I7,   I8,
+     +                  I9,   I10,  I11,  I12,  I13,  I14,  I15,  I16,
+     +I17,  I18,  I19,  I20,  I21,  I22,  I23,  I24,  I25,  I26,  I27,
+     +I28,  I29,  I30,  I31,  I32,  I33,  I34,  I35,  I123, I230
+*
++KEEP,HCPRIN
+*CMZ :  4.22/04 02/06/94  14.29.18  by  Rene Brun
+*-- Author :
+      INTEGER       IFW   ,NW    ,NB    ,IH    ,NHT   ,ICN   ,IPONCE,
+     +       NH    ,MSTEP ,NOENT ,NOLD  ,IDOLAR,IBLANC,KBINSZ,INO   ,
+     +       KSQUEZ,NCOLMA,NCOLPA,NLINPA,       ICBLAC,ICSTAR,ICFUNC,
+     +       IDG(42),MAXBIT(30),IDENT(9)
+      REAL BIGP
+*
+      COMMON/HCPRIN/IFW   ,NW    ,NB    ,IH    ,NHT   ,ICN   ,IPONCE,
+     +       NH    ,MSTEP ,NOENT ,NOLD  ,IDOLAR,IBLANC,KBINSZ,INO   ,
+     +       KSQUEZ,NCOLMA,NCOLPA,NLINPA,BIGP  ,ICBLAC,ICSTAR,ICFUNC,
+     +       IDG   ,MAXBIT,IDENT
+*
++KEEP,HCFITF
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER(MAXOP=10)
+      COMMON/HCFITF/NOPER,LOPER(MAXOP),IFTYPE(MAXOP),NPF(MAXOP)
+*
++KEEP,HCFITR
+*CMZ :  4.22/04 02/06/94  08.47.30  by  Rene Brun
+*-- Author :
+      INTEGER       IFTRNG,IFXLOW,IFXUP,IFYLOW,IFYUP
+      COMMON/HCFITR/IFTRNG,IFXLOW,IFXUP,IFYLOW,IFYUP
+C
++KEEP,HCFIT1
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCFIT1/ NUMEP1,N3,EPS
+*
++KEEP,HCTIT
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON/HCTIT/LTIT(40)
+*
++KEEP,HCPAR0
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      REAL            PNEF,PNBF,PSEL,PFLV,PLUN,PNBX,PNCX,FNIX,FEPS
+      COMMON /HCPAR0/ PNEF,PNBF,PSEL,PFLV,PLUN,PNBX,PNCX,FNIX,FEPS
+*
++KEEP,HCPAR1
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCPAR1/ IOPT(8),ND,NP,NPMAX,NBF,NBFMAX,NEF,NCO,NCOMAX
+*
++KEEP,HCPAR2
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCPAR2/ COEFF(50),IBASFT(10,50),XMIN(10),XMAX(10),
+     +                ALIM(10),BLIM(10)
+*
++KEEP,HCPOUT
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCPOUT/ IFLAG,RSSS,R2S,SECO(50),COMIN(50),COMAX(50)
+*
++KEEP,HCFIT2
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON/HCFIT2/ENDFLG,NA,INDFLG(5),IFLFUN,NAMFUN,IDIMPN,XFUMIL(10),
+     +        NUMEP ,XMIN  ,EPSW  ,ALLCHA,BINWID,WGTMAX,YMIN,BINWIY,
+     +       NCHANX,LINEAR,IFLSF ,IFLBUF,IDER,IWEIGH,ITFUM,ISUPIM
+*
++KEEP,HCFIT3
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCFIT3/ NPOLYN,IPARAM,IDERIV,IDEROK
+*
++KEEP,HCFIT6
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCFIT6/XVAR(10),EPSIF,NUP,NFCNMH,ITPR,IHIS,IMINU,
+     +        NX,NY,NPFIT,ILICO,CHIM,IOFSET,IMAT,IBQ(14),ILXE,ILYE,
+     +        ILEY,ICSTAT,NFLRET,IDESUM
+*
++KEEP,HCFITS
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      INTEGER       NCFITS,NPFITS,NFPAR
+      REAL                              FITCHI,FITPAR    ,FITSIG
+     +             ,FITDER
+      COMMON/HCFITS/NCFITS,NPFITS,NFPAR,FITCHI,FITPAR(35),FITSIG(35)
+     +             ,FITDER(35)
+      CHARACTER*8 FITNAM
+      COMMON/HCFITN/FITNAM(35)
+*
++KEEP,HCFITD1.
+*CMZ :  4.19/00 28/04/93  11.16.52  by  Rene Brun
+*-- Author :
+      DOUBLE PRECISION FITPAD,FITFUN
++KEEP,HCFITD.
+*CMZ :  4.19/00 28/04/93  11.16.52  by  Rene Brun
+*-- Author :
++SEQ,HCFITD1,IF=DOUBLE.
+      COMMON/HCFITD/FITPAD(24),FITFUN
+*
++KEEP,HCMAIL.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      CHARACTER*128  CHMAIL
+      COMMON /HCMAIL/CHMAIL
+*
++KEEP,HCNT
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCNT/ IBIPW, IBIPB, IBYPW, ISHBIT
+*
++KEEP,HCNTPAR.
+*CMZ :  4.20/00 21/06/93  12.39.17  by  Fons Rademakers
+*-- Author :
+      INTEGER   ZBITS,  ZNDIM,  ZNOENT, ZNPRIM, ZNRZB,  ZIFCON,
+     +          ZIFNAM, ZIFCHA, ZIFINT, ZIFREA, ZNWTIT, ZITIT1,
+     +          ZNCHRZ, ZDESC,  ZLNAME, ZNAME,  ZARIND, ZRANGE, ZNADDR,
+     +          ZIBLOK, ZNBLOK, ZLCONT, ZIFBIT, ZIBANK, ZIFTMP, ZITMP,
+     +          ZID,    ZNTMP,  ZNTMP1, ZLINK
+      PARAMETER(ZBITS=1,   ZNDIM=2,   ZNOENT=3,  ZNPRIM=4,  ZLCONT=6,
+     +          ZNRZB=5,   ZIFCON=7,  ZIFNAM=4,  ZIFCHA=5,  ZIFINT=6,
+     +          ZIFREA=7,  ZNWTIT=8,  ZITIT1=9,  ZNCHRZ=13, ZIFBIT=8,
+     +          ZDESC=1,   ZLNAME=2,  ZNAME=3,   ZRANGE=4,  ZNADDR=12,
+     +          ZARIND=11, ZIBLOK=8,  ZNBLOK=10, ZIBANK=9,  ZIFTMP=11,
+     +          ZID=12,    ZITMP=10,  ZNTMP=6,   ZNTMP1=3,  ZLINK=6)
+*
++KEEP,HCNTPAW.
+*CMZ :  4.21/10 01/03/94  11.54.50  by  Rene Brun
+*-- Author :    Fons Rademakers   10/04/93
+*
+*-- ATTENTION: MAXCR4 must be 50007 in order for variables in $HCBONT to
+*--            fit into PAWCR4. When changing any of these parameters
+*--            check also $HCBONT.
+*
+      PARAMETER      (MAXCR8 = 1000, MAXCR4 = 50007, MAXC32 = 1000)
+      REAL*8          RVAR8(MAXCR8)
+      REAL            RVAR4(MAXCR4)
+      INTEGER         IVAR4(MAXCR4)
+      LOGICAL         LVAR4(MAXCR4)
+      CHARACTER*32    CVAR32(MAXC32)
+*
+      COMMON /PAWCR8/ RVAR8
+      COMMON /PAWCR4/ RVAR4
+      COMMON /PAWC32/ CVAR32
+*
+      EQUIVALENCE (IVAR4, RVAR4)
+      EQUIVALENCE (LVAR4, RVAR4)
+*
++KEEP,HNTCUR.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HNTCUR/ NTCUR
+*
++KEEP,HCSET.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      COMMON /HCSET/ IBSIZE
+*
++KEEP,HMAC1.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=60,MBITCH=6,MOUT=L"OUTPUT",HMBIGP=1.E+200)
++KEEP,HMAC2.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=32,MBITCH=8,MOUT=6,HMBIGP=1.E+60)
++KEEP,HMAC3.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=36,MBITCH=9,MOUT=2,HMBIGP=1.E+38)
++KEEP,HMAC4.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=32,MBITCH=8,MOUT=6,HMBIGP=1.E+36)
++KEEP,HMAC5.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=64,MBITCH=8,MOUT=6,HMBIGP=1.E+200)
++KEEP,HMAC6.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      PARAMETER (MBIT=32,MBITCH=8,MOUT=6,HMBIGP=1.E+30)
++KEEP,HMACHINE.
+*CMZ :  4.19/00 19/04/93  09.58.06  by  Rene Brun
+*-- Author :
++SEQ,HMAC1,IF=CDC.
++SEQ,HMAC2,IF=IBM,NORD.
++SEQ,HMAC3,IF=UNIVAC.
++SEQ,HMAC4,IF=VAX.
++SEQ,HMAC5,IF=CRAY, CONVEX, UNIX, IF=-DOUBLE.
++SEQ,HMAC6,IF=UNIX,IF=DOUBLE.
+ 
++KEEP,JBYT1.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+      JBYT (IZW,IZP,NZB) = JIBITS (IZW,IZP-1,NZB)
++KEEP,JBYT2.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+*
++KEEP,JBYT3.
+*CMZ :  4.19/00 19/04/93  09.55.52  by  Rene Brun
+*-- Author :
+*
+      JBIT (IZZW,IZZP)      = IBITS (IZZW,IZZP-1,1)
+      JBYT (IZZW,IZZP,NZZB) = IBITS (IZZW,IZZP-1,NZZB)
++KEEP,JBYT4.
+*CMZ :  4.19/00 19/04/93  09.55.52  by  Rene Brun
+*-- Author :
+*
+      JBIT (IZW,IZP)      = AND(RSHIFT(IZW,IZP-1),1)
+      JBYT (IZW,IZP,NZB) =  ISHFTR(LSHIFT(IZW,33-IZP-NZB),32-NZB)
++KEEP,JBYT.
+*CMZ :  4.21/08 14/02/94  10.53.41  by  Rene Brun
+*-- Author :
++SEQ,JBYT1,IF=VAX,ALLIANT.
++SEQ,JBYT2,IF=IBM,NORD,CRAY,CDC,UNIX, IF=-ALLIANT,IF=-MSDOS,IF=-WINNT.
++SEQ,JBYT3,IF=MSDOS,IF=NDP.
++SEQ,JBYT4,IF=MSDOS,WINNT,IF=QF2C.
+ 
++KEEP,HCQCOM.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+* Basic parameters and data for multiquadric fit.
+* VPRINT is true if verbose option selected.
+      LOGICAL VPRINT
+* NTUPLE is .TRUE. if ntuple is being processed, otherwise .FALSE.
+      LOGICAL NTUPLE
+* IMQFUN function flag: = 0, no function evaluated yet.
+*                       = 1, linear sum of multiquadrics.
+*                       = 2, exponential of linear sum of multiquadrics.
+* (Note: HQF... routines take account of this, HQD... always calculate the
+*    simple sum of multiquadrics.)
+      INTEGER IMQFUN
+* IDMQ stores current histogram no. when required.
+      INTEGER IDMQ
+* JMQ, KMQ store current multiquadric basis function nos. when required.
+      INTEGER JMQ, KMQ
+* NSIG is number of significant points.
+      INTEGER NSIG
+* NFREE is number of free parameters in the fitting (often equal to NSIG).
+      INTEGER NFREE
+* Limits and recommended values of no. of significant points.
+      INTEGER NSMIN, NSMIN1, NSMIN2, NSMIN3, NSREC1, NSREC2, NSREC3
+      PARAMETER (NSMIN1 = 5, NSMIN2 = 10, NSMIN3 = 10)
+      PARAMETER (NSREC1 = 15, NSREC2 = 50, NSREC3 = 50)
+* NSMAX its maximum no. of significant points.
+      INTEGER NSMAX
+      PARAMETER (NSMAX = 500)
+* NDIM is the number of dimensions - NDMAX is its maximum.
+      INTEGER NDIM, NDMAX
+      PARAMETER (NDMAX = 3)
+* NDIMC is dimensionality of data currently under consideration (<= NDIM).
+* NDIMWH is which of the NDIM1 dimensions are currently being considered.
+      INTEGER NDIMC, NDIMWH (NDMAX)
+* NBINS is no. of bins in each coordinate, NBTOT the total
+*   no. of bins in current histogram.
+      INTEGER NBINS (NDMAX)
+      INTEGER NX, NY, NZ, NBTOT
+      EQUIVALENCE (NX, NBINS (1)), (NY, NBINS (2)), (NZ, NBINS (3))
+* Similarly, NBINSN is no. of bins for which first significant points where
+*   found when surveying Ntuple data.
+      INTEGER NBINSN (NDMAX)
+      INTEGER NXN, NYN, NZN
+      EQUIVALENCE (NXN, NBINSN (1)), (NYN, NBINSN (2)),
+     +(NZN, NBINSN (3))
+* NNBINn is no. of bins used to bin ntuple data in n-dimensions.
+      INTEGER NNBIN1, NNBIN2, NNBIN3
+      PARAMETER (NNBIN1 = 100, NNBIN2 = 40, NNBIN3 = 40)
+* NMQEVS is no. of events (see also WMQEVS).
+      INTEGER NMQEVS
+* NMQFUL is no. of histogram bins with non-zero content.
+      INTEGER NMQFUL
+* NINTVS, NQUADS are no. of intervals and no. of gaussian quadrature points
+*   per interval for integration of multiquadric functions.
+      INTEGER NINTVS, NQUADS
+      PARAMETER (NINTVS = 50, NQUADS = 8)
+* LAREA is working space for ZEBRA link maintenance.
+* LHQUAD is pointer to parent bank in  Q in /PAWC/ in SEQ HCBOOK.
+*  (For bank structure see HQINIT header.)
+* LnH and LnV are pointers to current n-D histogram contents and variances.
+* LHQCOV is pointer to covariances.
+* LHQDER is working bank for double derivatives.
+* LHQWK1/2.. are more working banks.
+* LHQDJN is pointer to temporary bank holding function values.
+* LLAST is a dummy pointer - always last!
+      INTEGER LAREA (2), LHQUAD, L1H, L1V, L2H, L2V, L3H, L3V,
+     +LHQCOV, LHQDER, LHQWK1, LHQWK2, LHQWK3,
+     +LHQDJN, LLAST
+*
+* SIGGRD contains the gradient of the function with respect to the strengths.
+* SIGDEN the (approximate) density of the function at the significant point.
+      REAL SIGGRD (NSMAX)
+      REAL SIGDEN (NSMAX)
+* SIGV contains significant points' coordinate vectors.
+      REAL SIGV (NSMAX, NDMAX)
+      REAL SIGX (NSMAX), SIGY (NSMAX), SIGZ (NSMAX)
+      EQUIVALENCE (SIGX, SIGV), (SIGY, SIGV (1, 2)), (SIGZ, SIGV (1, 3))
+* SIGDEL contains the scale parameter Delta for each coordinate.
+      REAL SIGDEL (NSMAX)
+* SIGVMI, SIGVMA, SIGVBI, SIGVT are lower and upper limits, bin size
+*   and total range.
+      REAL SIGVMI (NDMAX), SIGVMA (NDMAX), SIGVBI (NDMAX), SIGVT (NDMAX)
+      REAL XMI, XMA, DX, DXT, YMI, YMA, DY, DYT, ZMI, ZMA, DZ, DZT
+      EQUIVALENCE (XMI, SIGVMI (1)), (XMA, SIGVMA (1))
+      EQUIVALENCE (DX,  SIGVBI (1)), (DXT, SIGVT (1))
+      EQUIVALENCE (YMI, SIGVMI (2)), (YMA, SIGVMA (2))
+      EQUIVALENCE (DY,  SIGVBI (2)), (DYT, SIGVT (2))
+      EQUIVALENCE (ZMI, SIGVMI (3)), (ZMA, SIGVMA (3))
+      EQUIVALENCE (DZ,  SIGVBI (3)), (DZT, SIGVT (3))
+* BINV is used to store current coordinates - usually bin centres, but can
+*   be edges 0. or 1.
+      REAL BINV (NDMAX)
+      REAL XBIN, YBIN, ZBIN
+      EQUIVALENCE (XBIN, BINV (1)), (YBIN, BINV (2)), (ZBIN, BINV (3))
+* VOLTOT is total "volume" and VOLBIN is "volume" of bin in current histogram.
+      REAL VOLTOT, VOLBIN
+* WMQEVS is weighted no. of events (see also NMQEVS).
+      REAL WMQEVS
+* VSCALE scales variances (only if incorrectly assigned errors suspected).
+      REAL VSCALE
+* VMEAN1, VMEAN2 are mean variance per histogram entry and its square.
+      REAL VMEAN1, VMEAN2
+* VCONST is a constant multiplying exponential of sum of multiquadrics for
+*   Poisson likelihood fitting.
+      REAL VCONST
+* SENSIT is a sensitivity parameter - normally 1 - which controls the
+*   selection of significant points.
+      REAL SENSIT
+* SLCUT is current value of cut for Laplacian significance.
+      REAL SLCUT
+* SLRMS is rms of Laplacian significance.
+      REAL SLRMS
+* SPREAD is a smoothness parameter - normally 1 - which multiplies the
+*   scale parameter (radius of curvature).
+      REAL SPREAD
+* SMALLD is a "small" value of the multiquadric parameter DELTA for edges, etc.
+*    (usually set to 1.E-6 in HQUAD, HQUADN).
+      REAL SMALLD
+* HQMIN, HQMAX, HQFMIN, HQFMAX are current minimum and maximum bin heights and
+*   function values (at bin centres).
+      REAL HQMIN, HQMAX, HQFMIN, HQFMAX
+*
+      COMMON /HCQCOM/ SIGGRD, SIGDEN, SIGV, SIGDEL,
+     + SIGVMI, SIGVMA, SIGVBI, SIGVT,
+     + BINV, VOLTOT, VOLBIN, WMQEVS, VSCALE, VMEAN1, VMEAN2,
+     + VCONST, SENSIT, SLCUT, SLRMS, SPREAD, SMALLD,
+     + HQMIN, HQMAX, HQFMIN, HQFMAX,
+     + IMQFUN, IDMQ, JMQ, KMQ,
+     + NSIG, NFREE, NSMIN, NDIM, NDIMC, NDIMWH,
+     + NBINS, NBTOT, NBINSN, NMQEVS, NMQFUL,
+     + LAREA, LHQUAD, L1H, L1V, L2H, L2V, L3H, L3V,
+     + LHQCOV, LHQDER, LHQWK1, LHQWK2, LHQWK3,
+     + LHQDJN, LLAST,
+     + VPRINT, NTUPLE
+ 
++KEEP, HCQCOR1.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+* SIGA contains the coefficients of the multiquadric basis functions.
+      REAL SIGA (NSMAX)
+      COMMON /HCQCOR/ SIGA
++KEEP, HCQCOR2.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+* SIGA contains the coefficients of the multiquadric basis functions.
+      DOUBLE PRECISION SIGA (NSMAX)
+      COMMON /HCQCOD/ SIGA
+ 
++KEEP, HCQCOR.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
++SEQ,HCQCOR1,IF=-DOUBLE.
++SEQ,HCQCOR2,IF=DOUBLE.
++KEEP,HCDIFB.
+*CMZ :  4.19/00 13/04/93  16.36.40  by  Rene Brun
+*-- Author :
+C
+C----------------------------------------------------------------------
+C
+C   HDIFFB specific common block
+C
+C----------------------------------------------------------------------
+C
+C
+C Option string: Contains all possible character options, used as input
+C                for the option decoding utility HUOPTC. This returns a
+C                1-d array of length the number of options with contents
+C                one or zero. One indicates that that option was selected.
+C                For example, HUOPTC('A','ABC',SELECTED(3)) would return
+C                (1,0,0) in SELECTED array. Likewise, 'CB' would return
+C                (0,1,1).
+C
+C                HDIFFB has 12 possible options, and the resulting 1-d
+C                array, OPTS(12) is placed in the HDIFFB common block.
+C
+C----------------------------------------------------------------------
+C
+      INTEGER NPARMS
+      PARAMETER( NPARMS = 12 )
+      CHARACTER*(NPARMS) OPTST
+      INTEGER OFLOW, UFLOW, SOPTN, COPTN, AOPTN
+      INTEGER NORMD,DEBUG,ZEROS,XUNDR,XOVER,YUNDR,YOVER
+C  - possible options string
+      PARAMETER( OPTST = 'NDOUSCAZRLTB' )
+C     - option N, don't normalize contents
+C     - option D, debugging printout
+C     - option O, overflow option
+C     - option U, underflow option
+C     - option S, statistical comparison
+C     - option C, compatibility test
+C     - option A, absolute test
+C     - option Z, skip ref bin = 0
+C     - option R, X-Axis overflow
+C     - option L, X-Axis underflow
+C     - option T, Y-Axis overflow
+C     - option B, Y-Axis underflow
+      PARAMETER( NORMD = 1 , DEBUG = 2 , OFLOW = 3, UFLOW = 4,
+     +  SOPTN = 5, COPTN = 6 , AOPTN = 7 , ZEROS = 8, XOVER = 9,
+     +  XUNDR = 10, YOVER = 11, YUNDR = 12)
+C
+C----------------------------------------------------------------------
+C    Global HDIFFB declarations
+C----------------------------------------------------------------------
+C
+      INTEGER DUMPDV,IDR,IDD,BEGINI,BEGINJ,ENDI,ENDJ
+      INTEGER OPTS(NPARMS),XSIZ
+      REAL    LAMBDA,LNBIGP,ACDIGT
+      LOGICAL TWODIM,WEIGHR,WEIGHD,PROFIL,PSDMR,PSDMD
+ 
+      COMMON/HCDIFB/TWODIM,WEIGHR,WEIGHD,PROFIL,PSDMR,PSDMD,DUMPDV,
+     +  IDR,IDD,BEGINI,BEGINJ,ENDI,ENDJ,LAMBDA,OPTS,XSIZ,LNBIGP,ACDIGT

@@ -1,0 +1,22 @@
+SRCS_F=	 jqtest.F taa1.F taaa.F tbb1.F tbb2.F tbbb.F tcc1.F \ @@\
+	tccc.F tjidle.F tjmuan.F tjmufl.F tjwsp.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(jqtest,jqtest,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(taa1,taa1,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(taaa,taaa,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tbb1,tbb1,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tbb2,tbb2,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tbbb,tbbb,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tcc1,tcc1,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tccc,tccc,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tjmuan,tjmuan,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tjmufl,tjmufl,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(tjwsp,tjwsp,'-WF,-P',NullParameter)
+#endif
+
+#if defined(CERNLIB_QMIRIX64)
+EXTRA_INCLUDES=-I$(CVSCOSRC)/packlib/zebra/test/jqtest
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

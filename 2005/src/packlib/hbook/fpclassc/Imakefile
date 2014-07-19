@@ -1,0 +1,3 @@
+SRCS_C= ifp.c ifpdcl.c ifpscl.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

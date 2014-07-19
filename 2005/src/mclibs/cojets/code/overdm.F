@@ -1,0 +1,43 @@
+*
+* $Id: overdm.F,v 1.1.1.1 1996/01/11 14:14:40 mclareni Exp $
+*
+* $Log: overdm.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:40  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE OVERDM
+C     *****************
+C-- TAKES ACTION IN DIMENSION OVERFLOW
+C-- (IF KOVER.GT.0 JUST SETS WEIGHT=0. AND EXECUTION GOES ON WITH SOME
+C--  DIAGNOSTICS FOR THE 1ST 100 OVERFLOWS -- IF KOVER.LT.0 STOPS
+C--  EXECUTION BY PRODUCING AN ARITHMETIC ERROR)
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/event.inc"
+#include "cojets/itapes.inc"
+#include "cojets/over.inc"
+C
+      DATA ICALL/0/
+C
+      ICALL=ICALL+1
+      SPYOVR=FLOAT(ICALL)
+      WEIGHT=0.
+      IF(KOVER.GT.0..AND.ICALL.LT.100) WRITE(ITLIS,5) ICALL
+5     FORMAT(/1X,21HTHIS EVENT IS IGNORED
+     1 //1X,18HEXECUTION PROCEEDS
+     2  //1X,39H(KOVER.GT.0, DIMENSION OVERFLOWS SO FAR  ,I10,1H)  )
+      IF(KOVER.GT.0.AND.ICALL.LT.100) RETURN
+C
+      WRITE(ITLIS,10)
+10    FORMAT(5(/1X,80(1H*))//
+     1 1X,'100 DIMENSION OVERFLOWS GENERATED IN THIS RUN'
+     2/1X,'JOB ABORTED'
+     3  //5(/1X,80(1H*)))
+      STOP
+      END

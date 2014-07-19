@@ -1,0 +1,40 @@
+*
+* $Id: profxedit.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: profxedit.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, profile.xedit */
+/* */
+SET SHADOW  OFF
+SET Impcmscp off
+SET CURLINe on 4
+"SET VERIFY 1 72"
+set scale off 6
+set prefix on left
+set nulls on
+set fullread on
+set cmdline top
+set case mixed ignore
+set number on
+set wrap on
+SET PF4 BEFORE SOS  TABCMDF
+/* set nulls on */
+/* Sample colour setup for 3270 PC */
+'COMMAND SET COLOR ARROW    WHITE    NONE      NOHIGH'
+'COMMAND SET COLOR CMDLINE  RED      NONE      NOHIGH'
+'COMMAND SET COLOR CURLINE  PINK     NONE        HIGH'
+'COMMAND SET COLOR FILEAREA TURQUOIS NONE      NOHIGH'
+'COMMAND SET COLOR IDLINE   GREEN    NONE      NOHIGH'
+'COMMAND SET COLOR MSGLINE  RED      NONE        HIGH'
+'COMMAND SET COLOR PENDING  PINK     NONE        HIGH'
+'COMMAND SET COLOR PREFIX   YELLOW   NONE      NOHIGH'
+'COMMAND SET COLOR SCALE    YELLOW   NONE      NOHIGH'
+'COMMAND SET COLOR SHADOW   WHITE    NONE      NOHIGH'
+'COMMAND SET COLOR STATAREA BLUE     NONE      NOHIGH'
+'COMMAND SET COLOR TABLINE  WHITE    NONE      NOHIGH'
+'COMMAND SET COLOR TOFEOF   YELLOW   NONE      NOHIGH'
+#endif

@@ -1,0 +1,5 @@
+#cvs add -kb file
+- or - 
+#cvs add -ko  file
+
+#cvs commit

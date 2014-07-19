@@ -1,0 +1,52 @@
+*
+* $Id: ufiles.F,v 1.1.1.1 1995/10/24 10:22:20 cernlib Exp $
+*
+* $Log: ufiles.F,v $
+* Revision 1.1.1.1  1995/10/24 10:22:20  cernlib
+* Geant
+*
+*
+#include "geant321/pilot.h"
+*CMZ :  3.21/02 29/03/94  15.41.36  by  S.Giani
+*-- Author :
+      SUBROUTINE UFILES
+*
+*            To open FFREAD and HBOOK files
+*
+#if defined(CERNLIB_CRAY)
+      OPEN(50,FILE='bootgen1.dat',ACCESS='DIRECT',RECL=640,
+     +        FORM='UNFORMATTED',STATUS='OLD')
+      OPEN(51,FILE='bootgen2.dat',ACCESS='DIRECT',RECL=640,
+     +        FORM='UNFORMATTED',STATUS='OLD')
+      OPEN(UNIT=4,FILE='gexam7.dat',STATUS='OLD')
+      OPEN(UNIT=34,FILE='gexam7.hist',ACCESS='DIRECT',
+     +     RECL=8192,STATUS='NEW',FORM='UNFORMATTED')
+#endif
+#if defined(CERNLIB_APOLLO)
+      OPEN(50,FILE='bootgen1.dat',ACCESS='DIRECT',RECL=320,
+     +        FORM='UNFORMATTED',STATUS='UNKNOWN')
+      OPEN(51,FILE='bootgen2.dat',ACCESS='DIRECT',RECL=320,
+     +        FORM='UNFORMATTED',STATUS='UNKNOWN')
+      OPEN(UNIT=4,FILE='gexam7.dat',STATUS='UNKNOWN')
+      OPEN(UNIT=34,FILE='gexam7.hist',ACCESS='DIRECT',
+     +     RECL=4096,STATUS='UNKNOWN')
+#endif
+#if defined(CERNLIB_VAX)
+      OPEN(50,FILE='BOOTGEN1.DAT',ACCESS='DIRECT',RECL=80,
+     +        FORM='UNFORMATTED',STATUS='UNKNOWN')
+      OPEN(51,FILE='BOOTGEN2.DAT',ACCESS='DIRECT',RECL=80,
+     +        FORM='UNFORMATTED',STATUS='UNKNOWN')
+      OPEN(UNIT=4,FILE='GEXAM7.DAT',STATUS='UNKNOWN')
+      OPEN(UNIT=34,FILE='GEXAM7.HIST',ACCESS='DIRECT',
+     +     FORM='UNFORMATTED',RECL=1024,STATUS='UNKNOWN')
+#endif
+#if defined(CERNLIB_IBM)
+      OPEN (50,RECL=320,ACCESS='DIRECT')
+      OPEN (51,RECL=320,ACCESS='DIRECT')
+      CALL VMCMS('FILEDEF  4 DISK GEXAM7 DAT',IRET)
+      CALL VMCMS('FILEDEF 34 DISK GEXAM7 HIST A6',IRET)
+      OPEN(UNIT=4,STATUS='UNKNOWN')
+      OPEN(UNIT=34,ACCESS='DIRECT',
+     +     FORM='UNFORMATTED',RECL=4096,STATUS='UNKNOWN')
+#endif
+      END

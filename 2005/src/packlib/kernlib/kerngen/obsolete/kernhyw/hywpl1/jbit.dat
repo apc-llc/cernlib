@@ -1,0 +1,25 @@
+*
+* $Id: jbit.dat,v 1.1.1.1 1996/02/15 17:52:56 mclareni Exp $
+*
+* $Log: jbit.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:56  mclareni
+* Kernlib
+*
+*
+jbit   : proc (a, la) returns (bin fixed (35));
+ 
+/* *****************************************************************
+   *                                                               *
+   * jbit(a,la)     a bin fixed(35)                                *
+   *                la numero du bit a aller prendre dans a        *
+   *                                                               *
+   ***************************************************************** */
+dcl (temp, a, la) bin fixed (35);
+          temp = 0;
+          substr (unspec (temp), 36, 1) =
+substr (unspec (a), 37-la, 1);
+          return (temp);
+     END jbit;
+#ifdef CERNLIB_TCGEN_JBIT
+#undef CERNLIB_TCGEN_JBIT
+#endif

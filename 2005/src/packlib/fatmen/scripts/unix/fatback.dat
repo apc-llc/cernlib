@@ -1,0 +1,160 @@
+*
+* $Id: fatback.dat,v 1.3 1996/04/22 06:37:57 jamie Exp $
+*
+* $Log: fatback.dat,v $
+* Revision 1.3  1996/04/22 06:37:57  jamie
+* better messages regarding actual backup
+*
+* Revision 1.2  1996/04/16 06:43:37  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+d=`date`
+echo
+echo FATBACK running at $d
+echo
+#
+#   Fix for CERNSP based fatcat server
+#
+this_host=`hostname`
+
+if [ $this_host = "sp020" ]
+   then export FMHOST=fatcat
+   echo ${0}: setting FATMEN hostname to $FMHOST
+fi
+#
+#   Delete old backup files
+#
+find /fatback0 -name *.fatfx -mtime +5 -exec rm {} \;
+find /fatback1 -name *.fatfx -mtime +5 -exec rm {} \;
+#
+d=`date`
+echo
+echo FATBACK cleanup completed at $d
+echo
+#
+#   Loop over all FATMEN servers and
+#      stop them
+#      copy the .fatrz file to the backup area, verifying it in the process
+#      restart current server
+#
+log=" "
+run=" "
+nos=" "
+b="."
+#
+#   Ensure that variables are defined...
+#
+for i in /fatmen/fm*
+do
+ typeset -u fatgrp
+ typeset -l fatman
+ fatpath=$i
+ fatgrp=`basename $i`
+ fatman=$fatgrp
+ eval $fatgrp=$fatpath;export $fatgrp
+ if [ $fatman != "fmsend" -a $fatman != "fmkeops" ]
+    then
+#
+# and stop those servers that are running...
+#
+    if [ -x ${i}/fatserv ]
+      then
+#
+# does a log file exist?
+#
+      if [ -f /fatmen/${fatgrp}.log ]
+        then
+        echo Log file exists for ${fatgrp} - looking for existing process
+        log=${log}${b}${fatgrp}
+        pid=`cat /fatmen/${fatgrp}.log | awk '{printf "%s\n",$14}'`
+        if (test $pid)
+          then
+          echo Looking for server process for $fatgrp
+          if(ps -ae  | grep -ws $pid )
+            then
+            echo FATSRV running PID = $pid
+            run=${run}${b}${fatgrp}
+            d=`date`
+            echo Stopped at $d for backup > /fatmen/${fatman}/todo/signal.stop
+#
+# Wait until the server is stopped
+#
+            while (ps -ae | grep -s $pid )
+            do
+              d=`date`
+              echo Server ${fatman} still running - sleeping at $d
+              sleep 60
+            done
+#
+# Check that output directory exists
+#
+            if [ ! -d /fatback/${fatman} ]
+            then
+              echo Creating directory /fatback/${fatman}
+              mkdir /fatback/${fatman}
+            fi
+#
+# Server is now stopped - backup RZ file
+#
+            d=`date`
+            echo Backing up /fatmen/${fatman}/cern.fatrz at ${d} >> \
+                 /fatback/fatback.log
+ 
+            /afs/cern.ch/project/fatmen/@sys/bin/fatback /fatmen/${fatman}/cern.fatrz \
+               /fatback/${fatman} >> /fatback/fatback.log
+            rc=$?
+            if [ $rc -ne 0 ]
+              then
+#
+# Send mail
+#
+              echo RC = $rc for backup of RZ file for ${fatman} | mail \
+                   -s "FATMEN backup for ${fatman}" fatcat-mgr@zfatal.cern.ch
+#
+# print in log
+#
+              echo RC = $rc for backup of RZ file for ${fatman} >> \
+                 /fatback/fatback.log
+#
+# stdout
+#
+              echo RC = $rc for backup of RZ file for ${fatman} 
+            fi
+#
+            echo Backup of /fatmen/${fatman}/cern.fatrz complete at ${d} >> \
+                 /fatback/fatback.log
+
+            echo Backup of /fatmen/${fatman}/cern.fatrz complete at ${d} 
+ 
+#
+# Touch good backup file
+#
+            touch /fatback/${fatman}/good.fatfx
+#
+# Now restart server
+#
+            d=`date`
+            echo Restarting server for ${fatman} at ${d}
+            rm /fatmen/${fatman}/todo/signal.stop
+            nohup /fatmen/${fatman}/fatserv > /fatlogs/${fatman}/fatserv.log &
+            else
+            echo No existing server found for $fatgrp
+            echo Removing old log file...
+            rm /fatmen/${fatgrp}.log
+            nos=${nos}${b}${fatgrp}
+          fi
+        fi
+      fi
+    fi
+  fi
+done
+ 
+echo
+echo Log files found for $log | tr '.' ' '
+echo Servers running for $run | tr '.' ' '
+echo No server found for $nos | tr '.' ' '

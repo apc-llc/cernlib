@@ -1,0 +1,37 @@
+DoIncludePackage(paw)
+
+SRCS_C=	chain.c pavercmd.c pavers.c
+
+#ifndef CERNLIB_WINNT
+SRCS_C := $(SRCS_C) tcpiaf.c 
+#else
+SRCS_C := $(SRCS_C) pfdummy.c 
+#endif
+
+#include "pilot.h"
+
+#if defined(CERNLIB_HPUX) ||  defined(CERNLIB_IBMRT)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Df2cFortran
+#endif
+
+#if defined(CERNLIB_BUGREPORT)
+SRCS_C := $(SRCS_C) bugrep.c
+#else
+SRCS_C := $(SRCS_C) bugrep1.c 
+#endif
+
+#ifdef CERNLIB_VAXVMS
+DEFINES:= $(DEFINES) -DCERNLIB_TGV -DTGV
+#ifndef CERNLIB_QMALPH
+CCOPTIONS:= $(CCOPTIONS) /pref\=ansi
+SpecialCObjectRule(NullParameter,tcpiaf,tcpiaf,/stand=RELAXED_ANSI89)
+#endif
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+

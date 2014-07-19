@@ -1,0 +1,44 @@
+*
+* $Id: fort_.dat,v 1.1.1.1 1996/02/15 17:53:55 mclareni Exp $
+*
+* $Log: fort_.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:55  mclareni
+* Kernlib
+*
+*
+          DEF
+#include "fort.inc"
+#include "other.inc"
+#include "optr.inc"
+#include "nnop.inc"
+#include "lftnors.inc"
+#include "diagp.inc"
+#include "germax.inc"
+#include "lspyuse.inc"
+ 
+FORT$*    PROC      0 .
+#if defined(CERNLIB_GUYFORE)||defined(CERNLIB_GUYFORT)
+XARG*     EQU       X11
+RETUR0*   EQUF      0+NNOP+FORE,X11
+RETUR1*   EQUF      1+NNOP+FORE,X11
+RETUR2*   EQUF      2+NNOP+FORE,X11
+RETUR3*   EQUF      3+NNOP+FORE,X11
+RETUR4*   EQUF      4+NNOP+FORE,X11
+RETUR5*   EQUF      5+NNOP+FORE,X11
+RETUR6*   EQUF      6+NNOP+FORE,X11
+NCHWD*    EQU       6
+NBITCH*   EQU       6
+#endif
+#if defined(CERNLIB_GUYFTN)
+XARG*     EQU       A0
+RETUR0*   EQUF      0,X11
+RETUR1*   EQUF      0,X11
+RETUR2*   EQUF      0,X11
+RETUR3*   EQUF      0,X11
+RETUR4*   EQUF      0,X11
+RETUR5*   EQUF      0,X11
+RETUR6*   EQUF      0,X11
+NCHWD*    EQU       4
+NBITCH*   EQU       9
+#endif
+ END

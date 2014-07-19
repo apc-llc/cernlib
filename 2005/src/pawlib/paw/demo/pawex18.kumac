@@ -1,0 +1,32 @@
+MACRO PAWEX18
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 18                          *
+* Ntuple SCAN and the use of simple selection criteria                   *
+**************************************************************************
+Exec ALLDEF
+hi/file 2 aptuple.hbook
+opt grid
+opt stat
+set stat 110
+ALIAS/CREATE DIVEP 5
+ALIAS/CREATE NATFR 7
+cd //PAWC
+NT/SCAN //LUN2/10 nation=NATFR.and.division=DIVEP  _
+10 1 5 age service children grade step
+hi/create/1d 200 'Number of years at CERN' 35 0. 35.
+max 200 250
+set ndvx 507
+set htyp 233
+Nt/pl //LUN2/10.Service ! -200
+ATITLE 'Years at CERN' 'Number of staff'
+set htyp 344
+Nt/pl //LUN2/10.Service nation=NATFR -200 ! ! S
+set htyp 144
+Nt/pl //LUN2/10.Service _
+division=DIVEP.and.nation=NATFR -200 ! ! S
+close 2
+set htyp 0
+hi/de 0
+zone
+RETURN
+

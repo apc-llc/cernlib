@@ -1,0 +1,39 @@
+SRCS_C= getacct.c getconfent.c log.c netreq.c serror.c socket.c \ @@\
+	sysreqf.c trace.c xdr.c
+
+#ifndef CERNLIB_VAXVMS
+SRCS_C:= $(SRCS_C) sysreqc.c
+#endif
+
+#ifdef CERNLIB_UNIX
+EXTRA_INCLUDES=-I. -I$(CVSCOSRC)$(CURRENT_DIR)
+#endif
+
+#ifdef CERNLIB_SOLARIS
+EXTRA_DEFINES = -DSOLARIS
+#endif
+
+#ifdef CERNLIB_SGI
+EXTRA_DEFINES = -DIRIX5
+#endif
+
+#ifdef CERNLIB_LINUX
+EXTRA_DEFINES = -DLINUX
+#endif
+
+#ifdef CERNLIB_VAXVMS
+EXTRA_INCLUDES=-I[]
+DEFINES:= $(DEFINES) -DCOMPILE_NOPREFIX -DTGV
+CCOPTIONS:= $(CCOPTIONS) /stan\=vaxc/pref\=ansi
+#ifndef CERNLIB_QMALPH
+DEFINES:= $(DEFINES) -DDECC
+#endif
+#endif
+
+#if defined(CERNLIB_HPUX) || defined(CERNLIB_LINUX)
+/*  Cancel the default ansi compilation */
+CCOPTIONS=
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

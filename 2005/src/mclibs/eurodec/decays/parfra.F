@@ -1,0 +1,110 @@
+*
+* $Id: parfra.F,v 1.1.1.1 1996/03/08 16:58:53 mclareni Exp $
+*
+* $Log: parfra.F,v $
+* Revision 1.1.1.1  1996/03/08 16:58:53  mclareni
+* Eurodec
+*
+*
+#include "eurodec/pilot.h"
+      SUBROUTINE PARFRA(Q0,NPART,NTPNT,IADCUT)
+C.----------------------------------------------------------------------
+C.
+C.    FRAGMENT PARTONS 1 TO NPART IN COMMON /HADGEN/:
+C.    - FORWARD PARTON CASCADE,
+C.    - HADRONIZATION: F&F* FRAGMENTATION AND RECOMBINATION,
+C.    - Q0     < 0, BOOST PARTONS TO PARTON CMS FRAME,
+C.    - IADCUT < 0, NO ENERGY MOMENTUM ADJUSTMENT.
+C.    LAST UPDATE: 10/04/89
+C.
+C.----------------------------------------------------------------------
+#include "eurodec/hadgen.inc"
+#include "eurodec/result.inc"
+      DIMENSION PBOOST(4),BET(3)
+      NTEIL0=NTPNT
+      IF (Q0.LT.0.) THEN
+C--
+C--   DETERMINE BOOST VECTOR AND CMS ENERGY OF PARTONIC SYSTEM
+        IBOOST=1
+        SUMM=0.
+        DO 10 I=1,4
+   10   PBOOST(I)=0.
+        DO 20 I=1,NPART
+          SUMM=SUMM+AHM(I)
+          DO 20 J=1,4
+   20   PBOOST(J)=PBOOST(J)-PHA(J,I)
+        PBOOST(4)=-PBOOST(4)
+C--
+C--   CHECK CMS ENERGY
+        Q0=PBOOST(4)**2-PBOOST(1)**2-PBOOST(2)**2-PBOOST(3)**2
+        IF (Q0.LE.SUMM**2) CALL ERRORD(44,'JETS',Q0)
+        Q0=SQRT(Q0)
+C--
+C--   BOOST PARTONS TO THEIR CMS FRAME...
+        DO 30 J=1,3
+   30   BET(J)=PBOOST(J)/Q0
+        GAM=PBOOST(4)/Q0
+        DO 50 I=1,NPART
+          PB=BET(1)*PHA(1,I)+BET(2)*PHA(2,I)+BET(3)*PHA(3,I)
+          DO 40 J=1,3
+   40     PHA(J,I)=PHA(J,I)+BET(J)*(PHA(4,I)+PB/(GAM+1.))
+          PHA(4,I)=GAM*PHA(4,I)+PB
+   50   PHA(5,I)=SQRT(PHA(1,I)**2+PHA(2,I)**2+PHA(3,I)**2)
+      ELSE
+C--
+C--   ALREADY IN CMS FRAME...
+        IBOOST=0
+      ENDIF
+C--
+C--   FORWARD PARTON SHOWER
+      CALL FINSHO(1,NPART)
+C--
+C--   SPLIT GLUONS: G ---> Q QBAR
+      NSTART=NPART
+      DO 60 I=1,NSTART
+        IF (IABS(IH(I)).EQ.9) THEN
+          NTP1=NTPNT+1
+          CALL GJETFR(I,NPART,NTPNT)
+C--
+C--   GLUON SPLITTING HISTORY
+          IOR=10000*(IORIGT(IPP(I))/10000)+IPP(I)
+          IDCAYT(IPP(I))=NTP1*10000+NTPNT
+          IPP(I)=NTP1
+          IORIGT(NTP1)=IOR
+          IDCAYT(NTP1)=0
+          IPP(NPART)=NTPNT
+          IORIGT(NTPNT)=IOR
+          IDCAYT(NTPNT)=0
+        ENDIF
+   60 CONTINUE
+C--
+C--   FRAGMENT RESULTING PARTONS (QUARKS/DIQUARKS)
+      DO 80 I=1,NPART
+        NTP1=NTPNT+1
+        CALL QJETFR(I,NTPNT)
+C--
+C--   RESERVE POSITION IN /RESULT/ FOR SOFT PARTICLE
+        NTPNT=NTPNT+1
+        IOR=10000*(IORIGT(IPP(I))/10000)+IPP(I)
+        IPP(I)=IPP(I)*10000+NTPNT
+        DO 70 J=NTP1,NTPNT
+          IORIGT(J)=IOR
+   70   IDCAYT(J)=0
+   80 IDCAYT(IPP(I)/10000)=NTP1*10000+NTPNT
+C--
+C--   COLLECT 'SOFT' PARTONS AND HADRONIZE
+      CALL CLRSTK(1,NPART)
+C--
+C--   ENERGY/MOMENTUM ADJUSTMENT
+      IF (IADCUT.GE.0) CALL ADJUST(Q0,NTEIL0+1,NTPNT,IADCUT)
+      IF (IBOOST.EQ.1) THEN
+C--
+C--   BOOST PARTONS/PARTICLES BACK TO THEIR LAB FRAME
+        DO 100 I=NTEIL0+1,NTPNT
+          PB=-BET(1)*PTEIL(1,I)-BET(2)*PTEIL(2,I)-BET(3)*PTEIL(3,I)
+          DO 90 J=1,3
+   90     PTEIL(J,I)=PTEIL(J,I)-BET(J)*(PTEIL(4,I)+PB/(GAM+1.))
+  100   PTEIL(4,I)=GAM*PTEIL(4,I)+PB
+      ENDIF
+      RETURN
+      END

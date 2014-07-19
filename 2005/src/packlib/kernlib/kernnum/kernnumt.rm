@@ -1,0 +1,67 @@
+#!/bin/csh
+
+rm INSTALL Makefile* boot TITLE* config* inhibit* pilot*
+
+mv _kernchk kernnumt
+mv dkernchk history
+
+# move pilot files from */README to kernnumt/*.h
+mv machinetype/README kernnumt/machinetype.h
+mv numchk/README kernnumt/numchk.h
+mv numap/README kernnumt/numap.h
+mv numap1c/README kernnumt/numap1c.h
+mv numde/README kernnumt/numde.h
+mv numde1c/README kernnumt/numde1c.h
+mv numln/README kernnumt/numln.h
+mv numln1c/README kernnumt/numln1c.h
+mv numms/README kernnumt/numms.h
+mv numms1c/README kernnumt/numms1c.h
+mv skernchk/README kernnumt/skernchk.h
+
+mkdir obsolete
+mkdir obsolete/kernnumt
+mv numcd/README obsolete/kernnumt/numcd.h
+mv numcd1c/README obsolete/kernnumt/numcd1c.h
+mv numcr/README obsolete/kernnumt/numcr.h
+mv numcr1c/README obsolete/kernnumt/numcr1c.h
+mv numcv/README obsolete/kernnumt/numcv.h
+mv numcv1c/README obsolete/kernnumt/numcv1c.h
+mv numnd/README obsolete/kernnumt/numnd.h
+mv numnd1c/README obsolete/kernnumt/numnd1c.h
+mv numuc/README obsolete/kernnumt/numuc.h
+mv numuc1c/README obsolete/kernnumt/numuc1c.h
+mv numib/README obsolete/kernnumt/numib.h
+mv numib1c/README obsolete/kernnumt/numib1c.h
+mv numib2c/README obsolete/kernnumt/numib2c.h
+
+rm -r machinetype skernchk numchk
+rm -r numap* numcd* numcr* numcv* numde* numib* numln* numms* numnd* numuc*
+
+rm */Makefile* */README
+
+mkdir obsolete/numchk1 obsolete/numchk2 obsolete/numchk4
+mv numchk1/g100ch.F obsolete/numchk1
+mv numchk2/c204ch.F obsolete/numchk2
+mv numchk2/c300*.F obsolete/numchk2
+mv numchk2/d1*.F obsolete/numchk2
+mv numchk2/d209*.F obsolete/numchk2
+mv numchk4/c3*.F obsolete/numchk4
+
+cd numchk0
+update kernnumt
+cd ../numchk1
+update kernnumt
+cd ../numchk2
+update kernnumt
+cd ../numchk3
+update kernnumt
+cd ../numchk4
+update kernnumt
+cd ..
+
+mv numchk0/*.inc kernnumt
+#
+# merge typseed.inc in sysdat.inc
+# don't put checks on sysdat since it is used many times within one test file
+#
+# fix triads so code will compile

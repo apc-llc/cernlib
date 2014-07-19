@@ -1,0 +1,61 @@
+*
+* $Id: usage.doc,v 1.1.1.1 1996/01/11 14:15:01 mclareni Exp $
+*
+* $Log: usage.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:01  mclareni
+* Cojets
+*
+*
+[3] GENERALITIES ON USAGE
+
+      Two distinct input/output (I/O) interfaces are available for COJETS:
+the original, conventional one and an ISAJET type one. For brevity, they
+will be referred to as IOCON and IOISA.
+
+      IOCON is the original COJETS I/O interface. It is meant to be flexible
+and can be easily adapted to practically any kind of environment. The user
+must supply a main program, which steers the event generation. After each
+event is generated, control is given to a user supplied routine where the
+event parameters stored in the output common blocks can be accessed. The user
+is free to make the event analysis on line, or to store the events on tape.
+He is completely free to organize the user routines as he prefers. This
+interface is backward compatible with previous versions of COJETS, apart
+from marginal modifications, [4]. See section [7] for a detailed introduction
+to IOCON.
+
+      IOISA parallels as much as possible the I/O user interface adopted
+by the Monte Carlo event generation program ISAJET, by F.E. Paige and
+S.D. Protopopescu. A complete identity is not possible because of the
+substantial differences between the algorithmic approaches of the two
+programs. Input to the program is from data cards, and output is on tape.
+The user is supposed to read the tape in order to analyse the generated
+events. This interface is meant to facilitate users accustomed to ISAJET
+and to make it easier to have comparisons between the results of the two
+programs. See section [11] for a detailed introduction to IOISA.
+
+      The structures of output common blocks for the two interfaces are
+somewhat different. Therefore it would not be straightforward to adapt
+event analysis routines developed for one interface to the other interface.
+
+      The external particle identity codes are the same for both interfaces.
+They are those of ISAJET 6.00. Also the particle decay table has been
+taken from ISAJET 6.00. New options for it are available to handle
+experimentally unknown decay modes. See section [16] for details about the
+particle and decay table. With IOCON also the original COJETS particle
+codes are available in output, with due extension to the baryons. (They are
+used internally, to provide efficient storage of particle parameters.)
+
+      COJETS is maintained with the PATCHY code management system. The
+appropriate FORTRAN codes for usage with the two interfaces are obtained
+by means of suitable pilot patches, [5].
+
+      A few external routines are needed for COJETS to run, like e.g. the
+random number generator. They are all part of the CERN Program Library.
+If the latter is not available directions about how to substitute them
+can be found in [6].
+
+      Backward compatibility is assured by the IOCON interface. Details
+are given in [4].
+
+
+

@@ -1,0 +1,20 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(photos202)
+
+LIBDIRS= code
+
+SUBDIRS= $(LIBDIRS) test
+
+TopOfPackage(photos202)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(photos202,code)
+
+InstallLibrary(photos202,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+

@@ -1,0 +1,36 @@
+MACRO PAWEX20
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 20                          *
+* The use of Ntuple Cuts                                                 *
+**************************************************************************
+Exec ALLDEF
+hi/file 2 aptuple.hbook
+Ntuple/cut $1 MOD(int(FLAG),2).EQ.0
+Ntuple/cut $2 MOD(int(FLAG),4)>1
+1d 20 'Male/female and resident/non-resident Staff' 13 1 14
+opt grid
+set grid 1003
+opt stat
+SET STAT 10
+set xtic 0.0001
+opt bar
+igset barw 0.4
+igset baro 0.1
+max 20 600
+LABELS 1 13 AG DD DG EF EP FI LEP PE PS SPS ST TH TIS
+set NDVX 13.15
+set NDVY -506
+Ntuple/plot 10.division ! -20
+set htyp 244
+Ntuple/plot 10.division $2 -20 ! ! s
+igset baro 0.5
+set htyp 145
+Ntuple/plot 10.division $1 -20 ! ! s
+set htyp 154
+Ntuple/plot 10.division $1.and.$2 -20 ! ! s
+ATITLE 'Division' 'Number of staff'
+close 2
+set htyp 0
+hi/de 0
+RETURN
+

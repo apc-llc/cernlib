@@ -1,0 +1,20 @@
+*
+* $Id: rfracld.dat,v 1.1.1.1 1996/03/06 10:47:20 mclareni Exp $
+*
+* $Log: rfracld.dat,v $
+* Revision 1.1.1.1  1996/03/06 10:47:20  mclareni
+* Zebra
+*
+*
+#if !defined(CERNLIB_DCLTABLES)
+MODULE RFRA_CLD
+#endif
+define verb RFRA
+#if defined(CERNLIB_DCLTABLES)
+       image "CERN_ROOT:[EXE]RFRA"
+#endif
+              parameter       P1,LABEL=FIN,PROMPT="FA_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)
+              parameter       P2,LABEL=FOUT,PROMPT="RZ_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)
+              qualifier       RELATIVE

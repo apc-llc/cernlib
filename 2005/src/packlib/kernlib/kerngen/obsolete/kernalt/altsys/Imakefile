@@ -1,0 +1,10 @@
+SRCS_F= \ @@\
+	 datime.F datimh.F intrac.F timed.F timex.F
+
+SRCS_C= \ @@\
+	 signalf.c
+
+SRCS_S= \ @@\
+	 jumpxn.s qnexte.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

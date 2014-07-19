@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 datime.F intrac.F iuforw.F kerngt.F locb.F locf.F ublow.F ubunch.F \ @@\
+	 uctoh.F uctoh1.F uh1toc.F uhtoc.F uoptc.F vxinvb.F vxinvc.F \ @@\
+	 xinb.F xinbs.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,63 @@
+*
+* $Id: fatflags,v 1.1.1.1 1996/03/07 15:17:35 mclareni Exp $
+*
+* $Log: fatflags,v $
+* Revision 1.1.1.1  1996/03/07 15:17:35  mclareni
+* Fatmen
+*
+*
+* EXPLANATION OF SOME OF THE PATCHY FLAGS
+* This directory was created from fatmen.car patch fatflags
+*    To activate 'STRONG TYPING' for patchy sequences
+#ifndef CERNLIB_TYPE
+#define CERNLIB_TYPE
+#endif
+*     For systems running the HEPVM Tape Management System (TMS)
+#ifndef CERNLIB_TMS
+#define CERNLIB_TMS
+#endif
+* Use defaults for tapes unknown to TMS
+#ifndef CERNLIB_TMSTEST
+#define CERNLIB_TMSTEST
+#endif
+*  For systems supporting VID prefices  (FRCPN11)
+#ifndef CERNLIB_PREFIX
+#define CERNLIB_PREFIX
+#endif
+*    For systems without the QVOL command (FRCPN11)
+#ifndef CERNLIB_QVID
+#define CERNLIB_QVID
+#endif
+*   To activate HEPVM specific code (SETUP, STAGE etc.) (default)
+#ifndef CERNLIB_HEPVM
+#define CERNLIB_HEPVM
+#endif
+*   To force tape access via SETUP
+#ifndef CERNLIB_SETUP
+#define CERNLIB_SETUP
+#endif
+*   To force tape access via STAGE
+#ifndef CERNLIB_STAGE
+#define CERNLIB_STAGE
+#endif
+*     To activate the SQL code (only in server)
+#ifndef CERNLIB_SQL
+#define CERNLIB_SQL
+#endif
+* If you are running VMBATCH from Systems Center
+#ifndef CERNLIB_VMBATCH
+#define CERNLIB_VMBATCH
+#endif
+*  If you are running VMTAPE  from Systems Center
+#ifndef CERNLIB_VMTAPE
+#define CERNLIB_VMTAPE
+#endif
+*   If user tapes are catalogue in the VMTAPE TMC
+#ifndef CERNLIB_VMTMC
+#define CERNLIB_VMTMC
+#endif
+#if (defined(CERNLIB_CERN))&&(defined(CERNLIB_IBMVM))
+#ifndef CERNLIB_CERNVM
+#define CERNLIB_CERNVM
+#endif
+#endif

@@ -1,0 +1,81 @@
+*
+* $Id: helpintro.dat,v 1.1.1.1 1996/02/15 17:47:36 mclareni Exp $
+*
+* $Log: helpintro.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:36  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umon_int.helpinfo */
+.cm CAT:INFO
+.cm NAM:UMON_INTRO
+.cm EXP: Introduction to UMON, a server for monitoring program usage
+.cm DAT: 88.11.11
+.cm A/R: Bernd Pollermann
+.cm KEY: INTRODUCTION STATISTICS LOG LOGGING FREQUENCY
+.cm KEY: PROGRAM-USAGE USAGE MONITOR MONITORING UMON U-MON U-MONITOR
+.cm KEY: SERVICE SERVICE-MACHINE SERVER UMON-INTRO
+.cm KEY: MONITOR-EXEC EXEC-USAGE
+.cm END:
+If you are the author (or responsible) of programs/execs you might want
+to know whether your programs are being used and how. UMON is a service
+machine which can supply such information via "usage monitors".
+ 
+The following help file gives you an introduction to UMON.
+ 
+WHAT CAN A MONITOR DO FOR YOU?
+==============================
+ 
+A monitor can note down on a "log-sheet"
+ 
+  - when a program/exec was used,
+  - by whom and
+  - with which parameters.
+ 
+By analyzing the file produced by the monitor you can determine with what
+frequency your program/exec is being used and whether it is being used the
+way it was meant to be used.
+ 
+WHICH PROGRAMS CAN BE MONITORED?
+================================
+ 
+Any program which can execute the CP-command 'SMSG' can be monitored.
+ 
+This means that at CERN any REXX exec, XEDIT macro, ASSEMBLER or FORTRAN
+program can be monitored. The same is true for all programs calling a program
+written in the above mentionned languages.
+ 
+IS MONITORING DONE CONTINUOUSLY?
+================================
+ 
+Almost.
+ 
+However, to allow implementation of new features UMON can be taken down on
+Thursdays for one hour maximum (19.00-20.00). During this time monitoring is
+not possible.
+ 
+HOW TO START?
+=================
+ 
+ - Choose one of your existing minidisks or create (and FORMAT) a new one.
+ - Execute the command 'DIRM MDISK' and
+     . choose 'RR' as access mode (ensures read-only access on your side)
+     . give it a WRITE password (enables your monitor to write on it)
+ - MAIL the WRITE password and the name you want to give to YOUR monitor to
+   BERND@CERNVM
+ 
+We will then create the monitor for you and let you know about it. Once your
+monitor exists you can  ACTIVATE and BLOCK it, MODIFY and KILL it with the
+help of UMON commands. These commands also allow you to deal with the  "log-
+sheets". The UMON commands are described in the (FINDable) help file
+UMON_CMDS.
+ 
+Attention: Programs to be monitored must contain a call to 'LOGUSAGE'. For more
+           details consult the (FINDable help file) LOGUSAGE.
+ 
+ 
+ 
+For any further questions, Please contact me by mail (BERND@CERNVM) or
+phone (ext. 2407).
+#endif

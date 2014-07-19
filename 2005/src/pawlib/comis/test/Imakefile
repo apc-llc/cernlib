@@ -1,0 +1,13 @@
+SRCS_F=	 comist.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(comist,comist.o,$(PACKAGE_LIB),$(PACKAGE_LIB),pawlib graflib packlib mathlib)
+
+TestTarget(comist,NullParameter,comist.input)
+
+comist.input: comist.dat
+	CopyFile($<,$@)
+
+clean::
+	RemoveFile(comist.input)

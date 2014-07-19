@@ -1,0 +1,83 @@
+*
+* $Id: v138.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v138.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.38  920726  7.30
+C
+C  Global changes:
+C  ----------------
+C- replace IBMPC flag by MSDOS.
+C  add flag IPSC
+C  add patch CGEN for COMMON block definitions
+C  warning: COMMON clash between RIWIAD & DIVON4 (ANSWER)
+C           Possible problem when generating shareable libraries
+C  Add dummies to all new entries when a given routine is not available
+C           on a computer; this typically happens for:
+C             -   32-bit versions in 32-bit machines
+C             -  128-bit versions on 64-bit machines
+C
+C  Routine changes:
+C  ----------------
+C  B102 ASINH    New
+C  C202 RMULLZ   New
+C  C209 CPOLYZ   New
+C  C210 NZERFZ   New
+C  C300 ERF      Reissued
+C  C301 FREQ     Reissued
+C  C302 GAMMA    Reissued
+C  C303 GAMMF    New
+C  C309 CCLBES   Correct passing of arguments to C309R4
+C  C310 ALGAMA   Reissued
+C  C311 LEGFN    Pass a REAL argument to NIC311
+C  C315 RRIZET   New
+C  C316 RPSIPG   New
+C  C318 ELFUN    Reissued
+C  C320 CELFUN   Reissued
+C  C321 CGPLG    Use N002, add dummies when not available
+C  C328 CWHITM   Use N002, add dummies when not available
+C  C335 CWERF    Simplify definition of function type
+C  C346 RELI1    New
+C  C347 RELI1C   New
+C  C348 CELINT   New
+C  C349 RTHETA   New
+C  D107 RGQUAD   New
+C  D111 GPINDP   Transform DO-loop  350 into a GOTO
+C  D113 CGAUSS   Simplify definition of function type
+C  D115 CHEBQU   Transform DO-loop 1150 into a GOTO
+C  D151 DIVON4   DVNBKD: save local variable INITL
+C  D203 RKNYS    New
+C  D601 RFRDH1   New
+C  E209 SPLIN3   Transform DO-loop 1160 into a GOTO
+C  E401 ECTRAD   Rename internal entry name BIND to E401BD
+C  I303 RDWORD   Moved to KERNLIB
+C  J530 BINSIZ   Moved to KERNLIB
+C  M214 CVTVAX   Moved to KERNLIB
+C  M216 GETWI    Moved to KERNLIB
+C  M218 CVTCDC   Moved to KERNLIB
+C  M231 CVTIB    Moved to KERNLIB
+C  M232 CVTND    Moved to KERNLIB
+C  M233 TRTCH    Moved to KERNLIB
+C  M416 UBLOW1   Moved to KERNLIB
+C  M429 NUMBIT   Moved to KERNLIB
+C  M437 GETBIT   Moved to KERNLIB
+C  M438 BTMOVE   Moved to KERNLIB
+C  M439 GETBYT   Moved to KERNLIB
+C  N002 MTLSET   New
+C  V105 NRAN     Terminate Vax MACRO with .END
+C  V106 RN32     Terminate Vax MACRO with .END
+C  V130 RAN3D    Save IBUF,RBUF - R.Jones/CERN
+C  V202 PERMU    merging of V201+V202+V203
+C  V301 UCOPY    merging of V301+V303
+C  V304 IUCOMP   merging of V304+V305
+C  V700 RVNSPC   New
+C  W505 FOWL     Moved out of GENLIB as MC source
+C  W515 GENBOD   Moved out of GENLIB as MC source
+C  Y201 IUCHAN   merging of Y201+Y202+Y203
+C  Z009 CALDAT   Moved to KERNLIB
+C  Z034 WHICH    Moved to KERNLIB
+C
+C

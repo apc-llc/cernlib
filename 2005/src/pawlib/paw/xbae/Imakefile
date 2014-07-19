@@ -1,0 +1,11 @@
+DoIncludePackage(paw)
+#include "pilot.h"
+
+#if defined(CERNLIB_MOTIF)
+SRCS_C=	caption.c cell.c clip.c matrix.c version.c
+#endif
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+

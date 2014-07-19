@@ -1,0 +1,21 @@
+SRCS_C=	piafc.c piafl.c pstage.c
+
+SRCS_F=	piafs.F debug.F hplopt.F igq.F ipmid.F pacsel.F pant3d.F \ @@\
+	pchsnd.F plog_vms.F pnwork.F psbads.F pscast.F \ @@\
+	pscbuf.F psdumm.F pselct.F psexec.F pskuip.F pskupn.F pslave.F \ @@\
+	pslog.F psloop.F pslvio.F psmgrp.F pspar.F pspaw.F psplot.F \ @@\
+	pspush.F psrzin.F pstate.F hplfr3.F igcolm.F trimfn.F
+
+#define IHaveCDF
+
+SRCS_CDF= pawcdf_piaf.cdf
+
+#if defined(CERNLIB_HPUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+AllTarget($(OBJS))
+
+CernlibFortranProgramTarget(piafserv,piafs.o $(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),pawlib graflib/X11 packlib mathlib kernlib)
+
+NormalProgramTarget(piafront,piafront.o,NullParameter,NullParameter,NullParameter)

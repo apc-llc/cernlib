@@ -1,0 +1,18 @@
+*
+* $Id: v305.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v305.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.05  900421 04.00
+C-  New patches/flags
+C     *KERNCHK:  Pilot steering patch
+C     NUMDPRNT:  Flag to generate diagnostics
+C
+C-  Modifications
+C   >                      Editorial changes to testing of error messages
+C   > P=NUMCHK0 ,D=STAMP.  Use DATIME,DATIMH on available machines
+C   > P=NUMCHK3 ,D=CHECK3. Rename FLUSH to KFLUSH to avoid clash in UNIX
+C

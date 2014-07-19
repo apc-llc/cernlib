@@ -1,0 +1,28 @@
+*
+* $Id: v168.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v168.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.68  920715  9.00
+C
+C- The machine flags have been removed from some routines to help
+C    users who would like to implement the standard Fortran version.
+C    Although they will compile they are not guaranteed to work
+C    on the older systems (e.g. epdefu may not work on VM).
+C    The common epvxun has been included everywhere for epdefu but
+C    also may not be used in this version.
+C
+C-  P=EPIO  ,D=EPBLIN   : In random access mode treat read errors as
+C                         end of file.
+C-  P=EPIO  ,D=EPDACR   : Remove machine flags.
+C                         Status word 33 set to 1 but only used by
+C                         standard Fortran version.
+C-  P=EPIO  ,D=EPDEFU   : Remove machine flags.
+C-  P=EPIO  ,D=EPINIT   : Return if epinit has already been called.
+C                         Reset EPVXUN for EPDEFU
+C-  P=UTIL  ,D=SFRASC   : Replace character*1 with logical*1.
+C-  P=UTIL  ,D=STOASC   : Replace character*1 with logical*1.
+C

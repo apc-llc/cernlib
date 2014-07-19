@@ -1,0 +1,53 @@
+*
+* $Id: v165.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v165.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.65   900510 02.45
+C-  Standard Fortran version with flag STF77 in patches EPIO,UTIL,PTEST1
+C   This is a very preliminary version and will change.
+C
+C-  To aid maintenance, the test patches HLESS, HSPAN, ULENG have been
+C   removed and the code inserted inline in EPOUTL and EPBOUT with the
+C   same flags.
+C
+C-  To aid maintenance, the VAXS code has been grouped together under
+C   the patch P=SVAXS. See installation cradles in P=TZBOOK.
+C
+C-  Remove call to VMCMS in P=PTEST4,D=RATEST. OPEN is enough on IBM
+C
+C-  DIMENSION IHEAD(*) in EPFHDR,EPOUTL IF=-F4.
+C
+C-  New patches/flags:
+C     SEPIO:   Source patch
+C     FEPIO:   Flags  patch
+C     DEPIO:   Documentation patch (originally in P=HISTORY + P=INFORM)
+C              segmenting version updates in decks
+C     SVAXS:   Source patch for Vax ("Special code")
+C
+C-  Reorganization of the pam structure
+C   > Rename P=TAPECOPY to P=SUNIVAC, absorbing P=UNIASM.
+C   > Rename P=CCVX     to P=SCONVEX.
+C   > Rename P=NORDASSL to P=SNORD  .
+C   > Rename P=CRAYASSL to P=SCRAY  .
+C   > Rename P=VAXMACR  to P=SVAX   .
+C   > Rename P=UTIL   ,D=BTSWAPIBV to P=UTIL ,D=BTSWAPIV.
+C   > Rename P=UTIL   ,D=BTSWAPIBN to P=UTIL ,D=BTSWAPIB.
+C   > Rename P=UTIL   ,D=BTSWAPCDC to P=UTIL ,D=BTSWAPCD.
+C   > Move   P=SCRAY  ,D=BTSWAPCRA to P=UTIL ,D=BTSWAPCR.
+C   > Move   P=VAXMACR,D=BTSWAP    to P=UTIL ,D=BTSWAPVX.
+C   > Rename P=UTIL   ,D=W16MOVIB  to P=UTIL ,D=W16MOVAP.
+C   > Move   P=VAXMACR,D=W16MOV    to P=UTIL ,D=W16MOVVX.
+C   > Move   P=VAXMACR,D=W16MOV    to P=UTIL ,D=W16MOVVX.
+C   > Move   P=SNORD  ,D=W16MOVN5  to P=UTIL ,D=W16MOVN5.
+C   > Move   P=IBMASSL             to P=UTIL ,D=W16MOVIB,IF=IBM,IBMMVS.
+C   > Move   P=EPIO   ,D=CLEARD    to P=SVAXS,D=CLEARD.
+C   > Move   P=EPIO   ,D=TRNLOG    to P=SVAXS,D=TRNLOG.
+C   > Move   P=VAXMACR,D=VAXIBM    to P=SVAXS,D=VAXIBM.
+C   > Move   P=VAXMTFOR,D=MTFORMAT to P=SVAXS,D=MTFORMAT.
+C   > Move   P=VAXMTFOR,D=TAPEFORM to P=SVAXS,D=TAPEFORM.
+C   > Move   P=VAXMTFOR,D=TAPEHELP to P=DEPIO,D=TAPEHELP.
+C

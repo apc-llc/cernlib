@@ -1,0 +1,15 @@
+*
+* $Id: v4_16,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_16,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.16/00 24/07/92  08.20.42  by  Rene Brun
+*-- Author :    Rene Brun   24/07/92
+*
+*::>          VERSION  4.16/00   920724  8.20
+*
+*       New routine HLNEXT to scan the content of a HBOOK, RZ directory
+*

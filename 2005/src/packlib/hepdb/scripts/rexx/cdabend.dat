@@ -1,0 +1,21 @@
+*
+* $Id: cdabend.dat,v 1.1.1.1 1996/02/28 16:23:59 mclareni Exp $
+*
+* $Log: cdabend.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:59  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, CDABEND.EXEC */
+/*-------------------------------------------------------------*/
+/*                                                             */
+/*                        C D A B E N D                        */
+/*                                                             */
+/*-------------------------------------------------------------*/
+'ID (STACK'
+Pull user . node .
+if fexist(HEPDB MAILFILE A3) then 'ERASE HEPDB MAILFILE A3'
+'EXECIO 1 DISKW HEPDB MAILFILE A3 (STRING 'user node
+'EXEC MAIL HEPDBMAN (NOEDIT NOLOG FILE HEPDB MAILFILE SUBJECT CDSERV abend'
+#endif

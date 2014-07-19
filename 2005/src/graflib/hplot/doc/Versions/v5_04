@@ -1,0 +1,337 @@
+*
+* $Id: v5_04,v 1.1.1.1 1996/01/19 10:50:14 mclareni Exp $
+*
+* $Log: v5_04,v $
+* Revision 1.1.1.1  1996/01/19 10:50:14  mclareni
+* Hplot
+*
+*
+*CMZ :          27/08/91  18.30.03  by  Unknown
+*-- Author :
+*
+*::>          VERSION  5.04/14   890510 16.26
+*
+*
+*       Minors changes in HPLSYM
+*       New HPLCON compatible with option SAME
+*       Changes in HPLOPT to inquire the OPT value
+*       Options DATE and TIME inplemented in HPLSUR HPLCON and HPLEGO
+*       Option FIT and SET FIT introduced (changes in HPLOPT, HPLSET
+*          and SEQ HPL1 where 2 variables IFIT and LOFIT have been added)
+*       New routine HPLFIT (Now dummy)
+*       Minor bug corrected in HPLS (in case of scatter plot)
+*       New version of the routine HPLSTA usable in case of histogram
+*          udating and zone
+*       CFON introduced, implies mods in:
+*           HPLSET, HPLOPT, HPLCOM, HPLDAT, HPLFIL, HPLKEY and HPLSTA
+*       Bug corrected in the routine HPLOT in case of ID=0 and option STAT
+*
+*::>          VERSION  5.04/13   890222 15.48
+*
+*
+*       In case of OPT DATE and SAME th date is drawn 1 time only
+*       The seconds are not drawn in OPT DATE
+*       The STAT box in drawn in Fill area hollow (cf Falco)
+*       The Statistics (in case of option U) are erased with IBCOL
+*       The Statistics boxes are drawn according with the number of zones
+*
+*::>          VERSION  5.04/12   890124 16.06
+*
+*       New version of HPLSUR (HPLSU2 is modified)
+*       New routine HPLTOC.
+*       New option 'A' in HPLOT to suppress axis drawing
+*       Bug corrected in HPLEND
+*       BWID, FWID, PWID, HWID, FTYP, FCOL and GRID introduced in HPLSET.
+*       MZNEED is called in HPLH.
+*       Mods in HPLNT
+*       The boxes around the histograms are drawn in the histogram coordinates
+*       New routine HPLABL
+*       New usage of NDVX and NDVY
+*       Modifications in HPLS (scatter plots): Polymarkers are now buffered
+*       HPLOPT call IGZSET('G') if option='NZFL' or '*'
+*       Mod in HPLH (remove test on precision)
+*       The new version of the HIGZ COMMON HIATT is now in HPLOT
+*       New options: DATE and FILE
+*       New setting commands: SET FILE, SET DATE and SET STAT
+*       In case of option Update, HPLSTA work in hard text font
+*       New options 'BOX' and 'COL' in HPLOT (2d Histograms)
+*       Scatter plot, Surface and Lego are drawn with HCOL
+*
+*             Version 5.03 (09/09/88)
+*
+*       Routine HPLNT: COMMON/PAWIDN/ added
+*       Mods in HPLSTA (NTWIN reset)
+*         IQUEST(11) returns NTWIN
+*         RQUEST(21:24) return XWMINI..YWMAXI
+*       HPLNT changed to use HGN
+*       PRINT from HPLEND has been removed.
+*       HTYP has now priority on HBLACK.
+*       HBLACK not recognized anymore
+*       HIGZ routine HIATT introduced in HPLCDES
+*       CHOPT activated (options * and P) for scatter-plots
+*       IN HPLOPT old format (29.7,21.) changed to (20.,20.)
+*       Array IFONT changed to IHFONT (clash with HIATT).
+*       In routines HPLTIT and HPLAX, NTWIN is reset to its initial value
+*       New option ZFL1 to retain only one HIGZ picture in memory.
+*       New option 'E' supported by routine HPLOT.
+*       New routine HPLER called by HPLONE for option 'E'
+*       HPLER draws error bars with the current marker
+*       HPLSWN sets NTHIST=NTWIN when LOSAME is true.
+*       Option GRID/NGRI introduced in HPLOPT
+*
+*    31/03
+*    - HPLCAP,HPLCOL,HPLGIV,HPLINE,HPLKEY,HPLWIR not yet implemented.
+*    - New version of HPLSET (SET SHOW)
+*    - New version of HPLOPT (OPT SHOW and OPT *)
+*
+*    01/04
+*    - New version of HPLSET (SET NDVX et SET NDVY)
+*
+*    02/04
+*    - Bug correction : reinitialisation of line type and hach type.
+*    - Axis divisions set to 510 by default
+*
+*    03/04
+*    - Logarithmic scale in Y implemented.
+*      Possibility of makink histogram with logarithmic scale in X
+*      not yet implemented.
+*
+*    13/04
+*    - LOCATOR with both logarithmic and linear scales is now possible.
+*
+*    14/04
+*    - New version of HPLERR and HPLSYM but there is normally no change
+*      for the user.
+*
+*    21/04
+*    - HPLWIR is now implemented with the new option W (but does not
+*      works yet)
+*
+*    27/04
+*    - Bug correction of the option "SAME" in HPLOT calling sequence.
+*
+*    28/04
+*    - Line type of 12, 13, 14, 15 (equivalent to HPLDRW in HIGZ) are
+*      used for histograms.
+*
+*    30/04
+*    _ Suppression du facteur FACT et des appels a HFACT.
+*    - "SET DMOD 0" ==> incrementation automatique du type de ligne
+*      si superposition de plusieurs histo avec l'option "SAME" (si un
+*     seul histo : trait plein)
+*    - Contour des histo "fill area" inchange si superposition avec
+*      l'option "SAME".
+*
+*    04/05
+*    - New version of HPLOPT with the option TIC/NTIC to have (or not)
+*      automatic cross-wires drawned after each plot.
+*    - New version of HPLSET with the option SET BTYP to set the fill
+*      area index for boxes (HPLBOX), SET HCOL and SET BCOL to set
+*      the color for histograms and boxes.
+*
+*    05/05
+*    - New convention for HTYP and BTYP (HPLSET) :
+*            HTYP = 100 * FAIS + FASI for histogram
+*            BTYP = 100 * FAIS + FASI for boxes
+*      (FAIS and FASI are GKS attributes for area)
+*    - Errors gestion with messages : a call to HBUG instead of HBUFF
+*      is done.
+*
+*     06/05
+*    - HPLCAP is now implemented (But there is a problem for WTYP :
+*      conflict between screen and metafile).
+*
+*     07/05
+*    - New version of HPLOPT with the option STA/NSTA to print statistics
+*      information on plots (with the new HPLOT routine HPLSTA).
+*    - New version of HPLSET with the options SET PTYP to set the fill
+*      area index for the whole picture boxe,and SET PCOL to set the color.
+*
+*     15/05
+*    - HPLGIV is now implemented
+*    - OPT ACH is no more in use but automatically set when SET HTYP VAL
+*      with VAL not equal to 0.
+*
+*     18/05
+*    - For histogram 1D axes are drawned at the end (bug with HCOL)
+*    - HPLAX is now implemented
+*
+*     19/05
+*    - New version of HPLSET with SET GFON, VFON, TFON, LFON with the following
+*      convention:
+*         XFON = 10 * FONT + PREC (X = G (Global title), V (axis Value),
+*         T (Text and Title), L (axis Labels))
+*    - HPLARC, HPLKEY are now implemented
+*
+*     20/05
+*    - Axis for LEGO plots are available. Now you can SET XTIC and YTIC with
+*      negative values to put tick marks on the other side (idem for XLAB and
+*      YLAB).
+*    - HPLSIZ(XSIZE,YSIZE,CHOPT) is implemented : according the flag CHOPT
+*      it sets or returns the picture size in cm.
+*
+*     23/05
+*    - Mods in HPLINT (If Workstation is zero RETURN)
+*    - New convention for HTYP, BTYP or PTYP (HPLSET) :
+*            XTYP = 1000 * (FAIS+1) + FASI (X=H, B or P)
+*      FAIS and FASI are GKS attributes for area:
+*      if FAIS=0 : empty   (XTYP=1000)
+*      if FAIS=1 : solid   (XTYP=2000)
+*      if FAIS=2 : hached  (XTYP=3000+FASI)
+*      if FAIS=3 : pattern (XTYP=4000+FASI)
+*      For GKSGRAL XTYP is negative.
+*
+*     03/06
+*    - KICASE must now be type CHARACTER
+*    - KICASE may be given as 'C' for 'CM'
+*    - Mods in routine HPLOT
+*
+*     15/06
+*    - HPLINE and HPLFUN are now implemented
+*    - HPLPRO implemented
+*
+*     18/06
+*    - New option PTO/NPTO in HPLOPT
+*    - New counter for HPLOT pictures
+*
+*     23/06
+*    - PATCH,HPLEXAM contains 7 examples
+*    - Bug corrected in HPLSYM.
+*    - Routine HPLWIN calls new official routine HPLZON.
+*
+*     02/07
+*    - Plots for non-equidistant bins are now available.
+*
+*     03/07
+*    - HPLOPT(CHOPTN,N)  with CHARACTER*(*) CHOPTN(1), instead of
+*      HPLOPT(KIOPTN,N).
+*    - OPT P (or *P, **P, ***P) is now available
+*    - New option in HPLSET: SET FPGN to set the first page number
+*
+*     07/07
+*    - New version of HPLNT.
+*    - Bugs when drawing scatter-plots with option 'CHA' or tables
+*      are corrected.
+*    - Axes for contours are available, and for ITYP=2 in HPLCON all
+*      lines have the same line type (continuous line).
+*
+*     17/07
+*    - Logarithmic scale in Z is available for lego plots and surfaces
+*      (by using new option LOGZ/LINZ in HPLOPT, or when a call to HLOGAR
+*       in HBOOK)
+*
+*     30/07
+*    - New option "SET HMAX" (HMAX is in percent and must be .LE. 1) which
+*      allows the user to set the scale beetwen axis graduation and maximum of
+*      histogram (default is 0.9). This option is particularly usefull when
+*      superposition of several histograms.
+*    - New options in HPLOT ("L", "K", "U", "+", etc...) because a Zebra bank
+*      has been introduced (only if HPLH called), which memorised the
+*      description of the histogram when option "L" ("Live") is selected
+*      (usefull for future option "U" ("Update) ).
+*
+*     10/08
+*    - new version of HPLC: new scale for histograms and functions with
+*      negative value (for instance SINUS which is symetric / Y=0 ).
+*
+*     14/08
+*    - new DECKS HPLIVE,HPLRDW,HPLHUP for option "Update".
+*
+*     19/08
+*    - options 'U', 'K', 'L', '+' in HPLOT are available (one option at a time).
+*
+*     21/09
+*    - New options OPT DVXI (resp. DVXR) and DVYI (resp. DVYR) (DiVisions are
+*      Integer (resp. Real) for X or Y axis). If NDVX or NDVY have negative
+*      value (in HPLSET) no optimisation is done for axis labelling.
+*    - If TSIZ is set to 0 in HPLSET automatic calculation is performed for
+*      character size of histogram title in order that it is not truncated.
+*      (TSIZ 0 is taken by default).
+*    - Correction in HPLEND.
+*    - Bug correction in HPLSOF (coordinates in cm).
+*    - Optimisation in order to have less CALL to ISELNT
+*      (NTWIN=current transformation, NTHIST=histogram transformation
+*      and 1=transformation cm).
+*
+*     07/10
+*    - Option "L" is no more in use in HPLOT (option "K" replaces it). "K" is
+*      necessary only if windowing option is selected.
+*
+*     12/10
+*    - New version of HPLF to support new HBOOK functionality
+*
+*     16/10
+*    - New PATCH,HPLEXAM
+*
+*     26/10
+*    - New options 'L', 'C', 'F', '*', 'M' and 'B' in HPLOT.
+*
+*     30/10
+*    - Bug correction about "line type" with option "SAME" (simplifications
+*      in the code with ILTYP ).
+*    - Bug correction in HPLSET : PASS and CSHI are now correctly reinitialised
+*      with SET *.
+*    - New option SET BARO and SET BARW (instead of IGSET) in HPLSET.
+*
+*      4/11
+*    - New routine HPLZOM(ID,CHOPT,NCMIN,NCMAX)
+*
+*     12/11
+*    - XSIZ = 20. and YSIZ = 20. are now the default values in HPLSET.
+*
+*     30/11
+*    - New routine HPLCHA
+*
+*     08/12
+*    - Bug corrected in HPLPRO
+*
+*     10/12
+*    - Changes in HPLZON to reset number of normalisation transformation
+*    - Changes for HCOL,PCOL,BCOL
+*
+*     04/01/88
+*    - Bug corrected in HPLF when called from HPLZOM
+*
+*     25/01/88
+*    - Bug corrected in HPLFUN
+*
+*     03/02/88
+*    - Routines HPLEND,HPLPTO,HPLOC and HPLZON modified
+*
+*     04/02/88
+*    - Changes in HPLC,HPLONE when YMINI.GE.YMAXI
+*
+*     05/02/88
+*    - Changes in HPLEND.
+*      Can now give HTYP,PTYP,BTYP like GKS
+*      Code cleanup
+*
+*     08/02/88
+*    - Changes in HPLS
+*
+*     18/02/88
+*    - Bug corrected in HPLNT
+*
+*     01/03/88
+*    - Bug corrected in HPLNT
+*    - Bug corrected in HPLF
+*
+*     14/03/88
+*    - CALL RZIN replaced by CALL HRZIN in HPLNT
+*    - Bug corrected in HPLH for option 'P'
+*
+*     15/03/88
+*    - Bug corrected in HPLINT
+*
+*     16/04/88
+*    - Marker for scatter-plots can be changed if option P given
+*
+*     05/05/88
+*    - Routine HPLUSR called with CHARACTER variable instead of Hollerith
+*
+*     10/05/88
+*    - Correction in HPLS when plotting tables
+*
+*     17/05/88
+*    - Changes for IHCOL,IHTYP in several routines
+*

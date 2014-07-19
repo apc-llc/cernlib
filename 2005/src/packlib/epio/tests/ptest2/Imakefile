@@ -1,0 +1,21 @@
+SRCS_F= errex.F main.F rwr123.F test2.F wr11.F
+
+/* Handle Objects ourselves */
+OBJS_CO= errex.o rwr123.o wr11.o
+OBJS_16= main.o test2.o
+OBJS_32= main_32.o test2_32.o
+
+DefinePackageLibrary(NullParameter)
+
+SpecialFortranObjectRule(main_32,main,NullParameter,-DCERNLIB_PH32BIT)
+SpecialFortranObjectRule(test2_32,test2,NullParameter,-DCERNLIB_PH32BIT)
+
+CernlibFortranProgramTarget(ptest2_16,$(OBJS_16) $(OBJS_CO),$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+CernlibFortranProgramTarget(ptest2_32,$(OBJS_32) $(OBJS_CO),$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+TestTarget(ptest2_32,NullParameter,NullParameter)
+
+TestTarget(ptest2_16,NullParameter,NullParameter)
+
+

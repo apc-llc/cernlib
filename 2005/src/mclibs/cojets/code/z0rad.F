@@ -1,0 +1,167 @@
+*
+* $Id: z0rad.F,v 1.1.1.1 1996/01/11 14:14:44 mclareni Exp $
+*
+* $Log: z0rad.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:44  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE Z0RAD(W,WL,N)
+C     ************************
+C------------------------------------------------------------------
+C-- CALCULATES RADIATIVE DECAYS OF Z0 (--> L-L+  +  PHOTONS)
+C-- (ALSO USABLE FOR DRELL-YAN VIRTUAL PHOTON DECAY)
+C-- MULTIPLE PHOTON EMISSION IS INCLUDED
+C-- CONVERSION OF PHOTONS INTO CHARGED LEPTON PAIRS IS NEGLECTED
+C-- W = Z0 MASS IN GEV (OR DRELL-YAN VIRTUAL PHOTON MASS)
+C-- WL = LEPTON MASS IN GEV
+C-- N = TOTAL NUMBER OF LEPTONS + PHOTONS IN DECAY
+C--
+C-- FINAL STATE PARTICLE MOMENTA STORED IN ARRAY P(I,J) BELONGING
+C-- TO COMMON BLOCK /JET/ (K( ,2) ARRAY IN /JET/ LEFT UNUSED).
+C-- P(I,J) CONTAINS PARAMETERS OF PARTICLE I (I=1,N) -- I = 1 AND N
+C-- CORRESPOND TO THE TWO LEPTONS. (ALL PARAMETERS IN GEV UNITS).
+C-- THE Z AXIS CORRESPONDS TO THE DIRECTION OPPOSITE TO THE
+C-- MOMENTUM OF PARTICLE WITH I = 1.
+C--     P(I,1) = X MOMENTUM COMPONENT
+C--     P(I,2) = Y    "         "
+C--     P(I,3) = Z    "         "
+C--     P(I,4) = ENERGY
+C--     P(I,5) = MASS
+C--
+C-- A FINITE PHOTON MASS IS USED AS CUTOFF -- ITS VALUE IS CONTAINED
+C-- IN THE VARIABLE GM, AND CAN BE ARBITRARILY CHANGED BY THE USER
+C-- (COMPATIBLY WITH MACHINE PRECISION AND STORAGE SPACE)
+C------------------------------------------------------------------
+C
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#if defined(CERNLIB_SINGLE)
+      REAL CJRN,P,PJTOT,W,WL
+#endif
+#if defined(CERNLIB_DOUBLE)
+      DOUBLE PRECISION CJRN,P,PJTOT,W,WL
+#endif
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+#include "cojets/zcom.inc"
+C
+      DATA ICALL/0/
+C
+      IF(ICALL.GT.0) GO TO 10
+      PIG=4.*ATAN(1.)
+      ALPHA=1./137.03604
+      GM=5.E-6
+      GMSQ=GM**2
+10    CONTINUE
+C
+      ICALL=ICALL+1
+      AL=WL
+      ALSQ=AL**2
+      QSQX=(W-AL)**2
+      S=W**2
+      EPSI=(GM/W)**2
+      QSQMN=(AL+GM)**2
+      QSQOPC=2.*QSQMN
+      TAU=1./(ALPHA/PIG*(-LOG(EPSI)-3./4.+EPSI-EPSI**2/4.))
+11    CONTINUE
+C-- DEVELOP 1ST LEG -- INITIAL KINEMATICS
+      CALL ZPSQZ(QSQX,PSQ,Z,ZC)
+C-- CORRECT TO REPRODUCE O(ALPHA) RESULTS FOR SINGLE EMISSIONS
+      IF(PSQ.LE.QSQMN) GO TO 14
+      XL2=1.-PSQ/S
+      XL1=1.-ZC*XL2
+      RATIO=(XL1**2+XL2**2)/(1.+Z**2)
+      IF(CJRN(0.).GT.RATIO) GO TO 11
+14    CONTINUE
+C
+      AM=SQRT(PSQ)
+      PCMSQ=(S-(AM+AL)**2)*(S-(AM-AL)**2)/(4.*S)
+      IF(PCMSQ.LT.0.) GO TO 11
+      PCM=SQRT(PCMSQ)
+      E1=SQRT(PSQ+PCMSQ)
+      E2=SQRT(ALSQ+PCMSQ)
+      IF(PSQ.LE.QSQMN) GO TO 12
+      PPLUS=E1+PCM
+      QSQOP=S*(1.-XL1)
+      IF(QSQOP.LE.QSQOPC) GO TO 11
+12    CONTINUE
+C-- BOOK IDLE LEPTON
+      N=1
+      P(N,1)=0.
+      P(N,2)=0.
+      P(N,3)=-PCM
+      P(N,4)=E2
+      P(N,5)=AL
+      IF(PSQ.GT.QSQMN) GO TO 100
+C-- NO RADIATION -- BOOK 2ND LEPTON
+      N=N+1
+      P(N,1)=0.
+      P(N,2)=0.
+      P(N,3)=PCM
+      P(N,4)=E1
+      P(N,5)=AL
+      RETURN
+100   CONTINUE
+C-- INITIAL SETTING FOR EMISSION LOOP
+      PX=0.
+      PY=0.
+      X=1.
+200   CONTINUE
+C-- BRANCHING LOOP
+      XP1SQ=Z*(PSQ-GMSQ/ZC)
+      CALL ZPSQZ(XP1SQ,P1SQ,Z1,ZC1)
+      PTRSQ=Z*ZC*PSQ-ZC*P1SQ-Z*GMSQ
+      IF(PTRSQ.LT.0.) GO TO 11
+      PTR=SQRT(PTRSQ)
+      PHI=2.*PIG*CJRN(0.)
+      PTRX=PTR*COS(PHI)
+      PTRY=PTR*SIN(PHI)
+C-- BOOK PHOTON
+      PGX=ZC*PX-PTRX
+      PGY=ZC*PY-PTRY
+      XG=X*ZC
+      PP=PPLUS*XG
+      PTGSQ=PGX**2+PGY**2
+      IF(N.EQ.1) PM=(Z*PSQ-P1SQ+GMSQ)/PPLUS
+      IF(N.GT.1) PM=(PTGSQ+GMSQ)/PP
+      PGZ=(PP-PM)/2.
+      EG=SQRT(PTGSQ+PGZ**2)
+      N=N+1
+      IF(N.GT.MAXJTP) GO TO 500
+      P(N,1)=PGX
+      P(N,2)=PGY
+      P(N,3)=PGZ
+      P(N,4)=EG
+      P(N,5)=0.
+C-- GO TO NEXT STEP OR EXIT
+      PSQ=P1SQ
+      X=X*Z
+      PX=Z*PX+PTRX
+      PY=Z*PY+PTRY
+      IF(PSQ.LE.QSQMN) GO TO 300
+      Z=Z1
+      ZC=ZC1
+      GO TO 200
+300   CONTINUE
+C-- STOP CASCADE -- BOOK 2ND LEPTON
+      N=N+1
+      IF(N.GT.MAXJTP) GO TO 500
+      PP=PPLUS*X
+      PM=(PX**2+PY**2+ALSQ)/PP
+      PZ=(PP-PM)/2.
+      E=(PP+PM)/2.
+      P(N,1)=PX
+      P(N,2)=PY
+      P(N,3)=PZ
+      P(N,4)=E
+      P(N,5)=AL
+      RETURN
+C-- ABNORMAL ENDING
+500   WRITE(ITLIS,501) MAXJTP,ICALL
+501   FORMAT(1H1,36HNUMBER OF PARTICLES IN Z0RAD EXCEEDS  , I5
+     1//1X,10HCALL NO. =  ,I10
+     3//1X,'INCREASE MAXJTP'
+     5)
+      STOP
+      END

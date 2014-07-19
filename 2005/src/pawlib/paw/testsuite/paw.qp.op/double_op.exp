@@ -1,0 +1,175 @@
+#
+#  double_op.exp  --
+#
+#  Original: 22-Feb-1996 15:10
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+
+#
+# Scalar -
+#
+
+expr_test	double	1	0.-dval				1.79769313486232d+308
+expr_test	double	2	0.-dval				1.23450000000000d+04
+expr_test	double	3	0.-dval				2.22507385850720d-308
+expr_test	double	4	0.-dval				0.00000000000000d+00
+expr_test	double	5	0.-dval				-2.22507385850720d-308
+expr_test	double	6	0.-dval				-1.23450000000000d+04
+expr_test	double	7	0.-dval				-1.79769313486232d+308
+
+expr_test	double	1	-1.79769313486232d+308-dval	0.00000000000000d+00
+expr_test	double	2	-1.23450000000000d+04-dval	0.00000000000000d+00
+expr_test	double	3	-2.22507385850720150d-308-dval	0.00000000000000d+00
+expr_test	double	4	0.-dval				0.00000000000000d+00
+expr_test	double	5	2.22507385850720150d-308-dval	0.00000000000000d+00
+expr_test	double	6	1.23450000000000d+04-dval	0.00000000000000d+00
+expr_test	double	7	1.79769313486232d+308-dval	0.00000000000000d+00
+
+expr_test	double	1	5000.-d2			1.00000000000000d+03
+
+#
+# Scalar +
+#
+
+expr_test	double	1	0.+dval				-1.79769313486232d+308
+expr_test	double	2	0.+dval				-1.23450000000000d+04
+expr_test	double	3	0.+dval				-2.22507385850720d-308
+expr_test	double	4	0.+dval				0.00000000000000d+00
+expr_test	double	5	0.+dval				2.22507385850720d-308
+expr_test	double	6	0.+dval				1.23450000000000d+04
+expr_test	double	7	0.+dval				1.79769313486232d+308
+
+expr_test	double	1	1.79769313486232d+308+dval	0.00000000000000d+00
+expr_test	double	2	1.23450000000000d+04+dval	0.00000000000000d+00
+expr_test	double	3	2.22507385850720150d-308+dval	0.00000000000000d+00
+expr_test	double	4	0.+dval				0.00000000000000d+00
+expr_test	double	5	-2.22507385850720150d-308+dval	0.00000000000000d+00
+expr_test	double	6	-1.23450000000000d+04+dval	0.00000000000000d+00
+expr_test	double	7	-1.79769313486232d+308+dval	0.00000000000000d+00
+
+expr_test	int	1	d2+1500				5.50000000000000d+03
+
+
+#
+# Scalar *
+#
+
+expr_test	double	1	1.*dval			-1.79769313486232d+308
+expr_test	double	2	1.*dval			-1.23450000000000d+04
+expr_test	double	3	1.*dval			-2.22507385850720d-308
+expr_test	double	4	1.*dval			0.00000000000000d+00
+expr_test	double	5	1.*dval			2.22507385850720d-308
+expr_test	double	6	1.*dval			1.23450000000000d+04
+expr_test	double	7	1.*dval			1.79769313486232d+308
+
+expr_test	double	1	0.*dval			0.00000000000000d+00
+expr_test	double	2	0.*dval			0.00000000000000d+00
+expr_test	double	3	0.*dval			0.00000000000000d+00
+expr_test	double	4	0.*dval			0.00000000000000d+00
+expr_test	double	5	0.*dval			0.00000000000000d+00
+expr_test	double	6	0.*dval			0.00000000000000d+00
+expr_test	double	7	0.*dval			0.00000000000000d+00
+
+expr_test	double	1	d2*1500			6.00000000000000d+06
+
+
+#
+# Scalar /
+#
+
+expr_test	double	1	dval/1.			-1.79769313486232d+308
+expr_test	double	2	dval/1.			-1.23450000000000d+04
+expr_test	double	3	dval/1.			-2.22507385850720d-308
+expr_test	double	4	dval/1.			0.00000000000000d+00
+expr_test	double	5	dval/1.			2.22507385850720d-308
+expr_test	double	6	dval/1.			1.23450000000000d+04
+expr_test	double	7	dval/1.			1.79769313486232d+308
+
+expr_test	double	1	0./dval			0.00000000000000d+00
+expr_test	double	2	0./dval			0.00000000000000d+00
+expr_test	double	3	0./dval			0.00000000000000d+00
+expr_test	double	4	0./dval			{Divide by zero}
+expr_test	double	5	0./dval			0.00000000000000d+00
+expr_test	double	6	0./dval			0.00000000000000d+00
+expr_test	double	7	0./dval			0.00000000000000d+00
+
+expr_test	double	1	-1.79769313486232d+308/dval	1.00000000000000d+00
+expr_test	double	2	-1.23450000000000d+04/dval	1.00000000000000d+00
+expr_test	double	3	-2.22507385850720150d-308/dval	1.00000000000000d+00
+expr_test	double	4	0./dval				{Divide by zero}
+expr_test	double	5	2.22507385850720150d-308/dval	1.00000000000000d+00
+expr_test	double	6	1.23450000000000d+04/dval	1.00000000000000d+00
+expr_test	double	7	1.79769313486232d+308/dval	1.00000000000000d+00
+
+expr_test	double	1	d2/10				4.00000000000000d+02
+
+
+#
+# Scalar unary -
+#
+
+expr_test	double	1	-dval			1.79769313486232d+308
+expr_test	double	2	-dval			1.23450000000000d+04
+expr_test	double	3	-dval			2.22507385850720d-308
+expr_test	double	4	-dval			0.00000000000000d+00
+expr_test	double	5	-dval			-2.22507385850720d-308
+expr_test	double	6	-dval			-1.23450000000000d+04
+expr_test	double	7	-dval			-1.79769313486232d+308
+
+
+#
+# Scalar min
+#
+
+expr_test	double	1	min(dval,123.0d0)	-1.79769313486232d+308
+expr_test	double	2	min(dval,123.0d0)	-1.23450000000000d+04
+expr_test	double	3	min(dval,123.0d0)	-2.22507385850720d-308
+expr_test	double	4	min(dval,123.0d0)	0.00000000000000d+00
+expr_test	double	5	min(dval,123.0d0)	2.22507385850720d-308
+expr_test	double	6	min(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	7	min(dval,123.0d0)	1.23000000000000d+02
+
+expr_test	double	1	min(dval,dval)	-1.79769313486232d+308
+expr_test	double	2	min(dval,dval)	-1.23450000000000d+04
+expr_test	double	3	min(dval,dval)	-2.22507385850720d-308
+expr_test	double	4	min(dval,dval)	0.00000000000000d+00
+
+
+#
+# Scalar max
+#
+
+expr_test	double	1	max(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	2	max(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	3	max(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	4	max(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	5	max(dval,123.0d0)	1.23000000000000d+02
+expr_test	double	6	max(dval,123.0d0)	1.23450000000000d+04
+expr_test	double	7	max(dval,123.0d0)	1.79769313486232d+308
+
+expr_test	double	1	max(dval,dval)	-1.79769313486232d+308
+expr_test	double	2	max(dval,dval)	-1.23450000000000d+04
+expr_test	double	3	max(dval,dval)	-2.22507385850720d-308
+expr_test	double	4	max(dval,dval)	0.00000000000000d+00
+
+
+#
+# Cleanup after tests
+#
+
+paw_cmd { close 4 }

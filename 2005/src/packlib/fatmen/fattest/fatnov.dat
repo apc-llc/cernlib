@@ -1,0 +1,58 @@
+*
+* $Id: fatnov.dat,v 1.1.1.1 1996/03/07 15:18:02 mclareni Exp $
+*
+* $Log: fatnov.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:18:02  mclareni
+* Fatmen
+*
+*
+*                                                                      *
+*   Test of novice interface                                           *
+************************************************************************
+      COMMON /QUEST/IQUEST(100)
+      PARAMETER (LKEYFA=10)
+      DIMENSION KEY(LKEYFA)
+      EXTERNAL  UROUT
+*
+*     Define logical units to access the catalogue (LUNRZ)
+*     and for writing updates to the server        (LUNFZ)
+*
+      LUNRZ = 1
+      LUNFZ = 2
+*
+*     Initialise FATMEN. ZEBRA will be initialised if required
+*
+      CALL FMSTRT(LUNRZ,LUNFZ,'//CLASSICAL/MUSIC',IRC)
+*
+*     Create a few directories
+*
+      CALL FMKDIR('//CLASSICAL/MUSIC/BERLIOZ',IRC)
+*
+*     If IQUEST(1) is set, then the directory already existed
+*     This is just information and not really novice level...
+*
+      CALL FMKDIR('//CLASSICAL/MUSIC/FAURE',IRC)
+*
+*     Now, scan directory structure. This will look for
+*     all directories down 3 levels. For each matching
+*     directory, the routine UROUT will be called.
+*
+      CALL FMSCAN('//CLASSICAL/MUSIC/*',3,UROUT,IRC)
+ 
+      END
+ 
+      SUBROUTINE UROUT(PATH,IRC)
+      CHARACTER*(*) PATH
+      COMMON/QUEST/IQUEST(100)
+*
+*     If we set a non-zero return code, then FMSCAN will stop
+*     the directory scan
+*
+      IRC = 0
+      PRINT *,'<< ',PATH(1:LENOCC(PATH))
+      PRINT *,'Number of subdirectories = ',IQUEST(12)
+      PRINT *,'Number of elements in initial path name = ',IQUEST(10)
+      PRINT *,'Number of elements in path name = ',IQUEST(13)
+      PRINT *,'Number of keys = ',IQUEST(14)
+      PRINT *,'Number of elements per key = ',IQUEST(15)
+      END

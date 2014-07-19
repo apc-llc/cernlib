@@ -1,0 +1,4 @@
+SRCS_C= \ @@\
+	 systems.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

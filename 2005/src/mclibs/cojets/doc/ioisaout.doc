@@ -1,0 +1,564 @@
+*
+* $Id: ioisaout.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: ioisaout.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[14] OUTPUT TAPE FOR IOISA
+
+      The output tape or file contains three types of records. Three
+beginning records are written by a call to WRBEG before generating a set
+of events; an event record is written by a call to WRTAPE for each
+event; and an end record is written for each run by a call to WREND.
+These subroutines load the common blocks described below into a single
+COMMON/ZEVEL/ZEVEL(1024) and write it out when it is full. A subroutine
+RDTAPE, described in the next section, inverts this process so that the
+user can analyse the event. The user may select the events to be written
+on tape appropriately setting the logical function EDIT.
+
+      ZEVEL is written out to TAPEj by a call to BUFOUT. ZEVEL is written
+out with a standard FORTRAN unformatted write.
+
+      The user can replace subroutines WRBEG, WRTAPE, and WREND to
+write out the events in a different format. The user can change the tape
+record format by modifying subroutine BUFOUT (and correspondingly BUFIN
+when reading the tape). The present write/read statementes have been chosen
+for portability. They can be optimized using machine dependent extensions,
+like asynchronous write/read on the CRAY. On IBM and VAX, one can adopt
+variable length binary records and write ZEVEL only up to its highest IL
+entry, which is actually used. For this sake, the present write statement
+in BUFOUT should be replaced with
+
+      WRITE(ITA) (ZEVEL(I),I=1,IL)
+
+and the present read statement in BUFIN with
+
+      READ(ITB,ERR=100,END=200) (IZVL1,IZVL2,(ZEVEL(JJ),JJ=3,IZVL2))
+
+Because of the variety of options, including a number of packing algorithms,
+it has been preferred to leave further write/read specifications to the
+user.
+
+      Units are GeV for energy and momentum, radians for angles, and
+millibarns for the cross section. The positive z axis is defined by the
+initial antiproton direction.
+
+      Beginning Records: At the start of each run WRBEG is called. It
+writes out the following common blocks (only the listed entries):
+
+
+#include "cojets/idrun.inc"
+IDVER              =program version
+IDG(1)             =run date (10000*year+100*month+day)
+IDG(2)             =run time (10000*hour+100*minute+second)
+IEVT               =event number
+
+
+#include "cojets/keys.inc"
+KEYS               =TRUE if reaction I is chosen
+                    1 for TWOJET
+                    3 for DRELLYAN
+                    4 for MINBIAS
+REAC               =reaction name
+WTYPE              =character identification of DRELLYAN boson
+                    ('Z ','W ','GM')
+
+
+#include "cojets/jetlim.inc"
+PTFFFM,PTFFFX      =min and max values requested for the square root of the
+                    Field-Feynman-Fox invariant variable:
+                        PTFFF = SQRT(2stu/(s**2+t**2+u**2))
+                    where s, t and u are the Mandelstam variables of the
+                    parton subprocess (for TWOJET only). PTFFF approximates
+                    the parton pt near the forward and backward directions.
+
+
+#include "cojets/dylim.inc"
+QMIN,QMAX          =min and max value for the DRELLYAN virtual photon mass
+WZMINM             =min value for Z/W mass generation, when KYWOPT=1.
+
+
+#include "cojets/primar.inc"
+NJET               =number of jets in the event
+SCM                =square of cms energy
+HALFE              =beam energy
+ECM                =cms energy
+IDIN               =ident code for initial beams
+NEVENT             =number of events to be generated
+SIGTIN             =experimental total inelastic cross section at ECM
+                    (TWOJET only)
+FACTRK             =K factor
+NFLAVR             =number of quark flavors
+
+
+#include "cojets/fstate.inc"
+KWMODE             =no. of decay channel for DRELLYAN boson:
+                    Z :
+                        1 - E-   E+
+                        2 - MU-  MU+
+                        3 - TAU- TAU+
+                        4 - NUE  ANUE
+                        5 - NUM  ANUM
+                        6 - NUT  ANUT
+                        7 - UP   UB
+                        8 - DN   DB
+                        9 - ST   SB
+                       10 - CH   CB
+                       11 - BT   BB
+                       12 - TP   TB
+                    W+ :
+                        1 - NUE  E+
+                        2 - NUM  MU+
+                        3 - NUT  TAU+
+                        4 - UP   DB
+                        5 - CH   SB
+                        6 - TP   BB
+                    W- : same channel no.s as for W+, with charge conjugated
+                         decay modes
+                    GM :
+                        1 - E-   E+
+                        2 - MU-  MU+
+                        3 - TAU- TAU+
+                    If 0, the vector boson is left undecayed.
+                    If negative, the decay channel is generated at random,
+                    according to theoretical probabilities.
+KYWOPT             =option for producing Z/W:
+                    1 : production with Breit-Wigner dependence.
+                    0 : production in the narrow width approximation (with
+                        Breit-Wigner mass distribution faked in the decay);
+KYWQED             =treatment of QED radiation in DRELLYAN leptonic decays:
+                    0: no QED radiation
+                    1: multiple QED radiation treated in O(alpha) corrected
+                       leading pole approximation
+                    2: single photon QED radiation treated in the O(alpha)
+                       approximation
+KYHEAV             =forcing of heavy quark production (TWOJET only):
+                    0: no forcing
+                    1: forced fusion
+                    2: forced flavor excitation
+                    3: combined forcing of fusion, flavor excitation and
+                       gluon splitting
+                    4: forced gluon splitting
+KYFLAV             =defines heavy quark flavor which has been forced:
+                    4: charm
+                    5: bottom
+                    6: top
+KTPFRM             =defines format of top decay particle and parton history.
+                    0: decay parton information is kept
+                    1: format according to isajet specifications (decay
+                        parton information is disregarded)
+KYEVOL             =controls QCD bremsstrahlung:
+                    0: full QCD bremsstrahlung
+                    1: longitudinal effects only
+                    2: scaling violation of parton densities only
+                    3: no QCD bremsstrahlung at all
+KYTQED             =treatment of QED radiation in TOP semileptonic decays:
+                    0: no QED radiation
+                    1: multiple QED radiation treated in O(alpha) corrected
+                       leading pole approximation
+                    2: single photon QED radiation treated in the O(alpha)
+                       approximation
+KYTQCD             =controls QCD bremsstrahlung in TOP semileptonic decays:
+                    0: full QCD bremsstrahlung
+                    1: longitudinal effects only
+                    3: no QCD bremsstrahlung at all
+NODECY             =.TRUE. if all particle decays have been frozen,
+                    otherwise .FALSE.
+NOFRGM             =.TRUE. if quanta and beam jets are NOT fragmented,
+                    otherwise .FALSE.
+KFORSL             =heavy flavor chosen for semileptonic decay forcing:
+                    4: CH
+                    5: BT
+                    6: TP
+LFORSL             =forcing of semileptonic decays for particles carrying
+                    the heavy flavor KFORSL:
+                    0: no forcing
+                    different from 0: forcing with decay lepton having
+                    IDENT = LFORSL
+NFORSL             =no. of heavy flavor particles forced to decay
+                    semileptonically
+NFORCE             =no. of forced decays requested
+KFORCE             =list of forced decays requested (IDENT coding, 1st is
+                    decay particle)
+NSTOPD             =no. of particles with decay frozen
+KSTOPD             =list of IDENT's of particles with decay frozen
+
+
+#include "cojets/qcdpar.inc"
+ALAM               =QCD lambda parameter
+ALAM2              =ALAM**2
+QZEVOL             =initial scale for parton density evolution.
+PTCUTF             =min parton pt cutoff (defines QCD cross section in
+                    MINBIAS events)
+PTSQIN             =non-perturbative, intrinsic <pt**2> of partons in beam
+                    particles
+CUTJET             =minimum mass cutoff in QCD jet evolution for gluons and
+                    light quarks (the quark mass is added for heavier quarks)
+ISTRUC             =(unevolved) initial parton densities used:
+                    0: NA3 (Drell-Yan) parametrization
+                    1: EHLQ set 1
+                    2: EHLQ set 2
+
+
+#include "cojets/zwpar.inc"
+GF                 =Fermi coupling constant
+ALFQED             =QED alpha
+S2THW              =sin**2 of Weinberg-Salam angle
+DELTAR             =Sirlin's dr, representing the radiative correction to W/Z
+                    masses.
+COSCAB             =cos of Cabibbo angle
+ZGAM               =Z width
+WGAM               =W width
+
+
+
+#include "cojets/par.inc"
+PUD                =probability of UP-UB generation (=probability of DN-DB
+                    generation, sum of probabilities for UP-UB, DN-DB and
+                    ST-SB is 1.)
+PS1                =probability of scalar particle generation for the six quark
+                    flavors (heaviest flavor in pair determines PS1)
+PISOPN             =probability of J=1/2 baryon generation
+PBARYO             =probability of diquark/antidiquark generation
+SIGMAQ             =<pt**2> of generated partons in quark/diquark jets
+CX2Q               =defines X generation for light quarks in quark/diquark
+                    jets (Field-Feynman):
+                      (1-CX2Q+3*CX2Q*(1-X)**2)dX
+SIGMAG             =<pt**2> of generated partons in gluon jets
+CX2G               =defines X generation for light quarks in gluon jets
+                    (Field-Feynman):
+                      (1-CX2G+3*CX2G*(1-X)**2)dX
+EPSPET             =defines parameter in Petersson et al. X distribution
+                    for initial heavy quark (I=1,2,3 for CH,BT,TP, resp.):
+                        1./(X*(1.-1./X-EPSPET(I)/(1.-X))**2)dX
+EFGMIN             =min value of available jet energy to keep on cascading
+FRGTHO             =if .TRUE. the Thompson and Biddulph options for jet
+                    generation are enforced (seagull),
+                    if .FALSE. standard Field-Feynman (y plateau) with
+                    minimal kinematic constraints is used
+FTHOMP,ETHOMP      =define the Thompson and Biddulph varying <pt**2> of the
+                    emitted hadron:
+                    <pt**2>= SIGMA**2*
+                           (1.-X)/(1.-.5*X)*2.*FTHOMP/MAX(EBEG,ETHOMP)*X*W
+                    where EBEG is the input jet energy and W is the
+                    E+PL of the parent quark/diquark
+
+
+#include "cojets/decpar.inc"
+BZDMIX,BZSMIX      =mixing parameters for BD and BS neutral bottom mesons
+CND1,CND2          =define multiplicity distribution in particle decays
+                    involving quark/diquarks pairs as secondaries (to be
+                    converted into particles according to a decay model):
+                    F(n)=N*exp((n-<n>)**2/(2*C))
+                    <n>=N0/2+C, n.GE.N0, n.GE.2, n.LE.10,
+                    N0=N(particles)+N(quark/diquark pairs)
+                    C=CND1+LOG((decaying particle mass)/CND2)
+
+
+#include "cojets/data1.inc"
+CMIX               =determines the probability for UP-UB,DN-DB,ST-SB
+                    (IQ=1,2,3) to yield PI0,ETA,ETAP (IP=1,2,3) when
+                    ISPIN=0, or RHO0,OMEG,PHI (IP=1,2,3) when ISPIN=1,
+                    according to:
+                    IP=INT(R+CMIX(IQ+3*ISPIN,1))+INT(R+CMIX(IQ+3*ISPIN,2))
+                    where 0<R<1 is a random number (same for both entries)
+QMAS               =quark masses
+
+
+#include "cojets/mb.inc"
+CLPRO              =determines the longitudinal distribution of leading
+                    nucleons: exp(-CLPRO*X)dX
+PT2PRO             =<pt**2> of leading nucleons (gaussian)
+FPTMB              =factor increasing the <pt**2> of beam jets particles
+                    (if 1.2, it is increased by 20%)
+FMULMB             =factor increasing the mean multiplicity of beam jets
+RETPIZ             =ETA/PI0 ratio in beam jets
+RPAIR              =particle ratios in beam jets:
+                    1: PI0 or ETA
+                    2: pair of PI-,PI+
+                    3: pair of K+,K-
+                    4: pair of K0,AK0
+                    5: pair of P,AP
+                    6: pair of N,AN
+                    7: pair of L,AL
+                    8: pair of S+,AS-
+                    9: pair of S-,AS+
+
+
+      Also written on tape are the particle table contents of /DATA1/ and
+/DATA3/.
+
+
+
+      Event Record: For each event WRTAPE is called. It writes out the
+following common blocks (only the listed entries):
+
+
+#include "cojets/idrun.inc"
+IDVER              =program version
+IDG(1)             =run date (10000*month+100*day+year)
+IDG(2)             =run time (10000*hour+100*minute+second)
+IEVT               =event number
+
+
+#include "cojets/primar.inc"
+NJET               =number of final, primary jets in the event
+
+
+#include "cojets/pfirst.inc"
+PFIRST(1,I)        =px for parton originating initial jet I
+PFIRST(2,I)        =py for parton originating initial jet I
+PFIRST(3,I)        =pz for parton originating initial jet I
+PFIRST(4,I)        =p0 for parton originating initial jet I
+PFIRST(5,I)        =mass for parton originating initial jet I
+IDFRST(I)          =IDENT for parton originating initial jet I
+
+
+#include "cojets/pinits.inc"
+PINITS(1,I)        =px for initial interacting parton I
+PINITS(2,I)        =py for initial interacting parton I
+PINITS(3,I)        =pz for initial interacting parton I
+PINITS(4,I)        =p0 for initial interacting parton I
+PINITS(5,I)        =mass for initial interacting parton I
+IDINIT(I)          =IDENT for initial interacting parton I
+
+
+#include "cojets/jetpar.inc"
+P                  =jet momentum
+PT                 =jet pt
+YJ                 =jet rapidity
+PHI                =jet phi
+XJ                 =jet xf
+TH                 =jet theta
+CTH                =jet cos(theta)
+STH                =jet sin(theta)
+JETTYP             =jet type. Code:
+                    I= 1  2  3  4  5  6  7  8  9 10 11 12 13
+                      GL UP UB DN DB ST SB CH CB BT BB TP TB
+                    I= 14   15 16 17  18   19  20  21  22   23   24   25
+                      NUE ANUE E- E+ NUM ANUM MU- MU+ NUT ANUT TAU- TAU+
+SHAT,THAT,UHAT     =hard scattering invariants
+QSQ                =effective Q**2  (FFF variable for TWOJET, intermediate
+                    boson square mass for DRELLYAN)
+PTFFF              =sqrt of FFF variable for TWOJET
+X1,X2              =xf of partons initiating the two-body subprocess
+PTA                =PTA(J,L), J=1,2, are px and py of parton L initiating
+                    the two-body subprocess
+XI1,XI2            =xf of partons originating the initial parton showers
+PTI                =like PTA for partons originating the initial parton
+                    showers
+PBEAM              =remaining beam momentum left by initial (unevolved)
+                    partons
+QMW                =W mass
+QW                 =W momentum
+QTW                =W transverse momentum
+YW                 =W rapidity
+XW                 =W xf
+THW                =W theta
+QTMW               =SQRT(QTW**2+QMW**2)
+PHIW               =W phi
+SHAT1,THAT1,UHAT1  =invariants for W decay
+JWTYP              =W type, according to the ISAJET code:
+                        GM     W+     W-     Z0
+                         1      2      3      4
+ALFQSQ             =QCD coupling at QSQ
+CTHW               =W cos(theta)
+STHW               =W sin(theta)
+Q0W                =W energy
+INITYP             =initial jet type. Same code as for JETTYP.
+IACTYP             =type of partons/particles initiating the two-body
+                    subprocess. Same code as for JETTYP.
+ISIGS              =subprocess code, given by 100*K1+K2, where K1 is related to
+                    the initial channel and K2 to the final channel.
+                    For TWOJET:
+                    K1=1,  K2=1: Q-Q --> Q-Q NON-ID.
+                    K1=2,  K2=1: Q-Q --> Q-Q ID.
+                    K1=3,  K2=1: QB-Q --> QB-Q ANNIH. F=I
+                           K2=2: QB-Q --> QB-Q ANNIH. F.NE.I
+                           K2=3: QB-Q --> G-G
+                           K2=4-6: QB-Q --> QHB-QH (CH,BT,TP, resp.)
+                    K1=4,  K2=1: Q-G --> Q-G
+                    K1=5,  K2=1: G-G --> G-G
+                           K2=2: G-G --> Q-QB
+                           K2=4-6: G-G --> QHB-QH (CH,BT,TP, resp.)
+                    K1=6,  K2=1: Q-QH --> Q-QH
+                    K1=7,  K2=1: G-QH --> G-QH
+                    K1=8,  K2=1: QH-QH --> QH-QH NON-ID.
+                    K1=9,  K2=1: QH-QH --> QH-QH ID.
+                    K1=10, K2=1: QHB-QH --> QHB-QH  F=I
+                           K2=2: QHB-QH --> QB-Q F=LIGHT
+                           K2=3: QHB-QH --> G-G
+                           K2=4-6: QHB-QH --> QHB-QH F.NE.I (CH,BT,TP, resp.)
+                    For MINBIAS:
+                    K1=0,  K2=0: pure beam jets events
+                    K1, K2 as in TWOJET for hard events
+                    For DRELLYAN:
+                    K1= JWTYP
+                    K2= decay channel code, with the same conventions as
+                    for KWMODE in /FSTATE/.
+
+PBEAMS(1)          =px of the two beam jets system
+PBEAMS(2)          =py of the two beam jets system
+PBEAMS(3)          =pz of the two beam jets system
+PBEAMS(4)          =p0 of the two beam jets system
+PBEAMS(5)          =mass of the two beam jets system
+
+
+#include "cojets/pjets.inc"
+PJETS(1,I)         =px for jet I
+PJETS(2,I)         =py for jet I
+PJETS(3,I)         =pz for jet I
+PJETS(4,I)         =p0 for jet I
+PJETS(5,I)         =mass for jet I
+IDJETS(I)          =IDENT code for jet I
+QWJET(1)           =px for W
+QWJET(2)           =py for W
+QWJET(3)           =pz for W
+QWJET(4)           =p0 for W
+QWJET(5)           =mass for W
+IDENTW             =IDENT CODE for W
+
+
+#include "cojets/jetset.inc"
+NJSET              =number of partons
+PJSET(1,I)         =px of parton I
+PJSET(2,I)         =py of parton I
+PJSET(3,I)         =pz of parton I
+PJSET(4,I)         =p0 of parton I
+PJSET(5,I)         =mass of parton I
+JORIG(I)           =JPACK*JET+K if I is a decay product of parton K.
+                    If K=0 then I is a primary parton.
+                   = -(JPACK*JET+K) if I is a parton originating from a
+                    decaying particle (e.g. a top particle), the same parton
+                    being coded as particle K in PPTCL; if stable particles
+                    only are retained K gives the JETSET number of the jet
+                    to which the decaying particle belongs.
+                   (JET = 1,2 for final jets. JET = 11,12 for initial jets.)
+JTYPE(I)           =IDENT code for parton I
+JDCAY(I)           =JPACK*K1+K2 if K1 and K2 are decay products of I.
+                    If JDCAY(I)=0 then I is a final parton in the parton
+                    shower.
+MXJSET             =dimension for /JETSET/ arrays.
+JPACK              =packing integer for /JETSET/ arrays.
+
+PJSET parameters are left to their parton shower values, except in W, Z and
+top particles decays where they are recalculated summing over the jet
+particles.
+
+
+#include "cojets/partcl.inc"
+NPTCL              =number of particles
+PPTCL(1,I)         =px for particle I
+PPTCL(2,I)         =py for particle I
+PPTCL(3,I)         =pz for particle I
+PPTCL(4,I)         =p0 for particle I
+PPTCL(5,I)         =mass for particle I
+IORIG(I)           =IPACK*JET+K if I is a decay product of particle K.
+                   =-(IPACK*JET+K) if I is a primary particle of jet K
+                    in /JETSET/. If only stable particles are retained,
+                    all jet particles are IORIG coded as primary jet
+                    particles.
+                   =0 if I is a primary beam jet particle.
+                   (JET = 1,2 for final jets. JET = 11,12 for initial jets.
+                   JET = 0 for beam jets.)
+IDENT(I)           =IDENT code for particle I
+IDCAY(I)           =IPACK*K1+K2 if decay products are K1-K2 inclusive.
+                    If IDCAY(I)=0 then particle I is stable.
+MXPTCL             =dimension for /PARTCL/ arrays.
+IPACK              =packing integer for /PARTCL/ arrays.
+
+
+
+      End Record: At the end of a set WREND is called. It writes out
+the following common block:
+
+
+#include "cojets/final.inc"
+NKINF             =number of points generated to calculate SIGF
+SIGF              =integrated cross section for this run. The quoted SIGF
+                   includes: i) the K factor, i) the decay branching ratio
+                   of the DRELLYAN boson, if WDECMODE has been set positive,
+                   ii) the effects of forcing semileptonic decays of heavy
+                   flavor particles. It does NOT include the effects of
+                   decay forcing by using the FORCE option in input.
+ALUM              =equivalent luminosity for this run
+ACCEPT            =ratio of events kept over events generated
+NRECS             =number of physical records for this run
+NEVTAP            =number of events on tape
+
+
+      In QED radiative leptonic decays of Drell-Yan produced Z/W/GAMMA, the
+coding of the decay in the /PARTCL/ particle stream goes through two steps:
+  i) the decay of the boson into two leptons, as from the decay table, which
+     are off the mass shell if undergoing radiation;
+ ii) the decay of the charged lepton(s), off the mass shell, into photons
+     and final lepton(s), on the mass shell.
+      If there are two charged lepton secondaries, photons are aggregated
+to the final charged lepton closer in angle, when calculating the off-shell
+mass of primary leptons. If a charged lepton does not radiate, it appears
+in the first step only.
+      If only stable particles are retained, information about the lepton
+of origin of the decay products is retained in IORIG, through the JET
+parameter.
+
+      In top particle decays, there are jets among the secondaries. The
+decay history can be coded in two alternative ways, according to the TOPFORM
+card. One of them follows the specifications of ISAJET: parton information
+is disregarded, the decay history appears only in the particle stream and
+follows the usual rules for particle decays (the IDCAY of primary top decay
+partons identifies all primary particles generated in the fragmentation of
+all the jets originated by the parton). The other one includes information
+about the decay parton development. With it the coding of the decay history
+follows two paths, within the particle and the parton streams, as specified
+in the following.
+      If unstable particles are retained, the two paths cross each other.
+The origin of the decaying top particle can be traced back to the top jet of
+origin, through IORIG in the particle cascade. (The JDCAY of the final top
+jet in the parton cascade is set to 0.). When the top particle decays, the
+decay coding goes through two steps:
+  i) the decay of the top particle into the 3 primary leptons/partons, as
+     from the decay table;
+ ii) the radiative decays of the primary charged leptons and the jet
+     developments of the partons.
+      Primary decay leptons which do not decay radiatively appear only
+once, in the first step. If they radiate, the decay coding parallels the
+one used for leptonic decays of Drell-Yan produced Z/W/GAMMA.
+      Primary decay partons appear both in /PARTCL/, coded as particles, and
+in /JETSET/ coded as jets. Their IORIG's in /PARTCL/ give the top particle
+as origin. Their JORIG's in /JETSET/ give the corresponding partons in
+/PARTCL/ as origins. A negative sign in front of their JORIG's signals that
+they do not result from a parton cascade, but from the decay of a particle.
+The IORIG's of primary particles in a decay jet gives the jet in /JETSET/
+as their origin, according to the general convention. Thus, when following
+the genealogy of a stable particle in a decay jet backwards, one moves
+in general through the following steps:
+  i) first, a cascade of unstable particles belonging to the jet, up to a
+     primary jet particle whose origin is a jet in /JETSET/,
+ ii) then, a QCD jet cascade coded in /JETSET/, up to a primary jet whose
+     origin is a parton coded as particle in /PARTCL/,
+iii) finally, the decaying top particle.
+      The IDCAY of the top particle identifies the 3 primary decay products
+in the particle stream. The IDCAY's of the latter identify the primary
+particles resulting from their respective decays or jet developments.
+For a parton, that means all primary particles generated in the fragmentation
+of all the jets originated by the parton. Thus, following the particles
+genealogy forward, by means of IDCAY, provides a description limited to the
+particle stream. (Having IDCAY referring to the particle stream only is a
+necessary consequence of having JDCAY referring to jets only, with JDCAY=0
+characterizing a final jet in the QCD shower.)
+      If stable particles only are retained, top decay particles and jets
+have their origins modified, so as to jump over the missing unstable
+particles, which include also the decaying top particle. Thus, the JORIG's
+of primary decay jets give the top jet, to which the decaying top particle
+belongs, as their origin. The IORIG's of particles generated in decay jets
+give the jet in /JETSET/, to which the particles belong, as their origin. In
+both cases, a minus sign is put in front.
+
+      Events within a given run have uniform weight. Separate runs can
+be combined together using SIGF/NEVENT as the weight per event. This
+gives a true cross section in mb units.
+
+
+

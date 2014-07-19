@@ -1,0 +1,3 @@
+SRCS_F=	 cdfopn.F cdfsnd.F cdfzlo.F cdsave.F cdstsv.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

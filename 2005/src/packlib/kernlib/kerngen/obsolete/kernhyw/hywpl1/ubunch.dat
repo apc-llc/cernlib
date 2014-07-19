@@ -1,0 +1,40 @@
+*
+* $Id: ubunch.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: ubunch.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+ubunch : proc (iv, it, n);
+ 
+/* *****************************************************************
+   *                                                               *
+   * ubunch(IV,IT,n) iv en a1 -> it en a4
+   *                si n=0 rien faire                              *
+   *                si n< 0 message erreur                         *
+   *                                                               *
+   ***************************************************************** */
+ 
+dcl  com_err_ entry () options (variable);
+DCL  TRUNC BUILTIN
+dcl (it (*), iv (*)) bin fixed (35);
+dcl  ivv (n) char (4) based (addr (iv));
+dcl  itt char (n) based (addr (it));
+dcl  iTCH (n) char (4) based (addr (iT));
+dcl (n, N4, i) bin fixed (35);
+          if n = 0 then return;
+          if n <0 then do;
+               call com_err_ (0, "ubunch", "n est negatif");
+               return;
+          end;
+          N4 = TRUNC ((n-1)/4 + 1);
+          ITCH(N4) = "    ";
+          do i = 1 to n;
+               substr (itt, i, 1) = substr (ivv (i), 1, 1);
+          end;
+          return;
+     END ubunch;
+#ifdef CERNLIB_TCGEN_UBUNCH
+#undef CERNLIB_TCGEN_UBUNCH
+#endif

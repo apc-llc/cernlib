@@ -1,0 +1,4 @@
+SRCS_F=	 encodi.F encodr.F hexenc.F ifsheqc.F jlastx.F jsearx.F \ @@\
+	texarr.F texerr.F texins.F texnme.F texstr.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

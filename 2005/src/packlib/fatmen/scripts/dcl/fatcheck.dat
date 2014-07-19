@@ -1,0 +1,77 @@
+*
+* $Id: fatcheck.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatcheck.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATCHECK.COM
+$SET NOON
+$ !
+$ ! Check that FATMEN servers are started
+$ !
+$ if p1 .eqs. "" then exit
+$ fatmen = p1
+$ count  = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$ bqname = f$trnlnm("SYS$FATMEN")
+$ if bqname .eqs. "" then bqname = "SYS$FATMEN"
+$ !
+$ ! Check that the queue is started
+$ !
+$ if f$getqui("DISPLAY_QUEUE","QUEUE_STOPPED",bqname) .eqs. "TRUE" then -
+     start/queue 'bqname'
+$loop:
+$ fatman = f$element(count,",",fatmen)
+$ if fatman .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''fatman'..."
+$ show user/nooutput 'fatman'
+$ if $severity .ne. 1
+$    then
+$ !
+$ !  Check that server has not been stopped
+$ !
+$    ON WARNING THEN GOTO UNDEFINED
+$    fatdir = &fatman
+$    ON WARNING THEN CONTINUE
+$    fatdir = f$extract(0,f$length(fatdir)-1,fatdir) + ".TODO]SIGNAL.STOP"
+$    if f$search(fatdir) .nes. ""
+$       then write sys$output "Signal.Stop file found - will not restart"
+$       goto loop
+$    endif
+$ !
+$ !  Check that there is not already a job pending (or otherwise)
+$ !  for this user
+$ !
+$    TEMP = F$GETQUI("")
+$ QLOOP:
+$    QNAME = F$GETQUI("DISPLAY_QUEUE","QUEUE_NAME","*")
+$    IF QNAME .EQS. "" THEN goto loop
+$    IF QNAME .NES. bqname then goto qloop
+$    WRITE SYS$OUTPUT ""
+$    WRITE SYS$OUTPUT "QUEUE: ", QNAME
+$ JLOOP:
+$    NOACCESS = F$GETQUI("DISPLAY_JOB","JOB_INACCESSIBLE",,"ALL_JOBS")
+$    IF NOACCESS .EQS. "TRUE" THEN GOTO JLOOP
+$    IF NOACCESS .EQS. "" THEN GOTO QLOOP
+$    JNAME = F$GETQUI("DISPLAY_JOB","JOB_NAME",,"FREEZE_CONTEXT,ALL_JOBS")
+$    UNAME = F$GETQUI("DISPLAY_JOB","USERNAME",,"FREEZE_CONTEXT,ALL_JOBS")
+$    JID   = F$GETQUI("DISPLAY_JOB","ENTRY_NUMBER",,"FREEZE_CONTEXT,ALL_JOBS")
+$    WRITE SYS$OUTPUT "JOB:  ", JNAME," ENTRY: ",JID," USER: ",UNAME
+$    if uname .eqs. fatman then goto loop
+$    goto jloop
+$ !
+$ !  No job found - restart
+$ !
+$    write sys$output "Restarting server ..."
+$    fatserv = &fatman + "FATSERV.COM"
+$    submit/queue='bqname'/user='fatman' /id 'fatserv'
+$    endif
+$ goto loop
+$ undefined:$ write sys$output "Warning: symbol ''fatman' is not defined"
+$ goto loop
+$ end:
+$ exit

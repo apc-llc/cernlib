@@ -1,0 +1,77 @@
+/* $Id: FreeBSD.cf,v 1.1.1.1 1995/12/20 15:26:44 cernlib Exp $
+ *
+ * $Log: FreeBSD.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:44  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: FreeBSD.cf,v 1.5 95/04/07 19:42:53 kaleb Exp $
+
+#define OSName            FreeBSD 1.1
+#define OSVendor          /**/
+XCOMM operating system:  OSName
+#define OSMajorVersion    1
+#define OSMinorVersion    1
+#define OSTeenyVersion    0
+
+#define HasPutenv       YES
+#define HasBSD44Sockets YES
+
+#define CppCmd          /usr/libexec/cpp -traditional
+#define PreProcessCmd   /usr/libexec/cpp -traditional
+#undef  InstallCmd
+#define InstallCmd /usr/bin/install
+
+#define UseGas		YES
+#ifndef GccUsesGas
+# define GccUsesGas	YES
+#endif
+
+#ifndef AsmDefines
+#  define AsmDefines -DUSE_GAS
+#endif
+
+#if GccUsesGas
+# define GccGasOption -DGCCUSESGAS
+#else
+# define GccGasOption /**/
+#endif
+
+#ifndef HasGcc2
+# define HasGcc2 YES
+#endif
+
+#define CcCmd gcc
+#define DefaultCCOptions /**/
+
+#ifdef i386Architecture
+#define OptimizedCDebugFlags -m486 -O2
+#else
+#define OptimizedCDebugFlags -O2
+#endif
+#if OSMajorVersion < 2
+#define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME -DXNO_SYSCONF
+#else
+#define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME
+#endif
+#define ServerExtraDefines GccGasOption
+
+#define StandardDefines	-DCSRG_BASED
+#define XawI18nDefines  -DUSE_XWCHAR_STRING -DUSE_XMBTOWC
+
+#define TroffCmd        groff -Tps
+#define SetTtyGroup     YES
+#define HasNdbm         YES
+#define HasShm          YES
+#define HasWChar32      YES
+
+#define HasLibCrypt	YES
+
+#define AvoidNullMakeCommand YES
+
+#include <bsdLib.rules>
+
+#ifdef i386Architecture
+#include <xfree86.cf>
+#endif

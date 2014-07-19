@@ -1,0 +1,7 @@
+#!/bin/ksh
+d=`date`
+#
+#   Delete old zz files
+#
+find /fatmen/fm*/todo -name zz* -mtime +1 -exec rm {} \;
+#find /fatmen/fm*/todo -name zz* -mtime +1 -print ;

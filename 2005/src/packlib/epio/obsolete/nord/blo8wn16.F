@@ -1,0 +1,33 @@
+*
+* $Id: blo8wn16.F,v 1.1.1.1 1996/03/08 15:21:57 mclareni Exp $
+*
+* $Log: blo8wn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:57  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+       SUBROUTINE BLO8W(SOURCE,N1,TARGET,N2,N3)
+C      +++++++++NORD 10/100 16-BIT VERSION++++++++++++
+C      VERSION 82-05-06
+C      BLOWS(UNPACKS) 8 BIT BYTES INTO MACHINE WORDS
+C
+C.     INPUT
+C.     SOURCE     ARRAY COTAINING 8 BIT BYTES IN PACKED FORM
+C.     N1         FIRST 8 BIT BYTE IN SOURCE TO BLOW(NUMBERING FROM 1)
+C.     TARGET     TARGET ARRAY FOR UNPACKED BYTES
+C.     TARGET(N2) WILL CONTAIN FIRST UNPACKED BYTE
+C.     N3         NO. OF BYTES TO UNPACK
+       INTEGER*2 N1,N2,N3
+       INTEGER*2 SOURCE(2)
+       INTEGER*2 TARGET(2)
+       IF(N3.LE.0) RETURN
+       I1=N1-2
+       I2=N2-1
+       DO FOR J=1,N3
+       TARGET(I2+J)=JLBYT(SOURCE,I1+J)
+       ENDDO
+       RETURN
+       END
+#endif

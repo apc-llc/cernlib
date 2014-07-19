@@ -1,0 +1,329 @@
+/* $Id: Win32.cf,v 1.8 1999/05/07 16:09:39 mclareni Exp $
+ *
+ * CERNLIB_MSSTDCALL  cpp flag has been introduced 
+ *
+ * $Log: Win32.cf,v $
+ * Revision 1.8  1999/05/07 16:09:39  mclareni
+ * A cleanup of the compiler options. In particular, remove -D_NTSDK which stopped
+ * cfstati.c working. Our tests and PAW work.
+ *
+ * Revision 1.7  1997/11/06 14:10:19  mclareni
+ * Separate C optimisation from default options
+ *
+ * Revision 1.5  1997/09/01 15:52:28  mclareni
+ * More NT corrections
+ *
+ * Revision 1.4  1997/07/15 17:44:34  mclareni
+ * Nenads mods for Digital Fortran DF90 and Intel Fortran
+ *
+ * Revision 1.3  1997/04/22 14:13:22  mclareni
+ * Change OptimisedFortranFlags from O2 to Ox for Microsoft Fortran
+ *
+ * Revision 1.2  1997/02/28 10:36:53  gunter
+ * usable version, many mods
+ *
+ * Revision 1.1.1.1  1995/12/20 15:26:45  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: Win32.cf,v 1.38 94/04/01 19:58:56 kaleb Exp $
+
+#define IntelCPUFamily Pentium
+
+#define OSName			Microsoft Windows NT 4.0
+XCOMM operating system:  OSName
+#define OSMajorVersion		4
+#define OSMinorVersion		0
+#define OSteenyVersion          0
+
+#ifndef PCHostArchitecture
+#define PCHostArchitecture Intel
+#endif
+
+#define BootstrapCFlags		-DWIN32
+
+#define CPUType PCHostArchitecture
+#if PCHostArchitecture==Intel
+# define CpuDefines -D_X86_=1
+/*# define CPUType i386*/
+# ifndef IntelCPUFamily 
+#   define IntelCPUFamily i386
+# endif
+# if IntelCPUFamily==i386
+#   define CCCPUOptimization -G5
+# elif IntelCPUFamily==i486
+#   define CCCPUOptimization -G4
+# elif IntelCPUFamily==Pentium
+#  define CCCPUOptimization -G5 
+# elif IntelCPUFamily==PentiumPro
+#  define CCCPUOptimization -G6
+#else
+#  undef CCCPUOptimization
+#endif
+#elif PCHostArchitecture==ALPHA
+# define CpuDefines -D_ALPHA_=1
+#elif PCHostArchitecture==MIPS
+# define CpuDefines -D_MIPS_=1
+#else
+# undef CpuDefines 
+#endif
+
+CPU = i386
+/* !include <ntwin32.mak> */
+/*  ---  Some flags from Microsoft Win32.Mak file  */
+TARGETOS=BOTH
+
+/* binary declarations common to all platforms */
+#ifdef _IRC_
+cc     = icl
+#else
+cc     = cl
+#endif
+rc     = rc
+link   = link
+implib = lib
+hc     = hcrtf -x
+
+/*  declarations common to all compiler options 
+ccommon = -D_NTSDK   */
+
+ifeq "$(CPU)" "i386"
+vc_cflags = $(ccommon) CpuDefines -DVISUAL_CPLUSPLUS
+scall  = -Gz
+endif
+
+APPVER = 4.0
+
+ifeq "$(APPVER)" "4.0"
+vc_cflags := $(vc_cflags) 
+else
+ifeq "$(APPVER)" == "3.51"
+vc_cflags := $(vc_cflags) -DWINVER=0x0400
+else
+vc_cflags := $(vc_cflags) -DWINVER=0x030A
+endif
+endif
+
+
+ifdef NO_ANSI
+noansi = -DNULL=0
+endif
+
+/* for Windows applications that use the C Run-Time libraries */
+cvars      = -DWIN32 $(noansi) -D_WIN32
+cvarsmt    = $(cvars) -D_MT
+cvarsdll   = $(cvarsmt) -D_DLL
+
+/* for compatibility with older-style makefiles */
+cvarsmtdll   = $(cvarsmt) -D_DLL
+
+/* for POSIX applications */
+psxvars    = -D_POSIX_
+
+/* resource compiler  */
+rcflags = /r
+rcvars =  -DWIN32 $(noansi)
+
+ifeq "$(APPVER)"  "4.0"
+rcvars := $(rcvars) -DWINVER=0x0400
+else
+rcvars := $(rcvars) -DWINVER=0x030A
+endif
+
+
+/* These CRT Libraries assume the use of Microsoft Visual C++ 2.0 on    */
+/* x86 and MIPS platforms.  If you are using another Compiler product,  */
+/* change the libc* variable to correspond to your import library names.*/
+
+ifeq ("$(CPU)","PPC")
+libc = libc.lib
+libcmt = libcmt.lib
+libcdll = crtdll.lib
+
+/*  for POSIX applications  */
+psxlibs    = libcpsx.lib psxdll.lib psxrtl.lib
+
+else
+libc = libc.lib oldnames.lib
+libcmt = libcmt.lib oldnames.lib
+libcdll = msvcrt.lib oldnames.lib
+
+/* for POSIX applications */
+psxlibs    = libcpsx.lib psxdll.lib psxrtl.lib oldnames.lib
+
+endif
+
+/*  optional profiling and tuning libraries */
+ifdef PROFILE
+optlibs =  cap.lib
+else
+ifdef TUNE
+optlibs = wst.lib
+else
+optlibs =
+endif
+endif
+
+/* The PPC compiler currently requires a library for 64-bit integers. */
+ifeq ("$(CPU)","PPC")
+int64lib = int64.lib
+else
+int64lib =
+endif
+
+
+/*  basic subsystem specific libraries, less the C Run-Time  */
+baselibs   = kernel32.lib $(optlibs) advapi32.lib
+winlibs    = $(baselibs) user32.lib gdi32.lib comdlg32.lib winspool.lib
+
+/* for Windows applications that use the C Run-Time libraries */
+conlibs    = $(libc)    $(baselibs) 
+conlibsmt  = $(libcmt)  $(baselibs)
+conlibsdll = $(libcdll) $(baselibs)
+guilibs    = $(libc)    $(winlibs)
+guilibsmt  = $(libcmt)  $(winlibs)
+guilibsdll = $(libcdll) $(winlibs)
+
+/*  ----- end Win3.mak file ------ */
+/* =============================== */
+
+/* brain-damaged windows headers will not compile with -Za */
+#define StandardDefines $(cvars)  CpuDefines 
+/* #define DefaultCCOptions -nologo -batch -G4 -W2 */
+#define DefaultCCOptions -nologo CCCPUOptimization /Zd $(vc_cflags) -W2
+#define StandardIncludes -I$(subst ;, -I,$(Include)) -I.\
+
+#define PathSeparator $(subst u,\,u)   /* strange way to get one '\' */
+
+#define Win32Path(path) $(subst /,\,path)
+#define OptimizedCDebugFlags /O1
+#define NoOpCDebugFlags /Od
+#define DebuggableCDebugFlags $(cdebug)
+#define DefaultCDebugFlags OptimizedCDebugFlags
+
+#define ThreadedX		YES
+#define CpCmd copy
+#define LnCmd copy
+#define MvCmd ren
+#define RmCmd del
+/* if you do not have deltree, substitute rd /s and suffer the prompts */
+#define RmTreeCmd rmdir /S 
+#define CcCmd $(cc)
+#define HasCplusplus		YES
+#define CplusplusCmd $(cc)
+#define PreProcessCmd CcCmd -nologo /C -EP
+#define CppCmd  CcCmd -nologo /C -E
+#define FortranCppCmd PreProcessCmd
+#define PatheticCpp		YES
+#define ArCmdBase lib
+#define ArCmd ArCmdBase
+#define CplusplusCmd $(cc)
+#define MkdirHierCmd mkdir
+#define InstallCmd copy
+#define InstPgmFlags /**/
+#define InstBinFlags /**/
+#define InstUidFlags /**/
+#define InstLibFlags /**/
+#define InstIncFlags /**/
+#define InstManFlags /**/
+#define InstDatFlags /**/
+#define InstallFlags /**/
+/* #define ExtraLibraries $(conlibs) $(conlibsdll) wsock32.lib */
+#define ExtraLibraries wsock32.lib
+
+#ifndef NMAKE 
+#define MakeCmd make
+#else
+#define MakeCmd nmake 
+#endif
+
+#define LdCmd $(link)
+#define MathLibrary
+#define HasSymLinks		NO
+#define HasPutenv		YES
+
+#define Osuf obj
+#define SetWin32ObjSuffix(objfilename) $(patsubst %.o,%.Osuf,objfilename) 
+
+#define BuildServer		NO
+#define ConnectionFlags		-DTCPCONN
+#define StdIncDir /msdev/include
+#define LdPreLib /**/
+#define LdPostLib /**/
+#ifndef UseInstalled
+#define ImakeCmd $(IMAKESRC:/=\)\imake
+#define DependCmd $(DEPENDSRC:/=\)\makedepend
+#endif
+#define FilesToClean *.bak *.obj *.lib make.log
+#define ShLibDir $(BINDIR)
+
+#define ThreadsCompileFlags -D_MT
+
+#define ThreadsCplusplusCompileFlags ThreadsCompileFlags
+/* #define ExtraLoadFlags -link */
+
+#define HasFortran      YES
+#define FortranDoesCpp  NO
+
+#define XFileSearchPathBase Concat4($(LIBDIR)/;L/;T/;N;C,;S:$(LIBDIR)/;l/;T/;N;C,;S:$(LIBDIR)/;T/;N;C,;S:$(LIBDIR)/;L/;T/;N;S:$(LIBDIR)/;l/;T/;N;S:$(LIBDIR)/;T/;N;S)
+
+#define BuildFonts		NO
+#define BuildFresco		NO
+#define XawI18nDefines		-DHAS_WCHAR_H
+
+#ifdef _DF90_
+/*       f77 DEC driver default options :
+   -fpconstants -optimize=4 -altparam -intconstant /assume:byterecl
+ */
+# define DefaultFCOptions CCCPUOptimization /Zd /nologo /4Nportlib
+# define OptimisedFortranFlags -Ox
+# define NoOpFortranDebugFlags -Od
+
+/* 
+   # define DefaultFCOptions CCCPUOptimization /nologo /4Nportlib /GNl /iface:nomixed_str_len_arg /iface:cref
+   # define OptimisedFortranFlags /Zd /Ox /fast /fpe:3   
+   /optimize:0 /iface:nomixed_str_len_arg /fpe:0 
+   /recursive 
+*/
+# define CernlibSystem -DCERNLIB_WINNT -DCERNLIB_UNIX -DCERNLIB_MSSTDCALL -DCERNLIB_QFMSOFT
+/* -CERNLIB_QFDEC -DCERNLIB_QXNO_SC -DCERNLIB_NOQUAD 13.08.97 vf */
+#elif _IRC_
+# define DefaultFCOptions CCCPUOptimization /nologo /4Nportlib
+# define OptimisedFortranFlags -Ox
+# define CernlibSystem -DCERNLIB_WINNT -DCERNLIB_UNIX -DCERNLIB_QFMSOFT
+# define CERNLIB_QFMSOFT
+#else
+#  define DefaultFCOptions CCCPUOptimization /Zd /nologo /4Nportlib
+
+/* # define OptimisedFortranFlags /Zd -Ox  13.08.97 vf */
+#  define OptimisedFortranFlags  /Ox
+      /* flags to turn on debugging info  This must be /Zd !!!	 */
+#  define DebuggableFortranDebugFlags -Zi
+      /* flags NOT to turn on optimisation or debug*/
+#  define NoOpFortranDebugFlags /Od
+      /*  CERNLIB   options  */
+#  define CernlibSystem -DCERNLIB_WINNT -DCERNLIB_UNIX -DCERNLIB_QFMSOFT -DCERNLIB_MSSTDCALL
+#  define CERNLIB_QFMSOFT
+#  define CERNLIB_MSSTDCALL
+#endif
+
+#define CERNLIB_F90
+#define CERNLIB_WINNT
+#define CERNLIB_UNIX
+
+
+colon=:
+indirectfile=@
+
+#ifdef UseXargs
+#undef UseXargs
+#endif
+
+#ifdef CERNLIB_SHIFT
+#undef CERNLIB_SHIFT
+#endif
+
+#define UseXargs NO
+#define X11Includes
+ 

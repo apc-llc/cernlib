@@ -1,0 +1,127 @@
+*
+* $Id: v1_22,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_22,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.22/11 07/04/95  10.46.41  by  O.Couet
+*-- Author :    O.Couet   10/11/94
+*
+*::>          VERSION  1.22/11   07/04/95 10.46.41
+*
+* Bug fixed in IGPAVE: The coordinates was not stored in the correct
+* order.
+*
+*::>          VERSION  1.22/10   05/04/95 15.48.50
+*
+* Fix in IZTX: the IGTEXT call (for PS) was not done with GFLAG=.TRUE.
+*
+* 05/04/95  11.03.50
+* Bug fixed in IGAXIS. When the axis is close to the vertical a test
+* XMIN = XMAX was done. Now we compare the difference to EPSIL.
+*
+* 03/04/95  17.08.19
+* Fix in IPPATT: the trailing blank before the continuation line in
+* the middle of a character string are removed on VAXes.
+*
+* 03/04/95  10.36.54
+* Bug fixed in //HIGZ/IKERNEL/IRQLC. After the MAIL option removal
+* the SAMPLE variable was not initialized (a +SELF was missing).
+*
+*::>          VERSION  1.22/09   23/03/95 15.25.29
+*
+* Bug fixed in IPL (all the versions): The clipping on line type
+* greater than 12 was not correct.
+*
+* 09/03/95  16.17.22
+* Mods in IGTABL and IGHCXY to drawn the errors (color) correctly for
+* 1D histos.
+*
+*::>          VERSION  1.22/08   09/03/95 14.09.16
+*
+* New option E in IGTABL. This option allows to draw the error
+* on 2D histograms. Used with S1, S2, etc the colors are mapped
+* on the errors not on the content.
+*
+* 27/02/95  17.41.51
+* The MAIL option (telnetg) has bin removed from the installation
+* cradle *HIGZ.
+*
+* 24/02/95  16.57.11
+* Misplaced RETURN in IGWWK (options 2BUF and HWCO).
+*
+* 24/02/95  15.46.45
+* Bug fixed in IGTAB4: Th background color for surface was not correct
+* if, for example, BCOL=1102.
+*
+* 22/02/95  12.05.12
+* All the ONtuple material has been moved in the OBSOLETE patch.
+*
+* 14/02/95  10.43.48
+* Bug fixed in IKBOX for the FALCO driver. IGSG was missing.
+*
+*::>          VERSION  1.22/07   09/02/95 17.03.34
+*
+* Bug fixed in IPTEXT. Some arrays was accessed with wrong indeces.
+*
+* 07/02/95  10.10.51
+* Mod in IPEND: In some cases (for example NEXT at the end of a macro)
+* a PS file was terminated like an EPS file.
+*
+*::>          VERSION  1.22/06   03/02/95 12.15.27
+*
+* Bug fixed in IPTEXT: in some case the text was cutted in the middle
+* of an octal code.
+*
+*::>          VERSION  1.22/05   30/01/95 11.02.06
+*
+*   Bug fixed in IZSCLI. The PostScript clipping was stored in
+*   the LaTex file (-777).
+*
+* 27/01/95  16.28.10
+*
+*   Better drawing of the ARC border. Patch IG: IGARC2 IGARC3 IGARC4
+*
+*::>          VERSION  1.22/04   25/01/95 17.50.08
+*
+*   New routine IXMOVWI to move an X11 window.
+*
+* 25/01/95  15.44.18
+*
+*   New option WIID in IGQWK to return the window identifier associated
+*   to a given workstation ID.
+*
+*   Bug fixed in ixgetwi (x11int): It was not working for several
+*   windows.
+*
+*::>          VERSION  1.22/03   06/01/95 15.29.04
+*
+*   ISWN3 is called in IGTABL instead of IHSVIE. If IHSVIE is called,
+*      a sequence like:
+*         call hplfr3(0.,4.,0.,1.,0.,1.,30.,30.,'WBF')
+*         lego 20
+*      does not work because the window (ISWN3) is not normalized after
+*      the call to HPLFR3.
+*   Protection added in ISVP3 and ISWN3
+*
+*::>          VERSION  1.22/02   05/01/95 15.10.45
+*
+*   Mods in IZSCLI, IPINIT, IPZONE: The clipping is now set only
+*      if IPZONE has been called. Otherwise some clipping problems
+*      can append if there is several zones in the PS file
+*   Mod in IPDEF: atend is replaced by (atend).
+*
+*::>          VERSION  1.22/01   15/11/94 15.57.56
+*
+*   Modif in IGAXIS to have the correct label alignment (L,R,C) for
+*      vertical axis. I the previous version it was set to Left always
+*      if the axis was drawn TOP do DOWN. IGCOLM also been modified
+*      accordingly.
+*
+*::>          VERSION  1.22/00   10/11/94 11.49.51
+*
+*   Modif in the definition of the clipping for PostScript to avoid
+*      side effect in FrameMaker.
+*

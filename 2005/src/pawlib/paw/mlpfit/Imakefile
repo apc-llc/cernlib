@@ -1,0 +1,19 @@
+DoIncludePackage(paw)
+
+SRCS_C= mlp_gen.c mlp_inter.c mlppawc.c mlp_sigmoide.c
+
+SRCS_F= mlpfit.F pawmlp1.F
+
+#if defined(CERNLIB_HPUX) ||  defined(CERNLIB_IBMRT)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Df2cFortran
+#endif
+
+#ifndef CERNLIB_VAXVMS
+EXTRA_INCLUDES := $(EXTRA_INCLUDES) -I$(VPATH)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

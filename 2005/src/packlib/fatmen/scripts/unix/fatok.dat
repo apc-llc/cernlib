@@ -1,0 +1,27 @@
+#!/bin/ksh
+#
+# Check that the FATMEN servers are running for all known servers
+# Send warning mail if not
+#
+
+typeset -l logfile
+
+for i in /fatmen/*.log
+do
+pid=`cat $i | awk '{printf "%s\n",$14}'`
+server=`basename $i .log`
+
+if (test $pid)
+   then
+
+   if(ps -ae  | grep -qs $pid )
+      then
+        :
+      else
+         subject=`echo ${0}: Process for ${server} - tail of logfile`
+         logfile=/fatmen/${server}/fatserv.log
+         tail ${logfile} | mail -s " ${subject} " fatcat-mgr@zfatal.cern.ch
+   fi
+fi
+done
+

@@ -1,0 +1,145 @@
+*
+* $Id: siop2c.F,v 1.1.1.1 1995/12/12 14:36:19 mclareni Exp $
+*
+* $Log: siop2c.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:19  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.10/03 10/02/94  17.17.05  by  Carlo E. Vandoni
+*-- Author :
+      SUBROUTINE SIOP2C
+#include "sigma/sigc.inc"
+#include "sigma/pawc.inc"
+C
+      DIMENSION IAD(3),JMIP(3)
+      EQUIVALENCE(IAD,IZAD,IADA),(IADB,IZADB),(JMIP,IMODA,IZMOD),(IMODB,
+     ,IZMODB)
+      DIMENSION RCA(2),RCB(2),RCX(2)
+      EQUIVALENCE (CPLA,RCA),(CPLB,RCB),(CPLX,RCX)
+      EQUIVALENCE(RA,RCA(1)),(CA,RCA(2)),(RB,RCB(1)),(CB,RCB(2))
+     ,,(RX,RCX(1)),(CX,RCX(2))
+      COMPLEX CPLC
+C
+C
+C
+C
+      RA=DYNA(IADA)
+      RB=DYNA(IADB)
+      IF(IMODA.EQ.2) CA=DYNA(IADA+1)
+      IF(IMODB.EQ.2) CB=DYNA(IADB+1)
+C
+C     KLASS=10B=**
+C    KLASS=  11B *
+C            12B /
+C            13B -
+C            14B +
+C
+C
+C   KLASS CODES ALREADY CHECKED IN FA0 OR SYSFUN
+      IF(KLASS.GT.200) GOTO 200
+      K=KLASS-7
+      GOTO (10,11,12,13,14) K
+C
+C
+10    CONTINUE
+C 10                           **  OR  '
+C
+C   AVOID TAKING THE LOG OF ZERO IN THE MIDDLE OF THIS
+      IF(RA.EQ.0.0.AND.CA.EQ.0.0) GOTO 66666
+C
+C     CHECK VALID ARG FOR CEXP
+C
+      CPLC=CPLB*CLOG(CPLA)
+      CPLX=(0.0,0.0)
+*      IF (REAL(CPLC).GE.-675.8185010459447   .AND.
+*     1    REAL(CPLC).LE.741.667483199142   .AND.
+*     2    ABS(AIMAG(CPLC)).LE.2**47  ) CPLX=CEXP(CPLC)
+      CPLX=CEXP(CPLC)
+      GOTO 55
+C
+C
+11    CONTINUE
+C 11                           *
+C
+      CPLX=CPLA*CPLB
+      GOTO 55
+C
+C
+12    CONTINUE
+C 12                           /
+C
+      IF(RB.EQ.0.0.AND.CB.EQ.0.0) GOTO 66666
+      CPLX=CPLA/CPLB
+      GOTO 55
+C
+C
+13    CONTINUE
+C 13                           -
+C
+      CPLX=CPLA-CPLB
+      GOTO 55
+C
+C
+14    CONTINUE
+C 14                           +
+C
+      CPLX=CPLA+CPLB
+      GOTO 55
+C
+C
+C
+200   CONTINUE
+C   TWO ARGUMENT SYSFUNS IF RESULT IS TO BE COMPLEX
+      K=KLASS-200
+      GOTO(201,202,203,204),K
+C
+C
+201   CONTINUE
+C 201              MOD       MOD OF REAL&IMAG PART IDEPENDENTLY
+      RX=AMOD(RA,RB)
+      IF(RB.EQ.0.) RX=0.
+      CX=AMOD(CA,CB)
+      IF(CB.EQ.0.) CX=0.
+      GOTO 55
+C
+C
+202   CONTINUE
+C 202              ATAN2     NOT DEFINED FOR COMPLEX ARGS
+      CALL SINERR(32)
+      RETURN
+
+C
+C
+203   CONTINUE
+C 203              SIGN
+      RX=SIGN(RA,RB)
+      CX=SIGN(CA,CB)
+      GOTO 55
+C
+C
+204   CONTINUE
+C 204              CPLX      MAKE COMPLEX ARRAY FROM TWO REAL PARTS
+      RX=RA
+      CX=RB
+      GOTO 55
+C
+C
+55     CONTINUE
+      DYNA(IADDR)=RX
+      DYNA(IADDR+1)=CX
+      RETURN
+C
+C
+66666 CONTINUE
+C   ARBITRARILY RESET RESULT TO ZERO IF ARG NOT PERMISSIBLE
+C   *************  ALL MODE 2 ABORTS CANNOT BE PREVENTED BY TESTING AS
+C   *************  LEGVAR IS OF NO USE TO PREVENT MODE 2 ERRORS BECAUSE
+C   ************   INTERMEDIATE RESULTS OF CPLX OPERATIONS ARE UNAVAIABL
+      RX=0.
+      CX=0.
+      GOTO 55
+C
+C
+      END

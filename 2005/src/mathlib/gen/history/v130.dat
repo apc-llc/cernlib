@@ -1,0 +1,36 @@
+*
+* $Id: v130.dat,v 1.1.1.1 1996/04/01 15:01:42 mclareni Exp $
+*
+* $Log: v130.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:42  mclareni
+* Mathlib gen
+*
+*
+* Version 1.30
+C  GLOBAL CHANGES:
+C- PRINT x statements changed to WRITE(6,x)
+C- replacement of Hollerith specifications by quoted strings in
+C  FORMAT statements
+C- replacement of intrinsic functions by the generic equivalent
+C- AMODE/RMODE qualifiers added to IBM assembler routines.
+C  Selected by PATCHY flag QMIBMXA.
+C
+C  ROUTINE CHANGES FROM 1.29 :
+C
+C          A401 IDENZB   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          C201 DSNLEQ   New
+C          C208 DRTEQ4   Bug corrected
+C          D102 GAUSS1   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          D112 RGAUSS   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          F122 SCATTER  New, not for Cray
+C          J504 HIST     OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          J507 HISTO    OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          M412 AFROMI   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          M413 BCDWD    OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          M414 IDIGIT   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          M439 GETBYT   Add Apollo flag in SETBYT, GETBYT
+C          W601 MLR      Obsoleted due to lack of user feedback
+C          X203 PAROFI   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          Z034 WHICH    Cray machine added
+C          Z210 EXCPRD   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C

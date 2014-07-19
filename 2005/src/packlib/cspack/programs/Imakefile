@@ -1,0 +1,9 @@
+DoIncludePackage(cspack)
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+SUBDIRS= zftp zs
+
+InstallBinSubdirs($(SUBDIRS))
+

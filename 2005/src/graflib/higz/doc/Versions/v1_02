@@ -1,0 +1,112 @@
+*
+* $Id: v1_02,v 1.1.1.1 1996/02/14 13:10:20 mclareni Exp $
+*
+* $Log: v1_02,v $
+* Revision 1.1.1.1  1996/02/14 13:10:20  mclareni
+* Higz
+*
+*
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.02/00   880420
+*
+*  27/03/87 New version of IZMERG the option 'D' is available
+*
+*  27/03/87 The routine IRQLC fills the COMMON /QUEST/ with the window
+*           and viewport parameters. For more precision see the comments
+*           at the beginning of the routine
+*
+*  30/03/87 New version of IGAXIS with beautiful ticks marks and labels
+*
+*  01/04/87 A new version of IZMERG
+*
+*  02/04/87 First implementation of IGRAPH
+*
+*  06/04/87 New format in the option SHOW in IGSET
+*
+*  07/04/87 Correction of IGARC in case of R1=R2 and PHIMIN=PHIMAX
+*
+*  13/04/87 Corrections for IBM/VM
+*
+*  13/04/87 New version of IGRAPH for Fill Area
+*
+*  13/04/87 New picture structure : Control bank.
+*
+*  16/04/87 The routine IGSA is implemented
+*
+*  21/04/87 New internal coding of the control bank
+*
+*  22/04/87 Polyline with two points and marker with one point are stored
+*           in a compact way
+*
+*  23/04/87 Line type from 12 to 15 are available . They are independent from
+*           the basic graphics package . For this line types the Basic Segment
+*           Length may be sets with the routine IGSET
+*
+*  11/05/87 Implementation of the routines IGSG and IGSA for IBM
+*
+*  20/05/87 First version of IGPIE
+*
+*  27/05/87 Modifications for the GTS_GRAL version of GKS
+*
+*  27/05/87 The routine IGRNG is available. This routine maps the workstation
+*           window onto the whole screen and select the normalization
+*           transformation number 1 according to the XSIZ and YSIZ parameters
+*
+*  12/06/87 Mods in IGAXIS to solve rounding problems for log axis
+*
+*  17/06/87 New error routine IGERR
+*
+*  18/06/87 Bar charts implemented in IGRAPH (option "B")
+*
+*  26/06/87 Changes in routine IGMETA (variable IWTYPE was reset!)
+*
+*  30/06/87 Bug corrected in IZPICT when GFLAG=.FALSE.
+*
+*  02/07/87 Bug corrected when ZFLAG=.TRUE. and GFLAG=.FALSE.
+*
+*  16/07/87 Bars attributes in IGRAPH are now stored in the data structure.
+*
+*  29/07/87 RBOF,RBWD are returned in RQUEST(1) and RQUEST(2) after a call
+*           to IGRAPH with option 'B'
+*
+*  06/08/87 Some bugs in IGRAPH are corrected
+*
+*  10/08/87 New version of IGRAPH with new options "L" and "M"
+*
+*  12/08/87 IZGRAP corrected according to the new version of IGRAPH
+*
+*  13/08/87 IGRAPH is now IGHIST (cf. doc) and IZGRAP is now IZHIST.
+*           The old option "A" is now the option "F" for "Fill area"
+*
+*  13/08/87 The angle of IGARC are now in degrees
+*
+*  20/08/87 Changes in IGAXIS (temporary variable CHTEMP)
+*
+*  28/09/87 New version of IGAXIS: option I (Integer labeling). Correction
+*           in IGSET : BARO can be .LT.0.
+*
+*  05/10/87 The routines IGSA and IGSG have the "Workstation Type" as input
+*           parameter.
+*
+*  20/10/87 The routine IZRIOS is replaced by the routines IZIN, IZOUT, IZSCR
+*
+*  28/10/87 This file contains now the PATCH MENU and the PATCH GED
+*
+*  30/11/87 A priority system is available between the normalization
+*           transformation. The last selected transformation by ISELNT
+*           has the higher priority. In case of overlaping of the
+*           transformations the transformations with the higher priority
+*           is choosen by IRQLC .
+*
+*  04/01/88 Modifications to IGRAP1. Normalization in X and Y
+*
+*  04/03/88 Mods in the IZ routine (IZHIST)
+*
+*  30/03/88 Bug corrected in IPM
+*
+*  18/04/88 Changes in HICDES to run on CRAY
+*
+*  24/05/88 Mods in IGMETA
+*

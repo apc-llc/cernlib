@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 ticnth.F tlenoc.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

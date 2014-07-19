@@ -1,0 +1,41 @@
+*
+* $Id: mkfatnew.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: mkfatnew.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, MKFATNEW.EXEC */
+/*---------------------------------------------------------------------*/
+/*                                                                     */
+/* FATNEW EXEC.                                                        */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+'EXEC CERNLIB'
+FREE_BLOCKS = QDISK("191","BLKLEFT") /* Look how many blocks are left
+                                        on 191 disk */
+/* Now define FATSYS and FATGRP. These will be used by FATNEW to
+   generate an RZ file named fatsys.FATRZ with a top-directory
+   //fatsys/fatgrp.
+ 
+   e.g. for FATSYS = IN2P3, FATGRP = BUGEY
+ 
+   //IN2P3/BUGEY in file IN2P3.FATRZ.A6
+*/
+/*FATGRP = 'BUGEY'*/
+/*FATSYS = 'IN2P3'*/
+Say
+Say "Please give the name of the FATMEN system. This name forms"
+Say "the top-level of the FATMEN catalogue,"
+Say "e.g. CERN, FNAL, DESY etc."
+Say
+Say "Please give the name of the FATMEN system"
+Pull FATSYS
+Say
+Say "Please give the name of the FATMEN group"
+Pull FATGRP
+ 
+Address Command
+ 
+'FATNEW'

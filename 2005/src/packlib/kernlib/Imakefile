@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(kernlib)
+
+LIBDIRS= kernbit kerngen kernnum umon 
+
+SUBDIRS= $(LIBDIRS)
+
+TopOfPackage(kernlib)
+
+SubdirLibraryTarget(kernlib,$(LIBDIRS))
+
+InstallLibrary(kernlib,$(CERN_LIBDIR))
+InstallLibraryAlias(kernlib,kernlib-shift,$(CERN_LIBDIR))
+
+test::	LibraryTargetName(kernlib)
+
+TestSubdirs($(SUBDIRS))
+
+InstallIncludeSubdirs($(LIBDIRS))

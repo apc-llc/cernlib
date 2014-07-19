@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:44 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:44  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNHPX)
+
+
+              Up-date record for the Pam-file  KERNHPX
+              ----------------------------------------
+
+
+UP-DATE  1.04 :  28-Sept-1994
+----------------------------
+
+Replacing file   KERNHPX  1.03  940511 20.58
+
+New Decks:    TRACEQ, TRACEQC       to print trace-back of routines
+
+---------------------------------------------------------------------
+
+#endif

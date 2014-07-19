@@ -1,0 +1,12 @@
+SRCS_F= gukine.F guout.F gustep.F gutrev.F main.F \ @@\
+	ufiles.F ugeom.F uginit.F uglast.F uhinit.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(exam1,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib)
+
+TestTarget(exam1,gexam1.dat,gexam1.input)
+
+CopyFile(g321x1.inp,gexam1.input)
+
+CopyFile(exam1.dat,gexam1.dat)

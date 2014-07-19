@@ -1,0 +1,9 @@
+SRCS_F=	fafndf.F fastgq.F fastgs.F fmbalq.F fmbque.F fmcstg.F \ @@\
+	fmlook.F fmqstg.F fmquot.F fmrack.F fmrqui.F fmrstg.F \ @@\
+	fmstgc.F fmstgp.F fmvaxc.F fmvusr.F fmwto.F 
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) fmgtel.F fmgtlg.F fmxdsk.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

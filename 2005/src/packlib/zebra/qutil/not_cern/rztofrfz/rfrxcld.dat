@@ -1,0 +1,20 @@
+*
+* $Id: rfrxcld.dat,v 1.1.1.1 1996/03/06 10:47:20 mclareni Exp $
+*
+* $Log: rfrxcld.dat,v $
+* Revision 1.1.1.1  1996/03/06 10:47:20  mclareni
+* Zebra
+*
+*
+#if !defined(CERNLIB_DCLTABLES)
+MODULE RFRX_CLD
+#endif
+define verb RFRX
+#if defined(CERNLIB_DCLTABLES)
+       image "CERN_ROOT:[EXE]RFRX"
+#endif
+              parameter       P1,LABEL=FIN,PROMPT="FX_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)
+              parameter       P2,LABEL=FOUT,PROMPT="RZ_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)
+              qualifier       RELATIVE

@@ -1,0 +1,53 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:47 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:47  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSGI)
+
+UP-DATE  1.04 :  20-Jan-1993
+----------------------------
+
+Replacing File   KERNSGI 1.03  920521 16.33
+
+Correct :     SIGNALF            correct for C syntax
+
+---------------------------------------------------------------------
+
+UP-DATE  1.03 :  11-May-1992
+----------------------------
+
+Replacing File   KERNSGI 1.02  910318 14.16
+
+New deck :    LENOCC                    for speed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  18-Mar-1991
+----------------------------
+
+Replacing File   KERNSGI 1.01  900724 18.48
+
+New deck :    SIGNALF, FFSIZE
+
+Correct :     connect P=CCGEN, CCGENCF of KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01 :  24-July-1990
+----------------------------
+
+Replacing File   KERNSGI 1.00  891208 10.40
+
+Correct :     connect CCGEN by individual routines
+
+---------------------------------------------------------------------
+
+          First release of the KERNSGI Pam :   8-dec-1989
+
+---------------------------------------------------------------------
+
+#endif

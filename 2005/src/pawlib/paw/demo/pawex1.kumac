@@ -1,0 +1,23 @@
+MACRO PAWEX1
+****************************************************************
+*                       PAW TUTORIAL EXAMPLE 1                 *
+* Lines starting with a * are comments and are ignored by PAW  *
+****************************************************************
+Exec ALLDEF
+vector/create VECT1(10)
+vector/input VECT1 10 8 6 4 2 3 5 7 9 11
+VECTOR/CREATE VX(20) R 1. 2. 3. 4. 5. 6. _
+7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20.
+VECTOR/CREATE VY(20) R 1.1 3.2 5.3 7.4 7.5 _
+6.6 4.3 2.1 6.6 11.1 16.2 18.3 19.0 17.8 16.0 12.1 9.1 6.1 3.1 6.6
+zon 1 2
+set htyp 244
+vector/draw VECT1
+GRAPH 20 VX VY
+SET MTYP 21
+GRAPH 20 VX VY P
+set DMOD 2
+GRAPH 20 VX VY C
+set DMOD 0
+VE/DE *
+RETURN

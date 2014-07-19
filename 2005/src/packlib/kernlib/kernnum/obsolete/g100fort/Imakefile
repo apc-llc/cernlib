@@ -1,0 +1,6 @@
+SRCS_F= prob.F
+
+FDEBUGFLAGS=NoOpFortranDebugFlags
+FORTRANSAVEOPTION=FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,28 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS=  cz fz sz xz tcpaw
+
+#if defined(CERNLIB_VAXVMS)
+LIBDIRS:= $(LIBDIRS) vmsc czdnet
+#endif
+
+#if ( defined(CERNLIB_VAXVMS) || defined(CERNLIB_UNIX) ) \
+  && ! defined(CERNLIB_SHIFT) && ! defined(CERNLIB_WINNT)
+LIBDIRS:= $(LIBDIRS) sysreq
+#endif
+
+PROGRAMDIRS= programs
+
+SUBDIRS= $(LIBDIRS) $(PROGRAMDIRS) cspack
+
+TopOfPackage(cspack)
+
+SubdirLibraryTarget(cspack,$(LIBDIRS))
+
+InstallBinSubdirs($(PROGRAMDIRS))
+
+test::
+
+InstallIncludeSubdirs(cspack)

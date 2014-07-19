@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 isarun.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

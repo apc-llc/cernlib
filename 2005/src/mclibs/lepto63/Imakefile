@@ -1,0 +1,19 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(lepto651)
+
+SUBDIRS= code test
+
+TopOfPackage(lepto651)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(lepto651,code)
+
+InstallLibrary(lepto651,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+
+install.include:

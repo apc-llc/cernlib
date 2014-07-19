@@ -1,0 +1,192 @@
+C
+C-----------------------------------------------------------------------
+#if defined(CERNLIB_IMPNONE)
+      IMPLICIT NONE
+#endif
+#include "isajet/sslun.inc"
+#include "isajet/sssm.inc"
+#include "isajet/sspar.inc"
+#include "isajet/ssmode.inc"
+#include "isajet/sstype.inc"
+#include "isajet/isapw.inc"
+C
+      REAL XMG,XMU,XMHA,XTANB,XMQ1,XMDR,XMUR,XML1,XMER
+     $,XMQ2,XMSR,XMCR,XML2,XMMR,XMQ3,XMBR,XMTR,XML3,XMLR
+     $,XAT,XAB,XAL,XM1,XM2,XMT
+      INTEGER J,K
+      CHARACTER*60 FNAME
+      CHARACTER*5 LBLIN,LBLOUT(5),SSID
+      CHARACTER*40 V,VISAJE
+      INTEGER NOUT,IALLOW,IITEST
+      PARAMETER (NOUT=33)
+      INTEGER IDOUT(NOUT)
+      CHARACTER*30 ISAPW2
+      SAVE ISAPW2
+C
+      DATA IDOUT/
+     $IDTP,ISGL,ISUPL,ISDNL,ISSTL,ISCHL,ISBT1,ISTP1,ISUPR,ISDNR,
+     $ISSTR,ISCHR,ISBT2,ISTP2,ISEL,ISMUL,ISTAU1,ISNEL,ISNML,ISNTL,
+     $ISER,ISMUR,ISTAU2,ISZ1,ISZ2,ISZ3,ISZ4,ISW1,ISW2,
+     $ISHL,ISHH,ISHA,ISHC/
+C          ISAPW2 is used to check whether ALDATA is loaded
+      DATA ISAPW2/'ALDATA REQUIRED BY FORTRAN G,H'/
+C
+C          Initialize
+C
+      IF(ISAPW1.NE.ISAPW2) THEN
+        PRINT*, ' ERROR: BLOCK DATA ALDATA HAS NOT BEEN LOADED.'
+        PRINT*, ' ISAJET CANNOT RUN WITHOUT IT.'
+        PRINT*, ' PLEASE READ THE FINE MANUAL FOR ISAJET.'
+        STOP99
+      ENDIF
+C
+      LOUT=1
+      PRINT 1000
+1000  FORMAT(' ENTER output file name (in single quotes)')
+      READ*, FNAME
+      OPEN(1,FILE=FNAME,STATUS='NEW',FORM='FORMATTED')
+C          Print version
+      V=VISAJE()
+      WRITE(LOUT,1001) V
+1001  FORMAT(' ',44('*')/' *',42X,'*'/
+     C  ' * ',A40,' *'/
+     C  ' *',42X,'*'/' ',44('*')/)
+C
+      PRINT 1100
+1100  FORMAT(' ENTER M(TP)')
+      READ*, XMT
+      PRINT 1200
+1200  FORMAT(' ENTER M(GLSS), MU, M(A), TAN(BETA)')
+      READ*, XMG,XMU,XMHA,XTANB
+      PRINT 1250
+1250  FORMAT(' ENTER M(Q1), M(DR), M(UR), M(L1), M(ER)')
+      READ*, XMQ1,XMDR,XMUR,XML1,XMER
+      PRINT 1300
+1300  FORMAT(' ENTER M(Q3), M(BR), M(TR), M(L3), M(LR), A_T, A_B, A_L')
+      READ*, XMQ3,XMBR,XMTR,XML3,XMLR,XAT,XAB,XAL
+      XMQ2=1.E20
+      XMSR=1.E20
+      XMCR=1.E20
+      XML2=1.E20
+      XMMR=1.E20
+      PRINT 1400
+1400  FORMAT(' ENTER OPTIONAL 2ND GEN MASSES (/ FOR DEFAULT):')
+      PRINT 1401 
+1401  FORMAT(' ENTER M(Q2), M(SR), M(CR), M(L2), M(MR)')
+      READ*, XMQ2,XMSR,XMCR,XML2,XMMR
+      XM1=1.E20
+      XM2=1.E20
+      PRINT 1500
+1500  FORMAT(' ENTER OPTIONAL GAUGINO MASSES M1, M2 (/ FOR DEFAULT):')
+      READ*, XM1,XM2
+      AMGVSS=1.E20
+      PRINT 1501
+1501  FORMAT(' ENTER OPTIONAL GRAVITINO MASS (/ FOR DEFAULT):')
+      READ*, AMGVSS
+C
+C          Calculate...
+C
+      CALL SSMSSM(XMG,XMU,XMHA,XTANB,XMQ1,XMDR,XMUR,
+     $XML1,XMER,XMQ2,XMSR,XMCR,XML2,XMMR,XMQ3,XMBR,XMTR,XML3,
+     $XMLR,XAT,XAB,XAL,XM1,XM2,XMT,IALLOW,1)
+C
+C          Test parameters
+C
+      IF(IALLOW.NE.0) THEN
+        WRITE(LOUT,2001)
+2001    FORMAT(//' MSSM WARNING: Z1SS IS NOT LSP')
+      ENDIF
+C
+      CALL SSTEST(IALLOW)
+      IITEST=IALLOW/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2002)
+2002    FORMAT(' MSSM WARNING: Z -> Z1SS Z1SS EXCEEDS BOUND')
+      ENDIF
+      IITEST=IITEST/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2004)
+2004    FORMAT(' MSSM WARNING: Z -> CHARGINOS ALLOWED')
+      ENDIF
+      IITEST=IITEST/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2008)
+2008    FORMAT(' MSSM WARNING: Z -> Z1SS Z2SS TO BIG')
+      ENDIF
+      IITEST=IITEST/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2016)
+2016    FORMAT(' MSSM WARNING: Z -> SQUARKS, SLEPTONS ALLOWED')
+      ENDIF
+      IITEST=IITEST/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2032)
+2032    FORMAT(' MSSM WARNING: Z -> Z* HL0 EXCEEDS BOUND')
+      ENDIF
+      IITEST=IITEST/2
+      IF(MOD(IITEST,2).NE.0) THEN
+        WRITE(LOUT,2064)
+2064    FORMAT(' MSSM WARNING: Z -> HL0 HA0 ALLOWED')
+      ENDIF
+C
+C          Print results. Note decay modes need not be together, so
+C          need to select each parent particle separately.
+C
+      WRITE(LOUT,3000) XMT,XMG,XMU,XMHA,XTANB,XMQ1,XMDR,XMUR,XML1,
+     $XMER,XMQ3,XMBR,XMTR,XML3,XMLR,XAT,XAB,XAL,ALFAEM,SN2THW,ALFA3
+3000  FORMAT(
+     $' INPUTS FOR ISASUSY:'/
+     $' M(TP)     =',F10.3/
+     $' M(GLSS)   =',F10.3,'   MU        =',F10.3,'   M(HA)  =',F10.3/
+     $' TAN(BETA) =',F10.3/
+     $' M(Q1  )   =',F10.3,'   M(DR)     =',F10.3,'   M(UR)  =',F10.3/
+     $' M(L1)     =',F10.3,'   M(ER)     =',F10.3,'   M(Q3)  =',F10.3/
+     $' M(BR)     =',F10.3,'   M(TR)     =',F10.3,'   M(L3)  =',F10.3/
+     $' M(LR)     =',F10.3,'   A_T       =',F10.3,'   A_B    =',F10.3/
+     $' A_TAU     =',F10.3/
+     $' ALPHAEM   =',F10.5,'   SIN2(THW) =',F10.5,'   ALPHA3 =',F10.5/)
+      IF(ABS(XML2).LE.1.E19) THEN
+        WRITE(LOUT,3005) XMQ2,XMSR,XMCR,XML2,XMMR
+3005    FORMAT(
+     $' M(Q2)     =',F10.3,'   M(SR)     =',F10.3,'   M(CR)  =',F10.3/
+     $' M(L2)     =',F10.3,'   M(MR)     =',F10.3/)
+      ENDIF
+      IF(ABS(XM1).LE.1.E19.AND.ABS(XM2).LE.1.E19) THEN
+        WRITE(LOUT,3010) XM1,XM2
+3010    FORMAT(
+     $  ' M_1       =',F10.3,'   M_2       =',F10.3/)
+      ENDIF
+C
+      WRITE(LOUT,3100) AMZ1SS,AMZ2SS,AMZ3SS,AMZ4SS
+3100  FORMAT(' NEUTRALINO MASSES (SIGNED) =',4F10.3)
+      DO 100 J=1,4
+        WRITE(LOUT,3200) J,(ZMIXSS(K,J),K=1,4)
+3200    FORMAT(' EIGENVECTOR ',I1,'       =',4F10.5)
+100   CONTINUE
+      WRITE(LOUT,3300) AMW1SS,AMW2SS
+3300  FORMAT(/' CHARGINO MASSES (SIGNED)  =',2F10.3)
+      WRITE(LOUT,3400) GAMMAL,GAMMAR
+3400  FORMAT(' GAMMAL, GAMMAR             =',2F10.5/)
+      WRITE(LOUT,3500) AMHL,AMHH,AMHC,ALFAH
+3500  FORMAT(' M(HL) =',F10.3,' M(HH) =',F10.3,
+     $' M(H+) =',F10.3,'   ALFAH=',F6.4/)
+      WRITE(LOUT,3550) AMT1SS,AMT2SS,THETAT
+3550  FORMAT(
+     $' M(T1)   =',F10.3,'   M(T2)   =',F10.3,'   THETA(T)=',F10.3/)
+      WRITE(LOUT,3551) AMB1SS,AMB2SS,THETAB
+3551  FORMAT(
+     $' M(B1)   =',F10.3,'   M(B2)   =',F10.3,'   THETA(B)=',F10.3/)
+      WRITE(LOUT,3552) AML1SS,AML2SS,THETAL
+3552  FORMAT(
+     $' M(TAU1) =',F10.3,'   M(TAU2) =',F10.3,' THETA(TAU)=',F10.3/)
+C
+      WRITE(LOUT,3600)
+3600  FORMAT(' PARENT --> DAUGHTERS',18X,'WIDTH',10X,
+     $'BRANCHING RATIO'/)
+C          Write all modes
+      DO 200 J=1,NOUT
+        CALL SSPRT(IDOUT(J))
+200   CONTINUE
+C
+      STOP
+      END

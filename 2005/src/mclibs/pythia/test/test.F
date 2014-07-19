@@ -1,0 +1,9 @@
+      PROGRAM PYTST
+C
+      EXTERNAL PYDATA
+
+      MPAR = 1
+C
+      CALL PYTEST(MPAR)
+C
+      END

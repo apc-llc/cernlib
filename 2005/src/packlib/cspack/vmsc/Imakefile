@@ -1,0 +1,10 @@
+SRCS_C=	 crypt.c ctl.c getpwnam.c jib.c pcb.c \ @@\
+	setacct.c setid.c setpriv.c setuid.c setuser.c sgtty.c
+
+#if defined(CERNLIB_TWG)
+SRCS_C :=$(SRCS_C) gethostn.c
+#endif
+
+CCOPTIONS:= $(CCOPTIONS)/stand=vaxc
+
+SubdirLibraryTarget(NullParameter,NullParameter)

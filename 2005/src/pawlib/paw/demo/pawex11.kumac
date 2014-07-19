@@ -1,0 +1,19 @@
+MACRO PAWEX11
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 11                          *
+* Creation of one and two dimensional histograms                         *
+**************************************************************************
+Exec ALLDEF
+OPT GRID
+zon 1 2
+function/fun1 100 htfun1.f 100. 0. 1.
+1dh  110 'Test 1-dim Histo' 100 0. 1. 1000.
+call urout.f(5000)
+fun/fun2 200 htfun2 25. 0. 1. 25. 0. 1. C
+hi/li
+histogram/file 1 pawhists.hbook 1024 N
+hrout 0
+close 1
+hi/de 0
+RETURN
+

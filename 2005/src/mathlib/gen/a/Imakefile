@@ -1,0 +1,22 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+#if defined(CERNLIB_QF2C)
+
+SRCS_F=	dreal.F
+
+#if !defined(CERNLIB_LINUX)
+SRCS_F= $(SRCS_F) dcmplx.F dconjg.F dimag.F gcmplx.F gconjg.F gimag.F greal.F
+#endif
+
+#endif
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+

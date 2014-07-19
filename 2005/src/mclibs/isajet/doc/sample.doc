@@ -1,0 +1,338 @@
+\newpage
+\section{Sample Jobs\label{SAMPLE}}
+
+      The simplest ISAJET job reads a user-supplied parameter file and
+writes a data file and a listing file. The following is an example of
+a parameter file which generates each type of event:
+\begin{verbatim}
+SAMPLE TWOJET JOB
+800.,100,2,50/
+TWOJET
+PT
+50,100,50,100/
+JETTYPE1
+'GL'/
+JETTYPE2
+'UP','UB','DN','DB','ST','SB'/
+END
+SAMPLE DRELLYAN JOB
+800.,100,2,50/
+DRELLYAN
+QMW
+80,100/
+WTYPE
+'W+','W-'/
+END
+SAMPLE MINBIAS JOB
+800.,100,2,50/
+MINBIAS
+END
+SAMPLE WPAIR JOB
+800.,100,2,50/
+WPAIR
+PT
+50,100,50,100/
+JETTYPE1
+'W+','W-','Z0'/
+JETTYPE2
+'W+','W-','Z0'/
+WMODE1
+'E+','E-','NUS'/
+WMODE2
+'QUARKS'/
+END
+SAMPLE HIGGS JOB FOR SSC
+40000,100,1,1/
+HIGGS
+QMH
+400,1600/
+HMASS
+800/
+JETTYPE1
+'Z0'/
+JETTYPE2
+'Z0'/
+WMODE1
+'MU+','MU-'/
+WMODE2
+'E+','E-'/
+PT
+50,20000,50,20000/
+END
+SAMPLE SUSY JOB
+1800,100,1,10/
+SUPERSYM
+PT
+50,100,50,100/
+JETTYPE1
+'GLSS','SQUARKS'/
+JETTYPE2
+'GLSS','SQUARKS'/
+GAUGINO
+60,1,40,40/
+SQUARK
+80.3,80.3,80.5,81.6,85,110/
+FORCE
+29,30,1,-1/
+FORCE
+21,29,1/
+FORCE
+22,29,2/
+FORCE
+23,29,3/
+FORCE
+24,29,4/
+FORCE
+25,29,5/
+FORCE
+26,29,6/
+END
+SAMPLE MSSM JOB FOR TEVATRON
+1800.,100,1,1/
+SUPERSYM
+BEAMS
+'P','AP'/
+MSSMA
+200,-200,500,2/
+MSSMB
+200,200,200,200,200/
+MSSMC
+200,200,200,200,200,0,0,0/
+JETTYPE1
+'GLSS'/
+JETTYPE2
+'SQUARKS'/
+PT
+100,300,100,300/
+END
+SAMPLE MSSM SUGRA JOB FOR LHC
+14000,100,1,10/
+SUPERSYM
+PT
+50,500,50,500/
+SUGRA
+247,302,-617.5,10,-1/
+TMASS
+175/
+END
+SAMPLE SUGRA HIGGS JOB USING DEFAULT QMH RANGE
+14000,100,20,50/
+HIGGS
+SUGRA
+200,200,0,2,+1/
+HTYPE
+'HA0'/
+JETTYPE1
+'GAUGINOS','SLEPTONS'/
+JETTYPE2
+'GAUGINOS','SLEPTONS'/
+END
+SAMPLE E+E- TO SUGRA JOB WITH POLARIZED BEAMS AND BREM/BEAMSTRAHLUNG
+500.,100,1,1/
+E+E-
+SUGRA
+125,125,0,3,1/
+TMASS
+175,-1,1/
+EPOL
+-.9,0./
+EEBEAM
+200.,500.,.1072,.12/
+JETTYPE1
+'ALL'/
+JETTYPE2
+'ALL'/
+NTRIES
+10000/
+END
+SAMPLE WH JOB
+2000,100,0,0/
+WHIGGS
+BEAMS
+'P','AP'/
+HMASS
+100./
+JETTYPE1
+'W+','W-','HIGGS'/
+JETTYPE2
+'W+','W-','HIGGS'/
+WMODE1
+'ALL'/
+WMODE2
+'ALL'/
+PT
+10,300,10,300/
+END 
+SAMPLE EXTRA DIMENSIONS JOB
+14000,100,1,100/
+EXTRADIM
+QMW
+5,1000/
+QTW
+500,1000/
+EXTRAD
+2,1000,.FALSE./
+END
+SAMPLE ZJJ JOB AT LHC
+14000,100,1,100/
+ZJJ
+PT
+20,7000,20,7000,20,7000/
+MIJLIM
+0,0,20,7000/
+MTOT
+100,500/
+NSIGMA
+200/
+NTRIES
+10000/
+END
+STOP
+\end{verbatim}
+\noindent See Section~\ref{INPUT} of this manual for a complete list
+of the possible commands in a parameter file. Note that all input to
+ISAJET must be in {\it UPPER} case only.
+
+      Subroutine RDTAPE is supplied to read events from an ISAJET data
+file, which is a machine-dependent binary file. It restores the event
+data to the FORTRAN common blocks described in Section~\ref{OUTPUT}.
+The skeleton of an analysis job using HBOOK and PAW from the CERN
+Program Library is provided in patch ISAPLT but is not otherwise
+supported. A Zebra output format based on code from the D0
+Collaboration is also provided in patch ISAZEB; see the separate
+documentation in patch ISZTEXT.
+
+\subsection{DEC VMS}
+
+      On a VAX or ALPHA running VMS, ISAJET can be compiled by
+executing the .COM file contained in P=ISAUTIL,D=MAKEVAX. Extract this
+deck as ISAMAKE.COM and type
+\begin{verbatim}
+@ISAMAKE
+\end{verbatim}
+This will run YPATCHY with the pilot patches described in
+Section~\ref{PATCHY} and the VAX flag to extract the source code,
+decay table, and documentation. The source code is compiled and made
+into a library, which is linked with the following main program,
+\begin{verbatim}
+      PROGRAM ISARUN
+C          MAIN PROGRAM FOR ISAJET
+      OPEN(UNIT=1,STATUS='OLD',FORM='FORMATTED',READONLY)
+      OPEN(UNIT=2,STATUS='NEW',FORM='UNFORMATTED')
+      OPEN(UNIT=3,STATUS='OLD',FORM='FORMATTED')
+      OPEN(UNIT=4,STATUS='NEW',FORM='FORMATTED')
+      CALL ISAJET(-1,2,3,4)
+      STOP
+      END
+\end{verbatim}
+to produce ISAJET.EXE. Two other executables, ISASUSY.EXE and
+ISASUGRA.EXE, will also be produced to calculate SUSY masses and decay
+modes without generating events. Temporary files can be removed by
+typing
+\begin{verbatim}
+@ISAMAKE CLEAN
+\end{verbatim}
+
+      Create an input file \verb|JOBNAME.PAR| following the examples
+above or the instructions in Section~\ref{INPUT} and run ISAJET with
+the command
+\begin{verbatim}
+@ISAJET JOBNAME
+\end{verbatim}
+using the ISAJET.COM file contained P=ISAUTIL,D=RUNVAX. This will
+create a binary output file \verb|JOBNAME.DAT| and a listing file
+\verb|JOBNAME.LIS|. Analyze the output data using the commands
+described in Section~\ref{TAPE}.
+
+      There is also an simple interactive interface to ISAJET which
+will prompt the user for commands, write a parameter file, and
+optionally execute it.
+
+\subsection{IBM VM/CMS}
+
+      On an IBM mainframe running VM/CMS, run YPATCHY with the pilot
+patches described in Section~\ref{PATCHY} and the IBM flag to extract
+the source code, decay table, and documentation. Compile the source
+code and link it with the main program
+\begin{verbatim}
+      PROGRAM ISARUN
+C          MAIN PROGRAM FOR ISAJET
+      OPEN(UNIT=1,STATUS='OLD',FORM='FORMATTED')
+      OPEN(UNIT=2,STATUS='NEW',FORM='UNFORMATTED')
+      OPEN(UNIT=3,STATUS='OLD',FORM='FORMATTED')
+      OPEN(UNIT=4,STATUS='NEW',FORM='FORMATTED')
+      CALL ISAJET(-1,2,3,4)
+      STOP
+      END
+\end{verbatim}
+to make ISAJET MODULE.
+
+      Create a file called \verb|JOBNAME INPUT| containing ISAJET
+input commands following the examples above or the instructions in
+Section~\ref{INPUT}. Then run ISAJET using ISAJET EXEC, which is
+contained in P=ISAUTIL,D=RUNIBM.  The events will be produced on
+\verb|JOBNAME DATA A| and the listing on \verb|JOBNAME OUTPUT A|.
+
+\subsection{Unix}
+
+      The Makefile contained in P=ISAUTIL,D=MAKEUNIX has been tested
+on DEC Ultrix, Hewlett Packard HP-UX, IBM RS/6000 AIX, Linux, Silicon
+Graphics IRIX, Sun SunOS, and Sun Solaris. It should work with minor
+modifications on almost any Unix system with /bin/csh, \verb|ypatchy|
+or \verb|nypatchy|, and a reasonable Fortran 77 compiler. Extract the
+Makefile and edit it, changing the installation parameters to reflect
+your system. Note in particular that CERNlib is usually compiled with
+underscores postpended to all external names; you must choose the
+appropriate compiler option if you intend to link with it. Then type
+\begin{verbatim}
+make
+\end{verbatim}
+This should produce an executable \verb|isajet.x| for the event
+generator, which links the code with the following main program:
+\begin{verbatim}
+      PROGRAM RUNJET
+      CHARACTER*60 FNAME
+      READ 1000, FNAME
+1000  FORMAT(A)
+      PRINT 1020, FNAME
+1020  FORMAT(1X,'Data file      = ',A)
+      OPEN(2,FILE=FNAME,STATUS='NEW',FORM='UNFORMATTED')
+      READ 1000, FNAME
+      PRINT 1030, FNAME
+1030  FORMAT(1X,'Parameter file = ',A)
+      OPEN(3,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+      READ 1000, FNAME
+      PRINT 1040, FNAME
+1040  FORMAT(1X,'Listing file   = ',A)
+      OPEN(4,FILE=FNAME,STATUS='NEW',FORM='FORMATTED')
+      READ 1000, FNAME
+      OPEN(1,FILE=FNAME,STATUS='OLD',FORM='FORMATTED')
+      CALL ISAJET(-1,2,3,4)
+      STOP
+      END
+\end{verbatim}
+Two other executables, \verb|isasusy.x| and \verb|isasugra.x|, will
+also be produced to calculate SUSY masses and decay modes without
+generating events. Type
+\begin{verbatim}
+make clean
+\end{verbatim}
+to delete the temporary files.
+
+      Most Unix systems do not allow two jobs to read the same decay
+table file at the same time. The shell script in P=ISAUTIL,D=RUNUNIX
+copies the decay table to a temporary file to avoid this problem.
+Extract this file as \verb|isajet|. Create an input file
+\verb|jobname.par| following the examples above or the instructions in
+Section~\ref{INPUT} and run ISAJET with the command
+\begin{verbatim}
+isajet jobname
+\end{verbatim}
+This will create a binary output file \verb|jobname.dat| and a listing
+file \verb|jobname.lis|. Analyze the output data using the commands
+described in Section~\ref{TAPE}.
+
+      This section only describes running ISAJET as a standalone
+program and generating output in machine-dependent binary form. The
+user may elect to analyze events as they are generated; this is
+discussed in Section~\ref{MAIN} of this manual.

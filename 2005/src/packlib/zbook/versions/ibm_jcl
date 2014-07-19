@@ -1,0 +1,25 @@
+*
+* $Id: ibm_jcl,v 1.1.1.1 1996/03/08 12:01:16 mclareni Exp $
+*
+* $Log: ibm_jcl,v $
+* Revision 1.1.1.1  1996/03/08 12:01:16  mclareni
+* Zbook
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_zbook/pilot.h"
+//       JOB ,TIME=(0,14)
+//  EXEC YPATCHY,PAMDSN='CR.PUB.PAM.PRO.ZBOOK'
+//Y.SYSIN  DD *
+&USE,IBM,ZEXAM.
+&EXE,P=ZEXAM.
+&PAM,11
+&QUIT
+/*
+//   EXEC NFORTCG,LLB1='CR.PUB.GENLIB'
+//C.SYSIN DD DSN=&&ASM,DISP=(OLD,PASS)
+//G.FT01F001 DD DSN=GG.UUU.XXXX,DISP=(NEW,DELETE),SPACE=(CYL,(1,1)),
+//     UNIT=SYSDA,DCB=(BLKSIZE=400,LRECL=400),LABEL=(,,,OUT)
+//G.IOFILE02 DD DSN=GG.UUU.XXXXXX,DISP=(NEW,DELETE),SPACE=(CYL,(1,1)),
+//    UNIT=SYSDA,DCB=(RECFM=U,BLKSIZE=3600,LRECL=3600),LABEL=(,,,OUT)
+//  EXEC CIAO

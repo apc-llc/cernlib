@@ -1,0 +1,21 @@
+/* $Id: Fresco.tmpl,v 1.1.1.1 1995/12/20 15:26:47 cernlib Exp $
+ *
+ * $Log: Fresco.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:47  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: Fresco.tmpl,v 1.5 94/03/31 16:31:31 matt Exp $
+XCOMM
+XCOMM Definitions for using Fresco library
+XCOMM
+
+        DEPLIBS = FrescoClientDepLibs
+LOCAL_LIBRARIES = FrescoClientLibs
+
+#include <Threads.tmpl>
+
+#define CplusplusSource
+
+NormalCplusplusObjectRule()

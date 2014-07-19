@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 ffcard.F fffind.F ffget.F ffgo.F ffinit.F ffkey.F ffread.F ffrset.F \ @@\
+	 ffset.F ffskip.F ffupca.F ffuser.F ffuset.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

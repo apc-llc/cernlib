@@ -1,0 +1,14 @@
+*
+* $Id: v220.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v220.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.20
+C            APOLLO CORRECTIONS IN EXAMPLES
+C            GENERAL BUG FIXES IN ROUTINE ZFRIBM
+C            PATCH ZCRAY ZPR1ME DELETED
+C            MINOR MODIFICATIONS TO ZJUMP AND ZTRAP
+C

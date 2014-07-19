@@ -1,0 +1,166 @@
+#!/bin/sh
+#
+#*******************************************
+#
+#@(#) GXINT   link (and run) interactive GEANT.
+#@(#) $Header: /afs/cern.ch/asis/share/cern/CVS/scripts/gxint,v 1.3 2005/04/18 15:23:13 mclareni Exp $
+#
+# Author:   G.Folger   92/02/25
+#
+#  Modifications:
+#      8 June 93  fix @ to + for patchy
+#     Jan/Feb 94  use cernlib, adapt to geant316
+#      7 Apr 94   correct for Ultrix ( no set -- in sh),
+#                 add ; in -o option handling
+#     following mods are kept in the RCS log
+#
+#*******************************************
+line="******************************************************"
+ 
+ 
+if [ $# -eq 0 ] ; then
+cat << EoD
+
+ GXINT [options] file(s)
+  ld an interactive Geant application and run it. Your compiled
+  routines are given in file(s).
+  options:
+ 
+  -d driver
+        specify the driver for the graphics output. Possible
+        values are X11, Motif, GKS, or GDDM. Not all are available
+        on all systems. X11 is the default.
+  -v version
+        version of the program library to use. Possible values
+        include pro ( default ), new and old.
+  -g geant_version
+        which version of geant to use. Current default is 315.
+  -h host
+        useful with the -d X11 option only. Specify the hostname
+        used for the display. Syntax identical to that of DISPLAY.
+        If no hostname is specified, the value of DISPLAY is used.
+  -o outputfile
+        Do not immediately run GEANT, but produce an executable
+        file named outputfile.
+  -L path
+        additional loader search path. Usefull if additional libraries
+        are specified with -l option.  This option may be repeated to
+        more than one pathname.
+  -l libary
+        specify additional libraries. This option may be repeated to
+        add several libs.
+  -m    do NOT use main program from cernlib area.
+
+EoD
+exit
+fi
+
+if [ -f /usr/bin/uname ] ; then
+	system=`/usr/bin/uname`
+	if [ "$system" = "ULTRIX" -a -z "$sh5" ] ; then
+		sh5="yes"
+		export sh5
+		/bin/sh5 $0 $*
+		exit
+	fi
+fi
+
+ SHOPT="d:v:g:h:o:L:l:m"
+ cmd=$0
+# Check option set and give default values
+  if [ -f /bin/getopt -o -f /usr/bin/getopt ] ; then
+     set -- `getopt $SHOPT $*` ; cc=$?
+     if [ $cc -ne 0 ] ; then
+	echo ""
+	echo "Usage:"
+	exec $cmd
+	exit
+     fi
+  fi
+ 
+drv="/X11" ; ver="pro" ; OUT="${HOME}/GEANT$$"
+gxint=""
+ 
+while [ $# -gt 0 ]
+do case $1 in
+     -d) drv="/$2";                     shift ;;
+     -v) ver=$2;                     shift ;;
+     -g) gvs=$2;                     shift ;;
+     -h) DISPLAY=$2;export DISPLAY;  shift ;;
+     -o) OUT=$2; norun="1";          shift ;;
+     -L) userpath="$userpath -L$2"; shift ;;
+     -l) userlibs="$userlibs -l$2"; shift ;;
+     -m) _m="1"				   ;;
+     --)                     shift ; break ;;
+      *)                             break ;;
+   esac
+   shift
+done
+ 
+if [ $# -gt 0 ] ; then
+   pgm="$*"
+ else
+   echo "gxint_Warning: no user program specified"
+fi
+ 
+ 
+ 
+if [ -z "$CERN" ] ; then
+  if [ ! -d /cern ]; then
+   echo "gxint_Error: shell variable CERN must be set or /cern must exist"
+   exit 1
+  fi
+  CERN="/cern" ; export CERN
+fi
+ 
+if [ "$drv" = "/GKS" ] ; then
+  if [ -z "$GKSR" ] ; then
+    if [ ! -d $CERN/gks/$ver ] ; then
+      echo "gxint_Error: shell variable GKSR must be set or "
+      echo "           :  $CERN/gks/$ver must exist"
+      exit 1
+    fi
+    GKSR=$CERN/gks/$ver
+  fi
+  GKSP=$GKSR/lib
+fi
+ 
+  LDN="f77"
+  _o="o"
+
+  system="x"
+  [ -x /bin/uname ]        && system=`/bin/uname`
+  [ -x /usr/bin/uname ]    && system=`/usr/bin/uname`
+  [ -x /sys5.3/bin/uname ] && system=`/sys5.3/bin/uname`
+
+case $system in
+	AIX)		LDN="xlf"   ;;
+	ConvexOS)       LDN="fc"    ;;
+	DomainOS)	LDN="ld"    ;_o="bin"  ;;
+	HP-UX)		LDN="fort77";;
+esac
+ 
+CLIB="geant${gvs} pawlib graflib$drv packlib mathlib"
+ 
+[ -z "$_m" ] && gxint="${CERN}/${ver}/lib/gxint${gvs}.$_o" 
+ 
+cat << EoD
+$line
+* loading interactive Geant
+*   creating          : $OUT
+*   loader used       : $LDN
+*   user library path : $userpath
+*   user libraries    : $userlibs
+*   Cern libraries    : $CLIB
+*   gxint used        : ${gxint:-user supplied}
+$line
+EoD
+ 
+$LDN -o $OUT $gxint $pgm $userpath $userlibs `cernlib -v $ver $CLIB`; cc=$?
+ 
+[ $cc -ne 0 ] && exit $cc
+ 
+if [ ${norun-0} -eq 0 ] ; then
+ $OUT ; cc=$?
+fi
+exit $cc

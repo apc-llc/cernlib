@@ -1,0 +1,5 @@
+!
+!   Linker options to reduce the image size
+!
+ISD_MAX=512              ! Maximum number oof image sections
+DZRO_MIN=20              ! Minimum size of a demand zero page

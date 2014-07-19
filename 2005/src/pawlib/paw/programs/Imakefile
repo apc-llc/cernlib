@@ -1,0 +1,89 @@
+/*SRCS_F=	 0pamain.F 0pamainm.F */
+
+#if defined(CERNLIB_QMVAOS)
+/* OSF needs these for comis jump package, -taso is needed for dyn. linking */
+FCLDOPTIONS=-D 40000000 -T 20000000 -taso
+#endif
+
+#if defined(CERNLIB_HPUX)
+EXTRA_LDOPTIONS=-Wl,-E
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_LDOPTIONS=-Wl,-E
+#endif
+
+#if defined(CERNLIB_QMIRIX64)
+EXTRA_LDOPTIONS=-multigot
+#endif
+
+InstallScript(paw,$(CERN_BINDIR))
+
+#if defined (CERNLIB_UNIX) && !defined(CERNLIB_WINNT)
+CernlibFortranProgramTarget(pawX11,0pamain.o,NullParameter,NullParameter,pawlib graflib/X11 packlib mathlib kernlib)
+
+InstallProgram(pawX11,$(CERN_BINDIR))
+
+/* Allow to veto build of paw++, e.g. on a system without Motif */
+MotifDependantMakeVar(DO_PAW_PP,YES)
+
+#if defined(CERNLIB_LINUX)
+MotifDependantMakeVar(DO_PAW_PP,YES)
+#endif
+
+/* This is a gmake ifeq, not a Imake/cpp #if... ! */
+ifeq ($(DO_PAW_PP),YES)
+
+CernlibFortranProgramTarget(paw++,0pamainm.o,NullParameter,NullParameter,pawlib graflib/Motif packlib mathlib kernlib)
+
+InstallProgram(paw++,$(CERN_BINDIR))
+
+endif
+
+#endif
+
+#if defined(CERNLIB_WINNT)
+CernlibFortranProgramTarget(pawNT,0pamain.o,NullParameter,NullParameter,pawlib
+graflib packlib mathlib kernlib)
+
+InstallProgram(pawX11,$(CERN_BINDIR))
+
+#endif
+
+
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+/* And reset the Variable used by CernlibFortranProgramTarget; thus 
+ *   we can also build the paw modules without tcpip
+ *   (on VAX squeeze/opt is in VMS_TCPIP_LIB )
+ */
+VMS_OPT_FILES:=
+#ifndef CERNLIB_QMALPH
+SQUEEZE=squeeze/opt
+#endif
+
+CernlibFortranProgramTarget(pawx11,0pamain.o gethostname.o czdummy.o,\
+NullParameter,NullParameter,\
+pawlib graflib/X11 packlib mathlib kernlib $(SQUEEZE))
+
+CernlibFortranProgramTarget(pawpp,0pamainm.o gethostname.o czdummy.o,\
+NullParameter,NullParameter,\
+pawlib graflib/Motif packlib mathlib kernlib $(SQUEEZE))
+
+CernlibFortranProgramTarget(pawx11_m,0pamain.o,NullParameter,\
+NullParameter,pawlib graflib/X11 packlib mathlib kernlib $(VMS_TCPIP_LIB))
+
+CernlibFortranProgramTarget(pawpp_m,0pamainm.o,NullParameter,\
+NullParameter,pawlib graflib/Motif packlib mathlib kernlib $(VMS_TCPIP_LIB))
+
+InstallTarget(install.bin,gethostname.obj,$(INSTDATFLAGS),$(CERN_LIBDIR))
+InstallTarget(install.bin,czdummy.obj,$(INSTDATFLAGS),$(CERN_LIBDIR))
+
+InstallProgram(pawx11,$(CERN_BINDIR))
+InstallProgram(pawx11_m,$(CERN_BINDIR))
+InstallProgram(pawpp,$(CERN_BINDIR))
+InstallProgram(pawpp_m,$(CERN_BINDIR))
+
+#endif
+

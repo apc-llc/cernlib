@@ -1,0 +1,11 @@
+*
+* $Id: v173.dat,v 1.1.1.1 1996/03/08 15:21:46 mclareni Exp $
+*
+* $Log: v173.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:46  mclareni
+* Epio
+*
+*
+*  Version 1.73  940421  9.00
+C- Correct VMS deck EPIOVAX to remove linker warning.
+C

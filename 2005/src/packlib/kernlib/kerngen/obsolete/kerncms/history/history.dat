@@ -1,0 +1,12 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:51:41 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:41  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerncms.car patch dkerncms
+KERNCMS  0.00     000000 00.00         CERN  KERNLIB for IBM VM/CMS
+              Kernel library machine PAM for IBM machines
+              containing system interface routines for VM/CMS

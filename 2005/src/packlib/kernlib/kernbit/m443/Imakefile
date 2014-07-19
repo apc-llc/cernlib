@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 charn.F icharn.F rchar.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

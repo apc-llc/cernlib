@@ -1,0 +1,17 @@
+*
+* $Id: v4_18,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_18,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.18/00 26/02/93  08.35.02  by  Rene Brun
+*-- Author :    Rene Brun   26/02/93
+*
+*::>          VERSION  4.18/00   930226  8.35
+*
+*      Routine HLATTR rewritten
+*      New version of routine HQWAVE by John Allison
+*      Mods in HFNT2
+*

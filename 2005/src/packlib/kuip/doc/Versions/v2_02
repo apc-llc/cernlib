@@ -1,0 +1,88 @@
+*
+* $Id: v2_02,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_02,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.02/09 07/06/93  15.43.12  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   29/04/93
+*
+*::>          VERSION  2.02/09   930607 15.43
+*
+* KMDIAL: fix for Piaf password prompt in Motif.
+*
+*::>          VERSION  2.02/08   930604 13.55
+*
+* Deck KUPIAF removed.  Piaf syncronization moved into PAW.
+*
+*::>          VERSION  2.02/07   930527 13.11
+*
+* Linux version introduced.
+*
+* Restructuring of getline(): previous terminal interface recognition failed
+* for NeXT.
+*
+* Motif window for menu guidance text.
+*
+*::>          VERSION  2.02/06   930526 15.19
+*
+* On Apollo the complete C part can and should be compiled under BSD now.
+*
+* SHELL command: fixed problem with VMS batch and Apollo /bin/sh.
+*
+*::>          VERSION  2.02/05   930525 18.24
+*
+* New routine KUPROP(CHPRMT,CHVAL,NCH) to prompt for a password.
+*
+* STYLE GP: panel lines can be redefined with fewer numbers of fields.
+*
+* Piaf synchronization for VMS/Multinet implemented.
+*
+*::>          VERSION  2.02/04   930511 15.22
+*
+* Bug fix in ICONBOX.
+*
+*::>          VERSION  2.02/03   930511 15.10
+*
+* The routine registered by KUCOMV is now called without arguments.  The called
+* routine has to CALL KUVNAM(VNAME) to retrieve the vector name which was
+* deleted.
+*
+*::>          VERSION  2.02/02   930507 10.30
+*
+* KUCOMV routine was only called for '*' (delete all vectors).
+*
+*::>          VERSION  2.02/01   930504 11.49
+*
+* New routine KUCOMV(SUB) to register a subroutine SUB(CHNAME) which is called
+* whenever a vector is deleted.  This is mainly needed for COMIS which keeps a
+* table of defined vectors.
+*
+* New system function $FORMAT(number,format) to format a number according to a
+* Fortran-like FORMAT string, e.g. $FORMAT([x],F9.3). Supports F,E,G,I, and
+* Z (hexadecimal).
+*
+*::>          VERSION  2.02/00   930429 17.48
+*
+* KIDTAB: replace TABs by an equivalent number of blanks (assuming tab
+* positions are every 8th column).  Before TABS were replaced by a single
+* blank only.
+*
+* STYLE G could not be used in PAWLOGON.
+*
+* Add minus sign to list of valid characters for building alias names
+* (request by Per Scharff-Hansen).
+*
+* KUGETE did not work when prompting for missing mandatory argument
+* (reported by Steve Fisher).
+*
+* KIMINT: label calculation caused integer overflow when using more than
+* 26 IF-ENDIF constructs (fatal on VMS).  Changing from MAXIFS=200,MAXIFN=20
+* to MAXIFS=120,MAXIFN=10 should push the limit beyond 100.  Hopefully
+* nobody uses more then 10 levels of nested IFs.
+*
+* KUARGS: mismatch between code and manual.  Option BATCH should NOT imply
+* NOLOG, i.e. LOGON.KUMAC should still be executed.
+*

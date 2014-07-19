@@ -1,0 +1,15 @@
+SRCS_F= hexam1.F hexam2.F hexam3.F hexam4.F hexam5.F hexam6.F \ @@\
+	hexam7.F hexam8.F 
+
+SubdirLibraryTarget(hbtlib,NullParameter)
+
+DefinePackageLibrary(hbtlib)
+
+CernlibFortranProgramTarget(hbtest,hexam.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+CernlibFortranProgramTarget(hbdiff,htdiffb.o,$(PACKAGE_LIB),$(PACKAGE_LIB),mathlib)
+
+CernlibFortranProgramTarget(hmerge,hmerg.o hmergin.o,$(PACKAGE_LIB),$(PACKAGE_LIB),mathlib)
+
+TestTarget(hbtest,NullParameter,NullParameter)
+TestTarget(hbdiff,NullParameter,NullParameter)

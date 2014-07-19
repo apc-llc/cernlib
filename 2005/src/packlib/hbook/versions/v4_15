@@ -1,0 +1,28 @@
+*
+* $Id: v4_15,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_15,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :          02/06/92  17.55.07  by  Rene Brun
+*-- Author :    Rene Brun   17/04/92
+*
+*::>          VERSION  4.15/00   920417 17.05
+*
+*
+*     Bug fixed in HCREATEM/HMAPM (SYS5) by Chip Watson Cebaf.
+*
+*     Bug fixed in HRESET in case of ntuples (J.Colas)
+*
+*     Set error criterion properly for Chi**2 or Liklihood fits
+*     routine HMINUT corrected (John Marraffino)
+*
+*     Changes in HCDES. New sequence HCFITD.
+*     HCFITD introduced in HFCNH,HFCNV,HGAUS,HDEXPO and HPOLYN.
+*     COMMON/HCFITD/FITPAD(25) may be used in user routine FUTIL
+*     instead of single precision parameters.
+*
+*     Bug fixed in HFITHN (return array PARAM) Ian Scott
+*

@@ -1,0 +1,31 @@
+*
+* $Id: v1_14,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_14,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :          20/10/92  10.03.08  by  O.Couet
+*-- Author :    Rene Brun   14/07/92
+*
+*::>          VERSION  1.14/01   920715  9.31
+*
+*       Change in PAWLOC, ISTAT is now tested just after the call
+*          to IRQLC (koellner@lbl.Bitnet).
+*
+*::>          VERSION  1.14/00   920714 13.29
+*
+*       Routine PMLOCA removed from FPMOTIF (it was not used).
+*       Bug corrected in PANT3D LOGX was tested instead of LOGZ.
+*       The polymarker color index in now reset in PANTPM.
+*       Bug corrected in PAHIST: angles not used in H/PLOT
+*       Routines ERF,ERFC,FREQ,PROB added to list of callable routines
+*          from COMIS in PAWCS.
+*       Commons /HCFITS/ and /HCFITD/ added to PAWCS.
+*       bug corrected in PAMASK for option CLOSE (L option in <MZDROP)
+*       bug corrected in PAHIST: ANGLEs not used for 2D histos
+*          without subranges.
+*       Bug corrected in PAHIST (side effect of the previous correction)
+*          slices were ignored in HISTO/PLOT ID.SLIX.
+*

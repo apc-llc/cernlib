@@ -1,0 +1,12 @@
+SRCS_F= \ @@\
+	 btest.F ibclr.F ibset.F ishftl.F jiand.F jior.F \ @@\
+	 putget.F vxinvb.F vxinvc.F
+
+SRCS_C= \ @@\
+	 cbyt.c ckrack.c csethi.c csetoi.c floarg.c iand.c incbyt.c \ @@\
+	 intarg.c ishft.c ishftc.c ishftl.c ishftr.c iumode.c iuweed.c \ @@\
+	 jbit.c jbyt.c jbytet.c jbytor.c jbytpk.c jrsbyt.c locbyt.c \ @@\
+	 mbytet.c mbytor.c mcbyt.c msbyt.c pause.c pkbyt.c sbyt.c sbytor.c \ @@\
+	 ublow.c ubunch.c uflint.c upkbyt.c upkch.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

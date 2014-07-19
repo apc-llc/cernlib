@@ -1,0 +1,14 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= dzebra fq jz91 mq mqg mqs mqv qend qutil rz tq
+SUBDIRS= $(LIBDIRS) test zebra
+
+TopOfPackage(zebra)
+
+SubdirLibraryTarget(zebra,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(zebra)

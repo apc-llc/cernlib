@@ -1,0 +1,28 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:57 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:57  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernalt.car patch kernalt
+#if !defined(CERNLIB_KERNALT)
+ 
+              KERNLIB routines particular to Alliant
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KALT     Pilot-patch selecting the full standard general KERNLIB
+                                         for the Alliant
+ 
+QMALT     ALT machine patch
+ 
+ALTGS     ALT versions of general KERNLIB rotuines
+ 
+ALTSYS    ALT versions of KERNLIB system routine interfaces
+ 
+=====================================================================
+#endif

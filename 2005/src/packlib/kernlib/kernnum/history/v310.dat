@@ -1,0 +1,13 @@
+*
+* $Id: v310.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v310.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.10  940304
+C-  Remove activation of :
+C      C312, C313, C336, C337, D103, G100  moved to gen/mathlib
+C      C204, C308, C341, D106              all obsoleted in CNL207.
+C

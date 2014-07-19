@@ -1,0 +1,173 @@
+*
+* $Id: sierro.F,v 1.1.1.1 1995/12/12 14:36:16 mclareni Exp $
+*
+* $Log: sierro.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:16  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.09/04 26/10/93  09.49.18  by  Carlo E. Vandoni
+*-- Author :
+      SUBROUTINE SIERRO(LIERR)
+      SAVE IAMES
+      CHARACTER IAMES (79)*40
+C
+C
+C  .....................................................................
+C        REMARKS:
+C        *******
+C
+C           .ERROR MESSAGES HAVE BEEN CLASSIFIED INTO CLASSES
+C           .THE FIRST CHARACTER OF "IN" IN ERRO(IN) INDICATES THE CLASS
+C
+C           .TO ADD ANOTHER ERROR MESSAGE:
+C
+C              -FIRST SEARCH FOR THE CORRESPONDING CLASS
+C                  *IF NO MORE SPACE LEFT CREATE A NEW CLASS
+C                  *ELSE CHANGE THE LAST CARD AND ADD THE MESSAGE
+C
+C           .FOR RECORD:
+C              -THE PRESENT DIMENSION OF THE ARRAY CONTAINING
+C                            ERROR MESSAGES IS:
+C                                (108,40)
+C                                *******
+C
+C  .....................................................................
+C
+C          ******************
+C          *GENERAL MESSAGES*
+C          ******************
+C
+C           CLASS 0
+C           *******
+C
+      DATA (IAMES(J),J=1,10)/
+     C'VALUE IS UNDEFINED',
+     C'SCALAR VALUE EXPECTED.IT IS NOT.',
+     C'TOO MANY OR TOO LARGE ARRAYS - OVERFLOW',
+     C'NOT ENOUGH SPACE AVAILABLE',
+     C'TOO MANY ARRAYS OR PROGRAMS (OVERFLOW)',
+     C'INTERNAL SIGMA ERROR   ',
+     C'OPERATOR NOT YET IMPLEMENTED',
+     C'PROTECTED NAME DEPROTECT BEFORE CHANGE',
+     C'UNDEFINED NAME OR SYSTEM FUNCTION NAME',
+     C'INCORRECT BOOLEAN VALUE(NOT ZERO OR ONE)'/
+C
+C           CLASS 1
+C           *******
+C
+      DATA (IAMES(J),J=11,20)/
+     1'GIVE THE SAME SHAPE TO BOTH ARGUMENTS',
+     2'ILLEGAL OPERATOR ',
+     3'INCORRECT DATA TYPE',
+     4'GOTO MUST HAVE SCALAR OR CONST ARGUMENT',
+     5'STORING STRING INTO NUMBER OR VICE VERSA',
+     6'NOT ENOUGH OR TOO MANY ARGUMENTS',
+     7'USE GLOBAL IN SUBPROGRAMS ONLY',
+     8'MISSING INDEX MEANINGLESS IN THIS OP',
+     9'Zero length string-not allowed in SIGMA',
+     +'NOT ENOUGH SPACE AVAILABLE'/
+C
+C           CLASS 2
+C           *******
+C
+C
+C          =DROP  PROJ   HIST=
+C          ---------------
+      DATA (IAMES(J),J=21,28)/
+     1'DROP LIST NO MATCH NCO(NCO(FIRST ARG))',
+     2'DROP OR PROJ ON NON-EXISTENT COMPONENTS',
+     3'ONE INDEX DROPPED MORE THAN ONCE',
+     4'ALL SUBSCRIPTS OF ONE DIMENSION DROPPED',
+     5'TOO MANY ITEMS IN SUBSCRIPT LIST',
+     6'SUBSCRIPT LIST ITEM MULTIDIMENSIONAL',
+     7'THE SECOND ARG OF HIST MUST BE AN ARRAY',
+     8'DROP ARG2, ... MUST BE ONE-DIMENSIONAL'/
+C
+C
+C          *********************
+C          *PARTICULAR MESSAGES*
+C          *********************
+C
+C           CLASS 3
+C           *******
+C
+C          -COMPLEX  MYOP-
+C          ---------------
+      DATA (IAMES(J),J=31,39)/
+     1'IS NOT DEFINED FOR COMPLEX ARGUMENTS',
+     2'OPERATOR UNDEFINED FOR COMPLEX ARGUMENT',
+     3'-',
+     4'-',
+     5'FIRST ARGUMENT SHOULD NOT BE MISSING',
+     6'SECOND ARGUMENT SHOULD NOT BE MISSING',
+     7'NCO(RESULT) NOT ROUNDABLE TO +VE INTEGER',
+     8'2-ND ARG CAN SET NO MORE THAN 50 NUMBERS',
+     9'RESULT NCO INCOMPATIBLE WITH NCO OF ARG'/
+C
+C           CLASS 4
+C           *******
+C
+C          -FUNCTIONS,PROGRAMS AND MACROS-
+C          -------------------------------
+      DATA (IAMES(J),J=41,47)/
+     1'DISABLED COMMAND',
+     2'NOT ENOUGH OR TOO MANY ARGUMENTS',
+     3'-',
+     4'- CANNOT BE PRINTED',
+     5'SYS FUNCTION NEEDS A NUMERICAL ARGUMENT',
+     6'-',
+     7'-'
+     8/
+C
+C           CLASS 5
+C           *******
+C
+C          -MATRIX AND QUADRATURE-
+C          -----------------------
+      DATA (IAMES(J),J=51,58)/
+     1'MATRIX IS SINGULAR OR ALMOST SINGULAR',
+     2'NO CONVERGENCE IN EIGVAL OR EIGVEC',
+     3'MATRIX NOT SQUARE INV DET EIGVAL EIGVEC',
+     4'MULT IS TWO ARG LIBRARY FUNCTION AT CERN',
+     5'STEPSIZE OF QUADRATURE MUST BE A SCALAR',
+     6'PROGRAMS CANNOT BE INTEGRATED',
+     7'QUADRATURE NEEDS ROWLENGHT OF 5 OR MORE',
+     8'ONE ARGUMENT IS A PROGRAM NAME'/
+C
+C           CLASS 6
+C           *******
+C
+C          -ARRAYS-
+C          --------
+      DATA (IAMES(J),J=61,69)/
+     1'NO MATCH IN DIMENSIONS',
+     2'INCORRECT NCO VECTOR',
+     3'INCORRECT NUMBER OF SUBSCRIPTS',
+     4'SUBSCRIPT OUT OF RANGE ON INDEXING',
+     5'ARRAY EXPECTED.IT IS NOT.',
+     6'ENDS OF RANGE MUST BE SCALAR',
+     7'SUBSCRIPT MUST BE A NUMERICAL ITEM',
+     8'CALLED WITH INCOMPATIBLE ARGUMENTS',
+     9'INCOMPATIBLE ARG IN GENERALIZED ARITH'/
+C
+C           CLASS 7
+C           *******
+C
+C
+C          -TRACE,DIAG,TP,LS AND ORDER-
+C          ----------------------------
+      DATA (IAMES(J),J=71, 79)/
+     1'TRACE OR DIAG ARG 2,..MUST HAVE DIM LE 1',
+     2'MAX NUMBER OF DIMENSIONS MUST BE LE 10',
+     3'UNMATCHED COMPONENTS IN TRACE OR DIAG',
+     4'TP ARG2 MAPPING NOT COMPLETELY DEFINED',
+     5'TRACE OR DIAG OVER NON-EXISTENT DIM',
+     6'TP ARG2 NOT A VECTOR OF FIRST N INTEGERS',
+     7'LS ARG2 MUST HAVE ROWLENGTH ONE',
+     8'A SINGLE NUMBER CANNOT BE SORTED',
+     9'A PROGRAM CANNOT BE SORTED'/
+11    FORMAT(' **** INTERP. ERROR **** ',A40)
+      PRINT 11, IAMES(LIERR)
+ 999  END

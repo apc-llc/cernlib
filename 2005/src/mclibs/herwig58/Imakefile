@@ -1,0 +1,14 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+SUBDIRS= code doc herwig58
+
+TopOfPackage(herwig58)
+
+SubdirLibraryTarget(herwig58,code)
+
+InstallLibrary(herwig58,$(CERN_LIBDIR))
+InstallLibraryAlias(herwig58,herwig,$(CERN_LIBDIR))
+
+InstallIncludeSubdirs(herwig58)

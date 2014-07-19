@@ -1,0 +1,20 @@
+*
+* $Id: cdps.dat,v 1.2 1996/04/16 10:09:04 jamie Exp $
+*
+* $Log: cdps.dat,v $
+* Revision 1.2  1996/04/16 10:09:04  jamie
+* bring in sync with /afs/cern.ch/project/hepdb/scripts, aix 4 upgrade
+*
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#echo 'HEPDB server                                        Elapsed     CPU time   %CPU'
+#echo '==============================================================================='
+#ps -aef -F "args,etime,time,pcpu" | grep "/cdsrv" | sort +2 -r
+echo '    Elapsed    CPU time  %CPU ** HEPDB server ** '
+echo '========================================================'
+ps -aef -F "etime,time,pcpu,args" | cut -c 1-80 | grep "/cdsrv" | sort +1 -r
+
+#endif

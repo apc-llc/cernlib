@@ -1,0 +1,12 @@
+
+SRCS_F= test.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(cojetst,test.o,$(PACKAGE_LIB),$(PACKAGE_LIB),mathlib kernlib)
+
+CopyFile(test.input,test.in)
+
+LinkFileFromDir($(TOP)$(PACKAGETOP),cojets.dat)
+
+TestTarget(cojetst,cojets.dat,test.in)

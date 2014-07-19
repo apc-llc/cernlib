@@ -1,0 +1,16 @@
+SRCS_F=	 hiex1.F hiex2.F hiex3.F hiex4.F hiex5.F hiex6.F 
+
+SubdirLibraryTarget(higztlib,NullParameter)
+
+DefinePackageLibrary(higztlib)
+
+#ifndef CERNLIB_WINNT
+CernlibFortranProgramTarget(higzex,higzex.o,$(PACKAGE_LIB),$(PACKAGE_LIB),graflib/X11 packlib)
+#else
+CernlibFortranProgramTarget(higzex,higzex.o,$(PACKAGE_LIB),$(PACKAGE_LIB),graflib)
+#endif
+
+test:
+	@echo "----------------------------------------"
+	@echo "test for higz is interactive"
+	@echo "----------------------------------------"

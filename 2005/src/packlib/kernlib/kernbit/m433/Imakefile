@@ -1,0 +1,9 @@
+SRCS_F= indexa.F indexb.F indexc.F indexn.F indexs.F indxac.F indxbc.F \ @@\
+	 indxnc.F iscan.F repeat.F spaces.F strip.F subword.F verify.F \ @@\
+	 word.F words.F wordsep.F
+
+#ifdef CERNLIB_OS9
+SRCS_C= m433f2h.c
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

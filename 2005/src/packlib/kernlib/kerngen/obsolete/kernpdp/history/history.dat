@@ -1,0 +1,102 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:53:32 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:32  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernpdp.car patch kernpdp
+#if !defined(CERNLIB_KERNPDP)
+ 
+ROUTINES OF THE GENERAL SECTION PARTICULAR TO THE DEC PDP
+ 
+ 
+---------------------------------------------------------------------
+FIRST RELEASE OF THE GENPDP MINI-PAM :  1-NOV-76
+---------------------------------------------------------------------
+ 
+THIS FILE CONTAINS THE FOLLOWING PATCHES :
+ 
+*KPDP10   PILOT-PATCH SELECTING THE FULL STANDARD GENERAL SECTION
+ 
+REENTR    OPTION PATCH TO SELECT RE-ENTRANCE
+ 
+UUOTAPOP  OPTION PATCH TO SELECT INSTALLATION FOR A SYSTEM
+          WHICH PROVIDES THE NEW UUO 'TAPOP' (SEE D=TAPOP, QPDP9T)
+ 
+HELP      UNIVERSAL MACRO DEFINITIONS
+ 
+PDP10MLN  ML VERSIONS OF GENSEC ROUTINES IN NON-REENTRANT FORM
+ 
+PDP10MLR  ML VERSIONS OF GENSEC ROUTINES IN     REENTRANT FORM
+ 
+PDP10OBS  OBSOLETE GENSEC ROUTINES
+ 
+=====================================================================
+ 
+USAGE :
+ 
+      THE FORTRAN AND THE ASSEMBLER ROUTINES HAVE TO BE COMPILED
+      SEPARATELY, THEY MUST BE ON TWO SEPARATE PATCHY OUTPUT FILES.
+      FOR THE ASSEMBLER ONE NEEDS IN ADDITION A THIRD FILE WHICH
+      CONTAINS THE DEFINITION OF SOME MACRO INSTRUCTIONS.
+ 
+      WITH PATCHY THESE THREE FILES CAN BE CREATED IN ONE GO WITH
+      THE FOLLOWING CRADLE
+ 
+              +EXE.
+              +USE, REENTR.       IF AND ONLY IF RE-ENTRANCE
+              +USE, UUOTAPOP.     IF AND ONLY IF THE 'TAPOP' UUO
+              +USE, *KPDP10.
+              +ASM, 22.           FILE FOR ASSEMBLER
+              +ASM, 32.           FILE FOR DIVERTED ASSEMBLER
+              +DIVERT, HELP.      DIVERT MACRO DEFINITIONS
+              +PAM.               READ CONCATENATED KERNPDP + KERNFOR
+ 
+ 
+      IF YOU WANT TO MAKE A REENTRANT LIBRARY YOU MUST GIVE UP
+      SOME ASSEMBLER ROUTINES WHICH EXIST ONLY IN NON-REENTRANT FORM
+      AND TAKE THEIR FORTRAN VERSION INSTEAD.
+      THIS IS TRIGGERED BY   +USE, REENTR.
+ 
+      SETTING INDUSTRY COMPATIBLE-MODE IS SOMEWHAT OF A MESS.
+      TWO ALTERNATIVE ROUTINES ARE PROVIDED IN D=TAPOP, QPDP9T
+      NEAR THE BEGINNING OF P=PDP10MLN, YOU BETTER LOOK AT THEM.
+      TAPOP USES THE NEW UUO 'TAPOP', QPDP9T NEEDS SITE-DEPENDENT
+      PARAMETERS.
+ 
+      THIS GENERAL SECTION WAS USED ON CERN ERASME PDP10.
+      CARE HAS BEEN TAKEN THAT IT DOES NOT CONTAIN KI10 CODE.
+ 
+ 
+=====================================================================
+ 
+UPDATE  2.01 :  22-MAR-84
+-------------------------
+ 
+REPLACING FILE  GENPDP  1.07  840321 19.16
+ 
+NEW DECKS :   P=PDP10MLN, D=QPDP9T      (COPIED FROM HYDRA)
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  2.02 :  27-MAR-84
+-------------------------
+ 
+REPLACING FILE  KERNPDP  2.01  840322 18.51
+ 
+CORRECTIONS :   P=PDP10MLN, D=IBMTP,QPDP9T   TO BE COMPATIBLE
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  2.03 :  28-NOV-84
+-------------------------
+ 
+REPLACING FILE  KERNPDP  2.02  840327 16.04
+ 
+NEW DECKS :   P=PDP10MLN, D=UCTOH1, UCTOH, UH1TOC, UHTOC
+ 
+---------------------------------------------------------------------
+ 
+#endif

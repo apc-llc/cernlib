@@ -1,0 +1,475 @@
+*
+* $Id: ioconinp.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: ioconinp.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[9] INPUT FOR IOCON
+
+      Input parameters should be set in the main program before calling
+GEVENT. The same applies to all command calls, except for PARTAB. A CALL
+PARTAB placed after CALL GEVENT causes the printing of the particle and
+decay table, modified by the STOPD and FORCE commands.
+      Units are GeV for energy and momentum, and millibarns for cross
+sections.
+
+INPUT PARAMETERS AND COMMANDS
+-----------------------------
+
+Basics    Limits    QCD       J-fragm.  Beam jets Decays    Other     Commands
+------    ------    ---       --------  --------- ------    -----     --------
+
+ITDKY     PTMIN     ALAMB     KHADRO    CLPRO     LEPRAD    TOPMAS    FLAVEX
+ITLIS     PTMGE     QZ        FRGTHO    PT2PRO    KYTQED    S2THW     FUSION
+IEVTYP    PTMAX     QZEV      SIGMAQ    FPTMB     NOUNST    TLEAVE    GSPLIT
+IDECBO    BOMSMN    FACTK     SIGMAG    FMULMB    IDECAY    NDUMP     HEAVYQ
+ECM       BOMSMX    PT2INT    CX2Q      RETPIZ    BZDMIX    NJUMP     STOPD
+IPBAR     WZTHRS    IEICHT    CX2G      RPAIR     BZSMIX    FRATAB    FORCE
+NFLAV               KEYBRE    PUD                 CND1      NSIGMA    FORCSL
+NLEAVE              KYTQCD    PS1                 CND2      LWIDTH    PARTAB
+SIGINL                        PISOPN                        IPTWGT
+KOPTWZ                        PBARYO                        FRAGEH
+                              EPSPET                        DELTAR
+                              CMIX
+^^E^^E^^E
+
+
+Input parameters:
+-----------------
+
+ALAMB  = QCD lambda (default: 0.2).
+
+BOMSMN,BOMSMX = lower and upper bounds for generating the mass of the
+         Drell-Yan virtual photon (default: none).
+
+BZDMIX = mixing parameter for BD-DB neutral bottom mesons (default: 0.2).
+
+BZSMIX = mixing parameter for BS-SB neutral bottom mesons (default: 0.).
+
+CLPRO  = determines the longitudinal distribution of leading nucleons:
+                     exp(-CLPRO*X)dX
+         (default: 0.7).
+
+CMIX(1:6,1:2) = determines the probability for UP-UB, DN-DB, ST-SB (IQ=1,2,3)
+         to yield PI0,ETA,ETAP (IP=1,2,3) when ISPIN=0, or RHO0,OMEG,PHI
+         (IP=1,2,3) when ISPIN=1, according to:
+                     IP=INT(R+CMIX(IQ+3*ISPIN,1))
+                                       +INT(R+CMIX(IQ+3*ISPIN,2))
+         where 0<R<1 is a random number (same for both entries).
+         (Defaults: see block data).
+
+CND1, CND2 = define the multiplicity distribution in particle decays
+         involving quark/diquark pairs as secondaries (to be converted
+         into particles according to a decay model). With n = total no. of
+         decay particles:
+                    F(n)=N*exp((n-<n>)**2/(2*C))
+                    <n>=N0/2+C, n.GE.N0, n.GE.2, n.LE.10,
+                    N0=N(particles)+N(quark/diquark pairs)
+                    C=CND1+LOG((decaying particle mass)/CND2)
+         N.B. For semileptonic decays, n is set equal to 3.
+         (Defaults: CND1 = 1.8, CND2 = 0.8).
+
+CX2G   = defines X generation for light quarks/diquarks in gluon jets
+         (Field-Feynman): (1-CX2G+3*CX2G*(1-X)**2)dX (default: 0.77).
+
+CX2Q   = defines X generation for light quarks/diquarks in quark/diquark jets
+         (Field-Feynman): (1-CX2Q+3*CX2Q*(1-X)**2)dX (default: 0.77).
+
+DELTAR = Sirlin's dr, representing the radiative correction to Z/W masses.
+         (Default: dr = 0.0709 - 3*ALFQED*(1-S2THW)/(4*PI*4*S2THW**2)
+                                 *(mass(top)**2-0.35**2)/mass(W)**2    )
+
+ECM    = c.m. energy (default: 630.).
+
+EPSPET(1:3) = defines parameter in Petersson et al. X distribution for
+         heavy quark fragmentation (I=1,2,3 for CH,BT,TP, resp.):
+                 1./(X*(1.-1./X-EPSPET(I)/(1.-X))**2)dX
+         (default: .25,2*.001).
+
+FACTK  = K-factor multiplying hard X-section (default: 2.).
+
+FMULMB = factor increasing the mean multiplicity of beam jets (if 1.2, it is
+         increased by 20%) (default: 1.).
+
+FPTMB  = factor increasing the <pt**2> of beam jets particles (if 1.2, it is
+         increased by 20%) (default: 1.).
+
+FRAGEH = approximate fraction of hard events (only for IPTWGT=1)
+         (default: 0.5).
+
+FRATAB, NSIGMA = pretabulation control. If NSIGMA > 0, FRATAB is set to 1.
+         Pretabulation stops when:
+         either (pretab. time) > (max exec. time) * FRATAB
+         or     (no. of calculated points) > MAX(NSIGMA,NLEAVE*100)
+         (defaults: FRATAB  = 0.1 normally, 0.3 for forced generation of
+         heavy flavors, NSIGMA = 0)
+
+FRGTHO, FTHOMP, ETHOMP = if FRGTHO is .TRUE. the Thompson and Biddulph
+         options for jet generation are enforced (seagull). If FRGTHO
+         is .FALSE. standard Field-Feynman (y plateau with uniform <pt>)
+         with minimal kinematic constraints is used.
+         FTHOMP and ETHOMP define the Thompson and Biddulph varying <PT**2>
+         for the emitted hadron:
+         <PT**2> = sigma**2*(1.-X)/(1.-.5*X)*2.*FTHOMP/MAX(EBEG,ETHOMP)*X*W
+         where EBEG is the input jet energy and W is the E+PL of the parent
+         quark/diquark.
+         (Defaults: FRGTHO = .FALSE., FTHOMP = 2., ETHOMP = 34.)
+
+IDECAY(IDINT) = if set to 0, the particle with internal code IDINT is made
+         stable, together with its charge conjugate partner if there is one
+         (see CALL STOPD for referring to the external IDENT code of the
+         particle).
+         (Default: non-zero).
+
+IDECBO = Z/W/GAMMA decay channel, as shown below.
+         If 0, Z/W/GAMMA is left undecayed.
+         If a negative integer, the decay channel is chosen at random according
+         to BR's.
+         (Default: -100).
+         Z :
+            1 - E-   E+
+            2 - MU-  MU+
+            3 - TAU- TAU+
+            4 - NUE  NUEB
+            5 - NUM  NUMB
+            6 - NUT  NUTB
+            7 - U-UB
+            8 - D-DB
+            9 - S-SB
+            10 - C-CB
+            11 - B-BB
+            12 - T-TB
+         W- :
+            1 - E-   NUEB
+            2 - MU-  NUMB
+            3 - TAU- NUTB
+            4 - D-UB
+            5 - S-CB
+            6 - B-TB
+         W+ : same channel no.s as for W+, with charge conj. decay modes.
+         E.m. Drell-Yan :
+            1 - E-   E+
+            2 - MU-  MU+
+            3 - TAU- TAU+
+
+IEICHT = selects structure functions.
+         0 : NA3 structure functions,
+         1 : Eichten et al. set 1,
+         2 : Eichten et al. set 2.
+         (All used only at QSQ = QZEV**2, structure function evolution is
+         always calculated by the program.)
+         (Default: 1).
+
+IEVTYP = type of parton collision:
+            1 - purely hadronic
+            2 - Z production
+            3 - W production
+            4 - Drell-Yan l-l+ continuum
+         (default: 1)
+
+IPBAR  = if 1 antiproton-proton collisions, otherwise proton-proton
+         (default: 1).
+
+IPTWGT = if 1 events are weighted by function PTWGT, if 0 events are
+         unweighted (i.e. weight = 1.). IPTWGT is automatically set to 0
+         if PTMGE > PTMIN. (Default: 0).
+
+ITDKY  = unit from which the particle and decay table is to be read
+         (default: 1)..
+
+ITLIS  = unit on which the output listing is written (default: 6).
+
+KEYBRE = 0 : full QCD bremsstrahlung,
+         1 : longitudinal effects only,
+         2 : scaling violations of parton densities only,
+         3 : no QCD bremsstrahlung at all.
+         (Default: 0).
+
+KHADRO = if 0 jets are not fragmented (except for Z/W decay jets)
+         (default: 1).
+
+KOPTWZ = 1 : Z/W is produced with Breit-Wigner dependence.
+         0 : Z/W is produced in the narrow width approximation (no Breit-
+             Wigner in the production process). A Breit-Wigner distribution
+             in the decay process can be set by LWIDTH.
+         Option 1 is automatically activated if:
+         i)  IDECBO = 12 and M(Z) < 2.*m(top) + 2.;
+         ii) IDECBO = 6  and M(W) < m(top) + m(bottom) + 2. .
+         Option 0 is more efficient, but is inadequate for a quantitative
+         study of effects from the Breit-Wigner distribution. In particular,
+         it is inadequate when selecting top decay modes with a top quark
+         mass yielding a decay threshold close or above the Z/W mass.
+         When IEVTYP=4, option 1 includes GM-Z interference, option 0 is limited
+         to the virtual GM only.
+         (Default: 1).
+
+KYTQCD = controls QCD bremsstrahlung in top decays.
+         0 : full QCD bremsstrahlung.
+         1 : longitudinal effects only.
+         3 : no QCD bremsstrahlung at all.
+         (Default: 0).
+
+KYTQED = controls QED radiation in top semileptonic decays.
+         0 : QED radiation effects are neglected.
+         1 : multiple QED radiation treated in the LLA.
+         (Default: 1).
+
+LEPRAD = controls QED radiation effects in Z/W leptonic decays.
+         0 : QED radiation effects  are neglected,
+         1 : multiple photon emission treated with O(alpha) corrected LLA
+             (Laporta and Odorico, NP B266 (1986) 633),
+         2 : single photon emission treated in the O(alpha) approximation
+             (Berends and Kleiss, Leiden preprint (1983))
+         (Default: 1).
+
+LWIDTH = if 0 the Z/W width is set to 0, if 1 it is given the standard
+         model value (default: 1).
+
+NDUMP  = no. of events to dump (default: 5).
+
+NFLAV  = no. of quark flavors (default: 5).
+
+NJUMP  = number of events jumped for each event dump (default: 1).
+
+NLEAVE = event generation stops when the number of events
+         generated is equal to NLEAVE (default: 1 billion).
+
+NOUNST = if .TRUE. unstable particles are eliminated (default: .TRUE.).
+
+NSIGMA = see FRATAB.
+
+PBARYO = probability of diquark/antidiquark generation (default: 0.1).
+
+PISOPN = probability of J=1/2 baryon generation (default: 0.5).
+
+PS1(1:6) =  probability of scalar particle generation for the six quark
+            flavors (heaviest flavor in pair determines PS1)
+            (default: 3*0.5,3*0.75).
+
+PT2INT = mean kt**2 of initial partons, before evolution (default: 0.4).
+
+PT2PRO = <pt**2> of leading nucleons (default: 0.15).
+
+PTMGE  = if PTMGE > PTMIN generate only hard events with PTHARD > PTMGE.
+         For IEVTYP = 1 only (default: 0.).
+
+PTMIN  = min PTHARD cutoff for hard parton collisions (default: 4.001). It
+         must be PTMIN > QZEV.
+
+PTMAX  = max PTHARD cutoff for hard parton collisions (default: ECM*0.45).
+         If it is larger than its default value, it is set to its default
+         value.
+
+PUD    = probability of UP-UB generation (=probability of DN-DB generation,
+         sum of probabilities for UP-UB, DN-DB and ST-SB is 1.)
+         (Default: 0.4).
+
+QZ     = minimum parton mass cutoff for light partons (default: 3.).
+         For heavy quarks, the cutoff is set to max(QZ, Mq + 0.5 GeV),
+         where Mq is the heavy quark mass.
+
+QZEV   = initial evolution scale for parton densities (default: 4.).
+         It must be PTMIN > QZEV.
+
+RETPIZ = ETA/PI0 ratio in beam jets (default: 0.257).
+
+RPAIR(1:9) =  Particle ratios in beam jets. Defaults and meaning:
+                13.6           1: PI0 or ETA
+                20.2           2: pair of PI-,PI+
+                 2.5           3: pair of K+,K-
+                 2.7           4: pair of K0,AK0
+                 1.5           5: pair of P,AP
+                 1.5           6: pair of N,AN
+                 0.5           7: pair of L,AL
+                 0.125         8: pair of S+,AS-
+                 0.125         9: pair of S-,AS+.
+
+S2THW  = sin**2 of Weinberg-Salam angle (default: 0.215).
+
+SIGINL = total inelastic X-section (millibarn) (default set by log(s) fit
+         to ISR and 900 GeV (UA5) pbar-p data).
+
+SIGMAG = SIGMAG**2 is <pt**2> of quarks/diquarks in the fragmentation of
+         gluon jets (default: 0.6).
+
+SIGMAQ = SIGMAQ**2 is <pt**2> of quarks/diquarks in the fragmentation of
+         quark/diquark jets (default: 0.6).
+
+TLEAVE = event generation stops when time left < TLEAVE (sec)
+         (default: 30.).
+
+TOPMAS = mass of top quark  (default: from particle-decay table).
+
+WZTHRS = lower limit of Z/W mass generation when KOPTW=1. It must be
+         > 10 GeV. For top decay modes it is automatically set to the value
+         of the decay threshold.
+         (Default: Mass(Z/W) - 4.*Width(Z/W)).
+
+
+
+
+Input commands:
+---------------
+
+CALL FLAVEX(HFLAV)  : to force flavor excitation of flavor HFLAV = 'CH',
+                      'BT', 'TP'.
+
+CALL FORCE(IDP,ID1,ID2,ID3,ID4,ID5) : to force the decay IDP --> ID1 +
+                      ID2 + ID3 + ID4 + ID5, using external IDENT codes for
+                      particles. The decay must appear in the decay table,
+                      with the same order for the secondaries. The
+                      charge-conjugate decay mode is forced for the
+                      antiparticle. FORCE can be called up to 100 times.
+                      More decays can be forced for the same parent particle,
+                      its decay will then occur into the selected decay
+                      modes according to the decay table BR's. The quoted
+                      X-section is not corrected for the effects of FORCE.
+
+CALL FORCSL(HFLAV,LEPTON,NTIMES) : to force semi-leptonic decays lepton + x
+                      of particles with flavor HFLAV, where HFLAV = 'CH',
+                      'BT', 'TP', LEPTON = 'E  ', 'MU ', 'TAU'. NTIMES = 1
+                      or 2 is the number of heavy flavor particles forced to
+                      decay. Particles originating from the heavy quarks
+                      of highest pt are selected for the forcing.
+                      For IEVTYP = 1, a call to FUSION, FLAVEX, GSPLIT or
+                      HEAVYQ with the same HFLAV must have been made.
+                      For IEVTYP = 2, IDECBO must select the channel leading
+                      to the primary production of HFLAV quarks.
+                      For IEVTYP =3, NTIMES can only be 1 and IDECBO must
+                      select the channel leading to the primary production
+                      of a HFLAV quark.
+                      The quoted X-section is corrected for the effects
+                      induced by FORCSL on the decay of the chosen
+                      heavy flavor particles (of course the bias due to the
+                      selection of the largest pt heavy quarks for applying
+                      the forcing cannot be corrected for).
+
+CALL FUSION(HFLAV)  : to force fusion of flavor HFLAV = 'CH', 'BT', 'TP'.
+
+CALL GSPLIT(HFLAV)  : to force gluon splitting into heavy quark
+                      pairs with flavor HFLAV = 'CH', 'BT', 'TP'.
+
+CALL HEAVYQ(HFLAV)  : to force production of heavy flavor HFLAV, including
+                      fusion, flavor excitation and gluon splitting, where
+                      HFLAV = 'CH', 'BT', 'TP'. (Do not use it for accurate
+                      X-section determination.)
+
+CALL PARTAB         : causes the printing of the particle and decay table,
+                      modified by STOPD and FORCE commands. It must be
+                      placed after the call to GEVENT.
+
+CALL STOPD(ID)      : makes particle with external particle IDENT code ID
+                      stable, together with its charge conjugate partner if
+                      there is one.
+
+
+NOTE: Only ONE call to either FUSION, FLAVEX, GSPLIT or HEAVYQ is accepted.
+
+
+      The practical problem of forcing the generation of statistically
+unfavored events is treated in the following cases:
+i) parton pt forcing, ii) forcing of heavy flavor production, iii) forcing
+of semileptonic decays of heavy flavor particles.
+      i) Parton pt forcing. In order to generate only events with PTHARD
+above some value, larger than PTMIN, one must set PTMGE to that value.
+PTMIN should not be changed for this sake. It defines the QCD X-section,
+and thus the relative fraction of hard events when running with PTMGE=0,
+which is given by the ratio of the QCD X-section to the total inelastic
+X-section, defined by SIGINL. Usage of PTMAX is meant for supplementary,
+corrective runs. E.g., it may turn out that for a specific event selection,
+like events with a muon above some pt value, the events generated in a
+first run have a PTHARD distribution that appears abruptly truncated at
+PTMGE. That indicates that also lower PTHARD's should have contributed to
+the same sample. Without throwing away the biased event sample, one can
+integrate it by a second run where PTMGE is set to a lower, safe value
+and PTMAX is set to the PTMGE value of the first run, thus avoiding
+double counting. The two event samples should then be weighted by the
+corresponding ratios SIGTOT/NEVNTS (/TOTAL/). As an alternative option,
+the program allows to enrich the event generation at large PTHARD without
+any cutoff but with a weight attached to the events. The option can be
+activated by setting IPTWGT = 1. The PTHARD distribution on which the
+sampling is made is then multiplied by the function PTWGT(QSQ), where
+QSQ = PTHARD**2. Function PTWGT can be modified at will by the user,
+avoiding singularities in the QSQ generation range. The event weight is
+given in output in common block /EVENT/. This type of pt forcing may
+become statistically unsafe and should be used with caution.
+      ii) Forcing of heavy flavor production. One can choose between a
+forcing comprehensive of fusion, flavor excitation and gluon splitting
+(HEAVYQ),  or select the fusion (FUSION), flavor excitation (FLAVEX) and
+gluon splitting (GSPLIT) mechanisms separately. The latter option is to be
+preferred for accurate X-section determinations. When activating
+HEAVYQ one can monitor the relative importance of the three mechanisms
+by sorting events using the LINV and LFINV (/EVINT/) parameters. At a pt
+small with respect to the heavy quark mass, superimposing the three
+mechanisms leads to multiple counting. At such small pt's one is supposed
+to employ a full O(alphas**3) approximation, which is not yet available in
+exclusive form (the results of Nason et al. (1987), cover only the total
+and the single inclusive cross section). A reasonable sustitute for it is
+the O(alphas**2) approximation represented by the fusion process.
+      iii) Forcing of semileptonic decays of heavy flavor particles. That
+can be done by using FORCSL. Although the X-section is corrected for the
+decay forcing by taking into account the appropriate branching ratios, one
+should not forget the bias associated with the choice of the particles to
+force in the event. The selection is done according to the pt of the
+originating quark jet, particles belonging to the highest pt jets being
+selected. That can introduce a negligible bias when studying, e.g., decay
+leptons at very high pt. But of course it is not appropriate for studying
+leptons at small or moderate pt, since it leads to an underestimation of
+the contribution from events where the leptons are originated by heavy
+quarks with smaller pt.
+
+      When FUSION is forced, in order to calculate the X-section including
+all pt's, some changes for the QCD evolution variable are necessary.
+For this sake the Field-Feynman-Fox evolution variable is modified by
+correcting its arguments:
+ Q**2 = 2*s*tc*uc/(s**2+tc**2+uc**2), tc = t - mq**2, uc = u - mq**2
+where s, t and u are the Mandelstam invariant variables for the parton
+subprocess, and mq is the heavy quark mass. One has: s + tc + uc = 0.
+The minimum Q**2 at a given s is determined by:
+ t(min) = -(sqrt(s)/2 - sqrt(s/4-mq**2))**2
+This gives a lower limit for Q**2 at large s equal to mq**2. At s = 4*mq**2
+one has Q**2 = (4/3)*mq**2. Therefore, it always is Q**2 > mq**2.
+PTMIN is set equal to max(mq,QZEV*1.01). In the final printout, the entry
+PT CUTOFF is set equal to sqrt(PTMIN**2-mq**2), which corresponds to the
+approximate value of the asymptotic cutoff for the parton transverse
+momentum. If it is zero and if PTMGE has been left to its default value by
+the user, then no pt cutoff is operating and the quoted X-section is the
+total fusion X-section. If mq < QZEV, PT CUTOFF is greater than zero. In
+practice, that is the case for charm quarks. To get the total fusion
+X-section for charm, one must decrease QZEV to a value lower than mq. For
+consistency, also the input parton densities should be suitably modified.
+
+      The (unevolved) input parton densities can be defined by the user by
+simply replacing FUNCTION F2IN(X,IT). This must return the parton density
+times X or the sum of parton densities times X, as specified by IT = 1 (up),
+2 (ub), 3 (dn), 4 (db), 5 (st + sb), 6 (up + ub + dn + db + st + sb), 7 (gl).
+X and F2IN must be defined of single or double precision type, according
+to which PATCHY flag, SINGLE or DOUBLE PRECISION, has been selected. (For
+IEICHT=0 the nucleon momentum fraction carried by gluons, AGLU (/ALQGEN/),
+is calculated elsewhere in the program before the gluon density is used.
+Except for that, IEICHT is used only in F2IN and in the auxiliary function
+FGLU, which is called by F2IN only.)
+
+      Arrays with variable dimensions, like those holding the particle
+and parton streams, have their dimension parameters set in PARAMETER
+statements placed in the same patchy KEEP blocks containing the common blocks
+to which the arrays belong. In the output listing, dimension usage for such
+arrays during the run is reported. In the case of dimension overflow, the
+program prints a warning, cancels the current event and continues execution
+for the first 100 overflows. If more than 100 overflows are found, the job
+is aborted. The user can freely change the dimension control parameters
+listed in output, the only restriction coming from the values of the packing
+parameters, also set by PARAMETER statements placed in the same patchy KEEP
+blocks containing the relevant common blocks. There are two such packing
+parameters, one for the particle stream, IPACK, and one for the parton
+stream, JPACK. Both of them should be larger than the dimension control
+parameters for the particle and parton streams, i.e.
+      IPACK, JPACK > MXPART, MXJSET
+(there are cross references between the two streams). The current values of
+dimension control parameters are adequate for running up to 2 TeV in cms
+energy (leaving the relevant input parameters to their default values).
+
+
+

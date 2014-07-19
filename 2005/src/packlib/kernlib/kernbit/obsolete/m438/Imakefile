@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 btmove.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

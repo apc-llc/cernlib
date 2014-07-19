@@ -1,0 +1,48 @@
+;
+; $Id: numbitvx.s,v 1.1.1.1 1996/02/15 17:47:48 mclareni Exp $
+;
+; $Log: numbitvx.s,v $
+; Revision 1.1.1.1  1996/02/15 17:47:48  mclareni
+; Kernlib
+;
+;
+ .TITLE  NUMBIT -- RETURNS THE NUMBER OF 1 BITS IN THE ARGUMENT.
+;
+;       ROUTINE NUMBIT - CERNLIB ROUTINE M429
+;
+;       NUMBIT FINDS THE NUMBER OF 1 BITS IN THE ARGUMENT WORD.
+;
+;       THIS ROUTINE WORKS IN THE FOLLOWING MANNER. IT FIRST VERIFYS
+;       THAT THE ARGUMENT IS NON-ZERO. IF NOT, IT RETURNS ZERO. IT THEN
+;       PERFORMS THE THE FOLLOWING STEPS FOR EACH SET BIT.
+;       1) IT CLEARS THE LOWEST ORDER BIT BY ANDING THE WORKING COPY
+;          OF THE ARGUMENT WITH THE COMPLEMENT OF ITS NEGATIVE.
+;       2) IT INCREMENTS A BIT COUNTER.
+;       THIS LOOP CONTINUES UNTIL THE WORKING COPY OF THE ARGUMENT IS
+;       ZERO (ALL BITS HAVE BEEN CLEARED). THE BIT COUNTER THEN CONTAINS
+;       THE DESIRED VALUE.
+;
+;       REVISION HISTORY
+;
+;       DATE      AUTHOR    CHANGES
+;       ----      ------    -------
+;     2-MAY-83  J. ZWEIZIG  ORIGINAL VERSION
+;
+;
+
+        .PSECT  $CODE,PIC,CON,REL,LCL,SHR,EXE,RD,NOWRT,LONG
+
+        .ENTRY  NUMBIT,^M<R2>
+
+        CLRL    R0                      ; ZERO THE STARTING VALUE
+        MOVL    @4(AP),R1               ; GET THE ARGUMENT VALUE
+        BEQL    2$                      ; MAKE SURE ONE BIT IS SET
+1$:     INCL    R0                      ; INCREMENT THE BIT COUNT.
+        MNEGL   R1,R2                   ; DELETE THE LOWEST ORDER BIT
+        BICL    R2,R1                   ;  BY ANDING THE NUMBER WITH
+                                        ;  THE COMPLEMENT OF ITS NEGATIVE.
+        BNEQ    1$                      ; REPEAT FOR THE REST OF THE BITS
+
+2$:     RET
+
+        .END

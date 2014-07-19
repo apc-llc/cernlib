@@ -1,0 +1,37 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:57 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:57  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernamx.car patch kernamx
+#if !defined(CERNLIB_KERNAMX)
+ 
+              KERNLIB ROUTINES PARTICULAR TO THE Amiga 3000UX
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KAMX     Pilot-patch selecting the standard KERNLIB for Amiga 3000UX
+ 
+QMAMX     Amiga 3000UX machine patch
+ 
+AMXGS     Amiga 3000UX versions of general KERNLIB routines
+ 
+=====================================================================
+ 
+ 
+              Up-date RECORD FOR THE PAM-FILE  KERNAMX
+              ----------------------------------------
+ 
+ 
+---------------------------------------------------------------------
+ 
+          FIRST RELEASE OF THE KERNAMX  PAM :  18-July-1991
+ 
+---------------------------------------------------------------------
+ 
+#endif

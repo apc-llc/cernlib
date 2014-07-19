@@ -1,0 +1,17 @@
+MACRO PAWEX9
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 9                           *
+* Plot two-dimensional functions                                         *
+**************************************************************************
+Exec ALLDEF
+zone 2 2
+FUN2 10 abs(sin(x)/x)*(cos(y)*y) 40 -6 6 _
+40 -6 6
+contour 10 40 0
+hi/de 10
+FUN2 10 x*sin(x)*y*sin(y) 40 -10. 10. _
+40 -10. 10. CONT
+surface 10
+hi/de 10
+RETURN
+

@@ -1,0 +1,15 @@
+*
+* $Id: v162.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v162.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.62
+C   Bug corrected in EPOPEN_VAX
+C   Variable record length disk files treated correctly
+C   This bug was affecting Interlink-transferred files.
+C   Bug corrected in EPMTEOF, back space over last
+C   written EOF did not always occur
+C

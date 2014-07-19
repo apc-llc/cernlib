@@ -1,0 +1,6 @@
+SRCS_F=	 mzattm.F mzbook.F mzcopy.F mzdiv.F mzdred.F mzdrop.F \ @@\
+	mzebra.F mzend.F mzflag.F mzinco.F mzinqd.F mzinqs.F mzlift.F \ @@\
+	mzlink.F mzlint.F mzlogl.F mzmaps.F mzmark.F mzneed.F mzpaw.F \ @@\
+	mzpudx.F mzpush.F mzrepl.F mzstor.F mzvers.F mzvolm.F mzwork.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

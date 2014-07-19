@@ -1,0 +1,9 @@
+#if 0
+/* this is not yet understood */
+CernlibFortranProgramTarget(hbtest,test_fp.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+
+TestTarget(hbtest)
+#else
+test::
+#endif

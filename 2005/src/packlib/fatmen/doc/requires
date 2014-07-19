@@ -1,0 +1,56 @@
+*
+* $Id: requires,v 1.1.1.1 1996/03/07 15:17:35 mclareni Exp $
+*
+* $Log: requires,v $
+* Revision 1.1.1.1  1996/03/07 15:17:35  mclareni
+* Fatmen
+*
+*
+* This directory was created from fatmen.car patch requires
+ 
+The FATMEN package requires the following other packages to run:
+ 
+- ZEBRA, KUIP, CSPACK (from CERN Program Library PACKLIB)
+ 
+- KERNLIB
+ 
+- FPACK (if the flag FPACK is +USEd)
+ 
+In addition, the following system specific software is required:
+ 
+VM/CMS systems
+--------------
+ 
+HEPVM software (EXECs, tape handling software, Tape Management System IF=TMS)
+ 
+(An interface to VMTAPE and VMBATCH is also provided)
+ 
+VAX/VMS systems
+---------------
+ 
+- VAXTAP (CERN Program Library) for tape handling
+ 
+N.B. for server mode staging, a logical name STAGE_QUEUE must be
+defined in the system table. This directory must be world writable.
+The current recommended practice is:
+ 
+a) Define STAGE_QUEUE to point to the same directory on all nodes
+b) Use batch mode staging on all nodes.
+   Batch mode staging is used by default if a batch queue STAGE_xxxxS
+   exists, e.g. STAGE_8200S
+ 
+Unix systems
+------------
+ 
+SHIFT/CORE software for tape handling, IF=SHIFT
+ 
+L3 Apollo tape staging, IF=APOLLO and the file l3stage is found
+in the current path.
+ 
+System dependant information
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+RS6000:
+To compile the CDF file, use the following options on the XLF command:
+ 
+-q ST_SIZE=5000 -q TKQ_SIZE=20000 -q charlen=32000 -q extname

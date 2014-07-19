@@ -1,0 +1,119 @@
+*
+* $Id: test1.F,v 1.1.1.1 1996/03/08 11:40:53 mclareni Exp $
+*
+* $Log: test1.F,v $
+* Revision 1.1.1.1  1996/03/08 11:40:53  mclareni
+* Kapack
+*
+*
+#include "kapack/pilot.h"
+#if defined(CERNLIB_CDC)
+      PROGRAM KATEST (INPUT,OUTPUT,TAPE5=INPUT,TAPE6=OUTPUT)
+#endif
+#if defined(CERNLIB_NORD)
+      OPEN ( UNIT=11,  FILE='KAPTEST:KAPC', ACCESS='DIRECT')
+*
+*.....ACCESS COULD BE 'DC' IF ENOUGH CONTIGUOUS SPACE ON DISK
+*
+      OPEN ( UNIT= 6 , FILE='TERMINAL'     )
+#endif
+      CALL KATST1(11)
+      CALL KATST2(11)
+      CALL KASTOP
+      END
+      SUBROUTINE KATST1(LUN)
+*
+*.....KAPACK TEST 1: CREATE A KA-FILE, ADD, RETRIEVE AND VERIFY RECORDS
+*
+#include "kapack/kax000.inc"
+*
+      CHARACTER*5 MAJOR, MINOR
+      INTEGER IA(10000)
+      DATA IA/10000*0/
+*
+*-----------------------------------------------------------------------
+*
+*.....SET OPTIONS
+      CALL KAOPTN(LUN,'MODIFY=YES',IRC)
+*
+*.....CREATE A KA-FILE
+      HMEG = 343400. * LWORD * 1.3 / (1 024. * 1 024. )
+      CALL KAMAKE(LUN,HMEG,0,IRC)
+*
+*.....ADD, RETRIEVE AND VERIFY SOME RECORDS
+      MAJOR = '1'
+      CALL KAADDM(LUN,MAJOR,0,99999,IRC)
+      CALL KAHOLD(LUN,MAJOR,IRC)
+      DO  1  J = 1, 100
+         WRITE(MINOR,100) J
+         NWORDS = J
+         IA(NWORDS) = NWORDS
+         CALL KAADD(LUN,MAJOR,MINOR,IA,NWORDS,IRC)
+         IA(NWORDS) = 0
+         CALL KAGET(LUN,MAJOR,MINOR,'READ',IA,NWORDS,IRC)
+         IF ( IA(NWORDS) .NE. NWORDS )  GO TO 10
+         IA(NWORDS) = 0
+ 1    CONTINUE
+      CALL KAFREE(LUN,MAJOR,IRC)
+*
+      MAJOR = '2'
+      CALL KAADDM(LUN,MAJOR,0,99999,IRC)
+      CALL KAHOLD(LUN,MAJOR,IRC)
+      DO  2  J = 1, 100
+         WRITE(MINOR,100) J
+         NWORDS = J*J
+         IA(NWORDS) = NWORDS
+         CALL KAADD(LUN,MAJOR,MINOR,IA,NWORDS,IRC)
+         IA(NWORDS) = 0
+         CALL KAGET(LUN,MAJOR,MINOR,'READ',IA,NWORDS,IRC)
+         IF ( IA(NWORDS) .NE. NWORDS )  GO TO 10
+         IA(NWORDS) = 0
+ 2    CONTINUE
+      CALL KAFREE(LUN,MAJOR,IRC)
+*
+*.....SUCCESSFUL COMPLETION
+      WRITE(6,101)
+      RETURN
+*
+*.....ERROR PROCESSING
+ 10   WRITE(6,110) MAJOR, MINOR, NWORDS, IA(NWORDS)
+      CALL KASTOP
+      STOP
+*
+ 100  FORMAT(I5)
+ 101  FORMAT(' ***** TEST 1 COMPLETED SUCCESSFULLY *****')
+ 110  FORMAT(' VERIFICATION ERROR FOR RECORD ',2A,', NWORDS = ',I10,
+     +       ', IA(NWORDS) = ',I10)
+*
+      END
+      SUBROUTINE KATST2(LUN)
+*
+*.....KAPACK TEST 2: DELETE THE ENTRIES CREATED BY KATST1
+*
+      CHARACTER*5 MAJOR, MINOR
+*
+*-----------------------------------------------------------------------
+*
+*.....SET OPTIONS
+      CALL KAOPTN(LUN,'MODIFY=YES',IRC)
+*
+*.....DELETE ALL THE ENTRIES
+      DO  2  I = 2, 1, -1
+         WRITE(MAJOR,100) I
+         CALL KAHOLD(LUN,MAJOR,IRC)
+         DO  1  J = 100, 1, -1
+            WRITE(MINOR,100) J
+            CALL KADEL(LUN,MAJOR,MINOR,IRC)
+ 1       CONTINUE
+         CALL KAFREE(LUN,MAJOR,IRC)
+         CALL KADELM(LUN,MAJOR,IRC)
+ 2    CONTINUE
+*
+*.....SUCCESSFUL COMPLETION
+      WRITE(6,101)
+      RETURN
+*
+ 100  FORMAT(I5)
+ 101  FORMAT(' ***** TEST 2 COMPLETED SUCCESSFULLY *****')
+*
+      END

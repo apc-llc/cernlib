@@ -1,0 +1,12 @@
+*
+* $Id: v115.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v115.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+C- Modifications: (GF)
+C- > Z268 SYSTEMS disabled for OS9.
+C- > Z268 linux and freebsd added in fortran wrapper.
+C-

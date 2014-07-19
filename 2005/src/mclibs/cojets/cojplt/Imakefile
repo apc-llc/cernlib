@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 cojplt.F ehist.F setup.F user.F userbg.F useren.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

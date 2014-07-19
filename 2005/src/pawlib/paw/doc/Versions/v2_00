@@ -1,0 +1,70 @@
+*
+* $Id: v2_00,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_00,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :          26/02/93  08.53.39  by  Rene Brun
+*-- Author :    Rene Brun   07/12/92
+*
+*::>          VERSION  2.00/07   930216  9.17
+*.
+*      Changes in PAWFOP to open FZ files with the L option (CFOPEN)
+*      Bugs corrected in PAWTYT,PPROJ0.
+*
+*::>          VERSION  2.00/06   930201 14.03
+*
+*      Protections against negative values for LOG10.
+*         New function PLOG10.
+*      Bug fixes in PAWFCU.
+*      Changes in ntuple routines for ntuple with structures.
+*      In PAHOPE: reset variable JOFSET.
+*
+*::>          VERSION  2.00/05   930126 18.12
+*
+*      Changes in PNTVAL for ntuples with arrays not correctly filled.
+*      Call to IGTERM in PAMAINM to update the buffer for MOTIF version
+*
+*::>          VERSION  2.00/04   930125 10.21
+*
+*      Version for official distribution: Release CERNLIB v93a
+*
+*      Bug fix in PAHOPE (test on CHOPT instead of CHOPT1) RESET works
+*      Bug fixes in PAMERG when mixing old/new HBOOK files
+*      Protection in PAWROP to prevent opening a file already connected
+*      Bug fix in PAWTYT for long expressions in SQRT
+*      Bug fixes in PAWFCU
+*
+*::>          VERSION  2.00/03   930120  8.19
+*
+*      Bugs fixed in routines to merge ntuples (old/new format)
+*      Bug fixed in PAWFCU,PAWTYT (addition of COMIS functions)
+*
+*::>          VERSION  2.00/02   930118 16.51
+*
+*      Interface to new MOTIF/KXTERM panel
+*
+*      Routine PAWSIM changed to DOUBLE PRECISION and use of HCFITD
+*
+*      Option 'E' introduced in Histo/Operations commands
+*      This option computes correctly the error bars for the resulting
+*      histogram. Requires equivalent mods in HBOOK/HOPERA.
+*
+*      Change HELP of Ntuple/Create command.
+*      Add new callable routines in PAWCS
+*
+*::>          VERSION  2.00/01   921221 17.55
+*
+*
+*::>          VERSION  2.00/00   921207 10.28
+*
+*
+*      new user callable routine HFINAM callable from COMIS.
+*      HFINAM can be used to store the names of the parameters of a fit
+*
+*      Protection added in LOCATE (PAGRAF)
+*
+*      New command PICTURE/PRINT to print the current picture.
+*

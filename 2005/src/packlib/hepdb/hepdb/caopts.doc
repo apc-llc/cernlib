@@ -1,0 +1,26 @@
+*
+* $Id: caopts.doc,v 1.1 1997/01/22 16:56:56 gunter Exp $
+*
+* $Log: caopts.doc,v $
+* Revision 1.1  1997/01/22 16:56:56  gunter
+* rename files with % to be .doc files
+*
+* Revision 1.1.1.1  1996/02/28 16:24:06  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#ifndef CERNLIB_HEPDB_CAOPTS%_INC
+#define CERNLIB_HEPDB_CAOPTS%_INC
+*
+*
+* caopts%.inc
+*
+#if defined(CERNLIB__DOC)
+/CAOPTS/           (For carrying decoded information of CHOPT)
+  IOPaCA..IOPzCA Flag for each character in character option.
+                 Decoded by CDOPTS and set to 1 if option requested.
+    IOKYCA       Flag for each key element as set by CHOPT.
+                 Decoded and has similar meaning as IOPxCA.
+#endif
+
+#endif

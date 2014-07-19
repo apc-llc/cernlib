@@ -1,0 +1,37 @@
+DoIncludePackage(higz)
+#include "pilot.h"
+
+SRCS_F=	iacwk.F iclks.F iclwk.F idawk.F ifa.F igsa.F \ @@\
+	igsg.F iopks.F \ @@\
+	iopwk.F ipl.F ipm.F irqlc.F irqst.F ischh.F ischup.F isclip.F \ @@\
+	iscr.F iselnt.F isfaci.F isfais.F isfasi.F isln.F islwsc.F \ @@\
+	ismk.F ismksc.F isplci.F ispmci.F istxal.F istxci.F istxfp.F \ @@\
+	isvp.F iswkvp.F iswkwn.F iswn.F itx.F iuwk.F
+
+#if !defined(CERNLIB_MSDOS)
+SRCS_F := $(SRCS_F) iclrwk.F 
+#endif
+
+#if defined(CERNLIB_X11)
+SRCS_F := $(SRCS_F) ikfntx.F ikuwk.F 
+#endif
+
+#if !defined(CERNLIB_BATCH)
+SRCS_F := $(SRCS_F) ikpl.F
+#endif
+
+#if defined(CERNLIB_GL) || defined(CERNLIB_X11) || \
+    defined(CERNLIB_FALCO) || defined(CERNLIB_MACMPW)
+SRCS_F := $(SRCS_F) ikbox.F 
+#endif
+
+#if defined(CERNLIB_KERNEL) &&  \
+    !defined(CERNLIB_PHIGS) && !defined(CERNLIB_MSDOS)
+SRCS_F := $(SRCS_F) ikfile.F  
+#endif
+
+#ifdef CERNLIB_DECS
+SpecialFortranLibObjectRule(ikpl,ikpl,-O1,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

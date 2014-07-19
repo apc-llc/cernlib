@@ -1,0 +1,22 @@
+*
+* $Id: v137.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v137.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.37  920317 23.00
+C
+C  Routine changes:
+C  ----------------
+C  C343 BSJA     Restore usage of DGAMMA. Only IBM supports GAMMA as a
+C  C344 CBSJA    generic function - L.Roberts/SSC
+C                Bug in 32-bit version of WBSJA: DGAMMA was not declared
+C                as DOUBLE PRECISION
+C  E221 CHEB     Set BIG=10**37 as default for all machines - L.Roberts
+C  V110 POISSN   Save EXPMA,AMUOL,AMAX for all machines
+C  V150 HISRAN   Declare Y as a vector with implicit length. The previous
+C                declaration Y(2) interferes with the Cray vector comp.
+C  Z034 WHICH    Add IBM 9000
+C

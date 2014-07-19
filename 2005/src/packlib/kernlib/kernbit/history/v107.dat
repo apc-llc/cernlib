@@ -1,0 +1,22 @@
+*
+* $Id: v107.dat,v 1.1.1.1 1996/02/15 17:47:45 mclareni Exp $
+*
+* $Log: v107.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:45  mclareni
+* Kernlib
+*
+*
+*  Version 1.07  910910 22.00
+C- Additions:
+C  > P=FKERNBIT   QSAA Flag to use the SAA-C compiler on IBM
+C  > M433 CLTOU   Add STRIP, SUBWORD, WORD, WORDS functions "a la REXX"
+                  Add WORDSEP to set word-delimiter for M433 package
+C  > M442 NAMEFD  Fortran version of VM/CMS command NAMEFIND
+C  > M443 CHARN   Translate CHARACTER <> numeric rep. of numbers
+C  > M444 UXTOVM  Translate Unix-filenames to VM (for OPEN,INQUIRE,etc)
+C  > Z100 JOBNAM  Add test program
+C  > Z265 GETENVF Add dummy version for MVS
+C  > Z305 VMSTAK  Add test program
+C  > Z307 JOB$VM  Add test program
+C  > Z313 JOBINFO Add test program
+C

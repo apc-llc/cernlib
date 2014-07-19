@@ -1,0 +1,38 @@
+*
+* $Id: cdpurge.dat,v 1.1.1.1 1996/02/28 16:23:57 mclareni Exp $
+*
+* $Log: cdpurge.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:57  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDPURGE.COM
+$SET NOON
+$ !
+$ ! Purge journalled HEPDB updates that are over a day old
+$ !
+$ if p1 .eqs. "" then exit
+$ hepdb =  p1
+$ count  = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$loop:
+$ server = f$element(count,",",hepdb)
+$ if server .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''server'..."
+$ ON WARNING THEN GOTO UNDEFINED
+$ cddir = &server
+$ purge 'cddir' ! Purge old log files
+$ cdfil = f$extract(0,f$length(cddir)-1,cddir) + ".SAVE]*.*;*"
+$ ON WARNING THEN CONTINUE
+$ delete/before=-0-23:59 'cdfil'
+$ goto loop
+$ undefined:
+$ write sys$output "Warning: symbol ''server' is not defined"
+$ goto loop
+$ end:
+$ set message 'save_mess'
+$ exit
+#endif

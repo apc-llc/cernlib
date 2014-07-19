@@ -1,0 +1,24 @@
+MACRO PICTMERG HID=0 S1=1 S2=100
+**************************************************************************
+*                   PAW TUTORIAL EXAMPLE 25 - MERGE Macro                *
+**************************************************************************
+Swi Z
+Pic/cr MERGE2
+set HTYP 354
+Hi/PL [hid]
+set HTYP 345
+Hi/PL [hid]([s1]:[s2]) s
+Pic/cr MERGE1
+set HTYP 354
+opt UTIT
+opt GRID
+Hi/PL [hid]([s1]:[s2])
+opt NGRI
+Izpict MERGE2 c
+If BATCH = 'YES' Then
+   Pi/Merge MERGE1 .45 .45 .47
+Else
+   Pi/Merge MERGE1 .45 .45 .47 D
+Endif
+Pict/del *
+Return

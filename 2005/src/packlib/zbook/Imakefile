@@ -1,0 +1,14 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= code ybook
+SUBDIRS= $(LIBDIRS) test zbook
+
+TopOfPackage(zbook)
+
+SubdirLibraryTarget(zbook,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(zbook)

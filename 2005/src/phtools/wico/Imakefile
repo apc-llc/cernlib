@@ -1,0 +1,3 @@
+SRCS_F=	 cwicof.F wico.F wicoin.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

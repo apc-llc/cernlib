@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 derf.F dfreq.F erf.F freq.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

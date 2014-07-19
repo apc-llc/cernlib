@@ -1,0 +1,15 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= hplotcc hplotf77
+SUBDIRS= $(LIBDIRS) hplot
+
+MakeSubdirs($(SUBDIRS))
+
+TopOfPackage(hplot)
+
+SubdirLibraryTarget(hplot,$(LIBDIRS))
+
+InstallIncludeSubdirs(hplot)

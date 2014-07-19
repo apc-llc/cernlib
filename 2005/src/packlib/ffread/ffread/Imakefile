@@ -1,0 +1,5 @@
+INCLUDES=	 cfread.inc cfreadsv.inc ffchar.inc ffcharsv.inc \ @@\
+	ffcomm.inc ffcommsv.inc ffluns.inc ffmach.inc ffparm.inc \ @@\
+	pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),ffread)

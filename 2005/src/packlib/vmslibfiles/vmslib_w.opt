@@ -1,0 +1,2 @@
+CERN_ROOT:[lib]VMSLIB/lib
+SYS$LIBRARY:vaxcrtl/share

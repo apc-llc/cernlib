@@ -1,0 +1,62 @@
+*
+* $Id: addfat.dat,v 1.1.1.1 1996/03/07 15:18:02 mclareni Exp $
+*
+* $Log: addfat.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:18:02  mclareni
+* Fatmen
+*
+*
+      PROGRAM ADDTEST
+      CHARACTER*80 GENAM
+      CHARACTER*80 DSN,COMM
+      CHARACTER*8  HOST
+      CHARACTER*4  FFORM,RECFM,CHOPT
+*
+*     User words
+*
+      DIMENSION IVECT(10)
+*
+*     Initialise FATMEN. Read catalogue on unit 1, updates on unit 2
+*
+      CALL FMSTRT(1,2,'//CERN/CNDIV',IRC)
+*
+*     Maximum (documented) log level
+*
+      CALL FMLOGL(3)
+*
+*     Add a disk file
+*
+*  Generic name...
+      GENAM  = '//CERN/CNDIV/JAMIE/TESTING'
+*  File name...
+      DSN    = 'DISK$CD:[JAMIE.FATMEN]FXFILE.DAT'
+*  File format (FZ binary exchange)...
+      FFORM  = 'FX'
+*  Data type or copy level... (none)
+      IDAT   = 0
+*  Host name...
+      HOST   = 'CERNVM'
+*  Record format (fixed length records)...
+      RECFM  = 'F'
+*  Record length in bytes...
+      LRECL  = 32400
+*  Block length in bytes...
+      LBLCK  = 32400
+*  File size in MB...
+      ISIZE  = 1
+*  Comment...
+      COMM   = 'Sample FZ file'
+*  Options:
+      CHOPT  = ' '
+*  User words...
+ 
+      DO 10 I=1,10
+10       IVECT(I) = IRNDM(DUMMY)
+ 
+      CALL FMADDD(GENAM,DSN,FFORM,IDAT,HOST,RECFM,LRECL,LBLCK,ISIZE,
+     +            COMM,IVECT,CHOPT,IRC)
+ 
+      CALL FMEND(IRC)
+      PRINT *,'Return code ',IRC,' from FMEND'
+*
+      END

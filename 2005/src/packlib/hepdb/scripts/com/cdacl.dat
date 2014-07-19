@@ -1,0 +1,22 @@
+*
+* $Id: cdacl.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdacl.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDACL.COM
+$   if p1 .eqs. "" then exit
+$   group = P1 - "CD"
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER='P1',ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER=ID$_'GROUP',ACCESS=READ+WRITE+EXECUTE)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER='P1',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER=ID$_'GROUP',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE)
+$   directory/security DISK$MF:['p1']QUEUE.DIR
+#endif

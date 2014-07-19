@@ -1,0 +1,32 @@
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(kapack,test1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+/* the kapack test, or better kamake asks for a file name only in unix.
+ *  on VMS, the file is opened on unit 11, resulting in for011.dat
+ *  other systems ?
+ */
+
+#if defined(CERNLIB_UNIX)
+
+TestTarget(kapack,NullParameter,test.input)
+
+CopyFile(kapack.input,test.input)
+
+clean::
+	RemoveFile(kapackt.dat)
+
+#elif defined(CERNLIB_VAX)
+
+TestTarget(kapack,NullParameter,NullParameter)
+
+clean::
+	 RemoveFile(FOR011.DAT)
+
+#elif 1
+
+test::
+	echo "You must still add the test for Kapack to the Imakefile."
+
+#endif

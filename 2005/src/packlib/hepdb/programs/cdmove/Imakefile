@@ -1,0 +1,9 @@
+SRCS_F=	cdmove.F
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+#endif
+
+CernlibFortranProgramTarget(cdmove,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(cdmove,$(CERN_BINDIR))

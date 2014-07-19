@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 chdir.F getcwd.F getenv.F rename.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

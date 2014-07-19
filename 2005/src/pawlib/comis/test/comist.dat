@@ -1,0 +1,60 @@
+      DOUBLE PRECISION FUNCTION DEQ(Y,R,S,T)
+      DOUBLE PRECISION Y,R,S,T
+      DEQ=Y**3+R*Y**2+S*Y+T
+      END
+ 
+      SUBROUTINE WEQ(X,Y,R,S,T,XOUT,YOUT)
+      DOUBLE PRECISION X,Y,R,S,T,XOUT,YOUT,THETA,RHO
+ 
+C     WEQ(Z)=Z**3+R*Z**2+S*Z+T
+ 
+      THETA = ATAN2(Y,X)
+      RHO   = SQRT(X**2+Y**2)
+      XOUT  =
+     +RHO**3*COS(3.*THETA)+R*RHO**2*COS(2.*THETA)+S*RHO*COS(THETA)+T
+      YOUT  =
+     +RHO**3*SIN(3.*THETA)+R*RHO**2*SIN(2.*THETA)+S*RHO*SIN(THETA)
+      END
+ 
+C     TEST DRTEQ3   ON IBM AND ALIKE
+ 
+      DOUBLE PRECISION A0,A1,A2,A3,X(3),DEQ,Y,R,S,T,D,XO,YO
+      REAL RD(0:3)
+ 
+      DO 1 K = 0,180
+      IF(MOD(K,50) .EQ. 0) WRITE(6,100)
+      CALL RVRAN(4,-7.,7.,RD(0),RD(1))
+      J0=RD(0)
+      IF(J0 .EQ. 0) GO TO 1
+      J1=RD(1)
+      J2=RD(2)
+      J3=RD(3)
+      IF(K .EQ. 0) THEN
+       J0=1
+       J1=-5
+       J2=8
+       J3=-4
+      END IF
+      A0=J0
+      A1=J1
+      A2=J2
+      A3=J3
+      R=A1/A0
+      S=A2/A0
+      T=A3/A0
+      CALL DRTEQ3(R,S,T,X,D)
+      IF(D .GT. 0.D0) THEN
+       CALL WEQ(X(2),X(3),R,S,T,XO,YO)
+       WRITE(6,101) J0,J1,J2,J3,X,D,DEQ(X(1),R,S,T),XO,YO
+      ELSE IF(D .EQ. 0.D0) THEN
+       WRITE(6,101) J0,J1,J2,J3,X,D,DEQ(X(1),R,S,T),DEQ(X(2),R,S,T)
+      ELSE
+       WRITE(6,101) J0,J1,J2,J3,X,D,DEQ(X(1),R,S,T),
+     +DEQ(X(2),R,S,T),DEQ(X(3),R,S,T)
+      END IF
+    1 CONTINUE
+  100 FORMAT('1'/1X,'A0A1A2A3',14X,'X(1)',14X,'X(2)',
+     1       14X,'X(3)',9X,'D'/)
+  101 FORMAT(1X,I3,3I2,3F18.14,D10.2,3F18.14)
+      STOP
+      END

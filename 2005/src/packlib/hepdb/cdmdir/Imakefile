@@ -1,0 +1,4 @@
+SRCS_F=	 cdddir.F cdfpat.F cdkeep.F cdmdir.F cdmkdi.F cdpart.F \ @@\
+	cdsdir.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

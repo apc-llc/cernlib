@@ -1,0 +1,22 @@
+INCLUDES=	 alqgen.inc berend.inc bkwg.inc boends.inc boflag.inc \ @@\
+	bopar.inc boson.inc botqrk.inc bxgen.inc cfun1.inc cmpsca.inc \ @@\
+	ctopdc.inc cuejet.inc cuevol.inc cutoff.inc data1.inc \ @@\
+	data2.inc data3.inc davers.inc decpar.inc dylim.inc edpar.inc \ @@\
+	eicht.inc entrev.inc event.inc evint.inc evtype.inc ffmul.inc \ @@\
+	final.inc fint.inc flapre.inc forcsl.inc forgen.inc fratab.inc \ @@\
+	fstate.inc idrun.inc iflghv.inc imlf.inc inifl.inc inmat.inc \ @@\
+	intype.inc isjetc.inc isjetn.inc itapes.inc itlis2.inc jet.inc \ @@\
+	jetlim.inc jetnpc.inc jetpar.inc jetset.inc kdump.inc \ @@\
+	keybre.inc keyjet.inc keys.inc kfact.inc khadro.inc m2qua.inc \ @@\
+	maxn.inc mb.inc mflain.inc nevol.inc nflav.inc njsetb.inc \ @@\
+	nkinpt.inc nleave.inc nquaz.inc over.inc par.inc parq.inc \ @@\
+	parqua.inc parram.inc partcl.inc pfirst.inc photbe.inc \ @@\
+	photon.inc pinits.inc pjets.inc pmbias.inc primar.inc \ @@\
+	prmswd.inc pthard.inc qcd.inc qcdpar.inc qcds.inc quaor.inc \ @@\
+	quaor2.inc radlep.inc rectp.inc rotq.inc spyfor.inc stable.inc \ @@\
+	tabpsq.inc tabqrk.inc thrfla.inc tleave.inc top.inc total.inc \ @@\
+	tpretb.inc transl.inc ttends.inc tweigh.inc twobod.inc \ @@\
+	wcom.inc weakbo.inc weakon.inc zcom.inc zevel.inc zpar2.inc \ @@\
+	zwpar.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),cojets)

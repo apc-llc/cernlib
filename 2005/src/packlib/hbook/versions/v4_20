@@ -1,0 +1,231 @@
+*
+* $Id: v4_20,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_20,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.20/14 22/10/93  11.19.43  by  Rene Brun
+*-- Author :    Rene Brun   21/06/93
+*
+*::>          VERSION  4.20/14   22/10/93 11.19.43
+*
+*    Remove IOFSET limitation in HRIN for ntuples
+*
+*::>          VERSION  4.20/13   21/10/93 15.10.39
+*
+*    Introduce WINNT flag in nearly all routines with the LINUX flag.
+*
+*    Large array T removed in HMCLNL (C.Beeston)
+*
+*::>          VERSION  4.20/12   18/10/93 17.48.08
+*
+*
+*::>          VERSION  4.20/11   15/10/93 16.56.03
+*
+*
+*     Routine HGNTBF: fixed bug in case an index variable fit in memory
+*     while the variable depending on that index variable did not fit in
+*     memory.
+*
+*::>          VERSION  4.20/10   13/10/93 18.01.16
+*
+*
+*     Implement possibility to list/plot histograms in a subdirectory
+*       of a shared memory section. Mods in HCOPYU and HPLISM.
+*
+*     Routine HMCMLL: put DATA statement after declarations.
+*
+*     Routine HCDIR: don't allow to CD to server connection point (like
+*     cd //piaf1) this does not make sense plus it causes conflicts when
+*     a chain is named piaf1.
+*
+*     Routine HNBUF: first word of contents back must be zeroed. Fixes bug
+*     when filling different Ntuples with index variables in the same job.
+*
+*     KEEP,HCMPCM contained +SELFs: OK for CMZ not for Patchy.
+*          New KEEPs,HCMPCM1 and 2.
+*
+*::>          VERSION  4.20/09   28/09/93 16.39.40
+*
+*
+*     New PATCH,HMCSTAT from Christine Beeston, R.Barlow from OPAL.
+*      Fits the given Monte Carlo distributions to the data distribution, using
+*      a binned maximum likelihood fit which includes the effect of both data
+*      and Monte Carlo statistics, and allows weights to be
+*      provided for each Monte Carlo distribution.  The data and Monte Carlo
+*      distributions must be presented in 1 dimensional histograms.
+*      The best estimate of the fraction of each Monte
+*      Carlo distribution present in the data distribution is returned, with an
+*      error estimate where required.
+*
+*     Common /PAWIDN/ : X(512) changed to X(522)
+*
+*     New routines HPLISG,HPLISG1 in patch HGLOBAL.
+*     Routine HLDIR modified to call new routine HPLISG (VAX only).
+*     HPLISH can do a Histo/List in Global sections.
+*
+*     Replace line with TEST.GT.1.5 by TEST.GE.0. in HFCN
+*
+*::>          VERSION  4.20/08   12/09/93 18.57.43
+*
+*
+*     Histogram directory bank LTAB created and MZPUSHed with 500 words
+*        and links instead of 50. This speeds up considerably programs
+*        using a large number of histograms.
+*
+*     New deck HRNGPF in patch HBOOK
+*     New deck HNDESC in patch HNTUP
+*     Corrections in CWN filling and GET routines for character type columns
+*
+*     Ulrich Mueller changes for IEEE computers in filling routines.
+*     There is an unpleasant feature in HBOOK on computers with IEEE 754
+*     floating point arithmetic (in our case on DECstations under Ultrix
+*     4.3a, CERNLIB 93b or 93d).
+*
+*     Calculations on these machines can give as result Infinity or
+*     Not-a-Number (NaN). If one tries to fill these numbers into histograms
+*     (and this happens in real-world applications, especially during the
+*     development phase of a program), some problems may arise:
+*
+*     1) Filling of +/- infinity as value. This case is handled properly by
+*        the checks for over/underflow and the value is counted as such.
+*
+*     2) Filling of NaN as value. The over/underflow checks fail because
+*        relations like .LT. or .GE. are always false if one of the operands
+*        is NaN. Then the value is converted to a bin address, which is an
+*        undefined integer and finally results in either a segmentation
+*        fault or an overwriting of memory somewhere.
+*
+*        However, this could easily be fixed, for example in HF1 (the other
+*        routines are analogous):
+*
+*           IF(X.LT.Q(LPRX+1))THEN
+*              ICHAN=0
+*           ELSEIF(.NOT.(X.LT.Q(LPRX+2)))THEN
+*              ICHAN=IQ(LPRX)+1
+*           ELSE
+*              ... calculate bin address ...
+*           ENDIF
+*
+*        By changing the overflow check from .GE. to .NOT. .LT. the NaN
+*        value will be counted as overflow. Another approach would be a
+*        separate check for NaN, something like
+*           IF (.NOT. (X.LT.0. .OR. X.GE.0.))
+*        together with an appropriate error message.
+*     ====>      This changes has been made in all filling routines
+*
+*     3) Filling of Infinity or NaN as a weight. This is maybe the worst
+*        case. The value is added to the bin, and this results in a crash
+*        when the ZEBRA structure is written to a file, or in a crash of PAW
+*        if one tries to plot the bad histogram.
+*
+*        I propose to add a check for the finiteness of the weight. On most
+*        machines a (C-)function "finite" is available for that purpose.
+*     =====> This suggested change is not yet implemented.
+*     Ulrich Mueller       Exp. WA89, Div. PPE, CERN, CH-1211 Geneva 23
+*     ulm@vsnhd1.cern.ch   Phone +41-22-767-8658, FAX +41-22-7850314
+*
+*::>          VERSION  4.20/07   07/09/93 12.09.33
+*
+*     Optimization in HGNTBF in case of running on Piaf slave server
+*
+*     Introduced the deck HRNGPF (formerly PFRANGE in the Paw source)
+*
+*     Optimize logic of HCDIR for PIAF connections
+*
+*::>          VERSION  4.20/06   06/09/93 12.20.45
+*
+*     Optimize logic for sorting IDs in HRSORT
+*
+*::>          VERSION  4.20/05   29/08/93 10.08.32
+*
+*
+*     New routine HRSORT(CHOPT) to sort IDs in a RZ directory
+*     HRSORT is automatically called by HLDIR if option 'S' given
+*     Routine HLNEXT automatically sorts IDs in increasing order
+*     HLNEXT is the routine called by the PAW++ browser
+*
+*     New definition of $HCPIAF for parallel PIAF
+*     Changes in HLOGPF,HINPF,HOUTPF for parallel PIAF
+*
+*     Changes in LINUX version in HSHM
+*
+*     Changes for Windows/NT (HMMAP in particular)
+*
+*     Sequence/common/HCRECO renamed HCRECV to avoid clash with L3 programs
+*
+*::>          VERSION  4.20/04   05/08/93 15.06.25
+*
+*     Protections introduced in case of empty arrays in HGNT2,HGNTBF.
+*
+*     Changes in Unix mapping memory routines.
+*     SGI moved from BSD to SYS5 class.
+*
+*::>          VERSION  4.20/03   03/08/93 15.30.17
+*
+*
+*     Bug fix in HGNTBF for indexed variables in ntuples.
+*
+*     Protection in HRESET to not reset ntuples.
+*
+*     Protection in HRIN if IOFSET is not 0 for RWN ntuples.
+*
+*     Changes in sequence HCNTPAW. MAXCOL=1000 replaced by:
+*          MAXCR8=1000, MAXCR4=5000, MAXC32=1000
+*
+*     Maximum number of files extended to 50.
+*
+*     New routine HPROF2 to make profile histograms from 2-D histograms
+*
+*     Mods in HMINUT to call a user routine (via JUMPX2) to read
+*     MINUIT commands. (In paw the user routine is PMNCOMD)
+*
+*     Decks HCDIR and HROUT: update LBUF and LTMP when switching between
+*     different directories in memory.
+*
+*     New routines HRESETM,HRESETM1,HREZ0M to reset histograms
+*     in shared memory (from W.Bruckner).
+*     New routines HPLISM,HPLISM1 to list histograms in shared memory (W.B.)
+*     Mods in HLDIR to call HPLISM.
+*
+*     Remove WARNING in HDIFFB in case of identical histograms (HDBINI)
+*
+*::>          VERSION  4.20/02   23/07/93 10.44.48
+*
+*     Mods in HRESET to reset HFIT structure
+*
+*     Deck HFNT2: when value is out of range substitute max or min value,
+*     also check range when only number of bits is specified.
+*
+*     Deck HALLOC: moved code from PVMEM (PAW) into HBPRNT.
+*
+*::>          VERSION  4.20/01   28/06/93 11.48.27
+*
+*      Mods in HMINUT to call the new MINUIT routine MNCOMD.
+*      The new routine MNCOMD is temporarily introduced as a DECK,MNCOMND
+*      in the HBOOK file. This should be removed for the next release.
+*      In particular MNCOMD will not work as it is on CRAYs.
+*
+*
+*::>          VERSION  4.20/00   21/06/93 18.17.17
+*
+*      Fix problem in HRIN (IOFSET moved to 1st statement)
+*
+*      Deck HNTNAM: correct call to HBUG.
+*
+*      Save in word 12 (ZID) of the CWN header the Ntuple ID used
+*      to write the Ntuple extensions on disk. This ID necessary when an
+*      Ntuple has been loaded in memory with on offset. Decks changed:
+*      HRIN, HBNT, HNBUFR, HNTRD.
+*
+*      Deck HGNTF: changed some error checks.
+*
+*      Deck HNTMPF: forgot to set LTMP1 (caused problems reading and
+*      writing CWN's at the same time).
+*
+*      Deck HRECOV: set NTCUR=0 and fixed special case of endless loop.
+*
+*      Fixed bug in HALLOC (block names of 8 characters were overwriting
+*      on VMS systems the first character of the column name)

@@ -1,0 +1,28 @@
+*
+* $Id: cstab.inc,v 1.1.1.1 1996/02/26 17:16:35 mclareni Exp $
+*
+* $Log: cstab.inc,v $
+* Revision 1.1.1.1  1996/02/26 17:16:35  mclareni
+* Comis
+*
+*
+#ifndef CERNLIB_COMIS_CSTAB_INC
+#define CERNLIB_COMIS_CSTAB_INC
+*
+*
+* cstab.inc
+*
+        DOUBLE PRECISION DVPAR
+        COMPLEX          CXVPAR
+      COMMON/CSTCGB/NCIDGB,IADGB,ICGB,LENGB,IDGB(8)
+*
+     + /CSTGP/NCIDGP,IADGP,ITYPGP,IFCS,IDESGP,IDGP(8)
+*
+     + /CSTGLI/NCIDGI,ISHGI,NUMGI,MODEGI,ITYPGI,LENEGI,LEQUGI,IOFSGI
+     +      ,  LXXGLI,IDGI(8)
+*
+     + /CSTLL/LABLL,LABST,LABADR
+*
+        EQUIVALENCE (DVPAR,CXVPAR,RVPAR,IVPAR,LEQUGI)
+
+#endif

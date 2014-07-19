@@ -1,0 +1,59 @@
+#
+#  uint.exp  --
+#
+#  Original: 30-Jun-1995 15:52
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Valid formats
+#
+
+#
+# Binary representations
+#
+literal_test	uint	b'0'					z'0'
+literal_test	uint	b'11111110110111000000000100100011'	z'fedc0123'
+literal_test	uint	b'11111111111111111111111111111111'	z'ffffffff'
+
+
+#
+# Octal representations
+#
+literal_test	uint	o'0'					z'0'
+literal_test	uint	o'12345670'				z'29cbb8'
+literal_test	uint	o'37777777777'				z'ffffffff'
+
+#
+# Hexadecimal representations
+#
+literal_test	uint	z'0'					z'0'
+literal_test	uint	z'deadbeef'				z'deadbeef'
+literal_test	uint	z'ffffffff'				z'ffffffff'
+literal_test	uint	z'DEADbeef'				z'deadbeef'
+literal_test	uint	z'FfFfFfFf'				z'ffffffff'
+
+#
+# Invalid formats
+#
+
+untested "Literal test UInt: Invalid formats not tested"
+
+#
+# Cleanup after tests
+#
+paw_cmd { close 4 }

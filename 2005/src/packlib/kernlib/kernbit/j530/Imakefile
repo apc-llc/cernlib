@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 binsiz.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

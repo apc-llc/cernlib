@@ -1,0 +1,77 @@
+/* $Id: Threads.tmpl,v 1.1.1.1 1995/12/20 15:26:39 cernlib Exp $
+ *
+ * $Log: Threads.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:39  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: Threads.tmpl,v 1.3 94/03/30 12:04:19 gildea Exp $
+
+/*
+ * For a multi-threaded application or library,
+ * Define LocalThreadsDefines in your Imakefile (unless you like the
+ * project default), then include this file.
+ * Everything else should be automatic. 
+ */
+
+#ifndef LocalThreadsDefines
+#ifdef ProjectThreadsDefines
+#define LocalThreadsDefines ProjectThreadsDefines
+#else
+#define LocalThreadsDefines /**/
+#endif
+#endif
+
+#ifndef LocalThreads
+#ifdef ThreadedProject
+#define LocalThreads ThreadedProject
+#else
+#define LocalThreads YES
+#endif
+#endif
+
+#ifndef ThreadTypeDefines
+#if HasCThreads
+#define ThreadTypeDefines -DCTHREADS
+#else
+#define ThreadTypeDefines /**/
+#endif
+#endif
+#ifndef SystemMTDefines
+#define SystemMTDefines /**/
+#endif
+#ifndef CplusplusSystemMTDefines
+#define CplusplusSystemMTDefines /**/
+#endif
+#ifndef ThreadsCompileFlags
+#define ThreadsCompileFlags /**/
+#endif
+#ifndef ThreadsCplusplusCompileFlags
+#define ThreadsCplusplusCompileFlags /**/
+#endif
+
+#ifndef ThreadsLibraries
+#define ThreadsLibraries /**/
+#endif
+#ifndef ThreadsCplusplusLibraries
+#define ThreadsCplusplusLibraries /**/
+#endif
+#ifndef ThreadsLoadFlags
+#define ThreadsLoadFlags ThreadsCompileFlags
+#endif
+#ifndef ThreadsCplusplusLoadFlags
+#define ThreadsCplusplusLoadFlags ThreadsCplusplusCompileFlags
+#endif
+
+#if LocalThreads
+    THREADS_CFLAGS = ThreadsCompileFlags
+   THREADS_DEFINES = LocalThreadsDefines ThreadTypeDefines SystemMTDefines
+   THREADS_LDFLAGS = ThreadsLoadFlags
+      THREADS_LIBS = ThreadsLibraries
+
+  THREADS_CXXFLAGS = ThreadsCplusplusCompileFlags
+THREADS_CXXDEFINES = LocalThreadsDefines ThreadTypeDefines CplusplusSystemMTDefines
+THREADS_CXXLDFLAGS = ThreadsCplusplusLoadFlags
+   THREADS_CXXLIBS = ThreadsCplusplusLibraries
+#endif

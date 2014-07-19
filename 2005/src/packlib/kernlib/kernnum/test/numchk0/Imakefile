@@ -1,0 +1,3 @@
+SRCS_F= c205d3.F c205r3.F cvdist.F dvdist.F rvdist.F stamp.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

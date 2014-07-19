@@ -1,0 +1,13 @@
+INCLUDES=	 fpadr.inc fpcoms.inc gplotst.inc pachar.inc \ @@\
+	pacomis.inc paloc.inc pawbgn.inc pawbig.inc pawcfu.inc \ @@\
+	pawchn.inc pawcom.inc pawfil.inc pawfil1.inc pawfil2.inc \ @@\
+	pawfil3.inc pawfil4.inc pawfil5.inc pawfil6.inc pawidn.inc \ @@\
+	pawlun.inc pawnpu.inc pawsiz.inc pawsmall.inc pcaddr.inc \ @@\
+	pcargs.inc pcbuff.inc pcchar.inc pccmd.inc pccsel.inc \ @@\
+	pcfitf.inc pcfunc.inc pchist.inc pchost.inc pchtag.inc \ @@\
+	pclin1.inc pclin2.inc pclint.inc pcmask.inc pcmatw.inc \ @@\
+	pcmode.inc pcntwk.inc pcolv.inc pcpatl.inc pcpiaf.inc \ @@\
+	pcrang.inc pcslas.inc pcwk.inc pntold.inc quest.inc rzcxio.inc \ @@\
+	pilot.h tree.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),paw)

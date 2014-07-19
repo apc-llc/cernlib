@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 whichf.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

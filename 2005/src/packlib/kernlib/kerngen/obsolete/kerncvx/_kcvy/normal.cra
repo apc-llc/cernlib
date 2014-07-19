@@ -1,0 +1,26 @@
+#if !defined(CERNLIB_P5BOOT)
+#ifndef CERNLIB_CV32GS
+#define CERNLIB_CV32GS
+#endif
+#ifndef CERNLIB_CVXGS
+#define CERNLIB_CVXGS
+#endif
+#ifndef CERNLIB_CCGEN
+#define CERNLIB_CCGEN
+#endif
+#ifndef CERNLIB_CCGENCX
+#define CERNLIB_CCGENCX
+#endif
+#ifndef CERNLIB_CCGENCF
+#define CERNLIB_CCGENCF
+#endif
+#ifndef CERNLIB_CCGENCI
+#define CERNLIB_CCGENCI
+#endif
+#ifndef CERNLIB_XVECT
+#define CERNLIB_XVECT
+#endif
+#ifndef CERNLIB_TCGEN
+#define CERNLIB_TCGEN
+#endif
+#endif

@@ -1,0 +1,138 @@
+*
+* $Id: v4_17,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_17,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.17/09 16/02/93  10.01.47  by  Rene Brun
+*-- Author :    Rene Brun   31/07/92
+*
+*::>          VERSION  4.17/09   930216 10.01
+*
+*      Names of some ZEBRA banks modified. DDL implemented.
+*      Mods in routines to list directories.
+*      Bug fixed in HFNT2 in case a CWN is filled again (Dave Rees)
+*
+*::>          VERSION  4.17/08   930204 11.57
+*
+*      Nasty bug found in HNTWRT. When routine HCDIR is called,
+*         then IDLAST is reset to 0. If HNTWRT was called again,
+*         in the same call to HFNT, then IDRZ(1)=0 !
+*
+*      Bug fixed in HLABEL and HLPOS (found by M.Goossens).
+*
+*::>          VERSION  4.17/07   930201 14.06
+*
+*      Changes in the Ntuple handling routines for ntuples with arrays
+*      and substructures.
+*
+*::>          VERSION  4.17/06   930126 18.16
+*
+*      Changes in HGNT2 and HGNTF for ntuples with arrays.
+*      Protection in case of large ntuples that could not be processed
+*      by PAW.
+*
+*::>          VERSION  4.17/05   930124 13.19
+*
+*      Protections in HROPEN if filename already attached.
+*      Change in HRFILE for option 'O' (exchange mode not used)
+*      Bug fix in HRMDIR, HMDIR, HGN and HGNF.
+*      Bug fix in HALLOC (wrong memory allocation when the new buffer
+*         is bigger than the previous one for the same column)
+*
+*::>          VERSION  4.17/04   930120  8.10
+*
+*      The following problems fixed after the release:
+*      Implement option 'O' in HRFILE to create old format files
+*      Corresponding changes in HREND,HRIN,HRMDIR,HMDIR,HFN
+*      Bug fixes when merging old-format with new-format ntuples
+*      Bug fixed in HLABEL for 2-D case.
+*      Bug fixed in HLNEXT,HLDIR2 to access the first key of a file.
+*      Replace BIGP in HBOOKN by 1.E30 to avoid overflow on IBM.
+*
+*
+*::>          VERSION  4.17/03   930115 17.09
+*
+*     Version released for cernlib 93a
+*
+*
+*::>          VERSION  4.17/02   921221 17.56
+*
+*     Implement option 'E' in HOPERA.
+*
+*     Changes in HSCR to delete ntuples
+*
+*     New routine HDDIR to delete directories (memory or RZ)
+*
+*     Bug fixed in HMINUT when option 'E' given
+*     COMMON/HCFITD/FITPAD(25) may be used in user fcn routine (DOUBLE P)
+*
+*     New example HEXAM8 in patch,HEXAM
+*     Example HEXAM6 modified.
+*     New ZEBRA pointers LHFIT,LFUNC,LHFCO,LHFNA introduced in HCBOOK
+*     Changes in HSUPIN,HSUPIS
+*
+*::>          VERSION  4.17/01   921207 16.54
+*
+*
+*
+*     New set of routines to store alphanumeric labels on the axes.
+*     Corresponding routines (HFC1,HFC2) to fill histograms with labels
+*         (implementation by P.Aubert)
+*
+*     New routine HFINAM to store the names of the parameters after HFIT..
+*
+*     Modifications in HRZIN for PAWSERV
+*
+*     Reorganization of LHBOOK and LCDIR links (See HLIMIT)
+*     Link 8 of LHBOOK/LCDIR reserved for HPLTAB (instead of link 4)
+*
+*     New Patch,HDIFF introduced (Rich Genik from D0)
+*       New routine HDIFFB to compare histograms bin by bin
+*       Existing routine HDIFF moved to this patch from patch,HBOOK.
+*
+*     New Patch,HQUAD introduced (Author John Allison Manchester)
+*     HQUAD (see routine HQUAD) performs a fit with multiquadric radial
+*     basis functions on 1- and 2-D histograms and ntuples with up to
+*     NDMAX variables.
+*
+*::>          VERSION  4.17/00   920731 15.54
+*
+*
+*     New PATCH,HNTUP introduced
+*     All routines referencing ntuples modified, including I/O routines.
+*     See new HBOOK manual for a complete description of the new ntuples.
+*     Sequences /HCBOOK/, /HCDIRE/ modified.
+*     Same sequences used by HPLOT and PAW (must be recompiled).
+*
+*
+*      Protection in HOPER1 (divide by 0) (D.Sanders)
+*
+*      Routine HFITHC modified. DOUBLE PRECISION added.
+*      Option 'L' added in HFITHN
+*
+*      Changes in HPAK,HFCX,HFCXY to increment the number of entries
+*        following the sum of the contents in case of integer contents
+*
+*      Bug corrected in HGNPAR for memory-resident ntuples (title garbled)
+*      Bug corrected in HRIN for memory-resident ntuples (title garbled)
+*
+*      Bug in output format in routine HWRITF corrected (Janusz Chwastowski)
+*
+*
+*               ! ! ! !  W A R N I N G  ! ! ! !
+*
+*      HBOOK/RZ file format is changed. New version of HBOOK can still read
+*      old format files. The change consists in adding a new key.
+*      KEY(1)=ID as in old format
+*      KEY(2)=ntuple extension  number (0 for histograms)
+*      The new array ICHTYP(20) in HCDIRE contains the type of HBOOK file.
+*        ICHTYP(ICDIR)=1 for old format HBOOK files
+*                     =5 for new files
+*      The new HBOOK files are machine independent and can be transported
+*      across all architectures with normal binary FTP.
+*      Maximum number of records in HBOOK file changed from 4000 to 16000
+*      'X' EXchange mode is now set automatically
+*

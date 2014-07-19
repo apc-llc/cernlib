@@ -1,0 +1,47 @@
+*
+* $Id: beamin.F,v 1.1.1.1 1996/03/22 16:42:46 mclareni Exp $
+*
+* $Log: beamin.F,v $
+* Revision 1.1.1.1  1996/03/22 16:42:46  mclareni
+* Phtools
+*
+*
+      SUBROUTINE BEAMIN
+C--       CALLED FROM FOWLMP.   CHOOSES BEAM MOMENTUM IF VARIABLE,
+C                               CALCULATES RESULTING TOTAL ENERGY, ETC.
+      COMMON/UTIL/PLACE(150),WEIGHT(150),NP,TECM,AMASS(18),PCM(5,18),WT
+     +/BEAM  / PRM       ,TARGM    ,PBM      ,ETA      ,GAM      ,DPBM
+      DATA  INIT, NBAD / 0, 0 /
+      IF(INIT.EQ.0) GOTO 100
+      IF(DPBM) 99,99,10
+   10 CONTINUE
+      PBM = XPLSDX(GPBM,DPBM)
+   20 EBM = SQRT(PBM**2 + PRMS)
+      ECMS = TPMMS + TARGM2*EBM
+      TECM = SQRT(ECMS)
+      IF(TECM.LE.SUMS) GOTO 200
+      ETA = PBM/TECM
+      GAM = (EBM + TARGM) / TECM
+   99 RETURN
+  100 CONTINUE
+      INIT = 1
+      GPBM = PBM
+      SUMS = 0.0
+      DO  120  I= 1, NP
+      SUMS = SUMS + AMASS(I)
+  120 CONTINUE
+      TARGM2 = 2.0*TARGM
+      TARGMS = TARGM**2
+      PRMS = PRM**2
+      TPMMS = TARGMS + PRMS
+      GOTO 20
+  200 NBAD = NBAD + 1
+      IF(NBAD.GT.1000) GOTO 300
+      GOTO 10
+  300 CONTINUE
+      WRITE(6,1000)
+ 1000 FORMAT('0'/'0',100('*')/'0',50X,'ERROR'/'0',20X,'BEAM MOMENTUM',
+     +' FALLS TOO OFTEN BELOW THRESHOLD OF REACTION'/'0',100('*'))
+      CALL FOWLPR
+      STOP
+      END

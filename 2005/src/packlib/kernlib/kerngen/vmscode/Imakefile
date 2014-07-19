@@ -1,0 +1,27 @@
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_VAXVMS)
+LIBDIRS=vaxgs vaxsys
+#if !defined(CERNLIB_QMALPH)
+LIBDIRS:=$(LIBDIRS) vaxmlan
+#endif
+#else
+#undef IHaveSubdirs
+all::
+
+#endif
+
+#ifdef IHaveSubdirs
+
+SUBDIRS= $(LIBDIRS)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(kerngen,$(LIBDIRS))
+
+#endif
+/*ccgen ccgencf ccgenci ccgenu kerngen
+ *other tcgen tcgenc tcgens unix vms xvect
+ */
+

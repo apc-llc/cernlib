@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(eurodec)
+
+LIBDIRS= decays eudini fragmt supdec
+SUBDIRS= $(LIBDIRS) data doc eudtest eurodec
+
+TopOfPackage(eurodec)
+
+SubdirLibraryTarget(eurodec,$(LIBDIRS))
+
+InstallLibrary(eurodec,$(CERN_LIBDIR))
+
+SubdirDataFile($(LIBRARY),eurodec.dat,data)
+
+InstallNonExecFileTarget(install.lib,eurodec.dat,$(CERN_LIBDIR))
+
+TestSubdirs(eudtest)
+
+InstallIncludeSubdirs(eurodec)

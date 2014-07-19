@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 concdc.F errlog.F getwi.F readwi.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

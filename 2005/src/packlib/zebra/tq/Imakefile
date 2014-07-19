@@ -1,0 +1,4 @@
+SRCS_F=	 tzacw.F tzfind.F tzfree.F tzinit.F tzinq.F tzshun.F \ @@\
+	tzuser.F tzvers.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

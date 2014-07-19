@@ -1,0 +1,14 @@
+SRCS_F= ffuser.F gbooti.F gukine.F guout.F gustep.F gutrev.F main.F \ @@\
+	ufiles.F ugboot.F ugeom.F uginit.F uglast.F uhinit.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(exam7,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib)
+
+TestTarget(exam7,gexam7.dat,gexam7.input)
+
+gexam7.input: g321x7.inp
+	$(CP) $< $@
+
+gexam7.dat: exam7.dat
+	$(CP) $< $@

@@ -1,0 +1,21 @@
+Macro Pawlogon
+*
+Alias/Create go      'Exec ALL'
+Alias/Create clean   'Shell clean_demo'
+Alias/create Waiting 'Call Igterm ; Wait '' '' 3'
+Color 9 .8 .8 .8
+*
+Mess
+Mess 'Enter GO to start all the examples (PAWEX and PAWTEST)'
+Mess 'Enter GO n m to start from the PAWEX n and PAWTEST m'
+Mess '  - If n>31, PAWEX are skipped'
+Mess '  - If m>8, PAWTEST are skipped'
+Mess
+Mess 'If the third parameter is ''CR'', hitting <CR> is mandatory'
+Mess 'after each macro execution.'
+Mess
+Mess 'If the third parameter is ''B'', batch mode is used'
+Mess 'PostScript files are created.'
+Mess
+*
+Return

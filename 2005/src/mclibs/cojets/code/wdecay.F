@@ -1,0 +1,218 @@
+*
+* $Id: wdecay.F,v 1.1.1.1 1996/01/11 14:14:43 mclareni Exp $
+*
+* $Log: wdecay.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:43  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE WDECAY(QE,QN,QK)
+C     ***************************
+C------------------------------------------------------------
+C LEPTONIC DECAY OF W- BOSON PRODUCED FROM Q QBAR PAIR
+C
+C     AUTHORS    F.A.BERENDS AND R.KLEISS
+C
+C    INFORMATION ON THIS PROGRAM IS FOUND IN
+C    F.A. BERENDS AND R. KLEISS, "HARD PHOTON CORRECTIONS IN
+C    W AND Z DECAY ", LEIDEN UNIVERSITY PREPRINT (1983).
+C    PLEASE REFER TO THIS PAPER WHEN USING THIS PROGRAM |
+C
+C
+C PARAMETERS: S (CM ENERGY OF LEPTON PAIR SQUARED IN GEV**2);
+C             XM (LEPTON MASS IN GEV)
+C             XMW,XGWTOT (W MASS AND WIDTH IN GEV)
+C THESE PARAMETERS MUST BE SUPPLIED IN THE COMMON 'PRMSWD'
+C-----------------------------------------------------------
+C IT IS ASSUMED THAT THE QUARKS ARE IN THEIR CMS SYSTEM.
+C INITIAL STATE CORRECTIONS LIKE SOFT GLUON EMISSION ARE
+C NOT INCLUDED.
+C THE EFFECT OF THE CABIBBO ANGLE IS INCLUDED.
+C THE MASS AND WIDTH OF THE W ARE ASSUMED TO BE RELATED
+C TO EACH OTHER BY THE SIMPLE WEINBERG-SALAM RULE; THIS
+C IS A VERY GOOD APPROXIMATION AS SHOWN BY CONSOLI ET AL.
+C THE COUPLING CONSTANTS OF THE LEPTONS ARE DEFINED TO
+C BE SUCH THAT THEY YIELD PRECISELY THE GIVEN LEPTONIC
+C WIDTH IF WE NEGLECT THE (VERY TINY) COMPLETE QED EFFECT.
+C IN ORDER TO GET THE EVENT SAMPLE FOR W+ EVENTS, ALL
+C FOUR-MOMENTA ARE TO BE INVERTED (EXCEPT THE ENERGIES,
+C OF COURSE), AND ALL PARTICLES RELABELLED AS THEIR
+C ANTIPARTICLES.
+C--------------------------------------------------------WDECAY.
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#if defined(CERNLIB_SINGLE)
+      REAL CJRN,P,PJTOT,W,WL
+#endif
+#if defined(CERNLIB_DOUBLE)
+      DOUBLE PRECISION CJRN,P,PJTOT,W,WL
+#endif
+#include "cojets/itapes.inc"
+#include "cojets/photon.inc"
+#include "cojets/prmswd.inc"
+      DIMENSION QE(4),QN(4),QK(4)
+      DATA INITI /0/
+      IF(INITI.NE.0) GOTO 1000
+C------------------------------- INITIALIZATION ----------------
+      INITI=1
+C SOME CONSTANTS
+      EB=SQRT(S)/2.
+C--      ALFA INITIALIZED BY COMMON
+      PIG=3.1415926536D0
+      BARN=3.8937D+05/EB**2
+      XM2=(XM/EB)**2
+      XL=LOG(4./XM2)
+      XK0=Q0/EB
+C SOME CONSTANTS CONNECTED WITH W BOSON
+      XMU=37.281D0
+      SINW=XMU/XMW
+      XGW=ALFA/12.*XMW**3/XMU**2
+      XGCOR=1.+ALFA/PIG*(77./24D0-PIG**2/3.D0)
+      XGW=XGW*XGCOR
+      FRHARD=ALFA/PIG*(LOG(1./XK0)*(XL-2.)
+     .  -3./4.*XL - PIG**2/6.D0 + 53./24.D0)
+      FRHARD=FRHARD/XGCOR
+C FERMION COUPLING CONSTANTS TO  W
+C REMEMBER SUPPRESSION OF QUARK COUPLING BY
+C THE COSINE OF THE CABIBBO ANGLE
+      EQED=SQRT(4.*PIG*ALFA)
+      GL=EQED/SQRT(8.)/SINW
+      GQ=GL*0.973D0
+C
+C     WRITE(ITLIS,1)
+    1 FORMAT(1H0,90(1H-),/,
+     . 29H0 THIS IS ROUTINE ''WDECAY''  )
+C LOWEST ORDER CROSS SECTION
+      W2=16.*((1.-XMW/S)**2 + (XMW*XGWTOT/S)**2)
+      SIG0=1./(3.*PIG)
+     .    *(GL*GQ)**2
+     .    *4./W2
+     .    *BARN
+C
+C     WRITE(ITLIS,2)      S,   XMW,    XM,XGWTOT,    EB,  ALFA,
+C    .            PIG,  BARN,   XM2,    XL,   XK0,   XMU,
+C    .          SINW, XGCOR,   XGW,FRHARD,  EQED,    GL,
+C    .            GQ,    W2,  SIG0
+    2 FORMAT(1H0,6D15.6)
+C     WRITE(ITLIS,21) XMW,XGWTOT,XGW,SIG0,XK0,FRHARD
+   21 FORMAT(1H0,90(1H-),/,
+     . 39H MASS OF W- BOSON                     =,F15.6,4H GEV,/,
+     . 39H TOTAL WIDTH OF W- BOSON              =,F15.6,4H GEV,/,
+     . 39H LEPTONIC WIDTH (+ QED CORRECTION)    =,F15.6,4H GEV,/,
+     . 39H LOWEST ORDER PRODUCTION CROSSECTION  =,D15.6,3H NB,/,
+     . 36H MINIMUM ENERGY OF ''HARD'' PHOTONS ,/,
+     . 39H IN FRACTIONS OF SQRT(S)/2            =,F15.6,/,
+     . 39H FRACTION OF HARD BREMSSTRAHLUNG      =,F15.6)
+C------------------------------ END OF INITIALIZATION -----------
+ 1000 CONTINUE
+C------------------------------ GENERATION STEP -----------------
+C CHOOSE BETWEEN HARD OR SOFT
+      IF(CJRN(1.).LT.FRHARD) GOTO 2000
+C----------------------------- START OF SOFT PART -----------------
+C GENERATE ANGLES
+      CN=1.-2.*CJRN(2.)**(1./3.D0)
+      SN=SQRT(1.-CN*CN)
+C CONSTRUCT MOMENTA WITHOUT NORMALIZATION AND TRIVIAL ROTATION
+      QN(4)=1.
+      QN(3)=CN
+      QN(2)=0.
+      QN(1)=SN
+      QE(4)=1.
+      QE(3)=-CN
+      QE(2)=0.
+      QE(1)=-SN
+      DO 3 I=1,4
+    3 QK(I)=0.
+      GOTO 3000
+C----------------------------- END OF SOFT PART -------------------
+ 2000 CONTINUE
+C----------------------------- START OF HARD PART -----------------
+C GENERATE VALUES FOR XK AND V1 USING APPROXIMATION
+    4 XK=XK0**CJRN(3.)
+      XKM=1.-XK
+      V1=XK*(XM2/(4.*XKM))**CJRN(4.)
+C DEFINE F1 AS FOUR TIMES FI(1) OF NOTES
+      F1=(4. - 4.*XK + 4.*V1 + 2.*XK**2 - 6.*XK*V1 + 8.*V1**2)/(XK*V1)
+     .  -XM2/V1**2
+     .  -4.*(1.+V1**2)/XK**2
+C REJECT UNTIL V1 AND K ACCEPTED
+      WKV=XK*V1/4.*F1
+      IF(WKV.LT.2.D0*CJRN(5.)) GOTO 4
+C
+C TAKE RANDOM VALUES FOR CN AND FG
+    5 CN=-1.+2.*CJRN(6.)
+      FG=2.*PIG*CJRN(7.)
+      SN=SQRT(1.-CN*CN)
+      CFG=COS(FG)
+C CALCULATE VARIOUS DOT-PRODUCTS
+      VG=2.*V1*(1.-XK)/(XK*(1.-V1))
+      CG=VG-1.
+      SG=SQRT(VG*(2.-VG))
+      Z= CN*CG + SN*SG*CFG
+      V=1.-V1
+      QQ=4.
+      QPU=2.
+      QPD=2.
+      QPN=2.*V
+      QKK=2.*XK
+      QPE=QQ-QPN-QKK
+      PUPN=V*(1.+CN)
+      PDPN=V*(1.-CN)
+      PUK =XK*(1.+Z)
+      PDK =XK*(1.-Z)
+      PUPE=QPU-PUPN-PUK
+      PDPE=QPD-PDPN-PDK
+      PEK =2.*V1
+      PNK =2.*(XK-V1)
+      PEPN=2.*XKM
+C CALCULATE MULTIDIFFERENTIAL DISTRIBUTION
+C     YB= -XM2*PDPN**2/PEK**2
+C    . +( PDPN*( QQ/2.*(PUPE+PUK) + PUPE*QPE
+C    .            -PEK*(QPU +PUK)            )
+C    .   +PUPE*( PEPN*PDK - PDPE*PNK         ) )/(PEK*QKK)
+C    . +( PDPN*( -QQ*PUPE - PUK*QPE + PEK*QPU + PUK*PEK)
+C    .   +PUPE*(  QPD*PNK - QPN*PDK + PDK*PNK          ))/QKK**2
+      YB= -XM2*PDPN**2/PEK**2
+     . + QQ*PNK/(2.*QKK**2*PEK)*(PUPE**2+PDPN**2)
+C CALCULATE WEIGHT: REJECT UNTIL ANGLES ACCEPTED
+      WANGL=YB/F1
+      IF(WANGL.LT.2.D0*CJRN(8.)) GOTO 5
+C
+C CONSTRUCT MOMENTA UNNORMALIZED AND UNROTATED
+      QN(4)=V
+      QN(3)=V*CN
+      QN(2)=0.
+      QN(1)=V*SN
+      QK(4)=XK
+      QK(3)=XK*Z
+      QK(2)=XK*SG*SIN(FG)
+      QK(1)=XK*(SN*CG - CN*SG*CFG)
+      DO 6 I=1,4
+    6 QE(I)= -QN(I) - QK(I)
+      QE(4)=2.+QE(4)
+C CHECK ON MASSES
+      XMN=QN(4)**2-QN(3)**2-QN(2)**2-QN(1)**2
+      XMK=QK(4)**2-QK(3)**2-QK(2)**2-QK(1)**2
+      XME=QE(4)**2-QE(3)**2-QE(2)**2-QE(1)**2
+C---------------------------- END OF HARD PART -----------------
+ 3000 CONTINUE
+C NORMALIZE AND ROTATE VECTORS
+      DO 7 I=1,4
+      QN(I)=EB*QN(I)
+      QK(I)=EB*QK(I)
+    7 QE(I)=EB*QE(I)
+      FI=2.*PIG*CJRN(9.)
+      CF=COS(FI)
+      SF=SIN(FI)
+      QN1  =  QN(1)*CF + QN(2)*SF
+      QN(2)= -QN(1)*SF + QN(2)*CF
+      QN(1)= QN1
+      QK1  =  QK(1)*CF + QK(2)*SF
+      QK(2)= -QK(1)*SF + QK(2)*CF
+      QK(1)= QK1
+      QE1  =  QE(1)*CF + QE(2)*SF
+      QE(2)= -QE(1)*SF + QE(2)*CF
+      QE(1)= QE1
+C
+      RETURN
+      END

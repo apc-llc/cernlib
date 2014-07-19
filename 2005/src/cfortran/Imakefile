@@ -1,0 +1,17 @@
+#define IHaveSubdirs
+
+#ifndef CERNLIB_VAXVMS
+SUBDIRS= Examples
+#else
+SUBDIRS= $e$xamples
+#endif
+
+FILES=	cfortran.h \ @@\
+	comis.h cspack.h \ @@\
+	geant315.h geant321.h gen.h hbook.h higz.h hplot.h \ @@\
+	jetset74.h kernlib.h lapack.h lepto62.h minuit.h packlib.h paw.h \ @@\
+	graflib.h kuip.h zebra.h
+
+InstallIncludes($(FILES),$(CERN_INCLUDEDIR),cfortran)
+
+InstallIncludeSubdirs($(SUBDIRS))

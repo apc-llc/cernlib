@@ -1,0 +1,1128 @@
+*
+* $Id: history,v 1.1.1.1 1996/03/07 15:17:35 mclareni Exp $
+*
+* $Log: history,v $
+* Revision 1.1.1.1  1996/03/07 15:17:35  mclareni
+* Fatmen
+*
+*
+* This directory was created from fatmen.car patch history
+Version 1.92=Make help for MODIFY command correspond to code (-K)
+             For import into CVS.
+Version 1.91=FMCLOS: add extra debug
+             FMLOOP, FMBACK: correct save statement
+             FMKADT, FMADDT: safer handling of VID prefixes
+             FATCDES: add definitions for DAT120, NTP
+             FMOPEN/FMTAPE: IOPTI - disable -G in calls to SHIFT s/w
+             Z=FATGET: ISFGET
+             FMTAPE: only specify -U for shift stagein if DDNAME looks like
+               a Fortran unit
+             FATLOG: log files (FATLOG.yymmdd) now written to fatlogs subdir
+             FATSEND: only wait if no files were transferred
+             FAINQR,FMVERI,FMURL: fix check on URL
+             FMTAPE: impose MAXSTG only on IBM (mainframe) systems
+             FATUTIL: save DIRNAM variable (problems diagnosed by Olof Barring)
+Version 1.90=FATSEND: tidy printout, improve time stamping of log messages
+             FMRZIN: print IQUEST(1) in case of RZIN errors
+             FMRSTG: tidy retry handling
+             FAERAS, FAINQR: initialise LCHNFS
+             FMCLOS: fix bug in stageclr
+             FMINIT, FMTAPE: call sfget only if in current path
+             New versions of FATCHK and FMMEDT from FNAL
+             - FATCHK increase width in the FORMAT statement
+             - FMMEDT move zeroing of NFMTYP and NUMMTP after check that
+               FATMEN.MEDTYPES exists;
+             FATSEND: skip remote nodes if protocol is afs
+             FMFZO: save FILEN. FATSRV: skip kumac files
+             FMSSND, FATSEND: increase nodenames and queues to 80 characters
+             FMMEDT: mods from D0 - set also NFMTYP, permit also negative
+                media types. (This results in a medium of type iabs(itype)
+                being defined but not selected).
+             FMMEDT: set media types (definitions of characteristics AND
+             selection vector) using fatmen.medtypes file.
+             FMPKTM: year 99 was not allowed!
+             FMDISK/FMTAPE: print warning message concerning conflicting
+               logical names on multiple lines (D0)
+             FMFIXF: strip trailing / from pathname (if any)
+             FMCLOS: update MSRDFA/MERDFA from FZINO
+             FMCLASS: define LDEF, FMURL: add Z=FATPARA.
+             FMSREQ: improve handling of bad sysreq.conf config file
+             FMSHO2: large directories - use I6 for ksn
+             Start support for mss commands (e.g. Lachman interface)
+                Files stored in Lachman have a URL like:
+                osm://[server-node:][/store-name][/storage-group]/bitfileID
+                fatmen.storage-classes:
+ 
+                   path storage-class [store-name] [storage-server]
+                                      DELPHI       DELPHI-conservator@domain
+                   osm://delphi-conservator@cern.ch/delphi/rawdata/bfid
+ 
+                storage-classes should be experiment independent (e.g. rawdata)
+                store-names are experiment specific (e.g. L3DSTS, ALEPHRAW)
+ 
+                mods to: FATCDES,FMDISK,FAINQR,FMVERI,FADARE,FMRZIN
+                                 mssget mssinq               ??
+                new routines: FMURL, FMCLASS, FMMSS, FMRSLV
+Version 1.89=FMUTIL: add FMETOA/FMATOE (from RB's RZHto/frA) for ebcdic/ascii
+                conversion
+             FMFIXF: handle multiple .. in path name correctly
+             FMATCH: handle *pattern correctly
+             FMKMOD: zero NMATCH before FMSELK
+             Add DLT definitions (as from TMS), include in CERN selection
+             Add RWN/CWN as allowable file formats
+             Add fatzero script to check for zero length files in /todo
+             Add fatdf script to check /fatmen not too full
+             FMSREQ: retry on all errors (after existing error handling)
+             FMPSTG: split FATOPTS into FATOPT0/1
+             FMPSTG: bug fix for VMS, fix typos
+             FMEDIA: debug printout added.
+             FMPSTG: new routine to prestage files (from suggestion by
+                Guenter Duckeck/OPAL)
+             FATCDES: new media type definitions for DESY
+             FATSEND: include CZDUMM for VMS
+             FMQTMS: protect against invalid media type (-TMS option)
+             FMINIT: sleep and retry if catalogue not found
+             FMOPEN: option Q for disk files - just return (rather than ignore)
+Version 1.88=FATSRV: protect against input files with no updates!
+             FMSTGQ: protect against tape not staged on VM (answer not
+             stacked).
+             FMRZIN: correct bug in call to FMSTGC
+             FMRZIN: accept tape file if already staged (VMS)
+             TMS VOLINFO tag: use SYSTEM tag IF=IN2P3
+             FMHOST: declare FMHSTC as integer
+             FMCLOS: format error
+             FMGET(module): change to FMGET GENAM [KSN] [CHOPT] [FILE]
+             FMINIT: define 2 DATs for call to FMSETM
+             FMCLOS: Return IRC to user in case of problems with STAGE PUT.
+             25/05/94
+Version 1.87=FMCLOS: support options C (clear), D (remove links) and
+               P (stageput) for new SHIFT stager
+             FMINIT: initialise also DAT tapes (2 varieties)
+             FATSCAN2: remove existing log file
+             FATCAT: correct bug in handling of # RDR files
+             FMTAPE: add NOWAIT option for SHIFT
+             FMTAPE: don't call FMFGET(sfget) for new SHIFT stager
+             FMFGET: print command if idebfa>=1
+             FAFILE: open NEW files CARRIAGECONTROL='LIST' on VMS
+             Add FMRKEY: replace existing key vector. Used from FMFZI
+             to update existing object in place with new loc.code etc.
+             FATBACK: create link to latest good backup file
+             Drop bank at end of FMTOUC
+             SEARCH/SCAN commands: fix bug for date/time ranges when
+             only pathname specified.
+             FMTAPE: put filename at end of call to stagein script
+             SCRIPT: add fatchk to look for servers that are stopped
+             Post 94A
+Version 1.86=Mods from Torbjorn Moa
+             FMLCOP: fix bug - eliminate call to FMGTLG before FMXDSK
+             FMRZIN: try DECnet access in case of $env/filename syntax
+             and file not found.
+             Protection in FMFZCP against FZOUT/FZRUN problems.
+             Add P=FATLOOP - example 'fast' listing program
+             CONVEX flag (FMOPEN)
+             FMOPEN:fix bug introduced by C I/O support on Unix w/o SHIFT
+             FMKUIP: add dummies to avoid linking FATMEN module with SHIFT
+             VIDQQ identification
+             FMPUTC: correct check on JL/JR
+             Add FMGETA: get first entry matching specific generic name
+             FMSTGP: treat group PUBXX like DELPHI (VXCERN reconfig)
+             FMDISK, FMTAPE: delete conflicting logical names from LNM$PROCESS
+             FATMDI: use RZCDIR rather than FACDIR
+             FMDISK: fix faulty call to FMXDSK, set lognam in JOB table (D0)
+             FMRSTG, FMRQUI: bug fixes from D0.
+                mod fmrqui and fmrstg to avoid waiting for a job to complete
+                when the file is already staged and to avoid running out of
+                'lun's (By Steve Glenn)
+             Unix systems: exchange mode catalogues only supported
+             FMSHOW: show also VOLINFO tag if IOPTQ
+             P=FMUTIL,D=FMLTON,FMNTOL, correct filename
+             New CMZ file - previous version archived in ADSM
+Version 1.85=Correct IRC in P=FATCAT after rename of remote file
+             Reorder statements in FATLIB to satisfy FLOPPY check 39
+             FMOPEN: CFOPEN also for non-SHIFT Unix machines
+             FMQTMS/FMQVOL: add (GENERIC SHIFT) IF=CERN,IF=SHIFT
+             FMVERS: add IF=CERN
+             Add P=FMUTIL,D=FMLTON,D=FMNTOL to process locations code file
+             Extra protection in FATCAT against network problems
+             Print user words also in decimal (FMSHOW)
+             V93D 20/10/94 16:20
+             Fix backslash problem for QMALPH.
+Version 1.84=TMS return codes: 312-315 all mean roughly the same
+             312 - volume not mountable on system issuing QVOL command
+             313 - if an unknown generic system name is given as a QVOL option
+             314 - if an unknown specific system name is given as a QVOL option
+             315 - if the volume is unmountable on ANY defined operating systems
+             FATMEN: reduce PAWC to 1M words
+             FMLD: more logical handling of NLEVEL and -R
+             FMOPEN: bug fix in options for XYOPEN (Alfonso Lopez)
+             FATSEND: protect against NFOUND>MAXFIL
+             Check status of LIB$GET_LUNs
+             Add STATUS on OPEN in FAFNDF
+             Print IOSTAT in FMRZIN if open of TPSERV.CONF file fails
+             Rework lib$find_file logic in fatsrv for vms systems
+             Add P=FATLOG to process *FATLOG* lines in FATSERV log
+             Add P=FATSREQ, to issue SYSREQ command with retry
+             Z=FATSYS: add IFMODX to flag exchange mode catalogue
+             (mods to FAOPEN, FARINI, FATSRV).
+             Add FATBACK to convert RZ file to FZ file.
+             ADD FMFIND to issue FIND in one-line. Add FATBACK script
+             Add program FATCHK to read all entries from catalogue
+             FMFZI: return GENEN correctly also for LOG records
+             GENEN is e.g. //CERN/DELPHI/FATLOG (to work with existing names
+             files)
+             V93C 08/06/93 12:40
+Version 1.83=FMXDSK: perform various checks on each element of search
+             list as recommended by Keith Chadwick, FNAL
+             Add FMLCOD to load location code definitions from user file
+             ADD/DISK|TAPE: support user words
+             CLIO support: look for 'vmstage' in current path
+             (still needs mods to FMTAPE/FMCLOS)
+             FATSRV: add FATLOG to write logging records to FZFILE,IF=FATLOG
+             FMFZO: lower FZLOGL for journal file
+             FMALLO: use ICDECI to interpret density field
+             FMPEEK: add option D to drop bank after unpacking
+             Add FMPLOG to print log records
+             FMFZI: chvsn & chvid = char*8
+             FMCOPY: add DSN to STAGE CHANGE command. STAGE CHANGE uses
+             dsn STAGEOUT if the input file was staged without specifying
+             the dsn.
+             Add FMDDIR: delete directories even with entries
+             FMCLOS: Correct handling of IOPTP in case of LBANK=0
+             Add Z=FAUST for user statistics
+             FMTAPE: treat RECFM=U like RECFM=F for Shift
+Version 1.82=FATKEOPS: use XZMV to rename request file
+             FMKMOD: comment field was never updated.
+             FMTMS: bug fixes from Steve O'Neale (FMGVID,FMGETP,FMSREQ)
+             FATSRV: names file is in DEFAULT(1:LDEF)
+             Protection in FMRQUI against network write errors.
+             Display error code in FASTGQ in case of unexpected errors.
+             Skip active files in FATSEND
+             TMS library SMCF_1 changed to 3495_2
+             Modify FATSEND to handle multiple groups; add protection
+             against errors.
+             Mods to FMLOOK, FMCSTG and FMRSTG from D0 (Krzysztof Genser)
+             Protection in FMTAPE against unexpected replies from STAGE Q
+             Add NeXT flag in FFATMEN and FMHSTC
+             25/02/93 10:20
+Version 1.81=FAFNDF: get short/long wait intervals and retry count from
+             logical names (FATMEN_SNETWT etc.) Call FAFNDF from FMQSTG.
+             FMTAPE: use FAFNDF to look for existing STAGE Q file
+             FATSERV.EXEC: exit 99 if timer expires and we are FMFATCAT
+             FMSELK, FMRZIN: protect against wild-cards in generic name
+             FAFNDF(VAX). Add longwait interval. Add FMWTO
+             FMRACK: protect against network problems.
+             FMTAPE, FMRZIN: correct problems reported by DESY.
+             FMTAPE: write temp file (IOPTY) in /tmp/<user>.fmstage,
+             sys$login:, MAXDSK
+             FMSEND: change mv to /bin/mv for Aegis users.
+             FMLN: warning message if entry for target already exists
+             FMINIT: set media type search order to 1,6,2,3,4,5 IF=CERN
+             FATCDES: add definitions for 3490s (media type 6).
+             FASEAC: FMISET is an integer function
+             FMFILL: blank fields prior to filling also for option O
+             FMTAPE: correct call to FMBQUE. FATNEW: clear FATNOD
+             FMALLO: retry only if there are more tapes in the current
+             library.
+             FMFZO: correct CHFNFA handling in journal file header
+             Fix warnings from Ruby compilation
+             Verify CDF options against code
+             Correct handling of status code in FMSEND (VAX)
+             Bug fixes to FMVINF (TMS VOLINFO tag manipulation)
+             wHole input staging on VM/CMS - take size from VOLINFO
+             tag or media capacity.
+             Bug fixes in FASEAR/FASEAC: check if any user word selection
+             has been made
+             Save current directory correctly in LD(FMLD)
+Version 1.80=FX=FFX in FMOPEN (removed in 1.73 for some unknown reason)
+             Add +SELF,IF=CSPACK to FMSEND to avoid pulling in
+             TCP/IP code unless CSPACK is selected.
+             V93A 15/01/93 13:30
+Version 1.78=More mods to CDF for new KUIP (options etc.)
+             Add call to INITC in FATMEN
+             Modify CDF for use with new KUIP.
+             KUIP style -U no longer needed with latest KUIP
+             Add KSN parameter to LS command
+             14/12/92 13:20
+Version 1.77=FMFZO, FMSEND, FMUPDT: handle remote updates via CSPACK.
+             Program lifetime: modules over 1 year old will print warning
+             Add ABEND routine to FATSRV. ABEND prints server statistics
+             and then executes fatabend script/command file/exec
+             Counters in FATSRV.
+             Try to clear out RDR in FATCAT - don't look on remote system
+                if there are more than 10 pending files
+             Handle remote catalogues correctly on VMS systems
+             Bug fix to FATSRV for zz files on Unix
+             Correct call to FAOPEN in FARINI
+             Bug fix in FMSREQ for return buffer length handling
+             Call lib$find_file_end before waiting in FATSRV.
+             Option N in rm command. Don't turn on I automatically for
+             option A. Reset reply buffer upon retry in FMSREQ.
+             Add STRING parameter to SCAN command - options for RM
+             Copy NAMEFD to FMNAMF for CSPACK access to remote files
+             Wait option in FMSMCF for FMCOPY. Do not add entry to
+             catalogue if FMCLOS fails.
+             Remote catalogue access via CSPACK
+                - FMLOCC, FMNICK, FMACCT, FMACL (use XZOPEN, XZGETL)
+                - FMINIT (not yet for VM) , FAOPEN, FARINI
+             01/12/92 12:00
+Version 1.76=Use of VOLINFO TMS tag field for multi-file handling
+             (routines FMGVOL, FMGVID and FMVINF)
+             Bug fix in FMTOVM for new journal file names
+             FMFZI: in case of warning from RZDELK, rebuild bit map
+             Speed up FMSELK by only comparing required fields and
+             only converting matching keys. (FNAME is converted to Z format)
+             Remote access to catalogue via CSPACK, e.g. for group L3:
+                FML3=/fatmen/fml3        = local/nfs access
+                FML3=fatcat:/fatmen/fml3 = CSPACK access
+                .netrc file should contain
+                machine fatcat login fml3 password xxxxxx
+             Update files are written locally and then transferred with
+             XZPUTA. Configuration files (FATMEN.NAMES, .ACCOUNTS, .ACL
+             and .UPDATES) read using XZGETL.
+             ==> Needs CSPACK   1.28/02 921124 10:30
+             Performance improvements in FASEAC, FALS (from FASEAR)
+             Bug fix in FMFZO for VM - only open LUFZFA if not already open.
+             Add command SCAN. Bug fix in FMRM (FMACNT never called).
+             Change FMACL to support ACL files (option A) and UPDATE files
+             (option U). Allows FMOPEN style updates to be controlled at
+             the path/user/node level without recompiling/linking
+             Don't check RC from FMLOCC in FMINIT
+             Interface to DESY MVS staging system (input only)
+Version 1.75=Bug fix in FASEAC/FMFILS for re-entry with non-zero context
+             pointer.
+             Better protection against errors in FATCAT.
+             Bug fix to FMSHOW. Print status in FMSEAR.
+             Bug fixes to FMKADD (KUGETS rather than KUGETC), FMRAND and
+             FMFGET (length for character strings) for DESY
+             Process each update directory in turn on fatcat
+             FATCAT: drop /* from XZLS call (avoid problem with globbing)
+             Define MINBLK in FATSRV - minimum number of blocks left
+             before cleanup is triggered (VMS)
+             Correct FAFNDF handling on Unix systems
+             Revise update handling in FATSRV for VMS systems
+               - RMS$_FNF = wait
+               - RMS$_NMF = reset context pointer and loop
+               - ZZ*.*    = loop
+             Exploit new RZOUT option 'R' in FATSRV
+               - use in case bank & keys match and entry already exists
+               - if bank matches but not keys, use old method
+             !!! N.B. this requires RZ version 2.00/05 or higher !!!
+             RZEBRA   2.00/05 921104 17:30   THE ZEBRA RZ PACKAGE
+             28/10/92 10:00 <<<<<< Install new RZ with this version >>>>>>
+             Bug fixes for IBMMVS (FMRZIN,FMCOPQ,FADARE,FMNICK,FMFPAK,FMOPEN).
+             FMUSER for non-HEPVM, non-VMBATCH sites (just use IDENTIFY)
+             Use RZVERI (FATSRV) to rebuild bit map of used records
+             from the file itself if required
+Version 1.74=Blank search strings in FMSEAR before UHTOC calls.
+             Fix error return in FMOPEN after reworking of monitoring info.
+             Call stageput only for tape datasets
+             Prepend CHEOPS error messages with CHEOPS error:
+             Save and reset CD in TOUCH. Restore CD also in mv if rm
+             failed.
+             APOF77 flag: double \ in FMCD, QX_SC selection
+             CHEOPSIF: call XYOPEN/CLOS only for disk files.
+             Send fatal messages from PROGRAM FATCAT to FATONE
+             14/10/92 16:00
+Version 1.73=Remove treatment of FX like FFX in FMOPEN
+             FMOPEN/FMCLOS etc. for links. New routine FMGETL.
+             Extra monitoring information - IHOWFA, ITIMFA & CHFNFA
+             Support CSPACK access to FX and FFX files, IF=CSPACK.
+             Remote files may reside on VMS or Unix systems
+             (VM not currently supported)
+             Move FMRCOP from FMKUIP to FMINT. +USE,CSPACK to get
+             functional version.
+             Protect against SS$_UNREACHABLE in LIB$FIND_FILE calls
+             Escape characters in 'ls': % for nicknames,
+                $ for environment variables
+             Server mode VMS staging - see P=REQUIRES
+             Use parameters in unpacking MFQNFA
+             Nickname processing via the shell
+             Add FMRMLN/'rmln' command to remove/find dangling links
+             Add routine FMLN and 'ln' command.
+             Add routine FMNICK a la DELPHI
+             Add routine FMRANK to rank CHFILES by VID & FSEQ
+             Use CFIO (via CHANNEL mode) on VAX/VMS systems for FZ files
+             Alpha port, bugs in FMCOPC
+Version 1.72=Require at least 2 update tokens left for mv, FMMV
+             Support FATMEN.LOCCODES file for location code definitions
+             Add SHOW/LOCCODES command
+             FMCDF: add R='x,y,z' for all cases of CHOPT for new KUIP
+             FMRZIN: check modification date and time of directory
+             on entry and exit. If directory has been modified, sleep
+             and retry. Add example program using FMPOKE (for SMC)
+             FMTAPE: do not issue FMFGET(sfget) in case of IOPTU
+             Support for /afs files in FMRZIN
+             Ensure LUFZFA is set before calling FMUPDT. Bug fix in FMSTGI/O
+             Return stageout return code in FMCLOS chopt=P
+             Support UPDATE/FMUPDT on non-VM systems !!! N.B. the server
+             must be at level V1.65 or higher !!!
+             Extra debug in FMRZIN - print out RZ info for object retrieved
+             FMDD2L: handle character lun, e.g. '12'
+             Fix bugs in FMCLOS, FMSTGO for CHEOPSIF
+             11/09/92 16:00
+Version 1.71=FMPUTC: blank padding from LEN(STRIM) up to field width
+             Option C in TOUCH: clear comment field
+             Set LFMODE in FMSTGO before call to FMCLOS
+             Add option A in TOUCH: set account field
+             FMVERI: check also MHSNFA for disk files
+             FMRZIN, FMDISK, FAINQR: DECnet access
+             FMTAPE: permit staging of files > max. media capacity
+             STAGE PUT support for Shift & VMS (local only) in FMCLOS
+             Extra debug in FATCAT
+             Use new journal file names in FMTOVM
+             Check stage group in FMSTGC only on first entry
+             Time FMOPEN/FMDISK/FMTAPE if IDEBFA>=1
+             Add user exit FMUVER to FMVERI.
+             FMTAPE: check if batch queue STAGE_xxxxS exists - if so,
+             perform stage request in batch. Add routine FMBQUE.
+Version 1.70=Improve diagnostics in FMVERI for blanks/unseen characters
+             in generic name. Bug fix in FMRMDR in call to FMVERI.
+             Bug fix in FMSTGI/O - ensure IRC always returned
+             NOWAIT option in FMOPEN - return after call to FMTAPE
+             Fix for Cray compiler in FMOPEN (LCHF = 1)
+             FMMVC - perform DEL then PUT
+             Bug fix in FMOPEN - FX treated as FFX (as in old FMOPEN)
+             V92B 20/07/92 10:30
+Version 1.69=Last minute fixes for V92B: move maximum recl and blksize
+             to Z=FATFORM.
+Version 1.68=Fix bug in FMTOUC. Use option U in FACDIR call in FMSELK.
+             15/07/92 13:30
+             pre-release of V92B(?)
+Version 1.67=Fix bug in FATARE for VAX/VMS systems or -TMS
+             Rename *CHEOPS -> *CHEOPS2F etc.
+             Support tag :queue in FATSEND - queue directory on remote node
+             for current server. If not defined, use subdirectory todo.
+             Check that RECFM is entirely alphabetic
+             Bug fix in FMCOPY - reset IRC after FMCOMP
+             MODIFY command : check that media type does not change
+             New Shift Disk Pool Manager (DPM) - do not provide shift
+             user or pool name. Old behaviour IF=OLDDPM.
+             Protection in FMTAPE against STAGE_RC undefined or in invalid
+             format. Add LOCCOD to ADD/DISK, ADD/TAPE
+             Bug fix in FMRSTG (check on whether file was already staged)
+             Check DCB information for output staging (VM)
+             Missing FATBUG in FMFGET, IMODE in FMDISK
+             Better processing of >MAXFIL files in FALS.
+             Fix bugs in HP/UX version
+             03/07/92 08:45
+Version 1.66=Add location code, media type and copy level to COPY command
+             Call FMVERI in FMSTGI/O. Write extra information in FMCOPQ.
+             Put density on stage command IF=SHIFT,IF=-TMS
+             Add protections in FMCOPY, FMTAPE for CHEOPS
+             Add program FATLOOP2 in P=EXAMPLE to FMGETK every entry in the
+             catalogue: ZFATAL = problems.
+             Permit useful options on shell FIND command.
+             Add program FATHEAD to print headers of journal file on unit 1,
+             or the file name passed on the command line.
+             Add option Y in FMOPEN: write stage command to file on LUN
+             but do not execute. Increase size of PAWC in FM shell.
+             No check on Zebra e-o-r in VM servers
+             Preliminary interface to TAPESYS (UVVM)
+Version 1.65=Modify FATSEND & FATSRV/FMSEND to use new naming convention
+             Ditto for program FATCAT
+             Increase size of Zebra store in FATSRV
+             Protection in directory scan routines against RZPAFF problems
+             (!!! mods to RZPAFF - ZEBRA/RZ must be reinstalled !!!)
+             Mods to FMFIXF to handle directory names beginning /
+             Call FMVERI in case of directory add/remove operations
+             Add CHEOPSIF patch. Routines to stage in or out.
+             Bank information is passed as arguments to the routines to
+             simplify C/Fortran interface
+             Use command file SETUP_EXE:STAGE to submit stage command
+             in FMTAPE. #bytes read (COPY_FILE only) returned in logical
+             names STAGE_filename. (Not yet used)
+             Change naming convention for journal files:
+             zz92061118040500000499024164.user_node
+             Renamed to aa... when update complete
+             APOLLO: use WHICHF to determine if 'l3stage' exists in
+             current path. If so, activate l3stage specific code (was IF=APOL3)
+             (!!! requires WHICHF KERNLIB (kernbit) routine !!!)
+             19/06/92 09:30
+Version 1.64=Mods from KLG for FMRSTG, FMCSTG, STGSERV.
+             Bug fix in FATSEND for ICONT/=0
+             Modify STGSERV to send jobname ('LOOK')
+             Incorporate mods from D0. to FMRSTG, FMCSTG etc.
+             FMRSTG/FMCSTG. check before each job inquiry whether file
+             is already on disk (and of the correct size - to be done)
+             FMCSTG: wait if tape is already in use
+             Job inquiry by FMLOOK (from Krzysztof Genser/D0)
+             Support usernames up to 12 characters. Look for signal.stop
+             files in FATSEND.
+             Add option J to FMSHOW. Just the files that are accessible.
+             Add MODIFY command
+             Extend CP and MV commands to allow keys, fileid, host, vsn,
+             vid and fseq to be changed for output file. XVID syntax supported
+             Change copy level to data representation. Add new parameter
+             offsets. Permit comments in acl/accounts files
+             Add option R to LS : show where the data Reside. (need STAGE Q
+             for Shift/Cray)
+             For disk files: accessible: Y/N method: Y/N
+             For tape files: active library: Y/N device: e.g. local staged: Y/N
+             Add option E to RM to erase disk file. !! to be tested on SHIFT !!
+             Change MV and CP commands to accept input key
+             Support search lists in FMRZIN for DFS devices
+             11/05/92 13:00
+Version 1.63=Fix bug in FALS - don't print blank line in case of option V/W
+             and no files found in CWD.
+             Don't drop disk of server if mode A. (VM)
+             Search list handling in FMLCOP.
+             FALS: protection for no files found. Bug fixes from D0.
+             Correct calls to VAX RTL routines (irc/istat handling).
+             Bug fix in FMPEEK for 'A', 'N' options.
+             Modify FMSHOW to accept LBANK=-1 (use LADDBK, e.g. from
+             novice i/f).
+             Protection in FMFZI - require ZEBRA end of run record in
+             input file.
+             Fix bug in FMTAPE - FSEQ missing from LABELDEF.
+             Add program CHEOPS - read .rqid and .rep files generated
+             by CHEOPS server and update FATMEN catalogue(s) accordingly
+Version 1.62=Retry 5 times in FMRZIN if keys vector has been given but
+             entry not found. (concurrent update problem).
+             Add routine FMACCT to check for account aliases.
+             Warning messages if SYSREQ is incorrectly installed.
+             Use SHIFT RFIO also for tape files (use sfget after stage
+             request). Save pathname across FMLDIR calls.
+             Add program FATKEOPS, to send updates from VM to
+             cheops directory on fatcat.
+             CHEOPS interface - routine FMBTOA to write bank in
+             ascii format, write update to /fatmen/fmcheops
+             or as variable FMCHEOPS. On VM, use gateway machine FMCHEOPS.
+             Fix bug in FMCOPC - set media type in keys vector
+             Add patch FATRZCHK to protect against corrupt RZ files.
+             Add routine FMACL to provide protection on FATMEN paths
+             Correct calls to FMCLOS from FMCOPY.
+Version 1.61=Use exchange mode and C I/O on DECS, if the RZ file is
+             kept in a directory starting /fatmen (e.g. on fatcat)
+             Support search lists in FMSTGP.
+             Rewrite FMCFGL using CIGET routines (for character data)
+             Print host type and OS for disk files in FMSHOW
+             Add support for Physical copy in FMCOPY. This is the
+             default. (Use cp/COPY/VMIO to perform the copy)
+             Split FMOPEN into separate routines: FMDISK/FMTAPE/FMFOPN
+             FPACK files are handled in FMFPAK.
+Version 1.60=v92a March 1992
+             Fix bug in FMSELM when CHOPT=' '
+             Bug fix in FMOPEN - save IQUEST(10) & (11) over call
+             to FMGET
+Version 1.59=Bug fix in FMSTGP. Network retries in FMRSTG.
+             Check that SETUP_EXE:TPSERV.CONF exists in FMOPEN, FMRZIN.
+             More bug fixes in remote staging.
+             Massaging in VAX Stage handling. Add NRFMFA
+             Add Motif version, restructuring of CDF file,
+             SHOW/CATALOGUES command.
+Version 1.58=Print stage log in FMCSTG, FMRSTG.
+             Correct tag definitions for FATMEN directories.
+             (loc.code and med.type were swapped).
+             Default catalogue name is DESY,IF=DESY, FNAL,IF=FNAL in
+             FATMEN shell only. Fix bug in FATSRV, FMOPEN for VMS.
+             Move FAFNDF,IF=APOLLO to patch UNREF.
+             Bug fixes in remote VAX staging.
+             Deassign channel in FMQUOT. Use FORTRAN I/O when reading
+             SETUP_EXE:TPSERV.CONF
+             Add debug printout for remote staging.
+Version 1.57=Print dsn, host or vsn,vid,fseq if logl>=1 in FMFZI
+             Print user & host of originator of update in FMFZI.
+             Protect FMQUOT against disks with quotas disabled.
+             Bug fix in FMLDIR for [] support.
+             Add routines FMRSTG, FMCSTG, FASTGS, FASTGQ for remote
+             VAX staging. (Across or within clusters)
+             Bug fix in FMLFIL.
+             Add support for remote tapes in VMS:
+                tpserv device-group host1 [host2]
+             Add support for RMS files (RECFM RMS, /RMS on STAGE command,
+             use COPY to copy data)
+             Permit creation for exchange mode files, via FATMODE in
+             FATNEW (setenv FATMODE X or XC)
+Version 1.56=Debug printout in FACOPY.
+             Open journal files as recordtype=stream_lf if writing
+             over NFS from VMS->Unix.
+             Fix bug in FMGLUN.
+             Print date and time before going to sleep
+             Fix warnings from VSFORT 2.5 compiler (unreachable code
+             in routines FMCOPC and FMRZIN. See warnings in these routines)
+             Fix bug in FMTAGS (undefined variable)
+             Friday, 13th December
+             Fix bugs in FMSEND
+Version 1.55=mods to FAINQR and FMRZIN for FPACK files
+             If host is not local, then search in .netrc file for nodename
+                IBMMVS: userid.PER.NETRC
+                VAXVMS: netrc.;
+                VM/CMS: DOT NETRC A0
+                Unix  : $HOME/.netrc
+             Update FATNEW for MVS. Resync copy level with FPACK
+             FPACK interface: in case of FPACK files, routine FPARM
+             is called in FMOPEN & FMCLOS. FPARM handles file open and
+             starts server etc as necessary.
+             OPEN:  CALL FPARM('OPEN logical-name UNIT=lun FILE="fn"'
+             CLOSE: CALL FPARM('CLOSE logical-name')
+Version 1.54=Support NFS mounted files (FMRZIN, FAINQR) VAX/VMS, Unix
+             Use sequence QFTITLCH to get pam title rather than QFTITLE
+             Fix bug in FATSRV for check on /done directory (Unix systems)
+             Handle .. characters in FMPAFF and FMFIXF
+             Fast match in FALS, FMLOOP (file='*')
+             Add ACTION=read/readwrite on OPENs. Modify FMHOST for CMS 7.
+             Fix bug in CP command - cwd was not correctly restored.
+             Add FATOUCH example program, to touch files or directories.
+             Fast count in FMFC, if filename=*. (Uses 1/3 of CP time)
+             Changes in FMOPEN for shift - call CFOPEN for
+             full shift file name, not fort.n
+             Use C I/O and exchange mode for RZ file if
+             STREAM_LF (VAX) or in /fatmen (CERN Cray)
+             Call FMVERI from FMRM, FMRMC
+             Use configuration files to determine device access.
+             VAX/VMS,IF=VAXTAP: logical names SETUP_modelS
+             IBMVM,  IF=HEPVM : nodename RESOURCE P
+             SHIFT            : /etc/shift.conf, /etc/TPCONFIG
+             CRAY             : /etc/shift.conf
+Version 1.53=Add routine FMQUOT to P=FMVAX - get current disk quota
+             information (from SPACE by JJB). Perform cleanup in FATSRV
+             Perform automatic cleanup in FATSERV EXEC
+             Update return codes in FMATCH. Return location of
+             mismatches in IQUEST. Modify FMSCAN to treat wild-carded
+             and non-wild-carded pathnames alike.
+             Add routine FMHUNT - hunt for (wild-carded) generic name
+             Set IQUEST(10) to number of levels in initial path in FMLOOP
+             Common version for CERNVM, CERNVMB & LEPICS
+Version 1.52=Access to SMCF now based on sequence FASMCF.
+             Access enabled, however, for SHIFT, CSF, VXCERN, APOL3
+             Fixes for CERNVMB
+             More examples in P=EXAMPLE.
+             Extra protection in VAX, Unix versions if FM symbols
+             not defined.
+             Rewrite FMLDIR using FMSCAN
+             Add support for [] wild-cards.
+             Given the following subdirectories:
+                Y91V02
+                Y91V03
+                Y91V04
+                Y90V06
+                Y91V05
+             ld y(90:91)v> will follow Y90V06, but ld y[90:91]v> will
+             follow both Y90V06 and Y91V05.
+             Call FMACNT on each entry to FMRMC, in case user has reset acct
+             Fix bug in FMPOOL when TO specified
+             User meeting of 16/10/91 (ship command not yet implemented)
+Version 1.51=Add routine FMSETK - set keys matrix for d/s selection
+             Add commands SET/SHOW userwords.
+             Add routine FAINQR - inquire with GIME/sfget/env. variable
+             expansion.
+             Add FMSELM routine - select by keys matrix.
+             Add ZOOM command to zoom down directory tree to first
+             directory with no subdirectories & at least one file
+             FMSCAN now descends specified number of levels below
+             wild-carded pathname, and not below path up to last wild-card
+             Add option V in FMOPEN - as S but even if file size is ^0
+             Fix bugs in FMMANY, FASELP for <> matching.
+             Fix bugs in FAT2VM.COM, FMTOVM to not send files back to origin
+             Add FACDIR interface routine - reset top directory
+             if naming directory is not TOPDIR
+             Fix bug in FAEXTR
+             Fix bug in FMALLO - use separate buffer for QUERY CONTENTS
+             Modify FMLD to use FALD - remove limitations on
+             numbers of directories that can be displayed.
+Version 1.50=CNL 204 - 12/09/91 09:00
+             Add FMLOOP. As for FMSCAN but for file names
+             Add FMMODU - modify user fields
+             Use FMSCAN from FC, LS commands and routines
+             Add routine FMSCAN & FASELP. FMSCAN provides FMLDIR
+             like functionality but avoids the use of local arrays
+             by calling user exit. <> are also supported.
+             Option Q in FMSHOW also shows TMS tags
+             Extra protections in FMINIT
+             Add options Q, S, T (A) in CD to list RZ quota, statistics,
+             dates & times etc. Add command DIR to issue RZLDIR.
+             Add option Y in FMLSC - verify bank contents
+             Permit reinit if user typed a bad FM group
+             Add utility routine FAEXST
+             Add command ALLOCATE to add tape file with volume
+             allocated from named pool in specified library.
+             Add TREE command to print directory tree
+             Use FMOPTC rather than UOPTC - checks on CHOPT case insensitive
+             Treat <> like * in FMATCH (with warning if LOGL>=3)
+             Change flags for routine names (Lowercase, Underscore etc.)
+             Fix bug in FATMDI introduced by move to FATLIB.
+             Purge CON files in FATSERV on VM
+             Fix bugs in FMXDSK. Add warning in FMOPEN if size > MAXSTG
+             Add command MEDIA to set/show media attributes
+             Command files for VAX servers - scripts for FATCAT
+             Add patch FATSEND to send FATMEN updates to remote
+             servers, according to NAMES file. Current version
+             is for Unix and VMS systems only.
+Version 1.49=Interface to VMTAPE (FMOPEN/FMFIND/FMMAKE) & FMALLO
+             Interface to VMBATCH (for FMUSER, FMACNT, FMJOB)
+             Add routine FMEDIA to set default media attributes.
+             Call FMUTMS (user exit) from FMQTMS IF=-TMS to allow
+             user to override these values for individual volumes.
+             Add option G to RM command, to change protection
+             group on a volume. Defaults to *None.
+             Add routine FMPROT.
+             Add command RMTREE, to delete a complete directory tree.
+             Modify FMATCH & FMMANY. Pointer now reset after a *
+             by looking for a substring, rather than single character
+             Only check TMS information in FMVERI if Q option present.
+             Add routine FMTAGS, to get, set or delete TMS tags.
+             Change default shift staging pool from PUBLIC to shift1
+             Add program FAT2SQL - convert entire RZ file to SQL
+             Add routine FMVMIO - user hook routine for FZ D/A
+             for binary exchange format files on IBMVM.
+             Protect against error opening input file in FMFZI
+             Option D in SEARCH (FMSHOW really): write KUMAC file
+             to remove matching entries
+             Use FORTRAN I/O by default for FX, FXN files.
+             This is default for Zebra 3.67 and above, unless Y
+             specified on FZFILE.
+             Fix bugs in FMOPEN for SHIFT. N.B. must use -lsun for
+             XY routines. To get debug from XY routines:
+             setenv RFIO_TRACE 3
+Version 1.48=Issue QUERY LIBRARY in FMQTMS IF=QVID to determine if
+             library is active or not. Libraries beginning with a '*'
+             are apparently inactive by definition.
+             Issue option X on FZENDx in FMCLOS if C I/O selected in FMOPEN
+             Return true RC from SYSREQ in IQUEST(1) (FMQMED)
+             312 = volume unavailable only fatal in FMRZIN when key not
+             specified.
+             Allow staging disks upto 210 MB IF=CERNVM. Default to
+             sequential access for FZ files on disk.
+             Support date & time ranges in SEARCH
+             Mods for DESY.
+Version 1.47=Add FATPURGE.COM to delete old files in [.DONE]
+             Add FATRL.COM - modified RDRLIST.COM to copy files send to
+             VAX via SENDFILE to [.TODO] directory
+             Add FAT2VAX exec to send updates via Interlink
+             Support MVS in FATSRV.
+             Add FMUSER for MVS systems (adapted from KPREFI)
+             Add /*DECK, $!DECK lines to REXX/DCL patches
+Version 1.46=Fix PREFIX support in FMOPEN, FMFIND, FMMAKE
+             Support range of Copy Levels, Media types in FMRZIN, FMLS(C)
+Version 1.45=Fix bug in FATCAT - reset IC after call to XZLS
+             Fix bug in RM command for freeing volumes
+             Permit use of FMGETV/C/I, FMPUTV/C/I from novice interface
+             (LBANK=-1)
+             Add example pgm using novice interface in patch EXAMPLE.
+             Add example installation procedures
+             Perform checks on input parameters in FMINIT, FMSTRT
+             Set location code to the value given by a call to FMSETL
+             (or set/loc) in FMKADD, FMKADT, FMADDD, FMADDT
+Version 1.44=Add commands SET/COPYLEVEL, MEDIATYPE and SHOW commands
+             FZFILE options: T only if read directly from tape.
+             Add command SET/LOC
+             Check that location code of each candidate is found
+             in location code vector specified by user (FMRZIN)
+             Modify for use with ORACLE on FATCAT(IBMRT).
+             Oracle RTL compiled without -qextname
+             Requires trailing _ on ORACLE interface routines,
+             Common/FOFILE/ and CLTOU.
+Version 1.43=Check status from stage -o in FMCLOS (APOL3)
+             VID prefix support for all calls to FMQTMS.
+             Change key allocation in FMALLK: now use maxkey+1
+             Change FMACNT to check env variable FMACNT
+             FMQTMS, FMGTMS: iquest(1) = -1 if -TMS
+             Add routine FMQMED to return media type and mount flag
+             Add options AFIU to FMRMC (All,Free,Interactive and Unlock)
+             Support search options as for FMSEAR.
+             Use C I/O for Zebra FZ if IQUEST(10) = 1
+             Look at environmental variable FMHOST (Unix, VAXVMS)
+             Use this as nodename, if set.
+Version 1.42=Bug fix in FMNODE for VAXclusters
+             Fix bugs in FMTMS patch for SYSREQ retry
+             Revert to CART for APOL3 - old stage still on LEPICS
+             Fix bugs in FMCOPC, FMRCOP.
+             Fix bug in FMFZI - return code from VMCMS undefined.
+             Add example EXEC/COM/SCRIPT for running pgm FATNEW.
+             Fix INQUIRE bug in FMKUIP routines for VM.
+             Fix typo in FMOPEN. Add -h in fmld, fmseac, fmlsc, fmfc.
+             Support options -V,-W in FMLD
+             IBMMVS version. Current implementation assumes that all files
+             are catalogued.
+Version 1.41=Add stage -o for APOL3 in FMCLOS. Reinstall and test on Apollo
+             Support non-CERN catalogues: variable FATSYS (server, pgms),
+             INIT //fatsys/group (KUIP)
+             Modify FC command to support CHOPT: count #file/dir,
+             #subdirs/dir.
+             Use FMLFIL in FMLSC, FMSEAC
+             Fix bugs in FMLDIR. Restore code for NLEVEL in FMTREE, support
+             in LD command. Fix bug in SEARCH for NMATCH=n.
+             Change CART to CT1 in FMMAKE (this is now returned by the TMS
+             for manual 3480s)
+             Retry in FMALLO if first tape from Q CONTENTS has been
+             allocated away from under us...
+             Add protection in FMOTOZ for bad ORACLE information.
+             Fix bugs in FMATCH, FMOTOZ, FMLD.
+Version 1.40=CNL201
+Version 1.39=Fix bugs in FMLDIR. Add FMLFIL, FMFILS.
+             Add return codes for SYSREQ(TCP)
+             Use FMSREQ to perform call to sysreq with retry
+             Add calls to L3 stage script in FMOPEN, FMFIND, FMMAKE
+             Add FMFILC - like FC in FM shell.
+             New calling sequences for GETENVF, SLEEPF.
+             Fix bugs in SHIFT version
+             Add IBM MACROS (needed for MVS version) to FATCDES.
+             Add program FATCAT to send updates to FATCAT upon
+             arrival in RDR and poll for new updates at wakeup
+             interval.
+Version 1.38=SHIFT code for sfget (DSN is [pool.user]/unix-dsn)
+             Add MVS routines from DESY
+             Split FMOPEN, FMFIND, FMMAKE
+             Add routine FMFNME to generate extended unique file name -
+             not suitable for VM systems.
+Version 1.37=Add Patch FATULOK. Example program to unlock FATMEN RZ file.
+             Current version will unlock 'CERN.FATRZ' in current directory
+             Put large arrays in FMALLK, FMLIST, FMLDIR into commons.
+             Add options K (keep) and P (autoput) to FMOPEN
+             Modify FMQTMS so that the correct media type (taken from
+             bank) is returned if volume unknown or TMS option not
+             installed. Media type is passed to FMQTMS via IQUEST(11).
+Version 1.36=Add patches DCL, SCRIPT to contain sample command files/
+             scripts to start FATMEN server.
+             Add variable FMWAKEUP (FATMEN$WAKEUP on VAX) to define
+             FATSRV wakeup interval
+             Fix all warnings reported by Apollo compiler.
+             Return in FMOPEN for Unix systems without tape support
+             (currently only Cray, Shift)
+             Extra protection in FMINIT if logical name/env. variable
+             pointing to FATMEN catalogue is not defined.
+             Fix bug in FMLD for bad pathnames
+Version 1.35=Fix bug in FMRM if non-existant key is specified
+             Use XYOPN in FMOPEN for SHIFT disk files
+             Add WRTAPE support in FMCOPY for VAX
+             Add option MEDIA in ADD/TAPE and FMADDT. (For NA44)
+Version 1.34=Fix bug in FMALLK, extra debug in FMFZI.
+             Use stagewrt in FMCOPY for Cray
+             Add SHIFT support: use stagein/stageout scripts in FMOPEN.
+             All SHIFT files are assumed to be accessed via RFAS routines.
+             Current support only for FZ binary files...
+             Add routines FMULOK, FMPOOL to unlock (enable write) and
+             transfer a tape from one pool to another. Modify FMSHOW
+             to display the host on which a disk file resides, rather
+             than that from which it was catalogued.
+             Add DCB/Generic device support in VAX version
+             Move 'fix' for check on robot/manual to FMQTMS
+             Add extra print out in FMFZI.
+             Fix bug in FMQTMS introduced by VID prefix support.
+             Add command SEARCH to allow searches on DSN, HOST, VID and
+             USER. Output is piped to FMSHOW.
+             Add option Z in FMCOPY - use STAGE OUT for output file
+             Add routine FMGBYK (get by key-serial-number).
+             Modify FMLS to support options I (sort in Increasing order)
+             and 1 (display only one entry per generic name).
+             Option W in FMLS - multi-column output
+             Modify FMSHOW to call FMSHO2 in case of options B (brief=80 cols.)
+             or E (extended=132 cols.) listing. Modify FMOPEN to take
+             file size for STAGE request from IQUEST(11) if option O(verride)
+             is specified. Fix bug in FMLD for output redirection.
+Version 1.33=Add routines FMSETL, M, C, U to set the list of (<100)
+             location codes, media types, copy levels and logical units
+             for use in FATMEN selection and for use by FMCOPY etc.
+             Add routine FMPUSE to print usage information.
+             Add routine FMUNIQ to return a unique list of file names
+             in specified directory. Selection may be made under normal
+             keys mask, as for FMSELK.
+             Add routines FMJULI/FMDATE/FMDAYS to provide conversion to
+             and from julian date and delta time.
+             New entry point FMDCB - provide DCB or take from 'model DCB'
+             Add routine FMFZCP to copy an FZ file from LUNI to LUNO.
+             Called by FMCOPY. Logical units required by FMCOPY may
+             be set in IQUEST(11-12).
+             Change size of RZ file to 65000 records (new protection in RZ)
+             Fix bug in FMKEYS/FMSELK.
+             Close and reopen RZ file in FATSRV on return from FMFZI.
+             This ensures that updates are seen by clients.
+Version 1.32=FMPEEK/FMPOKE routines - return information from FATMEN bank
+             in vector/ copy vector to FATMEN bank with optional catalogue
+             update.
+             Rename FMADDT/FMADDD to FMKADT, FMKADD. Add routines FMADDT,
+             FMADDD in patch FATUOUS. Add routine FMSTRT -
+             "Novice" initialisation routine which also initialises Zebra
+             Suppress call to RZDELK in FMFZI for MOD operations
+             Add option L in FMOPEN - override Label information with
+             DCB from catalogue or user-supplied bank
+             Add routine FMLDIR - provide <> wild-card support plus
+             context pointer.
+             Support wild-cards in any location in LD command.
+             Add routine FMCOPC - command line copy routine. Permit copy
+             to named VID, tape allocated from pool, remote copy (via
+             CSPACK) or copy according to two existing catalogue entries.
+             Add entry point FMGTMS to obtain FATMEN oriented details from TMS
+             Change calling sequence of FATUOUS interface to match CERNLIB
+             standard. Fix bug in FMLD for -R option, VID-prefix handling
+             in FMADDT.
+Version 1.31=Add 2MB to file size on VMSTAGE request, if < 200 MB
+             Modify FMPUTC/FMGETC to support VID prefix field
+             VMSTAK now also for HPO. Use KERNLIB version of GETENV
+             Add ZABEND routine for FATMEN shell - avoid ZPOSTM
+             Support VMIO in FMOPEN for DDNAMEs like VM%%F%%%
+             Update mode corresponds to FMOPEN option X
+             Add pilot patches for CERNVM, LEPICS and FRCPN11 (ugh)
+             Add routine FMMANY - match many files, selecting
+             according to < or >.
+             Add routine FMCHOP - check options against allowed values
+             Output to search list on VAX: use disk with most space
+             Add routine FMKEYS. As RZKEYS, but with IFIRST,ILAST
+             to avoid the use of large arrays.
+             Use QUERY VID instead of QVOL (IN2P3 only, temporary!)
+             Return immediately after STAGE command in FMOPEN if NOWAIT
+             Support output redirection in LS, LD
+             Add patch FATUOUS - novice interface
+             Add routine FMFILE - as FMOPEN but no LBANK
+             Add routine FMPREF to convert VID prefices to/from
+             CHARACTER/INTEGER
+             Support STRONG TYPING IF=TYPE in PATCHY sequences
+             Add call to FMUPRT in FMSHOW, FMUSEL in FMRZIN
+             Add PATCH FMTMS for TMS interface routines (FMALLO,
+             FMQTMS and FMLOCK)
+             Add entry point FMSCAN - FMLIST + FMSORT + FMGET
+             Add DA as valid file format: open ACCESS='DIRECT'
+             in FMOPEN for format DA or it option X is given.
+             Support full wild carding of generic name in FMLS
+             Support RZOPEN in FMOPEN, RZEND in FMCLOS
+             Provide interface to DUMPTAPE (IBM, Cray)
+             Extend FATOPTS to numeric options
+Version 1.30=CNL 200
+Version 1.25=Fix bug in FMCOPY - close both input & output files
+             if an error occurs opening the output file
+             Fix bug in tape allocation in FMOPEN
+             Free tape unit correctly in FMCLOS for output volumes
+             Lift bank in FMADDD/T only on first entry. Add FFX
+             as valid file format.
+             Use FMBOOK in FMSMCF - save address in link area
+             FORTRAN version of FAFNDF based on SZLS from CSPACK.
+             Use RZOPEN from FAOPEN
+             Extend IFLAG in FOPUT: add only if not already present
+Version 1.24=Move FMALLK to patch FATSRV.
+             Fix bug in FMCOPY when called from FMSMCF (infinite loop)
+             Treat characters following a blank in DSN as a comment.
+             Correct FMQTMS, FMALLO for VAX.
+             Print DSN stacked in FMOPEN if LOGL >= 0
+Version 1.23=Extra protection in FMFZI for file deletion.
+             Fix bug in FMCOPY for VBS files. Remove unecessary
+             protection in FMSMCF for unknown VIDs.
+             Add TESTFAT KUMAC - example test macro in PATCH FATTEST
+Version 1.22=Try to reduce size of program. Limit number of directories
+             that can be displayed in FMLD to 10000, number of
+             copies of a file to 1000 (parameter MAXCOP).
+Version 1.21=Ensure that VMOPEN error codes are passed back to user
+             Force updating of KEYS vectors from BANKS in FMCOPY
+             Option C in FMCOPY - use STAGE CHANGE, option S, using
+             STAGE for input file (C implies STAGE for input and output)
+             No FORTRAN open in FMOPEN if using IOPACK.
+             Add sequence FATPARA in FMEXST.
+             Add flag NOSMCF for LEPICS - no TMS or robot access
+             Fix bug in FMLIST for call to FMFNMS (no wild cards)
+             Increase FORMAT statement for key serial number and loc.code
+             Set MAXKEY to 10000. Always put DCB on Cray STAGE
+             Use -S sbin option on Cray
+Version 1.20=CNL 199
+Version 1.18=For input tapes, must use 'EXEC STAGE CLEAR' in FMCLOS
+             CTRANS, CSQMCH now in KERNFOR.
+             Add parameter lengths of character fields
+             Fix conversion of LUN to DDNAME in FMOPEN for IOFILEnn
+             Attempt reconnect to ORACLE if IRC=3114 or 6065
+             Erase FATMEN RDRFILE after successful processing.
+             Fast exit in FATSERV EXEC in case unprocessed file exists
+             Increase working space to 200K words in FATSRV.
+             Save current directory in FMLS for restore at end
+             Add routine VMSTAK. Print shortest/longest record in FMCOPY
+Version 1.17=Fix bug in FMSMCF for check on robot/manual.
+             Convert TMS density to SETUP/STAGE format
+Version 1.16=Check bank address in FMVERI using MZCHLS
+             Add routines FMGETV, FMPUTV, FMGETC and FMPUTC to get and
+             put information to/from FATMEN bank.
+             Add FATSTACK exec for LABELDEF FID ? in FMOPEN.
+             Add routine FMFILL to fill FATMEN bank with default
+             values according to CHOPT. Old FMFILL renamed to FAFILL.
+             Set MNTTYP to 'R' if TMS unavailable and vid = Innnnn
+             Add routine FMEXST to check if entry already exists.
+             Ensure that Media type is set (keys and bank) in FMFILL,
+             FMALLO, FMCOPY.
+             Call EXEC FATSTACK to stack FID for FMOPEN option T
+             Fix bug in FMFZI for call to FMCOMP, default density
+             in FMQTMS=38K (not 38000).
+             Use VMCLOS in FMCLOS for DDNAMEs like VM%%F%%%.
+             If STAGE fails, retry using larger disk size up to max.
+             CP DETACH tape unit (option D in FMCLOS)
+             Use new version of SYSREQ (one line per CHARACTER element)
+             Protect in FMVERI against blanks, unseen chars in GENAM.
+             Update use count in FMOPEN only for input datasets
+             Output datasets require U option in FMCLOS
+             Add option E to FMOPEN - issue SETUP (END
+             Save vaddr of tape unit used in FMOPEN, free in FMCLOS.
+             Save and reset current directory in FMCPC, FMMVC.
+             Extend FMCOPY - disk-disk, disk-tape, tape-disk, tape-tape
+             via VMIO. Fix bug in FMALLO for curious length TMS replies
+             Rewrite FMRM. If more than one match is found, key serial
+             number must be specified.
+Version 1.15=Fix bug in FMFZI in call to FMCOMP.
+             Set date/time of cataloging, last access and use count
+             in FMSMCF. Add -K option on stagein (Cray)
+             Add Apollo version of GETENV (FMGENV)
+             RC=3 from TMS, use defaults IF=TMSTEST, ELSE sleep
+             for 1 minute and then retry.
+             Option G in FMALLO - change control group to *None
+             to allow GROUP access to the tape allocated.
+             FMLIST calls FMFNMS if PATH contains no wildcards
+             Labeltype in lower case on Cray
+             Add routine FMSMCF to make automatic copy into SMCF
+             (FMOPEN option D, CERN specific routine!)
+             Add flag TMSTEST (for CERN until all tapes in TMS)
+             Modify FATSERV to support FATOWNERS and FATOPERATORS
+             lists from NAMES file. Apollo version with local catalogue
+Version 1.14=Add routine FMCOPY - copy dataset from GENAM1 to GENAM2
+             using STAGE CHANGE, COPYTAPE, DISKTAPE, TAPEDISK or ZFTP.
+             Add option S in FMOPEN - update bank with file size from
+             VMSTAGE. Add option N in FMOPEN - do not specify DSN on
+             STAGE/LABELDEF command. Stop in FAOPEN if RZ file not found.
+Version 1.13=Add shell command MAKE. Add print out to FMCLOS.
+             Add DCB to FILEDEF for VM/CMS disk files. Print use count
+             in FMLS/FMSHOW (option P).
+             Add OPEN to FMOPEN routine, unless option U(seropen)
+             Support C(lear), D(rop), E(nd), F(zstat), P(ut), U(pdate)
+             options in FMCLOS. Add routines FML2DD, FMDD2L to convert
+             FORTRAN logical unit to corresponding DDNAME.
+             Add call to FZFILE in FMOPEN, if option F is chosen.
+             Add optional parameters RECFM, LRECL, BLOCK, FSIZE in
+             FMADDT/D. Add support for 3420s (media type 3) in FMRZIN
+             Use mode 4 for VM VBS disk files.
+             Support remote non-Bitnet servers. Pull updates over
+             using ZFTP based utility. Polling interval defined by
+             remote installation.
+Version 1.12=Fix bug in FMSHOW for user supplied bank.
+             Add flags SETUP and STAGE to allow sites to enforce tape
+             processing style.
+             Add entry FMOPEN - just options RTUW for now
+             Use TMS to allocate tapes in FMALLO
+             TMS QUERY CONTENTS LIBRARY <lib> user <pool> slot 1
+             TMS GETPOOL VID <vid> FROM <pool>
+Version 1.11=Add C routines for Cray to find next file in a directory
+             (from Phil Defert). Fix bug in FAT4WARD when no remote
+             servers are specified.
+             Add exec FAT2CERN to forward updates to CERNVM, unless
+             they originated there.
+             Activate FAT4WARD if on CERNVM (forward last update to
+             remote servers)
+             Add routine FMBOOK - create bank with FATMEN format at
+             L, LSUP and JBIAS specified by user.
+             Fix bug in FMMV - protect bank address in LTDSFA
+             Add command VIEW, to edit a local disk file, using KUEDIT.
+             Use TMS to determine MNTTYP in FMRZIN. Get labeltype,
+             generic device from TMS (FMFIND/MAKE)
+             Add interface to TMS (FMLS/FMSHOW) + patchy flag TMS.
+             Set warning in FMVERI if VID unknown to TMS.
+             Update use count (MUSCFA) and last access date in
+             FMFIND/MAKE. Increment in FMFIND, set to 1 in FMMAKE.
+             Modify FMTOVM to issue dispose from Cray to CERNVM
+             VM:   Nick names    FATSYS, FATGRP, fatgrp
+             VMS:  Logical names FATMEN$SYSTEM, FATMEN$GROUP, DISK$fatgrp
+             Unix: Variables     FATSYS, FATGRP, fatgrp
+             Send logging message to server only on CERNVM
+             Add interface to TMS via routine FMQTMS. Use flag TMS
+             to allow sites without TMS to continue.
+             Use variables for UNIX systems to determine location of
+             FATMEN RZ file (FMgroup=/u/mf/fml3, for ex.) and
+             group for which this server is running (FATMEN)
+             Use count stored in MSYWFA+1(=MUSCFA)
+Version 1.10=Enable CONVEX flag. Introduce FFATMEN patch
+Version 1.08=Fix bug in FMALLK when directory is empty.
+             Allow VAX server to run under any account.
+Version 1.07=Fix bug in FMVERI for check on user words.
+             Fix bugs in 1.06. Bad +SELF in FATMDI. Fix bugs in VAXVMS
+             version. FATMEN logical names now in GROUP table.
+             Add patch FATNEW (to create new RZ file)
+             Ensure that directory is reset in FMFNDC
+Version 1.06=Fix bug in FMVERI - copy level may be 0. Add EXECs to PAM
+             Calls to FMONIT in FMFIND/MAKE rather than FMGET
+             Add routine FMVERI, return extra information via IQUEST
+             in FMLIFT, FMKDIR. Extend FMOPEN/FMCLOS.
+             IQUEST(11) = 1 : generic name already exists
+             IQUEST(12) = 0 : path name already exists
+             IQUEST(12) = 1 : path name does not exist
+             Numeric ranges (m:n) supported in FMLIST
+Version 1.05=Add routine FMSORT - call SORTCH (modified from SORTZV)
+             Fix problem in FMFZI - allocate next key using FMALLK
+             In case of MOD or REP operation, re-use old key.
+             Add DCB on STAGE OUT /FILEDEF commands (VM only)
+             Add routines FMUPTM/FMPKTM - as DBxxx but with return code
+             Use mode 6 for RZ files on VM (unless mode=*)
+             Fix bugs in FMATCH. Add routine CSQMCH (squeeze multiple
+             characters) Add FMSHOW example print out routine.
+             Use DEVTYP SMCF for robot, if VID =Innnnn and MMTPFA=2
+             Introduce flag DECS for DEC MIPS. Modify C code to
+             use +SELF rather than #IFDEF.
+             Add journaling of FZ files. Use AUTOPUT option on
+             STAGE OUT command. Tidy LOGL.
+Version 1.04=Retry connect to ORACLE up to 5 times. Reinit RZ if
+             error from RZFILE. Add FMALLO on VM systems
+             New versions of SQL/DS compatible FOxxx routines.
+             Cleanup pilot patches. Modify for AIX. Default for CD is PWD
+             Find KEYS(1) using FMSELK,FMCOMP in FMFZI (for
+             remote delete to work).
+             Allow NOWAIT option in FMFIND, if CHLUN=NOWAIT
+             Add routine FMCOMP to compare banks pointed to
+             by two generic names.
+             Add routine FMLIST - combine FMTREE with FMFNMS and wild
+             card support for directory names.
+             Add G option to FMLS - list full generic name
+             Support VAXclusters and DFS in FATMEN selection.
+             VAXclusters treated as a single node, DFS disk
+             taken after local disk but before local tape.
+             (DFS logical name must be in LNM$SYSTEM_TABLE).
+             New routine FMSELB to allow user to perform select on
+             contents of FATMEN bank.
+Version 1.03=Fix bug in call to RZIN - don't use 'S' option.
+             Server now uses FATLIB.
+             Rewrite FMATCH subroutine. Add LOGLEVEL to FMLS
+             Bugs fixes and enhancements from DELPHI installation.
+             Add debug print to FOPUT. Add patch TAPELOAD.
+             Add PROGRAM FATO2F - recover from ORACLE /SQL and send to
+             server as FZ file(s).
+             Add DSN to STAGE command. Add UPDATE command to CDF.
+             Bugs in FMLIFT/FMLINK fixed (IQUEST/IRC uninitialised)
+             Fix bug in FMFILL for user-allocated tapes
+             Error message in FMRM if key vector cannot be found
+             Add routines FMMOD and FMUPDT
+             Examine REXX variable FREE_BLOCKS to determine number
+             of records to preformat in RZ file (for FATMEN server)
+             Modify FMFZI, FMZTOR and FOPUT to support equivalent
+             of DISP=NEW, OLD, MOD.
+             Add routine FMSELK to allow selection of files on
+             basis of keys vector (e.g. media type, copy level etc.)
+             Add SIZE qualifier on input STAGE requests. Sizes are
+             based on current VMSTAGE disk sizes.
+             Selection of best copy (local_disk>robot_tape>manual_tape)
+             Improved logging: Level -3 Suppress all log messages
+                                     -2 Error messages
+                                     -1 Terse logging
+                                      0 Normal (FMINIT, FMEND etc.)
+                                      1 Log to watch   FM calls
+                                      2 Log to monitor FM decisions
+                                      3 Debug messages
+             Add PATCH FATSTAT, to print statistics on usage
+             of FATMEN RZ database. Current version VM only.
+Version 1.02=Bugs reported by CHARM2.
+             Conform to CERN Program Library convention for flags
+             Preformat RZ file before call to RZMAKE by writing
+             2500 records (fills 85% of a 20 cylinder disk)
+Version 1.01=Coincide with version 1.00 of documentation
+             Add IRC to all FM calls, make FMATCH a subroutine
+             Use KIPRMT to set KUIP prompt, rather than KUEXEC
+Version 1.00=Meddle meeting of 19/10/89
+             and CERN Library release of CNL196
+File and Tape Management Package
+  Requires:
+          CERN libraries,
+          HEPVM (VM/CMS systems),
+          VMS 4.6 or greater (VAX/VMS systems),
+          Apollo SR10        (Apollo systems),
+          Unicos             (Cray systems).
+ 
+  Enhancements to external packages:
+  Requests from LFATMEN list:
+          <> wild-card support (Daniel Lellouch) (done, FMLDIR)
+          <n1-n2> in FATMEN selection            (fmnext)
+          Wild card support in LS, LD            (done)
+          Output to disk files for LS, LD        (done)
+          COPY command in FM shell               (done for local files)
+          Select disk with max. space for output to search lists (VAX) (done)
+  To be clarified:
+  For FORTRAN 90:
+          Hollerith     (FMSTRT, FMINIT, FMVERS)
+          UCOPY         (FMMODU)

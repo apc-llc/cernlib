@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 dfnpre.F dfunrn.F dgauss.F errord.F eurran.F eurrin.F ieupdg.F \ @@\
+	 indnam.F ipdgeu.F pcharg.F prtevt.F prtvtx.F rlego.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

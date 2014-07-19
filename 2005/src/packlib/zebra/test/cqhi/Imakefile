@@ -1,0 +1,11 @@
+SRCS_F=	 cqdivi.F cqdlin.F cqdtab.F cqdwsp.F cqfixu.F cqlink.F \ @@\
+	cqlrta.F cqmota.F cqstoc.F cqstom.F cqstor.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(cqdivi,cqdivi,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(cqdlin,cqdlin,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(cqdwsp,cqdwsp,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(cqstor,cqstor,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

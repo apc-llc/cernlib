@@ -1,0 +1,4 @@
+SRCS_F=	 dcross.F ddot.F dmm55.F dnorm.F dsmt5t.F rmm55.F \ @@\
+	rsmt5t.F ssmt5t.F xmm55.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

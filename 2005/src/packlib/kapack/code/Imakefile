@@ -1,0 +1,25 @@
+SRCS_F= ka1to2.F kaadd.F kaaddm.F kacopy.F kadel.F kadelm.F kafree.F \ @@\
+	kaget.F kagetm.F kahold.F kalen.F kalist.F kaloc.F kamake.F \ @@\
+	kamsg.F kaoptn.F kapre.F kaprem.F kaprik.F kaput.F kaputm.F \ @@\
+	karlse.F kaseq.F kaseqm.F kastop.F kat.F kaxad1.F kaxad2.F \ @@\
+	kaxad3.F kaxadd.F kaxage.F kaxcmp.F kaxcon.F kaxdel.F kaxdl1.F \ @@\
+	kaxdl2.F kaxdlv.F kaxe2i.F kaxed.F kaxend.F kaxfbk.F kaxgbk.F \ @@\
+	kaxget.F kaxglv.F kaxgxa.F kaxgxd.F kaxi2e.F kaxini.F kaxinr.F \ @@\
+	kaxins.F kaxjid.F kaxls1.F kaxmaj.F kaxmsg.F kaxnam.F kaxolk.F \ @@\
+	kaxopn.F kaxput.F kaxrd.F kaxrlk.F kaxshl.F kaxshr.F \ @@\
+	kaxtlk.F kaxwrd.F kaxwrt.F kaz1a2.F kaz1b2.F
+
+#if !defined(CERNLIB_IBM)
+SRCS_F := $(SRCS_F) kaxrcl.F 
+#else
+SRCS_F := $(SRCS_F) kaxrclib.F 
+#endif
+
+#if defined(CERNLIB_HPUX)
+SpecialFortranLibObjectRule(ka1to2,ka1to2,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(kacopy,kacopy,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(kamake,kamake,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(kaxopn,kaxopn,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,95 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:52:59 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:59  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernibm.car patch kernibm
+#if !defined(CERNLIB_KERNIBM)
+
+       KERNLIB routines in machine language or otherwise special
+                        for IBM 360/370
+
+           The specific material for system VM/CMS if found
+                   the separate Pam file KERNCMS
+
+---------------------------------------------------------------------
+
+             This file contains the following Patches :
+
+PILOT PATCHES
+-------------
+
+*KJCERN   Kern IBM pilot for system OS at CERN with Siemens compiler
+
+*KICERNV  Kern IBM pilot for system VM at CERN with VSFORT compiler
+
+*KICERN   Kern IBM pilot for system OS at CERN, Fortran 4
+
+
+*KIMVSSP  Kern IBM pilot for system OS mvs/sp
+
+*KIMVSSE  Kern IBM pilot for system OS mvs/se
+
+*KIMVS    Kern IBM pilot for system OS mvs
+
+*KIMVT    Kern IBM pilot for system OS mvt
+
+*KIOS     Kern IBM pilot for system OS
+
+*KIVM     Kern IBM pilot for system VM/CMS
+
+OTHER PATCHES
+-------------
+
+QF_IBM    using the VSFORT compiler
+
+QF_SIEM   using the SIEMENS compiler
+
+QMIBMXA   option : system VM /XA
+
+QMIBMVF   option : using the Vector Facility
+
+QCMS4     option : system CMS version 4 or earlier
+
+XVECTSI   Siemens versions of routines of P=XVECT
+XVECTIBM  IBM versions of routines of P=XVECT
+
+IBM370    Routines taking advantage of special /370 features
+          Give  +USE,IBM370,T=INH.  if hardware not available
+
+IBM360    IBM specific normal routines
+
+SYCERNV   System routines for system VM at CERN only
+
+SYVM      System routines for system VM
+
+SYCERNJ   System routines for Siemens compiler at CERN only
+
+SYCERN    System routines for use at CERN only
+
+SYMVSSP   System routines for system OS mvs/sp
+
+SYMVSSE   System routines for system OS mvs/se
+
+SYMVS     System routines for system OS mvs
+
+SYMVT     System routines for system OS mvt
+
+SYOS      System routines for system OS
+
+SYVMOS    System routines for both VM or OS
+
+PRELIB    Library creation program
+
+OPTION PATCHES
+--------------
+
+IBM370    See above
+
+SIEMENS   Siemens compiler, not VSFORT
+
+=====================================================================
+#endif

@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 normal.F patchy.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

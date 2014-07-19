@@ -1,0 +1,432 @@
+*
+* $Id: tbyt.F,v 1.1.1.1 1996/02/15 17:54:59 mclareni Exp $
+*
+* $Log: tbyt.F,v $
+* Revision 1.1.1.1  1996/02/15 17:54:59  mclareni
+* Kernlib
+*
+*
+#include "kerngent/pilot.h"
+      SUBROUTINE TBYT
+
+#include "kerngent/mkcde.inc"
+
+      DATA  IALL1  / 16777215 /
+
+      JINIT (JZ) = 7*JZ + 5
+
+C-------           TEST   JBIT - JBYT
+
+      CALL NEWGUY ('JBIT - JBYT.','TBYT    ')
+
+      MCUM = 0
+        DO 12  JL=1,22,4
+C-                        JB = 0 4 8 12 16 20
+      JB   = JL -1
+      MCUM = MCUM*16 + 5
+      MUSE = MCUM
+
+      IA(JB+101) = JBIT (MUSE,JB+1)
+      IA(JB+102) = JBIT (MUSE,JB+2)
+      IA(JB+103) = JBIT (MUSE,JB+3)
+      IA(JB+104) = JBIT (MUSE,JB+4)
+
+      IB(JB+101) = 1
+      IB(JB+102) = 0
+      IB(JB+103) = 1
+      IB(JB+104) = 0
+
+      IA(JB+201) = JBYT (MUSE,JB+1,1)
+      IA(JB+202) = JBYT (MUSE,JB+2,1)
+      IA(JB+203) = JBYT (MUSE,JB+3,1)
+      IA(JB+204) = JBYT (MUSE,JB+4,1)
+
+      IB(JB+201) = 1
+      IB(JB+202) = 0
+      IB(JB+203) = 1
+      IB(JB+204) = 0
+
+      IA(JB+301) = JBYT (MUSE,JB+1,2)
+      IA(JB+302) = JBYT (MUSE,JB+2,2)
+      IA(JB+303) = JBYT (MUSE,JB+3,2)
+      IA(JB+304) = JBYT (MUSE,JB+4,2)
+
+      IB(JB+301) = 1
+      IB(JB+302) = 2
+      IB(JB+303) = 1
+      IB(JB+304) = 0
+
+      IA(JB+401) = JBYT (MUSE,JB+1,3)
+      IA(JB+402) = JBYT (MUSE,JB+2,3)
+      IA(JB+403) = JBYT (MUSE,JB+3,3)
+      IA(JB+404) = JBYT (MUSE,JB+4,3)
+
+      IB(JB+401) = 5
+      IB(JB+402) = 2
+      IB(JB+403) = 1
+      IB(JB+404) = 0
+
+      IA(JB+501) = JBYT (MUSE,JB+1,4)
+      IA(JB+502) = JBYT (MUSE,JB+2,4)
+      IA(JB+503) = JBYT (MUSE,JB+3,4)
+      IA(JB+504) = JBYT (MUSE,JB+4,4)
+
+      IB(JB+501) = 5
+      IB(JB+502) = 2
+      IB(JB+503) = 1
+      IB(JB+504) = 0
+   12 CONTINUE
+
+      CALL MVERII (1,IA(101),IB(101),24)
+      CALL MVERII (2,IA(201),IB(201),24)
+      CALL MVERII (3,IA(301),IB(301),24)
+      CALL MVERII (4,IA(401),IB(401),24)
+      CALL MVERII (5,IA(501),IB(501),24)
+
+C-------           TEST   SBIT0 - SBIT1 - SBIT
+
+      CALL NEWGUY ('SBIT0 - SBIT1 - SBIT.','TBYT    ')
+
+      IONE = 1
+        DO 14  JB=1,23
+      IA(JB+100) = 0
+      IA(JB+200) = 0
+      IA(JB+300) = IALL1
+      IA(JB+400) = IALL1
+      CALL SBIT1  (IA(JB+100),JB)
+      CALL SBIT (1,IA(JB+200),JB)
+      CALL SBIT0  (IA(JB+300),JB)
+      CALL SBIT (0,IA(JB+400),JB)
+
+      IB(JB+100) = IONE
+      IB(JB+300) = IALL1 - IONE
+   14 IONE = 2*IONE
+
+      CALL MVERII (1,IA(101),IB(101),23)
+      CALL MVERII (2,IA(201),IB(101),23)
+      CALL MVERII (3,IA(301),IB(301),23)
+      CALL MVERII (4,IA(401),IB(301),23)
+
+C-------           TEST   SBYT
+
+      CALL NEWGUY ('SBYT.','TBYT    ')
+
+      MSHIF = 1
+        DO 18     JB=1,21
+
+      MCUM = MSHIF
+      MTMP = MSHIF
+        DO 17  NBITS=1,4
+      JV = 100*NBITS
+
+      IA(JB+JV) = 0
+      CALL SBYT (JB,IA(JB+JV),JB,NBITS)
+
+      IA(JB+JV+400) = IALL1
+      CALL SBYT (JB,IA(JB+JV+400),JB,NBITS)
+
+      IB(JB+JV)     = MSHIF * JBYT(JB,1,NBITS)
+      IB(JB+JV+400) = IALL1 - MCUM + IB(JB+JV)
+      MTMP = 2*MTMP
+   17 MCUM = MCUM + MTMP
+   18 MSHIF = 2*MSHIF
+
+      CALL MVERII (1,IA(101),IB(101),21)
+      CALL MVERII (2,IA(201),IB(201),21)
+      CALL MVERII (3,IA(301),IB(301),21)
+      CALL MVERII (4,IA(401),IB(401),21)
+      CALL MVERII (5,IA(501),IB(501),21)
+      CALL MVERII (6,IA(601),IB(601),21)
+      CALL MVERII (7,IA(701),IB(701),21)
+      CALL MVERII (8,IA(801),IB(801),21)
+      CALL PRTEST
+
+C----              CROSS-USE  SBYT - JBYT
+
+        DO 24  NBITS=1,IQBITW
+      NDO = IQBITW + 1 - NBITS
+
+        DO 23  JB=1,NDO
+      JPREA = JINIT(JB)
+      JPREN = -JPREA
+      JVALA = JB - 1
+      JVALN = -JVALA
+
+      IA(1) = JPREA
+      IA(2) = JPREN
+      IA(3) = JPREA
+      IA(4) = JPREN
+
+      CALL SBYT (JVALA,IA(1), JB,NBITS)
+      CALL SBYT (JVALA,IA(2), JB,NBITS)
+      CALL SBYT (JVALN,IA(3), JB,NBITS)
+      CALL SBYT (JVALN,IA(4), JB,NBITS)
+
+      IA(JB+100) =  JBYT (IA(1),JB,NBITS)
+      IA(JB+200) =  JBYT (IA(2),JB,NBITS)
+      IA(JB+300) =  JBYT (IA(3),JB,NBITS)
+      IA(JB+400) =  JBYT (IA(4),JB,NBITS)
+
+      IB(JB+100) = JBYT (JVALA, 1,NBITS)
+      IB(JB+300) = JBYT (JVALN, 1,NBITS)
+   23 CONTINUE
+
+      CALL MVERII (10*NBITS+1,IA(101),IB(101),NDO)
+      CALL MVERII (10*NBITS+2,IA(201),IB(101),NDO)
+      CALL MVERII (10*NBITS+3,IA(301),IB(301),NDO)
+      CALL MVERII (10*NBITS+4,IA(401),IB(301),NDO)
+      IF (JBIT(NBITS,1).EQ.0)  CALL PRTEST
+   24 CONTINUE
+
+C-------           TEST   CBYT
+
+      CALL NEWGUY ('CBYT.','TBYT    ')
+
+        DO 28  NBITS=1,IQBITW
+      NDO = IQBITW + 1 - NBITS
+
+        DO 27  JB=1,NDO
+      JPREA = JINIT(JB)
+      JPREN = -JPREA
+      JVALA = JB - 1
+      JVALN = -JVALA
+
+      IB(JB+100) = JPREA
+      IB(JB+200) = JPREN
+      IB(JB+300) = JPREA
+      IB(JB+400) = JPREN
+
+      CALL SBYT (JVALA,IB(JB+100), JB,NBITS)
+      CALL SBYT (JVALA,IB(JB+200), JB,NBITS)
+      CALL SBYT (JVALN,IB(JB+300), JB,NBITS)
+      CALL SBYT (JVALN,IB(JB+400), JB,NBITS)
+
+      IA(JB+100) = JPREA
+      IA(JB+200) = JPREN
+      IA(JB+300) = JPREA
+      IA(JB+400) = JPREN
+
+      CALL CBYT (IB(JB+100),JB, IA(JB+100),JB,NBITS)
+      CALL CBYT (IB(JB+200),JB, IA(JB+200),JB,NBITS)
+      CALL CBYT (IB(JB+300),JB, IA(JB+300),JB,NBITS)
+      CALL CBYT (IB(JB+400),JB, IA(JB+400),JB,NBITS)
+
+   27 CONTINUE
+
+      CALL MVERII (10*NBITS+1,IA(101),IB(101),NDO)
+      CALL MVERII (10*NBITS+2,IA(201),IB(201),NDO)
+      CALL MVERII (10*NBITS+3,IA(301),IB(301),NDO)
+      CALL MVERII (10*NBITS+4,IA(401),IB(401),NDO)
+      IF (JBIT(NBITS,1).EQ.0)  CALL PRTEST
+   28 CONTINUE
+
+C-------           TEST   SBYTOR - JBYTET
+
+      CALL NEWGUY ('SBYTOR - JBYTET.','TBYT    ')
+
+        DO 38  NBITS=1,21,3
+      NDO = IQBITW + 1 - NBITS
+
+        DO 37  JB=1,NDO
+      JPREA = JINIT(JB)
+      JPREN = -JPREA
+      JVALA = JB - 1
+      JVALN = -JVALA
+
+      IB(100) = JVALA
+      IB(200) = JVALA
+      IB(300) = JVALN
+      IB(400) = JVALN
+
+      IA(JB+100) = JPREA
+      IA(JB+200) = JPREN
+      IA(JB+300) = JPREA
+      IA(JB+400) = JPREN
+
+      IA(JB+500) = JPREA
+      IA(JB+600) = JPREN
+      IA(JB+700) = JPREA
+      IA(JB+800) = JPREN
+
+      CALL SBYTOR (JVALA,IA(JB+100), JB,NBITS)
+      CALL SBYTOR     (0,IA(JB+100), JB,NBITS)
+      CALL SBYTOR (JVALA,IA(JB+200), JB,NBITS)
+      CALL SBYTOR     (0,IA(JB+200), JB,NBITS)
+      CALL SBYTOR (JVALN,IA(JB+300), JB,NBITS)
+      CALL SBYTOR     (0,IA(JB+300), JB,NBITS)
+      CALL SBYTOR (JVALN,IA(JB+400), JB,NBITS)
+      CALL SBYTOR     (0,IA(JB+400), JB,NBITS)
+
+      IA(JB+500) = JBYTET (JVALA,IA(JB+500), JB,NBITS)
+      IA(JB+600) = JBYTET (JVALA,IA(JB+600), JB,NBITS)
+      IA(JB+700) = JBYTET (JVALN,IA(JB+700), JB,NBITS)
+      IA(JB+800) = JBYTET (JVALN,IA(JB+800), JB,NBITS)
+
+      IB(JB+100) = JPREA
+      IB(JB+200) = JPREN
+      IB(JB+300) = JPREA
+      IB(JB+400) = JPREN
+
+      IB(JB+500) = JPREA
+      IB(JB+600) = JPREN
+      IB(JB+700) = JPREA
+      IB(JB+800) = JPREN
+
+        DO 36  JV=100,400,100
+      MMET = 0
+      MMOR = 0
+      MBIT = 1
+
+        DO 35  J=1,NBITS
+      IP = JBIT (IB(JB+JV),JB+J-1)
+      IV = JBIT (IB(JV),J)
+
+      IF ((IP.EQ.1) .OR.  (IV.EQ.1))  MMOR=MMOR+MBIT
+      IF ((IP.EQ.1) .AND. (IV.EQ.1))  MMET=MMET+MBIT
+   35 MBIT = 2*MBIT
+
+      CALL SBYT (MMOR,IB(JB+JV),JB,NBITS)
+      IB(JB+JV+400) = MMET
+   36 CONTINUE
+   37 CONTINUE
+
+      CALL MVERII (10*NBITS+1,IA(101),IB(101),NDO)
+      CALL MVERII (10*NBITS+2,IA(201),IB(201),NDO)
+      CALL MVERII (10*NBITS+3,IA(301),IB(301),NDO)
+      CALL MVERII (10*NBITS+4,IA(401),IB(401),NDO)
+      CALL MVERII (10*NBITS+5,IA(501),IB(501),NDO)
+      CALL MVERII (10*NBITS+6,IA(601),IB(601),NDO)
+      CALL MVERII (10*NBITS+7,IA(701),IB(701),NDO)
+      CALL MVERII (10*NBITS+8,IA(801),IB(801),NDO)
+      CALL PRTEST
+   38 CONTINUE
+
+C-------           TEST   JRSBYT
+
+      CALL NEWGUY ('JRSBYT.','TBYT    ')
+
+        DO 48  NBITS=1,IQBITW,3
+      NDO = IQBITW + 1 - NBITS
+
+        DO 47  JB=1,NDO
+      JPREA = JINIT(JB)
+      JPREN = -JPREA
+      JVALA = JB - 1
+      JVALN = -JVALA
+
+      IA(JB+100) = JPREA
+      IA(JB+200) = JPREN
+      IA(JB+300) = JPREA
+      IA(JB+400) = JPREN
+
+      IA(JB+500) = JRSBYT (JVALA, IA(JB+100),JB,NBITS)
+      IA(JB+600) = JRSBYT (JVALA, IA(JB+200),JB,NBITS)
+      IA(JB+700) = JRSBYT (JVALN, IA(JB+300),JB,NBITS)
+      IA(JB+800) = JRSBYT (JVALN, IA(JB+400),JB,NBITS)
+
+      IB(JB+100) = JPREA
+      IB(JB+200) = JPREN
+      IB(JB+300) = JPREA
+      IB(JB+400) = JPREN
+
+      IB(JB+500) = JBYT (IB(JB+100),JB,NBITS)
+      IB(JB+600) = JBYT (IB(JB+200),JB,NBITS)
+      IB(JB+700) = JBYT (IB(JB+300),JB,NBITS)
+      IB(JB+800) = JBYT (IB(JB+400),JB,NBITS)
+
+      CALL SBYT (JVALA, IB(JB+100),JB,NBITS)
+      CALL SBYT (JVALA, IB(JB+200),JB,NBITS)
+      CALL SBYT (JVALN, IB(JB+300),JB,NBITS)
+      CALL SBYT (JVALN, IB(JB+400),JB,NBITS)
+
+   47 CONTINUE
+
+      CALL MVERII (10*NBITS+1,IA(101),IB(101),NDO)
+      CALL MVERII (10*NBITS+2,IA(501),IB(501),NDO)
+      CALL MVERII (10*NBITS+3,IA(201),IB(201),NDO)
+      CALL MVERII (10*NBITS+4,IA(601),IB(601),NDO)
+      CALL MVERII (10*NBITS+5,IA(301),IB(301),NDO)
+      CALL MVERII (10*NBITS+6,IA(701),IB(701),NDO)
+      CALL MVERII (10*NBITS+7,IA(401),IB(401),NDO)
+      CALL MVERII (10*NBITS+8,IA(801),IB(801),NDO)
+      CALL PRTEST
+   48 CONTINUE
+
+C--      TIMING
+
+      IF (ITIMES.EQ.0)       RETURN
+      NTIMES = ITIMES * 10000
+
+      CALL TIMED (TIMERD)
+         DO 61 JN=1,ITIMES
+        DO 61 JM=1,400
+        DO 61 JL=1,25
+      IA(JL+JM) = JBIT (JL,JL+4)
+   61 CONTINUE
+      CALL TIME77 (NTIMES,'JBIT  ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 62 JN=1,ITIMES
+        DO 62 JM=1,400
+        DO 62 JL=1,25
+      IA(JL+JM) = JBYT (JL,JL+2,26-JL)
+   62 CONTINUE
+      CALL TIME77 (NTIMES,'JBYT  ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 63 JN=1,ITIMES
+        DO 63 JM=1,400
+        DO 63 JL=1,25
+      CALL SBIT0 (IA(JL+JM),JL+4)
+   63 CONTINUE
+      CALL TIME77 (NTIMES,'SBIT0 ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 64 JN=1,ITIMES
+        DO 64 JM=1,400
+        DO 64 JL=1,25
+      CALL SBIT1 (IA(JL+JM),JL+4)
+   64 CONTINUE
+      CALL TIME77 (NTIMES,'SBIT1 ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 65 JN=1,ITIMES
+        DO 65 JM=1,400
+        DO 65 JL=1,25
+      CALL SBIT (JL+7,IA(JL+JM),JL+4)
+   65 CONTINUE
+      CALL TIME77 (NTIMES,'SBIT  ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 66 JN=1,ITIMES
+        DO 66 JM=1,400
+        DO 66 JL=1,25
+      CALL SBYT (JL,IA(JL+JM+1),JL+2,26-JL)
+   66 CONTINUE
+      CALL TIME77 (NTIMES,'SBYT  ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 67 JN=1,ITIMES
+        DO 67 JM=1,400
+        DO 67 JL=1,25
+      CALL CBYT (JL,JL+4,IA(JL+JM+1),JL+2,26-JL)
+   67 CONTINUE
+      CALL TIME77 (NTIMES,'CBYT  ',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 68 JN=1,ITIMES
+        DO 68 JM=1,400
+        DO 68 JL=1,25
+      CALL SBYTOR (JL,IA(JL+JM+1),JL+2,26-JL)
+   68 CONTINUE
+      CALL TIME77 (NTIMES,'SBYTOR',0,' ')
+
+      CALL TIMED (TIMERD)
+         DO 69 JN=1,ITIMES
+        DO 69 JM=1,400
+        DO 69 JL=1,25
+      IA(JL+JM) = JBYTET (JL,IA(JL+JM+1),JL+2,26-JL)
+   69 CONTINUE
+      CALL TIME77 (NTIMES,'JBYTET',0,' ')
+      RETURN
+      END

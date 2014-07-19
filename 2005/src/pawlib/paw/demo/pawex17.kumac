@@ -1,0 +1,29 @@
+MACRO PAWEX17
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 17                          *
+* Read an Ntuple from a histogram file                                   *
+* Difference between automatic and user binning                          *
+**************************************************************************
+Exec ALLDEF
+hi/file 2 aptuple.hbook 0
+zon 2 2
+opt NSTA
+opt GRID
+set XTIC 0.15
+set YTIC 0.15
+set htyp 244
+Ntuple/pl 10.age
+hi/create/1dhisto 11 'Age - User binning' 45 20. 65.
+set ndvx -509
+Ntuple/project 11 10.Age
+hi/plot 11
+hi/create/1dhisto 12 'Cost - User binning' 50 0. 20000.
+set ndvx
+Ntuple/plot 10.cost
+set ndvx -504
+Ntuple/pl 10.Cost ! -12
+close 2
+zone
+hi/de 0
+RETURN
+

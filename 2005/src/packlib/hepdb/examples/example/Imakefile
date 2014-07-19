@@ -1,0 +1,5 @@
+SRCS_F=	 cdexam1.F cdexam10.F cdexam11.F cdexam12.F cdexam13.F \ @@\
+	cdexam2.F cdexam3.F cdexam4.F cdexam5.F cdexam6.F cdexam7.F \ @@\
+	cdexam8.F cdexam9.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

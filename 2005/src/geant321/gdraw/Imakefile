@@ -1,0 +1,38 @@
+
+#define CERNLIB_BLDLIB
+
+DoIncludePackage(geant321)
+#include "pilot.h"
+
+SRCS_F= gchnwk.F gd3d3d.F gdahit.F gdarc.F gdarr.F \ @@\
+	gdaxis.F gdbomb.F gdcgcl.F gdcgem.F gdcger.F gdcghi.F gdcgob.F \ @@\
+	gdcgpr.F gdcgrs.F gdcgsl.F gdcgwv.F gdchit.F gdcirc.F \ @@\
+	gdcirr.F gdciry.F gdclos.F gdcol.F gdcol1.F gdcurs.F \ @@\
+	gdcut.F gdcxyz.F gdelet.F gdeltu.F gdfr3d.F gdfspc.F gdhead.F \ @@\
+	gdhits.F gdinit.F gdkine.F gdlcyl.F gdlens.F gdline.F gdlumi.F \ @@\
+	gdlw.F gdlw1.F gdman.F gdnino.F gdnson.F gdopen.F gdopt.F gdpart.F \ @@\
+	gdplst.F gdprtr.F gdrack.F gdraw.F gdrawc.F gdrawp.F gdraws.F \ @@\
+	gdrawt.F gdrawv.F gdrawx.F gdrayt.F gdrect.F gdrvol.F gdrwsc.F \ @@\
+	gdsarc.F gdscal.F gdshif.F gdshow.F gdson.F gdspec.F \ @@\
+	gdssur.F gdstep.F gdsurf.F gdthrz.F gdtr0.F gdtr1.F gdtr10.F \ @@\
+	gdtr11.F gdtr12.F gdtr2.F gdtr3.F gdtr4.F gdtr5.F gdtr6.F gdtr8.F \ @@\
+	gdtr99.F gdtrak.F gdtree.F gdwmn1.F gdwmn2.F gdwmn3.F gdxyz.F \ @@\
+	gdxzoo.F gdzoom.F geditv.F gfind.F gkhits.F gkxyz.F glight.F \ @@\
+	gm3pol.F gmclos.F gmopen.F greswk.F gspe3d.F gunliv.F gviewf.F
+
+#ifdef CERNLIB_CG
+SRCS_F:= $(SRCS_F) gd16v.F gdcgvw.F gdcota.F gdshad.F 
+#endif
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

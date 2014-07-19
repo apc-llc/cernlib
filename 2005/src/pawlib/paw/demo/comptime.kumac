@@ -1,0 +1,76 @@
+MACRO COMPTIME
+**************************************************************************
+*             Companion macro to PAW TUTORIAL EXAMPLE 27                 *
+**************************************************************************
+ve/de *
+OPT NBOX
+OPT LOGY
+OPT TIC
+OPT UTIT
+opt ZFL1
+size 16 20
+set VSIZ 0.20
+set YGTI 1.2
+set XVAL 0.4
+set YVAL 0.2
+set XLAB 1.0
+set YLAB 1.2
+set XTIC 0.15
+set YTIC 0.15
+set ASIZ 0.26
+set GSIZ 0.35
+title_gl 'CERN Central Computer Usage'
+vector/create vy(30) R 9.2 11.8 34.9 60.7 87.1 217.8 360 1250 2500 4006 _
+  4478 5590 5910 6246 10879 12849 18429 19481 21171 25005 _
+  31219 33928 37057 45520 57000 75957 98806 118993 131800 151138
+sigma vx=array(30,60#89)
+ve/cre f1(2) r 2*0.0
+ve/cre f2(2) r 2*0.0
+SET NDVX -30.05
+NULL 60 90 5 250000
+igset MSCF 0.75
+igset mtyp 21
+graph 30 vx vy p
+sigma we=sqrt(vy)
+ve/fi vx(:10) vy(:10) we e es ! f1
+ve/fi vx(10:) vy(10:) we e es ! f2
+arrow  64. 62.    10.    10.  0.15
+igset txal 20
+igset chhe 0.18
+itx 63.    12. 'IBM 709'
+arrow  65. 63.    35.    35. -0.11
+itx 64.    40  'IBM 7090'
+arrow 75. 65.    230.   230. -0.11
+itx 70.   260. 'CDC 6600'
+arrow 85. 72.   4000.  4000. -0.11
+itx 78.5  4500. 'CDC 7600'
+arrow 82. 78.   6500.  6500. -0.11
+itx 80.   7500. 'IBM 168 '
+arrow 81. 79.  10000. 10000. -0.11
+itx 80.  12000. 'IBM 3032'
+arrow 85. 81.  18000. 18000. -0.11
+itx 83.  20000. 'IBM 3081'
+igset txal 10
+arrow 84. 82.  27000. 27000. -0.11
+itx 82.  30000. 'SIEMENS 7880'
+igset txal 20
+arrow 90. 84.  42000. 42000.  0.11
+itx 87.  50000. 'SIEMENS 7890'
+arrow 90. 85.  68000. 68000.  0.11
+itx 87.5 72000. 'IBM 3090'
+arrow 90. 88.  100000. 100000.  0.11
+itx 89. 110000. 'CRAY'
+
+arise=$sigma(int((exp(f1(2))-1)*100+0.5))//'% per Annum rise'
+xhand=68.
+yhand=$sigma(exp(f1(1)+f1(2)*[xhand]))
+EXEC DRAW X=[xhand] Y=[yhand] TEXT=[arise]
+arise=$sigma(int((exp(f2(2))-1)*100+0.5))//'% per Annum rise'
+xhand=84.
+yhand=$sigma(exp(f2(1)+f2(2)*[xhand]))
+EXEC DRAW X=[xhand] Y=[yhand] TEXT=[arise]
+atitle 'Year ' 'IBM 168 Units used '
+RETURN
+
+
+

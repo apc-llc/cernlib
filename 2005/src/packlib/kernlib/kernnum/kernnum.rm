@@ -1,0 +1,136 @@
+#!/bin/csh
+
+rm INSTALL Makefile* boot TITLE* config* 
+
+mkdir obsolete
+mv dkernnum history
+
+mv _kernnum kernnum
+# move pilot files from */README to kernnum/*.h
+mv machinetype/README kernnum/machinetype.h
+mv numap/README kernnum/numap.h
+mv numap1f/README kernnum/numap1f.h
+mv numde/README kernnum/numde.h
+mv numde1f/README kernnum/numde1f.h
+mv numln/README kernnum/numln.h
+mv numln1f/README kernnum/numln1f.h
+mv numms/README kernnum/numms.h
+mv numms1f/README kernnum/numms1f.h
+mv skernnum/README kernnum/skernnum.h
+
+mkdir obsolete/kernnum
+mv numcd/README obsolete/kernnum/numcd.h
+mv numcd1a/README obsolete/kernnum/numcd1a.h
+mv numcd1f/README obsolete/kernnum/numcd1f.h
+mv numcdopt/README obsolete/kernnum/numcdopt.h
+mv numcr/README obsolete/kernnum/numcr.h
+mv numcr1f/README obsolete/kernnum/numcr1f.h
+mv numcv/README obsolete/kernnum/numcv.h
+mv numcv1f/README obsolete/kernnum/numcv1f.h
+mv numnd/README obsolete/kernnum/numnd.h
+mv numnd1a/README obsolete/kernnum/numnd1a.h
+mv numndopt/README obsolete/kernnum/numndopt.h
+mv numuc/README obsolete/kernnum/numuc.h
+mv numuc1f/README obsolete/kernnum/numuc1f.h
+mv numib/README obsolete/kernnum/numib.h
+mv numib1a/README obsolete/kernnum/numib1a.h
+mv numib1f/README obsolete/kernnum/numib1f.h
+mv numib2a/README obsolete/kernnum/numib2a.h
+mv numib2f/README obsolete/kernnum/numib2f.h
+mv numibopt/README obsolete/kernnum/numibopt.h
+
+rm -r machinetype num* skernnum
+
+mv kerncd/README kerncd/kerncd.s
+
+rm */Makefile* */README
+
+mv g900nord obsolete
+mv *cd obsolete		# CDC assembler
+mv *ib obsolete		# IBM assembler
+mv c300fort obsolete	# never used
+mv c305fort obsolete	# never used
+mv d103fort obsolete	# never used
+mkdir obsolete/g900fort
+mv g900fort/dranf.F obsolete/g900fort/dranf.F
+mkdir obsolete/e106fort
+mv e106fort/*.s obsolete/e106fort	# IBM assembler
+mv e106fort/*.inc obsolete/e106fort	# IBM assembler
+
+cd c204fort
+update kernnum
+cd ../c205fort
+update kernnum
+cd ../c308fort
+update kernnum
+cd ../c312fort
+update kernnum
+cd ../c313fort
+update kernnum
+cd ../c336fort
+update kernnum
+cd ../c337fort
+update kernnum
+cd ../c341fort
+update kernnum
+cd ../d106fort
+update kernnum
+cd ../d209fort
+update kernnum
+cd ../d509fort
+update kernnum
+cd ../d703fort
+update kernnum
+cd ../d704fort
+update kernnum
+cd ../e100fort
+update kernnum
+cd ../e104fort
+update kernnum
+cd ../e105fort
+update kernnum
+cd ../e106fort
+update kernnum
+cd ../e208fort
+update kernnum
+cd ../f002fort
+update kernnum
+cd ../f002ib
+updates kernnum
+cd ../f003fort
+update kernnum
+cd ../f003ib
+updates kernnum
+cd ../f004fort
+update kernnum
+cd ../f004ib
+updates kernnum
+cd ../f010fort
+update kernnum
+cd ../f011fort
+update kernnum
+cd ../f011ib
+updates kernnum
+cd ../f012fort
+update kernnum
+cd ../f012ib
+updates kernnum
+cd ../f406fort
+update kernnum
+cd ../g100fort
+update kernnum
+cd ../g900fort
+update kernnum
+cd ../g900ib
+updates kernnum
+cd ../g901fort
+update kernnum
+cd ../kernnt
+update kernnum
+cd ../n001fort
+update kernnum
+cd ..
+
+fixinc kernnum
+
+mv kernnumt tests

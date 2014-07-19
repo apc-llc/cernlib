@@ -1,0 +1,78 @@
++asm, expect, t=att  .p5verx.expect
++asm, fort:2, t=att  .p5verx.away
++use, *verify.
++divert, nocheck.
+      asm test only
++asm, as:3, cc:3, t=bind.
++asm, xsplit, t=split, log    .a/${USER}.split
++asm, xsplit, t=prefix        .a/
++names, 24, 2400, 12000.
++gap, 6400, 800, 8000, 44.
++exe
++use, *test.
++use, newf, t=inh, if=-py_vs5.
+ alpha
+ beta
+ gamma
++list, cra*, t=only.
+ iota
+ kappa
+ lambda
++PAM, T=ATT, IF=NOSUCH .nopam
++PAM, T=ATT, IF=NOSUCH .nopam_again
+ rho
+ sigma
+ tau
++KEEP, CRASEQ.
+seq material from the cradle 1
+seq material from the cradle 2
++param, lines, n=110.
++option, all, mapasm.
++DECK, INIT.
+      line 1 of d=init of p=cra*
+      line 2 of d=init of p=cra*
+      line 3 of d=init of p=cra*
+      line 4 of d=init of p=cra*
+      line 5 of d=init of p=cra*
+      line 6 of d=init of p=cra*
+      line 7 of d=init of p=cra*
++PAM, T=CARDS, IF=-PY_VS5.
++PAM,          IF=PY_VS5.
++PAM, T=ATT, IF=NOSUCH .nopam
+      line 1 of p=cra* d=cra*
+      line 2 of p=cra* d=cra*
+      line 3 of p=cra* d=cra*
+      line 4 of p=cra* d=cra*
++use, zlongname012, t=inhibit.
++use, zlongname012andmore, t=inhibit.
++DECK, LILI.
+      line 1 of p=cra* d=lili
+      line 2 of p=cra* d=lili
+      line 3 of p=cra* d=lili
++PAM, T=ATT, IF=NOSUCH .nopam
+      line 1 of P=CRA* D=CRA*
+      line 2 of P=CRA* D=CRA*
++quit, if=nosuch
+      line 4 of P=CRA* D=CRA*
+      line 5 of P=CRA* D=CRA*
++SHOW, MEMORY.
++PATCH, UNUSED.
+      line 1 of P=UNUSED D=
+      line 2 of P=UNUSED D=
+      line 3 of P=UNUSED D=
+      line 4 of P=UNUSED D=
+      line 5 of P=UNUSED D=
++DECK, XYZ.
+      line 1 of P=UNUSED D=XYZ
+      line 2 of P=UNUSED D=XYZ
+      line 3 of P=UNUSED D=XYZ
+      line 4 of P=UNUSED D=XYZ
+      line 5 of P=UNUSED D=XYZ
++quit
+trail 1
+trail 2
++DECK, FCRA.
+      line 1 of P=CRA* D=FCRA
+      line 2 of P=CRA* D=FCRA
+      line 3 of P=CRA* D=FCRA
+      line 4 of P=CRA* D=FCRA

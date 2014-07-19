@@ -1,0 +1,238 @@
+#
+#  fun_single.exp  --
+#
+#  Original:  1-Apr-1996 11:16
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# sin(x)
+#
+
+expr_test	float	2	sin(0.*i7)		0.000000e+00
+expr_test	float	2	sin(pi/6*i7)		5.000000e-01
+expr_test	float	2	sin(pi/4*i7)		7.071068e-01
+expr_test	float	2	sin(pi/3*i7)		8.660254e-01
+expr_test	float	2	sin(pi/2*i7)		1.000000e+00
+expr_test	float	2	sin(-pi/2*i7)		-1.000000e+00
+
+# don't bother to test arguments larger then pi/2 because errors are to large
+# on most systems
+
+
+#
+# cos(x)
+#
+
+expr_test	float	2	cos(0.*i7)		1.000000e+00
+expr_test	float	2	cos(pi/6*i7)		8.660254e-01
+expr_test	float	2	cos(pi/4*i7)		7.071068e-01
+expr_test	float	2	cos(pi/3*i7)		5.000000e-01
+
+# don't bother to test arguments larger then pi/2 because errors are to large
+# on most systems
+#expr_test	float	2	cos(pi/2*i7)		0.000000e+00
+#expr_test	float	2	cos(-pi/2*i7)		0.000000e+00
+
+
+#
+# tan(x)
+#
+
+expr_test	float	2	tan(0.*i7)		0.000000e+00
+expr_test	float	2	tan(pi/4*i7)		1.000000e+00
+expr_test	float	2	tan(-pi/4*i7)		-1.000000e+00
+
+
+#
+# sqrt(x)
+#
+
+expr_test	float	2	sqrt(0.*i7)		0.000000e+00
+expr_test	float	2	sqrt(1.*i7)		1.000000e+00
+expr_test	float	2	sqrt(4.*i7)		2.000000e+00
+
+expr_test	float	2	sqrt(-1.*i7)	{Sqrt of negative number}
+
+#
+# exp(x)
+#
+
+expr_test	float	2	exp(0.*i7)		1.000000e+00
+expr_test	float	2	exp(1.*i7)		2.718282e+00
+expr_test	float	2	exp(-1.*i7)		3.678795e-01
+
+
+#
+# log(x)
+#
+
+expr_test	float	2	log(1.*i7)		0.000000e+00
+expr_test	float	2	log(2.718282*i7)	1.000000e+00
+expr_test	float	2	log(0.3678795*i7)	-9.999998e-01
+
+expr_test	float	2	log(0.*i7)	{Log of zero or negative number}
+expr_test	float	2	log(-8.*i7)	{Log of zero or negative number}
+
+
+#
+# abs(x)
+#
+
+expr_test	float	1	abs(fval)		3.402823e+38
+expr_test	float	2	abs(fval)		1.234500e+04
+expr_test	float	3	abs(fval)		1.175494e-38
+expr_test	float	4	abs(fval)		0.000000e+00
+expr_test	float	5	abs(fval)		1.175494e-38
+expr_test	float	6	abs(fval)		1.234500e+04
+expr_test	float	7	abs(fval)		3.402823e+38
+
+
+#
+# log10(x)
+#
+
+expr_test	float	2	log10(1.*i7)		0.000000e+00
+expr_test	float	2	log10(10.*i7)		1.000000e+00
+expr_test	float	2	log10(0.1*i7)		-1.000000e+00
+
+expr_test	float	2	log10(0.*i7)	{Log10 of zero or negative number}
+expr_test	float	2	log10(-8.*i7)	{Log10 of zero or negative number}
+
+
+#
+# asin(x)
+#
+
+expr_test	float	2	asin(0.*i7)		0.000000e+00
+expr_test	float	2	asin(1.0*i7)		1.570796e+00
+expr_test	float	2	asin(-1.0*i7)		-1.570796e+00
+
+expr_test	float	2	asin(1.00001*i7)	{Asin domain error}
+expr_test	float	2	asin(-1.00001*i7)	{Asin domain error}
+
+
+#
+# acos(x)
+#
+
+expr_test	float	2	acos(0.*i7)		1.570796e+00
+expr_test	float	2	acos(1.0*i7)		0.000000e+00
+expr_test	float	2	acos(-1.0*i7)		3.141593e+00
+
+expr_test	float	2	acos(1.00001*i7)	{Acos domain error}
+expr_test	float	2	acos(-1.00001*i7)	{Acos domain error}
+
+#
+# atan(x)
+#
+
+expr_test	float	2	atan(0.*i7)		0.000000e+00
+expr_test	float	2	atan(1.0*i7)		7.853982e-01
+expr_test	float	2	atan(-1.0*i7)		-7.853982e-01
+
+
+#
+# sinh(x)
+#
+
+expr_test	float	2	sinh(0.*i7)		0.000000e+00
+expr_test	float	2	sinh(1.0*i7)		1.175201e+00
+expr_test	float	2	sinh(-1.0*i7)		-1.175201e+00
+
+
+#
+# cosh(x)
+#
+
+expr_test	float	2	cosh(0.*i7)		1.000000e+00
+expr_test	float	2	cosh(1.0*i7)		1.543081e+00
+expr_test	float	2	cosh(-1.0*i7)		1.543081e+00
+
+
+#
+# tanh(x)
+#
+
+expr_test	float	2	tanh(0.*i7)		0.000000e+00
+expr_test	float	2	tanh(1.0*i7)		7.615942e-01
+expr_test	float	2	tanh(-1.0*i7)		-7.615942e-01
+
+
+#
+# mod(x,y)
+#
+
+expr_test	float	2	mod(0.*i7,1.)		0.000000e+00
+expr_test	float	2	mod(7.*i7,3.)		1.000000e+00
+expr_test	float	2	mod(-7.*i7,3.)		-1.000000e+00
+
+expr_test	float	2	mod(7.*i7,0.)	{Mod with divisor of zero}
+
+
+#
+# atan2(x,y)
+#
+
+expr_test	float	2	atan2(0.*i7,1.)		0.000000e+00
+expr_test	float	2	atan2(1.*i7,0.)		1.570796e+00
+expr_test	float	2	atan2(0.*i7,-1.)	3.141593e+00
+expr_test	float	2	atan2(-1.*i7,0.)	-1.570796e+00
+
+
+#
+# sign(x,y)
+#
+
+expr_test	float	2	sign(0.*i7,1.)		0.000000e+00
+expr_test	float	2	sign(0.*i7,-1.)		0.000000e+00
+expr_test	float	2	sign(5.*i7,1.)		5.000000e+00
+expr_test	float	2	sign(5.*i7,-1.)		-5.000000e+00
+expr_test	float	2	sign(-5.*i7,1.)		5.000000e+00
+expr_test	float	2	sign(-5.*i7,-1.)	-5.000000e+00
+
+
+#
+# fint(x)
+#
+
+expr_test	float	1	fint(fval)		-3.402823e+38
+expr_test	float	2	fint(fval)		-1.234500e+04
+expr_test	float	3	fint(fval)		0.000000e+00
+expr_test	float	4	fint(fval)		0.000000e+00
+expr_test	float	5	fint(fval)		0.000000e+00
+expr_test	float	6	fint(fval)		1.234500e+04
+expr_test	float	7	fint(fval)		3.402823e+38
+
+
+#
+# frac(x)
+#
+
+expr_test	float	1	frac(fval)		0.000000e+00
+expr_test	float	2	frac(fval)		0.000000e+00
+expr_test	float	3	frac(fval)		-1.175494e-38
+expr_test	float	4	frac(fval)		0.000000e+00
+expr_test	float	5	frac(fval)		1.175494e-38
+expr_test	float	6	frac(fval)		0.000000e+00
+expr_test	float	7	frac(fval)		0.000000e+00
+
+
+#
+# Cleanup after tests
+#
+paw_cmd { close 4 }

@@ -1,0 +1,16 @@
+SRCS_F= \ @@\
+	 dfrdpq.F dfrsqr.F fraacol.F frangan.F frangur.F frariad.F fratleo.F \ @@\
+	 frbeleo.F frbetav.F frboot1.F frchexg.F frchkep.F frcolpt.F \ @@\
+	 frdata.F frdoict.F fredipy.F freditd.F frevent.F frfilhd.F frfilhw.F \ @@\
+	 frgauss.F frhardp.F frhelge.F frhildn.F frhplis.F fringeb.F \ @@\
+	 frinita.F frinset.F frinskk.F frint.F fript.F frkvm.F frloopu.F \ @@\
+	 frmgout.F frmxgpt.F frnucdf.F frnucod.F frnucor.F frord01.F \ @@\
+	 frorder.F frovlap.F frpacol.F frplimt.F frpolar.F frppart.F \ @@\
+	 frppcol.F frpsoft.F frpyini.F frpyxto.F frqprob.F frrex.F frringo.F \ @@\
+	 frror.F frrotar.F frrotay.F frrotaz.F frsample.F frsaven.F frsearc.F \ @@\
+	 frsetdm.F frsetpy.F frsqr.F frsum.F frtestg.F frtocms.F frtorst.F \ @@\
+	 frupcas.F frvalue.F frvecrc.F frvectc.F frvov.F ifrkfc.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

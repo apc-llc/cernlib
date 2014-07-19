@@ -1,0 +1,124 @@
+*
+* $Id: eudtab.F,v 1.1.1.1 1996/03/08 16:58:50 mclareni Exp $
+*
+* $Log: eudtab.F,v $
+* Revision 1.1.1.1  1996/03/08 16:58:50  mclareni
+* Eurodec
+*
+*
+#include "eurodec/pilot.h"
+      SUBROUTINE EUDTAB
+C.----------------------------------------------------------------------
+C.
+C.    ROUTINE READS PARTICLE DATA FROM EXTERNAL FILE (LUN0),
+C.    INCLUDING ALL BRANCHING MODES AND STORES THE INFORMATION IN
+C.    COMMON BLOCKS FOR OPTIMIZED ACCESS.
+C.    LAST UPDATE: 01/03/89
+C.
+C.----------------------------------------------------------------------
+#include "eurodec/ptable.inc"
+#include "eurodec/namind.inc"
+#include "eurodec/dtable.inc"
+#include "eurodec/convrt.inc"
+#include "eurodec/inpout.inc"
+#include "eurodec/filnam.inc"
+      DIMENSION DPNA(6)
+      CHARACTER*8 PNAME,DPNA,PMOTH
+      CHARACTER*80 STRING
+      LOGICAL OPENED
+C--
+C--   OPEN EXTERNAL DATA FILE
+      IOS=0
+      INQUIRE(UNIT=LUN0, OPENED=OPENED)
+      IF(.NOT.OPENED) THEN
+#if (defined(CERNLIB_IBM)||defined(CERNLIB_VAX)||defined(CERNLIB_UNIX)||defined(CERNLIB_CDC))&&(!defined(CERNLIB_APOLLO))&&(!defined(CERNLIB_MACMPW))
+        OPEN (UNIT=LUN0,STATUS='OLD',IOSTAT=IOS)
+#endif
+#if defined(CERNLIB_APOLLO)||defined(CERNLIB_MACMPW)
+        OPEN (UNIT=LUN0,FILE=EUDATD,STATUS='OLD',IOSTAT=IOS)
+#endif
+        IF (IOS.NE.0) CALL ERRORD(58,'TABLES',0.)
+      END IF
+C--
+C--   LOOP OVER RECORDS, CHECK ARRAY BOUNDERIES
+      I=1
+      NPA=0
+   10 READ(LUN0,9000,ERR=20,END=30) STRING
+      IF (STRING(1:1).EQ.'!') GOTO 10
+      READ(STRING,9010,IOSTAT=IOS) PNA(I),IPC(I),IPDG(I),PM(I),PLT(I)
+      IF (IOS.NE.0) CALL ERRORD(76,' ',FLOAT(I))
+      IF (PNA(I).EQ.'ENDLIST ') GOTO 40
+      ICONV(IABS(IPC(I)))=I
+      IDP(I)=0
+C--
+C--   FILL POINTER ARRAY FOR BINARY SEARCH ON PARTICLE NAMES
+      INDX=IDLOC(PNA(I),ISTAT)
+      IF (ISTAT.EQ.1) CALL ERRORD(59,PNA(I),FLOAT(I))
+      DO 15 J=I,INDX+2,-1
+   15 IPPIDX(J)=IPPIDX(J-1)
+      IPPIDX(INDX+1)=I
+      NPA=I
+      I=I+1
+      IF (I.GT.NPMAX) CALL ERRORD(53,' ',FLOAT(NPMAX))
+      GOTO 10
+C--
+C--   DATA STREAM ON INPUT FILE ABNORMALLY TERMINATED
+   20 CALL ERRORD(51,' ',FLOAT(I))
+   30 CALL ERRORD(52,' ',FLOAT(I))
+C--
+C--   READ DECAY INFORMATION UNTIL END OF TABLE
+   40 I=1
+      IFIRST=1
+   50 READ(LUN0,9000,ERR=20,END=30) STRING
+      IF (STRING(1:1).EQ.'!') GOTO 50
+      READ(STRING,9020,IOSTAT=IOS) PNAME,(DPNA(J),J=1,6),DBR(I),ME(I)
+      IF (IOS.NE.0) CALL ERRORD(76,' ',FLOAT(I))
+      ND=0
+C--
+C--   WHEN PARENT PARTICLE NOT STABLE THEN
+C--   FIND REFERENCE POINTER TO THE DECAY PARTICLES
+      IF (PNAME.NE.'        ') THEN
+        IF (I.GT.1) THEN
+          ILAST=I-1
+C--
+C--   ORDER DECAY MODES IN DECREASING BRANCHING FRACTION
+C--   AND CALCULATE CUM. DISTRIBUTION...
+          CALL ORDBR(IFIRST,ILAST)
+          IF ((DBR(ILAST).LT.0.99999).OR.(DBR(ILAST).GE.1.00001))
+     &    CALL ERRORD(57,PMOTH,DBR(ILAST))
+          DBR(ILAST)=1.00000
+          IFIRST=I
+        ENDIF
+        IF (PNAME.EQ.'ENDLIST ') THEN
+C--
+C--   END OF LOOP OVER PARTICLE DECAY TABLE
+          CLOSE (UNIT=LUN0)
+          RETURN
+        ENDIF
+        PMOTH=PNAME
+        IPOINT=NAMPOI(PNAME)
+        IDP(IPOINT)=I
+      ENDIF
+C--
+C--   DAUGHTER PARTICLE MISSING...
+      IF (DPNA(1).EQ.'        ') CALL ERRORD(54,PMOTH,FLOAT(I-ILAST))
+C--
+C--   CONVERT INFORMATION OF DAUGHTERS
+      DO 60 J=1,6
+        IF (DPNA(J).EQ.'        ') GOTO 70
+        ND=ND+1
+        IPOINT=NAMPOI(DPNA(J))
+        IF (DPNA(J)(8:8).EQ.PNA(IPOINT)(8:8)) THEN
+          IEPS=1
+        ELSE
+          IEPS=-1
+        ENDIF
+   60 IDC(ND,I)=IEPS*IPC(IPOINT)
+   70 NDP(I)=ND
+      I=I+1
+      IF (I.GT.NDMAX) CALL ERRORD(55,' ',FLOAT(NDMAX))
+      GOTO 50
+ 9000 FORMAT(A80)
+ 9010 FORMAT(A8,2X,I6,2X,I6,2X,F10.5,2X,E10.4)
+ 9020 FORMAT(7(A8,2X),F6.4,2X,I2)
+      END

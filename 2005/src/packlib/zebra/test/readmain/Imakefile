@@ -1,0 +1,3 @@
+SRCS_F=	 rdmain.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

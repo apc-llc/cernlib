@@ -1,0 +1,9 @@
+*
+* $Id: v101.dat,v 1.1.1.1 1996/04/01 15:01:43 mclareni Exp $
+*
+* $Log: v101.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:43  mclareni
+* Mathlib gen
+*
+*
+* 1.01    M.Marquina   91/06/29 G110 LANDAU   Protect against sol=0.

@@ -1,0 +1,3 @@
+SRCS_F=	 cexam10.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

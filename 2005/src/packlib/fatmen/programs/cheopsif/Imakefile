@@ -1,0 +1,3 @@
+SRCS_F=	 fmendk.F fminik.F fmstgi.F fmstgo.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

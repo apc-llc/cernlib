@@ -1,0 +1,77 @@
+*
+* $Id: dreyin.F,v 1.1.1.1 1996/01/11 14:14:35 mclareni Exp $
+*
+* $Log: dreyin.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:35  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE DREYIN(KOPTWZ,IDECBO,LEPRAD)
+C     ***************************************
+C-- ARRANGES INITIAL SET-UP FOR DRELL-YAN PAIR PRODUCTION
+C-- IDECBO = IF 0 PHOTON DECAY NOT HANDLED, IF 1-3 PHOTON DECAY IS
+C--          HANDLED (1 FOR E-E+, 2 FOR MU-MU+, 3 FOR TAU-TAU+),
+C--          IF NEGATIVE DECAY CHANNEL IS GENERATED AT RANDOM.
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/alqgen.inc"
+#include "cojets/data1.inc"
+#include "cojets/event.inc"
+#include "cojets/evtype.inc"
+#include "cojets/itapes.inc"
+#include "cojets/radlep.inc"
+#include "cojets/weakbo.inc"
+      DATA DH/4./
+      DATA ICALL/0/
+      IF(ICALL.GT.0) RETURN
+      ICALL=1
+C
+      IF(IDECBO.GT.3) GO TO 500
+      IF(BOMSMX.GT.ECM*.5) GO TO 600
+      IF(BOMSMN.LE.QZEV) GO TO 700
+      IF(BOMSMN.GE.BOMSMX) GO TO 800
+C
+      WEAKBO=DH
+      IDECWK=IDECBO
+      IRADLP=LEPRAD
+      IF(LEPRAD.EQ.2) THEN
+        IRADLP=1
+        WRITE(ITLIS,1)
+1       FORMAT(/1X,'***LEPRAD (KYWQED) HAS BEEN CHANGED TO 1'
+     *  /1X,'***FOR THE DRELL-YAN L-L+ CONTINUUM QED RADIATION IN THE'
+     *  ,' O(ALPHA) APPROXIMATION IS NOT AVAILABLE')
+      ENDIF
+      RETURN
+C
+C-- INCORRECT INPUT
+500   WRITE(ITLIS,501) IDECBO
+501   FORMAT(////1X,I10,20H IS INCORRECT IDECBO,
+     1//1X,'(ACCEPTED ARGUMENTS ARE 0,1,2 AND 3 FOR NO DECAY,'
+     2,'ELECTRON,MUON AND TAU DECAY, RESPECTIVELY),'
+     *//1X,'OR A NEGATIVE INTEGER TO HAVE THE DECAY CHANNEL'
+     *,' GENERATED AT RANDOM.'
+     3//1X,20HEXECUTION TERMINATED    )
+      STOP
+600   WRITE(ITLIS,601) BOMSMX
+601   FORMAT(////1X,E12.5,
+     1' IS INCORRECT UPPER LIMIT FOR DY GAMMA MASS',
+     2//1X,24HTOO LARGE (MAX IS ECM/2)   ,
+     3//1X,20HEXECUTION TERMINATED     )
+      STOP
+700   WRITE(ITLIS,701) BOMSMN,QZEV
+701   FORMAT(////1X,E12.5,
+     1' IS INCORRECT LOWER LIMIT FOR DY GAMMA MASS' ,
+     2//1X,20HSMALLER THAN QZEV =  ,E12.5,
+     4//1X,20HEXECUTION TERMINATED      )
+      STOP
+800   WRITE(ITLIS,801) BOMSMN,BOMSMX
+801   FORMAT(////1X,'BOMSMN =',E12.5,'   >   ','BOMSMX =',E12.5
+     1//1X,'INCORRECT RANGE FOR DY GAMMA MASS'
+     4//1X,20HEXECUTION TERMINATED      )
+      STOP
+      END

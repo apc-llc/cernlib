@@ -1,0 +1,60 @@
+*
+* $Id: info,v 1.1.1.1 1996/03/08 15:44:18 mclareni Exp $
+*
+* $Log: info,v $
+* Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+* Cspack
+*
+*
+* This directory was created from cspack.car patch info
+This PAM consists of a set of utility routines and programs for
+client-server computing.
+ 
+The following people have contributed to this PAM:
+ 
+          Rene Brun          Tony Cass          Olivier Couet
+          Frederic Hemmer    Burkhard Holl      Catherine Magnin
+          Ignacio Reguero    Fons Rademakers    Ben Segal
+          Jamie Shiers       Jonathan Wood/RAL  Thomas Schwab/GSI
+ 
+================================================================================
+ 
+N.B. on LINUX,  cc -Dlinux_softland for the 'Softland' dialect
+        -----   of linux
+ 
+N.B. on IBMVM,  +USE,TCPSOCK,T=INHIBIT. to activate PASCAL version of TCPAW.
+        -----   The C version, which is the default, requires TCP/IP V2 or
+                higher, plus IBM SAA C compiler
+ 
+                Use EDCLIB MACLIB for assembler routines activated by TCPSOCK.
+ 
+N.B. on Apollo, TCPAW must be compiled under BSD:
+        ------
+ 
+ver bsd4.3
+cc -c tcpaw.c
+ 
+     on SGI, add -lsun
+        ---
+ 
+N.B. on VAX/VMS systems, netreq, serror, socket must be compiled:
+        -------
+ 
+cc /DEFINE=TGV for systems running Multinet   TCP/IP
+cc /DEFINE=TWG for systems running Wollongong TCP/IP
+ 
+SYSREQ is not currently supported for other VAX/VMS TCP/IP versions,
+notably DEC/UCX.
+ 
+$if f$trnlnm("MULTINET")   .nes. "" then write sys$output "Multinet TCP/IP"
+$if f$trnlnm("TWG$ETC")    .nes. "" then write sys$output "Wollongong TCP/IP"
+$if f$trnlnm("UCX$DEVICE") .nes. "" then write sys$output "UCX TCP/IP"
+ 
+ 
+N.B. on AIX systems, add the following line to /etc/environments:
+        ---
+ 
+xrf_messages=no
+ 
+This turns off the printing of FORTRAN error messages, which disturb
+the protocol used between ZFTP & ZSERV.

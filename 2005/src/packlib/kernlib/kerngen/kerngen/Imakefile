@@ -1,0 +1,9 @@
+INCLUDES=	 iall1s.inc iallbl.inc q_andor.inc q_cbyt.inc \ @@\
+	q_isabit.inc q_jbit.inc q_jbytet.inc q_sbit.inc q_sbyt.inc \ @@\
+	q_shift.inc qnatch.inc qnatchdata.inc ublowx1.inc ubnchx1.inc \ @@\
+	wordsize.inc cf_clos.h cf_open.h cf_reaw.h cf_seek.h cf_xaft.h \ @@\
+	fortchar.h fortranc.h kalph.h kdecwnt.h kdos.h khpx.h kirt.h kirtd.h \ @@\
+	klnx.h kmpw.h kos9.h ksgi.h ksun.h kvaos.h kvax.h kvmi.h kwnt.h \ @@\
+	pilot.h qf_f2c.h wordsizc.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),kerngen)

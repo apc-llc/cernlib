@@ -1,0 +1,5 @@
+#define IHaveCDF
+
+SRCS_C :=$(SRCS_C) SetWindowsJmp.c 
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,5 @@
+INCLUDES=	 pawc.inc sicfor.inc sichel.inc sicipa.inc siclin.inc \ @@\
+	sicph1.inc sicph2.inc sicsav.inc sicsig.inc sicst4.inc \ @@\
+	sicxan.inc sigc.inc sigcmp.inc sigkq.inc sitab.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),sigma)

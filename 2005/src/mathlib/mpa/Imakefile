@@ -1,0 +1,60 @@
+
+/*
+ *  mpa is distributed as object files only.
+ *
+ */
+
+LIBNAME=LibraryTargetName($(LIBRARY))
+
+install.include:
+
+#if defined(CERNLIB_UNIX)
+
+
+archive/stamp:
+	@[ ! -d archive ] && mkdir archive || true
+	@touch $@
+
+
+ifneq ($(strip $(MPADIR)),)
+
+libaddobjects:
+	@echo "adding archive objects from mpa/archive"
+	(cd $(MPADIR)/mpasrc/archive;$(AR) $(LIBPATH)/$(LIBNAME) *.o)
+
+archive/objects.list debug/objects.list shared/objects.list: Makefile
+	@[ ! -d archive ] && mkdir archive || true
+	RemoveFile($@)
+	(cd $(MPADIR)/mpasrc/archive;\
+		ls *.o | sed -e "s=^.=$(MPADIR)/mpasrc/archive/&="  )  > $@
+
+else
+
+libaddobjects:
+	@echo "There are no object files for mpa"
+
+archive/objects.list debug/objects.list shared/objects.list: Makefile
+	@[ ! -d archive ] && mkdir archive || true
+	touch $@
+	@echo "You do not have object files for mpa"
+
+
+endif
+
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+
+st.amp:
+	@ TouchFile($@)
+
+
+libaddobjects:
+	@ if f$search("cern\:[mpa]*.obj") .eqs. "" then \		@@\
+	write sys$output "CERNLIB_Warning: There are no object files for mpa"@@\
+	@ if f$search("cern\:[mpa]*.obj") .nes. "" then \		@@\
+		write sys$output "adding archive objects from mpa"	@@\
+	if f$search("cern\:[mpa]*.obj") .nes. "" then \		@@\
+		$(AR) $(LIBPATH)$(LIBNAME) cern\:[mpa]*.obj
+                                                 
+#endif

@@ -1,0 +1,17 @@
+*
+* $Id: v103.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v103.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.03  891017 13.30
+Correct:      P=SYVM   , D=VMBEEP        Activate +SELF cards related
+                                         to 3 sequences, so they are
+                                         used only in XA.
+              P=SYCERNV, D=JOB$VM        Clear R15 before SVC 204
+                                         Allow 1digit time limits
+Replace:      P=SYVM   , D=DATIME        Store date, time in /SLATE/
+              P=SYVM   , D=IOSPAK2       Update IOSRD, IOSWRT
+ 

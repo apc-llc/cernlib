@@ -1,0 +1,23 @@
+/* $Id: bsdLib.tmpl,v 1.1.1.1 1995/12/20 15:26:45 cernlib Exp $
+ *
+ * $Log: bsdLib.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:45  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: bsdLib.tmpl,v 1.2 95/01/23 19:07:12 kaleb Exp $
+
+/*
+ * NetBSD/FreeBSD shared library template
+ */
+
+#ifndef SharedXtReqs
+#define SharedXtReqs /**/
+#endif
+#ifndef SharedXawReqs
+#define SharedXawReqs /**/
+#endif
+#ifndef SharedXmuReqs
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLONLYLIB) $(XONLYLIB)
+#endif

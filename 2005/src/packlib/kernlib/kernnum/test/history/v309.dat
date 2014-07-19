@@ -1,0 +1,15 @@
+*
+* $Id: v309.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v309.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.09  921017  0.20
+C     
+C GF  P=NUMCHK3, D=F003CH SUBROUTINE TMBIL, mod limit for M0 from 200 to 300
+C
+C-  Updates to current version:
+C/1 > P=MACHINETYPE          New patch replacing FKERNCHK
+C

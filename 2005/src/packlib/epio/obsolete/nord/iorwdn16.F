@@ -1,0 +1,29 @@
+*
+* $Id: iorwdn16.F,v 1.1.1.1 1996/03/08 15:21:58 mclareni Exp $
+*
+* $Log: iorwdn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:58  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+      SUBROUTINE IORWND(LUNIT,IRET)
+C     *****************************
+C  CHANGE TO STANDARD FORTRAN REWIND
+C 82-04-19  J.O.PETERSEN
+C   REWIND
+C   LUNIT  = LOGICAL DEVICE NUMBER
+C   IRET   = RETURN STATUS
+      INTEGER*2 LUNIT,IRET,ZERO,IORCNV
+      DATA ZERO/0/
+       REWIND LUNIT
+C--  ERRCODE NO GOOD WITH NORD-FORTRAN REW/ENDFILE
+C--  WAIT FOR FTN77
+C-- GET FILE SYSTEM ERROR CODE
+       IRET=ERRCODE
+CCCCC IF(IRET.NE.ZERO) IRET=1
+       IRET=0
+77777 RETURN
+      END
+#endif

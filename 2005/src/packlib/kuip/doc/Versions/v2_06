@@ -1,0 +1,132 @@
+*
+* $Id: v2_06,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_06,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.06/10 03/03/95  16.31.15  by  N.Cremel
+*-- Author :    N.Cremel           03/03/95
+*
+*::>          VERSION  2.06/10   03/03/95 16.31.15
+*
+*   ICONWIDGET : change || by &&
+*
+*::>          VERSION  2.06/09   03/03/95 16.27.18
+*
+*
+*   Implement the new FIND mechanism (new behavior for command "HELP".
+*   Behavior of "HELP" is kept in new command name "CHELP" (for
+*   "Command Help").
+*   This new HELP is connected to the new directive:
+*   >Keyword
+*   list-of-keywords
+*   in the CDF.
+*   e.g.
+*   >Command PSVIEW
+*   >Parameters
+*   FNAME 'File name' C
+*   >Keyword
+*   PostScript
+*   display viewer
+*   >Guidance
+*   ...
+*   Notes:
+*   1- This implies to install also the new CDF compiler (kuipc) and
+*   the new kxterm.
+*   2- I have (at the same time) implemented in kuipc the new CDF directive:
+*   >Link
+*   list-of-links
+*   similar to >Keyword (same logic), for future development arround the
+*   HTML links.
+*
+*   Bug correction: MAX_opt (for option-menu parameters) was not
+*   tested (MKDCMP). Do other check on "MAX" definition ($MKDIMS).
+*
+*-- Author :    Gunter Folger      05/10/94
+*
+*::>          VERSION  2.06/08   24/02/95 14.42.34
+*
+*   fix trivial = to == in iconwidget in #if
+*
+*::>          VERSION  2.06/07   22/02/95 17.01.33
+*
+*
+* 03/02/95  15.58.06
+*
+*  fsearch modified to correct problem for VMS when current dir is
+*    search list
+*  Iconwidget still; the difference is not Irix4, but Motif1.1 except Hp and
+*     apollo, which have in Motif1.1 the 1.2 prototype
+*
+*::>          VERSION  2.06/06   18/01/95 15.32.31
+*
+* uxxt : add test for "XtSpecificationRelease"
+*
+*::>          VERSION  2.06/05   17/01/95 14.40.04
+*
+* adapt iconwdget for SGI Irix4.
+*
+*::>          VERSION  2.06/04   17/01/95 09.56.35
+*
+* kuxxt : add test for "XtSpecificationRelease"
+*
+*::>          VERSION  2.06/03   16/01/95 11.13.30
+*
+* Do not exit on input of mulitnational characters; they are ignored now.
+*
+* Write error message on attempt to create a vector with more than 3d;
+*  previously quietly a 3d vector was created.
+*
+* Command panels: give possibility to have all parameters input in a
+* scrolled window. Add new resource "scrolledCmdPanel. In .Xdefaults:
+*    *scrolledCmdPanel: auto    (default)
+* or *scrolledCmdPanel: always
+* or *scrolledCmdPanel: never
+* "auto" means that the scrolled window is automatically created if the
+* number of params. > 10 (otherwise fixed size area). "always" and "never"
+* means, respectively, that the scrolled window  is always (or never) created.
+*
+* km_create_sctext (used for "HELP") : calculate height of the window, to
+* avoid too big windows with small amount of text.
+*
+* new routine "CreateIconWidget" to avoid extern reference to "iconWidgetClass"
+* which was causing problems on VMS (for user-defined panels, "view" option
+* "by name and icon").
+*
+* KUXXT, ICONWIDGET : small corrections for DEC-CC.
+*
+* For panel definition: accept labels with blank inside and replace blanks
+* by '0' for valid alias definition (new routine strblk0).
+*
+* Bug correction in panel: when a new button is filled (mouse button 2)
+* or a button is erased (mouse button 3) then do it in all "views"
+* and not only in the current one (km_panel_execute).
+*
+* KMUMEN : small correction for DEC-CC.
+*
+* Panels: "view" option "by name and icon" is implemented (ICONWIDGET)
+* Change the logic in panel management.
+*
+*  Allow for file names up to 256 chars in KUOPEN, including path; was 80
+*
+*::>          VERSION  2.06/02   21/11/94 12.13.54
+*  Correct typo in pop_stack
+*
+*::>          VERSION  2.06/01   17/11/94 16.15.57
+*
+* 2 bugs correction in "panel" :
+*   - "panel 0 d" protect empty panels (KUWHAT)
+*   - "close" panel : give all panels a different title (MKDCMP)
+*
+* carry over previous fixesto kmacro, kuwham, mkdcmp, kmiout, and kxterm
+* add protection for failed execl call in kmisc/shsystem
+*
+*::>          VERSION  2.06/00   05/10/94 12.02.47
+*
+* New commands GLOBAL/CREATE, IMPORT, DELETE, LIST for handling global
+* variables.
+*
+* Support for variable indirection and arrays of variables.
+*

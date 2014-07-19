@@ -1,0 +1,22 @@
+SRCS_F= \ @@\
+	 ar4frm.F araddg.F aradg2.F aradig.F arangl.F arbocm.F arbole.F \ @@\
+	 arbopy.F arcasc.F archem.F archfl.F archki.F arclus.F arcodi.F \ @@\
+	 arcoli.F arcont.F arcopa.F arcopj.F arcrdi.F ardata.F ardbrb.F \ @@\
+	 ardump.F arduph.F ardyre.F arearr.F arecoi.F aremi2.F aremi3.F \ @@\
+	 aremit.F arerrm.F arevol.F arevst.F arexec.F arexma.F arfidy.F \ @@\
+	 argdig.F argdis.F argetr.F argig2.F arging.F argpt2.F argqcd.F \ @@\
+	 argqcg.F argqcq.F argqed.F argtyp.F arincr.F arinit.F arinqq.F \ @@\
+	 aripsf.F aript2.F arjoin.F arjoqq.F arjost.F arlept.F armade.F \ @@\
+	 armas2.F armas3.F armas4.F armass.F armcdi.F armipt.F armtqq.F \ @@\
+	 arndx1.F arndx2.F arndx3.F arndx4.F arndy1.F arndy2.F arndy3.F \ @@\
+	 arndy4.F arndy5.F arniqq.F arnofl.F arobo1.F arobo2.F arobo3.F \ @@\
+	 arobo4.F arobo5.F arordj.F arorie.F arpadd.F arpado.F arpars.F \ @@\
+	 arpcms.F arphas.F arpins.F arpoki.F arposf.F arprda.F arprdy.F \ @@\
+	 arprem.F arprgc.F arptqq.F arputr.F arpyth.F arpyww.F arradg.F \ @@\
+	 arradp.F arradq.F arreca.F arremd.F arremg.F arremn.F arremp.F \ @@\
+	 arrems.F arrobo.F arscan.F arsplg.F arstor.F arstra.F arsume.F \ @@\
+	 arswap.F artest.F arthrw.F artpt2.F artune.F arupdj.F arupom.F \ @@\
+	 aruthr.F arvet1.F arvet2.F arvet3.F arvet4.F arvet5.F arvet6.F \ @@\
+	 arvet7.F arvet8.F arveth.F arzcms.F lnstrf.F pystfu.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

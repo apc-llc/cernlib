@@ -1,0 +1,17 @@
+SRCS_F= hplabl.F hplaer.F hplarc.F hplatt.F hplax.F hplax2.F hplaxi.F \ @@\
+	hplbox.F hplc.F hplcap.F hplcha.F hplcol.F hplcom.F hplcon.F \ @@\
+	hpldat.F hpldes.F hpldo.F hplego.F hplend.F hplerr.F \ @@\
+	hplf.F hplfil.F hplfit.F hplfr3.F hplfra.F hplfun.F hplgiv.F \ @@\
+	hplglb.F hplgtl.F hplgzo.F hplh.F hplhip.F hplhup.F hpli.F hpline.F \ @@\
+	hplint.F hplist.F hplive.F hplj.F hplkey.F hpllgd.F hplnew.F \ @@\
+	hplnot.F hplnt.F hplnul.F hplnxt.F hploc.F hplone.F hplopt.F \ @@\
+	hplot.F hplpgn.F hplpro.F hplpto.F hplqop.F hplqse.F hplrdw.F \ @@\
+	hplscm.F hplsel.F hplset.F hplsiz.F hplsof.F hplsta.F hplsur.F \ @@\
+	hplswn.F hplsym.F hpltab.F hpltit.F hpltoc.F hpltx1.F hpltxt.F \ @@\
+	hplu.F hplusr.F hplwin.F hplwir.F hplwn.F hplzom.F hplzon.F
+
+#ifdef CERNLIB_SGI
+SpecialFortranLibObjectRule(hplh,hplh,-O1,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

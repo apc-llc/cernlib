@@ -1,0 +1,12 @@
+*
+* $Id: v303.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v303.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.03   870817
+C
+C- Correct STOP statement in FFCARD for better FORTRAN 77 compatibility
+C

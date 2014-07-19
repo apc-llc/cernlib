@@ -1,0 +1,119 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:54:46 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:46  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernnor.car patch kernnor
+#if !defined(CERNLIB_KERNNOR)
+ 
+       KERNLIB routines in machine language or otherwise special
+                      for NORSK DATA 500
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following Patches :
+ 
+ 
+*KNORD3   KERN Pilot for NORD 500
+ 
+QMND3     Machine Patch for NORD 500
+ 
+NORD3     NORD 500 versions of normal routines
+ 
+NORDSYS   system interface routines for ND 500
+ 
+=====================================================================
+ 
+ 
+       UP-DATE RECORD FOR THE PAM-FILE  KERNNOR, VERSION 2
+       ---------------------------------------------------
+ 
+ 
+UP-DATE  2.08 :  20-Nov-1989
+------------------------------
+ 
+Replacing file  KERNNOR 2.07  880912 19.42
+ 
+Correct :     LOCF           add entry LOCB
+ 
+Delete :      ABEND          use default on KERNFOR
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.07 :  12-Sept-1989
+------------------------------
+ 
+Replacing file  KERNNOR 2.06  880712 21.18
+ 
+Correct :     DATIME         to return seconds in /SLATE/
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.06 :  12-JUL-1988
+------------------------------
+ 
+Replacing file  KERNNOR 2.05  880419 20.21
+ 
+Correct :     D=NOARG            delete dummy in P=TCGEN
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.05 :  19-APR-1988
+------------------------------
+ 
+Replacing file  KERNNOR 2.04  870525 15.22
+ 
+New decks :   P=NORD3, D=RNDM, RNDM2
+ 
+Correct :     D=UHTOC                            bug fixed
+              D=UCOPY,UCOPIV,UCOPYN,UCOPY2,              small
+              D=VBLANK,VCOPYN,VFILL,VFIX,VFLOAT,VZERO    improvments
+ 
+Move:         D=XINB,XINBS to P=NORD3, delete P=XVECTNOR
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.04 :  24-MAY-1987
+------------------------------
+ 
+Replacing file  KERNNOR 2.03  861204 21.07
+ 
+New decks :   P=NORD3, D=JBYTOR, MBYTET, MBYTOR, MCBYT
+                       D=MSBIT,  MSBIT0, MSBIT1, MSBYT,
+                       D=BTEST,  IBCLR,  IBSET
+ 
+        All material for the NORD 50 has been removed
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.03 :   4-DEC-1986
+------------------------------
+ 
+Replacing file  KERNNOR 2.02  850320 21.20
+ 
+New decks :   P=NORD3, D=IE3FOD,IE3FOS,IE3TOD,IE3TOS
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.02 :  20-MAR-1985
+------------------------------
+ 
+Replacing file  KERNNOR 2.01  840815 23.00
+ 
+New deck :    P=NORDSYS, D=INTRAC
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.01 :  16-AUG-1984
+------------------------------
+ 
+Replacing file  KERNNOR 2.00  2-DEC-82
+ 
+ADDED ROUTINE  D=QNEXTE IN P=NORDSYS
+ 
+---------------------------------------------------------------------
+ 
+#endif

@@ -1,0 +1,9 @@
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+PROGRAMDIRS= fatback fmkuip fatnew fatsend fatsrv
+
+SUBDIRS= $(PROGRAMDIRS)
+
+InstallBinSubdirs($(PROGRAMDIRS))
+

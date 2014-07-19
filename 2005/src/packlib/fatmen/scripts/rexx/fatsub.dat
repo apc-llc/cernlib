@@ -1,0 +1,73 @@
+*
+* $Id: fatsub.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatsub.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATSUB.EXEC */
+/*---------------------------------------------------------------------*/
+/*                   F A T S U B      E X E C                          */
+/*                   ------------------------                          */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+ 
+Parse upper arg fn ft fm . remuser . remnode
+ 
+'NAMEFIND :NICK 'remuser ':JOBCARD (STACK'
+Pull jobcard
+ 
+If strip(jobcard) = '' then do
+   Say 'Error - no job card for 'remuser 'at' remnode
+   exit 9
+end
+ 
+'ID (LIFO'
+ 
+Pull me . mynode .
+ 
+code = cpush('PUN')
+if code ^= 0 then call ABEND code "Return code" code "from CPUSH PUN."
+ 
+"CP TAG DEV PUNCH "remnode remuser
+code = RC
+if code ^= 0 then call ABEND code "Return code" code "from CP TAG."
+ 
+/* Now, punch the job card and the JCL */
+ 
+'EXECIO 1 PUNCH (STRING 'jobcard
+ 
+'EXECIO 1 PUNCH (STRING // EXEC PGM=IEBGENER'
+'EXECIO 1 PUNCH (STRING //SYSIN DD DUMMY'
+'EXECIO 1 PUNCH (STRING //SYSPRINT DD SYSOUT=*'
+'EXECIO 1 PUNCH (STRING //SYSUT2 DD UNIT=FAST,SPACE=(1,1),DISP=(NEW,CATLG),'
+ 
+fat_date = date("JULIAN")
+fat_time = remove(time(""),':')
+fat_file = "FAT"||fat_date || fat_time
+ 
+fatfile = remuser//'.TODO.'// me // '_' // mynode // '.' // fat_file
+ 
+'EXECIO 1 PUNCH (STRING // DSN='//fatfile
+'EXECIO 1 PUNCH (STRING //SYSUT1 DD *'
+ 
+nprev = queued()
+"EXECIO * DISKR" fn ft fm
+"FINIS "fn ft fm
+ 
+nlines = queued() - nprev
+do nlines
+   'EXECIO 1 PUNCH'
+end
+ 
+'EXECIO 1 PUNCH (STRING //'
+ 
+"CP CLOSE PUNCH"
+code = cpop('pun')
+if code ^= 0 then call ABEND code "Return code" code "from CPOP PUN."
+Exit
+ 
+ABEND:
+Parse Arg abend_code text
+Say text

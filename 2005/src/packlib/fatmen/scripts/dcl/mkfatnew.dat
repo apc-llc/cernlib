@@ -1,0 +1,43 @@
+*
+* $Id: mkfatnew.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: mkfatnew.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, MKFATNEW.COM
+$! fatsys:==CERN ! For example
+$! fatgrp:==LHC  ! For example
+$
+$  type/nopage sys$input
+ 
+Please give the name of the FATMEN system. This name forms
+the top-level of the FATMEN catalogue, e.g. //CERN
+ 
+$eod
+$  inquire/nopunc ans "FATSYS? "
+$  if ans.eqs."" then ans = "CERN"
+$  fatsys==ans - "//"
+$  type/nopage sys$input
+ 
+Please give the name of the FATMEN group.
+ 
+$eod
+$  inquire/nopunc ans "FATGRP? "
+$  if ans.eqs."" then exit
+$  fatgrp==ans - "FM"
+$  write sys$output ""
+$  inquire/nopunc fatdir "Directory where FATMEN catalogue should reside? "
+$  olddir = f$environment("DEFAULT")
+$  set default 'fatdir'
+$  create/directory [.todo]
+$  create/directory [.tovm]
+$  create/directory [.done]
+$  set file/protection=w:rw todo.dir
+$  fatman="FM''fatgrp'"
+$  set file/acl=(id='fatman',access=read+write,options=default) todo.dir
+$  set file/protection=w:rw tovm.dir
+$  set file/protection=w:rw done.dir
+$  run cern:[pro.exe]fatnew
+$  set default 'olddir'

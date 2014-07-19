@@ -1,0 +1,46 @@
+#
+#  basic.exp  --
+#	Test simple interaction with the running paw.
+#
+#  Original: 23-Feb-1995 16:43
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+
+set timeout_save $timeout
+set timeout 60
+set ok 1 ; set name "<return> test"
+exp_send "\r"
+expect {
+	-gl "PAW > "
+		{
+			if { $ok } {
+				pass $name
+			} else {
+				fail $name
+			}
+		}
+	timeout
+		{ fail "timeout on $name" }
+}
+set timeout $timeout_save
+
+set ok 0 ; set name "message test"
+exp_send "message 'hello world'\r"
+expect {
+	-gl "hello world\r"
+		{ set ok 1 ; continue -expect }
+	-gl "PAW > "
+		{
+			if { $ok } {
+				pass $name
+			} else {
+				fail $name
+			}
+		}
+	timeout	
+		{ fail "timeout on $name" }
+}
+

@@ -1,0 +1,10 @@
+INCLUDES=	 kcesvr.inc kcgen.inc kcgen1.inc kcgen2.inc kcmac.inc \ @@\
+	kcmcmd.inc kcpar.inc kcques.inc kcsigm.inc kcunit.inc kcvrwf.inc \ @@\
+	kcvect.inc kcwork.inc kucdes.inc browh1.h kalias.h kbrow.h \ @@\
+	kbrow1.h kbrow2.h kbrow3.h kbrow4.h kcom.h kflag.h kfor.h \ @@\
+	khaix370.h khapoftn.h khash.h khibmmvs.h khibmvm.h khnewlib.h \ @@\
+	klink.h klink1.h kmacro.h kmenu.h kmenu1.h kmenu2.h kmenu3.h \ @@\
+	kmenu4.h kmenu5.h kmenu6.h kmpanel.h kproto.h ksig.h kstring.h \ @@\
+	ksys.h kuip.h kuser.h mkqio.h mkterm.h mkutfu.h pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),kuip)

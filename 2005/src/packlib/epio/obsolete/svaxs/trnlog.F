@@ -1,0 +1,34 @@
+*
+* $Id: trnlog.F,v 1.1.1.1 1996/03/08 15:21:53 mclareni Exp $
+*
+* $Log: trnlog.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:53  mclareni
+* Epio
+*
+*
+#if defined(CERNLIB_VAXS)
+#include "sys/CERNLIB_machine.h"
+#include "_epio/pilot.h"
+        SUBROUTINE TRNLOG(OLDNAM,NEWNAM)
+C
+C       A.F.R. 2-9-80           FIRST VERSION
+C
+C       TRANSLATION WITH ITERATION OF LOGICAL NAMES
+C       IT WONT STOP TILL ITS DONE
+C       NOTE: YOU STILL HAVE TO BE CAREFUL ABOUT DESCRIPTOR LENGTHS
+C
+        CHARACTER*(*) OLDNAM,NEWNAM
+        CHARACTER*63 NEWER
+           INTEGER SYS$TRNLOG
+        ISTAT = SYS$TRNLOG(OLDNAM,%DESCR(NEWNAM),NEWNAM,,,)
+ 10     CONTINUE
+       IF(ISTAT.NE.1)GO TO 100
+        CALL CLEARD(%DESCR(NEWER),63)
+        ISTAT=SYS$TRNLOG(NEWNAM,%DESCR(NEWER),NEWER,,,)
+        CALL CLEARD(%DESCR(NEWNAM),63)
+        ISTAT=SYS$TRNLOG(NEWER,%DESCR(NEWNAM),NEWNAM,,,)
+        GO TO 10
+  100   CONTINUE
+        RETURN
+        END
+#endif

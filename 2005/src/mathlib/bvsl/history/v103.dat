@@ -1,0 +1,20 @@
+*
+* $Id: v103.dat,v 1.1.1.1 1996/03/21 17:19:54 mclareni Exp $
+*
+* $Log: v103.dat,v $
+* Revision 1.1.1.1  1996/03/21 17:19:54  mclareni
+* Bvsl
+*
+*
+* Version 1.03   920307 14.30
+C- Additions/modifications
+C   > P=*BVSL                   Do not activate QMIBMVF on IBM by default
+C   > P=BVSLIBM ,D=DDOTB        correct deck and comment header name
+C   > P=BVSLIBM ,D=             Add sequence CACHESZ
+C
+C- Introduce the following patches/flags:
+C   > IBMMVS,IBMVM,VAXVMS,VAXULX,HPUX,MIPS,NECSX
+C
+C- Modify all routines using DOUBLE PRECISION arithmetics to accept
+C  SINGLE (as Cray)
+C

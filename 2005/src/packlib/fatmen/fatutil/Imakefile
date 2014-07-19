@@ -1,0 +1,42 @@
+DoIncludePackage(fatmen)
+#include "pilot.h"
+
+SRCS_F=	 facdir.F fadare.F faeras.F faexst.F faextr.F fafc.F \ @@\
+	fahunt.F fainqr.F fald.F falink.F faln.F fals.F \ @@\
+	famodu.F fantrc.F faopen.F faseac.F fasear.F faselp.F fastat.F \ @@\
+	fatare.F fatrek.F fazoom.F fmback.F fmchop.F fmcopq.F \ @@\
+	fmdate.F fmdays.F fmdump.F fmfzo.F fmhunt.F fmiset.F fmjuli.F \ @@\
+	fmkeys.F fmlcop.F fmldir.F fmlink.F fmlist.F fmloop.F fmnode.F \ @@\
+	fmpaff.F fmpstg.F fmpurg.F fmrank.F fmrkey.F fmscan.F fmsend.F \ @@\
+	fmsetc.F fmsetk.F fmsetl.F fmsetm.F fmsetu.F fmsetv.F \ @@\
+	fmsort.F fmstgq.F \ @@\
+	fmtree.F fmuver.F fmveri.F sortch.F
+
+#if defined(CERNLIB_UNIX)
+SRCS_F := $(SRCS_F) fafndf.F
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) fmcfio.F 
+#endif
+
+#if defined(CERNLIB_SHIFT)
+SRCS_F := $(SRCS_F) fmxyio.F 
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+#endif
+
+#if defined(CERNLIB_cspack)
+SRCS_F := $(SRCS_F) fmxzio.F 
+#endif
+
+
+#if defined(CERNLIB_IBMVM)
+SRCS_F := $(SRCS_F) fmvmio.F
+#endif
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(fantrc,fantrc,'-WF,-P',NullParameter)
+FORTRANSAVEOPTION = FortranSaveFlags
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

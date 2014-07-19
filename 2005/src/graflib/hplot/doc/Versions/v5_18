@@ -1,0 +1,153 @@
+*
+* $Id: v5_18,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_18,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.18/20 24/10/94  10.49.41  by  O.Couet
+*-- Author :    O.Couet   02/11/93
+*
+*::>          VERSION  5.18/20   24/10/94 10.49.41
+*
+*     HPLFUN is now completly dynamic: no limitation on the number
+*        of points.
+*
+*::>          VERSION  5.18/19   21/10/94 11.05.01
+*
+*     Mods in HPLONE to redraw the axis tick marks if they have been
+*        erased with an function drawn with option 'S' as a filled area.
+*
+*::>          VERSION  5.18/18   11/10/94 17.05.19
+*
+*     Bug fixed in HPLFIL: the string send to IGTCCH was too long.
+*
+*::>          VERSION  5.18/17   28/09/94 17.57.43
+*
+*     Bug fixed in HPLF: In case of LOG scale on Y, the
+*        Y bank was filled at the wrong adress.
+*     New option 'X' of IGZSET used in HPLOPT.
+*     Bug fixed in HPLTAB. The LO3DPL flag is false in case of 1D
+*        histos.
+*
+*::>          VERSION  5.18/16   26/08/94 17.04.51
+*
+*     Redesign of the ZEBRA data structure. All the banks
+*        created by are linked on LHPLOT (see comments in HPLINT).
+*
+*::>          VERSION  5.18/15   22/07/94 15.26.01
+*
+*     Bug fixed in HPLTAB. The decoding of option 'A' was misplaced
+*        (conflict with option 'SCAT').
+*     Small fix is HPLAER. After the call to HPLATT, the PLCI can
+*       be equal to the color of the histogram border. It is now
+*       reset to the histogram color (as before).
+*     Mods in HPLF. NBINS is used instead of ICMAX to check if
+*       the function to draw has too many points. This allows to plot
+*       at least subranges.
+*
+*::>          VERSION  5.18/14   30/06/94 14.54.54
+*
+*     HPLTIT allows titles like:
+*        'histo_title ; X_axis_title ; Y_axis_title ; Z_axis_title'
+*     HPLAX allows to draw also the Z_axis_title. If CHYTIT contains
+*        a ';' the Z title is drawn
+*     The string CHTEMP is now in a sequence in order to save space.
+*     Mods in HPLAXI and HPLONE to redraw the axis tick marks if
+*        they have been erased with an histogram drawn with option 'S'
+*        as a filled area.
+*
+*::>          VERSION  5.18/13   17/06/94 17.41.35
+*
+*     HPLAXI: IGXY is initialised to 0.
+*     New options 'FB' and 'BB' in HPLTAB. The option 'A' to suppress
+*        the axis drawing works also on 2D histograms.
+*
+*::>          VERSION  5.18/12   10/06/94 11.44.50
+*
+*     Fix in HPLNEW: the PTO was not done the first time.
+*     New version of HPLH to plot histogram with several millions
+*        of bins.
+*     New routine HPLATT to set the HIGZ attributes from the HPLOT
+*        attributes (histogram and Function). It avoids a lot of
+*        duplicated code.
+*
+*::>          VERSION  5.18/11   01/03/94 09.10.55
+*
+*     In HPLOC, HPLCHA is called only if ISTAT > 0
+*
+*::>          VERSION  5.18/10   21/02/94 11.16.33
+*
+*     Sometimes LCID was equal to 0 in HPLFIT and the number
+*        of lines in the fit drawing was not correct.
+*     Mods in HPLH and HPLRDW to use the new option 'Z' of IGHIST.
+*
+*::>          VERSION  5.18/09   14/02/94 17.38.52
+*
+*     New option 0 in HPLAER to avoid the automatic clipping
+*        of markers.
+*     In HPLAER the symbol clipping was applied only on histogram
+*        drawing. Now it is also applied on vectors drawing.
+*
+*::>          VERSION  5.18/08   11/02/94 16.00.43
+*
+*     New FLAG WINNT in *HPLOT and *HPLEXAM.
+*     Bug fixed in HPLAER: LBINS was not recomputed in
+*        case of histograms with a non equidistant bining.
+*
+*::>          VERSION  5.18/07   17/01/94 17.59.01
+*
+*     Bug fixed in HPLTAB. the scale factor SCMAX should
+*        be put in PAR2(5) only for 2-Dim histograms.
+*     Bug fixed for the page numbering. In HPL1 the page
+*        number variable was IOP which was often a local
+*        variable. Now the page number is IOPAGE.
+*     HPLPGN has been rewritten in a better way.
+*
+*::>          VERSION  5.18/06   07/01/94 18.39.43
+*
+*     Mods in HPLFR3 in order to use the new HIGZ 3D routines:
+*        ISWN3 and ISVP3.
+*
+*::>          VERSION  5.18/05   15/12/93 19.28.57
+*
+*     Improvment in HPLTIT: If the histogram title contains a ';'
+*        two titles are drawn: one horizontally and one vertically.
+*     HPLONE has now a return error code. If it is 0 everything is
+*        ok. If NOT, some problem occurs (i.e. log scale on Y=<0).
+*        This error code is used in HPLOT.
+*
+*::>          VERSION  5.18/04   06/12/93 17.15.26
+*
+*     Bug fixed in HPLH. Side effect of: 5.14/07   920930 11.00
+*     Fix in HPLH. With option U, the temporary bank HIST was
+*        not updated. Side effect of 5.08/01   900503 14.48 (option +-)
+*
+*::>          VERSION  5.18/03   01/12/93 17.10.36
+*
+*     New option HSTA (HNST) in HPLOPT.
+*     If a parameter name given to the HBOOK routine HFINAM begin
+*        with a '-', HPLFIT doesn't draw this parameter.
+*
+*::>          VERSION  5.18/02   16/11/93 17.40.56
+*
+*     Protection added in HPLCHA in case the histo IDH doesn't
+*        exist.
+*     Improvments in HPLH and HPLHUP: With the options +, -, +-
+*        and U of HPLOT, the border is drawn only around the new
+*        contribution not around each bin as before.
+*
+*::>          VERSION  5.18/01   08/11/93 09.47.24
+*
+*     The unsed parameter NCHR in HPLTX1 is suppressed.
+*
+*::>          VERSION  5.18/00   02/11/93 17.41.57
+*
+*     Unused sequence HPL2 removed in HPLTOC.
+*     Bug fixed in HPLWN. An error message was printed even if
+*        there was no error.
+*     Bug fixed in HPLAER: The definition of the cm coordinates
+*        (if requested) was done too late.
+*     Bug fixed in HPLSET (SET 2SIZ was not corect).
+*

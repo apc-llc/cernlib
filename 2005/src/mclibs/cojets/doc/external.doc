@@ -1,0 +1,46 @@
+*
+* $Id: external.doc,v 1.1.1.1 1996/01/11 14:15:01 mclareni Exp $
+*
+* $Log: external.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:01  mclareni
+* Cojets
+*
+*
+[6] EXTERNAL ROUTINES USED BY COJETS
+
+      COJETS needs a few external routines. They are all part of the CERN
+Program Library. Here are given details about them.
+
+
+FUNCTION RANF()            Uniform random number generator between 0 and 1.
+                           It is called only in FUNCTION CJRN(A).
+
+SUBROUTINE TIMEL(T)        T is the time left for execution, in seconds. It
+                           is called only in SUBROUTINE TIMELF(TLEFT). It is
+                           essentially used for protection against exceeding
+                           the preset time limit. It can be mocked by
+                           returning T with a very high value.
+
+SUBROUTINE DATIMH(ND,NT)   ND and NT return the year-month-day and the
+                           hour-minute-second, respectively, of job
+                           submission, in hollerith with length 6. They are
+                           scalars for 64 (or higher) bit machines, and
+                           arrays of length 2 for 32 bit machines. It is
+                           called only in SUBROUTINE IDGEN, to generate the
+                           run identification number. It can be mocked by
+                           returning ND and NT with arbitrary hollerith
+                           values.
+
+FUNCTION GAMMA(X)          Gamma function. If not available, one can +USE
+                           PATCH GAMMA which contains a FORTRAN coded
+                           version of it.
+
+
+      Because of the variety of random number generators in use, it has
+been avoided in COJETS to have explicit reference to seed setting and seed
+getting operations for the random number generator. The relevant routine
+calls can be easily made by the user in the main program, before and after
+calling the event generator.
+
+
+

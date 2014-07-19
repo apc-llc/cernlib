@@ -1,0 +1,7 @@
+SRCS_F= fritioft.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(fritioft,fritioft.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(fritioft,NullParameter,NullParameter)

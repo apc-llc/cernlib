@@ -1,0 +1,13 @@
+*
+* $Id: v109.dat,v 1.1.1.1 1996/04/01 15:01:43 mclareni Exp $
+*
+* $Log: v109.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:43  mclareni
+* Mathlib gen
+*
+*
+C
+C  95/05/04 - Modified test for V136  RNPSSN (S. Kolbig)
+C  95/02/18 - relax tolerance for VAXVMS E408M (L. Garren)
+C  95/02/18 - relax tolerance for V135M (L. Garren)
+C

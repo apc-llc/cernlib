@@ -1,0 +1,35 @@
+
+#ifdef CERNLIB_UNIX
+#if defined(CERNLIB_DECS) || (defined(CERNLIB_LINUX) && !defined(CERNLIB_PPC)) || defined(CERNLIB_WINNT)
+F_ARCHITECTURE=	blo16stv.F blo32wsv.F blo8stv.F btswpstv.F bun16stv.F \ @@\
+		bun32wsv.F bun8stv.F cfribmsv.F ctoibstv.F iwd16stv.F \ @@\
+		sfrascvx.F stoascvx.F w16mvstv.F
+#else
+F_ARCHITECTURE=	blo16stf.F blo32wsf.F blo8stf.F btswpstf.F bun16stf.F \ @@\
+		bun32wsf.F bun8stf.F cfribmsf.F ctoibstf.F iwd16stf.F \ @@\
+		sfrascap.F stoascap.F w16mvstf.F
+#endif
+#endif
+#ifdef CERNLIB_VAX
+F_ARCHITECTURE=	blo16wva.F blo32wva.F blo8wib.F bun16wib.F  bun32wva.F \ @@\
+		bun8wib.F cfribmva.F ctoibmva.F iwd16vax.F sfrascvx.F \ @@\
+		stoascvx.F
+
+SRCS_S = btswapvx.s epiovax2.s mtformat.s vaxibm.s w16movvx.s
+
+#ifdef CERNLIB_QMALPH
+SRCS_S := $(SRCS_S) epioaxp.s
+#else
+SRCS_S := $(SRCS_S) epiovax.s
+#endif
+
+
+#endif
+
+SRCS_F= cfrascun.F ctoascun.F $(F_ARCHITECTURE)
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+
+
+

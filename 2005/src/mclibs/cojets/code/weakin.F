@@ -1,0 +1,102 @@
+*
+* $Id: weakin.F,v 1.1.1.1 1996/01/11 14:14:44 mclareni Exp $
+*
+* $Log: weakin.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:44  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE WEAKIN(WZ,KOPTWZ,IDECBO,LWIDTH,LEPRAD)
+C     *************************************************
+C-- ARRANGES INITIAL SET UP FOR W OR Z BOSON PRODUCTION
+C-- WZ = 3. OR 2.
+C-- KOPTWZ = OPTION FOR PRODUCING W/Z:
+C--          0 - WITHOUT BREIT-WIGNER
+C--          1 - WITH BREIT-WIGNER
+C-- IDECBO = DECAY CHANNEL FOR WEAK BOSON (1-12 FOR Z, 1-6 FOR W)
+C-- -- IF 0 WEAK BOSON IS LEFT STABLE -- IF NEGATIVE INTEGER
+C-- DECAY CHANNEL IS CHOSEN AT RANDOM ACCORDING TO B.R. VALUES
+C-- IN PARTICLE TABLE)
+C-- LWIDTH = IF 0 EVENTS ARE GENERATED  WITH ZERO W/Z WIDTH, OTHERWISE
+C-- THEY ARE GENERATED WITH FINITE W/Z WIDTH AS GIVEN BY THE STANDARD
+C-- MODEL
+C-- LEPRAD = 0 - NO RADIATIVE CORRECTIONS IN LEPTONIC DECAYS OF W/Z
+C--          1 - RADIATIVE CORRECTIONS IN LEPTONIC DECAYS OF W/Z
+C--              TREATED IN LPA (MULTIPHOTON EMISSION)
+C--          2 - RADIATIVE CORRECTIONS IN LEPTONIC DECAYS OF W/Z
+C--              IN O(ALPHA) APPROXIMATION (SINGLE PHOTON EMISSION)
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/data1.inc"
+#include "cojets/data3.inc"
+#include "cojets/decpar.inc"
+#include "cojets/evtype.inc"
+#include "cojets/itapes.inc"
+#include "cojets/nflav.inc"
+#include "cojets/radlep.inc"
+#include "cojets/stable.inc"
+#include "cojets/top.inc"
+#include "cojets/weakbo.inc"
+C
+      DATA ZH,WH/2.,3./
+      DATA ICALL/0/
+      IF(ICALL.GT.0) RETURN
+      ICALL=1
+C
+      IWIDTH=LWIDTH
+      IRADLP=LEPRAD
+      WEAKBO=WZ
+      IF(WZ.EQ.ZH) BOMASS=PMAS(2)
+      IF(WZ.EQ.WH) BOMASS=PMAS(3)
+8     CONTINUE
+      IF(IDECBO.NE.0) GO TO 10
+      IF(WZ.EQ.ZH) IDB(2)=0
+      IF(WZ.EQ.WH) IDB(3)=0
+      IF(WZ.EQ.WH) IDB(4)=0
+10    CONTINUE
+      IF(IDECBO.LE.0) IDECWK=IDECBO
+      IF(IDECBO.LE.0) GO TO 15
+      IF(WZ.EQ.ZH) IDECWK=IDECBO
+      IF(WZ.EQ.WH) IDECWK=IDECBO+12
+      IF(WZ.EQ.ZH.AND.(IDECWK.LT. 1.OR.IDECWK.GT.12)) GO TO 600
+      IF(WZ.EQ.WH.AND.(IDECWK.LT.13.OR.IDECWK.GT.18)) GO TO 600
+      IF(KOPTWZ.NE.0) GO TO 15
+      IF(WZ.EQ.ZH.AND.IDECWK.EQ.12) THEN
+        DIFF=PMAS(2)-2.*QMAS(6)-2.
+        IF(DIFF.LE.0) THEN
+          KOPTWZ=1
+          WRITE(ITLIS,96)
+96        FORMAT(/' ***KOPTWZ HAS BEEN CHANGED TO 1 BECAUSE'
+     *    ,' MASS(Z) < 2*MASS(TOP) + 2 ')
+        ENDIF
+      ENDIF
+      IF(WZ.EQ.WH.AND.IDECWK.EQ.18) THEN
+        DIFF=PMAS(3)-QMAS(6)-QMAS(5)-2.
+        IF(DIFF.LE.0) THEN
+          KOPTWZ=1
+          WRITE(ITLIS,97)
+97        FORMAT(/' ***KOPTWZ HAS BEEN CHANGED TO 1 BECAUSE'
+     *    ,' MASS(W) < MASS(TOP) + MASS(BOTTOM) + 2 ')
+        ENDIF
+      ENDIF
+15    CONTINUE
+      DO 20 L=2,4
+20    IF(RDECAY(L).EQ.0.) IDB(L)=0
+C
+      RETURN
+C
+C-- INCORRECT INPUT
+600   IWZ=WZ
+      WRITE(ITLIS,601) IDECBO,CHA2(IWZ)
+601   FORMAT(////' REQUESTED DECAY CHANNEL NO.',I4,' FOR ',A1,
+     1  ' IS INCONSISTENT'
+     *//' INCORRECT IDECBO',
+     *//' (1-12 FOR Z, 1-6 FOR W)'
+     2//' EXECUTION TERMINATED')
+      STOP
+      END

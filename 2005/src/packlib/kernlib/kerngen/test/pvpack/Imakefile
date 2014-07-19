@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 tvec.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

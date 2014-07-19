@@ -1,0 +1,235 @@
+*
+* $Id: v2_03,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_03,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.03/15 01/10/93  16.26.50  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   05/07/93
+*
+*::>          VERSION  2.03/15   01/10/93 16.26.50
+*
+* Motif: provide dummy mbstowcs() for VAX/VMS.
+*
+* KXTERM: fix communication problem if output stream contains # character.
+*
+*::>          VERSION  2.03/14   29/09/93 15.50.24
+*
+* KXTERM: add display of current local directory.
+* Line buffering between application process and kxterm
+* because mailboxes use record I/O.
+*
+* MANUAL command: recursive descent to all submenus.
+*
+* EXEC command in Motif mode: allow to pass more than one macro argument.
+*
+* KIMATH: fix problem for "vec(1)<vec(2)".
+* Round to 6 significat digits before testing equality/non-eq. of expressions.
+*
+* Unix and VMS: use unique names for all tempfiles.
+*
+* KUVAR: don't do alias translations etc.
+*
+*::>          VERSION  2.03/13   16/09/93 17.21.03
+*
+* KUIPC: fix for long names as >Action routines
+*
+* KUEDIT: test return code from system() == -1 rather than < 0
+*
+*::>          VERSION  2.03/12   13/09/93 09.34.59
+*
+* KIMINT: don't interpret [] inside application text as variable names.
+*
+* KIMATH: Change in treatment of vector names to allow:
+*   a = '?'
+*   IF [a]='?' THEN
+*
+*::>          VERSION  2.03/11   06/09/93 08.50.52
+*
+* $var now looks for environment variable on VMS as well.  Uppercase names are
+* searched first in the logical names tables and then in the symbol table.
+* Lowercase names are searched for only in the symbol table.  Replacement is
+* suppressed if $var is followed by a colon to avoid DISK$USER: etc.
+*
+* New command SET/LCDIR to change current working directory (only for Unix
+* and VMS).
+*
+* Asynchronous editing for VMS implemented (not yet fully tested).
+* HOST_EDITOR must be TPU/DISPLAY=MOTIF.
+*
+* $VEXIST did not work if the vector has existing.  $QUOTE did not work
+* correctly (reported by by Tim Adye).
+*
+*::>          VERSION  2.03/10   03/09/93 11.13.54
+*
+* Second iteration of KUIP/Motif for VMS.
+*
+*::>          VERSION  2.03/09   02/09/93 11.53.22
+*
+* Bug fix for $VLEN function.
+*
+* First iteration of kxterm for VMS (C.W. Hobbs/DEC).
+*
+*::>          VERSION  2.03/08   01/09/93 09.45.31
+*
+* Allow digits as first character in an alias name.
+*
+*::>          VERSION  2.03/07   31/08/93 18.14.00
+*
+* New routine KUFDEF to define application specific system functions.
+*
+* Buffer flushing for RS/6000 to keep correct sequence of C and Fortran output
+* if stdout is redirected into a file.  This requires compiler version xlf 2.3.
+*
+* First iteration of Windows/NT port (Valeri Fine).
+*
+*
+*::>          VERSION  2.03/06   25/08/93 13.09.50
+*
+* Problems with +KEEP with PATCHY vs. CMZ installation.
+*
+* $OS and $MACHINE were not described in HELP FUNCTIONS
+*
+*::>          VERSION  2.03/05   24/08/93 17.23.28
+*
+*
+* KUIPC: part of the menu tree was forgotten in C output mode (reported by
+* Robert Franchisseur).
+*
+* getline: mysterious hangups of Falco terminals connected to through a
+* DECserver line to Ultrix (reported by Rob Kreuger).
+* Went from POSIX terminal driver back to BSD driver for Ultrix.
+* BSD driver (also used for Apollo and NeXT) now catches typeahead.
+*
+* KIMINT: bug in the handling of nested IFs:
+*     IF 1=1 THEN
+*        IF 1=1 THEN
+*          IF 1=0 THEN
+*             mess Not reached
+*          ELSE
+*             mess first
+*          ENDIF
+*        ENDIF
+*        mess Okay
+*        IF 1=1 THEN
+*          IF 1=1 THEN
+*             mess second
+*          ENDIF
+*        ENDIF
+*     ENDIF
+* did not execute any of the commands!  (Reported by Nige Watson.)
+*
+* KIMATH: Vector indizes can now contain expressions, e.g. VEC([n]+1)
+*
+* KUGETI/KUGETR: Arguments can be expressions which are evaluated.
+*
+* System functions can now be nested and the arguments can be expressions,
+* e.g. "$lower($substring($OS$MACHINE,[k]+1,2*[n]))"
+*
+* New system functions: $INDEX(str1,str2), $WORDS(string,[sep]),
+* $WORD(string,[k,[n,[sep]]]), $QUOTE(string), $UNQUOTE(string),
+* $INLINE(string).
+*
+* ALIAS/CREATE: value is alias expanded; new option "-N" to inhibit expansion.
+*
+* ALIAS/LIST: print alias names sorted alphabetically.
+*
+* KIMINT: case labels were not properly recognized if the command following
+* on the same line contained parenthethes.  (Reported by Mike Kelsey).
+*
+* KIMCAL: FOR statement crashed if the loop index had a name
+* longer than 4 characters.  (Reported by Mike Kelsey).
+*
+* KIMCAL: SHIFT left a quote character at the end of [*].  (Reported by
+* Mike Kelsey).
+*
+* The modifications for ;& and ;! introduced a bug:  single commands always
+* returned status code 0.  As a result HELP went into the editor even if
+* the command name was invalid.  (Reported by David Wagner).
+*
+* Final fix for old-style behaviour for optional parameters without defaults
+* (mainly used by GEANT drawing commands).  (Thanks to Shaheen Tonse and
+* Dean Chacon for pointing it out the actual problem.)
+*
+* KUVCRE actually imposed an upper limit of 10 characters for vector names.
+* STYLE G did not write commands to LAST.KUMAC.
+* TRACE ON WAIT did not allow to skip a command.
+*
+*
+*::>          VERSION  2.03/04   05/08/93 12.29.35
+*
+*
+* new command "NEWPANEL" (defined in KUIPCDF) for building a new and
+* empty panel to be filled interactively at run time.
+* add possibility to raise (popup) the kxterm window.
+* add a "LIST" button to all options parameters which gives access to a
+* full explanation of the options.
+* add "Exit" in the browser window (menu "File").
+* update "helps" in KUIPMCDF.
+*
+*::>          VERSION  2.03/03   12/07/93 10.17.35
+*
+* Yacc grammar did not treat the cases of more than one string concatenation
+* per expression and the comparison of a numeric value to a string.
+*
+*::>          VERSION  2.03/02   07/07/93 18.35.24
+*
+* Fix for KUIPC and YKUIP.
+*
+*::>          VERSION  2.03/01   06/07/93 10.02.10
+*
+* Fix for Alpha/OSF.
+*
+*::>          VERSION  2.03/00   05/07/93 17.35.42
+*
+* KIMATH:  the evaluation of
+*    a = -2.34
+*    b = 40
+*    c = [a] - [b]
+* resulted in c = -0.234E-39.  (Reported by Walter Brueckner).
+* Expression evaluation is now done by a Yacc-generated parser which allows
+* arbitrarily complex expressions like
+*    c = [a]*[x] + [b]
+* The IF statement can now also contain a combination of logical expressions
+* like
+*    if [a]<[b] .and. [c]>[d] then
+*       ...
+*    endif
+*
+*
+* STYLE G:  clicking on the black box to select another option value could
+* hand up the system in case one of the option values was the blank string.
+* (Reported by Robert Franchisseur).
+*
+*
+* KUIPC produced garbage Fortran code if the guidance text contained lots of
+* significant blanks.  (Reported by Lawrence Williams).
+*
+* KUIPC in Fortran output mode did not handle correctly >Menu directives going
+* upwards more than one level.  (Reported by Steve Fisher).
+*
+*
+* KUOPEN:  added CALL DMCSCL... to avoid locking of VM-SFS files.
+* (Request by Wojciech Wojcik).
+*
+* SHELL for Apollo:  memory was overwritten when the shell command exceeded
+* 128 characters.  Also /bin/ksh was started as a restricted shell.
+* (Reported by Nige Watson).
+*
+* GETLINE:  add support for DEC function keys F12/F13/F14.
+* (Request by Jim Conboy).
+*
+* A command list separated by semicolon was not quite equivalent to the same
+* commands on consecutive lines:  In
+*    CMD1 ; CMD2
+* the second command was not executed if the first one returned a non-zero
+* status code.  CMD2 is now executed even if CMD1 fails.  The construct
+*    CMD1 ;& CMD2
+* allows to execute CMD2 only if CMD1 succeeds while
+*    CMD1 ;! CMD2
+* executes CMD2 only if CMD1 fails.  (Request by Burkhard Burow).
+*
+*
+* Motif part: fixed some cases of NULL pointer dereferencing.

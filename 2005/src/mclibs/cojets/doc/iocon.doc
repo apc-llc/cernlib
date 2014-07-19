@@ -1,0 +1,56 @@
+*
+* $Id: iocon.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: iocon.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[7] USAGE WITH THE CONVENTIONAL I/O INTERFACE (IOCON)
+
+      COJETS is steered by a MAIN program, to be supplied by the user, and
+during its execution calls three user routines: BOOKH, FILLH and OUTH.
+
+      The MAIN program sets the input variables, accessed through the
+appropriate input common blocks, makes optional command calls and eventually
+calls the event generator GEVENT.
+
+      BOOKH is called before event generation, and is meant for preliminary
+user operations, like histogram booking or writing a beginning record on
+tape.
+
+      FILLH is called after each event generation. By accessing the output
+common blocks, the user can place in this routine intructions for event
+analysis, histogram filling or event writing on tape.
+
+      OUTH is called after event generation has been terminated. The user
+can get here the cross section value applying to the run conditions and
+the number of generated events, through the appropriate common block. He
+can also perform final operations for the event analysis and for histograms
+(e.g. renormalization to the cross section value), and he can terminate
+tape writing by a final record.
+
+      To set up a job with the conventional I/O interface, the user must
+go through the following steps. Details about them can be found in the
+quoted sections.
+
+  i)  Get the FORTRAN ASM file for COJETS by running YPATCHY with the
+      *COJCONV pilot patch, [5].
+
+ ii)  Set up a MAIN program, [8], containing assignments of input parameters
+      and optional command calls, [9].
+
+iii)  Set up the user subroutines BOOKH, FILLH and OUTH, [8], by making use
+      of the output common blocks, [10].
+
+ iv)  Link the CERN Program Library, or substitutes for it, [6].
+
+  v)  Make the particle-decay table file available to the program for
+      reading, [5,16].
+
+
+      Sample sets of the MAIN program and of the user subroutines BOOKH,
+FILLH and OUTH are given in [8].
+
+
+

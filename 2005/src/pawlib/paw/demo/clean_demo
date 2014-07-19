@@ -1,0 +1,9 @@
+rm junk
+rm *.hbook
+rm last*
+rm *.metafile
+rm *.mask
+rm *.higz
+rm *.data
+rm pawtest.f
+rm pawmlp.f

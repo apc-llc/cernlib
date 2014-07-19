@@ -1,0 +1,36 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS=  i303 j530 m429 m433 m437 m439 m442 m443 t000 z009 z265 
+
+#if defined(CERNLIB_VAXVMS)
+LIBDIRS := $(LIBDIRS) m231asm z313
+#endif
+
+#if defined(CERNLIB_VAX) && ! defined(CERNLIB_QMALPH)
+LIBDIRS := $(LIBDIRS) m233vax
+#endif
+
+#if defined(CERNLIB_UNIX) && ! defined(CERNLIB_OS9)
+LIBDIRS += z268
+#endif
+
+#if defined(CERNLIB_HPUX)
+LIBDIRS += t002
+#endif
+
+#if defined(CERNLIB_WINNT)
+LIBDIRS += z264
+#endif
+
+SUBDIRS= $(LIBDIRS) kernbit test
+
+TopOfPackage(kernbit)
+
+SubdirLibraryTarget(kernbit,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(kernbit)

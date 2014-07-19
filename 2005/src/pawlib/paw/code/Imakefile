@@ -1,0 +1,62 @@
+SRCS_F=	getatt.F hcopyp.F hfixid.F hgetco.F hgetid.F hgetir.F \ @@\
+	hqfxyz.F hqixyz.F hvtob.F linear.F lintra.F \ @@\
+	lmatou.F ltql2.F ltred2.F mergin.F paclos.F pacsel.F \ @@\
+	padrfa.F padriso.F padvar.F paexit.F pafeyn.F pafitf.F pafith.F pafitv.F \ @@\
+	pafort.F pafunc.F pageti.F paghpl.F pagksa.F pagpri.F pagraf.F \ @@\
+	pagrid.F pahbok.F pahelp.F pahexy.F pahfit.F pahio.F pahist.F \ @@\
+	pahlog.F pahmov.F pahope.F pahpr.F pahset.F pahsmo.F pahvec.F \ @@\
+	palin1.F palint.F pallsq.F palogo.F palogs.F palsq.F palunf.F \ @@\
+	pantax.F paobs.F paopen.F pant3d.F papiaf.F papict.F paplot.F \ @@\
+	paread.F pasigm.F paspi2.F paexpr.F paexp1.F \ @@\
+	pautit.F pavect.F paw.F pawbrk.F pawdef.F pawfca.F \ @@\
+	pawfitz.F pawfop.F pawfu1.F pawfu2.F \ @@\
+	pawfu3.F pawfud.F pawfun.F pawfuy.F pawild.F pawins.F pawint.F \ @@\
+	pawint1.F pawint2.F pawint3.F pawint4.F pawintm.F \ @@\
+	pawjoj.F pawloc.F pawork.F pawpp.F pawrit.F pawrop.F \ @@\
+	pawsim.F pawusr.F pawuwf.F paxcut.F pazdz.F pazfz.F pazrz.F \ @@\
+	pchain.F pchclo.F pchncd.F pchrop.F pcnext.F pfclos.F \ @@\
+	pfhigz.F pfindc.F pfindf.F pfindf1.F pfindv.F pfinit.F pflog.F \ @@\
+	pfmask.F pfpaw.F pfplot.F pfrange.F pfstate.F phinfo.F \ @@\
+	phxtoc.F plog10.F plphch.F pmncomd.F pntlog.F pntval.F pnumch.F \ @@\
+	pnutil.F pnwork.F pvmem.F \ @@\
+	rlogin.F rshell.F pfminmax.F pflabels.F pfempty.F
+
+DoIncludePackage(paw)
+#include "pilot.h"
+
+#if defined(CERNLIB_IBM)
+SRCS_F := $(SRCS_F) hbug.F igerr.F
+#endif
+
+#if defined(CERNLIB_APOLLO)
+SRCS_F := $(SRCS_F) hbug.F 
+#endif
+
+#if defined(CERNLIB_COMIS)
+SRCS_F := $(SRCS_F) pacsfn.F pawcs.F 
+#if defined(CERNLIB_CZ)
+SRCS_F := $(SRCS_F) pfcsex.F
+#endif
+#endif
+
+#if defined(CERNLIB_CZ)
+SRCS_F := $(SRCS_F) pfcuts.F pfhout.F pfkuip.F pfkupn.F pfloop.F \ @@\
+	   pfping.F pfpush.F pfsock.F pzgeta.F pzopen.F 
+#endif
+
+#if defined(CERNLIB_SOLARIS)
+SpecialFortranLibObjectRule(pawfu1,pawfu1,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(pawfu2,pawfu2,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(csdjcl,csdjcl,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(pawfu3,pawfu3,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(pawfud,pawfud,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(pawfun,pawfun,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(pawfuy,pawfuy,NullParameter,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#if defined(CERNLIB_LINUX) && defined(CERNLIB_PPC)
+SpecialFortranLibObjectRule(pawins,pawins,-O0,NullParameter)
+#endif
+

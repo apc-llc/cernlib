@@ -1,0 +1,7 @@
+#define IHaveSubdirs
+#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)' /* for NamedMakeSubdirs */
+
+SUBDIRS= gexam1 gexam2 gexam3 gexam4 gexam5
+
+TestSubdirs($(SUBDIRS))
+

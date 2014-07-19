@@ -1,0 +1,3 @@
+SRCS_F=	 qnext.F zend.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

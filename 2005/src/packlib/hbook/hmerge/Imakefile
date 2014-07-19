@@ -1,0 +1,3 @@
+SRCS_F= hmerge.F hmerge1.F hmerge2.F hmerge3.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

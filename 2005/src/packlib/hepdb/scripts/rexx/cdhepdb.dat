@@ -1,0 +1,18 @@
+*
+* $Id: cdhepdb.dat,v 1.1.1.1 1996/02/28 16:23:59 mclareni Exp $
+*
+* $Log: cdhepdb.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:59  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, CDHEPDB.EXEC */
+Trace
+'EXEC GIME FAT3 (MODESEQ -Q NONOTICE)
+'EXEC GIME CERNPAMS
+'EXEC YPATCHY PAM1="ZEBRA CAR *" PAM2="HEPDB CARDS" CRADLE="CDHEPDB CRADLE",
+ASM="CDHEPDB FORTRAN A1"'
+'EXEC VFORT CDHEPDB'
+'EXEC CDLD'
+#endif

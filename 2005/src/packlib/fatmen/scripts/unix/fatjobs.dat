@@ -1,0 +1,63 @@
+*
+* $Id: fatjobs.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatjobs.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Print the names of the FATMEN servers that are running.
+#   Should a log file be found for which no process exists,
+#   it is deleted.
+#
+stop=" "
+run=" "
+nolog=" "
+noscr=" "
+b="."
+d=`date`
+#
+# Print names of FATMEN servers that are running
+#
+for i in /fatmen/fm*
+   do
+ 
+typeset -u fatgrp
+typeset -l fatman
+fatpath=$i
+fatgrp=`basename $i`
+fatman=$fatgrp
+eval $fatgrp=$fatpath;export $fatgrp
+#
+if [ -x ${i}/fatserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /fatmen/${fatgrp}.log ]
+      then
+      echo Log file exists for ${fatgrp} - looking for existing process
+      log=${log}${b}${fatgrp}
+      pid=`cat /fatmen/${fatgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+         echo Looking for server process for $fatgrp
+         if(ps -ae  | grep -s $pid )
+            then
+            echo FATSRV running PID = $pid
+            run=${run}${b}${fatgrp}
+            else
+            echo Removing old log file...
+            rm   /fatmen/${fatgrp}.log
+         fi
+      fi
+   fi
+fi
+ 
+done
+ 
+echo
+echo Log files found for $log | tr '.' ' '
+echo Servers running for $run | tr '.' ' '

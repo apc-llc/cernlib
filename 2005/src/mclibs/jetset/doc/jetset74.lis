@@ -1,0 +1,1095 @@
+*
+* $Id: jetset74.lis,v 1.1.1.1 1996/03/08 17:32:28 mclareni Exp $
+*
+* $Log: jetset74.lis,v $
+* Revision 1.1.1.1  1996/03/08 17:32:28  mclareni
+* jetset74
+*
+*
+* This directory was created from jetset74.car patch update
+
+
+
+                                                 23 August 1995
+ 
+ 
+                 Updates to
+ 
+          PYTHIA 5.7 and JETSET 7.4
+             Physics and Manual
+ 
+             Torbjorn Sjostrand
+     Department of theoretical physics 2
+             University of Lund
+               Solvegatan 14A
+               S-223 62 Lund
+                   Sweden
+ 
+-----------------------------------------------------------------
+ 
+1) Introduction.
+ 
+Since the PYTHIA/JETSET programs are being updated frequently,
+it is also important to keep the documentation up to date.
+The big manual that appeared as CERN-TH.7112/93 described the
+status as of 15 December 1993. The LaTeX file with this manual 
+will be updated, though less frequently than the programs. 
+Further, it is not very economical to have to get a new copy 
+of a long manual just to see if any interesting new features 
+have been added recently. Therefore I have here collected the 
+main changes that have taken place since the beginning of 1994. 
+The changes are indexed by sub-subversion number and date. This 
+file will be updated as regularly as the programs themselves. 
+It is not intended to be as complete as the ordinary manual, 
+but should be sufficient for the intended purpose.
+ 
+-----------------------------------------------------------------
+ 
+2) Changes in JETSET 7.4
+ 
+-----------
+ 
+00, 13 December 1993: baseline version.
+ 
+-----------
+ 
+01, 11 February 1994:
+ 
+LUZDIS has been changed to protect against an overflow in an exponent
+(harmless physicswise, but enough to crash the program on some 
+machines).
+ 
+-----------
+ 
+02, 7 April 1994:
+ 
+A possibility has been introduced into LUSHOW to suppress either hard
+or soft radiation, in the connection of radiation off rapidly decaying
+objects. The algorithm used is not exact, but still gives some 
+impression of potential effects. The switch ought to have appeared at
+the end of the current list of shower switches, but because of lack of 
+space it appears immediately before.
+ 
+MSTJ(40) : (D=0) possibility to suppress the branching probability for 
+a branching q -> q + g (or q -> q + gamma) of a quark produced in the
+decay of an unstable particle with width Gamma, where this width has to
+be specified by the user in PARJ(89). Can be changed for each new
+LUSHOW call.  
+= 0 : no suppression, i.e. the standard parton-shower machinery.
+= 1 : suppress radiation by a factor chi(omega) = 
+    Gamma**2 / (Gamma**2 + omega**2), where omega is the energy of the
+    gluon (or photon) in the rest frame of the radiating dipole.
+    Essentially this means that hard radiation with omega > Gamma
+    is removed. 
+= 2 : suppress radiation by a factor 1 - chi(omega) = 
+    omega**2 / (Gamma**2 + omega**2), where omega is the energy of the
+    gluon (or photon) in the rest frame of the radiating dipole.
+    Essentially this means that soft radiation with omega < Gamma
+    is removed. 
+ 
+PARJ(89) : (D=0. GeV) the width of the unstable particle studied for the
+    MSTJ(40) > 0 options; to be set by the user (separately for each
+    LUSHOW call, if need be). 
+ 
+-----
+ 
+A generic interface has been included to an external tau decay library.
+This should allow the handling of tau polarization, which is not done
+by JETSET. To use this facility you have to set the switch MSTJ(28),
+include your own interface routine LUTAUD and see to it that the dummy
+routine LUTAUD in JETSET is not linked. The dummy routine is there 
+only to avoid unresolved external references when no user-supplied 
+interface is linked.
+ 
+MSTJ(28) : (D=0) call to an external tau decay library.
+= 0 : not done, i.e. the internal LUDECY treatment is used.
+= 1 : done whenever the tau mother particle species can be identified,
+    else the internal LUDECY treatment is used. Normally the mother 
+    particle should always be identified, but it is possible for 
+    a user to remove event history information or to add extra taus 
+    directly to the event record, and then the mother is not known.
+= 2 : always done. 
+ 
+CALL LUTAUD(ITAU,IORIG,KFORIG,NDECAY)
+Purpose: to act as an interface between the generic decay routine
+    LUDECY and a user-supplied tau decay library. The latter library 
+    would normally know how to handle polarized taus, given the tau
+    polarization, so one task of the interface routine is to construct
+    the tau polarization/helicity from the information available.
+    Input to the routine is provided in the first three arguments, 
+    while the last argument and some event record information have 
+    to be set before return.
+ITAU : line number in the event record where the tau is stored. 
+    The four-momentum of this tau has first been boosted back to the
+    rest frame of the decaying mother and thereafter rotated to move 
+    out along the +z axis. This choice of frame should help the 
+    calculation of the helicity configuration. After the LUTAUD call
+    the tau (and its decay products) will be rotated and boosted back.
+    However, seemingly, the event record does not conserve momentum
+    at this intermediate stage.  
+IORIG : line number where the mother particle to the tau is stored.
+    Is 0 if the mother is not stored. This does not have to mean the
+    mother is unknown, e.g. in semileptonic B decay the mother is a
+    W+-, and its momentum can be obtained by adding the tau and
+    nu_tau momentum, but there is no line in the event record. 
+    When several copies of the mother is stored (e.g. one in the 
+    documentation section of the event record and one in the main
+    section), IORIG points to the last. If a branchings like 
+    tau -> tau + gamma occurs, the 'grandmother' is given, i.e. the
+    mother of the direct tau before branching.
+KFORIG : flavour code for the mother particle. Is 0 if the mother
+    is unknown. The mother would typically be a resonance such as 
+    Z0 (23), W+- (+-24), H0 (25), or H+- (+-37).
+    Often the helicity choice would be clear just by the knowledge
+    of this mother species, e.g. W+- vs. H+-. However, sometimes
+    further complications may exist. For instance, the KF code 23
+    represents a mixture of gamma* and Z0; a knowledge of the mother
+    mass (in P(IORIG,5)) would here be required to make the choice
+    of helicities. Further, a W and Z may either be (predominantly)
+    transverse or longitudinal, depending on the production process      
+    under study.
+NDECAY : the number of decay products of the tau; to be given by the
+    user. You must also store the KF flavour codes of those decay
+    products in the positions K(I,2), N+1 <= I <= N+NDECAY, of the 
+    event record. The corresponding five-momentum (momentum, energy
+    and mass) should be stored in the associated P(I,J) positions,
+    1 <= J <= 5. The four-momenta are expected to add up to the
+    four-momentum of the tau in position ITAU. You should not change
+    the N value or any of the other K or V values (neither for the 
+    tau nor for its decay products) since this is automatically done 
+    in LUDECY.  
+ 
+-----
+ 
+In a few places, a dot has been moved from the end of one line to the
+beginning of the next continuation line, or the other way around, 
+to keep together tokens such as .EQ. or .AND., since some debuggers
+may otherwise complain. 
+ 
+A source of (harmless) division by zero in LUSHOW has been removed.
+ 
+-----------
+ 
+03, 15 July 1994:
+ 
+The LUBOEI routine has been changed to avoid an unintentional gap
+in the limits of the very first bin. 
+ 
+Further, leptons and photons which are unrelated to the system 
+feeling the Bose-Einstein effects do not have their energies and
+momenta changed in the global rescaling step. (Example: W+W- events,
+where one W decays leptonically; before these lepton momenta could be 
+slightly changed, but now not.)
+ 
+-----
+ 
+The option LUEDIT(16) (used e.g. from PYEVNT) has been improved with
+a more extensive search for missing daughter pointers.
+ 
+-----
+ 
+The KLU(I,16) procedure for finding rank has been rewritten to work
+in the current JETSET version, which it did not before. However, note
+that it will only work for MSTU(16)=2. As a general comment, the
+options 14 - 17 of KLU were written at a time when possible event 
+histories were less complex, and can not be guaranteed always to work 
+today.
+ 
+-----------
+ 
+04, 25 August 1994:
+ 
+LUSHOW has been corrected, so that if t,  l or h quarks (or d* or u* 
+quarks masked as l or h) are given with masses that vary from event
+to event (a Breit-Wigner shape, e.g.), the current mass rather than the
+nominal mass is used to define the cut-off scales of parton shower
+evolution.
+ 
+-----
+ 
+LULOGO has been modified to take into account that a new PYTHIA/JETSET
+description has been published in
+T. Sjostrand, Computer Phys. Commun. 82 (1994) 74
+and is from now on the standard reference to these two programs.   
+ 
+-----------
+ 
+05, 27 January 1995:
+ 
+LUCELL has been corrected, in that in the option with smearing of
+energy rather than transverse energy, the conversion factor between 
+the two was applied in the wrong direction.
+ 
+-----
+ 
+LUSHOW has been corrected in one place where the PMTH array was 
+addressed with the wrong order of the indices. This affected quark 
+mass corrections in the matching to the three-jet matrix elements.
+ 
+-----
+ 
+An additional check has been included in LUBOEI that there are at
+least two particles involved in the Bose-Einstein effects. (No
+problem except in some bizarre situations.) 
+ 
+-----------
+ 
+06, 20 February 1995:
+ 
+A new option has been added for the behaviour of the running
+alpha_em(Q2) in ULALEM. This is not added as a true physics scenario, 
+but only to produce results with a given, fixed value for the hard 
+events, while still keeping the conventional value in the Q2=0 limit.   
+MSTU(101) = 2 : if Q2 is less than PARU(104) then alpha_em is
+    assigned the value PARU(101) (=1/137), while for Q2 above
+    PARU(104) the fixed value PARU(103) (=1/128.8) is used.
+PARU(103) : (D=0.007764=1/128.8) alpha_em used for hard processes
+    in the option MSTU(101)=2.
+PARU(104) : (D=1 GeV^2) dividing line for 'low' and 'high'
+    Q2 values in the MSTU(101)=2 option of ULALEM.
+ 
+Additionally, the G_F constant has been added to the parameter list.
+PARU(105) : (D=1.16639E-5 GeV^-2) G_F, the Fermi constant of weak
+    interactions.
+ 
+-----
+ 
+The LULOGO routine has been updated to reflect my change of
+affiliation.
+ 
+-----------
+ 
+07, 21 June 1995:
+ 
+Header and LULOGO have been updated with respect to phone number
+and WWW access.
+ 
+-----
+ 
+The PHEP and VHEP variables in the /HEPEVT/ common block are now 
+assumed to be in DOUBLE PRECISION, in accord with the proposed
+LEP 2 workshop addendum to the standard.
+ 
+-----
+ 
+In LUTEST a missing decimal point on the energy check has been
+reinstated (0001 -> 0.0001).
+ 
+-----
+ 
+In LUINDF the expression PR/(Z*W) has been protected against vanishing
+denominator.
+ 
+-----------
+ 
+08, 23 August 1995:
+ 
+Check against division by zero in LUSHOW.
+ 
+-----------------------------------------------------------------
+ 
+3) Changes in PYTHIA 5.7
+ 
+-----------
+ 
+00, 13 December 1993: baseline version.
+ 
+-----------
+ 
+01, 27 January 1994:
+ 
+The machinery to handle gamma-gamma interactions is expanded.
+In particular, several new options have been added to MSTP(14).
+The updated description of this variable reads as follows.
+ 
+MSTP(14) : (D=0) structure of incoming photon beam or target
+    (does not affect photon inside electron, only photons appearing 
+    as argument in the PYINIT call).
+  = 0 : a photon is assumed to be point-like (a  direct photon), 
+      i.e. can only interact in processes which explicitly contain 
+      the incoming photon, such as f_i gamma -> f_i g for gamma-p 
+      interactions. In gamma-gamma interactions both photons are
+      direct, i.e the main process is gamma gamma -> f_i fbar_i.
+  = 1 : a photon is assumed to be resolved, i.e. can only interact
+      through its constituent quarks and gluons, giving either high-pT
+      parton-parton scatterings or low-pT events. Hard processes are 
+      calculated with the use of the full photon parton distributions. 
+      In gamma-gamma interactions both photons are resolved.
+  = 2 : a photon is assumed resolved, but only the VMD piece is 
+      included in the parton distributions, which therefore mainly 
+      are scaled-down versions of the rho0/pi0 ones. Both high-pT
+      parton-parton scatterings and low-pT events are allowed. In 
+      gamma-gamma interactions both photons are VMD-like.
+  = 3 : a photon is assumed resolved, but only the anomalous piece of 
+      the photon parton distributions is included. Only high-pT 
+      parton-parton scatterings are allowed. In gamma-gamma 
+      interactions both photons are anomalous.
+  = 4 : in gamma-gamma interactions one photon is direct and the other 
+      resolved. A typical process is thus f_i gamma -> f_i g. Hard 
+      processes are calculated with the use of the full photon 
+      parton distributions for the resolved photon. Both possibilities 
+      of which photon is direct are included, in event topologies and 
+      in cross sections. This option cannot be used in configurations 
+      with only one incoming photon. 
+  = 5 : in gamma-gamma interactions one photon is direct and the other 
+      VMD-like. Both possibilities of which photon is direct are 
+      included, in event topologies and in cross sections. This option 
+      cannot be used in configurations with only one incoming photon. 
+  = 6 : in gamma-gamma interactions one photon is direct and the other 
+      anomalous. Both possibilities of which photon is direct are 
+      included, in event topologies and in cross sections. This option 
+      cannot be used in configurations with only one incoming photon. 
+  = 7 : in gamma-gamma interactions one photon is VMD-like and the other 
+      anomalous. Only high-pT parton-parton scatterings are allowed.
+      Both possibilities of which photon is VMD-like are included,
+      in event topologies and in cross sections. This option cannot be 
+      used in configurations with only one incoming photon. 
+  Note: a complete description requires separate runs for the components
+      above, i.e. it is not possible to mix them in a single run. Our
+      best understanding of gamma-p interactions [Sch93,Sch93a] is to
+      have three separate components, 0 + 2 + 3. A simpler alternative
+      is based on two only, 0 + 1. Our best understanding of gamma-gamma
+      interactions [in preparation] requires six separate components, 
+      0 + 2 + 3 + 5 + 6 + 7. A simpler alternative is based on three 
+      only, 0 + 1 + 4.
+ 
+In addition, one new option has been introduced and a few internal
+variables modified.
+ 
+MSTP(59) : (D=0) possibility to modify the Q2 scale used in the
+      anomalous parton distributions of the photon, as used in the
+      options MSTP(14) = 3, 6 and 7.
+  = 0 : no change of Q2 scale compared to what is normally used.
+  = 1 : the input Q2 scaled is divided by PARP(59)**2 to define
+      the Q2 scale used as argument for the anomalous parton 
+      distributions.
+ 
+PARP(59) : (D=1.) rescaling factor used for the Q2 argument of the 
+      anomalous parton distributions of the photon, see MSTP(59).
+ 
+MINT(105) : is MINT(103) or MINT(104), depending on which side
+    of the event currently is being studied.
+ 
+MINT(107), MINT(108) : if either or both of the two incoming particles 
+    is a photon, then the respective value gives the nature assumed for
+    that photon. The code follows the one used for MSTP(14):
+  = 0 : direct photon.
+  = 1 : resolved photon.
+  = 2 : VMD-like photon.
+  = 3 : anomalous photon.
+ 
+MINT(109) : is either MINT(107) or MINT(108), depending on which side
+    of the event currently is being studied.
+ 
+VINT(282) : no longer used.
+ 
+VINT(283), VINT(284): virtuality scale at which an anomalous photon 
+    on the beam or target side of the event is being resolved. More
+    precisely, it gives the p_T^2 pf the gamma -> q qbar vertex.
+ 
+-----
+ 
+A number of bugs have also been corrected:
+* Jet + low-pT event generation could give incorrect cross section 
+  information with PYSTAT(1) at low energies. The event generation
+  itself is correct. (The error was introduced when variable energies 
+  became allowed.)
+* Introduce rejection of top events where top mass (in the tails of the
+  Breit-Wigner distribution) is too low to allow decays t -> W + b.
+* Plus a few minor bugs, probably harmless.   
+ 
+-----------
+ 
+02, 13 February 1994:
+ 
+The interface to PDFLIB has been modified to reflect that 'TMAS' should
+no longer be set except in first PDFSET call. (Else a huge amount of 
+irrelevant warning messages are generated by PDFLIB.)
+ 
+-----
+ 
+The STOP statement in a few dummy routines has been modifed to avoid 
+irrelevant compilation warning messages on IBM mainframes. 
+ 
+-----
+ 
+A few labels have been renumbered. 
+ 
+-----------
+ 
+03, 22 February 1994:
+ 
+Removal of a bug in PYRESD, which could give (under some specific 
+conditions) errors in the colour flow. 
+ 
+-----------
+ 
+04, 7 April 1994:
+ 
+Process 11 has been corrected, for the part that concerns anomalous
+couplings (contact interactions) in the q + q' -> q + q' process.
+The error was present in the expression for u + dbar -> u + dbar
+and obvious permutations, while u + d -> u + d, u + ubar -> u + ubar
+and the others were correct. Thanks to J.-J. Dugne, M. Perrottet and 
+K. Lane for communications on this point.
+ 
+-----
+ 
+The option MSTP(23)=1 for post-facto (x,Q^2) conservation in deep
+inelastic scattering can give infinite loops when applied to process
+83, in particular if one asks for the production of a top. (Remember
+that the standard DIS kinematics only is defined for massless quarks.)
+Therefore the switch MSTP(23) has been modifed as follows:
+MSTP(23) : (D=1) (x, Q^2) correction level in DIS.
+    = 0 : no correction procedure applied.
+    = 1 : correction applied for process 10, but not for process 83.
+    = 2 : correction applied both for process 10 and 83. This latter
+        option could still work fine for charm and bottom, if the
+        energy is sufficient.
+ 
+-----
+ 
+PYRESD is modified to ensure isotropic angular distributions in the 
+decays of the top or a fourth generation particle, i.e. in t -> b + W+. 
+This may not be the correct distribution but, unless explicit knowledge
+exists for a given process, this should always be the default. 
+ 
+-----
+ 
+In processes 16, 20, 31 and 36 the W propagator has been modified to 
+include s-dependent widths in the Breit-Wigner shape. The most notable
+effect is a suppression of the low-mass tail of the W mass spectrum.
+ 
+-----
+ 
+When PDFLIB is used, PDFSET is now only called whenever a different
+structure function is requested. For pp events therefore only one call
+is made, while gamma-p interactions still involves a call to PDFSET 
+for each STRUCTM one, since gamma and p structure functions have to be 
+called alternatingly. To this end, MINT(93) is reset to 
+1000000 * Nptype + 1000 * Ngroup + Nset after each PDFSET call.
+ 
+-----
+ 
+In a few places, a dot has been moved from the end of one line to the
+beginning of the next continuation line, or the other way around, 
+to keep together tokens such as .EQ. or .AND., since some debuggers
+may otherwise complain. Also some other purely cosmetics changes 
+for the same reason.  
+ 
+A number of minor errors have been corrected.
+ 
+-----------
+ 
+05, 15 July 1994:
+ 
+A new option has been introduced, MSTP(14)=10, whereby it is possible 
+to obtain a mixture of the various allowed photon components. For
+gamma-hadron collisions, this means a mixture of VMD, direct and 
+anomalous events, for gamma-gamma collisions a mixture of VMD*VMD, 
+VMD*direct, VMD*anomalous, direct*direct, direct*anomalous and
+anomalous*anomalous. The mixture is properly given according to 
+the relative cross sections. 
+ 
+Note that this introduces a completely new layer of administration in
+PYTHIA. For instance, a subprocess such as q + g -> q + g is allowed
+in the VMD*VMD, VMD*anomalous and anomalous*anomalous classes, but
+appear with different sets of parton distributions and with different
+pT cut-offs. In order to handle this, various information is initialized
+separately for each event class, and subsequently saved and restored 
+as the generation switches back and forth between the event classes. 
+This introduces some limitations on what you may and may not do.
+ 
+First of all, the MSTP(14) switch is only applicable for incoming photon
+beams, i.e. when 'gamma' is the argument in the PYINIT call. A
+convolution with the bremsstrahlung photon spectrum in an electron beam
+may come one day, but not in the immediate future.
+ 
+Secondly, the machinery has only been set up to generate standard
+QCD physics, specifically either 'minimum bias' one or high-pT jets.
+For minimum bias, you are not allowed to use the CKIN variables at all.
+This is not a major limitation, since it is in the spirit of minimum
+bias physics not to impose any contraints on allowed jet production. 
+(If you still do, these cuts will be ineffective for the VMD processes 
+but take effect for the other ones, giving inconsistencies.) Further, 
+some variables are internally recalculated and reset: CKIN(1), CKIN(3), 
+CKIN(5), CKIN(6), MSTP(57), MSTP(85), PARP(2), PARP(81), PARP(82), 
+PARU(115) and MDME(22,J). These can not be modified without changing
+PYINPR and recompiling the program. The minimum bias physics option 
+is obtained by default; by switching from MSEL=1 to MSEL=2 also the 
+elastic and diffractive components of the VMD part are included. 
+High-pT jet production is obtained by setting the CKIN(3) cut-off 
+larger than the (energy-dependent) cut-off scales for the VMD, direct 
+and  anomalous components; typically this means at least 3 GeV. For 
+lower input CKIN(3) the program will automatically switch back to 
+minimum bias physics.
+ 
+Finally, pileup events are not at all allowed.  
+ 
+Here is a survey of common block variables affected:
+ 
+MSTP(14) (D=0) strucure of incoming photon beam or target;
+    see description above for PYTHIA 5.701.
+    = 10 : new option where the VMD, direct and anomalous components 
+        are automatically mixed, as described above. Works equally well
+        for gamma-p and gamma-gamma.
+ 
+MSTI(9) : event class used in current event.
+    = 1 : VMD (for gamma-p) or VMD*VMD (for gamma-gamma).
+    = 2 : direct (for gamma-p) or VMD*direct (for gamma-gamma).
+    = 3 : anomalous (for gamma-p) or VMD*anomalous (for gamma-gamma).
+    = 4 : direct*direct (for gamma-gamma).
+    = 5 : direct*anomalous (for gamma-gamma).
+    = 6 : anomalous*anomalous (for gamma-gamma).
+ 
+MINT(121) : number of separate event classes to initialize and mix.
+    = 1 : the normal value.
+    = 3 : for a gamma-hadron interaction when MSTP(14)=10.
+    = 6 : for a gamma-gamma interaction when MSTP(14)=10.
+ 
+MINT(122) : event class used in current event. Code as explained for
+    MSTI(9).
+ 
+MINT(123) : event class used in the current event, with the same list 
+    of possibilities as MSTP(14), except that MSTP(14) = 1, 4 or 10 
+    do not appear.  
+ 
+VINT(285) : the CKIN(3) value provided by the user at initialization;
+    subsequently CKIN(3) may be overwritten (for MSTP(14)=10) but 
+    VINT(285) stays.
+ 
+In addition, the structure of the initialization has been partly
+reorganized. The routine PYEVKI has been removed, new routines
+PYINBM, PYINPR and PYSAVE created, and some material has been moved 
+to or from PYINIT, PYINRE and PYINKI.
+ 
+SUBROUTINE PYINBM : to read in and identify beam and target particles
+    and frame as given in the PYINIT call (used to be done in PYINKI).
+ 
+SUBROUTINE PYINKI(MODKI) : to set up event kinematics, either at
+    initialization (MODKI=0) or for each separate event when varying
+    kinematics (MODKI=1). (The latter task used to be done in PYEVKI.)
+ 
+SUBROUTINE PYINPR : to set up the partonic subprocesses selected with
+    MSEL and, for gamma-p and gamma-gamma, MSTP(14).
+ 
+SUBROUTINE PYSAVE : saves and restores parameters and cross section
+    values between the 3 gamma-p and the 6 gamma-gamma alternatives
+    of MSTP(14)=10. Also makes a random choice for each new event
+    between the allowed alternatives.
+ 
+Among other changes, note that PYSTAT(1) now has been extended so
+that the subdivision into the various gamma-p and gamma-gamma classes
+is shown.     
+ 
+-----
+ 
+Further changes of particular relevance for gamma-p and gamma-gamma,
+but independent of the major revisions above:
+ 
+MSTP(59) and PARP(59) have been removed. Instead the following options
+are available:
+ 
+MSTP(15) : (D=5) possibility to modify the nature of the anomalous
+photon component, in particular with respect to the scale choices and
+cut-offs of hard processes.
+    = 0 : none, i.e. the same treatment as for the VMD component.
+    = 1 : evaluate the anomalous structure functions at a scale
+        Q2/PARP(17)^2.
+    = 2 : as =1, but instead of PARP(17) use PARP(81)/PARP(15) or
+        PARP(82)/PARP(15), depending on MSTP(82) value.
+    = 3 : evaluate anomalous structure function as
+        f^(anom)(x, Q2, p_0^2) - f^(anom)(x, Q2, r^2*Q2)
+        with r = PARP(17).
+    = 4 : as =3, but instead of PARP(17) use PARP(81)/PARP(15) or
+        PARP(82)/PARP(15), depending on MSTP(82) value.
+    = 5 : use larger pTmin for anomalous component than for VMD one,
+        but otherwise no difference.
+ 
+PARP(17) : (D=1) rescaling factor used as described for MSTP(15).
+ 
+MSTP(51) : new option added.
+    = 11 : the GRV p LO parametrization.
+ 
+MSTP(53) : new option added.
+    = 3 : the GRV pi LO parametrization.  
+ 
+MSTP(56) : new option added.
+    = 3 : when the anomalous photon structure function is requested,
+        the homogeneous solution is provided, evolved from a starting
+        value PARP(15) to the requested Q scale. The homogeneous 
+        solution is normalized so that the net momentum is unity,
+        i.e. any factors of alpha_em/2pi and charge have been left out. 
+        The flavour of the original q is given in MSTP(55) (1, 2, 3, 4 
+        or 5 for d, u, s, c or b); the value 0 gives a mixture 
+        according to squared charge, with the exception that c and b 
+        are only allowed above the respective mass threshold (Q > m_q).
+        The four-flavour Lambda value is assumed given in PARP(1);
+        it is automatically recalculated for 3 or 5 flavours at 
+        thresholds. This option is not intended for standard event 
+        generation, but is useful for some theoretical studies.
+  
+-----
+ 
+Option MSTP(92)=5 for beam remnant treatment erroneously missed some
+statements which now have been inserted. 
+ 
+Further, new options have been added for the splitting of momentum 
+between two beam remnants. MSTP(92) keeps its current role for the 
+production of diquark or quark jets. However, for the splitting into 
+a hadron plus a quark/diquark jet, MSTP(94) should now be used.
+ 
+MSTP(94) : (D=2) (C) energy partitioning in hadron or resolved photon
+remnant, when this is split into a hadron plus a remainder-jet. The 
+energy fraction chi is taken by one of the two objects, with 
+conventions as described below or for PARP(95) and PARP(97).
+    = 1 : 1 for meson or resolved photon, 2(1-chi) for baryon, i.e.
+        simple counting rules.
+    = 2 : (k+1)*(1-chi)**k, with k as given in PARP(95) or PARP(97).
+    = 3 : the chi of the hadron is selected according to the normal
+        fragmentation function used for the hadron in jet fragmentation,
+        see MSTJ(11). The possibility of a changed fragmentation 
+        function shape in diquark fragmentation (see PARJ(45)) is not 
+        included.  
+    = 4 : as =3, but the shape is changed as allowed in diquark
+        fragmentation (see PARJ(45)); this change is here also allowed 
+        for meson production.    
+ 
+-----
+ 
+In PYDIFF the recoiling gluon energy is calculated in a numerically more
+stable fashion. 
+ 
+-----
+ 
+A counter has been added to PYSSPA to avoid infinite loops in the
+angular ordering constraint due to interference with the final state
+colour charges.
+ 
+-----------
+ 
+06, 25 August 1994:
+ 
+New processes 167 and 168 have been added for the contact interaction
+production of d* or u* excited quarks
+167   q q' -> q" d*
+168   q q' -> q" u*
+where the different allowed quark and antiquark combinations are given
+according to eqs. (15) - (19) in U. Baur, M. Spira and P.M. Zerwas,
+Phys. Rev. D42 (1990) 815. The d* and u* are defined in the same
+way as for processes 147 and 148. Thus one needs to put MSTP(6)=1 to
+use l (7) and h (8) for representing the d* and u*. The couplings of
+the allowed decay channels are given by PARU(157) - PARU(159), and
+the Lambda scale parameter by PARU(155).
+ 
+At the same time, some minor changes has been introduced in the code
+for processes 147 and 148, for uniformity.
+ 
+-----
+ 
+Option MSTP(57)=3 now also allows a dampening of pi+- parton 
+distributions.
+ 
+-----
+ 
+A few minor errors have been corrected.
+ 
+-----------
+ 
+07, 20 October 1994:
+ 
+A major bug discovered in processes 121 and 122 (and thus also affecting
+181, 182, 186 and 187), g g or q qbar -> Q Qbar H: the kinematics was 
+incorrectly handed on to the Kunszt matrix elements. This affected the
+default option Q = t, but effects were especially dramatic when the
+alternative Q = b was used. 
+ 
+The choice of appropriate Q2 scale for structure functions introduces
+a further uncertainty in cross sections for the processes above. So long
+as only t quarks are considered, the t mass is a reasonable choice, but
+for the Q = b alternative this is presumably too low. Therefore new 
+options have been introduced as below, with the default behaviour 
+changed (the old one is obtainable with MSTP(39)=1).
+ 
+MSTP(39) : (D=2) choice of Q2 scale for structure functions and initial
+state parton showers in processes g g or q qbar -> Q Qbar H.
+    = 1 : m_Q**2.
+    = 2 : max(mT_Q**2 , mT_Qbar**2) = 
+        m_Q**2 + max(pT_Q**2 , pT_Qbar**2).
+    = 3 : m_H**2.
+    = 4 : shat = (p_H + p_Q + p_Qbar)**2.
+ 
+-----
+ 
+Another important bug corrected in the calculation of the reduction of
+t+tbar cross section when decay modes are forced. This occured when both
+t and tbar produced a W, and W+ and W- decay modes were set differently.
+ 
+-----------
+ 
+08, 25 October 1994:
+ 
+A few further places changed to make processes 181, 182, 186 and 187 
+work (see version 5.707 above).
+ 
+-----------
+ 
+09, 26 October 1994:
+ 
+The matrix element for f + fbar -> W+ + W- has been replaced, using the
+formulae of 
+D. Bardin, M. Bilenky, D. Lehner, A. Olchevski and T. Riemann,
+CERN-TH.7295/94,
+but with the dependence on the t-hat variable not integrated out
+(D. Bardin, private communication).
+This avoids some problems encountered in the old expressions when 
+one or both W's were far off the mass shell.
+ 
+-----
+ 
+Change in calls to PDFLIB, so that the input Q is always at least the 
+QMIN of the respective set.
+ 
+-----
+ 
+Extra protection against infinite loops in PYSSPA.
+ 
+-----------
+ 
+10, 27 January 1995:
+ 
+The dimensions of the HGZ array in PYRESD has been expanded to avoid
+accidental writing outside the bounds.
+ 
+-----
+ 
+VINT(41) - VINT(66) are saved and restored in PYSCAT, for use in low-pT
+events, when beam remnant treatment has failed (with nonzero MINT(57)).
+ 
+-----
+ 
+The routine PYSTGH has been replaced by the routine PYSTHG. This 
+contains an improved parametrization of the homogeneous evolution 
+of an anomalous photon from some given initial scale. The argument
+NF of the PYSTGH routine has been removed; now Lambda is always
+automatically converted to the relevant NF-flavour value from its
+4-flavour one, at flavour thresholds. 
+ 
+-----------
+ 
+11, 20 February 1995:
+ 
+New possibilities have been added to switch between electroweak
+couplings being expressed in terms of a running alpha_em(Q2)  or 
+in terms of a fixed Fermi constant G_F. This affects both decay widths
+and process cross sections, in the routines PYINRE, PYRESD, PYWIDT and 
+PYSIGH. There are three main options, with default agreeing with the
+old standard.
+ 
+MSTP(8) : (D=0) choice of electroweak parameters to use in decay
+    widths of resonances (W, Z, H, ...) and cross sections (production
+    of W's, Z's, H's, ...). 
+    = 0 : everything is expressed in terms of a running alpha_em(Q2) 
+        and a fixed sin^2(theta_W), i.e. G_F is nowhere used.
+    = 1 : a replacement is made according to 
+        alpha_em(Q2) -> sqrt(2) G_F m_W^2 sin^2(theta_W) / pi
+        in all widths and cross sections. If G_F and m_Z are considered 
+        as given, this means that sin^2(theta_W) and m_W are the only 
+        free electroweak parameter.
+    = 2 : a replacement is made as for =1, but additionally 
+        sin^2(theta_W) is constrained by the relation 
+        sin^2(theta_W) = 1 - m_W^2/m_Z^2
+        This means that m_W remains as a free parameter, but that the
+        sin^(theta_W) value in PARU(102) is never used, EXCEPT in
+        the vector couplings in the combination
+        v = a - 4 sin^2(theta_W) e.
+        This degree of freedom enters e.g. for forward-backward
+        asymmetries in Z^0 decays.
+Note : This option does not affect the emission of real photons in the 
+    initial and final state, where alpha_em is always used. However, 
+    it does affect also purely electromagnetic hard processes, such as 
+    q + qbar -> gamma + gamma.
+ 
+-----
+ 
+The option MSTP(37)=1, with running quark masses in couplings to Higgs
+bosons, only works when alpha_s is allowed to run (so one can define
+a Lambda value). Therefore a check has been introduced in PYWIDT and
+PYSIGH that the option MSTP(37)=1 is only executed if additionally
+MSTP(2) is 1 or bigger.
+ 
+-----
+ 
+Some non-physics changes have been made in the RKBBV and STRUCTM codes
+so as to avoid some (in principle harmless) compiler warnings.
+ 
+-----------
+ 
+12, 15 March 1995:
+ 
+A serious error has been corrected in the MSTP(173)=1 option, i.e. when
+the program is run with user-defined weights that should compensate for 
+a biased choice of variable beam energies. This both affected the 
+relative admixture of low- and high-pT events and the total cross 
+section obtained by Monte Carlo integration. (PYRAND changed.)
+ 
+In order to improve the flexibility and efficiency of the variable-energy
+option, the user should now set PARP(174) before the PYINIT call, and
+thereafter not change it. This allows PARP(173) weights of arbitrary
+size. (PYRAND and PYMAXI changed.)
+PARP(174) : (D=1.) maximum event weight that will be encountered in
+    PARP(173) during the course of a run with MSTP(173)=1; to be used 
+    to optimize the efficiency of the event generation. It is always 
+    allowed to use a larger bound than the true one, but with a 
+    corresponding loss in efficiency.
+ 
+MSTI(5) (and MINT(5)) are now changed so they count the number of 
+successfully generated events, rather than the number of tries made.
+This change only affects runs with variable energies, MSTP(171)=1 and 
+MSTP(172)=2, where MSTI(61)=1 signals that a user-provided energy
+has been rejected in the weighting. This change also affects PARI(2),
+which becomes the cross section per fully generated event. (PYEVNT
+changed.)
+ 
+-----
+ 
+The option MSTP(14)=10 has now been extended so that it also works for
+deep inelastic sacattering of an electron off a (real) photon, i.e.
+process ISUB = 10. What is obtained is a mixture of the photon acting
+as a vector meson and it acting as an anomalous state. This should 
+therefore be the sum of what can be obtained with MSTP(14)=2 and =3.
+It is distinct from MSTP(14)=1 in that different sets are used for
+the parton distributions - in MSTP(14)=1 all the contributions to the
+photon distributions are lumped together, while they are split in 
+VMD and anomalous parts for MSTP(14)=10. Also the beam remnant treatment
+is different, with a simple Gaussian distribution (at least by default)
+for MSTP(14)=1 and the VMD part of MSTP(14)=10, but a powerlike 
+distribution d(kT^2)/kT^2 between PARP(15) and Q for the anomalous
+part of MSTP(14)=10. (PYINIT, PYINPR and PYSTAT changed.)
+ 
+To access this option for e and gamma as incoming beams, it is only 
+necessary to set MSTP(14)=10 and keep MSEL at its default value.
+Unlike the corresponding option for gamma-p and gamma-gamma, no
+cuts are overwritten, i.e. it is still the responsability of the user
+to set these appropriately. Those especially appropriate for DIS usage
+are CKIN(21)-CKIN(22) or CKIN(23)-CKIN(24) for the x range (former or
+latter depending on which side is the incoming real photon), 
+and CKIN(35)-CKIN(36) for the Q2 range. A further new option has been 
+added (in PYKLIM):
+CKIN(39), CKIN(40) : (D=4., -1. GeV^2) the W2 range allowed in DIS
+    processes, i.e. subprocess number 10. If CKIN(40) < 0., the upper
+    limit is inactive. Here W2 is defined in terms of W2 = Q2 * (1-x)/x.
+    This formula is not quite correct, in that (i) it neglects the 
+    target mass (for a proton), and (ii) it neglects initial-state 
+    photon radiation off the incoming electron. It should be good 
+    enough for loose cuts, however. 
+ 
+A warning about the usage of PDFLIB for photons. So long as MSTP(14)=1, 
+i.e. the photon is not split up, PDFLIB is accessed by MSTP(56)=2 and
+MSTP(55) = parton distribution set, as described in the manual. 
+However, when the VMD and anomalous pieces are split, the VMD part
+is based on a rescaling of pion distributions by VMD factors
+(except for the SaS sets, that already come with a separate VMD piece).
+Therefore, to access PDFLIB for MSTP(14)=10, it is not correct to set 
+MSTP(56)=2 and a photon distribution in MSTP(55). Instead, one should
+put MSTP(56)=2, MSTP(54)=2 and a pion distribution code in MSTP(53),
+while MSTP(55) has no function. The anomalous part is still based on
+the SaS parametrization, with PARP(15) as main free parameter.   
+ 
+-----
+ 
+A change has been made in PYREMN to reduce the possibility of infinite 
+loops. 
+ 
+-----------
+ 
+13, 22 March 1995:
+ 
+The SaS parton distributions of the photons are now available.
+For details on these sets, see 
+G.A. Schuler and T. Sjostrand,
+"Low- and high-mass components of the photon distribution functions",
+CERN-TH/95-62 and LU TP 95-6.
+There are four new sets. These differ in that two use a Q0=0.6 GeV and
+two a Q0=2 GeV, and in that two use the DIS and two the MSbar conventions 
+for the dominant non-leading contributions. (However, the fits are 
+formally still leading-order, in that not all next-to-leading
+contributions have been included.) New default is the SaS 1D set. 
+Furthermore, for the definition of F_2^gamma, additional terms appear 
+that do not form part of the parton distributions itself. To partly 
+take this into account, an additional doubling of the possibilities 
+has been included. These possibilites can be accesed with MSTP(55):
+ 
+MSTP(55) : (D=5) choice of parton-distribution set of the photon;
+    see also MSTP(56).
+    = 1  : Drees-Grassie.
+    = 5  : SaS 1D (in DIS scheme, with Q0=0.6 GeV).
+    = 6  : SaS 1M (in MSbar scheme, with Q0=0.6 GeV).
+    = 7  : SaS 2D (in DIS scheme, with Q0=2 GeV).
+    = 8  : SaS 2M (in MSbar scheme, with Q0=2 GeV).
+    = 9  : SaS 1D (in DIS scheme, with Q0=0.6 GeV).
+    = 10 : SaS 1M (in MSbar scheme, with Q0=0.6 GeV).
+    = 11 : SaS 2D (in DIS scheme, with Q0=2 GeV).
+    = 12 : SaS 2M (in MSbar scheme, with Q0=2 GeV).
+    Note 1 : sets 5 - 8 use the parton distributions of the respective
+        set, and nothing else. These are appropriate for most 
+        applications, e.g. jet production in gamma-p and gamma-gamma
+        collisions. Sets 9 - 12 instead are appropriate for
+        gamma*-gamma processes, i.e. DIS scattering on a photon, 
+        as measured in F_2^gamma. Here the anomalous contribution
+        for c and b quarks are handled by the Bethe-Heitler formulae,
+        and the direct term is artificially lumped with the anomalous
+        one, so that the event simulation more closely agrees with what
+        will be experimentally observed in these processes. The agreement
+        with the F_2^gamma parametrization is still not perfect, e.g.
+        in the treatment of heavy flavours close to threshold. 
+    Note 2 : Sets 5 - 12 contain both VMD pieces and anomalous pieces,
+        separately parametrized. Therefore the respective piece is 
+        automatically called, whatever MSTP(14) value is used to select 
+        only a part of allowed photon interactions. For other sets 
+        (set 1 above or PDFLIB sets), usually there is no corresponding 
+        subdivision. Then an option like MSTP(14)=2 (VMD part of photon 
+        only) is based on a rescaling of the pion distributions, while
+        MSTP(14)=3 gives the SaS anomalous parametrization.     
+    Note 3 : Formally speaking, the k0 (or p0) cut-off in PARP(15) 
+        need not be set in any relation to the Q0 cut-off scales used by 
+        the various parametrizations. Indeed, due to the familiar scale
+        choice ambiguity problem, there could well be some offset between
+        the two. However, unless you know what you are doing, it is 
+        strongly recommended that you let the two agree, i.e. set
+        PARP(15)=0.6 for the SaS 1 sets and =2 for the SaS 2 sets.
+ 
+PARP(15) : (D=0.6 GeV) default value changed for k0 cut-off for 
+    separation between direct, VMD and anomalous photons; see Note 3 
+    for MSTP(55) above.       
+        
+The generic routine PYSTFU has been rewritten to handle the interfacing.
+The old routines PYSTAG, PYSTGS, PYDILN and PYSTHG have been removed.
+Instead the routines of the SaSgam library have been inserted. In order
+to avoid any clashes, the routines SAS*** have been renamed PYG***.
+Thus new routines are PYGGAM, PYGVMD, PYGANO, PYGBEH and PYGDIR.
+The common block SASCOM is renamed PYINT8. If you want to use the
+parton distributions for standalone purposes, you are encouraged to
+use the original SaSgam routines rather than going the way via the
+Pythia adaptations. 
+ 
+      COMMON/PYINT8/XPVMD(-6:6),XPANL(-6:6),XPANH(-6:6),XPBEH(-6:6),
+     &XPDIR(-6:6)
+Purpose: to store the various components of the parton distributions
+    when the PYGGAM routine is called.
+XPVMD(KFL) : gives distributions of the VMD part (rho, omega and
+    phi).      
+XPANL(KFL) : gives distributions of the anomalous part of light quarks
+    (d, u and s).
+XPANH(KFL) : gives distributions of the anomalous part of heavy quarks
+    (c and b).
+XPBEH(KFL) : gives Bethe-Heitler distributions of heavy quarks (c and b).
+    This provides an alternative to XPANH, i.e. both should not be used
+    at the same time.
+XPDIR(KFL) : gives direct correction to the production of light quarks
+    (d, u and s). This term is nonvanishing only in the MSbar scheme,
+    and is applicable for F_2^gamma rather than for the parton
+    distributions themselves.
+ 
+-----
+ 
+PYDOCU has been corrected so that PARI(2) refers to the full cross 
+section for gamma-p and gamma-gamma processes, rather than that of 
+the latest subprocess considered.
+ 
+An additional check has been inserted into PYREMN. 
+ 
+-----------
+ 
+14, 23 March 1995:
+ 
+Some minor modifications to PYSTFU and PYGGAM in the wake of the
+changes of the previous version.
+ 
+-----------
+ 
+15, 24 April 1995:
+ 
+An unfortunate choice of default values has been corrected:
+the old MSTP(3)=2 value implied that Lambda_QCD was entirely based on 
+the Lambda value of the proton structure function; also e.g. for e+e-
+annihilation events. Thus the Lambda in PARJ(81) was overwritten,
+i.e. did not keep the value required by standard phenomenology, which
+typically gave too narrow jets. (While switching to MSTP(3)=1 it worked
+fine.) In the modified option MSTP(3)=2 this has been corrected, to 
+better agree with user expectations. Change affects PYINIT and
+PYRESD. (See further version 16 for additional changes.)
+ 
+MSTP(3) : (D=2) choice of Lambda_QCD values.
+    = 1 : separate for hard scattering, initial showers and final 
+        showers, as before. Additionally separate for resonance
+        decays, given in PARP(3).
+    = 2 : most Lambda values are set to that of the proton structure
+        function used, except for the Lambda used in the decay of
+        a resonance (as treated in PYRESD). There the PARP(3) value
+        is used, with default as in e+e-.
+    = 3 : all Lambda values are set to that of the proton structure
+        function used, as was the case for =2 before.
+ 
+PARP(3) : (D=0.29 GeV) the Lambda value used in timelike parton showers 
+    in the decay of a resonance (in PYRESD).
+ 
+-----
+ 
+The form for PTMANO, the pTmin for anomalous processes, as used in 
+PYINPR when processes are mixed for gamma-p or gamma-gamma events,
+has been updated to match (as well as can be expected) the SaS 1D 
+photon distributions.
+ 
+-----------
+ 
+16, 30 June 1995:
+ 
+The strategy for the changes to MSTP(3) in version 15 above have been
+modified for better transparency. The parameter PARP(3) has been removed,
+and instead PARP(72) has been introduced. Now PARJ(81) is used for
+resonance decays (including e.g. Z0 decay, from which it is determined),
+and PARP(72) for other timelike showers. PARJ(81) is not overwritten
+for MSTP(3) = 2, but only for = 3. Changes affect PYINIT, PYEVNT and
+PYRESD.
+ 
+PARP(72) : (D=0.25 GeV) the Lambda value used in timelike parton showers 
+    except in the decay of a resonance.
+ 
+-----
+ 
+A new multiplicative factor has been introduced for the hard scattering 
+in PYSIGH.
+ 
+PARP(34) : (D=1.) the Q2 scale defined by MSTP(32) is multiplied by PARP(34)
+    when it is used as argument for structure functions and alpha_s at the
+    hard interaction. It does not affect alpha_s when MSTP(33)=3, nor
+    does it change the Q2 argument of parton showers.
+ 
+-----
+ 
+PYREMN has been corrected for occasional too large boost factors.
+ 
+An error in PYSIGH for process 148 has been corrected.
+ 
+The MSTP(62)=1 option of PYSSPA is modified to avoid division by zero.
+ 
+Header has been updated with WWW-information.
+ 
+-----------
+ 
+17, 23 August 1995:
+ 
+MIN1, MIN2, MAX1, MAX2, MINA and MAXA in PYSIGH have had an extra M 
+prefixed to avoid confusion with Fortran functions.
+ 
+Protect against MDCY(0,1) being accessed in PYSIGH.
+ 
+Protect against THB=0 in PYRAND.
+ 
+Protect against YSTMAX-YSTMIN = 0 in PYSIGH.
+ 
+Check for moved leptoquark at beginning of PYRESD just like for
+other particles with colour. 	
+ 
+-----------------------------------------------------------------

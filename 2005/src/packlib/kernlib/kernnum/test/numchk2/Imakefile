@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 check2.F d509ch.F d509f.F d703ch.F d704ch.F \ @@\
+	 d704tm.F f010c.F f010ch.F f010d.F f010mc.F f010md.F f010mr.F \ @@\
+	 f010r.F f406ch.F f406rd.F f406rr.F f406sd.F f406sr.F f406zd.F \ @@\
+	 f406zr.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

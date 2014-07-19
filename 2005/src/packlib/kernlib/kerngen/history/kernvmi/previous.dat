@@ -1,0 +1,99 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNVMI)
+
+UP-DATE  1.09 :  31-May-1994
+----------------------------
+
+Replacing File   KERNVMI  1.08  930603 10.40
+
+New Patches:  P=P5BOOT  for the Patchy 5 bootstrap
+
+New decks:    P=VAOGS, D=JUMPTN    for the Alpha
+
+---------------------------------------------------------------------
+
+UP-DATE  1.08 :  27-May-1993
+----------------------------
+
+Replacing File   KERNVMI  1.07  930511 18.03
+
+New Patches:  *KVAOS, QMVAOS, VAOGS for DEC Alpha OSF 32-bit
+
+Renamed:      P=VMIGS   to  P=ALLGS
+              P=VMIMLAN to  P=VMIGS
+
+---------------------------------------------------------------------
+
+UP-DATE  1.07 :  11-May-1993
+----------------------------
+
+Replacing File   KERNVMI 1.06  920521 16.31
+
+New Patch:    VMIMLAN     moved machine-language routines for MIPS
+                          D=JUMPXN, SETJMP, LONGJMP from P=VMIGS
+
+---------------------------------------------------------------------
+
+UP-DATE  1.06 :  11-May-1992
+----------------------------
+
+Replacing File   KERNVMI 1.05  910719 13.17
+
+New Decks:    LENOCC, LNBLNK                      for speed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.05 :  18-July-1991
+----------------------------
+
+Replacing File   KERNVMI 1.04  910225 21.14
+
+Delete :      D=QNEXTE             use default from KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.04 :  25-Feb-1991
+----------------------------
+
+Replacing File   KERNVMI 1.03  900726 22.43
+
+Correct :     connect P=CCGEN, CCGENCF of KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.03 :  26-July-1990
+----------------------------
+
+Replacing File   KERNVMI 1.02  900228 16.29
+
+Correct :     connect some CCGEN routines
+              use the BSD42 option
+
+Delete Decks :   GSHOW, DATIME, DATIMH, INTRAC, IUFORW
+                 LOCB, LOCF, TIMEX
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  21-Feb-1990
+----------------------------
+
+Replacing File   KERNVMI 1.01  891208 12.00
+
+New Decks :   IUCOMH
+
+Correct :     FCASPLIT to be used from KERNFOR
+
+---------------------------------------------------------------------
+
+          First release of the KERNVMI  Pam :  8-Dec-1989
+
+---------------------------------------------------------------------
+
+#endif

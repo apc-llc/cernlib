@@ -1,0 +1,7 @@
+SRCS_F=	cdpurg.F cdpurk.F cdpurp.F cdspur.F
+
+#if !defined(CERNLIB_P3CHILD)
+SRCS_F := $(SRCS_F)  cddelk.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,34 @@
+*
+* $Id: wind.F,v 1.1.1.1 1996/04/01 15:03:18 mclareni Exp $
+*
+* $Log: wind.F,v $
+* Revision 1.1.1.1  1996/04/01 15:03:18  mclareni
+* Mathlib gen
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_gen/pilot.h"
+      SUBROUTINE WIND(I,N)
+C  WIND SEARCHES FORWARD FOR A FILE MARK ON TAPE I.  IF N=0
+C  THE SEARCH IS CARRIED OUT IN BCD MODE - IF N=1, IN BINARY
+C  MODE (THE DEFAULT MODE IF N IS NOT PRESENT).  FOR EITHER MODE
+C  WIND ASSUMES NON-BUFFERED I/O.
+C
+C  CERN LIBRARY PROGRAM K403
+C  L. POPE - DECEMBER 1971
+C
+      CALL NOARG(M)
+      IF (M.LT.2) GO TO 100
+      IF (N.EQ.0) GO TO 200
+C     BINARY WIND
+100   J=IOCHEC(I)
+      READ (I)
+      IF (EOF(I).NE.0.) RETURN
+      GO TO 100
+C     BCD WIND
+200   J=IOCHEC(I)
+      READ (I,1) A
+1     FORMAT(A10)
+      IF (EOF(I).NE.0.) RETURN
+      GO TO 200
+      END

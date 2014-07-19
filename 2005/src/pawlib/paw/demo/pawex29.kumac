@@ -1,0 +1,49 @@
+MACRO PAWEX29
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 29                          *
+**************************************************************************
+Exec ALLDEF
+Mess '**********************************************'
+Mess '*                COMIS test (2)              *'
+Mess '**********************************************'
+Mess
+Mess 'Test of dynamic linking on' $MACHINE
+Mess
+
+CASE $MACHINE IN
+
+(IBMRT) Mess 'This example should draw 1 zone with axis'
+        call hplfra(-1.,1.,-1.,1.,' ')
+
+(HPUX)  Zone 1 2
+        Mess 'This example should draw two zones, one with axis and one without'
+        call hplfra(-1.,1.,-1.,1.,' ')
+        call hplnul
+
+(*)     Zone 1 2
+        Mess 'This example should draw two zones, one with axis and one without'
+        appl comis quit
+        !file 0.csl
+        quit
+        call hplfra(-1.,1.,-1.,1.,' ')
+        call hplnul
+ENDCASE
+Mess
+Mess '**********************************************'
+Mess '*                VECTOR test (1)             *'
+Mess '**********************************************'
+Mess
+Vector/delete *
+Vector/create v2(2,10) r 1 2 3 4 5 6 7 8 9 10
+Vector/create v1(10)  
+Vector/copy v2(1) v1  
+Mess 'Test the copy of a column of a 2D vector in a 1D vector.'
+Mess 'The two next lines should be the same: '
+Mess ' '
+Mess ' 1.  3.  5.  7.  9.  0.  0.  0.  0.  0.' 
+Vector/write v1 ' ' 10(F4.0)
+Mess ' '
+Mess 'If they are different, the KUIP routine KXCOPV may have'
+Mess 'problems and should may be deoptimized on this platform.'
+Mess ' '
+RETURN

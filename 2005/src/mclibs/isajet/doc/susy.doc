@@ -1,0 +1,307 @@
+\newpage
+\section{ISASUSY: Decay Modes in the Minimal Supersymmetric
+Model\label{SUSY}}
+
+      The code in patch ISASUSY of ISAJET calculates decay modes of
+supersymmetric particles based on the work of H. Baer, M. Bisset, M.
+Drees, D. Dzialo (Karatas), X. Tata, J. Woodside, and their
+collaborators. The calculations assume the minimal supersymmetric
+extension of the standard model. The user specifies the gluino mass,
+the pseudoscalar Higgs mass, the Higgsino mass parameter $\mu$,
+$\tan\beta$, the soft breaking masses for the first and third
+generation left-handed squark and slepton doublets and right-handed
+singlets, and the third generation mixing parameters $A_t$, $A_b$, and
+$A_\tau$.  Supersymmetric grand unification is assumed by default in
+the chargino and neutralino mass matrices, although the user can
+optionally specify arbitrary $U(1)$ and $SU(2)$ gaugino masses at the
+weak scale. The first and second generations are assumed by default to
+be degenerate, but the user can optionally specify different values.
+These inputs are then used to calculate the mass eigenstates, mixings,
+and decay modes.
+
+      Most calculations are done at the tree level, but one-loop
+results for gluino loop decays, $H \to \gamma\gamma$ and $H \to gg$, loop
+corrections to the Higgs mass spectrum and couplings, and leading-log
+QCD corrections to $H \to q \bar q$ are included. The Higgs masses have
+been calculated using the effective potential approximation including
+both top and bottom Yukawa and mixing effects. Mike Bisset and Xerxes
+Tata have contributed the Higgs mass, couplings, and decay routines.
+Manuel Drees has calculated several of the three-body decays including
+the full Yukawa contribution, which is important for large tan(beta).
+Note that e+e- annihilation to SUSY particles and SUSY Higgs bosons
+have been included in ISAJET versions $>7.11$. ISAJET versions $>7.22$
+include the large $\tan\beta$ solution as well as non-degenerate
+sfermion masses.
+
+Other processes may be added in future versions as the physics 
+interest warrants. Note that
+the details of the masses and the decay modes can be quite sensitive
+to choices of standard model parameters such as the QCD coupling ALFA3
+and the quark masses.  To change these, you must modify subroutine
+SSMSSM. By default, ALFA3=.12.
+
+      All the mass spectrum and branching ratio calculations in ISASUSY 
+are performed by a call to subroutine SSMSSM. Effective with version 7.23,
+the calling sequence is
+\begin{verbatim}
+      SUBROUTINE SSMSSM(XMG,XMU,XMHA,XTANB,XMQ1,XMDR,XMUR,
+     $XML1,XMER,XMQ2,XMSR,XMCR,XML2,XMMR,XMQ3,XMBR,XMTR,
+     $XML3,XMLR,XAT,XAB,XAL,XM1,XM2,XMT,IALLOW)
+\end{verbatim}
+where the following are taken to be independent parameters:
+
+\smallskip\noindent
+\begin{tabular}{lcl}
+      XMG    &=& gluino mass\\
+      XMU    &=& $\mu$ = SUSY Higgs mass\\
+             &=& $-2*m_1$ of Baer et al.\\
+      XMHA   &=& pseudo-scalar Higgs mass\\
+      XTANB  &=& $\tan\beta$, ratio of vev's\\
+             &=& $1/R$ (of old Baer-Tata notation).\\
+\end{tabular}
+
+\noindent
+\begin{tabular}{lcl}
+      XMQ1   &=& $\tilde q_l$ soft mass, 1st generation\\
+      XMDR   &=& $\tilde d_r$ mass, 1st generation\\
+      XMUR   &=& $\tilde u_r$ mass, 1st generation\\
+      XML1   &=& $\tilde \ell_l$ mass, 1st generation\\
+      XMER   &=& $\tilde e_r$ mass, 1st generation\\
+\\
+      XMQ2   &=& $\tilde q_l$ soft mass, 2nd generation\\
+      XMSR   &=& $\tilde s_r$ mass, 2nd generation\\
+      XMCR   &=& $\tilde c_r$ mass, 2nd generation\\
+      XML2   &=& $\tilde \ell_l$ mass, 2nd generation\\
+      XMMR   &=& $\tilde\mu_r$ mass, 2nd generation\\
+\\
+      XMQ3   &=& $\tilde q_l$ soft mass, 3rd generation\\
+      XMBR   &=& $\tilde b_r$ mass, 3rd generation\\
+      XMTR   &=& $\tilde t_r$ mass, 3rd generation\\
+      XML3   &=& $\tilde \ell_l$ mass, 3rd generation\\
+      XMTR   &=& $\tilde \tau_r$ mass, 3rd generation\\
+      XAT    &=& stop trilinear term $A_t$\\
+      XAB    &=& sbottom trilinear term $A_b$\\
+      XAL    &=& stau trilinear term $A_\tau$\\
+\\
+      XM1    &=& U(1) gaugino mass\\
+             &=& computed from XMG if > 1E19\\
+      XM2    &=& SU(2) gaugino mass\\
+             &=& computed from XMG if > 1E19\\
+\\
+      XMT    &=& top quark mass\\
+\end{tabular}
+\smallskip
+
+\noindent The variable IALLOW is returned:
+
+\smallskip\noindent
+\begin{tabular}{lcl}
+      IALLOW &=& 1 if Z1SS is not LSP, 0 otherwise\\
+\end{tabular}
+\smallskip
+
+\noindent All variables are of type REAL except IALLOW, which is
+INTEGER, and all masses are in GeV. The notation is taken to
+correspond to that of Haber and Kane, although the Tata Lagrangian is
+used internally. All other standard model parameters are hard wired in
+this subroutine; they are not obtained from the rest of ISAJET. The
+theoretically favored range of these parameters is
+\begin{eqnarray*}
+& 50 < M(\tilde g) < 2000\,\GeV &\\
+& 50 < M(\tilde q) < 2000\,\GeV &\\
+& 50 < M(\tilde\ell) < 2000\,\GeV &\\
+& -1000 < \mu < 1000\,\GeV &\\
+& 1 < \tan\beta < m_t/m_b &\\
+& M(t) \approx 175\,\GeV &\\
+& 50 < M(A) < 2000\,\GeV &\\
+& M(\tilde t_l), M(t_r) < M(\tilde q) &\\
+& M(\tilde b_r) \sim M(\tilde q) &\\
+& -1000 < A_t < 1000\,\GeV &\\
+& -1000 < A_b < 1000\,\GeV &
+\end{eqnarray*}
+It is assumed that the lightest supersymmetric particle is the lightest
+neutralino $\tilde Z_1$, the lighter stau $\tilde\tau_1$, or the
+gravitino $\tilde G$ in GMSB models. Some choices of the above
+parameters may violate this assumption, yielding a light chargino or
+light stop squark lighter than $\tilde Z_1$. In such cases SSMSSM does
+not compute any branching ratios and returns IALLOW = 1.
+
+      SSMSSM does not check the parameters or resulting masses against
+existing experimental data. SSTEST provides a minimal test. This routine
+is called after SSMSSM by ISAJET and ISASUSY and prints suitable warning
+messages.
+
+      SSMSSM first calculates the other SUSY masses and mixings and puts
+them in the common block /SSPAR/:
+\begin{verbatim}
+#include "sspar.inc"
+\end{verbatim}
+It then calculates the widths and branching ratios and puts them in the
+common block /SSMODE/:
+\begin{verbatim}
+#include "ssmode.inc"
+\end{verbatim}
+Decay modes for a given particle are not necessarily adjacent in this
+common block.  Note that the branching ratio calculations use the full
+matrix elements, which in general will give nonuniform distributions in
+phase space, but this information is not saved in /SSMODE/.  In
+particular, the decays $H \to Z + Z^* \to Z + f + \bar f$ give no
+indication that the $f \bar f$ mass is strongly peaked near the upper
+limit.
+
+      All IDENT codes are defined by parameter statements in the PATCHY
+keep sequence SSTYPE:
+\begin{verbatim}
+#include "sstype.inc"
+\end{verbatim}
+These are based on standard ISAJET but can be changed to interface with
+other generators.  Since masses except the t mass are hard wired, one
+should check the kinematics for any decay before using it with possibly
+different masses.
+
+      Instead of specifying all the SUSY parameters at the electroweak
+scale using the MSSMi commands, one can instead use the SUGRA parameter
+to specify in the minimal supergravity framework the common scalar mass
+$m_0$, the common gaugino mass $m_{1/2}$, and the soft trilinear SUSY
+breaking parameter $A_0$ at the GUT scale, the ratio $\tan\beta$ of
+Higgs vacuum expectation values at the electroweak scale, and $\sgn\mu$,
+the sign of the Higgsino mass term. The \verb|NUSUGi| keywords allow one
+to break the assumption of universality in various ways. \verb|NUSUG1|
+sets the gaugino masses; \verb|NUSUG2| sets the $A$ terms; \verb|NUSUG3|
+sets the Higgs masses; \verb|NUSUG4| sets the first generation squark
+and slepton masses; and \verb|NUSUG5| sets the third generation masses.
+The keyword \verb|SSBCSC| can be used to specify an alternative scale
+(i.e., not the coupling constant unification scale) for the RGE boundary
+conditions.
+
+      The renormalization group equations now include all the two-loop
+terms for both gauge and Yukawa couplings and the possible contributions
+from right-handed neutrinos. These equations are solved iteratively using
+Runge-Kutta numerical integration to determine the weak scale parameters
+from the GUT scale ones:
+\begin{enumerate}
+%
+\item The RGE's are run from the weak scale $M_Z$ up to the GUT scale,
+where $\alpha_1 = \alpha_2$, taking all thresholds into account. We use
+two loop RGE equations for the gauge couplings only.
+%
+\item The GUT scale boundary conditions are imposed, and the RGE's are
+run back to $M_Z$, again taking thresholds into account.
+%
+\item The masses of the SUSY particles and the values of the soft 
+breaking parameters B and mu needed for radiative symmetry are
+computed, e.g.
+$$
+\mu^2(M_Z) = {M_{H_1}^2 - M_{H_2}^2  \tan^2\beta \over
+\tan^2\beta-1} - M_Z^2/2
+$$
+These couplings are frozen out at the scale $\sqrt{M(t_L)M(t_R)}$.
+%
+\item The 1-loop radiative corrections are computed.
+%
+\item The process is then iterated until stable results are obtained.
+\end{enumerate}
+This is essentially identical to the procedure used by several other
+groups. Other possible constraints such as $b$-$\tau$ unification and 
+limits on proton decay have not been included.
+
+      An alternative to the SUGRA model is the Gauge Mediated SUSY
+Breaking (GMSB) model of Dine and Nelson, Phys.\ Rev.\ {\bf D48}, 1277
+(1973); Dine, Nelson, Nir, and Shirman, Phys.\ Rev.\ {\bf D53}, 2658
+(1996). In this model SUSY is broken dynamically and communicated to the
+MSSM through messenger fields at a messenger mass scale $M_m$ much less
+than the Planck scale. If the messenger fields are in complete
+representations of $SU(5$), then the unification of couplings suggested
+by the LEP data is preserved. The simplest model has a single $5+\bar5$
+messenger sector with a mass $M_m$ and and a SUSY-breaking VEV $F_m$ of
+its auxiliary field $F$. Gauginos get masses from one-loop graphs
+proportional to $\Lambda_m = F_m / M_m$ times the appropriate gauge
+coupling $\alpha_i$; sfermions get squared-masses from two-loop graphs
+proportional to $\Lambda_m$ times the square of the appropriate
+$\alpha_i$. If there are $N_5$ messenger fields, the gaugino masses and
+sfermion masses-squared each contain a factor of $N_5$.
+
+      The parameters of the GMSB model implemented in ISAJET are
+\begin{itemize}
+\item $\Lambda_m = F_m/M_m$: the scale of SUSY breaking, typically
+10--$100\,{\rm TeV}$;
+\item $M_m > \Lambda_m$: the messenger mass scale, at which the boundary
+conditions for the renormalization group equations are imposed;
+\item $N_5$: the equivalent number of $5+\bar5$ messenger fields.
+\item $\tan\beta$: the ratio of Higgs vacuum expectation values at the
+electroweak scale;
+\item $\sgn\mu=\pm1$: the sign of the Higgsino mass term;
+\item $C_{\rm grav}\ge1$: the ratio of the gravitino mass to the value it
+would have had if the only SUSY breaking scale were $F_m$.
+\end{itemize}
+The solution of the renormalization group equations is essentially the
+same as for SUGRA; only the boundary conditions are changed. In
+particular it is assumed that electroweak symmetry is broken radiatively
+by the top Yukawa coupling.
+
+      In GMSB models the lightest SUSY particle is always the nearly
+massless gravitino $\tilde G$. The phenomenology depends on the nature
+of the next lightest SUSY particle (NLSP) and on its lifetime to decay
+to a gravitino. The NLSP can be either a neutralino $\tilde\chi_1^0$ or
+a slepton $\tilde\tau_1$. Its lifetime depends on the gravitino mass,
+which is determined by the scale of SUSY breaking not just in the
+messenger sector but also in any other hidden sector. If this is set by
+the messenger scale $F_m$, i.e., if $C_{\rm grav}\approx1$, then this
+lifetime is generally short. However, if the messenger SUSY breaking
+scale $F_m$ is related by a small coupling constant to a much larger
+SUSY breaking scale $F_b$, then $C_{\rm grav}\gg1$ and the NLSP can be
+long-lived. The correct scale is not known, so $C_{\rm grav}$ should be
+treated as an arbitrary parameter. More complicated GMSB models may be
+run by using the GMSB2 keyword.
+
+      Patch ISASSRUN of ISAJET provides a main program SSRUN and some
+utility programs to produce human readable output.  These utilities must
+be rewritten if the IDENT codes in /SSTYPE/ are modified.  To create the
+stand-alone version of ISASUSY with SSRUN, run YPATCHY on isajet.car
+with the following cradle (with \verb|&| replaced by \verb|+|):
+\begin{verbatim}
+&USE,*ISASUSY.                         Select all code
+&USE,NOCERN.                           No CERN Library
+&USE,IMPNONE.                          Use IMPLICIT NONE
+&EXE.                                  Write everything to ASM
+&PAM,T=C.                              Read PAM file
+&QUIT.                                 Quit
+\end{verbatim}
+Compile, link, and run the resulting program, and follow the prompts for
+input.  Patch ISASSRUN also contains a main program SUGRUN that reads
+the minimal SUGRA, non-universal SUGRA, or GMSB parameters, solves the
+renormalization group equations, and calculates the masses and branching
+ratios. To create the stand-alone version of ISASUGRA, run YPATCHY with
+the following cradle:
+\begin{verbatim}
+&USE,*ISASUGRA.                        Select all code
+&USE,NOCERN.                           No CERN Library
+&USE,IMPNONE.                          Use IMPLICIT NONE
+&EXE.                                  Write everything to ASM
+&PAM.                                  Read PAM file
+&QUIT.                                 Quit
+\end{verbatim}
+The documentation for ISASUSY and ISASUGRA is included with that for
+ISAJET.
+
+      ISASUSY is written in ANSI standard Fortran 77 except that
+IMPLICIT NONE is used if +USE,IMPNONE is selected in the Patchy cradle. 
+All variables are explicitly typed, and variables starting with
+I,J,K,L,M,N are not necessarily integers.  All external names such as
+the names of subroutines and common blocks start with the letters SS. 
+Most calculations are done in double precision.  If +USE,NOCERN is
+selected in the Patchy cradle, then the Cernlib routines EISRS1 and its
+auxiliaries to calculate the eigenvalues of a real symmetric matrix and
+DDILOG to calculate the dilogarithm function are included.  Hence it is
+not necessary to link with Cernlib.
+
+      The physics assumptions and details of incorporating the Minimal
+Supersymmetric Model into ISAJET have appeared in a conference
+proceedings entitled ``Simulating Supersymmetry with ISAJET 7.0/ISASUSY
+1.0'' by H. Baer, F. Paige, S. Protopopescu and X. Tata; this has
+appeared in the proceedings of the workshop on {\sl Physics at Current
+Accelerators and Supercolliders}, ed.\ J. Hewett, A. White and D.
+Zeppenfeld, (Argonne National Laboratory, 1993). Detailed references
+may be found therein. Users wishing to cite an appropriate source should,
+however, cite the most recent ISAJET manual, e.g. hep-ph/0001086 (1999).
+

@@ -1,0 +1,14 @@
+*
+* $Id: v167.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v167.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.67  920306  9.00
+C
+C-  P=EPIO  ,D=EPBLIN   : make EBCDIC declaration of ULP only for the
+C                         Siemens compiler.
+C-  P=FEPIO             : trigger STF77VX for DEC in source+test
+C

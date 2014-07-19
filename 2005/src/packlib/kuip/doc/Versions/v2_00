@@ -1,0 +1,321 @@
+*
+* $Id: v2_00,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_00,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.00/16 15/02/93  17.08.42  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   04/12/92
+*
+*::>          VERSION  2.00/16   930215 17.08
+*
+* The location of the kxterm executable can now be defined as environment
+* variable KXTERM.
+*
+* Access from C to PAWC through a pointer to allow the use of dynamic common
+* blocks on IBM.
+*
+* Corrections for MVS (Harald Butenschoen).
+*
+* Ansi C compiler on Sun provides fixed include files <time.h> and <signal.h>.
+*
+* V/CREATE and V/INPUT allow again vector elements to be used as initializers
+* (reported by L.Pontecorvo)
+*
+* The macro READ statement did not provide the correct default value for
+* already existing variables (reported by Timothy Cox).
+*
+* The number of commands in the history list printed by "!" is now restricted
+* to the value set by SET/RECORDING.
+*
+*::>          VERSION  2.00/15   930201 14.27
+*
+* SET/ROOT was looking at menus at the same level as the root menu.
+* SET/ROOT now changes the prompt to the menu name.
+* (Problems reported by Mogens Dam.)
+*
+* KUIP/EDIT creates new files in the first directory in the MACRO/DEFAULTS
+* search list. Before it has always created in the current directory.
+* (Problem reported by Nige Watson.)
+*
+* Another bug fix for string concatenation: "abc//'def'//ghi" gave the
+* wrong result. (Problem reported by Nicole Lhermitte.)
+*
+* KUGETL: blank values in a variable length argument list were ignored.
+*
+* Remove edit server lock file before exiting.
+*
+* Avoid "writable strings" problem with default values.
+*
+*::>          VERSION  2.00/14   930128 18.32
+*
+* Alpha/VMS CC with /STAN=VAXC is now compiling without warnings.
+*
+* Second iteration for NeXT implementation.
+*
+* Bug fix in getline(): memory was overwritten when prompt exceeded
+* 80 characters (affected PAWGKS on VMS).
+*
+* After 3 consecutive ^C ask whether he wants to exit from application.
+*
+* Put additional calls to KUALFA in strategic places.
+*
+* "READ var" keeps the initial value of macro variable when pressing <CR>.
+* Problem reported by Tim Cox.
+*
+* For implicit LOOP arguments to commands: comma is only recognized as
+* argument separator if it is outside balanced ().
+*
+* For KUGETL: comma is only recognized as argument separator if it is
+* outside balanced () or ''.
+*
+*::>          VERSION  2.00/13   930126 16.50
+*
+* Avoid compiler warnings on Apollo and SGI.
+*
+* Fix for accessing common blocks from C on Cray.
+*
+* Restored old behaviour for KUPROx routines: input value is left unchanged
+* if typing <CR>.
+*
+* Fix for SUN and DECstation: strtod() is declared in <math.h> instead
+* of <stdlib.h>
+*
+* Replace long by int: we assume that int is at least 32 bits.
+*
+* New routine KUGRFL to flush the graphics output after each command.
+* The routine passed should do the same as IGTERM for X11 but be dummy for GKS.
+*
+* KUGETE ignored default value.
+*
+* First iteration for NeXT implementation.
+*
+* KIMULT: '*' was missing from list of characters which inhibit ';' being
+* the line separator --> on VMS "shell del file.type;*" was not working
+* inside a macro.
+*
+*::>          VERSION  2.00/12   930122 21.24
+*
+* Removed KUALFA after each command executed.
+*
+* On VM/CMS: replace sleep() emulation by call to SLEEPF (clash with with
+* entry in COMMTXT.TXTLIB).
+*
+* On VAX/VMS: MACRO/DEFAULT -Auto worked only if a search path was set.
+*
+* Undefined numbered variables, e.g. [1] are now replaced by "!".
+*
+* KUGETI and KUGETR now prompt in case the argument is not a valid number.
+*
+* Wrong logic in string concatenation: "abc//def//'ghi'" became "'abc//defghi'"
+* instead of "'abcdefghi'".
+*
+* "TRACE ON TEST" executed action routines.
+*
+*::>          VERSION  2.00/11   930121 16.27
+*
+* "V/CREATE name" is now treated as "V/CREATE name(1)".
+*
+* Environment variable KUIPEDITOR takes precedence over EDITOR.
+*
+*::>          VERSION  2.00/10   930120 18.43
+*
+* New CDF features are now available as well through Fortran mode of KUIPC.
+*
+* "-option" was only recognized if it was the last argument on the command
+* line.
+*
+* Use G-format instead of F-format to convert result of $SIGMA.
+*
+* Edit server is only used if HOST_EDITOR command contains a '&'.
+* HOST_EDITOR 'vi &' is treated as HOST_EDITOR 'xterm -e vi &'.
+*
+*::>          VERSION  2.00/09   930118 16.45
+*
+* Style GP reimplemented.
+*
+* Motif terminal kxterm introduced.
+*
+*::>          VERSION  2.00/08   930115 14.06
+*
+* FATMEN's "LS file -L" did not work because the second parameter is an
+* Integer which had implictly the MINUS flag set inhibiting the CHOPT trial.
+* ==> KUIPC changed that the MINUS flag for numeric parameters is not set
+* automatically any more. Instead "-value" on a numeric argument position
+* is checked whether it is a number. Otherwise the CHOPT assignment is tried.
+*
+* The filename "last.kumac" was undefined when exiting with having executed
+* a LAST command (message "Cannot open" when leaving application).
+*
+* In order to allow the new HPLOT escape sequences "@[" an undocumented
+* feature had to be removed: The construct "@[name]" forced variable
+* substitution even inside quoted strings. The same functionality is
+* achieved by using "//" for string concatenation, e.g. "vecname='vec@[n]'"
+* has to be replaced by "vecname='vec'//[n]".
+*
+* Bug fix for VMS file paths inside macros, e.g. "shell dir disk$xx:[user]".
+* Note: VMS file paths may NOT appear in EXEC statements inside a macro,
+* i.e. "EXEC DISK$xx:[user]macnam" does not work inside a macro (it does
+* though when entering it on the command line).
+* Workaround: define a logical name for the directory path and use
+* "EXEC LOG_NAME:macnam" or include the directory in the kumac search
+* path "MACRO/DEFAULT [],DISK$xx:[user]" and use "EXEC macnam".
+*
+*::>          VERSION  2.00/07   930113 15.58
+*
+* Typing "Q" after WAIT prompt terminates macro execution.
+*
+* Bug fix in Motif prompt for WAIT command.
+*
+*::>          VERSION  2.00/06   930112 18.45
+*
+* In concatenated system functions, e.g. "$machine$os" only the last one
+* was replaced.
+*
+* Macro variables "[%var]" were not replaced.
+*
+* TRACE ON WAIT implemented.
+*
+* All keyboard input requests are now done through Motif widgets.
+*
+* KGETAR did not work for VMS.
+*
+* New special argument value "!!" replaced by value used for previous
+* command execution, i.e. for mandatory parameters it behaves like
+* pressing <CR> at prompt.
+*
+* "-option" syntax was misbehaving if a shorted range value was a substring
+* of a longer range value.
+*
+*::>          VERSION  2.00/05   930107 17.38
+*
+* The dollar sign can be used in alias names.
+*
+* LaTeX manual formatting improved.
+*
+* Command LAST excluded the last command.
+*
+* Appending the default ".KUMAC" filetype was not done for VMS path names
+* like "[dir.sub]file".
+*
+* Problems with macro variable substitition if macro file name contains a
+* VMS directory path solved. (Special thanks to Rob Kreuger for reporting
+* the VMS related problems.)
+*
+* MACRO/DEFAULT -Auto/AutoReverse reimplemented. The default path can now
+* be a comma separated list of directories.
+*
+*::>          VERSION  2.00/04   921218 17.03
+*
+* Falco terminals lost arrow keys when logging into TAGIBM because the
+* escape sequences changes from "ESC-[-A" to "ESC-O-A".
+*
+* VMS signal handler installed to avoid program aborting for VMS
+* specific exceptions, e.g. invalid filenames.
+*
+* Unix only: KUHOME replaces now again environment variables in
+* filenames, e.g. $HOME/file.type
+*
+* When prompting for missing arguments the last used value is proposed
+* as default.
+*
+*::>          VERSION  2.00/03   921214 19.06
+*
+* KUIPAPPL.TMP files are opened for unformatted access to allow RECFM V
+* on VM/CMS.
+*
+* Bug fix for VM/CMS crash in KUPATH: In a CALL SUB('ABC') to a C function
+* SUB(char *ptr, int*len) the pointer ptr my NOT be considered as a local
+* variable. Doing ptr++ will be disastrous in the end.
+*
+*::>          VERSION  2.00/02   921211 18.13
+*
+* KUIP system functions were not substituted if used in CASE
+* e.g. CASE $OS IN ... did not work
+*
+* Bug fix for VM/CMS crash when calling help for command with
+* >User-Help twice
+*
+* KUARGS for option -n (no logon kumac) fixed
+*
+* Assignments "name = val" evaluated to "name = @macname[val]".
+* Fixed by removing the obsoleted feature of decoding unbracketed
+* variable names on the right hand side, i.e. "i = i+1" must now
+* be written as "i = [i]+1".
+*
+* KUVAR was passing a string constant to routines which could overwrite it.
+*
+* Name clash with FATMEN for routine fmatch(). Renamed to fwmatch()
+*
+* Command repetition now also recognized if ! is not in first column.
+*
+* Recognize alias names as help item, e.g. "A/CRE LS DIR C; HELP LS"
+*
+* Delete KUIPHELP.TMP file after exiting from HELP in -EDIT style
+*
+*::>          VERSION  2.00/01   921209 17.54
+*
+* Delete temp vectors created for non-contiguous subarrays
+*
+* For gcc (Sun) use option -fwritable-strings
+*
+*::>          VERSION  2.00/00   921204 21.36
+*
+* A large fraction of KUIP has been rewritten in C. The new version is
+* intended to be (mostly) backwards compatible to the old one but because
+* of the large amount of new code involved we cannot exclude that some
+* incompatibilities remain. We want to urge all users to test their KUMAC
+* files with the PAW version in the new area before it goes into production.
+*
+* At the moment the following features are not yet fully implemented:
+*
+*    DEFAULTS -AUTO
+*    MANUAL in SGML and plain TeX
+*    STYLE GP
+*    TRACE WAIT
+*    system functions for STYLE GP ($KEYNUM, $KEYVAL)
+*
+*
+* Known incompatibilities:
+*
+*  - Alias names may contain only letters, digits, @-signs and underscores.
+*    (If someone can make a strong case that this is too restrictive,
+*    let us know; we can still consider going back to the old scheme.)
+*
+*  - The commands /KUIP/LISTHELP and /KUIP/SET_SHOW/MODE have been removed.
+*
+*
+* Improvements:
+*
+*  - There is no limit on the number of aliases anymore.
+*    Since KUMAC variables are treated internally as a special kind of
+*    alias complex macros could hit the limit of 200 aliases before.
+*
+*  - The HELP command recognizes now abbreviations for submenu names.
+*    E.g. HELP H/OP works now while before HELP HISTOGRAM/OPERATIONS had
+*    to be spelled out.
+*
+*  - The HELP command does a simple text formatting. The line length is
+*    controlled by /KUIP/SET_SHOW/COLUMNS.
+*
+*  - The HELP -EDIT option is now implemented for all systems.
+*    A new command /KUIP/SET_SHOW/HOST_PAGER defines the pager used to
+*    display the help text.  E.g. on a Unix workstation define
+*    HOST_PAGER 'xterm -e view &' to display the help text in a
+*    separate window.
+*
+*  - A new command /KUIP/SET_SHOW/FILECASE allows now to select the case
+*    sensitivity for filenames on Unix systems. Before this functionality
+*    was hidden as STYLE '-FILECASE ON'.
+*
+*  - A new command /KUIP/SET_SHOW/RECALL_STYLE to define the command recall
+*    and editing style.  There is a choice between ksh/emacs-like binding
+*    and the key definitions used by DCL command line editing on VAX/VMS.
+*
+*******************************************************************************
+*  - A completely new Motif interface with a browser for application          *
+*    specific object types and many more features.                            *
+*******************************************************************************
+*

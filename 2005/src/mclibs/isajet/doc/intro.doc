@@ -1,0 +1,114 @@
+% LaTeX 2.09 or LaTeX 2e
+\documentstyle[12pt]{article}
+
+% Page dimensions
+\newdimen\SaveWidth \SaveWidth=\textwidth
+\newdimen\SaveHeight \SaveHeight=\textheight
+\textwidth=6.5in
+\textheight=8.9in
+\advance\SaveWidth by -\textwidth
+\advance\SaveHeight by -\textheight
+\divide\SaveWidth by 2
+\divide\SaveHeight by 2
+\advance\hoffset by \SaveWidth
+\advance\voffset by \SaveHeight
+
+\def\sgn{\mathop{\rm sgn}}
+\def\GeV{{\rm GeV}}
+\def\etmiss{\slashchar{E}_T}
+
+%  \slashchar puts a slash through a character to represent contraction
+%  with Dirac matrices.
+\def\slashchar#1{\setbox0=\hbox{$#1$}           % set a box for #1
+   \dimen0=\wd0                                 % and get its size
+   \setbox1=\hbox{/} \dimen1=\wd1               % get size of /
+   \ifdim\dimen0>\dimen1                        % #1 is bigger
+      \rlap{\hbox to \dimen0{\hfil/\hfil}}      % so center / in box
+      #1                                        % and print #1
+   \else                                        % / is bigger
+      \rlap{\hbox to \dimen1{\hfil$#1$\hfil}}   % so center #1
+      /                                         % and print /
+   \fi}                                         %
+
+%       \simge and \simle make the "greater than about" and the "less
+% than about" symbols with spacing as relations.
+\def\simge{%  ``greater than about'' symbol
+    \mathrel{\rlap{\raise 0.511ex
+        \hbox{$>$}}{\lower 0.511ex \hbox{$\sim$}}}}
+\def\simle{%  ``less than about'' symbol
+    \mathrel{\rlap{\raise 0.511ex 
+        \hbox{$<$}}{\lower 0.511ex \hbox{$\sim$}}}}
+
+\begin{document}
+
+\centerline{\Large\bf ISAJET 7.58}
+\centerline{\Large\bf A Monte Carlo Event Generator}
+\smallskip
+\centerline{\Large\bf for $pp$, $\bar pp$, and $e^+e^-$ Reactions}
+\bigskip\bigskip
+\centerline{\bf Frank E. Paige and Serban D. Protopopescu}
+\smallskip
+\centerline{Physics Department}
+\centerline{Brookhaven National Laboratory}
+\centerline{Upton, NY 11973, USA}
+\bigskip
+\centerline{\bf Howard Baer}
+\smallskip
+\centerline{Department of Physics}
+\centerline{Florida State University}
+\centerline{Talahassee, FL 32306}
+\bigskip
+\centerline{\bf Xerxes Tata}
+\centerline{Department of Physics and Astronomy}
+\centerline{University of Hawaii}
+\centerline{Honolulu, HI 96822}
+
+\bigskip\bigskip
+\tableofcontents
+
+\newpage
+\section{Introduction\label{INTRO}}
+
+      ISAJET is a Monte Carlo program which simulates $pp$, 
+$\bar pp$ and $e^+e^-$ interactions at high energies. 
+ISAJET is based on
+perturbative QCD plus phenomenological models for parton and beam jet
+fragmentation. Events are generated in four distinct steps:
+\begin{itemize}
+\item A primary hard scattering is generated according to the
+appropriate QCD cross section.
+\item QCD radiative corrections are added for both the initial and the
+final state.
+\item Partons are fragmented into hadrons independently, and particles
+with lifetimes less than about $10^{-12}$ seconds are decayed.
+\item Beam jets are added assuming that these are identical to a
+minimum bias event at the remaining energy.
+\end{itemize}
+
+      ISAJET incorporates ISASUSY, which evaluates branching ratios for
+the minimal supersymmetric extension of the standard model. H.~Baer and
+X.~Tata are coauthors of this package, and they have done the original
+calculations with various collaborators. See the ISASUSY documentation
+in the patch Section~\ref{SUSY}.
+
+      ISAJET is supported for ANSI Fortran and for Cray, DEC Ultrix,
+DEC VMS, HP/9000 7xx, IBM VM/CMS 370 and 30xx, IBM AIX RS/6000, Linux,
+Silicon Graphics 4D, and Sun computers. The CDC 7600 and ETA 10
+versions are obsolete and are no longer supported. It is written
+mainly in ANSI standard FORTRAN 77, but it does contain some
+extensions except in the ANSI version. The code is maintained with a
+combination of RCS, the Revision Control System, and the Patchy code
+management system, which is part of the CERN Library. The original
+sources are kept on physgi01.phy.bnl.gov in
+\verb|~isajet/isalibrary/RCS|; decks revised in release \verb|n.nn|
+are kept in \verb|~isajet/isalibrary/nnn|. ISAJET is supplied to BNL,
+CERN, Fermilab, and SLAC; it is also available by anonymous ftp from
+\begin{verbatim}
+ftp://penguin.phy.bnl.gov/pub/isajet
+\end{verbatim}
+or by request from the authors.
+
+      Patch ISAPLT contains the skeleton of an HBOOK histogramming
+job, a trivial calorimeter simulation, and a jet-finding algorithm.
+(The default is HBOOK4; HBOOK3 can be selected with a Patchy switch.)
+These are provided for convenience only and are not supported.

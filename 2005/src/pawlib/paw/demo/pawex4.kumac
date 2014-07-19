@@ -1,0 +1,29 @@
+MACRO PAWEX4
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 4                           *
+* Example which shows the difference between VECTOR/DRAW and VECTOR/PLOT *
+* It also shows the functioanlity of VECTOR/HFILL and PUT/CONTENTS       *
+**************************************************************************
+Exec ALLDEF
+zone 2 2
+ve/create VECT1(10) R 1 2 3 4 5 5 4 3 2 1
+set htyp 244
+ve/draw VECT1
+SET HCOL 1001
+ve/plot VECT1
+set htyp 244
+create/1dhisto 100 'test vector/hfill' 5 1. 6.
+MAX 100 2.5
+ve/hfill VECT1 100
+histo/plot 100 'b'
+hi/de 100
+create/1dhisto 100 'test put/contents' 10 1. 11.
+MAX 100 5.5
+MIN 100 0.5
+put/contents 100 VECT1
+histo/plot 100
+ve/de VECT1
+hi/de 100
+zone
+RETURN
+

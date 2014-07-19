@@ -1,0 +1,11 @@
+
+.SUFFIXES:
+
+CopyFile(cojets.cpp,cojets.cin)
+CopyFile(decay.cpp,decay.cin)
+CopyFile(table.cpp,table.cin)
+
+CppFileTarget(cojets.dat,cojets.cin,NullParameter,table.cin decay.cin)
+
+PackageDirFileTarget(cojets.dat)
+

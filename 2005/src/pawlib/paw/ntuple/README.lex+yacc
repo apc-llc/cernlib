@@ -1,0 +1,28 @@
+These are the commands used to transform the lex and yacc
+Files.
+
+--- Flex
+
+# -t is needed because -P on flex changes output name :-(
+%.o: %.l
+	$(FLEX) -s -p -b -P$*"_" -t $< > $(BD)$*$(VAR).c
+	$(COMPILE.c) $(BD)$*$(VAR).c $(OUTPUT_OPTION)
+	rm -f $(BD)$*$(VAR).c
+
+mv qp_scanner.c qp_scanner.c.old
+flex  -s -p -b -Pqp_scanner_ -t qp_scanner_l.l > qp_scanner.c
+
+%.o %.h: %.y
+	@echo '=> $(BYACC) -d $< "->" $(BD)%$(VAR).c $(BD)%$(VAR).h
+	$(BYACC) -d -v -t $<
+	mv y.tab.c $(BD)$*$(VAR).c
+	mv y.tab.h $(BD)$*$(VAR).h
+	$(COMPILE.c) $(BD)$*$(VAR).c -o $(BD)$*$(VAR).o
+	rm -f $(BD)$*$(VAR).c
+
+byacc -d -v -t qp_parser_y.y
+mv qp_parser.c qp_parser.c.old 
+mv qp_parser.h qp_parser.h.old 
+mv y.tab.c qp_parser.c
+mv y.tab.h qp_parser.h
+

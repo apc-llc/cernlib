@@ -1,0 +1,13 @@
+*
+* $Id: v31303.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v31303.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.13/03   940207 11.00
+C
+C- New patches/flags
+C     WINNT
+C

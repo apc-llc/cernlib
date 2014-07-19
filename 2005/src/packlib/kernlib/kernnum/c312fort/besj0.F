@@ -1,0 +1,120 @@
+*
+* $Id: besj0.F,v 1.1.1.1 1996/02/15 17:49:07 mclareni Exp $
+*
+* $Log: besj0.F,v $
+* Revision 1.1.1.1  1996/02/15 17:49:07  mclareni
+* Kernlib
+*
+*
+#include "kernnum/pilot.h"
+      REAL FUNCTION BESJ0(RX)
+      REAL RX
+      CHARACTER*6 ENAME
+#if defined(CERNLIB_NUMHIPRE)
+      REAL DBESJ0,X,Y,V,H,ALFA,ZERO,ONE,TWO,EIGHT,D
+      REAL PI1,PI2,C1(0:14),C2(0:9),C3(0:10),B0,B1,B2,P,Q,R
+#endif
+#if defined(CERNLIB_NUMLOPRE)
+      DOUBLE PRECISION X,Y,V,H,ALFA,ZERO,ONE,TWO,EIGHT,D
+      DOUBLE PRECISION PI1,PI2,C1(0:14),C2(0:9),C3(0:10),B0,B1,B2,P,Q,R
+      DOUBLE PRECISION DBESJ0,DX
+#endif
+ 
+      DATA ZERO /0.0D0/, ONE /1.0D0/, TWO /2.0D0/, EIGHT /8.0D0/
+      DATA PI1 /0.79788 45608 0287D0/, PI2 /0.78539 81633 9745D0/
+ 
+      DATA C1( 0) /+0.15772 79714 7489D0/
+      DATA C1( 1) /-0.00872 34423 5285D0/
+      DATA C1( 2) /+0.26517 86132 0334D0/
+      DATA C1( 3) /-0.37009 49938 7265D0/
+      DATA C1( 4) /+0.15806 71023 3210D0/
+      DATA C1( 5) /-0.03489 37694 1141D0/
+      DATA C1( 6) /+0.00481 91800 6947D0/
+      DATA C1( 7) /-0.00046 06261 6621D0/
+      DATA C1( 8) /+0.00003 24603 2882D0/
+      DATA C1( 9) /-0.00000 17619 4691D0/
+      DATA C1(10) /+0.00000 00760 8164D0/
+      DATA C1(11) /-0.00000 00026 7925D0/
+      DATA C1(12) /+0.00000 00000 7849D0/
+      DATA C1(13) /-0.00000 00000 0194D0/
+      DATA C1(14) /+0.00000 00000 0004D0/
+ 
+      DATA C2( 0) /+0.99946 03493 4752D0/
+      DATA C2( 1) /-0.00053 65220 4681D0/
+      DATA C2( 2) /+0.00000 30751 8479D0/
+      DATA C2( 3) /-0.00000 00517 0595D0/
+      DATA C2( 4) /+0.00000 00016 3065D0/
+      DATA C2( 5) /-0.00000 00000 7864D0/
+      DATA C2( 6) /+0.00000 00000 0517D0/
+      DATA C2( 7) /-0.00000 00000 0043D0/
+      DATA C2( 8) /+0.00000 00000 0004D0/
+      DATA C2( 9) /-0.00000 00000 0001D0/
+ 
+      DATA C3( 0) /-0.01555 58546 05337D0/
+      DATA C3( 1) /+0.00006 83851 99426D0/
+      DATA C3( 2) /-0.00000 07414 49841D0/
+      DATA C3( 3) /+0.00000 00179 72457D0/
+      DATA C3( 4) /-0.00000 00007 27192D0/
+      DATA C3( 5) /+0.00000 00000 42201D0/
+      DATA C3( 6) /-0.00000 00000 03207D0/
+      DATA C3( 7) /+0.00000 00000 00301D0/
+      DATA C3( 8) /-0.00000 00000 00033D0/
+      DATA C3( 9) /+0.00000 00000 00004D0/
+      DATA C3(10) /-0.00000 00000 00001D0/
+#if defined(CERNLIB_NUMHIPRE)
+      ROUND(D)  =  D
+#endif
+#if defined(CERNLIB_NUMLOPRE)
+      ROUND(D)  =  SNGL(D+(D-DBLE(SNGL(D))))
+#endif
+ 
+      X=RX
+      ENAME=' BESJ0'
+#if defined(CERNLIB_NUMLOPRE)
+      GOTO 9
+      ENTRY DBESJ0(DX)
+      ENAME='DBESJ0'
+      X=DX
+#endif
+ 
+    9 V=ABS(X)
+      IF(V .LT. EIGHT) THEN
+       Y=V/EIGHT
+       H=TWO*Y**2-ONE
+       ALFA=-TWO*H
+       B1=ZERO
+       B2=ZERO
+       DO 1 I = 14,0,-1
+       B0=C1(I)-ALFA*B1-B2
+       B2=B1
+    1  B1=B0
+       B1=B0-H*B2
+      ELSE
+       R=ONE/V
+       Y=EIGHT*R
+       H=TWO*Y**2-ONE
+       ALFA=-TWO*H
+       B1=ZERO
+       B2=ZERO
+       DO 2 I = 9,0,-1
+       B0=C2(I)-ALFA*B1-B2
+       B2=B1
+    2  B1=B0
+       P=B0-H*B2
+       B1=ZERO
+       B2=ZERO
+       DO 3 I = 10,0,-1
+       B0=C3(I)-ALFA*B1-B2
+       B2=B1
+    3  B1=B0
+       Q=Y*(B0-H*B2)
+       B0=V-PI2
+       B1=PI1*SQRT(R)*(P*COS(B0)-Q*SIN(B0))
+      ENDIF
+      IF(ENAME .EQ. ' BESJ0')  THEN
+         BESJ0=ROUND(B1)
+      ELSE
+         DBESJ0=B1
+      ENDIF
+      RETURN
+      END

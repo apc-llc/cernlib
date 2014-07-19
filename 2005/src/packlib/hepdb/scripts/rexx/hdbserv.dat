@@ -1,0 +1,801 @@
+*
+* $Id: hdbserv.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: hdbserv.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, HDBSERV.EXEC */
+/*---------------------------------------------------------------------*/
+/*                                                                     */
+/*                                                                     */
+/*              #    #  ######  #####   #####   #####                  */
+/*              #    #  #       #    #  #    #  #    #                 */
+/*              ######  #####   #    #  #    #  #####                  */
+/*              #    #  #       #####   #    #  #    #                 */
+/*              #    #  #       #       #    #  #    #                 */
+/*              #    #  ######  #       #####   #####                  */
+/*                                                                     */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+Parse Source . . execname .
+ 
+If Index('HDBSERV/DELSERV/DELCOPY/DELPSF',execname) = 0 then do
+   Say 'Action not currently supported'
+   Exit 999
+   end
+ 
+'IDENTIFY (LIFO'
+Parse pull username . mynode .
+if XFLAG('CPXA') then do
+   NOREAD = 'NOREAD'
+   IUCVMSG = 'IUCVMSG'
+   end
+   else do
+   NOREAD = ''
+   IUCVMSG = ''
+   end
+ 
+/* Get wakeup interval */
+ 
+interval = "+01:00:00"
+ 
+"GLOBALV SELECT *EXEC STACK CDWAKEUP"
+ 
+pull sleep
+ 
+if strip(sleep) = '' then sleep = interval
+ 
+Select
+   When execname = 'HDBSERV' then do
+ 
+      'GLOBALV SELECT *EXEC GET CDFILE'
+ 
+      Parse var cdfile
+ 
+      If fexist(cdfile) then do
+ 
+         Say "Unprocessed journal file" cdfile "exists -> will process now"
+         exit /* Fast exit if we still have a file to process */
+ 
+      end
+/*
+      owner.0 = 4
+      owner.1 = username mynode
+      owner.2 = "JAMIE CERNVM"
+      owner.3 = "FATONE"
+      owner.4 = "HRRCR"
+ 
+      operator.0 = 3
+      operator.1 = "OPSUTIL"
+      operator.2 = "CONSOLE"
+      operator.3 = "LEPSERV"*/
+ 
+/*  Build list of HEPDB owners and operators  */
+hdbstaff = 'HDBOWNERS HDBOPERATORS'
+ 
+Do j = 1 to 2
+current = word(hdbstaff,j)
+'NAMEFIND :NICK 'current'(STACK'
+If RC = 32 then do
+   ic = setvar(stem'.0',0)
+   end
+ 
+   else do
+   stem = substr(current,4,length(current)-4)
+   Pull line
+   Pull . line
+/* stem.0 = words(line) */
+   ic = setvar(stem'.0',words(line))
+   do i = 1 to words(line)
+      current = word(line,i)
+      'NAMEFIND :NICK 'current'(STACK'
+      If RC = 32 then do
+         address = current mynode
+         ic = setvar(stem'.'i,address)
+         end
+         else do
+         Pull .
+         Pull . user
+         Pull . node
+         address = user node
+         ic = setvar(stem'.'i,address)
+         end
+      end
+   end
+ 
+end
+      end
+   otherwise nop
+end /* Select on EXECNAME */
+ 
+validmsg.0 = 15
+validmsg.1 = "HELP      = display this list"
+validmsg.2 = "HELLO     = check if server is active"
+validmsg.3 = "STOP      = stop server"
+validmsg.4 = "QDISK (QUERY_DISK_parameters) (,File)   "
+validmsg.5 = "QSPOOL    = return number of spool files"
+validmsg.6 = "DROP fmode (fmode) (...)"
+validmsg.7 = "GIME gime_parameters_and_options"
+validmsg.8 = "*FATLOG*  = log FATMEN request "
+validmsg.9 = "CLOSE     = close console log and send to JAMIE"
+validmsg.10 = "NEWLOG    = start new "execname "log"
+validmsg.11 = "FINIS     = close "execname "log"
+validmsg.12 = "SETPW"
+validmsg.13 = "LOGOFF"
+validmsg.14 = "PURGE     = purge old FAT* FZ* journal files"
+validmsg.15 = "WAKEUP    = simulate arrival of new RDR file"
+ 
+Stop        = 999999
+ 
+/*  Issue WAKEUP and wait for new RDR files ...  */
+ 
+wait:
+ 
+'DROPBUF'
+'CP SET MSG IUCV'
+  Do Forever
+ 
+  Call wakeup_wait
+  RC = Result
+  Select
+    When RC = 6 then do    /*   Console attention  */
+      Signal Stop
+      Call Logmes execname mynode "Stop"
+    End
+ 
+/*  When RC = 3 then do    /*   time               */
+      time = 'TIME'("S")
+      do i = 1 to times.0
+        timediff = time-times.i
+        If timediff >= 0 & timediff < 5 then leave
+      End
+      If i <= times.0 then do
+        Call logmes execname mynode "TIME" time
+        nomsg = 1
+      end
+      nomsg = 0
+    End */
+ 
+    Otherwise do
+    End
+  End
+End /*Do Forever*/
+ 
+/*===================   W A K E U P - W A I T  ========================*/
+ 
+wakeup_wait:
+if fexist("$ORACLE$ $OSDPRT$") then do
+   "ERASE $ORACLE$ $OSDPRT$"
+   end
+'WAKEUP' sleep '(RDR' NOREAD  IUCVMSG  /* Wakeup once an hour */
+code = rc
+/* P r o c e s s   m e s s a g e */
+ 
+Select
+  When code = 2 then do /* Timer expired */
+  Say 'Wakeup at 'date() time()
+  exit 99
+  end
+ 
+  When code = 4 then do /* New RDR file */
+      Say 'New RDR file received at 'date() time()
+      call check_sp     /* Check disk space */
+        temp     = QSPOOL("FIRST")
+        Parse var temp origin spoolid class fna fty .
+        hdbtype  = QSPOOL("FIRST","TYPE")
+        if hdbtype = 'CON' then do
+           Say 'Purging console file ...'
+           'CP PURGE RDR 'spoolid
+        end
+        hdbuser  = QSPOOL("FIRST","ORIGINID")
+        hdbnode  = QSPOOL("FIRST","FROMNODE")
+ 
+/* Fix user and node name for files arriving from Cray station */
+ 
+        if hdbuser = "CRNCRAYX" & hdbnode = "CERNVM" then do
+           hdbuser = username
+           hdbnode = "SN201"
+           end
+ 
+        "GLOBALV SELECT *EXEC SETPL HDBADDR " hdbuser hdbnode
+ 
+        nfiles = QSPOOL("RDR","NUMFILES")
+        "GLOBALV SELECT *EXEC SETPL HDBFILES " nfiles
+ 
+        If class = "U" & index(origin,'ORA') ^= 0 then do
+           Say origin spoolid class
+           Say 'Log file from ORACLE - purge'
+           'CP PURGE R' spoolid
+           Return 1
+           end
+ 
+        If fty = "MAIL" | fty = "NOTE" then do
+           "CP PURGE RDR" spoolid
+           Say purging mail file...
+           Return 1
+           End/* End of MAIL handling */
+/* Receive RDR file and then exit */
+    /*  call queue_rdr*/
+       Select
+          When execname = 'HDBSERV' then do
+/* Get the name of the spool file */
+          fileid = qspool(spoolid,'FILEID')
+          if fileid = 'none none' then do
+             'TRANSFER RDR ' fileid 'TO JAMIE RDR'
+          end
+          else do
+             'EXEC Receive 'spoolid fileid' A1 (REPLACE'
+             'GLOBALV SELECT *EXEC SETPL CDFILE 'fileid 'A'
+             Exit
+             end
+          end
+          Otherwise nop
+       End
+      End
+ 
+    When code = 5 then do /* New MSG */
+       Pull text
+       Parse var text . user text
+ 
+       If user = XNAME("RSCSID") | user = "DECMCS" then do
+          Parse Var text . "FROM" user_node text
+          Parse Var user_node node "(" user ")" .
+          If user = "" | DATATYPE(user,"N") then Return 1
+          End
+          Else do
+          node = mynode
+          End
+       If index(text,"*GONE") ^= 0 then Return /* Ignore GONE messages */
+       If index(user,"DECSTG") ^= 0 then Return /* Ignore DECSTG% messages */
+       If user = 'MAILER' then Return /* Don't process messages from MAILER */
+       If user = "MAILER" then Return 1
+       Call process_msg
+       Return result
+       end
+    When code = 6 then do /* Console interrupt */
+       Say ""
+       Say "Stopping due to CONSOLE interrupt at "date() time()
+       Say "Stopping due to CONSOLE interrupt at "date() time()
+       Say ""
+       Signal stop
+       end
+    Otherwise nop
+  End
+ 
+Return
+ 
+/*======================   L  o  g  m  e  s   ========================*/
+ 
+Logmes: Procedure Expose execname Nextwork stop owner.
+Trace Off
+ 
+Parse arg user node action text
+ 
+  day = DATE("O")
+  tim = TIME()
+  line = day tim ,
+         LEFT(user,8) LEFT(node,8) LEFT(action,8) text
+  Call Check_A "Logging" line
+  'EXECIO 1 DISKW 'execname' LOG A ( VAR LINE '
+ 
+Return 0
+ 
+/*======================   H  a  l  t   ==============================*/
+ 
+Halt:
+ 
+Call Logmes execname XNAME("NODEID") "ERROR" "Halt at line" sigl
+Signal Stop
+ 
+/*======================   S  y  n  t  a  x   ========================*/
+ 
+Syntax:
+ 
+Call Logmes execname XNAME("NODEID") "ERROR" "Syntax error at line" sigl
+Signal Stop
+ 
+/*======================   N  o  v  a  l  u  e   =====================*/
+ 
+Novalue:
+ 
+Call Logmes execname XNAME("NODEID") "ERROR" "Undefined variable at line" sigl
+Signal Stop
+ 
+/*======================   C  h  e  c  k  _  f  m   ==================*/
+ 
+Check_fm: Procedure Expose execname Nextwork stop owner.
+Trace Off
+Parse Arg fm,blkneed
+ 
+mynode = XNAME("NODEID")
+If ^QDISK(fm,'RW') then do
+  text = "Not write access to my" fm "disk"
+  Call warning text
+  Return -2
+End
+lim = 10
+blkmin = 30
+blkleft = QDISK(fm,'BLKLEFT')
+If blkleft < blkmin then do
+  text = "Disk space = "blkleft" blocks in my" fm "disk"
+  Call warning text
+  Return -1
+End
+If blkleft < blkmin+blkneed then irc = Nextwork
+Else                             irc = 0
+ 
+blktot  = QDISK(fm,'BLKTOT')
+left    = 100 * blkleft/blktot
+If left < lim then do
+  If ^FEXIST(execname "LESS"lim fm) then do
+    line = "Disk space: Only " FORMAT(left,3,1)"% free "
+    'EXECIO 1 DISKW' execname 'LESS'lim fm '1 ( VAR LINE FINIS'
+    text = line "on my" fm "disk"
+    Call warning text
+  End
+End
+Else do
+  If FEXIST(execname "LESS"lim fm) then 'ERASE' execname 'LESS'lim fm
+End
+Return irc
+ 
+/*======================   C  h  e  c  k  _  s p    ==================*/
+ 
+Check_sp: Procedure Expose username execname Nextwork stop owner.
+Trace Off
+ 
+permax = 90
+perused = QDISK('A','PERCENT')
+If perused > permax then do
+  text = perused "% of A-disk in use - performing cleanup "
+  Call warning text
+  Say text
+  "EXEC SENDFILE "execname "LOG TO JAMIE AT CERNVM"
+  Call warning "Erasing "execname "LOG"
+  "ERASE "execname "LOG"
+  Call warning "Erasing "username "NETLOG"
+  "ERASE "username "NETLOG"
+  perused = QDISK('A','PERCENT')
+  text = perused "% of A-disk in use after cleanup "
+  Call warning text
+  If perused > permax then do
+     Call warning "Clean-up failed - exiting"
+     Exit 999
+  End
+  Return 0
+End
+ 
+/*======================   C  h  e  c  k  _  A   =====================*/
+ 
+Check_A:
+Trace Off
+Parse arg mssg
+ 
+irc = Check_fm("A",0)
+If irc <= -2 then do
+  Say mssg
+  Signal Stop
+End
+If irc = - 1 then do
+  If QFILE(execname "LOG A","BLKNO") > 10 then do
+    'EXEC SENDFILE 'execname' LOG A TO 'XNAME("USERID")' ( NOLOG'
+    'ERASE 'execname' LOG A'
+    If Check_fm("A",0) < 0 then do
+      Say mssg
+      Signal Stop
+    End
+    Else Return 0
+  End
+  Else do
+    Say mssg
+    Signal Stop
+  End
+End
+Return 0
+ 
+/*======================   O  p  e  r  a  t  o  r   ==================*/
+ 
+Operator: Procedure Expose execname stop owner. operator. mynode
+ 
+Parse arg user , node
+If node ^= mynode then Return -1
+do i=1 to operator.0
+  If operator.i = user then Return 0
+End
+ 
+Return -1
+ 
+ 
+/*======================   A  u  t  h  o  r  i  z  e   ===============*/
+ 
+Authorize: Procedure Expose execname stop owner.
+ 
+Parse arg user , node
+ 
+do i=1 to owner.0
+  Parse Var owner.i usero nodeo
+  If user = usero then do
+    If nodeo = "" | node = nodeo then Return 0
+  End
+End
+ 
+Return -1
+ 
+/*======================   P r o c e s s _ m s g   ===================*/
+ 
+Process_msg:
+/*Say text*/
+action = SUBSTR(WORD(text,1),1,4," ")
+Select
+ 
+  When action = "QSPO" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "Qspool "
+      n_files = QSPOOL("RDR","NUMFILES")
+      Call Send_msg user node "I have "n_files" files in my RDR"
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "STOP" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "Stop   "
+      Call Send_msg user node "Stop"
+      Signal Stop
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "LOGO" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "Logoff "
+      Call Send_msg user node "Logoff"
+      Queue "CP LOGOFF"
+      Signal Stop
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "WAKE" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "WAKEUP"
+      Call Send_msg user node "Thanks for the alarm call"
+      Exit 99
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "PURG" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "PURGE"
+      Call Send_msg user node "Purging journal files..."
+      'LISTFILE FAT* FZ* B (E'
+      'CMS EXEC PURGE'
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "HELL" then do
+    If Authorize(user,node) = 0 | operator(user,node) = 0 then do
+      Call Logmes user node "Hello  "
+      Call Send_msg user node "Hello and how are you today?"
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "HELP" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call Help
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "NEWL" then do
+    If Authorize(user,node) = 0 then do
+      "FINIS "execname "LOG"
+      "ERASE "execname "LOG"
+      Call Logmes user node text
+      Call send_msg user node "Old "execname "log erased"
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "FINI" then do
+    If Authorize(user,node) = 0 then do
+      "FINIS "execname "LOG"
+      Call Logmes user node text
+      Call send_msg user node execname "log closed"
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "SETP" then do
+    If Authorize(user,node) = 0 then do
+      Parse var text wud pw .
+/*
+      "GLOBALV SELECT *EXEC SETPL PWD "pw
+      "GLOBALV INIT"*/
+      "EXEC RACKF" pw
+      Call Logmes user node wud
+      Call send_msg user node "SETPW processed"
+      Call Logmes user node "Logoff after pw change"
+      Call Send_msg user node "Logoff after pw change"
+      "CP LOGOFF"
+      Call Logmes user node wud
+      Call send_msg user node "SETPW processed"
+    End
+    Else Do
+    Call Logmes user node "NOAUTHO" text
+    Call send_msg user node "Not authorized"
+    End
+  End
+ 
+  When action = "CLOS" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      "CP SPOOL CONSOLE CLOSE"
+      saverc = Result
+      Call Send_msg user node text "processed."
+      Return saverc
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "QQUE" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call qqueue text
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "QDIS" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call q_disk text
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "DROP" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call drop text
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "GIME" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call gime text
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "CHQU" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call chqueue text
+      Return result
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  When action = "*FAT" then do
+    Call Logmes user node text
+  End
+ 
+  When action = "CHJO" then do
+    If Authorize(user,node) = 0 then do
+      Call Logmes user node text
+      Call chjour text
+      Return result
+    End
+    Else Call Logmes user node "NOAUTHO" text
+  End
+ 
+  Otherwise do
+    If Authorize(user,node) = 0 then do
+      Call send_msg user node "Invalid command" text
+      Call Help
+    End
+    Call Logmes user node "BAD_MSG" text
+  End
+End
+ 
+Return 1
+ 
+/*======================   H  e  l  p   ==============================*/
+ 
+Help:
+parse arg ihelp
+ 
+If DATATYPE(ihelp,"N") & ihelp > 0 & ihelp <= validmsg.0 then do
+  Call Send_msg user node validmsg.ihelp
+End
+Else do
+  Call Send_msg user node "The valid commands are:"
+  do i=1 to validmsg.0
+    Call Send_msg user node validmsg.i
+  End
+End
+Return 0
+ 
+/*======================   S  e  n  d  _  m  s  g   ==================*/
+ 
+Send_msg: Procedure Expose execname stop owner.
+Parse arg user node stext
+mynode = XNAME("NODEID")
+If user = XNAME("USERID") & node = mynode then Say stext
+Else do
+  If node = mynode then 'CP MSG' user stext
+  Else 'EXEC TELL' user 'AT' node stext
+End
+Return 0
+ 
+/*======================   C h e c k _ f i l e   =====================*/
+ 
+Check_file:
+ 
+Parse arg fname,ftype,fuser,faddr
+ 
+If faddr ^= QDISK(Buffm,"ADDRESS") | fuser ^= XNAME("USERID") then do
+  'EXEC GIME 'fuser faddr '(STACK QUIET'
+  If RC > 4 then Return -2
+  Parse Pull fmode .
+  idrop = 1
+End
+Else do
+  fmode = Buffm
+  idrop = 0
+End
+ 
+iexist = FEXIST(fname ftype fmode) - 1
+If iexist = 0 then do
+  blkno = QFILE("=","BLKNO")
+  blksize = QDISK(fmode,"BLKSIZE")
+  size = FORMAT(blkno*blksize/1000,6,1)
+End
+If idrop then 'EXEC DROP 'fmode
+ 
+Return iexist
+ 
+/*======================   S  t  o  p   ==============================*/
+ 
+Stop:
+  text = 'STOP'
+  call warning text
+If FEXIST(execname "AUXLOG A") Then 'ERASE 'execname' AUXLOG A'
+ 
+Exit stop
+ 
+/*======================   W  a  r  n  i  n  g   =====================*/
+ 
+Warning:
+ 
+Parse arg msg
+do i = 2 to owner.0
+  Parse var owner.i user node
+  If node = "" then node = XNAME("NODEID")
+  Call mail user node msg
+End
+Return 0
+ 
+/*======================   M  a  i  l   ==============================*/
+ 
+Mail: Procedure Expose execname stop owner.
+ 
+Parse Arg user node text
+test = 1
+If ^test then
+  'EXEC MAIL' user 'AT' node '(NOPROMPT NOLOG NOEDIT FILE DUMMY MAIL A',
+            'SUBJECT' execname 'AT' XNAME("NODEID")':' text
+Else  Call Send_msg user node text
+Return 0
+ 
+/*======================   R  e  c  e  i  v  e   =====================*/
+ 
+Receive:
+ 
+Parse Arg spoolid fname ftype fmode
+ 
+'EXECIO 0 CP ( STRING ORDER READER' spoolid
+Do forever
+  'EXECIO 1000 CARD (STEM BUFF. '
+  Rcsave = RC
+  'EXECIO' Buff.0 'DISKW' fname ftype fmode '0 F 80 ( STEM BUFF. '
+  If Rcsave = 2 then leave
+End
+  'FINIS' fname ftype fmode
+ 
+Return 0
+ 
+/*======================   D  r  o  p   ==============================*/
+ 
+Drop:
+ 
+Parse arg . fm
+'EXEC DROP 'fm' ( QUIET'
+Call Send_msg user node "DROP "fm" ===> Rc="RC
+Return 0
+ 
+/*======================   G  i  m  e   ==============================*/
+ 
+Gime:
+ 
+Parse arg . fm
+'MAKEBUF'
+ibuf = Rc
+'EXEC GIME 'fm' ( QUIET STACK'
+rcsave = rc
+If rcsave <= 4 then Parse pull fmode .
+'DROPBUF' ibuf
+Call Send_msg user node "GIME "fm" ===> Rc="rcsave "fm="fmode
+Return 0
+ 
+/*======================   Q  d  i  s  k   ===========================*/
+ 
+Q_disk:
+ 
+Parse arg . rest
+Parse Var rest opt "," ifile
+mynode = XNAME("NODEID")
+ifile  = 'ABBREV'('WORD'(ifile,1),"F")
+'MAKEBUF'
+buffn = Rc
+'QUERY DISK 'opt'( STACK'
+Queue ""
+If ifile then do
+  If node = mynode then do
+    'CP SPOOL PUNCH TO 'user
+  End
+  Else do
+    'CP SPOOL PUNCH TO 'XNAME("RSCSID")
+    'CP TAG DEV PUNCH 'node user
+  End
+  'EXECIO * PUNCH '
+  'CP CLOSE PUNCH NAME' execname 'QDISK'
+  'CP SPOOL PUNCH OFF'
+  If node ^= mynode then 'CP TAG DEV PUNCH'
+End
+Else do forever
+  Parse pull line
+  If line = "" then leave
+  Call Send_msg user node line
+End
+'DROPBUF' buffn
+Return 0
+ 
+#endif

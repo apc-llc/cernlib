@@ -1,0 +1,135 @@
+*
+* $Id: install,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: install,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_higz/pilot.h"
+*CMZ :  2.07/06 11/07/95  17.46.47  by  O.Couet
+*-- Author :    O.Couet   04/10/91
+   Macro INSTALL 1=X 2=ftn 3=X 4=X
+*
+   If [1]='?' Then
+      Exec help
+      Goto END
+   Endif
+   File hbook
+   Pilot *hbook
+   Rel hbook
+*
+*  Set the FORTRAN extension
+*
+   Case $MACHINE In
+      (APOLLO) Alias/Create ext ftn
+      (IBM)    Alias/Create ext fortran
+      (VAX)    Alias/Create ext for
+      (*)      Alias/Create ext f
+   Endcase
+*
+*  LIBRARY    Library name
+*  CODEDIR    Source code directory
+*
+   LIBRARY  = $Lower([1])
+   CODEDIR  = $Lower([2])
+*
+*  Install the examples
+*
+   If [CODEDIR]='example' Then
+      Select  $MACHINE
+      Set [LIBRARY]/*.kumac -D
+      Ctot -Y //paw/paxmac/*
+      Set [LIBRARY]/*.ext -D
+      Ctot //paw/paxfor/*
+      Set [LIBRARY]/*.dat   -D
+      Ctot //paw/paxdat/*
+      Goto END
+   Endif
+*
+   D = FALSE
+   M = FALSE
+   Do I = 3,[#]
+      Case $Upper([%I]) In
+         (DEBUG) D = TRUE
+         (MOTIF) M = TRUE
+      Endcase
+   Enddo
+*
+   Mess ' '
+   Mess Installation of PAWLIB on $MACHINE _
+        starting at $DATE $TIME .
+   Mess ' '
+*
+   Set [CODEDIR]/paw.sh -XADCL
+*
+*  Set up the library name
+*
+   If [LIBRARY] = 'x' Then
+      Set [CODEDIR]/$cmzfile.a -L
+   Else
+      Set [LIBRARY] -L
+   Endif
+*
+   If [D] = TRUE Then
+      Case $MACHINE In
+         (APOLLO) D=' -dba'
+         (HPUX,SGI,SUN,DECS,IBMRT) D=' -g'
+         (VAX) D='/NOOP/DEB'
+      Endcase
+   Else
+      D=' '
+   Endif
+*
+   If [M] = TRUE Then
+      Sel MOTIF
+   Endif
+*
+*  Set up the FORTRAN compiling options
+*
+   Set FORTRAN -LAN
+   Set [CODEDIR]/*.ext -F
+   Case $MACHINE In
+      (APOLLO) Set '/com/ftn $compfile//[D]//' -indexl -save' -C
+      (HPUX) Set 'f77 -c'//[D]//' +ppu $compfile' -C
+      (SUN) Set 'f77 -c'//[D]//' -O $compfile' -C
+      (IBMRT) Set 'xlf -c'//[D]//' -qextname $compfile' -C
+      (SGI,DECS) Set 'f77 -c'//[D]//' $compfile G 3' -C
+      (VAX) Set 'FOR'//[D]//' $compfile' -C
+   Endcase
+*
+*  Select the options
+*
+   Select  $MACHINE
+*
+   Pilot *PAW
+*
+*  CMZ, FORTRAN, Library ...
+*
+   Set
+   seq
+   Cfl -P
+*
+*  Motif Part
+*
+   If [M] = FALSE Goto END
+   Set C -LAN
+   Set [CODEDIR]/*.c -F
+*
+   if $MACHINE = HPUX Then
+      OPTC = ' -z -DSYSV -Aa -D_HPUX_SOURCE'
+      X11H = ' -I/usr/include/X11R4'
+      XMH  = ' -I/usr/include/Motif1.1'
+      Set 'cc -c'//[D]//[OPTC]//[X11H]//[XMH]//' $compfile' -C
+   Endif
+   if $MACHINE = IBMRT Then
+      Set 'cc -c'//[D]//' $compfile' -C
+   Endif
+*
+   Pilot *PAW
+   Set
+   Cfl -P
+*
+END:
+   Return

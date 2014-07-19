@@ -1,0 +1,3 @@
+SRCS_F=	 dbpktm.F dbpkts.F dbuptm.F dbupts.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

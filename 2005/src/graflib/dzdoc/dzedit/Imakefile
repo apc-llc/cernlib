@@ -1,0 +1,26 @@
+#define IHaveCDF
+
+SRCS_F=	dzebkk.F dzechf.F dzechk.F dzecpp.F dzedel.F dzedff.F \ @@\
+	dzedof.F dzedrw.F dzedrz.F dzedsp.F dzehpe.F dzelal.F \ @@\
+	dzelas.F dzelin.F dzelof.F dzemrz.F dzenpg.F dzeop1.F dzeopl.F \ @@\
+	dzeppa.F dzepsb.F dzepur.F dzeqit.F dzerds.F dzesgp.F dzeurz.F \ @@\
+	dzewem.F dzezer.F
+
+SRCS_CDF= dzeditcdf.cdf
+
+DefinePackageLibrary(dzdoc)
+
+#ifdef CERNLIB_HPUX
+FORTRANOPTIONS+= -WF,-P
+#endif
+
+SubdirLibraryTarget(dzdoc,NullParameter)
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+#endif
+
+CernlibFortranProgramTarget(dzeX11,dzedit.o,$(PACKAGE_LIB),$(PACKAGE_LIB),graflib/X11 packlib)
+
+InstallProgram(dzeX11,$(CERN_BINDIR))
+InstallScript(dzedit,$(CERN_BINDIR))

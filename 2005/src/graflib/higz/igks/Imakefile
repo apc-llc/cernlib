@@ -1,0 +1,8 @@
+SRCS_F=	 iacwk.F iclks.F iclrwk.F iclwk.F idawk.F ifa.F igsa.F \ @@\
+	igsg.F igsgn.F iopks.F iopwk.F ipl.F ipm.F irqlc.F irqst.F \ @@\
+	ischh.F ischup.F isclip.F iscr.F iselnt.F isfaci.F isfais.F \ @@\
+	isfasi.F isln.F islwsc.F ismk.F ismksc.F isplci.F ispmci.F \ @@\
+	istxal.F istxci.F istxfp.F isvp.F iswkvp.F iswkwn.F iswn.F \ @@\
+	itx.F iuwk.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

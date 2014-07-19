@@ -1,0 +1,18 @@
+*
+* $Id: v306.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v306.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.06  910320 13.35
+C-  Updates to current version:
+C/2 > P=NUMCHK2 ,D=CHECK2   : make 800-section conditional to NUMTIME
+C/1 > P=FKERNCHK            : Add HPUX,MIPS,IBMVM,VAXVMS
+C
+C-  New patches/flags:
+C     SKERNCHK:  Source patch
+C     FKERNCHK:  Flags  patch
+C     DKERNCHK:  Documentation patch segmenting version updates in decks
+C

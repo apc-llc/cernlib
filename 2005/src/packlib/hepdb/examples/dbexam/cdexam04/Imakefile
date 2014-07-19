@@ -1,0 +1,3 @@
+SRCS_F=	 cdexam04.F cdonfk.F cexam04.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

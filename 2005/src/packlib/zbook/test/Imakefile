@@ -1,0 +1,10 @@
+SRCS_F= recovb.F recovz.F zepex1.F zepex2.F zexam1.F zexam2.F \ @@\
+	zexam3.F zexam4.F zexam5.F zexam6.F zexam7.F zexam8.F zexam9.F
+
+DefinePackageLibrary(zbookt)
+
+SubdirLibraryTarget(zbookt,NullParameter)
+
+CernlibFortranProgramTarget(zexam,zexam.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+TestTarget(zexam,NullParameter,NullParameter)

@@ -1,0 +1,8 @@
+INCLUDES=	 boscop.inc convrt.inc dforce.inc dtable.inc \ @@\
+	epsfrg.inc eudopt.inc eudver.inc eufiles.inc filnam.inc \ @@\
+	frgfix.inc glufix.inc hadgen.inc hvyini.inc inivtx.inc \ @@\
+	inpout.inc mixing.inc momgen.inc namind.inc onipot.inc \ @@\
+	picons.inc ptable.inc pwidth.inc quafix.inc ratmix.inc \ @@\
+	result.inc rnseed.inc runinf.inc sqdpar.inc wekpar.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),eurodec)

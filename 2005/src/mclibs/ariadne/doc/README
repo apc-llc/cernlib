@@ -1,0 +1,89 @@
+This directory contains the FORTRAN 77 source code of the Lund Monte Carlo 
+Ariadne version 4.08 for generating QCD cascades according to the Colour 
+Dipole Model.
+
+REGISTRATION:
+
+If you have obtained this program via anonymous ftp, you should send me an
+E-mail to register yourself as a user. In this way I can keep track of who is
+using the program and can keep you informed about bug-fixes and updates.
+
+INSTALLATION:
+
+If you have a "make" facility you should edit the Makefile according to the
+instructions in it and type "make install". This will compile the program and 
+produce an "ar" library of the object files called "libar4.a" which will be
+copied to the specified directory.
+
+The code is written according to the FORTRAN 77 standard. The only exception
+is the use of "INCLUDE" statements. If your compiler cannot handle this, you
+must use the file ariadne-4.08.f which contains the full program without 
+"INCLUDE" statements.
+
+If you do not have a "make" facility the full program is contained in the file
+ariadne-4.08.f and you may do whatever you usually do with a Fortran source
+file.
+
+If you use the file ariadne-4.08.f and split it up into subroutines to create
+a load library, please remember to place the routine "BLOCK DATA ARDATA" in the
+same module as "SUBROUTINE ARINIT" for proper initialization of the common 
+blocks.
+
+If you are using the file ariadne-4.08.f together with PYTHIA or
+LEPTO you must comment out the subroutines PYSTFU and LNSTRF
+respectively. If you use "libar4.a" together with PYTHIA or LEPTO it
+should be linked after the corresponding PYTHIA or LEPTO archives. If
+the linker despite this complains about the routines PYSTFU or LNSTRF,
+try to change the name of the problem routine and recompile.
+
+TEST PROGRAMS:
+
+There are four different test programs in this directory; "atest.f", "jtest.f",
+"ltest.f" and "ptest.f".
+
+"atest.f" checks the Ariadne program and watches for rounding errors
+etc. To run it type "make atest" and run the executable file "atest".
+
+"jtest.f" tests the interface to the JETSET program. Do "make jtest" and run
+the executable "jtest" which will produce listings of ten e+e- events at LEP
+energy.
+
+"ltest.f" test the interface to the LEPTO program. Do "make ltest" and run
+the executable "ltest" which will produce listings of ten ep events at HERA
+energy.
+
+"ptest.f" test the interface to the PYTHIA program. Do "make ptest" and run
+the executable "ptest" which will produce listings of ten pp events at LHC
+energy. 
+
+If any of these test programs crashes or produces error messages
+please report it to me.
+
+MANUALS:
+
+There is also a manual in this directory. It comes in two different
+formats, PostScript, and plain ASCII text in the files "ariadne.ps",
+and "ariadne.man" respectively. Note that "ariadne.man" does not
+contain all chapters of the manual.
+
+REFERENCES:
+
+If results obtained by the Ariadne program is used in a publication, the
+reference should read something like:
+
+L.\ L"\{o}nnblad, Ariadne version 4.08 program and manual,
+{\it Comp.\ Phys.\ Comm.} {\bf 71} (1992) 15.
+
+AUTHOR:
+
+Leif Lonnblad
+CERN - TH
+CH-1211 Geneve 23
+Switzerland
+
+
+E-mail: Leif.Lonnblad@cern.ch
+        leif@thep.lu.se
+
+Phone:  int +41-22-7672413
+Fax:    int +41-22-7823914

@@ -1,0 +1,8 @@
+SRCS_F=	 addfat.F fatcomm.F fatcount.F fatdelph.F fatexam1.F \ @@\
+	fathunt.F fatindx.F fatldir.F fatlfil.F fatlist.F fatloop.F \ @@\
+	fatloop2.F fatls.F fatlton.F fatmod.F fatnick.F fatntol.F \ @@\
+	fatopen.F fatouch.F fatpeek.F fatplot.F fatpoke.F fatrrob.F \ @@\
+	fatscan.F fatscan2.F fatselk.F fatselm.F fatsetup.F fatshow.F \ @@\
+	fattags.F fatuniq.F modfpack.F rzddir.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

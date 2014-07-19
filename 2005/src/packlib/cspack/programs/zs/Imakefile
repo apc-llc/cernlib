@@ -1,0 +1,40 @@
+DoIncludePackage(cspack)
+#include "pilot.h"
+
+SRCS_F=	fatmen.F message.F xzserv.F zscdir.F zsclos.F zsfile.F \ @@\
+	zsldir.F zslfil.F zslist.F zsout.F zsrzin.F sgeta.F sgetfz.F \ @@\
+	sgetp.F sgetrz.F sputa.F sputfz.F sputp.F sputrz.F
+
+#ifdef CERNLIB_UNIX
+SRCS_F:= $(SRCS_F) sppiaf.F ssfget.F 
+#endif
+
+#ifdef CERNLIB_OS9
+SRCS_F:= $(SRCS_F) hnear.F netcopym.F net_copy.F nettab.F zsget.F \ @@\
+	zslmod.F zslmod2.F zsmodu.F
+#endif
+
+#ifdef CERNLIB_MMAP
+SRCS_F:= $(SRCS_F) zslism.F zslism1.F zslistm.F
+#endif
+
+#ifdef CERNLIB_OLD
+SRCS_F:= $(SRCS_F) zsfold.F
+#endif
+ 
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+NeedSysexe
+#endif
+
+SubdirLibraryTarget(zservlib,NullParameter)
+
+DefinePackageLibrary(zservlib)
+
+CernlibFortranProgramTarget(zserv,zs.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+InstallProgram(zserv,$(CERN_BINDIR))
+
+CernlibFortranProgramTarget(pawserv,zs.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+InstallProgram(pawserv,$(CERN_BINDIR))

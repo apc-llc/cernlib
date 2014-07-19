@@ -1,0 +1,12 @@
+*
+* $Id: v100.dat,v 1.1.1.1 1996/03/08 17:48:06 mclareni Exp $
+*
+* $Log: v100.dat,v $
+* Revision 1.1.1.1  1996/03/08 17:48:06  mclareni
+* Pdf
+*
+*
+* VERSION 6.06   950315 17.05 CERN PROGRAM LIBRARY     W5051
+C
+C- Structuring of the code in PATCHY format
+C- Addition of the test

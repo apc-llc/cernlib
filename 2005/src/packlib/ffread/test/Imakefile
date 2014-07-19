@@ -1,0 +1,9 @@
+SRCS_F= ffuser.F furead.F fustar.F main.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(ffread,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+TestTarget(ffread,NullParameter,test.input)
+
+CopyFile(ffdata.dat,test.input)

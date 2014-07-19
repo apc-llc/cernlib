@@ -1,0 +1,37 @@
+*
+* $Id: v5_11,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_11,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.11/02 08/10/91  10.20.41  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  5.11/02   911008 10.20
+*
+*       Bug corrected in HPLFIT. The fit box was too large when the
+*          OPTION FIT was set to 100.
+*       Bug corrected in HPLWIR. The Tick Marks width was not taken
+*          into account.
+*       The line width for the surface drawing is now controlled with
+*          HWID (mods in HPLTAB).
+*       First version of the $KUMACS PATCH.
+*
+*::>          VERSION  5.11/01   910916 14.21
+*
+*       HPLAX doesn't change the text angle to 90 degrees.
+*       Bug corrected in HPLF: The fit was partially drawn in case
+*          of zoom.
+*
+*::>          VERSION  5.11/00   910827 12.19
+*
+*       Changes in HPLTOC. Now it works with te current NT parameters.
+*       Mods in HPLF to draw only the fitted part of an histogram in
+*          a command like HI/FIT 110(50:) G.
+*       Bug corrected in HPLFIT. ALLCHAN overwrote the STAT parameters.
+*       Bug corrected in HPLER. In case of option SAME the window
+*          size used could be wrong. Now IGQWK is called to get the
+*          right window size.
+*

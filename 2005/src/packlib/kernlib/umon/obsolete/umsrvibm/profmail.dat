@@ -1,0 +1,16 @@
+*
+* $Id: profmail.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: profmail.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, mailuser.xedit */
+/**/
+'MACRO SETMAIL PROMPT NO'
+'MACRO SETMAIL LOG NO'
+'MACRO SETMAIL ACK NO'
+'MACRO SETMAIL MENU.NAMEFIND NO'
+#endif

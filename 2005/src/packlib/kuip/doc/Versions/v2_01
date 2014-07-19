@@ -1,0 +1,133 @@
+*
+* $Id: v2_01,v 1.1.1.1 1996/03/08 15:33:03 mclareni Exp $
+*
+* $Log: v2_01,v $
+* Revision 1.1.1.1  1996/03/08 15:33:03  mclareni
+* Kuip
+*
+*
+*CMZ :  2.01/07 06/04/93  11.47.34  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   25/02/93
+*
+*::>          VERSION  2.01/07   930406 11.47
+*
+* Fix for KUGETx returning last value for optional parameters without default
+* in case of positional arguments.
+*
+*::>          VERSION  2.01/06   930406  9.43
+*
+* "$name" will be replaced by value of environment variable if it is defined
+* and "name" is not a KUIP system function.
+*
+* Allow switching to STYLE G from logon kumac.
+*
+* STYLE G: high-light last choice in menus; if panel is defined display it
+* along with menus (reported by Robert Franchisseur).
+*
+* Increased limit for number of macro arguments from 9 to 99.
+*
+* IBM: disabled trapping of floating point underflows (CALL XUFLOW).
+* Remove call to KUALFA from error handler.  This caused recursive Fortran I/O
+* in the GKS version.
+*
+* DECstation c89: make it compile without "-common" option.
+*
+* Fixes for MSDOS version using f2c and gcc (Valery Fine).
+*
+* Set IQUEST(1)=0 before calling action routine to fix problem of VECTOR/READ
+* with good filename being ignored after a VECTOR/READ with an invalid filename
+* (reported by IVERSEN@VSFYS1.FI.UIB.NO)
+*
+* KUGETx returns last value for optional parameters without default value.
+* Interactive Geant relies on this e.g. for the DRAW command.
+*
+* Version 2.01/02 introduced that all floating point numbers were printed with
+* a decimal point.  This broke the usage of $SIGMA for index calculations.  The
+* old behaviour that e.g. $SIGMA(2*3+1) returns "7" is restored.
+* To solve the problem which originally triggered the change a new system
+* function $RSIGMA is available now.  This function has be to used in COMIS
+* calls expecting a REAL argument, e.g.
+*    CALL file.f($RSIGMA(sqrt(x(1)))
+* Otherwise the value may be passed as an INTEGER if the SIGMA result turns out
+* to be a whole number.
+*
+* Filecase conversion for EXEC statements inside KUMACS.
+*
+* The invisible vector ? was not correctly treated for subranges (reported by
+* Nicole Lhermitte).
+*
+* A continuation line start in the first column is concatenated as-is, e.g.
+*    VEC/READ x,y,_
+*    z,t file.dat
+* is equivalent to "VEC/READ x,y,z,t file.dat".  Before there was put in at
+* least one blanks between the concatenated lines.
+*
+* getline(): implemented ^J/LF (delete word), ^R (refresh) and ^X for style DCL
+* and do output buffering.  Prefer Posix over BSD termio to solve problem with
+* type-ahead on Sun.
+*
+* KUIP/SHELL for Apollo: use pgm_$invoke() instead of system().  Otherwise
+* /com/sh is suspected to overwrite memory because of an unassigned I/O stream
+* (reported by Robert Franchisseur).
+*
+*::>          VERSION  2.01/05   930311 12.35
+*
+* Fix problem if too many alias expansions happen during kumac compilation
+* (reported by Hanspeter Beck).
+*
+*::>          VERSION  2.01/04   930308 11.31
+*
+* Fix for help menu in browser.
+*
+*::>          VERSION  2.01/03   930305 15.12
+*
+* Renamed IGXMES to KMXMES.
+*
+* Motif version: enable help menus again.
+*
+*::>          VERSION  2.01/02   930302 18.12
+*
+* Bug fix for $SUBSTRING.
+*
+* VECTOR/INPUT: bug fix for 2-dim vectors
+*
+* VECTOR/PRINT: print proper indizes for 2-dim vectors
+*
+* First iteration for Alpha/OSF.
+*
+* KUIP/EDIT: default .KUMAC extension missing for MVS.
+*
+* Fix recursion if $LAST is used in a command (reported by B. BUROW).
+*
+* Emulate "%G" and "%.<n>d" format which behaves improperly on VAX/VMS.
+*
+*::>          VERSION  2.01/01   930226 17.22
+*
+* Small fix in KXTERM.
+*
+*::>          VERSION  2.01/00   930225 17.52
+*
+* KXUNIT: protection against very long filenames.
+*
+* A few more corrections for NeXT.
+*
+* KUIPC: allow call with input file name only.
+*
+* Ignore quotes around string in $SUBSTRING expression.
+*
+* Allow compilation with non-ANSI compiler.
+*
+* Non-folkloristic functions strdup(), strcasecmp(), etc. are only redefined
+* if they do not exist in the C-library.
+*
+* New routine KUGETQ to protect arguments with multiple tokens by quotes.
+* To be used by MACRO/EXEC that "EXEC macro 'Hello World'" is passed as
+* one argument.
+*
+* More MVS/NEWLIB corrections.
+*
+* LAST command changed:  the new default N=-99 behaves like the old
+* default N=-1.  Values -99<N<0 print out the last -N commands.
+* This scheme originally invented for MVS support is also useful to
+* allow cut-and-paste of blocks of commands on workstation screens.
+*

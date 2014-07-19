@@ -1,0 +1,24 @@
+*
+* $Id: fmkuip.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fmkuip.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FMKUIP.COM
+$ypatchy cern:[pro.src.car]zebra.car fmkuip.for tty tty - fmcdf.cdf :go <<!
+&use,qcde.
+&use,vaxvms.
+&use,fmc,t=inhibit.
+&use,fmh,t=inhibit.
+&use,tms,t=inhibit.
+&use,*fmkuip.
+&asm,23.
+&exe.
+&pam,11,r=qcde,t=c.
+&pam,12,t=c,a. fatmen.cards
+&quit
+$kuipc fmcdf.cdf fmcdf.for
+$for fmcdf
+$for fmkuip

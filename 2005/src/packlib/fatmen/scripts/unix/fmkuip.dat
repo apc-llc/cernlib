@@ -1,0 +1,24 @@
+*
+* $Id: fmkuip.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fmkuip.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+rm fort.23 fmcdf.f fmkuip.f
+ypatchy /cern/src/car/zebra.car fmkuip.f :go <<!
+&use,qcde.
+&use,ibmrt,*fatlib.
+&use,fmc,t=inhibit.
+&use,fmh,t=inhibit.
+&use,tms,t=inhibit.
+&use,*fmkuip.
+&asm,23.
+&exe.
+&pam,11,r=qcde,t=c.
+&pam,12,t=c,a. fatmen.cards
+&quit
+!
+kuipc fort.23 fmcdf.f
+xlf -q extname fmkuip.f fmcdf.f  -L/cern/pro/lib -lpacklib -o fm

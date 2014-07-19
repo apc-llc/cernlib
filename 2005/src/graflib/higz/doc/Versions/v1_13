@@ -1,0 +1,50 @@
+*
+* $Id: v1_13,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_13,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :          14/07/92  13.29.42  by  Rene Brun
+*-- Author :    O.Couet   03/03/92
+*
+*::>          VERSION  1.13/01   920306  9.49
+*
+*       Bugs corrected in PAWUWF (changes in PAWIDN)
+*       LINTRA command revisited. Sequence EQULIN replaced by PCLINT
+*
+*::>          VERSION  1.13/00   920303 14.00
+*
+*       First version of the $KUMACS PATCH.
+*       Bug corrected in PAWFCU (A.Nathaniel)
+*       Default values for X and Y in command TICKS are changed
+*          to 1.E30.
+*
+*       Bug corrected in PAWFCU (bug submitted by W.Mueller GSI)
+*       Description : If one wants to fill with NTUPLE/PROJECT a
+*                     histogram with both  a cut C and a weight W
+*                     one can use a command like
+*                        NTU/PROJ 10 100.exp W*(C)
+*                 e.g.   NTU/PROJ 10 100.x   a*(y>0)
+*              which will increment at x with weight a if y>0.
+*              This works fine, but the very similar case with two
+*              conditions
+*                        NTU/PROJ 10 100.exp W*(C1)*(C2)
+*              never increments the histogram no matter what the
+*              conditions are. (bug corrected by Andy Cox)
+*
+*       Many new routines added in PAWCS
+*         (Most of the HBOOK user callable routines)
+*
+*       IGTERM is called in the PAWEX macros.
+*
+*       Mod in PAHIST to take care of the option "3" and "4" in the
+*          command SURFACE
+*
+*       New routines PANT3D, PANTAX and PANTPM to plot Ntuple in 3D
+*       (G.Richards)
+*       In the comand CUTS, the parameter CHOPT is now called OPTION
+*
+*  More details on PAW version 1.13/00 are given in PAW.NEWS113
+*

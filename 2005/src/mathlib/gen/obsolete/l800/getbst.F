@@ -1,0 +1,58 @@
+*
+* $Id: getbst.F,v 1.1.1.1 1996/04/01 15:03:19 mclareni Exp $
+*
+* $Log: getbst.F,v $
+* Revision 1.1.1.1  1996/04/01 15:03:19  mclareni
+* Mathlib gen
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_gen/pilot.h"
+      SUBROUTINE GETBST(N,K,A,L)
+C--- GETS AN ARRAY BACK FROM LCM
+C--- INPUT
+C   N = REFERENCE ADDRESS (DELIVERED BY PUTBST)
+C     K=-1  FREES SPACE AND RETURNS LENGTH, BUT DOES NOT RESTORE.
+C   K = 0 ALLOWS TO FREE THE SPACE AFTER RESTORING.
+C     = 1 MEANS THE ARRAY SHALL STAY IN STORE.
+C---INPUT/OUTPUT
+C   A = FIRST WORD OF ARRAY WHERE THE INFORMATION GOES.
+C--- OUTPUT
+C   L = LENGTH (NO. OF WORDS TRANSFERRED TO A)
+C       IN CASE OF AN ERROR (INVALID N)  L=0.
+      COMMON/AUXBST/LSTBST,LBLBST,LB2BST,MAXBST,NLMBST,LFRBST,LOWBST
+#if !defined(CERNLIB_NOSBE)
+      COMMON/LCMBST/LCMBST(8)
+#endif
+#if defined(CERNLIB_NOSBE)
+      COMMON/LCMBST/LCMBST(8)
+#endif
+#if defined(CERNLIB_F4)
+      LEVEL 2,LCMBST
+#endif
+#if !defined(CERNLIB_F4)
+      LEVEL 2,/LCMBST/
+#endif
+      DIMENSION A(2)
+      L=0
+      LADD=1
+      LST=N
+      IF(LST.LE.0) GOTO 50
+    1 CONTINUE
+      LW=LCMBST(LST)
+      IN=LCMBST(LST+1)
+      IF(LW.EQ.0) GOTO 50
+      IF(K.GE.0)
+     1CALL MOVLEV(LCMBST(LST+2),A(LADD),LW)
+      L=L+LW
+      IF(K.GT.0) GOTO 2
+      LCMBST(LST)=0
+      LFRBST=LFRBST+1
+      IF(LST.EQ.N) LOWBST=LST
+    2 CONTINUE
+      IF(IN.EQ.0) GOTO 50
+      LADD=LADD+LW
+      LST=IN
+      GOTO 1
+   50 RETURN
+      END

@@ -1,0 +1,11 @@
+*
+* $Id: v210.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v210.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.10  840324
+C         Calls to UCOPY2 removed from ZPUSHS
+C

@@ -1,0 +1,17 @@
+*
+* $Id: v5_15,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_15,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.15/00 24/02/93  15.56.27  by  O.Couet
+*-- Author :    O.Couet   24/02/93
+*
+*::>          VERSION  5.15/00   930224 15.56
+*
+*      Improvment in HPLC. In case of LOGY with option SAME, the
+*         mininum of the previously defined window is used if the
+*         content of the histogram is less or equal to 0.
+*

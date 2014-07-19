@@ -1,0 +1,110 @@
+*
+* $Id: v5_20,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_20,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :          10/11/95  10.51.08  by  O.Couet
+*-- Author :    O.Couet   05/05/95
+*
+* 10/11/95  10.49.26  by  O.Couet
+* New HPLSET attributes (mods also in HPLTAB)
+* The size of the axis values can be changed with:
+*      SET VSIZ
+* The position of the color map be changed with:
+*      SET CMAP
+* The margin between the plot and the color map can be changed with:
+*      SET CMMG
+* The width of the color map can be changed with :
+*      SET CWID
+* The distance between the axis values and the color map can be
+* changed with:
+*      SET CVAL
+*
+*::>          VERSION  5.20/06   01/11/95 13.03.00
+*
+* New option 'Z' in HPLAER to access directly the KUIP vectore inside
+* the ZEBRA banks.
+*
+* 31/10/95  11.34.47  by  O.Couet
+*
+* New routine HPLQSE to return the value of the HPLSET options (used
+* in the PAW function $GRAFINFO)
+*
+*::>          VERSION  5.20/05   27/10/95 11.40.55
+*
+* New routine HPLQOP to return the value of the HPLOPT options (used
+* in the PAW function $OPTION)
+*
+*::>          VERSION  5.20/04   16/10/95 16.17.06
+*
+* In hpltab the PMCI was not properly reset
+*
+* 04/10/95  17.30.25  by  O.Couet
+* IERROR initialize to 0 in HPLOT
+*
+*::>          VERSION  5.20/03   04/09/95 15.15.49
+*
+* Bug fixed in HPLSET. For to big value of the STAT or the FIT attribute
+* there was a crash.
+*
+* 04/09/95  12.12.52
+* In HPLSTA the PID for 2d-histos stat box is not store (anyway
+* not usable).
+*
+* 23/08/95  10.31.36
+* Bug fixed in HPLOPT: for the option HSTA the default value and the
+* alternative was inverted.
+*
+* 12/07/95  15.38.21
+* FORMAT I15 is used to write the entries in HPLSTA.
+*
+*::>          VERSION  5.20/02   11/07/95 10.29.15
+*
+* Bug fixed in HPLF. In some cases (ZOOM) in H/PLOT the first chanel
+* was greater than the last one.
+*
+*::>          VERSION  5.20/01   27/06/95 09.30.12
+*
+* The option W in HPLAER was not compatible with the LOG scale.
+*
+* 19/05/95  11.10.12
+* New routine HPLNOT to draw annotation with fill area, line and
+* symbol. It is a more complete version of HPLKEY.
+*
+* 05/05/95  16.42.18
+* Mod in HPLAXI: a SAVE statement was after DATA statements.
+*
+*::>          VERSION  5.20/00   05/05/95 15.29.14
+*
+* Bug fixed in HPLCHA. When a line was drawn on a histogram, the axis
+* was picked.
+*
+* 25/04/95  16.08.10
+* Mod in HPLAER. Now the option 1 draws always the tick mark at the
+* end of the error bar even if the tick is greater than the error.
+* This was too confuse in the past. The size of the tick is equal to
+* the size of the marker.
+*
+* 19/04/95  14.04.16
+* After a plot with option CONT3, the Atitle was not aligned correctly.
+*
+* 19/04/95  10.52.36
+* First atempt to reset the HIGZ attributes when they are changed in
+* a HPLOT routine
+*
+* 12/04/95  17.39.32
+* HPLWIR use the correct font.
+*
+* 12/04/95  17.39.32
+* New routine HPLLGD to drawn axis in a more flexible way compare
+* to HPLAX. Used in the command Atitle in PAW.
+*
+* 24/03/95  11.02.01
+* In HPLTAB, the scatter plot color and the text color was not HCOL
+*
+* 23/03/95  18.23.20
+* Mods in HPLAER: IOPTE was not initialized.
+*

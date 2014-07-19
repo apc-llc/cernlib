@@ -1,0 +1,13 @@
+*
+* $Id: v101.dat,v 1.1.1.1 1996/02/15 17:50:42 mclareni Exp $
+*
+* $Log: v101.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:42  mclareni
+* Kernlib
+*
+*
+* Version 1.01   930304 19.00
+C- Add NEXT        flag  (F. Dittus/University Bern)
+C- Add CONVEX32/64, MSDOS, OPENVMS flags
+C- Add SHIFT
+C

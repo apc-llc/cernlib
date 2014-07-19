@@ -1,0 +1,13 @@
+*
+* $Id: orald.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: orald.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+xlf -c -qcharlen=32000 fmlogi.f foget.f foput.f fodel.f
+xlf -q extname -qcharlen=32000 fmsrv.f fmlogi.o foget.o   \
+  foput.o fodel.o cltou.o $ORACLE_HOME/rdbms/lib/osntab.o \
+  -L/cern/new/lib -lpacklib -L$ORACLE_HOME/rdbms/lib      \
+  -lora -lsql -lsqlnet -L$ORACLE_HOME/tcp/lib -ltcp -lc -o fatsrvo

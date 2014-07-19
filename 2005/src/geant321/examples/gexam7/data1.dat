@@ -1,0 +1,42 @@
+*
+* $Id: data1.dat,v 1.1.1.1 1995/10/24 10:22:22 cernlib Exp $
+*
+* $Log: data1.dat,v $
+* Revision 1.1.1.1  1995/10/24 10:22:22  cernlib
+* Geant
+*
+*
+LIST
+BINS  20  IN Z   20  IN R   1.  DZ  0.25  DR
+MATER   21
+TRIG   100
+KINE  1  1.
+DEBUG     1   1   10
+SWIT      1   0
+PAIR  1
+COMP  1
+PHOT  1
+PFIS  0
+MULS  1
+BREM  1
+LOSS  1
+DRAY  1
+ANNI  1
+MUNU  0
+HADR  2
+CUTS  0.0001    0.001    6=0.00010 (BCUTE)    8=0.00100 (DCUTE)
+*BOOT 'RING' 0.5 0.33 1 50 2 51 3 51
+PRINT   'MATE' 'VOLU'  'TMED'
+TIME 2= 4.
+END
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

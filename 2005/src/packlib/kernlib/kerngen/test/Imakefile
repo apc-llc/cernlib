@@ -1,0 +1,35 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= micky npbyt pchar pdiv pm432 pm434 pmatrix ptlpac ptrpac \ @@\
+         putil pvect pvpack
+
+SUBDIRS= $(LIBDIRS)
+
+#ifndef CERNLIB_VAX
+
+EXTRA_INCLUDES=-I$(TOP)$(CURRENT_DIR) -I$(VPATH)
+export EXTRA_INCLUDES
+
+#else
+
+/*export EXTRA_INCLUDES would easier, but VMS gmake does not understand this yet
+  Also += is not understood by gmake 
+  Do not remove any of the \, unless you want to create trouble
+  GF (12-Jan-96)
+ */
+EXTRA_INCLUDES=-i$(TOP)$(CURRENT_DIR)]
+MAKEFLAGS:=EXTRA_INCLUDES\=\-i$(TOP)$(CURRENT_DIR)]
+#endif
+
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(kerngent,$(LIBDIRS))
+
+DefinePackageLibrary(kerngent)
+
+NormalFortranProgramTarget(kerngen,test.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(kerngen,NullParameter,NullParameter)

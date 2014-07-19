@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(cojets)
+
+LIBDIRS= code cojdata cojtapew
+SUBDIRS= $(LIBDIRS) data test cojets
+
+TopOfPackage(cojets)
+
+SubdirLibraryTarget(cojets,$(LIBDIRS))
+
+InstallLibrary(cojets,$(CERN_LIBDIR))
+
+SubdirDataFile($(LIBRARY),cojets.dat,data)
+
+InstallNonExecFileTarget(install.lib,cojets.dat,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(cojets)

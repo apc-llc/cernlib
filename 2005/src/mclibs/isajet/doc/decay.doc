@@ -1,0 +1,50 @@
+\newpage
+\section{Decay Table\label{DECAY}}
+
+      ISAJET uses an external table of decay modes. Particles can be
+put into the table in arbitrary order, but all modes for each particle
+must be grouped together. The table is rewound and read in before each
+run with a READ* format. Beginning with Version 7.41, the decay table
+must begin with a comment of the form
+\begin{verbatim}
+' ISAJET     V7.41   11-JAN-1999 20:41:57'
+\end{verbatim}
+If this does not match the internal version number, a warning is
+printed. After this initial line, each entry must have the form
+\begin{verbatim}
+IDENT,MELEM,CBR,ID1,ID2,ID3,ID4,ID5/
+\end{verbatim}
+where IDENT is the code for the parent particle, MELEM specifies the
+decay matrix element, CBR is the cumulative branching ratio, and
+ID1,\dots,ID5 are the IDENT codes for the decay products. The
+currently defined values of MELEM are:
+\begin{center}
+\begin{tabular}{cl}
+\hline
+MELEM   &\quad Matrix Element \\
+\hline
+0       &\quad Phase Space \\
+1       &\quad Dalitz decay \\
+2       &\quad $\omega/\phi$ decay \\
+3       &\quad $V-A$ decay \\
+4       &\quad top decay: $V-A$ plus $W$ propagator \\
+5       &\quad $\tau \to \ell \nu \bar \nu$ \\
+6       &\quad $\tau \to \nu \pi$, $\nu K$ \\
+7       &\quad $\tau \to \nu \rho$, $\nu a_1$ \\
+\hline
+\end{tabular}
+\end{center}
+The parent IDENT must be positive; the charge conjugate mode is used
+for the antiparticle. The values of CBR must of course be positive and
+monotonically increasing for each mode, with the last value being 1.00
+for each parent IDENT. The last parent IDENT code must be zero. Care
+should be taken in adding new modes, since there is no checking for
+validity. In some cases order is important; note in particular that
+quarks and gluons must always appear last so that they can be removed
+and fragmented into hadrons.
+
+      The format of the decay table for Versions 7.41 and later is
+incompatible with that for Versions 7.40 and earlier. Using an
+obsolete decay table will produce incorrect results.
+
+      The decay table is contained in patch ISADECAY.
