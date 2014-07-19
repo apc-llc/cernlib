@@ -1,3 +1,7 @@
+static int rnetrc(char *host, char **aname, char **apass);
+static int token(void);
+static void catch(void);
+
 /*
  * $Id: tcpaw.c,v 1.9 2005/04/18 15:23:09 mclareni Exp $
  *
@@ -2040,8 +2044,8 @@ int chpass(s, user, pass)           /* For VMS only (yes, it's different) */
 #include <stat.h>
 #include "sysreq/sgtty.h"
  
-        static char usr[30], pss[30], myname[30];
- 
+static char usr[30], pss[30], myname[30];
+
 ruserpass(host, aname, apass)
         char *host, **aname, **apass;
 {
@@ -2417,7 +2421,7 @@ ruserpass(host, aname, apass)
                 }
         }
 }
- 
+
 static
 rnetrc(host, aname, apass)
         char *host, **aname, **apass;
@@ -2498,7 +2502,6 @@ done:
         static FILE *cfile;
 #endif
 
-static
 token()
 {
 

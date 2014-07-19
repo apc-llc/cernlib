@@ -32,8 +32,8 @@ extern int   strncasecmp( const char* str1, const char* str2, size_t n );
 
 extern char* strrstr( const char* str1, const char* str2 );
 
-#define strdup Strdup           /* prototype without const */
-extern char* strdup( const char* str );
+//#define strdup Strdup           /* prototype without const */
+//extern char* strdup( const char* str );
 
 
 /*

@@ -47,6 +47,7 @@
 #include        <assert.h>
 #include        <string.h>
 #include        <stdlib.h>
+#define L_cuserid  9
 
 
 char    *pavers();
