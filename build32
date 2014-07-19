@@ -4,7 +4,7 @@
 # Depending on the system, other directories may need to be added to the PATH
 # e.g. for the build tools and alternative compilers.
 
-CERN_LEVEL=2006
+CERN_LEVEL=2005
 CERN=`pwd`
 CERN_ROOT=$CERN/$CERN_LEVEL
 CVSCOSRC=$CERN/$CERN_LEVEL/src
@@ -25,13 +25,13 @@ mkdir -p build bin lib build/log
 
 cd $CERN_ROOT/build
 #$CVSCOSRC/config/imake_boot
-find $CERN_LEVEL -name Makefile -exec sed -i 's/linux-lp64.cf/linux.cf/g' {} \;
+find . -name Makefile -exec sed -i 's/linux-lp64.cf/linux.cf/g' {} \;
 make tree -j24 TOP=$CERN_ROOT/build
-find $CERN_LEVEL -name Makefile -exec sed -i 's/= g77/= g77 -m32/g' {} \;
-find $CERN_LEVEL -name Makefile -exec sed -i 's/= gcc/= gcc -m32/g' {} \;
-find $CERN_LEVEL -name Makefile -exec sed -i 's/= g++/= g++ -m32/g' {} \;
-find $CERN_LEVEL -name Makefile -exec sed -i 's/linux-lp64.cf/linux.cf/g' {} \;
-find $CERN_LEVEL -name Makefile -exec sed -i 's/-DCERNLIB_QMLXIA64//g' {} \;
+find . -name Makefile -exec sed -i 's/= g77/= g77 -m32/g' {} \;
+find . -name Makefile -exec sed -i 's/= gcc/= gcc -m32/g' {} \;
+find . -name Makefile -exec sed -i 's/= g++/= g++ -m32/g' {} \;
+find . -name Makefile -exec sed -i 's/linux-lp64.cf/linux.cf/g' {} \;
+find . -name Makefile -exec sed -i 's/-DCERNLIB_QMLXIA64//g' {} \;
 
 # Install kuipc and the scripts (cernlib, paw and gxint) in $CERN_ROOT/bin
 
