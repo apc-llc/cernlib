@@ -24,7 +24,7 @@ mkdir -p build bin lib build/log
 # Create the top level Makefile with imake
 
 cd $CERN_ROOT/build
-$CVSCOSRC/config/imake_boot
+#$CVSCOSRC/config/imake_boot
 make tree -j24 TOP=$CERN_ROOT/build
 find . -name Makefile -exec sed -i 's/g77/g77 -m32/g' {} \;
 find . -name Makefile -exec sed -i 's/gcc/gcc -m32/g' {} \;

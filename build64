@@ -24,7 +24,7 @@ mkdir -p build bin lib build/log
 # Create the top level Makefile with imake
 
 cd $CERN_ROOT/build
-$CVSCOSRC/config/imake_boot
+#$CVSCOSRC/config/imake_boot
 
 # Install kuipc and the scripts (cernlib, paw and gxint) in $CERN_ROOT/bin
 
