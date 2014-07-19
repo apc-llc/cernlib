@@ -1,0 +1,168 @@
+*
+* $Id: fatchar.inc,v 1.1.1.1 1996/03/07 15:17:58 mclareni Exp $
+*
+* $Log: fatchar.inc,v $
+* Revision 1.1.1.1  1996/03/07 15:17:58  mclareni
+* Fatmen
+*
+*
+#ifndef CERNLIB_FATMEN_FATCHAR_INC
+#define CERNLIB_FATMEN_FATCHAR_INC
+*
+*
+* fatchar.inc
+*
+*
+** ***     Types (1 = integer, 2 = character, 3 = time)
+*
+      IBTYPE( 1)=2
+      IBTYPE( 2)=2
+      IBTYPE( 3)=1
+      IBTYPE( 4)=1
+      IBTYPE( 5)=1
+      IBTYPE( 6)=2
+      IBTYPE( 7)=2
+      IBTYPE( 8)=2
+      IBTYPE( 9)=2
+      IBTYPE(10)=1
+      IBTYPE(11)=1
+      IBTYPE(12)=1
+      IBTYPE(13)=1
+      IBTYPE(14)=1
+      IBTYPE(15)=1
+      IBTYPE(16)=1
+      IBTYPE(17)=1
+      IBTYPE(18)=2
+      IBTYPE(19)=1
+      IBTYPE(20)=1
+      IBTYPE(21)=2
+      IBTYPE(22)=2
+      IBTYPE(23)=3
+      IBTYPE(24)=3
+      IBTYPE(25)=3
+      IBTYPE(26)=2
+      IBTYPE(27)=2
+      IBTYPE(28)=2
+      IBTYPE(29)=2
+      IBTYPE(30)=1
+      IBTYPE(31)=1
+      IBTYPE(32)=1
+      IBTYPE(33)=2
+      IBTYPE(34)=1
+      IBTYPE(35)=1
+*
+** ***     Offsets
+*
+      IBOFFS( 1)=MFQNFA
+      IBOFFS( 2)=MHSNFA
+      IBOFFS( 3)=MCPLFA
+      IBOFFS( 4)=MMTPFA
+      IBOFFS( 5)=MLOCFA
+      IBOFFS( 6)=MHSTFA
+      IBOFFS( 7)=MHOSFA
+      IBOFFS( 8)=MVSNFA
+      IBOFFS( 9)=MVIDFA
+      IBOFFS(10)=MVIPFA
+      IBOFFS(11)=MDENFA
+      IBOFFS(12)=MVSQFA
+      IBOFFS(13)=MFSQFA
+      IBOFFS(14)=MSRDFA
+      IBOFFS(15)=MERDFA
+      IBOFFS(16)=MSBLFA
+      IBOFFS(17)=MEBLFA
+      IBOFFS(18)=MRFMFA
+      IBOFFS(19)=MRLNFA
+      IBOFFS(20)=MBLNFA
+      IBOFFS(21)=MFLFFA
+      IBOFFS(22)=MFUTFA
+      IBOFFS(23)=MCRTFA
+      IBOFFS(24)=MCTTFA
+      IBOFFS(25)=MLATFA
+      IBOFFS(26)=MCURFA
+      IBOFFS(27)=MCIDFA
+      IBOFFS(28)=MCNIFA
+      IBOFFS(29)=MCJIFA
+      IBOFFS(30)=MFPRFA
+      IBOFFS(31)=MSYWFA
+      IBOFFS(32)=MUSWFA
+      IBOFFS(33)=MUCMFA
+      IBOFFS(34)=MFSZFA
+      IBOFFS(35)=MUSCFA
+*
+** ***     Lengths
+*
+      IBLENG( 1)=NFQNFA
+      IBLENG( 2)=NHSNFA
+      IBLENG( 3)=NCPLFA
+      IBLENG( 4)=NMTPFA
+      IBLENG( 5)=NLOCFA
+      IBLENG( 6)=NHSTFA
+      IBLENG( 7)=NHOSFA
+      IBLENG( 8)=NVSNFA
+      IBLENG( 9)=NVIDFA
+      IBLENG(10)=NVIPFA
+      IBLENG(11)=NDENFA
+      IBLENG(12)=NVSQFA
+      IBLENG(13)=NFSQFA
+      IBLENG(14)=NSRDFA
+      IBLENG(15)=NERDFA
+      IBLENG(16)=NSBLFA
+      IBLENG(17)=NEBLFA
+      IBLENG(18)=NRFMFA
+      IBLENG(19)=NRLNFA
+      IBLENG(20)=NBLNFA
+      IBLENG(21)=NFLFFA
+      IBLENG(22)=NFUTFA
+      IBLENG(23)=NCRTFA
+      IBLENG(24)=NCTTFA
+      IBLENG(25)=NLATFA
+      IBLENG(26)=NCURFA
+      IBLENG(27)=NCIDFA
+      IBLENG(28)=NCNIFA
+      IBLENG(29)=NCJIFA
+      IBLENG(30)=NFPRFA
+      IBLENG(31)=NSYWFA
+      IBLENG(32)=NUSWFA
+      IBLENG(33)=NUCMFA
+      IBLENG(34)=NFSZFA
+      IBLENG(35)=NUSCFA
+*
+** ***     Character names of offsets
+*
+      CHBANK( 1)='MFQNFA'
+      CHBANK( 2)='MHSNFA'
+      CHBANK( 3)='MCPLFA'
+      CHBANK( 4)='MMTPFA'
+      CHBANK( 5)='MLOCFA'
+      CHBANK( 6)='MHSTFA'
+      CHBANK( 7)='MHOSFA'
+      CHBANK( 8)='MVSNFA'
+      CHBANK( 9)='MVIDFA'
+      CHBANK(10)='MVIPFA'
+      CHBANK(11)='MDENFA'
+      CHBANK(12)='MVSQFA'
+      CHBANK(13)='MFSQFA'
+      CHBANK(14)='MSRDFA'
+      CHBANK(15)='MERDFA'
+      CHBANK(16)='MSBLFA'
+      CHBANK(17)='MEBLFA'
+      CHBANK(18)='MRFMFA'
+      CHBANK(19)='MRLNFA'
+      CHBANK(20)='MBLNFA'
+      CHBANK(21)='MFLFFA'
+      CHBANK(22)='MFUTFA'
+      CHBANK(23)='MCRTFA'
+      CHBANK(24)='MCTTFA'
+      CHBANK(25)='MLATFA'
+      CHBANK(26)='MCURFA'
+      CHBANK(27)='MCIDFA'
+      CHBANK(28)='MCNIFA'
+      CHBANK(29)='MCJIFA'
+      CHBANK(30)='MFPRFA'
+      CHBANK(31)='MSYWFA'
+      CHBANK(32)='MUSWFA'
+      CHBANK(33)='MUCMFA'
+      CHBANK(34)='MFSZFA'
+      CHBANK(35)='MUSCFA'
+
+#endif

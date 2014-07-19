@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 ybook.F ybook0.F yfetch.F yinit.F ymove.F ypush.F ywork.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,26 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+  System interface routines for IBM with system VM / CMS
+         to be put onto the binary KERNLIB library
+ 
+  This file must be used in the concatenation KERNIBM / KERNCMS / KERNFOR
+ 
+This file contains the following patches :
+ 
+  SYCERNV   system routines for system VM at CERN only
+  SYVM      system routines for system VM
+ 
+The material of this file uses the following Patchy options :
+ 
+  QMIBMXA   system version XA
+  QMIBMVF   to generate code for the vector facility
+  QCMS4     CMS version 4 or earlier
+  QCMS6     CMS version 6 and on
+  QEXTRACT  Flag to replace the HEPVM-EXTRACT macro
+ 

@@ -1,0 +1,4527 @@
++TITLE.
+C GEANT   3.21/11  10/02/98  17.58.14  CERN PROGRAM LIBRARY GEANT  = W5013
++PATCH,$VERSION.
++DECK,V3_21.
+*CMZ :  3.21/10 13/11/97  17.58.14  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.21/04   21/03/95 17.58.14
+*
+*
+*::>          VERSION  3.21/03   17/10/94 16.00.29
+*
+*
+*::>          VERSION  3.21/02   25/07/94 15.24.16
+*
+*
+*::>          VERSION  3.21/01   28/03/94 16.10.10
+*
+*
+*::>          VERSION  3.21/00   28/02/94 16.32.43
+*
+**********************************************************************
+*                                                                    *
+*                       G E A N T   3 . 2 1                          *
+*                                                                    *
+*                            C E R N                                 *
+*                                                                    *
+*                       15/3/94  Geneva  CH                          *
+*                                                                    *
+**********************************************************************
+*
+* GEANT 3.21 has a new tracking logic to speed up the search over the
+*            volumes positioned inside a given node (Virtual Divisions).
+*            The new tracking is initialized by GGCLOS in a completely
+*            transparent way and in a negligible amount of time.
+*            The GUNEAR and GSORD techniques are automatically disabled
+*            and no change in the user code is needed. Anyway, it is
+*            still possible to get the old Geant tracking recompiling
+*            GEANT and GEANG with the patchy flag OLD.
+*            To implement the new logic, the following routines have
+*            written or deeply modified: GTNEXT, GGCLOS, GTMEDI, GNEXT,
+*            GMEDIA, GINVOL, GVDCAR, GVDRAD, GVDPHI, GVDLIM, GSCVOL.
+*                                                               S.Giani.
+*
+* GEANT 3.21 has a new logic for MANY volumes: the tracking is not
+*            based anymore on a step-search, but relies on a algorithm
+*            similar to the one used for ONLY volumes (giving then
+*            basically the same speed obtained for ONLY). The new logic
+*            of MANY allows boolean operations between volumes, clipping
+*            of protuding objects, divisions along arbitrary axis,
+*            overlaps of 1-D structures to build 2-D or 3-D structures
+*            (like honeycombs, spaghetti, etc.). To implement the new
+*            logic, the following routines have been written or modified:
+*            GTNEXT, GTMEDI, GNEXT, GMEDIA, GTELEC, GTCKOV, GTHADR,
+*            GTHION, GTMUON.
+*                                                             S.Giani.
+*
+* GEANT 3.21 contains modifications to GTELEC, GTGAMA, GDRAY in order
+*            to exploit the e.m. low energy effects introduced in 3.16
+*            without any overhead in performance compared with 3.15.
+*            A bug in the delta ray productions is now fixed.
+*                                                        Thanks to L.Urban.
+*
+* GEANT 3.21 provides a ray-tracing as a new visualization tool. The
+*            ray-tracing is based on the new Geant tracking and allows
+*            the visualization of the boolean operations results.
+*            The following routines have been written or modified:
+*            GDRACK, GDSTEP, GDNINO, GDOPT, GDRAYT, GDRAW, GDINIT,
+*            GTRIG, GTRIGI, GDKINE, GDLUMI, GLIGHT, GFIND, GXDRAW,
+*            CDF.
+*                                                             S.Giani.
+*
+* A new GGPERP has been written to cope with almost all the shapes.
+*            It is now of general utility both for the Cerenkovs
+*            and for the ray-tracing.
+*                                               Thanks to R.Jones.
+*
+* A new set of routines to compute distances to surfaces has been
+*            introduced (GVSAFE, GVGRAD, GVPSQR, GVSIGN, GVLONG).
+*                                               Thanks to V.Perev.
+*
+* Important fix in GPHYSI: user words for media were overwriting
+*            ILABS, ISYNC and ISTRA.
+*                                    Thanks to S.Giani, S.Ravndal.
+*
+* GXOBJ has been improved to handle DETs as objects of a SET directory
+*            in the HITS class.
+*                                    Thanks to S.Giani, A.Dellacqua.
+*
+* GTNINO has been corrected in order to print the mechanism NEXT when
+*            crossing boundaries.
+*                                    Thanks to S.Giani, M.Maire.
+*
+* GFMFIN and GFMDIS are the new names for the 316 routines FMUFIN and
+*        FMDIST to avoid clashes with the program library. GFMFIN has
+*        also been corrected for a 316 bug affecting neutrons.
+*                             Thanks to C.Zeitniz,K.Lassila,S.Ravndal.
+*
+* GINTRP and GINPCO have been corrected to handle sharp edges with no
+*        risk of float exception.
+*                                Thanks to L.Gibbons.
+*
+* GGPERP has been corrected in reading the TRAP parameters and a systematic
+*        consistency of single precision or double precision variables in
+*        the MAX,MIN,MOD operands is provided.
+*                                             Thanks to S.Ravndal.
+*
+* FEREVV and FERHAV are now new from FLUKA.
+*                                             Thanks to A.Ferrari.
+*
+* FEREVV has been adapted to the Geant random numbers generators.
+*                                             Thanks to S.Ravndal.
+*
+* In GRNDMQ the option `SH' is provided to write the seeds ISEED1 and
+*         ISEED2 to the event header bank.
+*                                             Thanks to S.Ravndal.
+*
+* In GMORIN,FLINIT and GHEINI the interface messages are removed.
+*                                             Thanks to S.Ravndal.
+*
+* In GGDPAR now PAR(3) is correctly initialized to 1.for slices of
+*         a PGON.
+*
+*
+* The seq GCNUM has been added to the deck ERTRGO in Geane.
+*
+*
+*
+* G321X and G321M are the new names for the KUIP output of the CDF.
+*                                             Thanks to S.Giani.
+*
+* GMORIN has been modified in order to read correctly xsneut.dat
+*          for MSDOS and WINNT as well.
+*                                         Thanks to V.Fine.
+*
+* GEAMON has been modified in order to print Real and CPU Time longer
+*          than 999 sec.
+*                                         Thanks to R.Brun.
+*
+*
+**********************************************************************
+*                                                                    *
+*                       G E A N T   3 . 2 1                          *
+*                                                                    *
+*                      Correction cradle 0.01                        *
+*                                                                    *
+*                            C E R N                                 *
+*                                                                    *
+*                       29/3/94  Geneva  CH                          *
+*                                                                    *
+**********************************************************************
+*
+* GZINIT and GSCKOV have been corrected (compared with 3.16) in order
+*        to initialize correctly the link area for the Zebra pointers
+*        of the banks relative to straggling, Cerenkovs, Asho, etc.
+*        Four pointers were not seen by Mzlint and, moreover, the link
+*        area (containing pointers for straggling, etc.) was initialized
+*        only if using Cerenkovs.
+*                                   Thanks to M.Verzocchi and R.Brun.
+*
+* FERHAV in Geanf was provoking a float exception due to a negative sqrt.
+*        The problem was fixed thanks to a comparison with the original
+*        Fluka code.
+*                                   Thanks to B.Slater and S.Giani.
+*
+* PREPRE has been deoptimized on HP.
+*                                   Thanks to A.Kulik.
+*
+* In GSKINE a pointer was not saved (in the previous versions as well).
+*                                   Thanks to A.Dellacqua.
+*
+* In GTNEXT and GNEXT precision problems are handled more effectively.
+*                                   Thanks to P.Ward, C.Markou and S.Giani.
+*
+* In GTNEXT the blocking of the volume from which particles are exiting
+*        has been corrected.
+*                                   Thanks to P.Ward.
+*
+* Problems in the interactive materials, mixtures and media definition
+*        have been solved. (Routines GXCONT,GXGEOM). Idem for the 3D
+*        Dspec (routine GXDRAW).
+*
+* In order to handle correctly calls to Gfcoor in phi (for x=0 or y=0)
+*        GTMEDI, GMEDIA and GINVOL have been modified.
+*                                    Thanks to P.Ward.
+*
+* In the ray-tracing, GDNINO has been corrected for precision problems.
+*                                    Thanks to S.Giani.
+*
+*
+**********************************************************************
+*                                                                    *
+*                       G E A N T   3 . 2 1                          *
+*                                                                    *
+*                      Correction cradle 0.02                        *
+*                                                                    *
+*                            C E R N                                 *
+*                                                                    *
+*                       25/7/94  Geneva  CH                          *
+*                                                                    *
+**********************************************************************
+*
+* In GTNEXT precision problems in phi have been solved.
+*                                    Thanks to A.Rosowsky and A.Givernaud.
+*
+* In GDRAY a missing protection for delta ray production was added.
+*                                    Thanks to L.Urban.
+*
+* In GINVOL the variable ingt is corrrectly reset. It was not reset in
+*       all the previous versions of GEANT as well.
+*                                    Thanks to R.Jones.
+*
+* GTCKOV, GTHADR, GTHION, GLISUR have been corrected and extended compared
+*       with the first implementation in 3.16 for Cerenkov tracking.
+*                                    Thanks to R.Jones.
+*
+* GSKPHO has been fixed for Cerenkov physics compared with the previous
+*       version of GEANT (3.16).
+*                                    Thanks to S.Bottai.
+*
+* GFTMAT had a wrong pointer to plot the muon-nucleus cross sections since
+*       version 3.16. Now it is fixed.
+*                                    Thanks to C.Wiebusch and S.Ravndal.
+*
+* GFINDS has been restored to the 3.15 functionality.
+*                                    Thanks to A.Dellacqua and S.Tonse.
+*
+* GFANG has been fixed for a special pathological case.
+*                                    Thanks to C.Zosi.
+*
+* GSROTM  has been fixed for a special pathological case.
+*                                    Thanks to A.Vlassov.
+*
+* GDRAYT does not increment ievent anymore.
+*                                    Thanks to P.Jacobs.
+*
+* GLVOLU has been fixed to recompute the pointers of the geometrical tree
+*       even if the names and numbers were identical.
+*                                    Thanks to R.Jones, T.Noble, S.Ravndal.
+*
+* GVDRAD has been fixed to compute the scope of tubs.
+*                                    Thanks to K.Albiol and S.Giani.
+*
+* GDSPEC has been fixed to print degrees for the 3-rd parameter of sphe.
+*                                    Thanks to S.Ravndal.
+*
+* GVDPHI has been fixed for a special pathological case (only for volumes
+*       with planar surfaces).
+*                                    Thanks to M.Kaspar and S.Giani.
+*
+* GXCONT is changed to handle correctly the variables ievent and nevent.
+*                                    Thanks to P.Jacobs.
+*
+* SVGAM7 in Gheisha has now a protection against the log(0).
+*                                    Thanks to D.Heck.
+*
+* FEREVV and FERHAV have been updated.
+*                                    Thanks to A.Ferrari.
+*
+* In FLUFIN the correct mechanism is given to lmec in case of energy
+*       below cut-off.
+*                                    Thanks to B.Slater and S.Ravndal.
+*
+* In NUDISV the array anpowr is saved.
+*                                    Thanks to S.Ravndal.
+*
+* In GMXSEC imed is used instead of nmed.
+*                                   Thanks to K.L.Perini.
+*
+*
+*
+**********************************************************************
+*                                                                    *
+*                       G E A N T   3 . 2 1                          *
+*                                                                    *
+*                  Correction version 0.03 = 94b release             *
+*                                                                    *
+*                            C E R N                                 *
+*                                                                    *
+*                       18/10/94  Geneva  CH                         *
+*                                                                    *
+**********************************************************************
+*
+* In GDCGVW traslation problems have been fixed (graphics).
+*                                    Thanks to J.Stepanek, S.Giani.
+*
+* In GLTRAC nlevel is now initialized to 0 and GTNEXT has been improved
+*    further for handling precision problems.
+*                                    Thanks to A.Dellacqua.
+*
+* GDRELX and GTELEC have been corrected for energy deposition problems.
+*                                    Thanks to L.Urban.
+*
+* GSDVT2 has been corrected for divisions in phi.
+*                                    Thanks to V.Popov.
+*
+* GPVOLU and GFMOTH are now able to handle cases where copy number = 1
+*    is not defined.
+*                                    Thanks to S.Giani, S.Nowak.
+*
+* GTREVE has been changed in order to avoid the loading of the graphics
+*    package if not desired.
+*                                    Thanks to S.Giani, I.Bird.
+*
+* GUPHAD, GUHADR and FLINIT give warnings and conditions for the use of FLUKA.
+*                                    Thanks to A.Ferrari.
+*
+* GVDPHI and GVDCAR have been further improved to compute the scope of pgon.
+*                                    Thanks to P.Kent.
+*
+* GTELEC now computes cross sections for SYNC only if there is mag. field.
+*                                    Thanks to M.Maire.
+*
+* GPCXYZ printing format can now handle bigger dimensions.
+*                                    Thanks to S.Ravndal.
+*
+* GDRMAT and GPRMAT headers are now consistent with GFTMAT. In GPLMAT `STEP'
+*    and `RANGE' do not belong anymore to `ALL' as physical processes.
+*                                    Thanks to M.Maire, S.Ravndal.
+*
+* GPHYSI is now setting dray=0 if loss=0. Labs, Sync and Stra can be switched
+*    interactively. Decay and Sync are now also defined in vacuum.
+*                                    Thanks to M.Maire, S.Ravndal.
+*
+* In GRNDMQ the ' ' and the 'G' options work now as described in the doc.
+*                                    Thanks to S.ONeale, S.Ravndal.
+*
+* GPART calls GSDK anyhow to give flexibility at run time (for the interactive
+*    version). The values relatives to the particles are now updated to
+*    Phys.Rev. D50 1173 1994.
+*                                    Thanks to S.Ravndal, F.H.Heinsius.
+*
+* In GDEXCA (Cadint) a bug from 316 is now fixed.
+*                                    Thanks to J.Vuoskosky.
+*
+* GBREME and GSYNC (see the new doc for the meaning of sync=0,1,2,3) have
+*    been improved and the two relative mechanism can happen at the same time.
+*                                    Thanks to M.Maire.
+*
+*
+*
+**********************************************************************
+*                                                                    *
+*                       G E A N T   3 . 2 1                          *
+*                                                                    *
+*                  Correction version 0.10 = 98  release             *
+*                                                                    *
+*                            C E R N                                 *
+*                                                                    *
+*                       28/3/95  Geneva  CH                          *
+*                                                                    *
+**********************************************************************
+*
+* In GTCKOV the variable RIN1 is not reset to 0 any longer.
+*                                           Thanks to A.Delpozo
+*
+* In GSTRAC heavy ions have now the correct itrtyp=8.
+*                                           Thanks to Yfwang
+*
+* In GTNEXT the variable SNXT and SNXNEW are compared with BIG1 to cure
+*  precision problems.
+*                                           Thanks to A.Dellacqua, P.Ward.
+*
+* In GPVOLU and GPVOLX the variable MOTHER is now declared as CHARACTER*4.
+*                                           Thanks to V.Tretyak
+*
+* In GGCLOS a test on IQUEST(11).le.0 has been changed into IQUEST(11).lt.0.
+*                                           Thanks to P.Ward
+*
+* In GLTRAC nlevel is reset to 0 only if GONLY(NLEVEL).EQ.0.
+*                                           Thanks to P.Ward, S.Giani
+*
+* In GDCGOB a bug on the unit for the angles of spheres has been fixed.
+*                                           Thanks to J.Allison
+*
+* GPRMAT is now protected against floating point exceptions.
+*                                           Thanks to R.Ruber
+*
+* GRNDMQ has been improved storing the seeds.
+*                                           Thanks to S.Ravndal.
+*
+* In GTNINO the time of flight is now updated.
+*                                           Thanks to S.Ravndal.
+*
+* In GXPHYS, GXCS, the interactive facilities have been extended.
+*                                           Thanks to M.Maire
+*
+* GPCXYZ has a corrected format to print.
+*                                           Thanks to S.Ravndal
+*
+* A GUXCS dummy routine has been created to extend the interactive use of COMIS.
+*                                           Thanks to M.Maire.
+*
+* GDPRTR is now able to recognize b/w Xterminals before drawing the tree.
+*                                           Thanks to S.Giani, B.Lorazo.
+*
+* GLVOLU has been corrected in the computation of GTRAN for the slices of
+*  divided volumes.
+*                                           Thanks to S.Giani.
+*
+* GXGEOM now allows correctly the definition of the basic shapes interactively.
+*                                           Thanks to S.Giani.
+*
+* GETVER and GINIT are improved to extract and print automatically the version.
+*                                           Thanks to M.Maire.
+*
+* GFTMAT and GPLMAT have been corrected in plotting the cross sections.
+*                                           Thanks to S.Ravndal, G.Zholobov.
+*
+* GLANDZ has been protected against floating point exceptions.
+*                                           Thanks to L.Urban, B.Fox.
+*
+* GLUDKY contains now the time of interaction (Lund).
+*                                           Thanks to S.Ravndal, C.Wiebusch.
+*
+* GPAIRG has been protected against undefined values for the variable X.
+*                                           Thanks to L.Urban, H.Ihssen.
+*
+* GINIT, GFFGO and GTELEC are modified in order to include a new data card,
+*  ABAN, which allows to follow the electrons down to the cuts value even
+*  when they are not doing physics (ABAN=0) or to propagate them up to the
+*  end-point with an optimized algorithm (ABAN=2). The default is ABAN=1
+*  (normal 3.21 behaviour).
+*                                           Thanks to L.Urban, S.Ravndal.
+*
+* BRTTP has been protected in case the file flukaaf.dat is not found.
+*                                           Thanks to S.Ravndal.
+*
+* GMORIN has been modified and GMISET has been created in order to interface
+*  to the new version of Micap (from Gcalor 1.03.08) which has been introduced
+*  in GEANM.
+*                                           Thanks to S.Ravndal.
+*
+* GPRSGG and GBRSGE have been modified to assume constant cross sections
+*  above 100 GeV both for pair production and for bremsstrahlung.
+*                                           Thanks to G.Battistoni, L.Urban.
+*
+* GVDPHI has been corrected and improved for the scope computation of tubes,
+*  cons and polycons which are rotated and translated at the same time.
+*                                           Thanks to S.Giani, J.P.Vialle.
+ 
++DECK,V3_16.
+*CMZ :          29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.16/00   07/12/93 14.33.29
+*
++DECK,V3_15.
+*CMZ :          29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.15/09   920408 13.02
+*
+*
+*          ************************************************************
+*          *                                                          *
+*          *                                                          *
+*          *                G E A N T   Version  3.15                 *
+*          *                                                          *
+*          *            O F F I C I A L     R E L E A S E             *
+*          *                                                          *
+*          *              CERN, Geneva, April 7, 1992                 *
+*          *                                                          *
+*          *                                                          *
+*          *                                                          *
+*          ************************************************************
+*
+*
+*::>          VERSION  3.15/08   920401  8.41
+*
+*
+*::>          VERSION  3.15/07   920331  9.42
+*
+*
+*::>          VERSION  3.15/06   920331  8.01
+*
+*
+*::>          VERSION  3.15/05   920329 15.41
+*
+*
+*::>          VERSION  3.15/04   920329 13.45
+*
+*
+*::>          VERSION  3.15/03   920327 18.49
+*
+*
+*::>          VERSION  3.15/02   920316 12.53
+*
+*
+*::>          VERSION  3.15/01   920316 10.18
+*
+*             Prerelease stamping of 3.15
+*
++DECK,V3_14.
+*CMZ :          29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.14/16   901107 15.23
+*
+*      See PATCH,HISTORY for the description of version 3.14
+*
+ 
++DECK,V3_13.
+*CMZ :          29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.13/05   890628 15.01
+*
+*      See PATCH,HISTORY for the description of version 3.14
+*
++PATCH,HISTORY
++DECK,BLANKDEK.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*
+*           ************************************************
+*           *                                              *
+*           *         G E A N T  version  3.16             *
+*           *                                              *
+*           *          Official  R E L E A S E             *
+*           *       ==============================         *
+*           *                                              *
+*           ************************************************
+*
++DECK,V_313.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*::>          VERSION  3.13/05   890628 15.01
+*
+*        Changes in GTELEC,GTHADR and GTMUON for overstopping tracks.
+*        STEP and SLENG correction optimized
+*        In COMMON/GCDRAW/ variable IGVIEW changed to IDVIEW
+*        Routine GTRMUL recoded
+*        DOUBLE precision in GINTCO and protection added.
+*        Changes in GNOPG6.
+*        Changes in GINME (for spheres,tubes and cones DPP.LE.0)
+*        GDINIT called by GXINT
+*        Particle data table updated in GPART
+*        Tests on boundary conditions for IEKBIN modified in GTGAMA
+*        A new user callable routine GBIRK introduced in GPHYS.
+*         GBIRK may be called from GUSTEP to compute the Birk
+*         correction factors for anorganic scintillators.
+*
+*::>          VERSION  3.13/04   890623 12.34
+*
+*        New version of GLANDZ and GPOISS by L.Urban
+*        GRNDM calling sequence changed
+*        Sequence numbers (1-->215) can be initialized
+*         with data card RNDM
+*                Ex:
+*            RNDM  9876  1234534   initializes sequence 1
+*            RNDM 45  initilizes sequence 45 with the starting
+*                     seed of sequence 45
+*        New routine GRANOR (copy of RANNOR for GRNDM)
+*
+*::>          VERSION  3.13/03   890425 12.09
+*
+*        Update of inline documentation DOCGBASE,DOCGKINE,DOCGTRAK
+*        Deck GGCLOS modified and moved from GGEOM to GBASE
+*        New deck GHCLOS (called by GGCLOS) in GBASE
+*        Deck GEVKEV moved from GTRAK to GCONS
+*        New decks GFNDIG,GFNHIT,GRHITS in GHITS
+*        Minor bug corrected in GTELEC
+*        Control of debug and removal of SNXT=BIG  in GTNEXT
+*        Call to GUSTEP removed from GUVIEW
+*
+*::>          VERSION  3.13/02   890311 10.45
+*
+*        Bug corrected in GPAIRM (COMMON/GCMATE/ overwritten
+*        Bug corrected in outines GDRELM and GDRELP
+*           (error in AVO changed to AVOGAD)
+*        Minor corrections in physics routines
+*        SAVE statements added
+*        Protection in GHANGL
+*        Default changed to GHEISHA instead of TATINA
+*          in routines GUPHAD and GUHADR
+*        Bug corrected in GHTATI (NAMEC(12) instead of NAMEC(10)
+*
++DECK,V_314.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+C
+C
+C           ************************************************
+C           *                                              *
+C           *         G E A N T  version  3.14.16          *
+C           *                                              *
+C           *           Official  R e l e a s e            *
+C           *       ==============================         *
+C           *                                              *
+C           ************************************************
+C
+C
+C
+*    The version 3.14 of GEANT is being released. Apart from a few
+*    features, reported below, the new version is compatible with the
+*    previous version 3.13. Substantial developments have taken place,
+*    in particular in the physics and tracking areas.
+*
+*    In addition to the GEANT team
+*     (R.Brun:CERN/CN-AS,  F.Bruyant:CERN/ECP-PI and M.Maire:LAPP),
+*    many people have contributed to the new version, especially
+*     - a large number of users of the previous version who reported
+*       their experience, found bugs and suggested several improvements,
+*     - the guinea-pigs of 3.14 who gave us essential comments during
+*       our attempt to automatize computation of the tracking parameters.
+*                 ** A.Givernaud (UA1), F.Nessi, V.Vercesi(UA2/LHC)
+*                 ** The LHC proto collaborations
+*     - H.Fesefelt(Aachen) has provided a new version of the GHEISHA
+*       package with help from N.Van Eijndhoven (CERN/CN-AS)
+*     - H.J Trost from ANL has reported problems in the muon-nuclear
+*       interactions routines and provided the relevant corrections.
+*     - P.Pedroni (Pavia) has implemented a new interface called
+*       by GHEISHA for low-energy hadronic processes (See NUCRIN below).
+*     - the contributors to the geometry package:
+*            for the introduction of new shapes
+*                ELTU by A.Solano (ZEUS)
+*                HYPE by M.Corden (ALEPH and SSC)
+*                CTUB by A.McPherson (CEBAF)
+*            for systematic investigation of problems with the old shapes
+*                R.Nierhaus (CERN/CN-AS)
+*     - S.Egli (H1) has proposed an automatic optimisation for the
+*       geometry at initialisation time.
+*     - G.Lynch from Berkeley has investigated the multiple-scattering
+*       various strategies and proposed a new algorithm.
+*     - A.Rotondi and P.Montagna have proposed a new technique for the
+*       fast generation of Vavilov distribution.
+*       K.S.Koelbig (CERN/CN-AS) has implemented a new routine GVAVIV
+*       based on their work.
+*     - J.Salt (CERN/CN-AS) has implemented the graphics interface to the
+*       CG package from Serpukhov with the help of E.Chernaev.
+*     - The IBM team (C.Guerin, M.Roelisberger) have investigated how
+*       to speed-up the program. Their work has been coordinated
+*       by F.Carminati (CERN/CN-AS).
+*
+*     GEANT3.14 documentation
+*     =======================
+*      The printing of a new manual describing the new version is
+*      scheduled for the end of this year. The CERN Program Library
+*      will not distribute anymore the old document (version 3.11).
+*
+*
+*     Important notice to GEANT users
+*     ===============================
+*
+*      Following the reorganisation of the CERN research divisions
+*      in July 90, R.Brun is now in charge of the Application Software
+*      group (AS) in the CN division and F.Bruyant is in charge of the
+*      Production support and computers Infrastructure group (PI) in the
+*      ECP division. They will nevertheless continue, with M.Maire, to be
+*      actively involved in the development of GEANT. Federico Carminati
+*      is the coordinator of a simulation software unit in the CN-AS group.
+*      Users are strongly recommended to address their questions,etc
+*      directly to him (email: FCA@CERNVM.CERN.CH on BITNET). In particular,
+*      feedback from users making comparisons with real data will be most
+*      appreciated.
+*
+*      The simulation team is preparing the ground for the next version
+*      of GEANT. In view of the proposed new accelerators, the following
+*      items are considered with high priority:
+*        - Parametrization techniques. A survey of the various methods
+*          used in current experiments has been done and the implementation
+*          of a new algorithm based on the GSCAN geometry + GFLASH (H1)
+*          is in progress.
+*        - Improvements in the geometry package. General shape definition,
+*          surface based algorithms.
+*        - Detector data structure and data base. Interface with CAD systems.
+*        - Parallelism (at event level and below).
+*
+*
+*......................................................................
+*
+* *** Compatibility with version 3.13
+*     ===============================
+*     - If COMMON blocks GCMULO or/and GCJLOC were included in the
+*       user code, the new GEANT sequences GCMULO and GCJLOC must be
+*       inserted and the code recompiled.
+*     - Initialisation data structures saved with the previous versions
+*       cannot be read by the new version, because the binning for
+*       the cross-sections and energy loss tables has been changed.
+*     - The GCPHYS variables SOLOSS,STLOSS,SOMULS,STMULS are no more
+*       defined (see comments below)
+*     - The GCTRAK variable IDECAD is replaced by IGAUTO
+*
+*
+* *** MAIN CHANGES IN THE TRACKING PROCEDURES
+*     =======================================
+*
+*    The tracking control routines GTGAMA,GTELEC,GTHADR,GTNEUT,GTMUON
+*    have been largely rewritten to reflect the changes to the energy-loss
+*    and multiple scattering processes.
+*
+*
+* *** The ENERGY RANGE of the cross section and energy loss tables can
+*     be fixed by the user with the new data card :
+*             'ERANG'   EKMIN  EKMAX    NKBIN
+*     which defines nkbin bins from Ekmin to Ekmax in a logarithmic scale.
+*     The default is, as before, 90 bins from 10 Kev to 10 Tev but in
+*     logarithmic scale. NKBIN must be 50<NKBIN<200.
+*
+*     WARNING 1 : as a consequence the common GCMULO has been changed.
+*     User applications referencing GCMULO must be recompiled.
+*
+*     WARNING 2 : as a consequence the ZEBRA data structure JMATE
+*     contains now cross-sections and energy loss tables based on the new
+*     energy range. Structures saved by previous versions of GEANT cannot
+*     be used by the new version.
+*
+*     WARNING 3 : changing the 'ERANG' data card arguments requires to
+*     recreate the initialisation data structures.
+*
+*     WARNING 4 : for Hadrons, GEANT tabulates the energy-loss tables
+*     for a proton-kinetic energy equivalent. As a consequence, the value
+*     given for EKMAX must be at least 7 times the maximum kinetic energy
+*     of particles to be tracked (ratio proton/pion mass).
+*     For LHC/SSC simulations, we recommend ERANG 1.E-5 1.E+5 100
+*     The recommended value for NKBIN is 10*LOG10(EKMAX/EKBIN).
+*
+*
+* *** The MEAN STOPPING RANGE of a charged particle (STOPMX) is computed and
+*     tabulated as a function of the kinetic energy (routine GRANGI).
+*     There are tables for electrons, muons, protons. The others particles are
+*     scaled from the proton table.
+*     As for the other tabulated quantities, the Stopping Range can be displayed
+*     with the routines GPLMAT and/or GPRMAT (keyword 'RANG').
+*
+*     During the tracking, the MEAN ENERGY LOSS over a given step (DEMEAN) is
+*     computed from the difference of the stopping range before and after the
+*     transport of the particle.
+*
+*
+* *** ENERGY LOSS STRAGGLING : when ILOSS=2 (default) the Landau/Vavilov
+*     fluctuations are applied to the mean energy loss over the step.
+*     The VAVILOV distribution has been improved so that the fluctuations are
+*     less dependent on the step size.
+*
+*     ILOSS=1 is now equivalent to ILOSS=3 i.e. restricted fluctuations are
+*     applied together with delta-ray production (see routine GLANDZ).
+*     The user who wish to inhibit the energy fluctuations must set ILOSS=4
+*     The latter option has been kept for debug purpose only.
+*
+*
+* *** MULTIPLE SCATTERING.  The calculation of the step size (SMULS) is new :
+*     Bethe criterion taken into account, limitation of step size at low
+*     energy (see routine GMULOF).
+*
+*     New routine GMULTS : depending on the step size the Moliere distribution,
+*     or its gaussian approximation, is used.
+*
+*     The routines GMOLI, GMOLIE (ex Gmol), GMOLS have been slightly modified.
+*
+*     In the routine GMGAUS (ex Gmuls), we use a new sigma (G. Lynch LBL-28165).
+*     The lateral displacement has been deleted. As a consequence the tracking
+*     parameter DMAXMS is not used anymore for the control of the step size.
+*     DMAXMS.LE.0 forces no multiple scattering at all in the medium.
+*
+*     New routine GMCOUL : for very small steps single Coulomb scatters are
+*     generated instead of Moliere distribution.
+*
+*     By default (IMULS=1) GEANT will select automatically the algorithm to use
+*     (GMCOUL, GMOLIE or GMGAUS).
+*
+*
+* *** NEW ROUTINE GMULOF. The step for energy loss (SLOSS), the step for
+*     multiple scattering (SMULS), and the step  for the curvature in a magnetic
+*     field (SFIELD) can be precomputed and tabulated, at least for electrons
+*     and muons. The routine GMULOF, called from GPHYSI, tabulates:
+*                  SMULOF = MIN ( SMULS , SLOSS , SFIELD )
+*     which is the effective step due to the "continuous processes".
+*     SMULOF can be displayed with the routines GPLMAT/GPRMAT, keyword 'STEP'.
+*
+*
+* *** Multiple scattering and energy loss computations are systematically
+*     applied at each step during tracking. Therefore the GCPHYS variables
+*     SOLOSS, STLOSS, SOMULS, STMULS are OBSOLETE. However, for backward
+*     compatibility with 3.13, STLOSS is set equal to STEP.
+*
+*
+* *** TRACKING PARAMETERS STMIN and DEEMAX.
+*
+*     The meaning of STMIN is the following : at low energy (below 1 Mev) the
+*     multiple scattering condition can induce a very small step SMULOF.
+*     On the other hand the Stopping Range is also small. Therefore, if the
+*     Stopping Range is smaller than STMIN, the constraint SMULOF is ignored.
+*     The exact condition is :
+*               IF (SMULOF.LE.STMIN)   SMULOF = MIN ( STOPMX, STMIN )
+*     STMIN is no more than an accelerator factor for the stopping particles.
+*
+*     The DEEMAX parameter remains the main tracking parameter. It governs the
+*     precision of the tracking by limitating SMULOF.
+*
+*
+* *** AUTOMATIC COMPUTATION of STMIN and DEEMAX.
+*
+*     By default Geant3.14 overwrites STMIN and DEEMAX. The STMIN default value
+*     correspond to a stopping range of 200 Kev above CUTELE.
+*     The default for DEEMAX follows the following algorithm:
+*       - For non-sensitive volumes (ISVOL=0) DEEMAX is set to 0.25 for
+*         materials with a radiation length x0<2cm
+*         and DEEMAX=0.25-0.2/sqrt(x0) for other materials.
+*       - For sensitive volumes (ISVOL.NE.0) DEEMAX=0.2/sqrt(x0)
+*     These values have been tuned empirically on a variety of setups.
+*
+*     A new data card 'AUTO' has been implemented :
+*     Setting 'AUTO' 1 is equivalent to NO data card, i.e. automatic computation
+*     Setting 'AUTO' 0 : NO automatic computation, EXCEPT if STMIN and/or DEEMAX
+*     has been given a negative value by the user.
+*
+*     WARNING : The default values above have been found reasonable for any kind
+*     of medium. The unexperienced user is invited to start with automatic
+*     computation. Please check the actual parameters by calling GPRINT ('TMED'
+*     after the call to GPHYSI.
+*
+*     We STRONGLY recommend to always run in AUTO mode (default). The AUTO
+*     mode makes GEANT a predictive tool if all parameters are automatically
+*     computed by the system as opposed to tuning data and Monte Carlo
+*     via the tracking parameters.
+*
+* *** GPHYSI
+*     The routine GPHYSI has been improved to include additional protections
+*     and to take into account the changes due to the new energy-range tables.
+*     It must be noted that is mandatory to always call GPHYSI at the end
+*     of the initialisation phase even when initialisation data structures
+*     are read from a file.
+*
+* *** GPIONS
+*     This new routine (a complement to GPART) defines a subset of the most
+*     common "stable" elements in the nature.
+*     GPIONS can be called at the initialisation stage after GPART. It creates
+*     particles with GEANT identifiers 61 to 112.
+*     GPIONS has been written for the heavy ions experiments in view of an
+*     interface with the program FRITIOF which is being developed by
+*     P.Gorodetzky (Strasbourg).
+*
+* *** GDEBUG
+*     This new user callable routine from GUSTEP will take the following actions
+*     if the flag IDEBUG=1:
+*
+*     IF(IDEBUG.NE.0) THEN
+*       IF((ISWIT(2).EQ.1).OR.(ISWIT(3).EQ.1)) CALL GSXYZ ! store point in JXYZ
+*       IF (ISWIT(2).EQ.2) CALL GPCXYZ ! step by step printed debug
+*       IF (ISWIT(1).EQ.2) CALL GPGKIN ! list of particles generated during step
+*       IF (ISWIT(2).EQ.3) THEN
+*          IF(ISWIT(4).EQ.3.AND.CHARGE.EQ.0.)RETURN
+*          CALL GDCXYZ    ! interactive drawing of trajectories
+*        ENDIF
+*     ENDIF
+*
+* *** New user callable routine GBIRK to take into account BIRK's factors.
+*     ====================================================================
+*    This new routine is callable from the GUSTEP routine. EDEP=DESTEP
+*    if no Birk factors have been given via GSTPAR.
+*      SUBROUTINE GBIRK(EDEP)
+*
+*     *** apply BIRK's saturation law to energy deposition ***
+*     *** only organic scintillators implemented in this version MODEL=1
+*
+*     Note : the material is assumed ideal, which means that impurities
+*            and aging effects are not taken into account
+*
+*     algorithm : edep = destep / (1. + RKB*dedx + C*(dedx)**2)
+*
+*     the values of RKB and C can be entered via :
+*
+*     call gstpar(imate,'BIRK1',value) to set the model (value= 1. or 2.)
+*     call gstpar(imate,'BIRK2',value) to set RKB
+*     call gstpar(imate,'BIRK3',value) to set C
+*
+*     the basic units of the coefficient are g/(Mev*cm**2)
+*     because the de/dx is obtained in Mev/cm
+*
+*     exp. values from NIM 80 (1970) 239-244 :
+*
+*     RKB = 0.013  g/mev*cm**2  and  C = 9.6e-6  g**2/(Mev**2)(cm**4)
+*
+*
+*
+*
+* *** GEANH news
+*
+*
+*     a serious bug in GMUNUI has been reported by
+*     Hans-Jochen Trost from ANL:
+*       : convert millibarns to cm**2 by a factor 10**-27
+*         and obtain therefore NA * 1 millibarn/cm**2 a
+*         factor 10 smaller than in the code. Hans has verified
+*         that the original code gives to high an energy loss
+*         due to muon-nuclear interactions on iron by a fac-
+*         tor of about 5-10, comparing to W.Lohmann et al.,
+*         CERN 85-03 whose predictions have recently been
+*         verified by CCFR data up to 1.2 TeV.
+*     Hans has also introduced protections in GMUNU.
+*
+*    A new version of the GHEISHA package has been introduced by
+*     H.Fesefelt (contact him for details).
+*
+*     The TATINA package is considered obsolete. Default routines
+*     GUPHAD/GUHADR call GHEISHA. We are planning to remove the code
+*     of TATINA in the coming versions of GEANT.
+*
+*
+* *** NUCRIN: A new model for hadronic showers at low energies
+*     ========================================================
+*
+*
+*    NUCRIN (see ref.1) simulates hadron-nucleus ( A > 3) inelastic
+*    interactions from a few MeV/c up to about 4.5 GeV/c laboratory
+*    momentum of the incoming particle.
+*    NUCRIN is automatically called by the GHEISHA routine GHEISH
+*    when the flag IHADR=3 (set by data card HADR).
+*    It is assumed that these reactions  are the superimposition of three
+*    basic processes:
+*
+*    (a) inelastic collision of the projectile hadron (allowed particles are :
+*        p,pbar,n,nbar,pi0,pi+,pi-,k+,k-,k0,k0bar,lamda0,lamda0bar,sigma+,
+*        sigma-,sigma0) with a target nucleon in the nucleus.
+*        This interaction is simulated,taking into account of the nucleon
+*        Fermi momentum,  using HADRIN (see ref.2) program.
+*        The corresponding physical model is based on the experimental evidence
+*        that, in the selected momentum range,the inelastic cross section shows
+*        the typical threshold and resonance behaviour of meson production:
+*        the primary hadron-nucleon system is excited to an isobaric state
+*        which then decays into hadrons or other resonances.
+*
+*        If the interacting nucleus is hydrogen,HADRIN can also be used
+*        in a separate way to simulate hadron-proton reaction.
+*
+*    (b) induced intranuclear cascade with resulting proton and neutron
+*        emission;
+*
+*    (c) nuclear evaporation and deexcitation from residual nucleus. At the
+*        output the total energy available for these processes is given as
+*        "excitation energy".
+*
+*    The mean excitation and cascade energies and the average multiplicities
+*    of cascade particles are parametrized, according to experimental
+*    distributions.
+*    In each event their value are sampled from gaussian distribution:
+*    if they fall in the permitted kinematical region, energy and types of
+*    cascade nucleons are calculated and the remaining energy is assigned to
+*    the incoming particle.
+*    For hadron-nucleon interactions all relevant kinematic variables are
+*    Lorentz-trasformed into the target nucleon rest system. If interaction
+*    kinetic energy is greater than the total available collision energy
+*    a new Fermi momentun is sampled, otherwise an event is generated with
+*    HADRIN,in which decays modes of 107 particle and resonances into about
+*    450 different channels are tabulated and outgoing particle directions
+*    and momenta are chosen to reproduced experimental momentum transfer
+*    distributions.
+*    Final state particles kinematical variables are transformed back into
+*    laboratory system; reaction and sampled event energies are again compared:
+*    if their difference is negative, energy is not conserved and generation
+*    has to be started once more with a new Fermi momentum sampling or if it
+*    is,on the contrary positive, particle momenta and energies are corrected
+*    to reach conservation.
+*    The sampled events conserve the energy, the momentum, the electric and
+*    baryonic charge  and the strangeness.
+*    NUCRIN and HADRIN are initialised, by default, before event generation,
+*    with a call to subroutines HADDEN and CHANWX which estabilish internal
+*    weight tables and decay channels.
+*
+*    -----------------------------------------------------------------------
+*    (1) K. Hanssgen, J. Ranft , Comp. Phys. Comm. 39, 53 (1986)
+*    (2) K. Hanssgen, J. Ranft , Comp. Phys. Comm. 39, 37 (1986)
+*
+*
+* *** GEOMETRY PACKAGE: New shapes and many improvements
+*     ==================================================
+*
+*    Automatic optimisation of the geometry structure:
+*    A new data card OPTI has been introduced (S.Egli H1).
+*      OPTI -1 : disable optimisation
+*      OPTI  0 : only volumes GSORDered are optimised (as in 3.13)
+*      OPTI  1 : volumes GSORDered are optimised along the axis
+*                specified. All the other volumes are automatically
+*                optimised along the best axis (1 to 7).
+*      OPTI  2 : All volumes are optimised along the best axis.
+*                Volumes for which GSORD was called are also optimised.
+*      The default value for OPTI is 0.
+*      In case OPTI >0, the result of the optimisation is printed.
+*      The automatic optimisation is done at initialisation time by
+*      a new routine GGORDQ called by GGCLOS.
+*
+*
+*    Most of the geometry routines have been revisited and consolidated.
+*    The following new shapes are available.
+*
+*      'ELTU'    is a cylinder with an elliptical section.
+*                It has three parameters: the ellipse semi-axis in X,
+*                the ellipse semi-axis in Y and the half length in Z.
+*                Given the equation of the conical curve:
+*                     X**2/A**2 + Y**2/B**2 = 1,
+*                describing the volume,then:       PAR(1) = A
+*                                                  PAR(2) = B
+*                                                  PAR(3) = DZ
+*                ELTU is not divisible.
+*
+*      'HYPE'    is a hyperbolic tube, ie the inner and outer surfaces
+*                are hyperboloids, as would be formed by a system of
+*                cylindrical wires which were then rotated
+*                tangentially about their centres.  The 4 parameters
+*                are the inner and outer radii, the half length in z,
+*                and the "stereo angle" theta in degrees, such that
+*                the hyperbolic surfaces are given by
+*                r**2 = (z*tan(theta))**2 + (r at z=0)**2
+*
+*      'CTUB'   (for cut tube) is a TUBS whose end planes are not
+*               perpendicular to the z axis. It has 11 parameters :
+*               the 5 of the TUBS shape plus the components of the normal
+*               to the end plane at the lower z (LXL,LYL,LZL) and
+*               those at the higher z (LXH,LYH,LZH).
+*               DZ means the half length in z for x = y = 0
+*
+*
+*     Bugs have been fixed in the routines GNPCON, GNPGON and GNOPGO.
+*
+*     The new version of GNOTRP requires an extended parameter array.
+*     In addition to the 11 specified parameters (of which 4 are
+*     modified in subroutine GSVOLU or GSPOSP), the coefficients of
+*     the implicit normalized plane equation for the 6 surfaces
+*     of the hexahedron are stored.
+*
+*     IMPORTANT NOTE concerning the TRAP shape
+*     ========================================
+*     The Geant documentation describes the Geant shape TRAP as follows:
+*
+*          TRAP is a general trapezoid, i.e. one for which the
+*          faces perpendicular to z are trapezia and their
+*          centres are not at the same x, y. It has 11
+*          parameters: Dz the half length in z, Th & Phi the
+*          polar angles from the centre of the face at z=-Dz
+*          to that at z=+Dz, H1 the half length in y  at
+*          z=-Dz, LB1 the half length in x at z=-Dz and y=low
+*          edge, LH1 the half length in x at z=-Dz and y=
+*          high edge, Th1 the angle w.r.t. the y axis from
+*          the centre of the low y  edge to the centre of the
+*          high y edge, and H2, LB2, LH2, Th2 the
+*          corresponding quantities to the 1s but at z=+Dz.
+*
+*     This seems to describe a general hexahedron with 3 constraints:
+*     2 constraints follow from the fact that two faces are "trapezia".
+*     (twice 2 edges parallel).
+*     The 3rd constaint is that two faces are parallel, namely the "trapezia"
+*     faces are both perpendicular to the Z-axis.
+*     We will assume that shape TRAP is a hexahedron with 3
+*     constraints and direct our attention to the degrees of freedom
+*     of such a shape.
+*     The shape has 8 vertices and therefore 24 coordinates.
+*     If we first consider a volume with 8 vertices and 6 surfaces,
+*     but do not make the assumption that the surfaces are plane,
+*     we see that this shape has 18 degrees of freedom.
+*     We loose 3 coordinates because of the translational invariance
+*     of the shape and 3 coordinates because of its rotational
+*     invariance.
+*     If we now assume that the shape is a hexahedron, that is
+*     bounded by plane surfaces, we have 6 constraints, one for each
+*     surface, and our hexahedron has 12 degrees of freedom.
+*     Considering the 3 constraints mentioned in the beginning,
+*     we conclude that our shape trapezohedron has 9 degrees of freedom.
+*     It is however described by 11 parameters.
+*     Therefore we must either drop our assumption that shape TRAP is
+*     a hexahedron, that is bounded by parallel surfaces, or we must
+*     request that the user specifies the 11 parameters with certain
+*     constraints.
+*
+*     To check that the user respected the constraints, we check the
+*     coplanarity of the faces during the specification phase of shape TRAP.
+*     We know the vertex coordinates, and we have the indices to the
+*     vertices for each face.
+*     Assuming that a face is tetrahedron, we compute its volume.
+*     We divide by the surface of the base triangle, and get a measure
+*     for the coplanarity of the face, which is actually a distance.
+*     A warning message is printed in case of no-coplanar faces.
+*
+*    GSORD problem
+*    =============
+*    A bug has been found in GTNEXT (and alike) which is induced by a bug of
+*    logic in GSORD/GGORD. User calls to GSORD, with ordering axis 4 (Rxy)
+*    or 5 (Rxyz), may cause problems when the ordered contents are such that
+*    one can jump from a given content to another one without crossing a
+*    content which, along the given axis, occupies a position in between the
+*    start and the end contents : e.g. coaxial TUBES with different Z-lengths
+*    should not in general be ordered by GSORD along the axis IAX=4 (Rxy).
+*    However, part of the information provided by such calls can still be
+*    used, in the static context of GTMEDI for instance. Therefore, the
+*    following convention has been introduced: If the user is sure that the
+*    contents are positioned in such a way that the anomaly mentioned above
+*    cannot occur, the call to GSORD can be modified by using IAX=14 (instead
+*    of 4), or 15 (instead of 5), in which case the ordering techniques will
+*    also be used in the dynamic context of GTNEXT. In case of doubt, the
+*    user has better to keep the old code, with IAX=4 or 5.
+*
+* *** DRAWING PACKAGE: Interface to the CG package
+*     ============================================
+*
+*    An interface to the CG (Combinatorial Geometry) package written
+*    at Serpukhov by E.Cernaev et al is now available. The new package
+*    is automatically called if the option 'HIDE' is selected. eg.
+*
+*         CALL GDOPT('HIDE','ON')  in a Fortran program
+*         DOPT HIDE ON/OFF  in the interactive version
+*
+*    This new facility includes a hidden line and surface algorithm
+*    which permits nice 3-D views of a detector.
+*    In the frequent case of hermetic 4 PI detectors, a facility
+*    to remove a box (The Cutting BOX) is also implemented. The Cutting BOX
+*    specifies a region of the detector which must be Cut to see inside.
+*    A new interactive command CBOX is available to specify the box limits.
+*
+*    The CG system is part of the GEANG file (See Patches CGCDES,CGPACK)
+*    To activate the CG package, +USE,CG,*GEANG.
+*
+*
+* *** The SCAN geometry
+*     =================
+*   A new Patch,GSCAN has been introduced on a provisional basis in the GEANG
+*   file. See discussion about SCAN below.
+*
+* *** GUPARA: Parametrization interface
+*     =================================
+*   A new FFREAD data cards PCUT can be used to set parametrization cuts.
+*   The first argument of the PCUT card is a integer flag which turns or
+*   on off the parametrization mechanism. If the parametrization is turned on
+*   and a particle falls below one of the 5 cuts specified by the PCUT card
+*   (similar in kind to the cuts specified by the card CUTS), then the
+*   routine GUPARA is called and tracking of the particle is abandoned. This
+*   mechanism is provided for applying parametrization schemes which
+*   replace a particle by a parametrized shower when it falls below
+*   a certain threshold.
+*
+*.............................................................................
+*
+*
+* *** GXINT: Interactive version
+*     ==========================
+*
+*      New menu FORTRAN: CALL,FILE,CLOSE,FORTRAN
+*      New menu HISTOGRAM: FILE,LIST,PLOT,DELETE,LEGO,HRIN,HROUT,PUT,GET
+*                          ZONE,SET,OPTION,NULL
+*      New menu PICTURE: FILE,LIST,DELETE,SCRATCH,PLOT,RENAME,IZOUT,IZIN,IGSET
+*      New menu SCAN: PHI,THETA,SLIST,VERTEX,SFACTORS,LSCAN,HSCAN
+*      New menu PHYSICS: ANNI,BREM,COMP,DCAY,DRAY,HADR,LOSS,MULS,MUNU,PAIR,
+*                        PFIS,PHOT,RAYL,CUTS,PHYSI
+*
+*      The menus FORTRAN,HISTOGRAM and PICTURE are subsets of the similar
+*      menus in the PAW system.
+*
+*      The menu PHYSICS gives the possibility to modify the run conditions.
+*      In case physics conditions are changed (LOSS,DRAY,MULS,CUTS) it is
+*      mandatory to call the command PHYSI (which calls GPHYSI) to recompute
+*      the cross-section and/or energy loss tables.
+*
+*      The menu FORTRAN is similar to the FORTRAN menu of PAW. It contains
+*      in addition a new very important command FORTRAN which gives the
+*      possibility to describe the geometry (UGEOM) in a Fortran routine
+*      that can be edited interactively with the local editor and also
+*      executed interactively under the control of the Fortran interpreter
+*      COMIS.
+*
+* ***  GEANT >FORTRAN  FNAME
+*
+*      The routines in the file FNAME will be compiled by COMIS.
+*      If routines with names: UGEOM,GUKINE,GUOUT,UGLAST are found,
+*      then they will be automatically called by GXINT instead of
+*      the routines with the same names compiled with the standard
+*      Fortran compiler and linked with the application.
+*      The user callable routines from the GEANT library as well as
+*      routines from PACKLIB (HBOOK,HPLOT,HIGZ,ZEBRA) may be called
+*      from these user routines. All GEANT common blocks may be
+*      referenced.
+*      In case where the routine UGEOM is called several times,
+*      it is important to DROP all the initialisation data structures
+*      JVOLUM,JMATE,JTMED,etc already in memory by using the routine GIDROP.
+*
+*       Example of an interactive session where the routine UGEOM is modified:
+*
+*         GEANT > Edit ugeom.for
+*         GEANT > Fortran ugeom.for
+*         GEANT > Call GIDROP
+*         GEANT > Call UGEOM
+*         GEANT > Dtree
+*         GEANT > Edit ugeom.for
+*         GEANT > Fortran ugeom.for
+*         GEANT > Call GIDROP
+*         GEANT > Call UGEOM
+*         GEANT > Dtree
+*
+*      If FNAME='-', calls to user routines is reset and standard
+*      routines called instead.
+*
+* *** Interface to CG
+*    The command DOPT has a new option HIDE (DOPT HIDE ON/OFF)
+*    Type DOPT without parameters to get the list of all currently
+*    available options.
+*    When this option is ON, the subsequent graphics commands DCUT/DRAW
+*    will invoke the CG system for hidden line/surface removal.
+*    This algorithm requires a lot of memory and time. It is recommended
+*    to set the visibility attributes (SATT SEEN 0) for many of the
+*    volumes in case the command aborts for lake of memory or time.
+*    This option can also be used with the view banks mechanism (DOPEN)
+*
+*    New command CBOX to specify the boundaries of the cutting box.
+*
+* *** PLMAT
+*
+*   The existing command PLMAT offers the new possibility to plot
+*    various physics parameters (cross-sections, energy-loss tables,etc)
+*   in graphics format (via HPLOT) if MECAN=ALLG
+*   The Keywords 'STEP' or 'RANG' may also be specified to produce
+*   an alphanumeric output of the step-size and energy-range tables.
+*
+*        PLMAT  IMATE IPART MECAN [ IDM ]
+*
+*       IMATE      I 'Material number'
+*       IPART      I 'Particle number'
+*       MECAN      C 'Mechanism'
+*       IDM        I 'ID mode option' D=0
+*
+*
+* *** New menu SCAN. The SCAN geometry
+*     ================================
+*
+*    This new menu contains various commands for an interactive interface
+*    to the SCAN geometry
+*    The SCAN geometry algorithm has been designed as a tool to improve
+*    the tracking speed. This new facility still requires substantial
+*    developments in view of the new parametrisation algorithms which
+*    are developed in collaboration between the CN/AS group and the
+*    LEP/HERA/LHC/SSC and other interested groups.
+*    The SCAN facility is being introduced in the version 3.14 on a trial
+*    basis to familiarise potential users with the concept.
+*    The SCAN geometry data structure JSCAN is automatically generated
+*    either by calling the GSCAN routine in the PATCH,GSCAN of GEANG
+*    or interactively by using the commands in the new menu SCAN.
+*    Starting from the normal geometry data structure created by GSVOLU,
+*    GSPOS,GSDVN,etc, the detector may be divided into a simpler geometry
+*    structure (theta,phi) or (eta,phi).
+*    Geantinos are tracked starting from a VERTEX position through
+*    the NPHI,NTETA divisions. For each division, the SCAN procedure
+*    will insert into the JSCAN data structure the following information
+*    for every main detector component specified in the SLIST command
+*    in the spherical R direction:
+*      Total number of radiation lengths up to entry in each R
+*      Total number of absorption lenghts
+*      Detector identifier
+*    When the interactive command TRIGGER is entered, the number of
+*    Geantinos specified as parameter will be tracked. In case the
+*    data structure JSCAN is not empty, the program will automatically
+*    start with the first PHI,TETA division not yet filled. As the
+*    number of Geantinos to be tracked can be very large (depending
+*    on the granularity) this gives the possibility to fill the JSCAN
+*    data structures in several passes.
+*
+*
+*     New menu SCAN: PHI,TETA,SLIST,VERTEX,SFACTORS,LSCAN,HSCAN
+*
+* ==>   /SCAN/PHI  NPHI [ PHIMIN PHIMAX ]
+*
+*        NPHI       I 'Number of PHI divisions' D=90
+*        PHIMIN     R 'Minimum PHI in degrees' D=0
+*        PHIMAX     R 'Maximum PHI in degrees' D=360
+*
+*        To specify number of divisions along PHI.
+*
+*
+* ==>   /SCAN/TETA  NTETA TETMIN TETMAX [ DIVTYP ]
+*
+*        NTETA      I 'Number of TETA divisions' D=90
+*        TETMIN     R 'Minimum value of TETA' D=0
+*        TETMAX     R 'Maximum value of TETA' D=180
+*        DIVTYP     I 'Type of TETA division' D=1 R=1:2
+*
+*        To specify number of divisions along TETA.
+*        If DIVTYP=1 divisions in degrees following the THETA angle.
+*        If DIVTYP=2 divisions in pseudo-rapidity ETA.
+*
+*
+* ==>   /SCAN/SLIST  LIST
+*
+*        LIST       C 'List of master volumes'
+*
+*        Only boundary crossings of volumes given in LIST
+*        will be seen in the SCAN geometry.
+*
+*
+* ==>   /SCAN/VERTEX  VX VY VZ
+*
+*        VX         R 'Scan vertex origin' D=0
+*        VY         R 'Scan vertex origin' D=0
+*        VZ         R 'Scan vertex origin' D=0
+*
+*        All Geantinos tracked will start from position VX,VY,VZ.
+*
+*
+* ==>   /SCAN/SFACTORS  FACTX0 FACTL FACTR
+*
+*        FACTX0     R 'Scale factor for SX0' D=100
+*        FACTL      R 'Scale factor for SL' D=1000
+*        FACTR      R 'Scale factor for R' D=100
+*
+*        Set scale factors for SX0,SL and R. The given scale factors must be
+*        such that:
+*
+*          SX0*FACTX0 < 2**15-1 (32767)
+*          SL*FACTL   < 2**10-1 (1023)
+*          SR*FACTR   < 2**17-1 (131071)
+*
+*
+* ==>   /SCAN/LSCAN  ID [ VOLUME CHOPT ]
+*
+*        ID         I 'Lego plot identifier' D=2000
+*        VOLUME     C 'Volume name' D='XXXX'
+*        CHOPT      C 'List of options' D='OPX' R=' ,O,P,I,X,L'
+*
+*        Generates and plot a table of physics quantities such as
+*        the total number of radiation lengths or interaction lengths
+*        in function of the SCAN parameters TETA,PHI.
+*
+*          CHOPT='O' table is generated at Exit  of VOLUME.
+*          CHOPT='I' table is generated at Entry of VOLUME.
+*          CHOPT='X' radiation lengths
+*          CHOPT='L' Interaction lengths
+*          CHOPT='P' Plot the table
+*
+*        If VOLUME='XXXX' Mother volume is used.
+*
+*
+* ==>   /SCAN/HSCAN  IDPHI [ VOLUME CHOPT ]
+*
+*        IDPHI      I 'Histogram/phi identifier' D=1000
+*        VOLUME     C 'Volume name' D='XXXX'
+*        CHOPT      C 'List of options' D='OPX' R=' ,O,P,I,X,L'
+*
+*        Generates and plot an histogram of physics quantities such as
+*        the total number of radiation lengths or interaction lengths
+*        in function of the SCAN parameter TETA for a given value of PHI.
+*
+*          CHOPT='O' histogram is generated at Exit  of VOLUME.
+*          CHOPT='I' histogram is generated at Entry of VOLUME.
+*          CHOPT='X' radiation lengths
+*          CHOPT='L' Interaction lengths
+*          CHOPT='P' Plot the histogram
+*
+*        If VOLUME='XXXX' Mother volume is used.
+*        The histogram identifier IDPHI is used to also identify which
+*        PHI division to plot. IPHI=MOD(IDPHI,1000).
+*        If IPHI=0, then all PHI divisions are generated (not plotted)
+*        with histogram identifiers IDPHI+PHI division number.
+*
+*
+*
+*
+*
+*
+* ***   New commands FILE,REND,MDIR,CDIR,IN,OUT in the RZ menu.
+*       =======================================================
+*
+*
+* ==>   RZ/FILE  LUN FNAME [ CHOPT ]
+*
+*        LUN        I 'Logical unit number'
+*        FNAME      C 'File name'
+*        CHOPT      C 'Options' D=' ' R=' ,U,N,I,O'
+*
+*        Open a GEANT/RZ file. Call GRFILE (See below).
+*
+*         CHOPT=' ' readonly mode
+*         CHOPT='U' update mode
+*         CHOPT='N' create new file
+*         CHOPT='I' Read all structures from existing file
+*         CHOPT='O' Write all structures on file
+*
+*
+* ==>   RZ/OUT  OBJECT [ IDVERS ]
+*
+*        OBJECT     C 'Structure name'
+*        IDVERS     I 'Version number' D=1
+*
+*        Write data structure identified by OBJECT,IDVERS to RZ file.
+*        Call GROUT (See below)
+*
+*          MATE write JMATE structure
+*          TMED write JTMED structure
+*          VOLU write JVOLUM structure
+*          ROTM write JROTM structure
+*          SETS write JSET  structure
+*          PART write JPART structure
+*          SCAN write JSCAN structure
+*          *    write all structures
+*
+* ==>   RZ/IN  OBJECT [ IDVERS ]
+*
+*        OBJECT     C 'Structure name'
+*        IDVERS     I 'Version number' D=1
+*
+*        Read data structure identified by OBJECT,IDVERS into memory.
+*        Call GRIN (See below)
+*
+*          MATE read JMATE structure
+*          TMED read JTMED structure
+*          VOLU read JVOLUM structure
+*          ROTM read JROTM structure
+*          SETS read JSET  structure
+*          PART read JPART structure
+*          SCAN read JSCAN structure
+*          *    read all structures
+*
+*
+*
+*
+* *** New routines for direct access I/O in the GIOPA package
+*     =======================================================
+*
+* ==>    SUBROUTINE GRFILE(LUN,CHFILE,CHOPT)
+*.
+*.           Routine to open a GEANT/RZ data base.
+*.
+*.           LUN logical unit number associated to the file
+*.
+*.           CHFILE RZ file name
+*.
+*.           CHOPT is a character string which may be
+*.              'N' To create a new file
+*.              'U' to open an existing file for update
+*.              ' ' to open an existing file for read only
+*.              'Q' The initial allocation (default 1000 records)
+*.                  is given in IQUEST(10)
+*.              'I' Read all data structures from file to memory
+*.              'O' Write all data structures from memory to file
+*.
+*.           Note:
+*.             If options 'I' or 'O' all data structures are read or
+*.                written from/to file and the file is closed.
+*.             See routine GRMDIR to create subdirectories
+*.             See routines GROUT,GRIN to write,read objects
+*.
+*.
+*.
+*. ==>    SUBROUTINE GROUT(CHOBJ,IDVERS,CHOPT)
+*.
+*.           Routine to write GEANT object(s) in the RZ file
+*.             at the Current Working Directory (See RZCDIR)
+*.           Input is taken from the data structures in memory
+*.               (VOLU,ROTM,TMED,MATE,SETS,PART,SCAN)
+*.
+*.           CHOBJ  The type of object to be written:
+*.                  MATE write JMATE structure
+*.                  TMED write JTMED structure
+*.                  VOLU write JVOLUM structure
+*.                  ROTM write JROTM structure
+*.                  SETS write JSET  structure
+*.                  PART write JPART structure
+*.                  SCAN write LSCAN structure
+*.                  INIT write all initialisation structures
+*.
+*.           IDVERS is a positive integer which specifies the version
+*.               number of the object(s).
+*.
+*.           CHOPT List of options (none for the time being)
+*.
+*.        Note that if the cross-sections and energy loss tables
+*.           are available in the data structure JMATE, then they are
+*.           saved on the data base.
+*.
+*.
+*.        The data structures saved by this routine can be retrieved
+*.        with the routine GRIN.
+*.
+*.        Before calling this routine a RZ data base must have been
+*.        created using GRFILE.
+*.        The data base must be closed with RZEND.
+*.          Ex: if LUN=1 CALL RZEND('LUN1')
+*.
+*.        The RZ data base can be transported between different
+*.        machines in using the ZEBRA RZ utility RZTOFZ.
+*.
+*.        The interactive version of GEANT provides facilities
+*.        to interactively update, create and display objects.
+*.
+*.          Example.
+*.
+*.          CALL GRFILE(1,'Geometry.dat','N')
+*.          CALL GROUT('VOLU',1,' ')
+*.          CALL GROUT('MATE',1,' ')
+*.          CALL GROUT('TMED',1,' ')
+*.          CALL GROUT('ROTM',1,' ')
+*.          CALL GROUT('PART',1,' ')
+*.          CALL GROUT('SCAN',1,' ')
+*.          CALL GROUT('SETS',1,' ')
+*.
+*.          The same result can be achieved by:
+*.          CALL GRFILE(1,'Geometry.dat','NO')
+*.
+*.
+*.
+*. ==>    SUBROUTINE GRIN(CHOBJ,IDVERS,CHOPT)
+*.
+*.           Routine to read GEANT object(s) fromin the RZ file
+*.             at the Current Working Directory (See RZCDIR)
+*.           The data structures from disk are read in memory
+*.               (VOLU,ROTM,TMED,MATE,SETS,PART,SCAN)
+*.
+*.           CHOBJ  The type of object to be read:
+*.                  MATE read JMATE structure
+*.                  TMED read JTMED structure
+*.                  VOLU read JVOLUM structure
+*.                  ROTM read JROTM structure
+*.                  SETS read JSET  structure
+*.                  PART read JPART structure
+*.                  SCAN read LSCAN structure
+*.                  INIT read all initialisation structures
+*.
+*.           IDVERS is a positive integer which specifies the version
+*.               number of the object(s).
+*.
+*.           CHOPT List of options (none for the time being)
+*.
+*.
+*.        The RZ data base has been created via GRFILE/GROUT
+*.
+*.
+*.          Example.
+*.
+*.          CALL GRFILE(1,'Geometry.dat',' ')
+*.          CALL GRIN ('VOLU',1,' ')
+*.          CALL GRIN ('MATE',1,' ')
+*.          CALL GRIN ('TMED',1,' ')
+*.          CALL GRIN ('ROTM',1,' ')
+*.          CALL GRIN ('PART',1,' ')
+*.          CALL GRIN ('SCAN',1,' ')
+*.          CALL GRIN ('SETS',1,' ')
+*.
+*.          The same result can be achieved by:
+*.          CALL GRFILE(1,'Geometry.dat','I')
+*.
+*.
+*.
+* ==>     SUBROUTINE GRMDIR(CHDIR,CHOPT)
+*.
+*.
+*.           Routine to create a subdirectory
+*.
+*.           CHDIR Subdirectory name
+*.
+*.           CHOPT is a character string which may be
+*.              ' ' To create a subdirectory
+*.              'S' To create a subdirectory and set the new
+*.                  Current Directory to this directory.
+*.
+*.
+ 
++DECK,V_315
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*
+*        Maintenance and support for the GEANT MonteCarlo system
+*        are performed by the Simulation Section of the CERN
+*        Computing and Networks division. For any problem please
+*        contact:
+*
+*                        Federico Carminati
+*                        CERN-CN
+*                        1211 Geneva 23
+*                        Tel:        +41 22 767.4959
+*                        Telefax:    +41 22 767.7155
+*                        E-mail:
+*                        BITnet/EARN: FCA@CERNVM
+*                        DECnet     : VXCERN::FCA (Node 22.190)
+*                        Internet   : fca@cernvm.cern.ch
+*
+*        An electronic GEANT discussion list has been set up on CERNVM.
+*        To be included in the mailing list it is enough to send the
+*        following message:
+*
+*       TELL LISTSERV AT CERNVM SUBSCRIBE LGEANT Firstname Lastname Inst
+*
+*        People who do not dispose of a TELL (or equivalent) bitnet
+*        command should send a mail to LISTSERV@CERNVM containing the
+*        only line:
+*
+*                   SUBSCRIBE LGEANT Firstname Lastname Inst
+*
+*================================= History
+*
+*===> 20/NOV/1990
+*
+*        Current plans set the release of GEANT 3.15 around the third
+*        quarter of 1991.
+*
+*===> 27/NOV/1990
+*
+*        Correction in GTRACK to set correctly the value of PREC
+*        to match machine precision. Thanks to Stephan Egli and
+*        M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*===> 28/NOV/1990
+*
+*        Correction in GNTUBE to avoid square root of a negative
+*        number. Thanks to M.Maire
+*        Introduced in the 314 correction cradle.
+*
+*        Eliminate TOFG=0 from GINIT, already done in GTRIGI
+*        Thanks to F.Carminati
+*        Introduced in the 314 correction cradle.
+*
+*===> 29/NOV/1990
+*
+*        UNIX and BSLASH flags correctly set inside *GEANT.
+*        Thanks to A.Nathaniel
+*        GPMATE now prints also the components in case of
+*        mixtures. If NUMB is <0 then materials from 1 to
+*        -NUMB are printed. Thanks to Stephan Egli.
+*
+*        Corrections in GRGET (obsolete), GGET, GRIN to reset
+*        correctly the number in GCNUM. Thanks to Stephan Egli
+*        Introduced in the 314 correction cradle.
+*
+*===> 30/NOV/1990
+*
+*        New version of GNOELT and GNELTU, thanks to Yoshihisa Iga
+*        and R.Nierhaus
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GTRAK, all mechanisms turned off in the
+*        vacuum. Thanks to S.Egli
+*        Introduced in the 314 correction cradle.
+*
+*
+*===> 03/DEC/1990
+*
+*        New routine GXPICK for the interactive version (Command
+*        DRAWING/PICK) to pick a point in a detector and return
+*        volume/material characteristics. Thanks to S.Egli.
+*
+*===> 04/DEC/1990
+*
+*        MAXNOD from 2000 to 8000 in GDTR0. Suggestion by S.Egli.
+*        Introduced in the 314 correction cradle.
+*
+*        Bug corrected in GGCLOS, do not touch ISEARC in case
+*        of user search (ISEARC.GT.0). Thanks to D.Ward.
+*        Introduced in the 314 correction cradle.
+*
+*===> 05/DEC/1990
+*
+*        Correction in TWOB, get correctly Tmin and Tmax and
+*        their distribution. Thanks to Marko Mikuz.
+*        Introduced in the 314 correction cradle.
+*
+*===> 06/DEC/1990
+*
+*        Correction in TWOCLU and GENXPT to improve energy
+*        conservation. Thanks to S.Egli.
+*        Introduced in the 314 correction cradle.
+*
+*===> 11/DEC/1990
+*
+*        Generic function LOG introduced in GHFRAK. Generic
+*        functions MAX and MIN introduced in several routines
+*        in GGEOM (HYPE) and CGPACK. Generic SIN, COS, ATAN and
+*        SQRT introduced in CGPACK. Thanks to Federico Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 13/DEC/1990
+*
+*        GTAU routine to be obsoleted.
+*
+*        Supporting link for the LSCAN data structure mispelled
+*        in several places. Corrected now. Thanks to Isabel Josa.
+*        Introduced in the 314 correction cradle.
+*
+*        Unused variable IPOT eliminated from GHFFER.
+*
+*        Changes in the interactive part for ATC GKS which does
+*        not use FORTRAN unit for metafiles. (routines GXINT and
+*        GXGCON). Thanks to W.Koellner
+*
+*===> 14/DEC/1990
+*
+*        REAL*8 changed to DOUBLE PRECISION in CGPACK.
+*        Life of the D+/- mesons was 100 times too short.
+*        Thanks to Cheng He Sheng.
+*        Introduced in the 314 correction cradle.
+*
+*===> 19/DEC/1990
+*
+*        Modification in GDRAW and GDSPEC to correct a bug.
+*        Modifications in GLVOLU not to print a warning message
+*        caused by drawing.
+*        Introduced in the 314 correction cradle.
+*
+*===> 20/DEC/1990
+*
+*        Correction in GRAYLI affecting Rayleigh effect in
+*        mixtures.
+*        Introduced in the 314 correction cradle.
+*
+*        Recode of GRAYLI and GHESIG to be safer with respect
+*        to compiler optimization.
+*        Thanks to Rafi Yaari.
+*
+*===> 8/JAN/1991
+*
+*        Corrections in GRGET, GGET, GRIN to set correctly
+*        NPART, NTMED, NMATE, NVOLUM. Thanks to Lee Roberts.
+*        Introduced in the 314 correction cradle.
+*
+*        New meaning for ISVOL. If <0 the material is not a
+*        a detector but the tracking parameters are the same
+*        as in the case ISVOL>0 (sensitive medium).
+*        Thanks to Michel Maire.
+*        Introduced in the 314 correction cradle.
+*
+*===> 9/JAN/1991
+*
+*        TMAXFD not recomputed with IGAUTO=1 if the value given
+*        by the user >= 0. Default value reset to 20. instead of
+*        60. degrees. Thanks to W.Mueller and M.Maire
+*        Introduced in the 314 correction cradle.
+*
+*===> 10/JAN/1991
+*
+*        Corrections in GPFIS, GPFISI and GPHYSI for the fotofission
+*        and fotoabsorbtion (Giant resonance) of photons on Uranium
+*        and plutonium. Thanks to Harm Fesefeld.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GPHYSI in case ILOSS=2 and more than one
+*        tracking medium with the same material number then a
+*        spurious error message was printed. Thanks to Kevin Sparks
+*        Introduced in the 314 correction cradle.
+*
+*        Corrections in GENXPT, TWOCLU, TWOB, CINEMA and EXNU.
+*        Thanks to Harm Fesefeldt.
+*        Introduced in the 314 correction cradle.
+*
+*===> 11/JAN/1991
+*
+*        Correction in GPPART in case of user words. Thanks to Walter
+*        Mueller.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GSTMED to protect for EPSIL <=0. Thanks to
+*        Michel Lefebvre.
+*        Introduced in the 314 correction cradle.
+*
+*===> 14/JAN/1991
+*
+*        Correction in GRGET to read the banks in the correct
+*        division. Thanks to M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*        Improvement of GRIN, GROUT. New global keywords KINE and
+*        TRIG can now be used. Thanks to Federico Carminati
+*        Introduced in the 314 correction cradle.
+*
+*===> 17/JAN/1991
+*
+*        Correction in GSVOLU, GSDVN, GSDVN2, GSDVT, GSDVT2 not to
+*        use uninitialized LINATT, set by GDINIT. This should take
+*        care of the problem of empty drawings. Thanks to Simone Giani.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GPKINE to print correctly user words and vertex
+*        information. Thanks to Kevin Sparks.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GPVERT to print correctly user words and vertex
+*        information. Thanks to Soren G. Frederiksen.
+*        Introduced in the 314 correction cradle.
+*
+*===> 18/JAN/1991
+*
+*        Max. GCKING stack size parametrized. The actual value of the
+*        stack is not changed (100), but can be redefined in the
+*        sequence GCKMAX. Important for LHC studies.
+*        Thanks to Harm Fesefeldt.
+*
+*        Correction in GPRINT to call correctly GPDIGI and GPSETS.
+*        Thanks to Michel Maire.
+*        Introduced in the 314 correction cradle.
+*
+*===> 22/JAN/1991
+*
+*        New facilities of DZDOC introduced in the interactive menu.
+*        Patchy flag (DZDOC) to assure backward compatibility.
+*        Thanks to O.Schaile
+*
+*===> 31/JAN/1991
+*
+*        New facility using the JUMPT package to call user routines.
+*        Patchy flag (USRJMP) to assure bacward compatibility.
+*        Thanks to F.Carminati
+*
+*===> 05/FEB/1991
+*
+*        Correction in GINIT to print the level of the correction
+*        cradle applied. Thanks to F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction Cradle 3.14/06 stamped and released.
+*
+*===> 06/FEB/1991
+*
+*        Introduction of the AIX370 flag in GEANX and GEANT.
+*        Thanks to Roger Howard.
+*
+*===> 13/FEB/1991
+*
+*        Protection in GTRACK, GFTRAC and GLTRAC, do not update
+*        pointers to cross section banks in the vacuum.
+*        Thanks to C.Fuglesang, S.Banerjee, M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*???>    Backward incompatibility
+*
+*        GFDETH returns NAMESH as a character*4 array and
+*        GFDETD returns NAMESD as a character*4 array.
+*        Thanks to M.Maire.
+*
+*
+*===> 14/FEB/1991
+*
+*        Mods in GPMATE, GPPART, GPTMED, GSDK, GSMATE, GSMIXT, GSPART,
+*        GSTMED, GSROTM, GPROTM
+*        to warn against replacement of existing objects. Thanks to
+*        Steve O'Neale.
+*        Introduced in the 314 correction cradle.
+*
+*        Force load of user routines in GINIT.
+*        Introduced in the 314 correction cradle.
+*
+*===> 15/FEB/1991
+*
+*        GSDVN to notify correctly when mother volume does not exists.
+*        Thanks to Victor Perevoztchikov.
+*        Introduced in the 314 correction cradle.
+*
+*===> 20/FEB/1991
+*
+*        Correction in GHEINI for the exponent range to be compatible
+*        with IEEE machines. Original limits were for IBM/370.
+*        Routine LIMDAT eliminated. Thanks to Hans-Jochen Trost.
+*        Introduced in the 314 correction cradle.
+*
+*???>    Backward incompatibility
+*
+*        Parameter NAMATE returned from GFMATE now a CHARACTER*20
+*        variable. Thanks to Michel Maire.
+*
+*        Monitoring introduced, flag MONITOR. Thanks to F.Carminati.
+*        Mods in GXINT, GINIT, GLAST. Routine GEAMON introduced.
+*        Introduced in the 314 correction cradle.
+*
+*===> 22/FEB/1991
+*
+*        GWORK in GINIT was (DUMMY) called without arguments.
+*        GUDTIM was (dummy) called as a routine and it is a
+*        function. Thanks to F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*        GUVIEW to specify 3rd argument as a character. Thanks to
+*        Federico Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*        Call NUCRIN with the right number of arguments (the last
+*        was not used anyway). Thanks to Federico Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 04/MAR/1991
+*
+*        Correction in GMUSIG to avoid division by zero. Thanks to
+*        M.Verzocchi.
+*        Introduced in the 314 correction cradle.
+*
+*
+*===> 20/MAR/1991
+*
+*        Corrections in GPRELM, muon e+e- soft radiation. Correction in
+*        GDRELM for the ionization energy loss for muons. Thanks to
+*        A.Nathaniel. Introduced in the 314 correction cradle.
+*
+*===> 21/MAR/1991
+*
+*        Correction in GPHYSI to initialise the JMULOF bank even in
+*        the case of vacuum. Electron tracking in vacuum was not taking
+*        into account the TMAXFD parameter. Correction in GRANGI to set
+*        the range to BIG in case of 0 energy loss tabulated in JLOSS.
+*        Correction in GPHYSI to switch off all the mechanisms in the
+*        vacuum but decay. The corresponding code in GTRACK has been
+*        removed. The previous corrections for IUPD in GLTRAC, GFTRAC
+*        and GTRACK have been removed as well. Thanks to D.Ward, R.Brun,
+*        F.Carminati
+*        Introduced in the 314 correction cradle.
+*
+*        Corrections in GRANGI and in GTHADR to cure small steps in
+*        tracking. Thanks to M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*===> 25/MAR/1991
+*
+*???>    Backward incompatibility
+*
+*        GFPART returns NAPART as a CHARACTER*20 array. Thanks to R.Rui
+*        Introduced in the 314 correction cradle.
+*
+*===> 26/MAR/1991
+*
+*        GFTMAT will return the correct values for the vacuum, except
+*        for hadrons. Thanks to P.Gumplinger.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GPCXYZ when the number of mechanisms is greater
+*        than 6. Thanks to Y.Iga.
+*        Introduced in the 314 correction cradle.
+*
+*
+*===> 27/MAR/1991
+*
+*        GDXYZ corrected to use HIGZ generic line types. Thanks to
+*        M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in the CDF for RZ/IN and RZ/OUT. Thanks to
+*        F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 04/APR/1991
+*
+*        For reasons of speed GKS-type lines are used now in
+*        GDCXYZ, GDXYZ. Thanks to F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 18/APR/1991
+*
+*        Correction of the logic for TMAXFD. Now is:
+*
+*            AUTO 1: 0<TMAXFD<20  --> accepted
+*                      TMAXFD>20  --> set to 20
+*                      TMAXFD<=0  --> set to 20
+*
+*            AUTO 0:   TMAXFD>0   --> accepted
+*                      TMAXFD<=0  --> set to 20
+*
+*        Thanks to Gerry Lynch.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GMULOF. STMIN=BIG for the vacuum. Thanks
+*        to F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GRFILE, GRIN called with IDVERS=0 and not
+*        999. Thanks to F.Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 22/APR/1991
+*
+*        Corrections in GPRELA, GMULOF, GPHYSI and GTNEXT. Now
+*        STMIN is set to 0. for vacuum independly of the AUTO
+*        flag. Thanks to M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*        Format correction in GSDVN. Thanks to Federico Carminati.
+*        Introduced in the 314 correction cradle.
+*
+*===> 23/APR/1991
+*
+*        Correction in GINIT to initialize LIN via IQTTIN if
+*        different from 0. Thanks to F.Carminati
+*        Introduced in the 314 correction cradle.
+*
+*===> 24/APR/1991
+*
+*        New routines GPLMAT, GPRMAT, GPGKIN from Michel Maire.
+*
+*===> 25/APR/1991
+*
+*        geant.metafile is not opened any more by default.
+*        The METAFILE command now accepts the metafile name
+*        for packages like ATC-GKS which do not use FORTRAN.
+*        Thanks to W.Koellner.
+*
+*===> 01/MAY/1991
+*
+*        Problem corrected in GHEISH for neutron cascade. A neutron
+*        undergoing an hadronic reaction could generate two recoil
+*        protons. Thanks to Henk den Bok.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GNEXT/GTNEXT. STMIN not used anymore for
+*        MANY volumes. Thanks to M.Maire.
+*        Introduced in the 314 correction cradle.
+*
+*===> 02/MAY/1991
+*
+*        Call to NVETIM routine removed from GHEISHA. Thanks to
+*        F.Carminati.
+*
+*===> 07/MAY/1991
+*
+*        RNDM interactive command added to set the random number
+*        generator seeds. Thanks to F.Carminati.
+*
+*===> 08/MAY/1991
+*
+*        New routine GDTRAK introduced to draw a track and delete
+*        it from the JXYZ buffer optionally. Thanks to R.Brun,
+*        F.Carminati.
+*
+*        Important correction in GTGAMA, GTNEUT to avoid problems
+*        due to machine precision. When a push is made to cross a
+*        volume boundary the condition that the change in coordinate
+*        be not negligible is imposed. Thanks to F.Carminati, R.Brun.
+*        Introduced in the 314 correction cradle.
+*
+*===> 09/MAY/1991
+*
+*        Correction in GMGAUS due to G.Lynch. The sigma of the multiple
+*        scattering in the gaussian approssimation was too small.
+*        Introduced in the 314 correction cradle.
+*
+*===> 14/MAY/1991
+*
+*        Corrections in GTELEC, GTHADR and GTMUON to introduce the
+*        same boundary correction than in GTNEUT, GTGAMA. Thanks to
+*        P.Gumplinger.
+*        Introduced in the 314 correction cradle.
+*
+*        New menu in GXINT to handle FZ files. Thanks to F.Carminati
+*
+*===> 17/MAY/1991
+*
+*        Correction in GHFHDN to reset to 0. TOFD. Thanks to
+*        R.Rui.
+*        Introduced in the 314 correction cradle.
+*
+*===> 31/MAY/1991
+*
+*        Correction in GTRACK to allow PREC to decrease and avoid
+*        problems when changing particle and position but not medium.
+*        Thanks to R.Spiwoks.
+*        Introduced in the 314 correction cradle.
+*
+*===>  4/JUN/1991
+*
+*        New version of the hidden line removal, thanks to S.Giani.
+*        New menu CVOL introduced to cut volumes and new SHIFT
+*        command to shift volumes for drawing.
+*
+*        Correction in GHEISH. The ENP parameters are reset to 0.
+*        at the beginning of every event. Thanks to Henk den Bok.
+*        Introduced in the 314 correction cradle.
+*
+*===>  5/JUN/1991
+*
+*        Correction introduced in GPHYSI. JTM recalculated after
+*        bank push. Thanks to K.Sparks.
+*        Introduced in the 314 correction cradle.
+*
+*===> 11/JUN/1991
+*
+*        Correction introduced in GTELEC, GTMUON, GTHADR. When the
+*        energy loss is below machine precision, it is recalculated
+*        via the De/Dx table. Thanks to H.Fesefeld and Ralf Spiwoks.
+*        Introduced in the 314 correction cradle.
+*
+*        Booking of the bank IMAT-4 delayed till GPHYSI. Will save some
+*        words in case of materials which are not inserted in a tracking
+*        medium. Thanks to F.Carminati.
+*
+*???>    Backward incompatibility
+*
+*        The argument DMAXMS in the calling sequence of GSTMED, unused
+*        in 314, will be called STEMAX and will assume the meaning of
+*        maximum step allowed for a particle in the given material.
+*        This will only affect people running with AUTO 0. In case of
+*        automatic computation of the tracking media parameters, this
+*        number will be set to BIG (=1.E10).
+*        Thanks to F.Carminati, M.Maire.
+*
+*===> 12/JUN/1991
+*
+*        Corrections in GMUNU to allow the usage of a variable number of
+*        energy bins. Corrections in PHASP and GMUSIG for very high
+*        energies. Thanks to Hans-Jochen Trost.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GFLTHE to avoid division by 0. Thanks to
+*        Roy Bossingham.
+*        Introduced in the 314 correction cradle.
+*
+*===> 13/JUN/1991
+*
+*        Correction in GINPGO and GINPCO to check correctly the PHI
+*        limits. Thanks to R.Bossingham.
+*        Introduced in the 314 correction cradle.
+*
+*===> 19/JUN/1991
+*
+*        Correction in GMUNU to calculate correctly the angle of the
+*        incoming muon. Thanks to H-J.Trost.
+*        Introduced in the 314 correction cradle.
+*
+*===> 20/JUN/1991
+*
+*        Corrections in GLANDZ for high energy to avoid numerical
+*        problems. Thanks to H-J.Trost.
+*        Introduced in the 314 correction cradle.
+*
+*===> 26/JUN/1991
+*
+*        All the routines and the commons of the HADRIN/NUCRIN
+*        package have been renamed. All routines begin now with
+*        GHF and all commons with GCF. This to avoid interactions
+*        with the interface with FLUKA. Thanks to F.Carminati
+*
+*===> 28/JUN/1991
+*
+*        New algorithm for pushing a view bank. Now push of the
+*        max between MORGS and the 25% of the size of the view
+*        bank. Thanks to S.Giani.
+*
+*===> 17/JUL/1991
+*
+*        Common HIATT of HIGZ removed from GXCONT and workstation type
+*        retrieved in GXDZ from Workstation ID. Thanks to O.Couet.
+*
+*        Modification in GMUSIG to protect against possible division
+*        by zero. Thanks to M.Sarris.
+*
+*        Correction in GDSHOW to recalculate COSPSI and SINPSI. Thanks
+*        to M.Verzocchi.
+*        Introduced in the 314 correction cradle.
+*
+*===> 18/JUL/1991
+*
+*        Correction in GINVOL. When tracking in magnetic
+*        field they could return the wrong volume. Thanks to D.Greiner.
+*        Introduced in the 314 correction cradle.
+*
+*===> 24/JUL/1991
+*
+*        Corrections in GRIN to allow tracking after reading a data
+*        structure. Thanks to R.Brun.
+*        Introduced in the 314 correction cradle.
+*
+*        Modifications in GXINT to allow running with the MOTIF
+*        user interface. Thanks to R.Brun.
+*
+*===> 31/JUL/1991
+*
+*        INT=0 suppressed in GHEISH after nuclear fission.
+*        Thanks to Kati Lassila.
+*
+*===> 01/AUG/1991
+*
+*        Protection introduced in GMUSIG. Thanks to Jochen Trost.
+*        Introduced in the 314 correction cradle.
+*
+*===> 02/AUG/1991
+*
+*        Correction in GHSTOP to fix the calculation of the time of
+*        flight for stopping particles. Thanks to L.Roberts.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GNPGON not to calculate safety for the inner
+*        radius when this is 0. Thanks to Andrei Nomerotsky.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GNOTRP to return the correct SNXT. Thanks to
+*        V.Innocente.
+*        Introduced in the 314 correction cradle.
+*
+*        Correction in GHSTOP not to discard hadrons at rest, they
+*        may decay. Thanks to H.Fesefeld.
+*        Introduced in the 314 correction cradle.
+*
+*        Modifications in GHSTOP and GHEISH to handle user defined
+*        particles. Thanks to P.Gumplinger.
+*        Introduced in the 314 correction cradle.
+*
+*===> 12/AUG/1991
+*
+*        Call to GUINTI added in GINTRI to define user commands. Thanks
+*        to V.Vercesi.
+*        Introduced in the 314 correction cradle.
+*
+*===> 21/AUG/1991
+*
+*        Modification in GTMED to print a warning when FIELDM .EQ. 0
+*        and IFIELD .NE. 0. Thanks to Federico Carminati
+*
+*        Modification in GTHADR to set CFLD = BIG in case FIELDM=0.
+*        Thanks to V.Vercesi.
+*        Introduced in the 314 correction cradle.
+*
+*===> 27/AUG/1991
+*
+*        Call to C dummy routine to initialise X11 introduced in
+*        GXINT for IBM/VM. Thanks to M.Marquina.
+*
+*===> 19/SEP/1991
+*
+*        Rayleigh effect now the default. IRAYL is set to 1 by default
+*        in GINIT. Thanks to M.Maire
+*
+*        Changes in the multiple scattering routines. GMOLI1 and GMOLI2
+*        suppressed and GMOLIO used instead. Corresponding changes in
+*        GMULTS and GMULOF. The code of GMOLS has been put in line inside
+*        GMOLIE and GMOLS is obsolete. GPOISS and GMCOUL modified for
+*        performance reasons.
+*        Gaussian scattering is now generated according to the Rossi
+*        gaussian formula and there is no logarithmic term in the
+*        sigma of the gaussian. This gives a distribution where the
+*        tails are underestimated, but which is consistent over many
+*        steps.
+*        Moliere and single Coulomb scattering are chosen according to
+*        the value of Omega in the Moliere formula.
+*        The new meaning of IMULS is the following:
+*
+*              IMULS = 0       No multiple scattering
+*              IMULS = 1,2     Moliere or single Coulomb scattering
+*              IMULS = 3       Gaussian scattering with Rossi formula
+*
+*        Thanks to G.Lynch.
+*
+*===> 14/OCT/1991
+*
+*         New algorithm for calculation of energy loss. The stopping
+*         range is now calculated with a parabolical interpolation
+*         instead than with a linear one. This gives a dE/dx curve
+*         which is a piecewise linear function and not a step function.
+*         Thanks to F.Carminati.
+*
+*         Modification of GNOPG1 taking care of the case of a particle
+*         which is very near to the surface and it may appear inside due
+*         to machine precision. This could cause the volume to be skipped.
+*         Thanks to R.Nierhaus.
+*
+*         Routine GNPGON rewritten for the calculation of SNXT. The
+*         previous routine was returning wrong results. Thanks to
+*         R.Nierhaus.
+*
+*===> 28/OCT/1991
+*
+*         Modifications in the routines GFLPHI and GFCOOR. The ordering
+*         for TUBS in phi was wrong. Volumes could become invisible.
+*         Thanks to F.Carminati.
+*
+*         New routine GFVERT introduced. Retrieves the parameters of a
+*         vertex. Thanks to F.Carminati.
+*
+*===> 29/OCT/1991
+*
+*         Modification in NUCREC to zero the whole of the PV array
+*         to prevent the use of uninitiated variables. Thanks to
+*         F.Ranjard. Introduced in the 3.14 correction cradel.
+*
+*===>  1/NOV/1991
+*
+*         Useless code commented out in GTRAIN. Thanks to F.Carminati.
+*
+*         GNCONE gone to double precision. Thanks to J.Toth.
+*
+*===>  5/NOV/1991
+*
+*         Variable USERW undefined in the RESULT common now set to
+*         UPWGHT from GCTRAK common. Thanks to F.Ranjard.
+*
+*         Type declarations for GCSTAK completed. Thanks to M.Battle.
+*
+*===>  5/DEC/1991
+*
+*         New calculation of the range table. Simpson integration rule
+*         used. Modifications in GRANGI, GCOEFF.
+*
+*===> 10/DEC/1991
+*
+*         Protection introduced against the reading of a pre-315 data
+*         structure. The value of STEMAX is set to BIG in this case.
+*         Modification in GPHYSI.
+*
+*         Better handling of version numbers in I/O operations.
+*         Modifications in GPHYSI and GRIN.
+*
+*===> 08/JAN/1992
+*
+*         Correction in GLANDZ to avoid gaussian distribution for
+*         very thin layers. The version of GEANT 3.13 has been
+*         used for this. Thanks to F.Carminati and M.Maire.
+*
+*         Corrections in GTNEXT, GINVOL and GTMEDI to protect against
+*         wrong values of INGOTO when using MANY volumes. Thanks to
+*         R.Brun.
+*
+*===> 15/JAN/1992
+*
+*???>    Backward incompatibility
+*
+*         The random numbers seeds are stored at the end of every event
+*         in the JRUNG bank at locations 19 and 20. If the JRUNG data
+*         structure is read in and the data card RNDM or the interactive
+*         command RNDM has not been issued (NRNDM(1), NRNDM(2) <> 0),
+*         and if the words 19/20 are not 0, then the random number
+*         generator is restarted with these seeds. Thanks to F.Carminati
+*
+*         The RNDM command now reads the values of the seeds into
+*         NRNDM(1) and NRNDM(2) in common GCFLAG. The values 0 0
+*         can be used for the random seeds. These values will not
+*         alter the current status of the random number generator,
+*         but zeroing the variables  NRNDM(1) and NRNDM(2) will
+*         allow them to be reinitialised with the values stored
+*         in a data structure read from disk. Thanks to F.Carminati
+*
+*         Routine GREND now needs an integer as input. This is to be
+*         consistent with GRFILE.
+*
+*===> 27/JAN/1992
+*
+*         The following changes made to the names of FLUKA routines
+*         to avoid clashes with ISAJET. Thanks to L.Roberts.
+*
+*        Type          Original name            New name
+*        Routine       DECAY                    FKDECA
+*        Routine       FLAVOR                   FKFLAV
+*        Routine       SIGINT                   FKSIGI
+*
+*===> 31/JAN/1992
+*
+*        Corrections in GMEDIA in case of many volumes to avoid
+*        program crash. Thanks to R.Jones.
+*
+*        Change of logics in GRUN. Now if NEVENT is <= 0, no event
+*        is processed. Thanks to B.Lockman.
+*
+*        Common GCFLAX put in the GCFLAG sequence with the BATCH and
+*        NOLOG variable from GXINT. Thanks to B.Cole.
+*
+*        Problem corrected in GDECAY. The mass of the particle was
+*        altered. If the next particle was the same, the mass was
+*        not reset to its correct value. Thanks to S.Tonse.
+*
+*        TIMINT is now really the time left after initiatlization
+*        as is specified in the documentation and not the time
+*        USED for initialization as it was till now.
+*        Thanks to V.Ivanov.
+*
+*        Corrections in GNPGON. Improvement of code safety under
+*        optimization in GNOGO1, GNPGON, GNPCON. Thanks to Y.Iga.
+*
+*===>  4/FEB/1992
+*
+*        Corrections in GMULOF and GTHADR. SFIELD takes precedence
+*        on STMIN in case IFIELD=1 to make sure that the Runge-Kutta
+*        approssimation still works. Thanks to R.Hawkings.
+*
+*===> 10/FEB/1992
+*
+*         Correction in GDRAY to improve the precision in the calculation
+*         of the angle. Thanks to F.Carminati & P.Lubrano.
+*
+*         Change in GFKINE. The variable TOFG is not updated any more.
+*         Thanks to F.Carminati
+*
+*         New GMEDIA, GTMEDI, GINVOL to take care of the problems with
+*         MANY volumes. Thanks to R.Jones.
+*
+*===> 14/FEB/1992
+*
+*         Bug corrected in GNPGON when the particle was exactly on the
+*         wall of the last Z section. Thanks to V.Palichik.
+*
+*===> 17/FEB/1992
+*
+*         Updated routines GLUND, GLUNDI and new sequences LUDAT1, LUDAT3,
+*         LUJETS. The data cards MSTE, KTYP, PMAS, PWID, IDB have been
+*         removed because either obsolete or not aplicable. The new code
+*         runs with JETSET 7.3 upward. Thanks to F.Carminati, T.Sjostrand.
+*
+*         Update of GLUDKY to work with 7.3. Thanks to F.Carminati.
+*
+*===> 23/FEB/1992
+*
+*         New subroutine GFIN to handle sequential input. Routine GGET
+*         has been maintained for backward compatibility.
+*         Thanks to F.Carminati.
+*
+*===> 01/MAR/1992
+*
+*         New Runge-Kutta integration routine for the tracking in
+*         magnetic field. If the result of the stepping is not accurate,
+*         the step is divided in 2 parts and the integration repeated
+*         and so on. Thanks to V.Perevotchikov.
+*
+*===> 05/MAR/1992
+*
+*         Correction in GLTRAC. When the particle fetched has an entry
+*         in JKINE the correct vertex number is calculated. Thanks to
+*         Y.Foka.
+*
+*===> 06/MAR/1992
+*
+*         Correction in GTELEC. The calculated range may be slightly
+*         larger than the maximum allowed range due to precision
+*         problems and this was leading to very small negative steps.
+*         Thanks to R.Brun.
+*
+*===> 08/MAR/1992
+*
+*         New GRKUTA, GHELIX, GHELX3 from V.Perevotchikov.
+*
+*===> 16/MAR/1992
+*
+*          ENERGY renamed to FKENER in FLUKA. Thanks to F.Carminati
+*
+*===> 17/MAR/1992
+*
+*          VERTEX->FKVERT, ZEROIN->FKZERO, ERROR->FKERRO in FLUKA.
+*          Thanks to F.Carminati
+*
+*          Corrections in PBANH. Thanks to M.Sasaki.
+*
+*===> 19/MAR/1992
+*
+*          Corrections in GFIN, GFOUT and GRIN, version 0 is now allowed
+*          for a data structure in I/O. Thanks to B.Cole.
+*
+*          Modification in GBREME to improve precision for small angles.
+*          Thanks to F.Carminati.
+*
+*          Inlining of rotation routines in GFTRAC, GINVOL, GTMEDI,
+*          GTNEXT, GMEPOS, GMEDIA. Thanks to D.Kryn, F.Carminati.
+*
+*          New routines GDLENS, GDPLST and GDPRTR in the drawing package.
+*          New version of GDTREE. Thanks to S.Giani.
+*
+*          Streamlining of GDTOM, GINROT, GITRAN, GMTOD, GRMTD, GRMUL,
+*          GROT, GTRMUL and GTRNSF. Thanks to F.Carminati.
+*
+*===> 23/MAR/1992
+*
+*???>    Backward incompatibility
+*           Tracking medium name in GFTMED changed in CHARACTER variable.
+*           Thanks to V.Perevotchikov.
+*
+*           IMPULS renamed to FKIMPU
+*           DRES   renamed to FKDRES
+*           ERUP   renamed to FKERUP in FLUKA. Thanks to F.Carminati.
+*
+*===> 24/MAR/1992
+*
+*       COSI entry point renamed to FKCOSI
+*       POLI             renamed to FKPOLI in FLUKA. Thanks to F.Carminati
+*
+*       Changes in GCOMP to increase the precision of the rotation
+*       of the scattered photons and electrons in the reference
+*       frame of the incoming particle. Thanks to F.Carminati
+*
+*       New version of the routines GNOPG1 and GNPGO1. Speed up of
+*       a factor two or more achieved. Thanks to F.Carminati,
+*       M.Roethlisberger.
+*
+*===> 29/MAR/1992
+*
+*       Improvement of the routines GMEDIA, GTMEDI and GINVOL. A better
+*       use is made of the variable INGOTO. Thanks to R.Jones, F.Carminati.
+*
+*===> 01/APR/1992
+*
+*       Modification in GTRACK. If a particle tries for more than 5 times
+*       consecutively to exit a volume, the precision used for tracking is
+*       multiplied by 5 and so on every fifth attempt. Thanks to
+*       F.Carminati.
+*
+*       Modification in FLUFIN to normalise in double precision the
+*       direction cosines given to FLUKA. Thanks to A.Ferrari
+*
+*       Modification in GLANDZ to avoid peaks in energy loss for very
+*       light materials. Thanks to F.Carminati
+*
+*       New routine GETVER to crack the title sequence and to return
+*       the correct version number. Thanks to F.Carminati and M.Maire.
+*
++DECK,V_316
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
+*     Correction cradle for version 3.15 of the GEANT Programme
+*     and history of the evolution of 3.16.
+*
+*               Important !!!
+*               =============
+*
+*     Only corrections flagged by "Introduced in the 3.15 correction
+*     cradle" are applied to 3.15. All the other comments refer
+*     to modifications which will appear in the 3.16 version of
+*     the program.
+*
+********************************************************************
+*
+*===> 06/12/93
+*
+*           Release of the 3.11 correction cradle.
+*
+*===> 02/12/93
+*
+*           Correction in GBRELE and GRANGI. Thanks to F.Carminati.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 29/11/93
+*
+*           Release of the 3.10/00 correction cradle.
+*
+*===> 21/10/93
+*
+*          Correction in FKDECA and HADEVV to permit the correct
+*          treatment of charmed particles decay. Thanks to
+*          A.Ferrari. Introduced in the 3.15 correction cradle.
+*
+*          Correction in FKDRES to avoid a loop. Thanks to
+*          B.Slater and A.Ferrari. Introduced in the 3.15 correction
+*          cradle.
+*
+*===> 20/10/93
+*
+*          Correction in GDRAW to update current pointer to IN
+*          bank. Correction in GGPPAR to compute the internal
+*          parameters of a TRAP with negative parameters. Thanks
+*          to S.Banerjee. Introduced in the 3.15 correction cradle.
+*
+*===> 19/10/93
+*
+*           Correction in GTNEUT, GTHADR, to allow hadronic decay
+*           in the vacuum. Thanks to R.Jones. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 01/10/93
+*
+*           Correction in GNSLWD to avoid numerical problem. Thanks
+*           to A.Parri. Introduced in the 3.15 correction cradle.
+*
+*===> 15/09/93
+*
+*           Release of the 3.09/00 correction cradle.
+*
+*===> 13/09/93
+*
+*           Correction in GNOCTU, thanks to M.Nessi. Introduced in
+*           the 3.15 correction cradle.
+*
+*===> 03/09/93
+*
+*           Correction in EVENTV to protect square root of a negative
+*           number. Thanks to B.Slater and A.Ferrari. Introduced in
+*           the 3.15 correction cradle.
+*
+*===> 11/08/93
+*
+*           New tratment for thin layer, mainly gas, of dE/dx
+*           introduced. Thanks to V.Grishin, S.Kotelnikov,
+*           K.Lassila-Perini and P.Nevski.
+*
+*           All bit manipulation functions replaced by Military
+*           Standard functions. Thanks to F.Carminati.
+*
+*===> 19/07/93
+*
+*           Correction in FLUFIN in order to avoid 0 mechanism
+*           number when IHADR=2. Thanks to P.Bloch. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Correction in GSROTM, NROTM updated when the bank is
+*           pushed. Thanks to M.Maire. Introduced in the 3.15
+*           correction cradle.
+*
+*           Correction in ERTRGO. Thanks to E.Nagy. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 07/06/93
+*
+*           Release of version 3.08 of the correction cradle.
+*
+*           New version of the FLUKA interface introduced. New
+*           model for energy straggling introduced (Ermilova&
+*           Checkin) and synchrotron radiation. Thanks to K.
+*           Lassila-Perini, A.Ferrari&P.Sala et al. and I.
+*           Gavrilenko. Please see the documentation for more
+*           information.
+*
+*           New routine GFANG introduced. It finds the angles
+*           Theta and Phi which are used to rotate a vector in
+*           the master system of the other. Thanks to F.Carminati
+*
+*           New rotine GVROT introduced. It will rotate in full
+*           double precision a vector in the reference system of
+*           another one. Thanks to F.Carminati
+*
+*           Corrections in GRIN/GFIN to calculate correctly the
+*           number of rotation matrixes. Thanks to M.Maire.
+*           Introduced in the 3.15 correction cradle.
+*
+*           Correction in FLUFIN to pass antiprotons to FLUKA when
+*           they are 'stopping'. Thanks to A.Ferrari. Introduced in
+*           the 3.15 correction cradle.
+*
+*
+*===> 27/05/93
+*
+*           Corrections in FLUFIN to pass stopping antiprotons,
+*           antineutrons and pions to FLUKA for annihilation. The
+*           other hadrons are either decayed or (neutral particles)
+*           passed to GHEISHA/GHSTOP.
+*
+*===> 04/05/93
+*
+*           Correction in FDNOPT to properly initialise an
+*           array. Thanks to K.Lassila-Perini. Introduced in
+*           the 3.15 correction cradle.
+*
+*===> 21/04/93
+*
+*           New routine from Laszlo Urban for the tracking of
+*           ions, GTHION. Ions now have to be given particle
+*           type 8. Thanks to L.Urban.
+*
+*===> 18/04/93
+*
+*           Addition in GPPERP, the sphere has been added. Thanks
+*           to R.Jones.
+*
+*           Old Hadrin/Nucrin interface deleted. HADR 3 flag has
+*           no meaning any more. Warning message introduced in
+*           GPHYSI, when IHADR=3 then reset it to 1 and use GHEISHA.
+*           Thanks to F.Carminati.
+*
+*           Tatina code eliminated from GEANT. Thanks to F.Carminati.
+*
+*           Small changes in GSCHIT to avoid integer/floating
+*           conversions and to speed-up the code. Thanks to
+*           F.Carminati.
+*
+*===> 07/04/93
+*
+*           Correction in the GPOISS routine to avoid overflows.
+*           Thanks to S.Qian. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 06/04/93
+*
+*           Correction in GNSPHR to avoid floating point overflow.
+*           Thanks to S.Ljungfelt. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 22/03/93
+*
+*           Correction in GEAMON to extend the field for CPU
+*           time. Thanks to R.Brun. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 14/03/93
+*
+*           Release of version 3.07 of the correction cradle.
+*
+*           Corrections in GZINIT, GPHYSI and GDSHOW. The
+*           working space is now allocated via calls to
+*           GWORK. GWORK has been modified and it only
+*           increases the working space, it never reduces it.
+*           Thanks to M.Corden. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 10/03/93
+*
+*           Correction in GFIN/GFOUT to avoid spurious error
+*           message. Thanks to M.Maire.
+*
+*===> 03/03/93
+*
+*           Correction in GLTRAC to improve the precision of
+*           the calculation of the kinetic energy. Thanks to
+*           C.Zeitnitz. Introduced in the 3.15 correction
+*           cradle.
+*
+*           Correction in GTRACK to avoid output overflow in
+*           format statement. Thanks to M.Corden. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Correction in GDXYZ to obtain the correct line color
+*           for a track. Thanks to M.Corden. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 02/03/93
+*
+*           New treatment of the photoelectric effect introduced.
+*           Thanks to J.Chwastowski. Please see documentation for
+*           more information.
+*
+*===> 01/03/93
+*
+*           Changes in GKGEOM to avoid warnings with the new
+*           version of KUIP. Thanks to A.Nathaniel. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Changes in GSDVN2 to support division of spheres
+*           in PHI with initial offset. Thanks to F.Carminati.
+*
+*           Changes in GMEDIV and GNSPHR to correct precision
+*           problems. Thanks to F.Carminati.
+*
+*           Introduction of the Cerenkov effect. Thanks to
+*           R.Jones. Please see documentation for more
+*           details.
+*
+*===> 12/02/93
+*
+*           Changes in GSDVN to support division in PHI (axis
+*           N. 3) of the sphere. Thanks to F.Carminati.
+*
+*           Changes in GDRAWS to partially support the drawing
+*           of parts of sphere. Thanks to F.Carminati.
+*
+*===> 09/02/93
+*
+*           Release of version 3.06 of the correction cradle.
+*
+*===> 28/01/93
+*
+*           Correction in GXINT for compatibility with the KUIP
+*           installed with version 93a of the CERN Program Library.
+*           Thanks to R.Jones. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 27/01/93
+*
+*           Correction in GMUNU. Only GHEISHA used to handle the
+*           interaction irrespective of the value of IHADR. Thanks
+*           to K.Lassila-Perini and G.Battistoni. Introduced in the
+*           3.15 correction cradle.
+*
+*           Corrections in GGPPAR to handle a tube with negative
+*           parameters positioned into a tubes in the general case.
+*           Thanks to F.Carminati.
+*
+*===> 19/01/93
+*
+*           Correction in FLUFIN to make sure that just neutrons
+*           are passed to GHEISHA. Thanks to K.Lassila. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 21/12/92
+*
+*           Option Q(uiet) introduced in GRIN/GROUT. Thanks to
+*           M.Maire.
+*
+*           New version of GRKUTA protected against 0 fields and
+*           improved for precision. Introduced in the 3.15 correction
+*           cradle. Thanks to W.Manner.
+*
+*===> 15/12/92
+*
+*           IQ(JRUNG+29) set to the event sequence number of the
+*           last generated event in GTRIGC. Thanks to M.Maire.
+*
+*===> 11/12/92
+*
+*           Call to LUPART replaced with LU1ENT in GLUDKY. LUPART
+*           was an obsolete routine deleted from JETSET 7.3
+*           library. Thanks to R.Gomes.
+*
+*===> 23/11/92
+*
+*           Release of the version 3.05/00 of the correction
+*           cradle.
+*
+*           Corrections in GRANGI to account for the use of the
+*           ERAN card. Thanks to P.Gumplinger. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 18/11/92
+*
+*           Correction in GDRAWS for very thin CTUBes. Thanks to
+*           M.Guidal. Introduced in the 3.15 correction cradle.
+*
+*           New version of GRKUTA introduced. It will limit the
+*           number of iterations and cut steps to prevent looping.
+*           Thanks to V.Perevotchikov. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 11/11/92
+*
+*           Correction in GGDSPE to allow repeated division of
+*           tubes along R. Thanks to M.Maire. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 11/11/92
+*
+*           Correction in GNPCON when the particle is slightly
+*           outside of the last plane in Z. It could happen for
+*           precision problems. Thank to C.Georgiopoulos.
+*           Introduced in the 3.15 correction cradle.
+*
+*           Quiet option introduced in GFIN and GFOUT to suppress
+*           printing. Thanks to A.Eisner.
+*
+*           Correction in the header of GFIN, GFOUT. Thanks to
+*           A.Eisner.
+*
+*           Correction to GSNEXT. It now checks the values of the
+*           input list. Repeated values or values which are not
+*           within the allowed limits are ignored and a warning
+*           message is printed. Thanks to F.Luehring.
+*
+*===> 04/11/92
+*
+*           Modification in GSVOLU. A warning is printed if the same
+*           volume name is repeated twice. Thanks to V.Perevoztchikov.
+*
+*===> 23/10/92
+*
+*           Print statement in GSKING replaced by a WRITE(CHMAIL
+*           Thanks to F.Carminati.
+*
+*===> 19/10/92
+*
+*           Correction in GDRAY to increase the precision of
+*           the angle calculation. Thanks to F.Malek.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 19/10/92
+*
+*           Release of version 3.04 of the correction cradle.
+*
+*           Corrections in FEREVV and HADEVV. Thanks to A.Ferrari.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 16/10/92
+*
+*           Release of version 3.03 of the correction cradle.
+*
+*===> 13/10/92
+*
+*           Correction in GFIN and GFOUT to handle correctly
+*           ZEBRA error conditions. Thanks to H.Uijterwaal.
+*           Introduced in the 3.15 correction cradle.
+*
+*           Correction in GDECAY to improve precision of rotation
+*           of secondaries. Thanks to F.Carminati. Introduced in
+*           the 3.15 correction cradle.
+*
+*           Correction in FEREVV to avoid square root of negative
+*           number. Thanks to A.Ferrari. Introduced in the 3.15
+*           correction cradle.
+*
+*           Correction in GDRAW to avoid error when traversing the
+*           tree. Thanks to F.Carminati. Included in the 3.15
+*           correction cradle.
+*
+*===> 09/10/92
+*
+*           Correction in GXPICT, added definition of a character
+*           variable. Thanks to F.Carminati. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 08/10/92
+*
+*           Corrections in ERPRDOC, EUFILV and ERTEST to change
+*           Hollerith in characters for GEANE. Thanks to V.Innocente.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 24/09/92
+*
+*           Correction in NUCREL to avoid square root of negative
+*           numbers. Thanks to A.Ferrari. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 23/09/92
+*
+*           Correction in GMEDIA. INFR not set going up the tree to
+*           avoid problem with user calls of GMEDIA during tracking.
+*           Thanks to S.Banerjee. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 21/09/92
+*
+*           Correction in GRANGI to avoid interpolation of DE/DX
+*           beyond 10GeV. Thanks to V.Innocente. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 16/09/92
+*
+*           Correction in GBRELA. Auxiliary integration point for
+*           muon dedx table was wrong. Thanks to V.Innocente.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 15/09/92
+*
+*           Release of version 3.02 of the correction cradle.
+*
+*           Correction in GMEDIA, GTMEDI: JVIN not properly
+*           initialised. Thanks to F.Carminati. Introduced in
+*           the 3.15 correction cradle.
+*
+*           Release of version 3.01 of the correction cradle.
+*
+*           Correction to GSDVN for a mistype. Thanks to H.Plothow.
+*           Introduced in the 3.15 correction cradle.
+*
+*           Small mod to GSNGTR for the CRAY. Function DSIGN changed
+*           to SIGN. Thanks to F.Carminati. Introduced in the 3.15
+*           correction cradle.
+*
+*           Release of version 3.00 of the correction cradle.
+*
+*           Correction in GDECAY. When IDCAY=2 the routine does not
+*           produce secondaries. Thanks to R.Jones. Introduced in
+*           the 3.15 correction cradle.
+*
+*           Corrections in GFIN, GFOUT. Thanks to B.Cole. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 14/09/92
+*
+*           Correction in GMEDIV, GMEDIA, GINVOL, GTMEDI to
+*           improve precision and prevent blocking of volumes.
+*           Thanks to F.Carminati, R.Jones. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 03/09/92
+*
+*           GDLADY and GDMISS routines introduced. Thanks to
+*           H.Plothow.
+*
+*           Correction in GXDRAW for the coordinates of the
+*           drawing of the GIRL. Thanks to F.Carminati.
+*           Introduced in the 3.15 correction cradle.
+*
+*           Correction in GPHSIG, typing mistake in a formula.
+*           Thanks to M.Fanti. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 02/09/92
+*
+*           Corrections in GSDVN, GGPPAR, GGDPAR, GMEDIV, GCENT,
+*           GSDVN2, GSDVT, GSDVT2 to allow the division of a TRAP
+*           along y. Thanks to F.Carminati. Introduced in the 3.15
+*           correction cradle.
+*
+*           Corrections in GNPGO1 for precision problems. Thanks
+*           to K.Lassila. Introduced in the 3.15 correction
+*           cradle.
+*
+*           Corrections in GGDPAR, GSDVN for the z division of a
+*           Polygone. Thanks to F.Carminati. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 01/09/92
+*
+*           Correction in GSDVT for the division of a parallepiped.
+*           Thanks to Y.Fisiak. Introduced in the 3.15 correction
+*           cradle.
+*
+*           Correction in GRKUTA. Helix is used if angle of
+*           curvature is too large. In this case step is anyway
+*           smaller than STMIN which is under user control.
+*           Thanks to H.Plothow and V.Perevotchikov. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 26/08/92
+*
+*           Correction in GKRZ and CDF for the command RZ/FILE.
+*           Record lenght fixed at 1024 in GRFILE cannot be
+*           Changed by the user. Thanks to H.Plothow. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Corrections in GTMEDI, GMEDIA and GINVOL for the case
+*           of 'MANY' volumes. Uncleared blocking words found in
+*           the tree. Thanks to H.Plothow. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 25/08/92
+*
+*           Correction in GNSPHR. The PHI limits were used
+*           incorrectly in calculating the distance to the
+*           sphere. This was slowing down calculation but still
+*           giving correct results. Thanks to J.Stepanek.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 21/08/92
+*
+*           Correction in GGORDQ. Incorrect counting of volumes
+*           in case of phi ordering and phi division spanning
+*           across 0 degrees. Thanks to L.Roberts and F.Carminati.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 18/08/92
+*
+*           Version 2.00 of the correction cradle released
+*
+*
+*           Correction in GDRELP and GDRELM. The shell corrections
+*           where underestimated due to a wrong factor introduced
+*           translating the original formula from ev to Gev. Thanks
+*           to A.Ferrari and K.Lassila-Perini. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 17/08/92
+*
+*           Correction in GCENT in case of general trapezoid sliced
+*           in z in a local development structure.
+*           Thanks to S.Chekhtman. Introduced in the 3.15 correction
+*           cradle.
+*
+*           Correction in GHEISH. Time of flight correctly initialised
+*           for particles with number > 48. Thanks to A.Eisner.
+*           Introduced in the 3.15 correction cradle.
+*
+*===> 14/08/92
+*
+*           Correction in GGPPAR for boxes with negative parameters
+*           in traps. The current code supports correctly boxes with
+*           one, two or three negative parameters positioned in a trap
+*           not necessarily in the centre. The trap must not be twisted
+*           and the ALP1 and ALP2 angles (PAR(7) and PAR(11)) must be
+*           equal. This facility must be used with care because the
+*           algorithm first maximises Z, then Y and then X. The result
+*           may be not quite what is expected in all cases, and the
+*           user is invited to check carefully the result. Thanks to
+*           H.Plothow. Introduced in the 3.15 correction cradle.
+*
+*===> 12/08/92
+*
+*           Correction in GINVOL, GTMEDI and GMEDIA to handle correctly
+*           the GSNEAR case when LIST(1)=1 and LIST(2)=0, that is when
+*           all the volume are separated inside a mother. Optimisation
+*           of the routine in case a large number of objects are
+*           positioned at the same level and GUNEAR is used. Thanks to
+*           R.Jones, M.Lefebvre and M.Pieri. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 07/08/92
+*
+*           Correction in GTNEXT. When the currents step brings
+*           the particle on the surface of the next volume, signal
+*           IGNEXT=1 to GTxxxx to 'push' into the next volume.
+*           This is a genuine bug and some volumes may be lost
+*           due to this. Thanks to M.Maire. Introduced in the 3.15
+*           correction cradle.
+*
+*===> 02/08/92
+*
+*           Corrections to the precision in GNOPG1, GNCONE, GNOCON.
+*           Thanks to R.Jones. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 31/07/92
+*
+*           Correction in the printout of GTRACK when max number
+*           of steps is reached. Event number and random numbers are
+*           printed out as well. Thanks to M.Maire. Introduced in the
+*           3.15 correction cradle.
+*
+*===> 29/07/92
+*
+*           Correction in PIMABS for HPUX only. If variable NT is
+*           saved then the routine compiles correctly, otherwise
+*           not. Thanks to F.Carminati. Introduced in the 3.15
+*           correction cradle.
+*
+*           Correction in NIZL. All local variable are saved now.
+*           Thanks to F.Carminati. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 29/07/92
+*
+*           Correction in CDF and in GKDRAW. Minimum angle for the
+*           drawing is 0 and not 1. Thanks to H.Plothow. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Minor update of GXFZ, a character length has been set
+*           to 4 to keep KUIP happy. Thanks to F.Carminati. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 28/07/92
+*
+*           Corrections in GXFZ. Now the array LUNITS is properly
+*           updated when a file is closed.
+*
+*           Correction in GBRSGE, GBRSGM. Save statement introduced.
+*           Thanks to L.Roberts. Introduced in the 3.15 correction
+*           cradle.
+*
+*           Correction in GINVOL for many volumes. Thanks to S.Giani
+*           and R.Jones. Introduced in the 3.15 correction cradle.
+*
+*           Correction in GMCOUL to prevent a division by 0. Thanks
+*           to M.Maire. Introduced in the 3.15 correction cradle.
+*
+*===> 03/06/92
+*
+*           Correction in GSNGTR. Double precision variables removed
+*           in case of 64 bits machines. Thanks to E.Boehm. Introduced
+*           in the 3.15 correction cradle.
+*
+*           Correction in the SROTM command. The lower limit for
+*           PHI3 is really 0. and not 1. Thanks to E.Boehm. Introduced
+*           in the 3.15 correction cradle.
+*
+*===> 01/06/92
+*
+*           New version of GRKUTA. In fact this is the 3.14 version
+*           with the multiple steps algorithm of 3.15 introduced.
+*           If the bending angle in one step is too big, then the
+*           integration is done in several steps rather than in
+*           one. The IMPLICIT REAL*8 in the cradle is to avoid
+*           problems with the CRAY in the absence of PATCHY delayed
+*           control cards. Thanks to V.Perevotchikov. Introduced in
+*           the 3.15 correction cradle.
+*
+*===> 25/05/92
+*
+*           Sequence GCONSP changed for 32 bits machines. All
+*           constants are suffixed with D0 to avoid truncations.
+*           Thanks to F.Carminati. Introduced in the 3.15 correction
+*           cradle.
+*
+*===> 25/05/92
+*
+*           Version 1.00 of the correction cradle released
+*
+*===> 21/05/92
+*
+*          Correction in GHFNUC: TNNUC variable was undefined.
+*          Thanks to B.Lund-Jensen.
+*          Introduced in the 3.15 correction cradle.
+*
+*===> 08/05/92
+*
+*          Correction in TWOCLU to avoid infinite looping in some
+*          pathological cases. Thanks to L.Roberts.
+*          Introduced in the 3.15 correction cradle.
+*
+*===> 06/05/92
+*
+*          Correction in GNPGO1. Constants changed to double
+*          precision to avoid problems on the IBM. Thanks to
+*          D.Ward.
+*          Introduced in the 3.15 correction cradle.
+*
+*===> 28/04/92
+*
+*          Correction in GXINT to obtain the correct time in
+*          the monitoring routine when running interactively
+*          on IBM/VM. Thanks to F.Carminati.
+*          Introduced in the 3.15 correction cradle.
+*
+*===> 16/04/92
+*
+*          Correction in GMULTS. A particle going exactly along
+*          the negative direction of the Z axis could be rotated
+*          of 180 degrees after multiple scattering. Thanks to
+*          P.Gabriel.
+*          Introduced in the 3.15 correction cradle.
+*
+*===> 15/04/92
+*
+*          Correction in GXDRAW. The arguments of DHEAD were
+*          fetched with the wrong order. Thanks to F.Videbaek.
+*          Introduced in the 3.15 correction cradle.
+*
+*          Correction in GPHYSI. Variable NUMOLD is now reset to
+*          zero. This may affect people running interactively and
+*          using the command PHYSI. Thanks to F.Videbaek.
+*          Introduced in the 3.15 correction cradle.
+*
++PATCH,*GEANT
++DECK,BLANKDEK.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
++USE,GCDES.
++USE,GBASE.
++USE,GCONS.
++USE,GHITS.
++USE,GIOPA.
++USE,GKINE.
++USE,GPHYS.
++USE,GTRAK.
++USE,GSTRAG.
++USE,GUSER.
++USE, SINGLE,  IF=CDC, CRAY.
++USE, F2C,     IF=MSDOS,WINNT,LINUX.
++USE, UNIX,    IF=SUN, SGI, DECS, CONVEX, IBMRT, AIX370.
++USE, UNIX,    IF=HPUX, APOLLO, IPSC, NEXT.
++USE, IBMALL,  IF=IBM, IBMMVS, AIX370.
++USE, DOUBLE,  IF=APOLLO, IBMALL, VAX.
++USE, DOUBLE,  IF=UNIX, IF=-SINGLE.
++USE, BSLASH,  IF=SUN, SGI, DECS, IBMRT, IPSC, F2C, QMALPH.
++USE, USRJMP,  IF=UNIX.
++USE, HIGZ,CG,MONITOR,FLUKA,IF=BLDLIB.
++DECK, INCSEQ, IF=INCLUDE
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
++KEEP,INCBEG,IF=IBM
+      INCLUDE '
++KEEP,INCEND,IF=IBM
+     +'
++PATCH,*GEAINC,IF=MINCL.
++DECK,blankdek.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
++USE,GCDES
++USE,GTINCL.     Include files for GEANT car file
++USE,GGINCL.     Include files for GEANG car file CG package
++USE,GFINCL.     Include files for GEANF car file
++USE,GHINCL.     Include files for GEANH car file
++USE,ERINCL      Include files for GEANE car file
++PATCH,GCDES.
++DECK,BLANKDEK,IF=-INCLUDE.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
++KEEP,GTLINK
+      INTEGER       JDIGI ,JDRAW ,JHEAD ,JHITS ,JKINE ,JMATE ,JPART
+     +      ,JROTM ,JRUNG ,JSET  ,JSTAK ,JGSTAT,JTMED ,JTRACK,JVERTX
+     +      ,JVOLUM,JXYZ  ,JGPAR ,JGPAR2,JSKLT
+C
++KEEP,GCLINK
++SEQ, GTLINK, IF=TYPE.
+      COMMON/GCLINK/JDIGI ,JDRAW ,JHEAD ,JHITS ,JKINE ,JMATE ,JPART
+     +      ,JROTM ,JRUNG ,JSET  ,JSTAK ,JGSTAT,JTMED ,JTRACK,JVERTX
+     +      ,JVOLUM,JXYZ  ,JGPAR ,JGPAR2,JSKLT
+C
++KEEP,GTBANK
+      INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
+      INTEGER KWBANK,KWWORK,IWS
+      REAL GVERSN,ZVERSN,FENDQ,WS,Q
+C
++KEEP,GCBANK
++SEQ,GTBANK,IF=TYPE.
+      PARAMETER (KWBANK=69000,KWWORK=5200)
+      COMMON/GCBANK/NZEBRA,GVERSN,ZVERSN,IXSTOR,IXDIV,IXCONS,FENDQ(16)
+     +             ,LMAIN,LR1,WS(KWBANK)
+      DIMENSION IQ(2),Q(2),LQ(8000),IWS(2)
+      EQUIVALENCE (Q(1),IQ(1),LQ(9)),(LQ(1),LMAIN),(IWS(1),WS(1))
+      EQUIVALENCE (JCG,JGSTAT)
++SEQ,GCLINK
++KEEP,GTCURS
+      INTEGER INTFLA
+      REAL    SIZD2,FACHV,HALF,SAVPLX,SAVPLY,YPLT,XPLT
+*
++KEEP,GCCURS
++SEQ,GTCURS,IF=TYPE
+      COMMON/GCCURS/INTFLA,SIZD2,FACHV,HALF,SAVPLX,SAVPLY,YPLT,XPLT
+*
++KEEP,GTCUTS
+      REAL          CUTGAM,CUTELE,CUTNEU,CUTHAD,CUTMUO,BCUTE,BCUTM
+     +             ,DCUTE ,DCUTM ,PPCUTM,TOFMAX,GCUTS
+C
++KEEP,GCCUTS
+      COMMON/GCCUTS/CUTGAM,CUTELE,CUTNEU,CUTHAD,CUTMUO,BCUTE,BCUTM
+     +             ,DCUTE ,DCUTM ,PPCUTM,TOFMAX,GCUTS(5)
+C
++SEQ,GTCUTS,IF=TYPE.
++KEEP,GTURSB
+      INTEGER NUMNDS,IADDI,NUMND2,NNPAR,IISELT
+*
++KEEP,GCURSB
+      COMMON/GCURSB/NUMNDS,IADDI,NUMND2,NNPAR,IISELT
+      COMMON/GCURSC/MOMO
+      CHARACTER*4 MOMO
+*
++SEQ,GTURSB,IF=TYPE
++KEEP,GTFLAG.
+      INTEGER       IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN
+     +        ,IEOTRI,IEVENT,ISWIT,IFINIT,NEVENT,NRNDM
+C
++KEEP,GCFLAG
+      COMMON/GCFLAG/IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN
+     +        ,IEOTRI,IEVENT,ISWIT(10),IFINIT(20),NEVENT,NRNDM(2)
+      COMMON/GCFLAX/BATCH, NOLOG
+      LOGICAL BATCH, NOLOG
+C
++SEQ,GTFLAG,IF=TYPE.
++KEEP,GCNMEC
+      PARAMETER(NMECA=45,IBLOWN=23)
+      CHARACTER*4 CHNMEC(NMECA)
+*
+* *** Two blank spaces for FISF and CAPF which do not exist
+*
+* *** The low-neutron cross-sections have to be at the end for the
+* *** logics of the routine to work, and they have to start at
+* *** IBLOWN
+      DATA CHNMEC /
+     +     'HADF',  'INEF',  'ELAF',  'NULL',  'NULL',
+     +     'HADG',  'INEG',  'ELAG',  'FISG',  'CAPG',
+     +     'LOSS',  'PHOT',  'ANNI',  'COMP',  'BREM',
+     +     'PAIR',  'DRAY',  'PFIS',  'RAYL',  'MUNU',
+     +     'RANG',  'STEP',  'LOWN',  'NABS',  'NELA',
+     +     'NINE',  'NINC',  'N,2N',  'N,3N',  'N,NA',
+     +     'N2NA',  'N,NP',  'NFIS',  'N,GA',  'N,PR',
+     +     'N,DE',  'N,TR',  'N3HE',  'N,AL',  'N,2A',
+     +     'N,3A',  'N,2P',  'N,PA',  'NT2A',  'ND2A'/
+*
++KEEP,GTOPTI
+      INTEGER IOPTIM
++KEEP,GCOPTI
+      COMMON/GCOPTI/ IOPTIM
+C
++SEQ, GTOPTI, IF=TYPE
++KEEP,GCJLOC
+      COMMON/GCJLOC/NJLOC(2),JTM,JMA,JLOSS,JPROB,JMIXT,JPHOT,JANNI
+     +                  ,JCOMP,JBREM,JPAIR,JDRAY,JPFIS,JMUNU,JRAYL
+     +                  ,JMULOF,JCOEF,JRANG
+C
+      INTEGER       NJLOC   ,JTM,JMA,JLOSS,JPROB,JMIXT,JPHOT,JANNI
+     +                  ,JCOMP,JBREM,JPAIR,JDRAY,JPFIS,JMUNU,JRAYL
+     +                  ,JMULOF,JCOEF,JRANG
+C
+      COMMON/GCJLCK/NJLCK(2),JTCKOV,JABSCO,JEFFIC,JINDEX,JCURIN
+     +                      ,JPOLAR,JTSTRA,JTSTCO,JTSTEN,JTASHO
+C
+      EQUIVALENCE (JLASTV,JTSTEN)
+C
+      INTEGER       NJLCK,JTCKOV,JABSCO,JEFFIC,JINDEX,JCURIN
+     +                   ,JPOLAR,JLASTV,JTSTRA,JTSTCO,JTSTEN
+     +                   ,JTASHO
+C
++KEEP,GTKINE.
+      INTEGER       IKINE,ITRA,ISTAK,IVERT,IPART,ITRTYP,NAPART,IPAOLD
+      REAL          PKINE,AMASS,CHARGE,TLIFE,VERT,PVERT
+C
++KEEP,GCKINE
+      COMMON/GCKINE/IKINE,PKINE(10),ITRA,ISTAK,IVERT,IPART,ITRTYP
+     +      ,NAPART(5),AMASS,CHARGE,TLIFE,VERT(3),PVERT(4),IPAOLD
+C
++SEQ,GTKINE,IF=TYPE.
++KEEP,GCKMAX
+      INTEGER MXGKIN
+      PARAMETER (MXGKIN=100)
++KEEP,GCKING
++SEQ, GCKMAX
+      COMMON/GCKING/KCASE,NGKINE,GKIN(5,MXGKIN),
+     +                           TOFD(MXGKIN),IFLGK(MXGKIN)
+      INTEGER       KCASE,NGKINE ,IFLGK,MXPHOT,NGPHOT
+      REAL          GKIN,TOFD,XPHOT
+C
+      PARAMETER (MXPHOT=800)
+      COMMON/GCKIN2/NGPHOT,XPHOT(11,MXPHOT)
+C
+      COMMON/GCKIN3/GPOS(3,MXGKIN)
+      REAL          GPOS
+C
++KEEP,GTLIST.
+      INTEGER       NHSTA,NGET ,NSAVE,NSETS,NPRIN,NGEOM,NVIEW,NPLOT
+     + ,NSTAT,LHSTA,LGET ,LSAVE,LSETS,LPRIN,LGEOM,LVIEW,LPLOT,LSTAT
+C
++KEEP,GCLIST
+      COMMON/GCLIST/NHSTA,NGET ,NSAVE,NSETS,NPRIN,NGEOM,NVIEW,NPLOT
+     +       ,NSTAT,LHSTA(20),LGET (20),LSAVE(20),LSETS(20),LPRIN(20)
+     +             ,LGEOM(20),LVIEW(20),LPLOT(20),LSTAT(20)
+C
++SEQ,GTLIST,IF=TYPE.
++KEEP,GCMATE
+      COMMON/GCMATE/NMAT,NAMATE(5),A,Z,DENS,RADL,ABSL
+C
+      INTEGER NMAT,NAMATE
+      REAL A,Z,DENS,RADL,ABSL
+C
++KEEP,GCMULO
+      COMMON/GCMULO/SINMUL(101),COSMUL(101),SQRMUL(101),OMCMOL,CHCMOL
+     +  ,EKMIN,EKMAX,NEKBIN,NEK1,EKINV,GEKA,GEKB,EKBIN(200),ELOW(200)
+C
+      REAL SINMUL,COSMUL,SQRMUL,OMCMOL,CHCMOL,EKMIN,EKMAX,ELOW,EKINV
+      REAL GEKA,GEKB,EKBIN
+      INTEGER NEKBIN,NEK1
+C
++KEEP,GCMZFO
+      COMMON/GCMZFO/IOMATE,IOPART,IOTMED,IOSEJD,IOSJDD,IOSJDH,IOSTAK
+     +             ,IOMZFO(13)
+C
+      INTEGER       IOMATE,IOPART,IOTMED,IOSEJD,IOSJDD,IOSJDH,IOSTAK
+     +             ,IOMZFO
+C
++KEEP,GTNUM.
+      INTEGER      NMATE ,NVOLUM,NROTM,NTMED,NTMULT,NTRACK,NPART
+     +            ,NSTMAX,NVERTX,NHEAD,NBIT ,NALIVE,NTMSTO
+C
++KEEP,GCNUM
+      COMMON/GCNUM/NMATE ,NVOLUM,NROTM,NTMED,NTMULT,NTRACK,NPART
+     +            ,NSTMAX,NVERTX,NHEAD,NBIT
+      COMMON /GCNUMX/ NALIVE,NTMSTO
+C
++SEQ,GTNUM,IF=TYPE.
++KEEP,GTCONS
+      REAL          PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+      REAL          EMMU,PMASS,AVO
+C
++KEEP,GCONSP,IF=SINGLE
+      REAL PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+      REAL EMMU,PMASS,AVO
+*
+      PARAMETER (PI=3.14159265358979324)
+      PARAMETER (TWOPI=6.28318530717958648)
+      PARAMETER (PIBY2=1.57079632679489662)
+      PARAMETER (DEGRAD=0.0174532925199432958)
+      PARAMETER (RADDEG=57.2957795130823209)
+      PARAMETER (CLIGHT=29979245800.)
+      PARAMETER (BIG=10000000000.)
+      PARAMETER (EMASS=0.00051099906)
+      PARAMETER (EMMU=0.105658389)
+      PARAMETER (PMASS=0.93827231)
+      PARAMETER (AVO=0.60221367)
+*
++KEEP,GCONSP,IF=-SINGLE
+      DOUBLE PRECISION PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+      DOUBLE PRECISION EMMU,PMASS,AVO
+*
+      PARAMETER (PI=3.14159265358979324D0)
+      PARAMETER (TWOPI=6.28318530717958648D0)
+      PARAMETER (PIBY2=1.57079632679489662D0)
+      PARAMETER (DEGRAD=0.0174532925199432958D0)
+      PARAMETER (RADDEG=57.2957795130823209D0)
+      PARAMETER (CLIGHT=29979245800.D0)
+      PARAMETER (BIG=10000000000.D0)
+      PARAMETER (EMASS=0.0005109990615D0)
+      PARAMETER (EMMU=0.105658387D0)
+      PARAMETER (PMASS=0.9382723128D0)
+      PARAMETER (AVO=0.60221367D0)
+*
++KEEP,GCONST.
++SEQ, GTCONS, IF=TYPE.
+      COMMON/GCONST/PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+      COMMON/GCONSX/EMMU,PMASS,AVO
+C
++KEEP,GTPHYS.
+      INTEGER IPAIR,ICOMP,IPHOT,IPFIS,IDRAY,IANNI,IBREM,IHADR,IMUNU
+     +       ,IDCAY,ILOSS,IMULS,IRAYL,ILABS,ISYNC,ISTRA
+      REAL    SPAIR,SLPAIR,ZINTPA,STEPPA,SCOMP,SLCOMP,ZINTCO,STEPCO
+     +       ,SPHOT,SLPHOT,ZINTPH,STEPPH,SPFIS,SLPFIS,ZINTPF,STEPPF
+     +       ,SDRAY,SLDRAY,ZINTDR,STEPDR,SANNI,SLANNI,ZINTAN,STEPAN
+     +       ,SBREM,SLBREM,ZINTBR,STEPBR,SHADR,SLHADR,ZINTHA,STEPHA
+     +       ,SMUNU,SLMUNU,ZINTMU,STEPMU,SDCAY,SLIFE ,SUMLIF,DPHYS1
+     +       ,SLOSS,SOLOSS,STLOSS,DPHYS2,SMULS,SOMULS,STMULS,DPHYS3
+     +       ,SRAYL,SLRAYL,ZINTRA,STEPRA,SLABS,SLLABS,ZINTLA,STEPLA
+C
++KEEP,GCPHYS
+      COMMON/GCPHYS/IPAIR,SPAIR,SLPAIR,ZINTPA,STEPPA
+     +             ,ICOMP,SCOMP,SLCOMP,ZINTCO,STEPCO
+     +             ,IPHOT,SPHOT,SLPHOT,ZINTPH,STEPPH
+     +             ,IPFIS,SPFIS,SLPFIS,ZINTPF,STEPPF
+     +             ,IDRAY,SDRAY,SLDRAY,ZINTDR,STEPDR
+     +             ,IANNI,SANNI,SLANNI,ZINTAN,STEPAN
+     +             ,IBREM,SBREM,SLBREM,ZINTBR,STEPBR
+     +             ,IHADR,SHADR,SLHADR,ZINTHA,STEPHA
+     +             ,IMUNU,SMUNU,SLMUNU,ZINTMU,STEPMU
+     +             ,IDCAY,SDCAY,SLIFE ,SUMLIF,DPHYS1
+     +             ,ILOSS,SLOSS,SOLOSS,STLOSS,DPHYS2
+     +             ,IMULS,SMULS,SOMULS,STMULS,DPHYS3
+     +             ,IRAYL,SRAYL,SLRAYL,ZINTRA,STEPRA
+      COMMON/GCPHLT/ILABS,SLABS,SLLABS,ZINTLA,STEPLA
+     +             ,ISYNC
+     +             ,ISTRA
+*
++SEQ,GTPHYS,IF=TYPE.
++KEEP,GTPARM.
+      INTEGER IPARAM,MPSTAK,NSPARA,NPGENE
+      REAL    PCUTGA,PCUTEL,PCUTNE,PCUTHA,PCUTMU
++KEEP,GCPARM.
+      COMMON/GCPARM/IPARAM,PCUTGA,PCUTEL,PCUTNE,PCUTHA,PCUTMU
+     +             ,NSPARA,MPSTAK,NPGENE
+      REAL PACUTS(5)
+      EQUIVALENCE (PACUTS(1),PCUTGA)
++SEQ,GTPARM,IF=TYPE.
+C
++KEEP,GCPOLY
+      COMMON/GCPOLY/IZSEC,IPSEC
+      INTEGER IZSEC,IPSEC
+C
++KEEP,GCPUSH
+      COMMON/GCPUSH/NCVERT,NCKINE,NCJXYZ,NPVERT,NPKINE,NPJXYZ
+      INTEGER       NCVERT,NCKINE,NCJXYZ,NPVERT,NPKINE,NPJXYZ
+C
++KEEP,GCRZ
+      COMMON/GCRZ1/NRECRZ,NRGET,NRSAVE,LRGET(20),LRSAVE(20)
+      INTEGER      NRECRZ,NRGET,NRSAVE,LRGET    ,LRSAVE
+      COMMON/GCRZ2/RZTAGS
+      CHARACTER*8 RZTAGS(4)
+C
++KEEP,GTSETS.
+      INTEGER       IHSET,IHDET,ISET,IDET,IDTYPE,NVNAME,NUMBV
+C
++KEEP,GCSETS.
+      COMMON/GCSETS/IHSET,IHDET,ISET,IDET,IDTYPE,NVNAME,NUMBV(20)
+C
++SEQ,GTSETS,IF=TYPE.
++KEEP,GTSTAK.
+      INTEGER  NJTMAX,NJTMIN,NTSTKP,NTSTKS,NDBOOK,NDPUSH,NJFREE,NJGARB,
+     +         NJINVO,LINSAV,LMXSAV,NWSTAK,NWINT,NWREAL,NWTRAC
+      INTEGER ISTORD
++KEEP,GCSHNO.
+      PARAMETER ( NSBOX=1,  NSTRD1=2, NSTRD2=3, NSTRAP=4, NSTUBE=5,
+     +  NSTUBS=6, NSCONE=7, NSCONS=8, NSSPHE=9, NSPARA=10,NSPGON=11,
+     +  NSPCON=12,NSELTU=13,NSHYPE=14,NSGTRA=28, NSCTUB=29 )
++KEEP,GCSTAK.
++SEQ,GTSTAK,IF=TYPE.
+      PARAMETER (NWSTAK=12,NWINT=11,NWREAL=12,NWTRAC=NWINT+NWREAL+5)
+      COMMON /GCSTAK/ NJTMAX, NJTMIN, NTSTKP, NTSTKS, NDBOOK, NDPUSH,
+     +                NJFREE, NJGARB, NJINVO, LINSAV(15), LMXSAV(15)
+      EQUIVALENCE (ISTORD,NJTMIN)
+C
++KEEP,GCSTRA.
+      PARAMETER (ILTAB=200)
+      COMMON /GCSTRA / EMAX,EM(200),SFINT,EPSR(ILTAB),EPSI(ILTAB),
+     +  FINT(ILTAB),EMIN,EPPS,BETA2,GAMMA2,WP2,S2,MEEV,EMM(200),
+     +  GAMLOG(21),NP,NTAB,IE,NFACT,NICOLL
+*
+      INTEGER NP,NTAB,IE,NFACT
+      REAL    EMAX,EM,SFINT,EPSR,EPSI,FINT,EMIN,EPPS,EMM,GAMLOG
+     +        ,BETA2,GAMMA2,WP2,S2,MEEV
+*
++KEEP,GTASHO
+      REAL         ZMED,AMED,DMED,E0MED,ZSMED,ESMED,ALFA,
+     *             STEP,PLIN,PLOG,BE2,PLASM,TRNSMA,
+     *             BOSC,AOSC,EOSC,ZOSC,EMEAN,CMGO,EMGO,EMGOMI
+      INTEGER      NSMED,IOSC,NOSC,NMGO,NMGOMA
+C
++KEEP,GCASHO
+      COMMON/GCASHO/ZMED,AMED,DMED,E0MED,ZSMED(50),ESMED(50),ALFA,
+     *             STEP,PLIN,PLOG,BE2,PLASM,TRNSMA,
+     *             BOSC(50),AOSC(50),EOSC(50),ZOSC(50),EMEAN,
+     *             CMGO(2000),EMGO,EMGOMI,
+     *             NSMED,IOSC(50),NOSC,NMGO,NMGOMA
+C
++SEQ,GTASHO,IF=TYPE.
++KEEP,GCTIME
+      COMMON/GCTIME/TIMINT,TIMEND,ITIME,IGDATE,IGTIME
+      INTEGER ITIME,IGDATE,IGTIME
+      REAL TIMINT,TIMEND
+C
++KEEP,GTHIL2.
+      INTEGER LARETT,JTICK,JMYLL,JFIMOT,JFISCA,JFINAM,
+     +        JAASS1,JAASS2,JAASS3,JAASS4,
+     +        JTICKS,JMYLLS,JMYMOT
++KEEP,GCHIL2.
++SEQ, GTHIL2, IF=TYPE
+      COMMON/GCHIL2/LARETT(2),JTICK,JMYLL,JFIMOT,JFISCA,JFINAM,
+     +              JAASS1,JAASS2,
+     +              JAASS3,JAASS4,JTICKS,JMYLLS,JMYMOT
+*
++KEEP,GTTMED.
+      INTEGER       NUMED,NATMED,ISVOL,IFIELD,IUPD,ISTPAR,NUMOLD
+      REAL          FIELDM,TMAXFD,STEMAX,DEEMAX,EPSIL,STMIN,CFIELD,PREC
+      INTEGER       JMIN,NPCKOV,IMCKOV,ITCKOV
+      REAL          THRIND,PMIN,DP,DNDL
+C
++KEEP,GCTMED
+      COMMON/GCTMED/NUMED,NATMED(5),ISVOL,IFIELD,FIELDM,TMAXFD,STEMAX
+     +      ,DEEMAX,EPSIL,STMIN,CFIELD,PREC,IUPD,ISTPAR,NUMOLD
+      COMMON/GCTLIT/THRIND,PMIN,DP,DNDL,JMIN,ITCKOV,IMCKOV,NPCKOV
+C
++SEQ,GTTMED,IF=TYPE.
++KEEP,GTTRAK.
+      INTEGER NMEC,LMEC,NAMEC,NSTEP ,MAXNST,IGNEXT,INWVOL,ISTOP,MAXMEC
+     + ,IGAUTO,IEKBIN,ILOSL, IMULL,INGOTO,NLDOWN,NLEVIN,NLVSAV,ISTORY
+     + ,MAXME1,NAMEC1
+      REAL  VECT,GETOT,GEKIN,VOUT,DESTEP,DESTEL,SAFETY,SLENG ,STEP
+     + ,SNEXT,SFIELD,TOFG  ,GEKRAT,UPWGHT
+      REAL POLAR
++KEEP,GCTRAK
++SEQ,GTTRAK,IF=TYPE.
+      PARAMETER (MAXMEC=30)
+      COMMON/GCTRAK/VECT(7),GETOT,GEKIN,VOUT(7),NMEC,LMEC(MAXMEC)
+     + ,NAMEC(MAXMEC),NSTEP ,MAXNST,DESTEP,DESTEL,SAFETY,SLENG
+     + ,STEP  ,SNEXT ,SFIELD,TOFG  ,GEKRAT,UPWGHT,IGNEXT,INWVOL
+     + ,ISTOP ,IGAUTO,IEKBIN, ILOSL, IMULL,INGOTO,NLDOWN,NLEVIN
+     + ,NLVSAV,ISTORY
+      PARAMETER (MAXME1=30)
+      COMMON/GCTPOL/POLAR(3), NAMEC1(MAXME1)
+C
++KEEP,GCUNIT
+      COMMON/GCUNIT/LIN,LOUT,NUNITS,LUNITS(5)
+      INTEGER LIN,LOUT,NUNITS,LUNITS
+      COMMON/GCMAIL/CHMAIL
+      CHARACTER*132 CHMAIL
+C
++KEEP,GTVOLU.
+      INTEGER NLEVEL,NAMES,NUMBER,LVOLUM,LINDEX,INFROM,NLEVMX,
+     +        NLDEV,LINMX
+      REAL GTRAN,GRMAT,GONLY,GLX
++KEEP,GCVOLU
+      COMMON/GCVOLU/NLEVEL,NAMES(15),NUMBER(15),
+     +LVOLUM(15),LINDEX(15),INFROM,NLEVMX,NLDEV(15),LINMX(15),
+     +GTRAN(3,15),GRMAT(10,15),GONLY(15),GLX(3)
+C
++SEQ,GTVOLU,IF=TYPE.
++KEEP,GTVOL1.
+      INTEGER NAMES1,NUMBR1,LVOLU1
++KEEP,GCVOL1
+      COMMON/GCVOL1/NLEVL1,NAMES1(15),NUMBR1(15),LVOLU1(15)
+C
++SEQ,GTVOL1,IF=TYPE.
++KEEP,GCVOL2
+      COMMON/GCVOL2/NLEVE2,NAMES2(15),NUMB2(15),
+     +LVOL2(15),LIND2(15),INFRO2,NLDEV2(15),LINMX2(15),
+     +GTRAN2(3,15),GRMAT2(10,15),GONLY2(15),GLX2(15)
+      INTEGER NLEVE2,NAMES2,NUMB2,LVOL2,LIND2,INFRO2,NLDEV2,LINMX2
+      REAL GTRAN2,GRMAT2,GONLY2,GLX2
+C
++KEEP,GTDRAW.
+      INTEGER NUMNOD,MAXNOD,NUMND1,LEVVER,LEVHOR,MAXV,IPICK,
+     + MLEVV,MLEVH,NWCUT,JNAM,JMOT,JXON,JBRO,JDUP,JSCA,JDVM,JPSM,
+     + JNAM1,JMOT1,JXON1,JBRO1,JDUP1,JSCA1,JULEV,JVLEV,
+     + LOOKTB,IDRNUM,NGVIEW,ICUTFL,ICUT,NSURF,ISURF,LINATT,LINATP,
+     + ITXATT,ITHRZ,IPRJ,ITR3D,IPKHIT,IOBJ,LINBUF,
+     + MAXGU,MORGU,MAXGS,MORGS,MAXTU,MORTU,MAXTS,MORTS,
+     + IGU,IGS,ITU,ITS,NKVIEW,IDVIEW,
+     + NOPEN,IGMR,IPIONS,ITRKOP,IHIDEN,MYISEL
+      REAL GRMAT0,GTRAN0,GSIN,GCOS,SINPSI,COSPSI,GTHETA,GPHI,GPSI,
+     + GU0,GV0,GSCU,GSCV,CTHETA,CPHI,DCUT,GZUA,GZVA,GZUB,GZVB,GZUC,
+     + GZVC,PLTRNX,PLTRNY,DPERS,ZZFU,ZZFV,DDUMMY
++KEEP,GCDRAW
+      COMMON/GCDRAW/NUMNOD,MAXNOD,NUMND1,LEVVER,LEVHOR,MAXV,IPICK,
+     + MLEVV,MLEVH,NWCUT,JNAM,JMOT,JXON,JBRO,JDUP,JSCA,JDVM,JPSM,
+     + JNAM1,JMOT1,JXON1,JBRO1,JDUP1,JSCA1,JULEV,JVLEV,
+     + LOOKTB(16),
+     + GRMAT0(10),GTRAN0(3),IDRNUM,GSIN(41),GCOS(41),SINPSI,COSPSI,
+     + GTHETA,GPHI,GPSI,GU0,GV0,GSCU,GSCV,NGVIEW,
+     + ICUTFL,ICUT,CTHETA,CPHI,DCUT,NSURF,ISURF,
+     + GZUA,GZVA,GZUB,GZVB,GZUC,GZVC,PLTRNX,PLTRNY,
+     + LINATT,LINATP,ITXATT,ITHRZ,IPRJ,DPERS,ITR3D,IPKHIT,IOBJ,LINBUF,
+     + MAXGU,MORGU,MAXGS,MORGS,MAXTU,MORTU,MAXTS,MORTS,
+     + IGU,IGS,ITU,ITS,NKVIEW,IDVIEW,
+     + NOPEN,IGMR,IPIONS,ITRKOP,IHIDEN,
+     + ZZFU,ZZFV,MYISEL,
+     + DDUMMY(15)
+C
++SEQ,GTDRAW,IF=TYPE.
++KEEP,GSECTI
+      COMMON/GSECTI/ AIEL(20),AIIN(20),AIFI(20),AICA(20),ALAM,K0FLAG
+      INTEGER K0FLAG
+      REAL AIEL,AIIN,AIFI,AICA,ALAM
+C
++KEEP,GCGOBJ
+      PARAMETER (NTRCG=1)
+      PARAMETER (NWB=207,NWREV=100,NWS=1500)
+      PARAMETER (C2TOC1=7.7, C3TOC1=2.,TVLIM=1296.)
+      COMMON /GCGOBJ/IST,IFCG,ILCG,NTCUR,NFILT,NTNEX,KCGST
+     +             ,NCGVOL,IVFUN,IVCLOS,IFACST,NCLAS1,NCLAS2,NCLAS3
+      COMMON /CGBLIM/IHOLE,CGXMIN,CGXMAX,CGYMIN,CGYMAX,CGZMIN,CGZMAX
+C
++KEEP,GTSCAN
+      INTEGER MSLIST,NPHI,IPHIMI,IPHIMA,IPHI1,IPHIL,NTETA,MODTET,NSLMAX,
+     +        MAXMDT,NSLIST,ISLIST,IPHI,ITETA,ISCUR
+      REAL    PHIMIN,PHIMAX,TETMIN,TETMAX,VSCAN,FACTX0,FACTL,
+     +        FACTR,SX0,SABS,TETMID,TETMAD
+     +       ,SX0S,SX0T,SABSS,SABST,FACTSF
+     +       ,DLTPHI,DLTETA,DPHIM1,DTETM1
+     +       ,FCX0M1,FCLLM1,FCRRM1
++KEEP,GCSCAN
++SEQ,GTSCAN, IF=TYPE
+      PARAMETER (MSLIST=32,MAXMDT=3)
+      COMMON/GCSCAN/SCANFL,NPHI,PHIMIN,PHIMAX,NTETA,TETMIN,TETMAX,
+     +              MODTET,IPHIMI,IPHIMA,IPHI1,IPHIL,NSLMAX,
+     +              NSLIST,ISLIST(MSLIST),VSCAN(3),FACTX0,FACTL,
+     +              FACTR,IPHI,ITETA,ISCUR,SX0,SABS,TETMID(MAXMDT),
+     +              TETMAD(MAXMDT)
+     +             ,SX0S,SX0T,SABSS,SABST,FACTSF
+     +             ,DLTPHI,DLTETA,DPHIM1,DTETM1
+     +             ,FCX0M1,FCLLM1,FCRRM1
+      LOGICAL SCANFL
+      COMMON/GCSCAC/SFIN,SFOUT
+      CHARACTER*80 SFIN,SFOUT
+*
++KEEP,GTSCAL.
+      INTEGER MXSLNK, ISLINK, LSLAST, LSCAN, LSTEMP, LSPARA, LSERAY
+*
++KEEP,GCSCAL.
++SEQ,GTSCAL, IF=TYPE
+      PARAMETER(MXSLNK=100)
+      COMMON/GCSCAL/ ISLINK(MXSLNK)
+      EQUIVALENCE (LSLAST,ISLINK(MXSLNK))
+      EQUIVALENCE (LSCAN ,ISLINK(1)),(LSTEMP,ISLINK(2))
+      EQUIVALENCE (LSPARA,ISLINK(3)),(LSERAY,ISLINK(4))
+*
++KEEP,GTPARA.
+      INTEGER    BITPHI, BITTET, BITPOT
+      LOGICAL    SYMPHI, SYMTEU, SYMTED
++KEEP,GCPARA.
++SEQ,GTPARA.
+      PARAMETER (LSTACK = 5000)
+C     BITPOT is for Phi.Or.Tet
+C
+C ---------------------------------------------------------
+      COMMON    /GCPARA/
+     +                   EPSIX0 (LSTACK)       ,
+     +                   IDRPHI (LSTACK     )  , IDRTET (LSTACK     ),
+     +                   IDROUT (LSTACK     )  , JPLOST (LSTACK     ),
+     +                   IPHTMP (LSTACK     )  ,
+     +                   BITPHI (LSTACK     )  , BITTET (LSTACK     ),
+     +                   BITPOT (LSTACK     )  , JJLOST, JJFILL,
+     +                                           JENTRY, JEMPTY,
+     +                                           EPSMAX,
+     +                   JJTEMP, JJWORK        , JJSTK1,
+     +                   J1TEMP,                 J1STK1,
+     +                   IFOUNP, IFOUNT        , IFNPOT,
+     +                                           SYMPHI,
+     +                   SYMTEU, SYMTED
+C
++KEEP,GTJUMP
+      INTEGER       JUDCAY, JUDIGI, JUDTIM, JUFLD , JUHADR, JUIGET,
+     +              JUINME, JUINTI, JUKINE, JUNEAR, JUOUT , JUPHAD,
+     +              JUSKIP, JUSTEP, JUSWIM, JUTRAK, JUTREV, JUVIEW,
+     +              JUPARA
+      INTEGER       JMPADR, MAXJMP
+*
++KEEP,GCJUMP
++SEQ ,GTJUMP, IF=TYPE
+      PARAMETER    (MAXJMP=30)
+      COMMON/GCJUMP/JUDCAY, JUDIGI, JUDTIM, JUFLD , JUHADR, JUIGET,
+     +              JUINME, JUINTI, JUKINE, JUNEAR, JUOUT , JUPHAD,
+     +              JUSKIP, JUSTEP, JUSWIM, JUTRAK, JUTREV, JUVIEW,
+     +              JUPARA
+      DIMENSION     JMPADR(MAXJMP)
+      EQUIVALENCE  (JMPADR(1), JUDCAY)
+*
++KEEP,GCOMIS
+      COMMON/GCOMIS/JUINIT,JUGEOM,JUKINE,JUSTEP,JUOUT,JULAST
+      DIMENSION JPCOMS(6)
+      EQUIVALENCE (JPCOMS,JUINIT)
+*
++KEEP,GCXLUN
+      COMMON/GCXLUN/LUNIT(128)
+*
++KEEP,GTMUTR
+*
+      INTEGER NCVOLS,NSHIFT,KSHIFT,ICUBE,NAIN,JJJ,NIET,IVOOLD,
+     +        IWPOIN,IHPOIN,IVECVO,IOLDSU,ICGP,IPORNT
+      REAL    GXMIN,GXMAX,GYMIN,GYMAX,GZMIN,GZMAX,GXXXX,GYYYY,GZZZZ
+      REAL    CLIPMI,CLIPMA,ABCD,BMIN,BMAX,CGB,CGB1,GBOOM
+      REAL    PORGX,PORGY,PORGZ,POX,POY,POZ,PORMIR,PORMAR
++KEEP,GCMUTR
++SEQ, GTMUTR, IF=TYPE
+*
+      PARAMETER (MULTRA=50)
+      CHARACTER*4 GNASH, GNNVV, GNVNV
+      COMMON/GCMUTR/NCVOLS,KSHIFT,NSHIFT,ICUBE,NAIN,JJJ,
+     +              NIET,IOLDSU,IVOOLD,IWPOIN,IHPOIN,IVECVO(100),
+     +              PORGX,PORGY,PORGZ,POX(15),POY(15),POZ(15),GBOOM,
+     +              PORMIR(18),PORMAR(18),IPORNT,
+     +              ICGP,CLIPMI(6),CLIPMA(6),
+     +              ABCD(4),BMIN(6),BMAX(6),CGB(16000),CGB1(16000),
+     +              GXMIN(MULTRA),GXMAX(MULTRA),GYMIN(MULTRA),
+     +              GYMAX(MULTRA),GZMIN(MULTRA),GZMAX(MULTRA),
+     +              GXXXX(MULTRA),GYYYY(MULTRA),GZZZZ(MULTRA)
+*
+      COMMON/GCMUTC/   GNASH(MULTRA),GNNVV(MULTRA),GNVNV(MULTRA)
+*
++KEEP,GTHILN.
+      INTEGER LARECG,JCGOBJ,JCGCOL,JCOUNT,JCLIPS,IMPOIN,IMCOUN,
+     +        JSIX,JSIY,JSIZ,JPXC,JPYC,JPZC,ICLIP1,ICLIP2
++KEEP,GCHILN.
++SEQ, GTHILN, IF=TYPE
+      COMMON/GCHILN/LARECG(2), JCGOBJ, JCGCOL, JCOUNT, JCLIPS,
+     +              IMPOIN, IMCOUN, JSIX, JSIY, JSIZ,
+     +              JPXC, JPYC, JPZC, ICLIP1, ICLIP2
+*
++KEEP,GTSPEE
+*
+      REAL S1,S2,S3,SS1,SS2,SS3,SRAGMX,SRAGMN,
+     +     RAINT1,RAINT2,RMIN1,RMIN2,RMAX1,RMAX2
+      INTEGER ISCOP,NTIM,NTFLAG,IOLDCU,ITSTCU,ISUBLI,IPORLI
+      INTEGER LPASS,JPORJJ,LEP,JSC
+*
++KEEP,GCSPEE.
++SEQ, GTSPEE, IF=TYPE
+      COMMON/GCSPEE/S1,S2,S3,SS1,SS2,SS3,LEP,IPORLI,ISUBLI,
+     +              SRAGMX,SRAGMN,RAINT1,RAINT2,RMIN1,RMIN2,
+     +              RMAX1,RMAX2,JPORJJ,ITSTCU,IOLDCU,ISCOP,
+     +              NTIM,NTFLAG,LPASS,JSC
+*
++KEEP, LUJETS
+      COMMON/LUJETS/N,K(4000,5),P(4000,5),V(4000,5)
+      INTEGER N,K
+      REAL P,V
+      SAVE /LUJETS/
+*
++KEEP, LUDAT1
+      COMMON/LUDAT1/MSTU(200),PARU(200),MSTJ(200),PARJ(200)
+      INTEGER MSTU,MSTJ
+      REAL    PARU,PARJ
+      SAVE /LUDAT1/
+*
++KEEP, LUDAT3
+      COMMON/LUDAT3/MDCY(500,3),MDME(2000,2),BRAT(2000),KFDP(2000,5)
+      INTEGER MDCY,MDME,KFDP
+      REAL    BRAT
+      SAVE /LUDAT3/
+*
++KEEP,GCLUND
+      COMMON/GCLUND/IFLUND,ECLUND
+      INTEGER IFLUND
+      REAL ECLUND
+C
++KEEP,PAWCT
+      INTEGER NWPAW,IXPAWC,IHBOOK,IXHIGZ,IXKUIP,IFENCE,LLMAIN,IQQ,LQQ
+      REAL WWS,QQ
++KEEP,PAWC
++SEQ,PAWCT,IF=TYPE.
+      COMMON /PAWC/ NWPAW,IXPAWC,IHBOOK,IXHIGZ,IXKUIP,IFENCE(5),
+     +              LLMAIN, WWS(9989)
+      DIMENSION IQQ(2),QQ(2),LQQ(8000)
+      EQUIVALENCE (QQ(1),IQQ(1),LQQ(9)),(LQQ(1),LLMAIN)
+C
++KEEP,GCPMXZ.
+      INTEGER MAXELZ
+      PARAMETER (MAXELZ=100)
+C
++KEEP,GC10EV.
+      REAL G10EV,TENEV
+      PARAMETER (G10EV=1.0E-8)
+      PARAMETER (TENEV=1.E-2)
+C
++KEEP,GCSHPT.
+C  Shells are numbered from 1 to 24.
+C  Shells used:
+C               K,L1,L2,L3,M1,M2,M3,M4,M5
+C               N1,N2,N3,N4,N5,N6,N7,
+C               O1,O2,O3,O4,O5,P1,P2,P3
+C   VARIABLES:
+C     NSHLST - value of Z for which the shells starts to be present
+C     N1ST   - pointer to K shell of a given Z (in ESHELL array)
+C     NSHLLS - Number of used shells for a given Z
+C     ESHELL - Shells potentials in eV !!!
+      INTEGER LENGTH,MAXSHL
+      PARAMETER (LENGTH=  1409)
+      PARAMETER (MAXSHL=24)
+      INTEGER NSHLST,N1ST,NSHLLS
+      REAL ESHELL
+      DIMENSION NSHLST(MAXSHL),N1ST(MAXELZ),NSHLLS(MAXELZ)
+      DIMENSION ESHELL(LENGTH)
+      COMMON /GCSHPT/NSHLST,N1ST,NSHLLS,ESHELL
+C
++KEEP,GCPHPR.
+C  Probability of radiative decay mode.
+      REAL GFLUPR
+      COMMON /GCPHPR/ GFLUPR(4,MAXELZ)
+C
++KEEP,GCPHNR.
+C  INRFIN - nonradiative decay mode
+      INTEGER IGNRFN
+      COMMON /GCPHNR/ IGNRFN(8,MAXELZ)
+C
++KEEP,GCPHRD.
+C  GRATE - radiative modes' rates
+      INTEGER KSHLS,L1SHLS,L2SHLS,L3SHLS,ISHLS,ISHLUS,ISHLTR
+      REAL GPHRAT
+      PARAMETER (KSHLS=6)
+      PARAMETER (L1SHLS=8)
+      PARAMETER (L2SHLS=7)
+      PARAMETER (L3SHLS=8)
+      PARAMETER (ISHLS=29)
+      COMMON / GCPHRD / GPHRAT(ISHLS,MAXELZ),ISHLUS(24,4),ISHLTR(ISHLS)
+C
++KEEP,GCPHXS.
+      INTEGER MAXPOW,MAXINT
+      PARAMETER (MAXPOW=4)
+      PARAMETER (MAXINT=13)
+      CHARACTER*6 CRNGUP
+      COMMON /GCPXRN/ CRNGUP(MAXINT,MAXELZ)
+      REAL COFS,GPOMIN
+      COMMON /GCPXCF/ COFS(MAXPOW,MAXINT,MAXELZ),GPOMIN(MAXELZ)
+C
++KEEP, GFKDIS
+      COMMON/ GFKDIS/ ZINE, ZELA, ZTOT, INT
+     +               ,SINE, SELA, FSIG, IFMAT, IGF
+C
+C
++KEEP,GTHVIR.
+      INTEGER JVIRT,JVDIV,JCONT2,JCONT
++KEEP,GCHVIR
+      COMMON/GCHVIR/JVIRT,JVDIV,JCONT2,JCONT
+C
++SEQ,GTHVIR,IF=TYPE.
+C
++KEEP,GTVDMA.
+      INTEGER NVMANY,MANYLE,MANYNA,MANYNU,
+     +        NFMANY,MYCOUN,IMYSE
+      REAL RAYTRA,VECCOS
++KEEP,GCVDMA
+      COMMON/GCVDMA/NVMANY,MANYLE(20),MANYNA(20,15),
+     +MANYNU(20,15),NFMANY,MYCOUN,IMYSE,RAYTRA,VECCOS(3)
+C
++SEQ,GTVDMA,IF=TYPE.
+C
++KEEP,GTFDIM.
+      INTEGER NPROC,NMPTOT
+      REAL TSEQTO,TOTMBY,TSEQ,TLAT,TNET,X1MIN,X1MAX,
+     +     Y1MIN,Y1MAX,Z1MIN,Z1MAX,XCUT,YCUT,ZCUT
++KEEP,GCFDIM
+      COMMON/GCFDIM/NPROC,NMPTOT,TSEQTO,TOTMBY,TSEQ,
+     +TLAT,TNET,X1MIN,X1MAX,Y1MIN,Y1MAX,Z1MIN,Z1MAX,
+     +XCUT,YCUT,ZCUT
+C
++SEQ,GTFDIM,IF=TYPE.
+C
++KEEP,GTRAYT.
+      INTEGER INTEN,IOMBRA,IXYFLA,NOFLAG
+      REAL XLPOS,YLPOS,ZLPOS,XLDIR,YLDIR,ZLDIR,APFLAH,
+     +     CCXX,CCYY,CCZZ,BOFLAG,APFLAG,
+     +     XCOSXS,YCOSYS,ZCOSZS,VDX,VDY,VDZ,SSLENG,
+     +     XPINTS,YPINTS,ZPINTS,FPINTX,FPINTY,FPINTZ,
+     +     AROTS,ZROTS,RRR
++KEEP,GCRAYT
+      COMMON/GCRAYT/INTEN,IOMBRA,IXYFLA,NOFLAG,
+     +XLPOS,YLPOS,ZLPOS,XLDIR,YLDIR,ZLDIR,APFLAH,
+     +CCXX(4),CCYY(4),CCZZ(4),BOFLAG,APFLAG,
+     +XCOSXS,YCOSYS,ZCOSZS,VDX,VDY,VDZ,SSLENG,
+     +XPINTS,YPINTS,ZPINTS,FPINTX,FPINTY,FPINTZ,
+     +AROTS(4,4),ZROTS(4,4),RRR(4)
+C
++SEQ,GTRAYT,IF=TYPE.
+C
++KEEP,GTPIXE.
+      INTEGER LIMPRE,IFLAPE,ICOLOR,IXXX,IYYY,
+     +        ISSEEN,ISCOLO,ISLSTY,ISLWID,ISFILL,
+     +        IMAP,JON,NMAP
+      REAL UUU,VVV,ZUV,ZNMAP1
++KEEP,GCPIXE
+      COMMON/GCPIXE/LIMPRE,IFLAPE,ICOLOR,IXXX,IYYY,
+     +ISSEEN,ISCOLO,ISLSTY,ISLWID,ISFILL,
+     +IMAP,JON,NMAP,UUU,VVV,ZUV,ZNMAP1
+C
++SEQ,GTPIXE,IF=TYPE.
+ 
++DECK,INCDEK,IF=INCLUDE.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
++KEEP,GCLINK
+*
++SEQ,INCBEG
+     +   gclink
++SEQ,INCEND
++KEEP,GCBANK
+*
++SEQ,INCBEG
+     +   gcbank
++SEQ,INCEND
++KEEP,GCCURS
+*
++SEQ,INCBEG
+     +   gccurs
++SEQ,INCEND
++KEEP,GCCUTS
+*
++SEQ,INCBEG
+     +   gccuts
++SEQ,INCEND
++KEEP,GCURSB
+*
++SEQ,INCBEG
+     +   gcursb
++SEQ,INCEND
++KEEP,GCFLAG
+*
++SEQ,INCBEG
+     +   gcflag
++SEQ,INCEND
++KEEP,GCOPTI
+*
++SEQ,INCBEG
+     +   gcopti
++SEQ,INCEND
++KEEP,GCJLOC
+*
++SEQ,INCBEG
+     +   gcjloc
++SEQ,INCEND
++KEEP,GCKINE
+*
++SEQ,INCBEG
+     +   gckine
++SEQ,INCEND
++KEEP,GCKMAX
+*
++SEQ,INCBEG
+     +   gckmax
++SEQ,INCEND
++KEEP,GCKING
+*
++SEQ,INCBEG
+     +   gcking
++SEQ,INCEND
++KEEP,GCLIST
+*
++SEQ,INCBEG
+     +   gclist
++SEQ,INCEND
++KEEP,GCMATE
+*
++SEQ,INCBEG
+     +   gcmate
++SEQ,INCEND
++KEEP,GCMULO
+*
++SEQ,INCBEG
+     +   gcmulo
++SEQ,INCEND
++KEEP,GCMZFO
+*
++SEQ,INCBEG
+     +   gcmzfo
++SEQ,INCEND
++KEEP,GCNUM
+*
++SEQ,INCBEG
+     +   gcnum
++SEQ,INCEND
++KEEP,GCONSP
+*
++SEQ,INCBEG
+     +   gconsp
++SEQ,INCEND
++KEEP,GCONST
+*
++SEQ,INCBEG
+     +   gconst
++SEQ,INCEND
++KEEP,GCPHYS
+*
++SEQ,INCBEG
+     +   gcphys
++SEQ,INCEND
++KEEP,GCPARM
+*
++SEQ,INCBEG
+     +   gcparm
++SEQ,INCEND
++KEEP,GCPOLY
+*
++SEQ,INCBEG
+     +   gcpoly
++SEQ,INCEND
++KEEP,GCPUSH
+*
++SEQ,INCBEG
+     +   gcpush
++SEQ,INCEND
++KEEP,GCRZ
+*
++SEQ,INCBEG
+     +   gcrz
++SEQ,INCEND
++KEEP,GCSETS
+*
++SEQ,INCBEG
+     +   gcsets
++SEQ,INCEND
++KEEP,GCSHNO
+*
++SEQ,INCBEG
+     +   gcshno
++SEQ,INCEND
++KEEP,GCSTAK
+*
++SEQ,INCBEG
+     +   gcstak
++SEQ,INCEND
++KEEP,GCTIME
+*
++SEQ,INCBEG
+     +   gctime
++SEQ,INCEND
++KEEP,GCHIL2
+*
++SEQ,INCBEG
+     +   gchil2
++SEQ,INCEND
++KEEP,GCTMED
+*
++SEQ,INCBEG
+     +   gctmed
++SEQ,INCEND
++KEEP,GCTRAK
+*
++SEQ,INCBEG
+     +   gctrak
++SEQ,INCEND
++KEEP,GCUNIT
+*
++SEQ,INCBEG
+     +   gcunit
++SEQ,INCEND
++KEEP,GCVOLU
+*
++SEQ,INCBEG
+     +   gcvolu
++SEQ,INCEND
++KEEP,GCVOL1
+*
++SEQ,INCBEG
+     +   gcvol1
++SEQ,INCEND
++KEEP,GCVOL2
+*
++SEQ,INCBEG
+     +   gcvol2
++SEQ,INCEND
++KEEP,GCDRAW
+*
++SEQ,INCBEG
+     +   gcdraw
++SEQ,INCEND
++KEEP,GSECTI
+*
++SEQ,INCBEG
+     +   gsecti
++SEQ,INCEND
++KEEP,GCGOBJ
+*
++SEQ,INCBEG
+     +   gcgobj
++SEQ,INCEND
++KEEP,GCSCAN
+*
++SEQ,INCBEG
+     +   gcscan
++SEQ,INCEND
++KEEP,GCSCAL
+*
++SEQ,INCBEG
+     +   gcscal
++SEQ,INCEND
++KEEP,GCPARA
+*
++SEQ,INCBEG
+     +   gcpara
++SEQ,INCEND
++KEEP,GCJUMP
+*
++SEQ,INCBEG
+     +   gcjump
++SEQ,INCEND
++KEEP,GCOMIS
+*
++SEQ,INCBEG
+     +   gcomis
++SEQ,INCEND
++KEEP,GCXLUN
+*
++SEQ,INCBEG
+     +   gcxlun
++SEQ,INCEND
++KEEP,GCMUTR
+*
++SEQ,INCBEG
+     +   gcmutr
++SEQ,INCEND
++KEEP,GCHILN
+*
++SEQ,INCBEG
+     +   gchiln
++SEQ,INCEND
++KEEP,GCSPEE
+*
++SEQ,INCBEG
+     +   gcspee
++SEQ,INCEND
++KEEP, LUJETS
+*
++SEQ,INCBEG
+     +    lujets
++SEQ,INCEND
++KEEP, LUDAT1
+*
++SEQ,INCBEG
+     +    ludat1
++SEQ,INCEND
++KEEP, LUDAT3
+*
++SEQ,INCBEG
+     +    ludat3
++SEQ,INCEND
++KEEP,GCLUND
+*
++SEQ,INCBEG
+     +   gclund
++SEQ,INCEND
++KEEP,PAWC
+*
++SEQ,INCBEG
+     +   pawc
++SEQ,INCEND
++KEEP,GCPMXZ
+*
++SEQ,INCBEG
+     +   gcpmxz
++SEQ,INCEND
++KEEP,GC10EV
+*
++SEQ,INCBEG
+     +   gc10ev
++SEQ,INCEND
++KEEP,GCSHPT
+*
++SEQ,INCBEG
+     +   gcshpt
++SEQ,INCEND
++KEEP,GCPHPR
+*
++SEQ,INCBEG
+     +   gcphpr
++SEQ,INCEND
++KEEP,GCPHNR
+*
++SEQ,INCBEG
+     +   gcphnr
++SEQ,INCEND
++KEEP,GCPHRD
+*
++SEQ,INCBEG
+     +   gcphrd
++SEQ,INCEND
++KEEP,GCPHXS
+*
++SEQ,INCBEG
+     +   gcphxs
++SEQ,INCEND
++KEEP,GCPOTM
+*
++SEQ,INCBEG
+     +   gcpotm
++SEQ,INCEND
++PATCH,GTINCL,IF=MINCL
++DECK,GCBANK
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCBANK
++DECK,GCCURS
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCCURS
++DECK,GCCUTS
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCCUTS
++DECK,GCDRAW
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCDRAW
++DECK,GCFLAG
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCFLAG
++DECK,GCGOBJ
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCGOBJ
++DECK,GCHIL2.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCHIL2.
++DECK,GCHILN.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCHILN.
++DECK,GCJLOC
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCJLOC
++DECK,GCJUMP
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCJUMP
++DECK,GCKINE
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCKINE
++DECK,GCKING
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCKING
++DECK,GCKMAX
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCKMAX
++DECK,GCLINK
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCLINK
++DECK,GCLIST
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCLIST
++DECK,GCLUND
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCLUND
++DECK,GCMATE
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCMATE
++DECK,GCMULO
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCMULO
++DECK,GCMUTR
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCMUTR
++DECK,GCMZFO
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCMZFO
++DECK,GCNUM
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCNUM
++DECK,GCOMIS
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCOMIS
++DECK,GCONSP
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCONSP
++DECK,GCONST.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCONST.
++DECK,GCOPTI
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCOPTI
++DECK,GCPARA.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPARA.
++DECK,GCPARM.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPARM.
++DECK,GCPHNR.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPHNR.
++DECK,GCPHPR.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPHPR.
++DECK,GCPHRD.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPHRD.
++DECK,GCPHXS.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPHXS.
++DECK,GCPHYS
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPHYS
++DECK,GCPMXZ.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPMXZ.
++DECK,GCPOLY
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPOLY
++DECK,GCPOTM.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPOTM.
++DECK,GCPUSH
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCPUSH
++DECK,GCRZ
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCRZ
++DECK,GCSCAL.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSCAL.
++DECK,GCSCAN
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSCAN
++DECK,GCSETS.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSETS.
++DECK,GCSHNO.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSHNO.
++DECK,GCSHPT.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSHPT.
++DECK,GCSPEE.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSPEE.
++DECK,GCSTAK.
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCSTAK.
++DECK,GCTIME
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCTIME
++DECK,GCTMED
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCTMED
++DECK,GCTRAK
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCTRAK
++DECK,GCUNIT
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCUNIT
++DECK,GCURSB
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCURSB
++DECK,GCVOL1
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCVOL1
++DECK,GCVOL2
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCVOL2
++DECK,GCVOLU
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCVOLU
++DECK,GCXLUN
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GCXLUN
++DECK,GSECTI
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,GSECTI
++DECK, LUDAT1
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ, LUDAT1
++DECK, LUDAT3
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ, LUDAT3
++DECK, LUJETS
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ, LUJETS
++DECK,PAWC
+*CMZ :  3.21/02 29/03/94  15.41.18  by  S.Giani
+*-- Author :
+*
++SEQ,PAWC
+*-- Author :
++PATCH,PAMEND.
+*

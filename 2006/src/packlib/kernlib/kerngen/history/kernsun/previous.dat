@@ -1,0 +1,136 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:47 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:47  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSUN)
+
+UP-DATE  1.10:   24-Jan-1995
+----------------------------
+
+Replacing File   KERNSUN  1.09  940905 18.59
+
+Correct:      use SIGNALF from KERNFOR, Posix version
+              use QNEXTE  from KERNFOR for Solaris
+
+---------------------------------------------------------------------
+
+UP-DATE  1.09:    5-Sep-1994
+----------------------------
+
+Replacing File   KERNSUN  1.08  940601 21.40
+
+New patches:  option BUGLRSHFT     to avoid use of intrinsic LRSHFT
+
+---------------------------------------------------------------------
+
+UP-DATE  1.08:   11-May-1994
+----------------------------
+
+Replacing File   KERNSUN  1.07  940218 10.46
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+---------------------------------------------------------------------
+
+UP-DATE  1.07:   24-Feb-1994
+----------------------------
+
+Replacing File   KERNSUN  1.06  920521 16.30
+
+New patches:  option SOLARIS       for new operating system
+              NOOPT                to divert routines to be compiled
+                                   without optimisation
+
+Correct:      KERNGT               to have the "what"-identifier
+
+Obsoleted:    JUMPAD, JUMPX2       use from KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.06:   11-May-1992
+----------------------------
+
+Replacing File   KERNSUN 1.05  910318 17.46
+
+New decks:    LENOCC                    for speed
+
+Deleted:      TIMED, TIMEX              use from KERNFOR
+              GSHOW                     use KERNGT
+              P=SUNPROGS
+
+Correct:      KERNGT                    to use Z=QFTITLCH
+              many routines    use the intrinsic LRSHFT instead of ISHFT
+
+---------------------------------------------------------------------
+
+UP-DATE  1.05:   18-Mar-1991
+----------------------------
+
+Replacing File   KERNSUN 1.04  900925 13.33
+
+New decks:    SIGNALF, FFSIZE
+
+Correct:      connect P=CCGEN, CCGENCF of KERNFOR
+              merge P=SUNSYS into P=SUNGS
+
+              LOCB           bug fixed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.04:   24-Sept-1990
+----------------------------
+
+Replacing File   KERNSUN 1.03  891121  0.53
+
+Correct:      connect some CCGEN routines
+              FCASPLIT:  use version on KERNFOR
+              correct faulty TIMED
+
+---------------------------------------------------------------------
+
+UP-DATE  1.03:   20-Nov-1989
+----------------------------
+
+Replacing File   KERNSUN 1.02  891025 19.06
+
+New decks:    LOCB           return the byte adr of a variable
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02:   25-Oct-1989
+----------------------------
+
+Replacing File   KERNSUN 1.01  890626 20.10
+
+Correct:      DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+              LOCF           change to work also on SPARC
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01:   23-june-1989
+----------------------------
+
+Replacing File   KERNSUN 1.00  881114 22.18
+
+New Deck:     KERNGT
+
+Correct:      remove UCTOH1, UCTOH, UH1TOC, UHTOC
+              these routines were working only on SUN 3
+              the new defaults on KERNFOR are good for SUN 3 & 4
+
+              LOCF      allow for 31 bit adrs
+
+              FCASPLIT  new version
+
+---------------------------------------------------------------------
+
+          First release of the KERNSUN Pam :  12-oct-1988
+
+---------------------------------------------------------------------
+
+#endif

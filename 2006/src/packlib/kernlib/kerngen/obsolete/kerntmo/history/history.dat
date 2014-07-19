@@ -1,0 +1,57 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:53:48 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:48  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerntmo.car patch kerntmo
+#if !defined(CERNLIB_KERNTMO)
+ 
+              KERNLIB routines particular to MEIKO on Tranputers
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KTMO     Pilot-patch selecting the full standard general KERNLIB
+                      for Tranputers with the MEIKO compiler
+ 
+QMTMO     TMO machine patch
+ 
+TMOGS     TMO versions of general KERNLIB rotuines
+ 
+=====================================================================
+ 
+ 
+              Up-date record for the Pam-file  KERNTMO
+              ----------------------------------------
+ 
+ 
+Up-date  1.02 :  11-Dec-1989
+----------------------------
+ 
+Replacing file   KERNTMO 1.01  890303 12.00
+ 
+New decks :   LOCB           byte adr of a variable
+              UOPTC          KERNFOR version does not work on TMO
+ 
+Delete :      many routines now available on KERNFOR
+ 
+---------------------------------------------------------------------
+ 
+Up-date  1.01 :   3-mar-1989
+----------------------------
+ 
+Replacing file   KERNTMO 1.00  890208 16.00
+ 
+New decks :   VXINVB, VXINVC              byte swopping routines
+ 
+---------------------------------------------------------------------
+ 
+          First release of the KERNTMO  Pam :  8-Feb-1989
+ 
+---------------------------------------------------------------------
+ 
+#endif

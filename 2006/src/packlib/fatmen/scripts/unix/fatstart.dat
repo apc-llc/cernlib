@@ -1,0 +1,107 @@
+*
+* $Id: fatstart.dat,v 1.2 1996/04/16 06:43:44 jamie Exp $
+*
+* $Log: fatstart.dat,v $
+* Revision 1.2  1996/04/16 06:43:44  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+start=" "
+stop=" "
+run=" "
+nolog=" "
+noscr=" "
+b="."
+#
+#   Fix for CERNSP based fatcat server
+#
+this_host=`hostname`
+
+if [ $this_host = "sp020" ]
+   then export FMHOST=fatcat
+   echo ${0}: setting FATMEN hostname to $FMHOST
+fi
+
+#
+#   Ensure that variables are defined...
+#
+
+for i in /fatmen/fm*
+   do
+
+echo  
+typeset -u fatgrp
+typeset -l fatdir
+fatpath=$i
+fatgrp=`basename $i`
+fatdir=`basename $i`
+echo Setting $fatgrp to $fatpath ...
+eval $fatgrp=$fatpath;export $fatgrp
+#
+# and start the servers
+#
+if [ -x ${i}/fatserv ]
+   then
+#
+# does a log file exist?
+#
+   if [ -f /fatmen/${fatgrp}.log ]
+      then
+      echo '>>> log file exists - looking for existing process'
+      log=${log}${b}${fatgrp}
+      pid=`cat /fatmen/${fatgrp}.log | awk '{printf "%s\n",$14}'`
+      if (test $pid)
+         then
+         echo Looking for server process for $fatgrp
+         if(ps -ae  | grep -s $pid )
+            then
+            echo FATSRV running PID = $pid
+            run=${run}${b}${fatgrp}
+            else
+            echo No existing server found for $fatgrp - starting server
+            if [ -f ${i}/todo/signal.stop ]
+               then echo but signal.stop file found!
+               else echo Starting server for $fatgrp
+               nohup ${i}/fatserv > /fatlogs/${fatdir}/fatserv.log &
+               start=${start}${b}${fatgrp}
+            fi
+         fi
+
+         else
+         echo No existing server found for $fatgrp - starting server 
+         if [ -f ${i}/todo/signal.stop ]
+            then echo but signal.stop file found!
+            stop=${stop}${b}${fatgrp}
+            else echo Starting server for $fatgrp
+            nohup ${i}/fatserv > /fatlogs/${fatdir}/fatserv.log &
+            start=${start}${b}${fatgrp}
+         fi
+      fi
+      else
+      echo No server log found in $i
+      if [ -f ${i}/todo/signal.stop ]
+         then echo but signal.stop file found!
+         stop=${stop}${b}${fatgrp}
+         else echo Starting server for $fatgrp
+         nohup ${i}/fatserv > /fatlogs/${fatdir}/fatserv.log &
+         start=${start}${b}${fatgrp}
+      fi
+   fi
+   else
+   echo No fatserv script found in $i - cannot start server
+   scr=${scr}${b}${fatgrp}
+fi
+     
+done
+
+echo
+echo Log files found for $log | tr '.' ' '
+echo Started servers for $start | tr '.' ' '
+echo Servers already running for $run | tr '.' ' '
+echo Servers stopped $stop | tr '.' ' '
+echo No scripts found for $scr | tr '.' ' '
+echo

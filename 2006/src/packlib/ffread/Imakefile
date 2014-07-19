@@ -1,0 +1,15 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(libraries)
+
+SUBDIRS= sffread test ffread
+
+TopOfPackage(ffread)
+
+SubdirLibraryTarget(ffread,sffread)
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(ffread)

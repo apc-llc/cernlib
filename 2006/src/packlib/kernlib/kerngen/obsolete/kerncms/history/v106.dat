@@ -1,0 +1,39 @@
+*
+* $Id: v106.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v106.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.06  910901 16.25
+Revise:       Structure of pam file to match CPL codes
+              Create one patch per CPL entry
+ 
+Add:          P=Z100   , D=JOBNAM        General version using JOBINFO
+              P=Z265   , D=SETENV        Set environment variable (exec)
+              P=Z265   , D=GETENVF       Get environment variable
+              P=Z313   , D=JOBINFO       Extraction of Job parameters
+                                         (usable at non-HEPVM sites)
+              P=Z305   , D=VMREXX, IF=QCMS6.
+                                         This version uses SVC 204
+                                         and APPLMSG, it does NOT move
+                                         parms in memory (to below 16MB)
+                                         This version of VMREXX works in
+                                         CMS 7 too since REXX is 31bit.
+ 
+Correct:      P=Z264   , D=GETARG        Initialize GOPARM string
+                                         Set IP2 for last argument
+              P=Z264   , D=IARGC         Fix case when nargs=0
+              P=Z305   , D=VMREXX        Fix bugs for code 'N'.
+              P=Z307   , D=JOB$VM        Correct CPU factor in interac-
+                                         tive jobs at CERNVM
+                                         Fix storage and node determina-
+                                         tion in non-XA systems
+ 
+Replace:      P=Z262   , D=GOPARM        Find parm string from R0 at
+                                         entry, not NUCPLIST entry.
+                                         Ensure no parms returned after
+                                         LOAD command.
+ 
+ 

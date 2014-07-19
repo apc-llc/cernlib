@@ -1,0 +1,43 @@
+*
+* $Id: gpdpup1.dat,v 1.1.1.1 1996/02/15 17:53:32 mclareni Exp $
+*
+* $Log: gpdpup1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:32  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNPDP)
+ 
+          UP-DATE RECORD FOR GENPDP VERSIONS 1.01 TO 1.99
+          -----------------------------------------------
+ 
+ 
+C.    1.01  MAR 76    UBUNCH: BUG + SPEED
+ 
+C.    1.02  OCT 76    IUHUNT: BUG, UBLOW: SPEED
+                      DATIME,DATIMH,TIMED,TIMEL,TIMEX NEW ROUT.
+ 
+C.    1.03  OCT 76    DELETES MOVED FROM PILOTES TO DECKS.
+ 
+C.    1.04  NOV 76    DELETE-LOGIC FINALIZED.
+ 
+C.    1.05  OCT 77    VFIX : BUG CORRECTED
+                      TIMEX :  COMMENT ADDED
+                      DELETED :  DATEZB, IDATZA, TIMEZB
+                                 USE INSTEAD  DATIM... , TIME...
+ 
+C.    1.06  OCT 82    CLEAN-UP FOR PATCHY4 STANDARD
+ 
+C.    1.07  MAR 84    NEW DECKS : GSHOW, IBMTP, IBMTP2
+                      NEW PATCH : PDP10OBS FOR OBSOLETE ROUTINES
+                                  D=LORENC,MXADD,MXDMA,MXDMAL,VMODUL
+                      DELETE P=PDP10F40
+                      CORRECT : P=HELP, D=HELP.
+ 
+---------------------------------------------------------------------
+ 
+                   KERNPDP 2.01  =  GENPDP 1.07
+ 
+---------------------------------------------------------------------
+ 
+#endif

@@ -1,0 +1,22 @@
+SRCS_F= gecdhs.F gukine.F guout.F gustep.F gutrev.F \ @@\
+	main.F ufiles.F uginit.F uglast.F uinit.F
+
+#if defined(CERNLIB_HIGZ)
+/* 
+ * if you want to get a Makefile with HIGZ, use 
+ *       gmake IMAKE_DEFINES=-DCERNLIB_HIGZ Makefile
+ *  and check that you did get a new Makefile.
+ */
+SRCS_F := $(SRCS_F) viewyz.F
+EXTRA_DEFINES:= $(EXTRA_DEFINES) -DCERNLIB_HIGZ
+#endif
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(exam2,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib)
+
+TestTarget(exam2,gexam2.dat,gexam2.input)
+
+CopyFile(g321x2.inp,gexam2.input)
+
+CopyFile(exam2.dat,gexam2.dat)

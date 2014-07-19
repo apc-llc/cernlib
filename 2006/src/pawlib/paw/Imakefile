@@ -1,0 +1,41 @@
+DoIncludePackage(paw)
+#include "paw/pilot.h"
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+MotifDependantMakeVar(MOTIF_DIRS,cmotif fmotif fpanelsc)
+MotifDependantMakeVar(PAWPP_DIRS,fpanelsf tree uimx)
+
+LIBDIRS= code cpaw cdf ntuple mlpfit
+
+#ifndef CERNLIB_WINNT
+LIBDIRS :=$(LIBDIRS) $(MOTIF_DIRS) $(PAWPP_DIRS)
+#endif
+
+#if defined(CERNLIB_UNIX) && !defined(CERNLIB_WINNT)
+MotifDependantMakeVar(PAWPP_DIRS,xbae)
+LIBDIRS := $(LIBDIRS) $(PAWPP_DIRS)
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+MotifDependantMakeVar(PAWPP_DIRS,xbaevms)
+LIBDIRS := $(LIBDIRS) $(PAWPP_DIRS)
+#endif
+
+SUBDIRS= $(LIBDIRS) programs piafs hbpiaf stagerd paw
+
+#if defined CERNLIB_WINNT
+SUBDIRS := $(LIBDIRS) programs
+#endif
+
+TopOfPackage(paw)
+
+SubdirLibraryTarget(paw,$(LIBDIRS))
+
+InstallBinSubdirs(programs)
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(paw)
+

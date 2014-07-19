@@ -1,0 +1,3 @@
+SRCS_F=	 dzdummy.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

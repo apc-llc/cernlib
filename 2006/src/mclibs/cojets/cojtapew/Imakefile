@@ -1,0 +1,11 @@
+SRCS_F= \ @@\
+	 bookh.F bufout.F edit.F fillh.F ichcnv.F isbosf.F isjtpf.F isjtqf.F \ @@\
+	 outh.F pptcl.F wgens.F wrbeg.F wrend.F wrtape.F
+
+#if !defined(CERNLIB_GFORTRAN)
+FORTRANSAVEOPTION = FortranSaveFlags
+#else
+FORTRANSAVEOPTION = -fno-automatic
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,46 @@
+*
+* $Id: fatserv.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatserv.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATSERV.COM
+$ set noon
+$!
+$! Example FATSERV.COM
+$!
+$ dd = f$cvtime(,,"WEEKDAY")
+$ tt = f$time()
+$ hh = f$trnlnm("SYS$NODE")
+$ write sys$output ""
+$ write sys$output "FATSERV starting at ''dd' ''tt' on ''hh'"
+$ write sys$output ""
+$ !
+$ ! Set FATMEN system
+$ !
+$ FATSYS:==CERN
+$ !
+$ ! Set FATMEN group
+$ !
+$ FATGRP:==FMCNDIV
+$ !
+$ ! Set FATMEN wakeup interval in seconds
+$ !
+$ FMWAKEUP:==30
+$ !
+$ ! Set FATMEN log level
+$ !
+$ FMLOGL:==3
+$ write sys$output -
+"FATMEN group set to ''FATGRP', wakeup interval is ''FMWAKEUP' seconds"
+$ !
+$ ! N.B. FMCNDIV (in this case) must also be defined to point
+$ !      to the directory where the FATMEN RZ file for FMCNDIV is located.
+$ !
+$ ! Set process name
+$ !
+$ set proc/name="fatserv_''f$edit(f$getjpi("","USERNAME"),"TRIM")'"
+$ run cern:[pro.exe]fatsrv
+ 

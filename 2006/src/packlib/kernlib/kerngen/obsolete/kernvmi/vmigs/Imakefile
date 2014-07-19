@@ -1,0 +1,4 @@
+SRCS_S= \ @@\
+	 jumpxn.s longjmp.s setjmp.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

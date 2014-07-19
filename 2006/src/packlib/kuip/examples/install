@@ -1,0 +1,43 @@
+*
+* $Id: install,v 1.1.1.1 1996/03/08 15:33:06 mclareni Exp $
+*
+* $Log: install,v $
+* Revision 1.1.1.1  1996/03/08 15:33:06  mclareni
+* Kuip
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_kuip/pilot.h"
+*CMZ :  1.68/00 02/03/92  13.55.53  by  Fons Rademakers
+*-- Author :
+#if defined(CERNLIB_APOLLO)
+#
+# Get TEST.CDF and UPROG.FTN from KUIP.CAR
+#
+ypatchy <<|
+- =uprog TTY TTY - =test.cdf .GO
+&EXE.
+&ASM,23
+&USE,EXAMPAT.
+&USE,P=EXAMPLE,D=CDF,UPROG.
+&PAM,11,T=CARDS,T=ATTACH   .kuip.car
+&QUIT.
+|
+#
+# Run KUIPC on TEST.CDF
+#
+kuipc <<|
+test.cdf
+testd.ftn
+|
+#
+# Compile TESTD.FTN and UPROG.FTN
+#
+ftn testd -save -indexl
+ftn uprog -save -indexl
+#
+# Bind and generate the executable module TEST
+#
+bind -looks -all -b test test.bin testd.bin
+#endif
+

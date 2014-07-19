@@ -1,0 +1,233 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:52:31 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:31  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSUN)
+
+UP-DATE  1.18 :  21-Nov-1992
+----------------------------
+
+Replacing file   KERNCRY 1.17  920229 19.41
+
+Correct:      add definition +KEEP, Q$SBYT
+              delete Fortran default of UNLINKF on KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.17 :  29-Feb-1992
+----------------------------
+
+Replacing file   KERNCRY 1.16  911111 23.57
+
+Correct:      P=CRYUNI, D=GETENVF
+              delete definition +KEEP, Q$ANDOR.
+
+---------------------------------------------------------------------
+
+UP-DATE  1.16 :  11-Nov-1991
+----------------------------
+
+Replacing file   KERNCRY 1.15  910719 13.01
+
+New Decks:    P=CRYGS, D=IUWEED
+              P=CRYUNI,D=CHDIRF,GETENVF,SIGON,STATF,UNLINKF,TMPRO,TMREAD
+
+Correct:      P=CRYGS, D=JBIT,JBYT,SBIT,SBIT0,SBIT1,SBYT
+                                                 avoiding assembler
+Correct:      P=CRYUNI,D=SIGNALF,INTRAC          new versions
+
+Deleted:      P=CRAYC, moving its routines into P=CRYUNI
+
+---------------------------------------------------------------------
+
+UP-DATE  1.15 :  18-Jul-1991
+----------------------------
+
+Replacing file   KERNCRY 1.14  910318 19.13
+
+New Deck:     SYSTEMF of P=CRYUNI       new routine
+
+Correct :     P=CRAYC, D=TIMEL
+
+Delete :      GSHOW
+
+---------------------------------------------------------------------
+
+UP-DATE  1.14 :  18-Mar-1991
+----------------------------
+
+Replacing file   KERNCRY 1.13  891120 23.09
+
+New Deck:     SIGNALF of P=CRYUNI       new routine
+
+Correct :     connect CCGEN and CCGENCF of KERNFOR
+              re-organize P=CRAYC for FCASPLIT
+
+---------------------------------------------------------------------
+
+UP-DATE  1.13 :  20-Nov-1989
+----------------------------
+
+Replacing file   KERNCRY 1.12  890913 21.10
+
+Correct :     JUMPX2         add delete default in KERNFOR
+
+Delete :      ABEND, P=CRYUNI   use default on KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.12 :  13-Sept-1989
+----------------------------
+
+Replacing file   KERNCRY 1.11  890628 11.53
+
+Correct :     DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+
+---------------------------------------------------------------------
+
+UP-DATE  1.11 :  27-June-1989
+----------------------------
+
+Replacing file   KERNCRY 1.10  890322 15.04
+
+New Decks:   VMATL, VMATR             for speed
+             MEMOR of P=CRAYC
+
+Correct :    TIMEL of P=CRAYC
+
+Deleted :    IARGC of P=CRAYC         now in the Cray library
+
+---------------------------------------------------------------------
+
+UP-DATE  1.10 :  22-mar-1989
+----------------------------
+
+Replacing file   KERNCRY 1.09  881121 19.10
+
+New Deck:    JOBNAM of P=CRYUNI       new routine
+             KERNGT                   to eventually replace GSHOW
+
+Correct :    TIMEL of P=CRAYC         new version for UNICOS
+             IE3FOD                   set left half to zero
+
+---------------------------------------------------------------------
+
+UP-DATE  1.09 :   2-nov-1988
+----------------------------
+
+Replacing file   KERNCRY 1.08  880913 18.30
+
+New Deck:    NOARG of P=CRYUNI       new routine
+             XINBF of P=CRYUNI       new routine
+             NOARG of P=CRYCOS       new routine
+
+Delete :     D=NOARG, P=CRYGS        delete dummy
+
+---------------------------------------------------------------------
+
+UP-DATE  1.08 :  28-JUL-1988
+----------------------------
+
+Replacing file   KERNCRY 1.07  880525 16.40
+
+New Patch:   P=CRAYC      C routines for system UNICOS
+
+Correct :    XINB,XINBS,XINBF   move the old routines into P=CRYCOS
+
+---------------------------------------------------------------------
+
+UP-DATE  1.07 :  28-APR-1988
+----------------------------
+
+Replacing file   KERNCRY 1.06  870527 15.51
+
+New Patches: P=*KCRU      pilot for Cray system UNICOS
+
+             P=CRYCOS     with system COS specific routines
+                          old D=ABEND,DETACH,INCMEM,TIMEL to here
+
+             P=CRYUNI     with system UNICOS specific routines
+                          new D=ABEND,INTRAC,TIMEL
+
+New decks :  D=JUMPAD, JUMPX2
+
+Modified :   move routines XIN... from P=XVECTCRY into P=CRYGS
+             delete P=XVECTCRY
+
+---------------------------------------------------------------------
+
+UP-DATE  1.06 :  27-MAY-1987
+----------------------------
+
+Replacing file   KERNCRY 1.05  861204 21.05
+
+New Decks :  P=CRYGS, D=IANDETC, JBYTET, JBYTOR
+                      D=MBYTET,  MBYTOR, MCBYT
+                      D=MSBIT0,  MSBIT1, MSBIT,  MSBYT
+                      D=BTEST,   IBITS,  IBCLR,  IBSET,  MVBITS
+                      D=ISHFT,   ISHFTC
+                      D=UCTOH,   UCTOH1, UHTOC,  UH1TOC
+                      D=NOARG           do-nothing dummy
+
+Modified  :   P=CRYGS, D=UBLOW, UBUNCH  entries UCTOH1,UH1TOC removed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.05 :   4-DEC-1986
+----------------------------
+
+Replacing file   KERNCRY 1.04  840815 21.01
+
+New Decks :  P=CRYGS, D=IE3FOD,IE3FOS,IE3TOD,IE3TOS
+
+Correct :    P=CRYGS, D=RNDM           to call RANGET as subroutine
+
+---------------------------------------------------------------------
+
+UP-DATE  1.04 :  16-AUG-1984
+----------------------------
+
+Replacing file   KERNCRY 1.03  840216 11.42
+
+New :      P=CRYGS, D=QNEXTE             FROM HYDRA FOR 'NEXT EVENT'
+
+---------------------------------------------------------------------
+
+UP-DATE  1.03 :  15-FEB-1984
+----------------------------
+
+Replacing file   KERNCRY 1.02  830728 17.29
+
+New :      P=CRYGS, D=INCMEM2            FOR NEW MEMORY REQUEST
+                    D=RNDM, TIMED, TIMEL, TIMEX
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  28-JUL-1983
+----------------------------
+
+Replacing file   KERNCRY 1.01  830712 12.35
+
+Modified  :   CORRECT REPRESENTATION OF THE VERTICAL BAR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01 :  12-JUL-1983
+----------------------------
+
+Replacing file   KERNCRY 1.00  830612 11.00
+
+Modified  :   P=CRYGS, D=ABEND
+
+---------------------------------------------------------------------
+
+          FIRST RELEASE OF THE KERNCRY  PAM :  12-JUNE-83
+
+---------------------------------------------------------------------
+
+#endif

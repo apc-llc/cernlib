@@ -1,0 +1,24 @@
+*
+* $Id: ibits.F,v 1.1.1.1 1996/02/15 17:52:35 mclareni Exp $
+*
+* $Log: ibits.F,v $
+* Revision 1.1.1.1  1996/02/15 17:52:35  mclareni
+* Kernlib
+*
+*
+#include "kerncry/pilot.h"
+      FUNCTION IBITS(I,N,L)
+C
+C CERN PROGLIB# M441    IBITS           .VERSION KERNCRY  1.06  870527
+C ORIG. 17/11/86  CNAF, BOLOGNA
+C
+C      CRAY VERSION OF MIL-STD-1753 FUNCTION IBITS
+C      N IS THE RIGHTMOST BIT OF THE REQUIRED FIELD
+C      L IS THE LENGTH OF THE REQUIRED FIELD
+C
+C
+      IBITS = AND(SHIFTR(I,N),MASK(128-L))
+      END
+#ifdef CERNLIB_TCGEN_IBITS
+#undef CERNLIB_TCGEN_IBITS
+#endif

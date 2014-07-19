@@ -1,0 +1,3 @@
+INCLUDES=	 d506cm.inc d506dp.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),minuit)

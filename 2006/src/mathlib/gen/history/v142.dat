@@ -1,0 +1,20 @@
+*
+* $Id: v142.dat,v 1.1.1.1 1996/04/01 15:01:35 mclareni Exp $
+*
+* $Log: v142.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:35  mclareni
+* Mathlib gen
+*
+*
+C C  Additions:
+C  ----------
+C
+C  Routine changes: 
+C  ---------------
+C
+C  SIMPS - speedup (Michel Roethlisberger/IBM)
+C  PROB  - change old version to PROBOLD
+C        - protection from WW/in2p3
+C        - set XLIM to 13.3 on IBM (WW/IN2P3)
+C        - Protect prob=h against underflow.
+C

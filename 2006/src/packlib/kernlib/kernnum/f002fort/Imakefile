@@ -1,0 +1,19 @@
+SRCS_F=  cvadd.F cvcpy.F cvdiv.F cvmpa.F cvmpac.F cvmpy.F cvmpyc.F cvmul.F \ @@\
+	 cvmula.F cvmuna.F cvran.F cvsca.F cvscl.F cvscs.F cvset.F cvsub.F \ @@\
+	 cvsum.F cvxch.F dvadd.F dvcpy.F dvdiv.F dvmpa.F dvmpy.F dvmul.F \ @@\
+	 dvmula.F dvmuna.F dvran.F dvsca.F dvscl.F dvscs.F dvset.F dvsub.F \ @@\
+	 dvsum.F dvxch.F rvadd.F rvcpy.F rvdiv.F rvmpa.F rvmpy.F rvmul.F \ @@\
+	 rvmula.F rvmuna.F rvran.F rvsca.F rvscl.F rvscs.F rvset.F rvsub.F \ @@\
+	 rvsum.F rvxch.F
+
+#if defined(CERNLIB_DECS) && ! defined(CERNLIB_QMVAOS)
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+
+#if defined(CERNLIB_MACOSX)
+FDEBUGFLAGS := -O0 $(FDEBUGFLAGS) -O0
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

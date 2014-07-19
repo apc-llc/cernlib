@@ -1,0 +1,47 @@
+INCLUDES=	 aadat.inc auxpar.inc balanc.inc bamjcm.inc blank.inc \ @@\
+	camass.inc cerrcm.inc cgcaan.inc cgcedg.inc cgcfac.inc \ @@\
+	cgctra.inc cgdelt.inc cggpar.inc cghpar.inc cgxcom.inc \ @@\
+	cmagic.inc cmass.inc cmsres.inc comcon.inc comcont.inc \ @@\
+	corinc.inc crandm.inc dblprc.inc decayc.inc decayc2.inc \ @@\
+	depnuc.inc dimpar.inc eropts.inc ertrio.inc erwork.inc \ @@\
+	eva0.inc eva1.inc fheavy.inc fheavyt.inc finlsp.inc \ @@\
+	finlsp2.inc finlsp3.inc finpar.inc finpar2.inc finuc.inc \ @@\
+	finuc2.inc finuct.inc forcn.inc gc10ev.inc gcasho.inc \ @@\
+	gcbank.inc gccurs.inc gccuts.inc gcdlin.inc gcdraw.inc \ @@\
+	gcfdim.inc gcflag.inc gcgobj.inc gchil2.inc gchiln.inc \ @@\
+	gchvir.inc gcjloc.inc gcjump.inc gckine.inc gcking.inc \ @@\
+	gckmax.inc gclink.inc gclist.inc gclund.inc gcmate.inc \ @@\
+	gcmulo.inc gcmutr.inc gcmzfo.inc gcnmec.inc gcnum.inc \ @@\
+	gcomis.inc gconsp.inc gconst.inc gcopti.inc gcpara.inc \ @@\
+	gcparm.inc gcphnr.inc gcphpr.inc gcphrd.inc gcphxs.inc \ @@\
+	gcphys.inc gcpixe.inc gcpmxz.inc gcpoly.inc gcpotm.inc \ @@\
+	gcpush.inc gcrayt.inc gcrz.inc gcscal.inc gcscan.inc \ @@\
+	gcsetf.inc gcsets.inc gcshno.inc gcshpt.inc gcspee.inc \ @@\
+	gcstak.inc gcstra.inc gctime.inc gctmed.inc gctrak.inc \ @@\
+	gcunit.inc gcursb.inc gcvdma.inc gcvol1.inc gcvol2.inc \ @@\
+	gcvolu.inc gcxlun.inc gfkdis.inc gsecti.inc gtasho.inc \ @@\
+	gtbank.inc gtcons.inc gtcurs.inc gtcuts.inc gtdraw.inc \ @@\
+	gtfdim.inc gtflag.inc gthil2.inc gthiln.inc gthvir.inc \ @@\
+	gtjump.inc gtkine.inc gtlink.inc gtlist.inc gtmutr.inc \ @@\
+	gtnum.inc gtopti.inc gtpara.inc gtparm.inc gtphys.inc \ @@\
+	gtpixe.inc gtrayt.inc gtscal.inc gtscan.inc gtsets.inc \ @@\
+	gtspee.inc gtstak.inc gttmed.inc gttrak.inc gtursb.inc \ @@\
+	gtvdma.inc gtvol1.inc gtvolu.inc gversc.inc hadflg.inc \ @@\
+	hadpar.inc hetc5.inc hetc7.inc hettp.inc higfis.inc incdek.inc \ @@\
+	inpdat.inc inpdat2.inc inpflg.inc iounit.inc isotop.inc \ @@\
+	labcos.inc limits.inc ludat1.inc ludat3.inc lujets.inc \ @@\
+	mapa.inc mapat.inc mapoll.inc mconst.inc mcreco.inc mcross.inc \ @@\
+	metlsp.inc mgamma.inc minput.inc mmass.inc mmicab.inc \ @@\
+	mmicap.inc mnutrn.inc mparam.inc mpifinc.inc mpoint.inc \ @@\
+	mpstor.inc mrecoi.inc multiprox.inc multseeds.inc mupsca.inc \ @@\
+	mxgkgh.inc nucdat.inc nucgeo.inc nuciod.inc nuclev.inc \ @@\
+	nucpar.inc nucstf.inc paprop.inc papropt.inc parevt.inc \ @@\
+	parnuc.inc part.inc part2.inc part2t.inc part3.inc partt.inc \ @@\
+	pawc.inc pawct.inc pcodat.inc pcodim.inc qquark.inc reac.inc \ @@\
+	redver.inc resnuc.inc s_blank.inc s_blankp.inc s_consts.inc \ @@\
+	s_coscom.inc s_csdat.inc s_csdim.inc s_curpar.inc s_defcom.inc \ @@\
+	s_errcom.inc s_event.inc s_genio.inc s_kginit.inc s_mat.inc \ @@\
+	s_nucio.inc s_prntfl.inc s_result.inc split.inc trcom3.inc \ @@\
+	xsepar.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),geant321)

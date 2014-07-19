@@ -1,0 +1,12 @@
+*
+* $Id: fatabend.dat,v 1.1.1.1 1996/03/07 15:17:52 mclareni Exp $
+*
+* $Log: fatabend.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#
+# This is for FATCAT. Modify at will
+#
+echo FATMEN server $FATSYS $FATGRP abending | mail fatcat-mgr@zfatal.cern.ch

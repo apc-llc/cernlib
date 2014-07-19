@@ -1,0 +1,30 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:47 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:47  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernsun.car patch kernsun
+#if !defined(CERNLIB_KERNSUN)
+
+              KERNLIB ROUTINES PARTICULAR TO THE SUN
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KSUN     Pilot-patch selecting the standard KERNLIB for SUN
+
+QMSUN     SUN machine patch
+
+SUNGS     SUN versions of general KERNLIB routines
+
+SOLARIS   option patch to select for this operating system
+
+BUGLRSHFT   temporary option patch to work around the SUN intrinsic
+            function LRSHFT which is wrong with f77 version 3.0
+
+=====================================================================
+#endif

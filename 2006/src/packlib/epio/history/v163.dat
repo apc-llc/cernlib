@@ -1,0 +1,14 @@
+*
+* $Id: v163.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v163.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.63
+C   Random access to standard input files added (only IBM/VM and Vax/VMS)
+C   The examples in the new PATCH PTEST4 must be
+C   studied as the user must store the indices in his own array.
+C   NWUNIT increased to 32.
+C   Routines affected - EPBLIN, EPINIT, EPREAD

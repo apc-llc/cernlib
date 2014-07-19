@@ -1,0 +1,3 @@
+SRCS_F=	 cheops2f.F fmbtof.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

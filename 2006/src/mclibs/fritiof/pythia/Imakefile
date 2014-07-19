@@ -1,0 +1,15 @@
+SRCS_F= \ @@\
+	 pydata.F pydiff.F pydocu.F pyevnt.F pyfram.F pygamm.F pyi3au.F \ @@\
+	 pyinit.F pyinki.F pyinre.F pykcut.F pyklim.F pykmap.F pymaxi.F \ @@\
+	 pymult.F pyofsh.F pypile.F pyrand.F pyremn.F pyresd.F pyscat.F \ @@\
+	 pysigh.F pyspen.F pyspli.F pysspa.F pystat.F pystfe.F pystfu.F \ @@\
+	 pystga.F pytest.F pywaux.F pywidt.F pyxtot.F rkbbv.F rkdot.F \ @@\
+	 rkhlpk.F rkrand.F rkzf.F rkzpr.F rkzsf.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#ifdef CERNLIB_SGI
+FDEBUGFLAGS := $(FDEBUGFLAGS) -Nn15000
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

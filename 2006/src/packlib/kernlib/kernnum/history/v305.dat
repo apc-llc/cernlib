@@ -1,0 +1,12 @@
+*
+* $Id: v305.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v305.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.05  900412
+C-  New patches:
+C-    *KERNNUM:   Pilot steering patch
+C

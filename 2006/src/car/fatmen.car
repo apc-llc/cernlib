@@ -1,0 +1,2942 @@
++TITLE.
+FATMEN   1.92/02 970107 09:30 CERN PROGRAM LIBRARY FATMEN=Q123
++PATCH,REQUIRES,T=DATA,IF=$DOC.
++DECK,BLANKDEK.
+ 
+The FATMEN package requires the following other packages to run:
+ 
+- ZEBRA, KUIP, CSPACK (from CERN Program Library PACKLIB)
+ 
+- KERNLIB
+ 
+- FPACK (if the flag FPACK is +USEd)
+ 
+In addition, the following system specific software is required:
+ 
+VM/CMS systems
+--------------
+ 
+HEPVM software (EXECs, tape handling software, Tape Management System IF=TMS)
+ 
+(An interface to VMTAPE and VMBATCH is also provided)
+ 
+VAX/VMS systems
+---------------
+ 
+- VAXTAP (CERN Program Library) for tape handling
+ 
+N.B. for server mode staging, a logical name STAGE_QUEUE must be
+defined in the system table. This directory must be world writable.
+The current recommended practice is:
+ 
+a) Define STAGE_QUEUE to point to the same directory on all nodes
+b) Use batch mode staging on all nodes.
+   Batch mode staging is used by default if a batch queue STAGE_xxxxS
+   exists, e.g. STAGE_8200S
+ 
+Unix systems
+------------
+ 
+SHIFT/CORE software for tape handling, IF=SHIFT
+ 
+L3 Apollo tape staging, IF=APOLLO and the file l3stage is found
+in the current path.
+ 
+System dependant information
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+RS6000:
+To compile the CDF file, use the following options on the XLF command:
+ 
+-q ST_SIZE=5000 -q TKQ_SIZE=20000 -q charlen=32000 -q extname
++PATCH,HISTORY.
++DECK,BLANKDEK.
+Version 1.92=Make help for MODIFY command correspond to code (-K)
+             For import into CVS.
+Version 1.91=FMCLOS: add extra debug
+             FMLOOP, FMBACK: correct save statement
+             FMKADT, FMADDT: safer handling of VID prefixes
+             FATCDES: add definitions for DAT120, NTP
+             FMOPEN/FMTAPE: IOPTI - disable -G in calls to SHIFT s/w
+             Z=FATGET: ISFGET
+             FMTAPE: only specify -U for shift stagein if DDNAME looks like
+               a Fortran unit
+             FATLOG: log files (FATLOG.yymmdd) now written to fatlogs subdir
+             FATSEND: only wait if no files were transferred
+             FAINQR,FMVERI,FMURL: fix check on URL
+             FMTAPE: impose MAXSTG only on IBM (mainframe) systems
+             FATUTIL: save DIRNAM variable (problems diagnosed by Olof Barring)
+Version 1.90=FATSEND: tidy printout, improve time stamping of log messages
+             FMRZIN: print IQUEST(1) in case of RZIN errors
+             FMRSTG: tidy retry handling
+             FAERAS, FAINQR: initialise LCHNFS
+             FMCLOS: fix bug in stageclr
+             FMINIT, FMTAPE: call sfget only if in current path
+             New versions of FATCHK and FMMEDT from FNAL
+             - FATCHK increase width in the FORMAT statement
+             - FMMEDT move zeroing of NFMTYP and NUMMTP after check that
+               FATMEN.MEDTYPES exists;
+             FATSEND: skip remote nodes if protocol is afs
+             FMFZO: save FILEN. FATSRV: skip kumac files
+             FMSSND, FATSEND: increase nodenames and queues to 80 characters
+             FMMEDT: mods from D0 - set also NFMTYP, permit also negative
+                media types. (This results in a medium of type iabs(itype)
+                being defined but not selected).
+             FMMEDT: set media types (definitions of characteristics AND
+             selection vector) using fatmen.medtypes file.
+             FMPKTM: year 99 was not allowed!
+             FMDISK/FMTAPE: print warning message concerning conflicting
+               logical names on multiple lines (D0)
+             FMFIXF: strip trailing / from pathname (if any)
+             FMCLOS: update MSRDFA/MERDFA from FZINO
+             FMCLASS: define LDEF, FMURL: add Z=FATPARA.
+             FMSREQ: improve handling of bad sysreq.conf config file
+             FMSHO2: large directories - use I6 for ksn
+             Start support for mss commands (e.g. Lachman interface)
+                Files stored in Lachman have a URL like:
+                osm://[server-node:][/store-name][/storage-group]/bitfileID
+                fatmen.storage-classes:
+ 
+                   path storage-class [store-name] [storage-server]
+                                      DELPHI       DELPHI-conservator@domain
+                   osm://delphi-conservator@cern.ch/delphi/rawdata/bfid
+ 
+                storage-classes should be experiment independent (e.g. rawdata)
+                store-names are experiment specific (e.g. L3DSTS, ALEPHRAW)
+ 
+                mods to: FATCDES,FMDISK,FAINQR,FMVERI,FADARE,FMRZIN
+                                 mssget mssinq               ??
+                new routines: FMURL, FMCLASS, FMMSS, FMRSLV
+Version 1.89=FMUTIL: add FMETOA/FMATOE (from RB's RZHto/frA) for ebcdic/ascii
+                conversion
+             FMFIXF: handle multiple .. in path name correctly
+             FMATCH: handle *pattern correctly
+             FMKMOD: zero NMATCH before FMSELK
+             Add DLT definitions (as from TMS), include in CERN selection
+             Add RWN/CWN as allowable file formats
+             Add fatzero script to check for zero length files in /todo
+             Add fatdf script to check /fatmen not too full
+             FMSREQ: retry on all errors (after existing error handling)
+             FMPSTG: split FATOPTS into FATOPT0/1
+             FMPSTG: bug fix for VMS, fix typos
+             FMEDIA: debug printout added.
+             FMPSTG: new routine to prestage files (from suggestion by
+                Guenter Duckeck/OPAL)
+             FATCDES: new media type definitions for DESY
+             FATSEND: include CZDUMM for VMS
+             FMQTMS: protect against invalid media type (-TMS option)
+             FMINIT: sleep and retry if catalogue not found
+             FMOPEN: option Q for disk files - just return (rather than ignore)
+Version 1.88=FATSRV: protect against input files with no updates!
+             FMSTGQ: protect against tape not staged on VM (answer not
+             stacked).
+             FMRZIN: correct bug in call to FMSTGC
+             FMRZIN: accept tape file if already staged (VMS)
+             TMS VOLINFO tag: use SYSTEM tag IF=IN2P3
+             FMHOST: declare FMHSTC as integer
+             FMCLOS: format error
+             FMGET(module): change to FMGET GENAM [KSN] [CHOPT] [FILE]
+             FMINIT: define 2 DATs for call to FMSETM
+             FMCLOS: Return IRC to user in case of problems with STAGE PUT.
+             25/05/94
+Version 1.87=FMCLOS: support options C (clear), D (remove links) and
+               P (stageput) for new SHIFT stager
+             FMINIT: initialise also DAT tapes (2 varieties)
+             FATSCAN2: remove existing log file
+             FATCAT: correct bug in handling of # RDR files
+             FMTAPE: add NOWAIT option for SHIFT
+             FMTAPE: don't call FMFGET(sfget) for new SHIFT stager
+             FMFGET: print command if idebfa>=1
+             FAFILE: open NEW files CARRIAGECONTROL='LIST' on VMS
+             Add FMRKEY: replace existing key vector. Used from FMFZI
+             to update existing object in place with new loc.code etc.
+             FATBACK: create link to latest good backup file
+             Drop bank at end of FMTOUC
+             SEARCH/SCAN commands: fix bug for date/time ranges when
+             only pathname specified.
+             FMTAPE: put filename at end of call to stagein script
+             SCRIPT: add fatchk to look for servers that are stopped
+             Post 94A
+Version 1.86=Mods from Torbjorn Moa
+             FMLCOP: fix bug - eliminate call to FMGTLG before FMXDSK
+             FMRZIN: try DECnet access in case of $env/filename syntax
+             and file not found.
+             Protection in FMFZCP against FZOUT/FZRUN problems.
+             Add P=FATLOOP - example 'fast' listing program
+             CONVEX flag (FMOPEN)
+             FMOPEN:fix bug introduced by C I/O support on Unix w/o SHIFT
+             FMKUIP: add dummies to avoid linking FATMEN module with SHIFT
+             VIDQQ identification
+             FMPUTC: correct check on JL/JR
+             Add FMGETA: get first entry matching specific generic name
+             FMSTGP: treat group PUBXX like DELPHI (VXCERN reconfig)
+             FMDISK, FMTAPE: delete conflicting logical names from LNM$PROCESS
+             FATMDI: use RZCDIR rather than FACDIR
+             FMDISK: fix faulty call to FMXDSK, set lognam in JOB table (D0)
+             FMRSTG, FMRQUI: bug fixes from D0.
+                mod fmrqui and fmrstg to avoid waiting for a job to complete
+                when the file is already staged and to avoid running out of
+                'lun's (By Steve Glenn)
+             Unix systems: exchange mode catalogues only supported
+             FMSHOW: show also VOLINFO tag if IOPTQ
+             P=FMUTIL,D=FMLTON,FMNTOL, correct filename
+             New CMZ file - previous version archived in ADSM
+Version 1.85=Correct IRC in P=FATCAT after rename of remote file
+             Reorder statements in FATLIB to satisfy FLOPPY check 39
+             FMOPEN: CFOPEN also for non-SHIFT Unix machines
+             FMQTMS/FMQVOL: add (GENERIC SHIFT) IF=CERN,IF=SHIFT
+             FMVERS: add IF=CERN
+             Add P=FMUTIL,D=FMLTON,D=FMNTOL to process locations code file
+             Extra protection in FATCAT against network problems
+             Print user words also in decimal (FMSHOW)
+             V93D 20/10/94 16:20
+             Fix backslash problem for QMALPH.
+Version 1.84=TMS return codes: 312-315 all mean roughly the same
+             312 - volume not mountable on system issuing QVOL command
+             313 - if an unknown generic system name is given as a QVOL option
+             314 - if an unknown specific system name is given as a QVOL option
+             315 - if the volume is unmountable on ANY defined operating systems
+             FATMEN: reduce PAWC to 1M words
+             FMLD: more logical handling of NLEVEL and -R
+             FMOPEN: bug fix in options for XYOPEN (Alfonso Lopez)
+             FATSEND: protect against NFOUND>MAXFIL
+             Check status of LIB$GET_LUNs
+             Add STATUS on OPEN in FAFNDF
+             Print IOSTAT in FMRZIN if open of TPSERV.CONF file fails
+             Rework lib$find_file logic in fatsrv for vms systems
+             Add P=FATLOG to process *FATLOG* lines in FATSERV log
+             Add P=FATSREQ, to issue SYSREQ command with retry
+             Z=FATSYS: add IFMODX to flag exchange mode catalogue
+             (mods to FAOPEN, FARINI, FATSRV).
+             Add FATBACK to convert RZ file to FZ file.
+             ADD FMFIND to issue FIND in one-line. Add FATBACK script
+             Add program FATCHK to read all entries from catalogue
+             FMFZI: return GENEN correctly also for LOG records
+             GENEN is e.g. //CERN/DELPHI/FATLOG (to work with existing names
+             files)
+             V93C 08/06/93 12:40
+Version 1.83=FMXDSK: perform various checks on each element of search
+             list as recommended by Keith Chadwick, FNAL
+             Add FMLCOD to load location code definitions from user file
+             ADD/DISK|TAPE: support user words
+             CLIO support: look for 'vmstage' in current path
+             (still needs mods to FMTAPE/FMCLOS)
+             FATSRV: add FATLOG to write logging records to FZFILE,IF=FATLOG
+             FMFZO: lower FZLOGL for journal file
+             FMALLO: use ICDECI to interpret density field
+             FMPEEK: add option D to drop bank after unpacking
+             Add FMPLOG to print log records
+             FMFZI: chvsn & chvid = char*8
+             FMCOPY: add DSN to STAGE CHANGE command. STAGE CHANGE uses
+             dsn STAGEOUT if the input file was staged without specifying
+             the dsn.
+             Add FMDDIR: delete directories even with entries
+             FMCLOS: Correct handling of IOPTP in case of LBANK=0
+             Add Z=FAUST for user statistics
+             FMTAPE: treat RECFM=U like RECFM=F for Shift
+Version 1.82=FATKEOPS: use XZMV to rename request file
+             FMKMOD: comment field was never updated.
+             FMTMS: bug fixes from Steve O'Neale (FMGVID,FMGETP,FMSREQ)
+             FATSRV: names file is in DEFAULT(1:LDEF)
+             Protection in FMRQUI against network write errors.
+             Display error code in FASTGQ in case of unexpected errors.
+             Skip active files in FATSEND
+             TMS library SMCF_1 changed to 3495_2
+             Modify FATSEND to handle multiple groups; add protection
+             against errors.
+             Mods to FMLOOK, FMCSTG and FMRSTG from D0 (Krzysztof Genser)
+             Protection in FMTAPE against unexpected replies from STAGE Q
+             Add NeXT flag in FFATMEN and FMHSTC
+             25/02/93 10:20
+Version 1.81=FAFNDF: get short/long wait intervals and retry count from
+             logical names (FATMEN_SNETWT etc.) Call FAFNDF from FMQSTG.
+             FMTAPE: use FAFNDF to look for existing STAGE Q file
+             FATSERV.EXEC: exit 99 if timer expires and we are FMFATCAT
+             FMSELK, FMRZIN: protect against wild-cards in generic name
+             FAFNDF(VAX). Add longwait interval. Add FMWTO
+             FMRACK: protect against network problems.
+             FMTAPE, FMRZIN: correct problems reported by DESY.
+             FMTAPE: write temp file (IOPTY) in /tmp/<user>.fmstage,
+             sys$login:, MAXDSK
+             FMSEND: change mv to /bin/mv for Aegis users.
+             FMLN: warning message if entry for target already exists
+             FMINIT: set media type search order to 1,6,2,3,4,5 IF=CERN
+             FATCDES: add definitions for 3490s (media type 6).
+             FASEAC: FMISET is an integer function
+             FMFILL: blank fields prior to filling also for option O
+             FMTAPE: correct call to FMBQUE. FATNEW: clear FATNOD
+             FMALLO: retry only if there are more tapes in the current
+             library.
+             FMFZO: correct CHFNFA handling in journal file header
+             Fix warnings from Ruby compilation
+             Verify CDF options against code
+             Correct handling of status code in FMSEND (VAX)
+             Bug fixes to FMVINF (TMS VOLINFO tag manipulation)
+             wHole input staging on VM/CMS - take size from VOLINFO
+             tag or media capacity.
+             Bug fixes in FASEAR/FASEAC: check if any user word selection
+             has been made
+             Save current directory correctly in LD(FMLD)
+Version 1.80=FX=FFX in FMOPEN (removed in 1.73 for some unknown reason)
+             Add +SELF,IF=CSPACK to FMSEND to avoid pulling in
+             TCP/IP code unless CSPACK is selected.
+             V93A 15/01/93 13:30
+Version 1.78=More mods to CDF for new KUIP (options etc.)
+             Add call to INITC in FATMEN
+             Modify CDF for use with new KUIP.
+             KUIP style -U no longer needed with latest KUIP
+             Add KSN parameter to LS command
+             14/12/92 13:20
+Version 1.77=FMFZO, FMSEND, FMUPDT: handle remote updates via CSPACK.
+             Program lifetime: modules over 1 year old will print warning
+             Add ABEND routine to FATSRV. ABEND prints server statistics
+             and then executes fatabend script/command file/exec
+             Counters in FATSRV.
+             Try to clear out RDR in FATCAT - don't look on remote system
+                if there are more than 10 pending files
+             Handle remote catalogues correctly on VMS systems
+             Bug fix to FATSRV for zz files on Unix
+             Correct call to FAOPEN in FARINI
+             Bug fix in FMSREQ for return buffer length handling
+             Call lib$find_file_end before waiting in FATSRV.
+             Option N in rm command. Don't turn on I automatically for
+             option A. Reset reply buffer upon retry in FMSREQ.
+             Add STRING parameter to SCAN command - options for RM
+             Copy NAMEFD to FMNAMF for CSPACK access to remote files
+             Wait option in FMSMCF for FMCOPY. Do not add entry to
+             catalogue if FMCLOS fails.
+             Remote catalogue access via CSPACK
+                - FMLOCC, FMNICK, FMACCT, FMACL (use XZOPEN, XZGETL)
+                - FMINIT (not yet for VM) , FAOPEN, FARINI
+             01/12/92 12:00
+Version 1.76=Use of VOLINFO TMS tag field for multi-file handling
+             (routines FMGVOL, FMGVID and FMVINF)
+             Bug fix in FMTOVM for new journal file names
+             FMFZI: in case of warning from RZDELK, rebuild bit map
+             Speed up FMSELK by only comparing required fields and
+             only converting matching keys. (FNAME is converted to Z format)
+             Remote access to catalogue via CSPACK, e.g. for group L3:
+                FML3=/fatmen/fml3        = local/nfs access
+                FML3=fatcat:/fatmen/fml3 = CSPACK access
+                .netrc file should contain
+                machine fatcat login fml3 password xxxxxx
+             Update files are written locally and then transferred with
+             XZPUTA. Configuration files (FATMEN.NAMES, .ACCOUNTS, .ACL
+             and .UPDATES) read using XZGETL.
+             ==> Needs CSPACK   1.28/02 921124 10:30
+             Performance improvements in FASEAC, FALS (from FASEAR)
+             Bug fix in FMFZO for VM - only open LUFZFA if not already open.
+             Add command SCAN. Bug fix in FMRM (FMACNT never called).
+             Change FMACL to support ACL files (option A) and UPDATE files
+             (option U). Allows FMOPEN style updates to be controlled at
+             the path/user/node level without recompiling/linking
+             Don't check RC from FMLOCC in FMINIT
+             Interface to DESY MVS staging system (input only)
+Version 1.75=Bug fix in FASEAC/FMFILS for re-entry with non-zero context
+             pointer.
+             Better protection against errors in FATCAT.
+             Bug fix to FMSHOW. Print status in FMSEAR.
+             Bug fixes to FMKADD (KUGETS rather than KUGETC), FMRAND and
+             FMFGET (length for character strings) for DESY
+             Process each update directory in turn on fatcat
+             FATCAT: drop /* from XZLS call (avoid problem with globbing)
+             Define MINBLK in FATSRV - minimum number of blocks left
+             before cleanup is triggered (VMS)
+             Correct FAFNDF handling on Unix systems
+             Revise update handling in FATSRV for VMS systems
+               - RMS$_FNF = wait
+               - RMS$_NMF = reset context pointer and loop
+               - ZZ*.*    = loop
+             Exploit new RZOUT option 'R' in FATSRV
+               - use in case bank & keys match and entry already exists
+               - if bank matches but not keys, use old method
+             !!! N.B. this requires RZ version 2.00/05 or higher !!!
+             RZEBRA   2.00/05 921104 17:30   THE ZEBRA RZ PACKAGE
+             28/10/92 10:00 <<<<<< Install new RZ with this version >>>>>>
+             Bug fixes for IBMMVS (FMRZIN,FMCOPQ,FADARE,FMNICK,FMFPAK,FMOPEN).
+             FMUSER for non-HEPVM, non-VMBATCH sites (just use IDENTIFY)
+             Use RZVERI (FATSRV) to rebuild bit map of used records
+             from the file itself if required
+Version 1.74=Blank search strings in FMSEAR before UHTOC calls.
+             Fix error return in FMOPEN after reworking of monitoring info.
+             Call stageput only for tape datasets
+             Prepend CHEOPS error messages with CHEOPS error:
+             Save and reset CD in TOUCH. Restore CD also in mv if rm
+             failed.
+             APOF77 flag: double \ in FMCD, QX_SC selection
+             CHEOPSIF: call XYOPEN/CLOS only for disk files.
+             Send fatal messages from PROGRAM FATCAT to FATONE
+             14/10/92 16:00
+Version 1.73=Remove treatment of FX like FFX in FMOPEN
+             FMOPEN/FMCLOS etc. for links. New routine FMGETL.
+             Extra monitoring information - IHOWFA, ITIMFA & CHFNFA
+             Support CSPACK access to FX and FFX files, IF=CSPACK.
+             Remote files may reside on VMS or Unix systems
+             (VM not currently supported)
+             Move FMRCOP from FMKUIP to FMINT. +USE,CSPACK to get
+             functional version.
+             Protect against SS$_UNREACHABLE in LIB$FIND_FILE calls
+             Escape characters in 'ls': % for nicknames,
+                $ for environment variables
+             Server mode VMS staging - see P=REQUIRES
+             Use parameters in unpacking MFQNFA
+             Nickname processing via the shell
+             Add FMRMLN/'rmln' command to remove/find dangling links
+             Add routine FMLN and 'ln' command.
+             Add routine FMNICK a la DELPHI
+             Add routine FMRANK to rank CHFILES by VID & FSEQ
+             Use CFIO (via CHANNEL mode) on VAX/VMS systems for FZ files
+             Alpha port, bugs in FMCOPC
+Version 1.72=Require at least 2 update tokens left for mv, FMMV
+             Support FATMEN.LOCCODES file for location code definitions
+             Add SHOW/LOCCODES command
+             FMCDF: add R='x,y,z' for all cases of CHOPT for new KUIP
+             FMRZIN: check modification date and time of directory
+             on entry and exit. If directory has been modified, sleep
+             and retry. Add example program using FMPOKE (for SMC)
+             FMTAPE: do not issue FMFGET(sfget) in case of IOPTU
+             Support for /afs files in FMRZIN
+             Ensure LUFZFA is set before calling FMUPDT. Bug fix in FMSTGI/O
+             Return stageout return code in FMCLOS chopt=P
+             Support UPDATE/FMUPDT on non-VM systems !!! N.B. the server
+             must be at level V1.65 or higher !!!
+             Extra debug in FMRZIN - print out RZ info for object retrieved
+             FMDD2L: handle character lun, e.g. '12'
+             Fix bugs in FMCLOS, FMSTGO for CHEOPSIF
+             11/09/92 16:00
+Version 1.71=FMPUTC: blank padding from LEN(STRIM) up to field width
+             Option C in TOUCH: clear comment field
+             Set LFMODE in FMSTGO before call to FMCLOS
+             Add option A in TOUCH: set account field
+             FMVERI: check also MHSNFA for disk files
+             FMRZIN, FMDISK, FAINQR: DECnet access
+             FMTAPE: permit staging of files > max. media capacity
+             STAGE PUT support for Shift & VMS (local only) in FMCLOS
+             Extra debug in FATCAT
+             Use new journal file names in FMTOVM
+             Check stage group in FMSTGC only on first entry
+             Time FMOPEN/FMDISK/FMTAPE if IDEBFA>=1
+             Add user exit FMUVER to FMVERI.
+             FMTAPE: check if batch queue STAGE_xxxxS exists - if so,
+             perform stage request in batch. Add routine FMBQUE.
+Version 1.70=Improve diagnostics in FMVERI for blanks/unseen characters
+             in generic name. Bug fix in FMRMDR in call to FMVERI.
+             Bug fix in FMSTGI/O - ensure IRC always returned
+             NOWAIT option in FMOPEN - return after call to FMTAPE
+             Fix for Cray compiler in FMOPEN (LCHF = 1)
+             FMMVC - perform DEL then PUT
+             Bug fix in FMOPEN - FX treated as FFX (as in old FMOPEN)
+             V92B 20/07/92 10:30
+Version 1.69=Last minute fixes for V92B: move maximum recl and blksize
+             to Z=FATFORM.
+Version 1.68=Fix bug in FMTOUC. Use option U in FACDIR call in FMSELK.
+             15/07/92 13:30
+             pre-release of V92B(?)
+Version 1.67=Fix bug in FATARE for VAX/VMS systems or -TMS
+             Rename *CHEOPS -> *CHEOPS2F etc.
+             Support tag :queue in FATSEND - queue directory on remote node
+             for current server. If not defined, use subdirectory todo.
+             Check that RECFM is entirely alphabetic
+             Bug fix in FMCOPY - reset IRC after FMCOMP
+             MODIFY command : check that media type does not change
+             New Shift Disk Pool Manager (DPM) - do not provide shift
+             user or pool name. Old behaviour IF=OLDDPM.
+             Protection in FMTAPE against STAGE_RC undefined or in invalid
+             format. Add LOCCOD to ADD/DISK, ADD/TAPE
+             Bug fix in FMRSTG (check on whether file was already staged)
+             Check DCB information for output staging (VM)
+             Missing FATBUG in FMFGET, IMODE in FMDISK
+             Better processing of >MAXFIL files in FALS.
+             Fix bugs in HP/UX version
+             03/07/92 08:45
+Version 1.66=Add location code, media type and copy level to COPY command
+             Call FMVERI in FMSTGI/O. Write extra information in FMCOPQ.
+             Put density on stage command IF=SHIFT,IF=-TMS
+             Add protections in FMCOPY, FMTAPE for CHEOPS
+             Add program FATLOOP2 in P=EXAMPLE to FMGETK every entry in the
+             catalogue: ZFATAL = problems.
+             Permit useful options on shell FIND command.
+             Add program FATHEAD to print headers of journal file on unit 1,
+             or the file name passed on the command line.
+             Add option Y in FMOPEN: write stage command to file on LUN
+             but do not execute. Increase size of PAWC in FM shell.
+             No check on Zebra e-o-r in VM servers
+             Preliminary interface to TAPESYS (UVVM)
+Version 1.65=Modify FATSEND & FATSRV/FMSEND to use new naming convention
+             Ditto for program FATCAT
+             Increase size of Zebra store in FATSRV
+             Protection in directory scan routines against RZPAFF problems
+             (!!! mods to RZPAFF - ZEBRA/RZ must be reinstalled !!!)
+             Mods to FMFIXF to handle directory names beginning /
+             Call FMVERI in case of directory add/remove operations
+             Add CHEOPSIF patch. Routines to stage in or out.
+             Bank information is passed as arguments to the routines to
+             simplify C/Fortran interface
+             Use command file SETUP_EXE:STAGE to submit stage command
+             in FMTAPE. #bytes read (COPY_FILE only) returned in logical
+             names STAGE_filename. (Not yet used)
+             Change naming convention for journal files:
+             zz92061118040500000499024164.user_node
+             Renamed to aa... when update complete
+             APOLLO: use WHICHF to determine if 'l3stage' exists in
+             current path. If so, activate l3stage specific code (was IF=APOL3)
+             (!!! requires WHICHF KERNLIB (kernbit) routine !!!)
+             19/06/92 09:30
+Version 1.64=Mods from KLG for FMRSTG, FMCSTG, STGSERV.
+             Bug fix in FATSEND for ICONT/=0
+             Modify STGSERV to send jobname ('LOOK')
+             Incorporate mods from D0. to FMRSTG, FMCSTG etc.
+             FMRSTG/FMCSTG. check before each job inquiry whether file
+             is already on disk (and of the correct size - to be done)
+             FMCSTG: wait if tape is already in use
+             Job inquiry by FMLOOK (from Krzysztof Genser/D0)
+             Support usernames up to 12 characters. Look for signal.stop
+             files in FATSEND.
+             Add option J to FMSHOW. Just the files that are accessible.
+             Add MODIFY command
+             Extend CP and MV commands to allow keys, fileid, host, vsn,
+             vid and fseq to be changed for output file. XVID syntax supported
+             Change copy level to data representation. Add new parameter
+             offsets. Permit comments in acl/accounts files
+             Add option R to LS : show where the data Reside. (need STAGE Q
+             for Shift/Cray)
+             For disk files: accessible: Y/N method: Y/N
+             For tape files: active library: Y/N device: e.g. local staged: Y/N
+             Add option E to RM to erase disk file. !! to be tested on SHIFT !!
+             Change MV and CP commands to accept input key
+             Support search lists in FMRZIN for DFS devices
+             11/05/92 13:00
+Version 1.63=Fix bug in FALS - don't print blank line in case of option V/W
+             and no files found in CWD.
+             Don't drop disk of server if mode A. (VM)
+             Search list handling in FMLCOP.
+             FALS: protection for no files found. Bug fixes from D0.
+             Correct calls to VAX RTL routines (irc/istat handling).
+             Bug fix in FMPEEK for 'A', 'N' options.
+             Modify FMSHOW to accept LBANK=-1 (use LADDBK, e.g. from
+             novice i/f).
+             Protection in FMFZI - require ZEBRA end of run record in
+             input file.
+             Fix bug in FMTAPE - FSEQ missing from LABELDEF.
+             Add program CHEOPS - read .rqid and .rep files generated
+             by CHEOPS server and update FATMEN catalogue(s) accordingly
+Version 1.62=Retry 5 times in FMRZIN if keys vector has been given but
+             entry not found. (concurrent update problem).
+             Add routine FMACCT to check for account aliases.
+             Warning messages if SYSREQ is incorrectly installed.
+             Use SHIFT RFIO also for tape files (use sfget after stage
+             request). Save pathname across FMLDIR calls.
+             Add program FATKEOPS, to send updates from VM to
+             cheops directory on fatcat.
+             CHEOPS interface - routine FMBTOA to write bank in
+             ascii format, write update to /fatmen/fmcheops
+             or as variable FMCHEOPS. On VM, use gateway machine FMCHEOPS.
+             Fix bug in FMCOPC - set media type in keys vector
+             Add patch FATRZCHK to protect against corrupt RZ files.
+             Add routine FMACL to provide protection on FATMEN paths
+             Correct calls to FMCLOS from FMCOPY.
+Version 1.61=Use exchange mode and C I/O on DECS, if the RZ file is
+             kept in a directory starting /fatmen (e.g. on fatcat)
+             Support search lists in FMSTGP.
+             Rewrite FMCFGL using CIGET routines (for character data)
+             Print host type and OS for disk files in FMSHOW
+             Add support for Physical copy in FMCOPY. This is the
+             default. (Use cp/COPY/VMIO to perform the copy)
+             Split FMOPEN into separate routines: FMDISK/FMTAPE/FMFOPN
+             FPACK files are handled in FMFPAK.
+Version 1.60=v92a March 1992
+             Fix bug in FMSELM when CHOPT=' '
+             Bug fix in FMOPEN - save IQUEST(10) & (11) over call
+             to FMGET
+Version 1.59=Bug fix in FMSTGP. Network retries in FMRSTG.
+             Check that SETUP_EXE:TPSERV.CONF exists in FMOPEN, FMRZIN.
+             More bug fixes in remote staging.
+             Massaging in VAX Stage handling. Add NRFMFA
+             Add Motif version, restructuring of CDF file,
+             SHOW/CATALOGUES command.
+Version 1.58=Print stage log in FMCSTG, FMRSTG.
+             Correct tag definitions for FATMEN directories.
+             (loc.code and med.type were swapped).
+             Default catalogue name is DESY,IF=DESY, FNAL,IF=FNAL in
+             FATMEN shell only. Fix bug in FATSRV, FMOPEN for VMS.
+             Move FAFNDF,IF=APOLLO to patch UNREF.
+             Bug fixes in remote VAX staging.
+             Deassign channel in FMQUOT. Use FORTRAN I/O when reading
+             SETUP_EXE:TPSERV.CONF
+             Add debug printout for remote staging.
+Version 1.57=Print dsn, host or vsn,vid,fseq if logl>=1 in FMFZI
+             Print user & host of originator of update in FMFZI.
+             Protect FMQUOT against disks with quotas disabled.
+             Bug fix in FMLDIR for [] support.
+             Add routines FMRSTG, FMCSTG, FASTGS, FASTGQ for remote
+             VAX staging. (Across or within clusters)
+             Bug fix in FMLFIL.
+             Add support for remote tapes in VMS:
+                tpserv device-group host1 [host2]
+             Add support for RMS files (RECFM RMS, /RMS on STAGE command,
+             use COPY to copy data)
+             Permit creation for exchange mode files, via FATMODE in
+             FATNEW (setenv FATMODE X or XC)
+Version 1.56=Debug printout in FACOPY.
+             Open journal files as recordtype=stream_lf if writing
+             over NFS from VMS->Unix.
+             Fix bug in FMGLUN.
+             Print date and time before going to sleep
+             Fix warnings from VSFORT 2.5 compiler (unreachable code
+             in routines FMCOPC and FMRZIN. See warnings in these routines)
+             Fix bug in FMTAGS (undefined variable)
+             Friday, 13th December
+             Fix bugs in FMSEND
+Version 1.55=mods to FAINQR and FMRZIN for FPACK files
+             If host is not local, then search in .netrc file for nodename
+                IBMMVS: userid.PER.NETRC
+                VAXVMS: netrc.;
+                VM/CMS: DOT NETRC A0
+                Unix  : $HOME/.netrc
+             Update FATNEW for MVS. Resync copy level with FPACK
+             FPACK interface: in case of FPACK files, routine FPARM
+             is called in FMOPEN & FMCLOS. FPARM handles file open and
+             starts server etc as necessary.
+             OPEN:  CALL FPARM('OPEN logical-name UNIT=lun FILE="fn"'
+             CLOSE: CALL FPARM('CLOSE logical-name')
+Version 1.54=Support NFS mounted files (FMRZIN, FAINQR) VAX/VMS, Unix
+             Use sequence QFTITLCH to get pam title rather than QFTITLE
+             Fix bug in FATSRV for check on /done directory (Unix systems)
+             Handle .. characters in FMPAFF and FMFIXF
+             Fast match in FALS, FMLOOP (file='*')
+             Add ACTION=read/readwrite on OPENs. Modify FMHOST for CMS 7.
+             Fix bug in CP command - cwd was not correctly restored.
+             Add FATOUCH example program, to touch files or directories.
+             Fast count in FMFC, if filename=*. (Uses 1/3 of CP time)
+             Changes in FMOPEN for shift - call CFOPEN for
+             full shift file name, not fort.n
+             Use C I/O and exchange mode for RZ file if
+             STREAM_LF (VAX) or in /fatmen (CERN Cray)
+             Call FMVERI from FMRM, FMRMC
+             Use configuration files to determine device access.
+             VAX/VMS,IF=VAXTAP: logical names SETUP_modelS
+             IBMVM,  IF=HEPVM : nodename RESOURCE P
+             SHIFT            : /etc/shift.conf, /etc/TPCONFIG
+             CRAY             : /etc/shift.conf
+Version 1.53=Add routine FMQUOT to P=FMVAX - get current disk quota
+             information (from SPACE by JJB). Perform cleanup in FATSRV
+             Perform automatic cleanup in FATSERV EXEC
+             Update return codes in FMATCH. Return location of
+             mismatches in IQUEST. Modify FMSCAN to treat wild-carded
+             and non-wild-carded pathnames alike.
+             Add routine FMHUNT - hunt for (wild-carded) generic name
+             Set IQUEST(10) to number of levels in initial path in FMLOOP
+             Common version for CERNVM, CERNVMB & LEPICS
+Version 1.52=Access to SMCF now based on sequence FASMCF.
+             Access enabled, however, for SHIFT, CSF, VXCERN, APOL3
+             Fixes for CERNVMB
+             More examples in P=EXAMPLE.
+             Extra protection in VAX, Unix versions if FM symbols
+             not defined.
+             Rewrite FMLDIR using FMSCAN
+             Add support for [] wild-cards.
+             Given the following subdirectories:
+                Y91V02
+                Y91V03
+                Y91V04
+                Y90V06
+                Y91V05
+             ld y(90:91)v> will follow Y90V06, but ld y[90:91]v> will
+             follow both Y90V06 and Y91V05.
+             Call FMACNT on each entry to FMRMC, in case user has reset acct
+             Fix bug in FMPOOL when TO specified
+             User meeting of 16/10/91 (ship command not yet implemented)
+Version 1.51=Add routine FMSETK - set keys matrix for d/s selection
+             Add commands SET/SHOW userwords.
+             Add routine FAINQR - inquire with GIME/sfget/env. variable
+             expansion.
+             Add FMSELM routine - select by keys matrix.
+             Add ZOOM command to zoom down directory tree to first
+             directory with no subdirectories & at least one file
+             FMSCAN now descends specified number of levels below
+             wild-carded pathname, and not below path up to last wild-card
+             Add option V in FMOPEN - as S but even if file size is ^0
+             Fix bugs in FMMANY, FASELP for <> matching.
+             Fix bugs in FAT2VM.COM, FMTOVM to not send files back to origin
+             Add FACDIR interface routine - reset top directory
+             if naming directory is not TOPDIR
+             Fix bug in FAEXTR
+             Fix bug in FMALLO - use separate buffer for QUERY CONTENTS
+             Modify FMLD to use FALD - remove limitations on
+             numbers of directories that can be displayed.
+Version 1.50=CNL 204 - 12/09/91 09:00
+             Add FMLOOP. As for FMSCAN but for file names
+             Add FMMODU - modify user fields
+             Use FMSCAN from FC, LS commands and routines
+             Add routine FMSCAN & FASELP. FMSCAN provides FMLDIR
+             like functionality but avoids the use of local arrays
+             by calling user exit. <> are also supported.
+             Option Q in FMSHOW also shows TMS tags
+             Extra protections in FMINIT
+             Add options Q, S, T (A) in CD to list RZ quota, statistics,
+             dates & times etc. Add command DIR to issue RZLDIR.
+             Add option Y in FMLSC - verify bank contents
+             Permit reinit if user typed a bad FM group
+             Add utility routine FAEXST
+             Add command ALLOCATE to add tape file with volume
+             allocated from named pool in specified library.
+             Add TREE command to print directory tree
+             Use FMOPTC rather than UOPTC - checks on CHOPT case insensitive
+             Treat <> like * in FMATCH (with warning if LOGL>=3)
+             Change flags for routine names (Lowercase, Underscore etc.)
+             Fix bug in FATMDI introduced by move to FATLIB.
+             Purge CON files in FATSERV on VM
+             Fix bugs in FMXDSK. Add warning in FMOPEN if size > MAXSTG
+             Add command MEDIA to set/show media attributes
+             Command files for VAX servers - scripts for FATCAT
+             Add patch FATSEND to send FATMEN updates to remote
+             servers, according to NAMES file. Current version
+             is for Unix and VMS systems only.
+Version 1.49=Interface to VMTAPE (FMOPEN/FMFIND/FMMAKE) & FMALLO
+             Interface to VMBATCH (for FMUSER, FMACNT, FMJOB)
+             Add routine FMEDIA to set default media attributes.
+             Call FMUTMS (user exit) from FMQTMS IF=-TMS to allow
+             user to override these values for individual volumes.
+             Add option G to RM command, to change protection
+             group on a volume. Defaults to *None.
+             Add routine FMPROT.
+             Add command RMTREE, to delete a complete directory tree.
+             Modify FMATCH & FMMANY. Pointer now reset after a *
+             by looking for a substring, rather than single character
+             Only check TMS information in FMVERI if Q option present.
+             Add routine FMTAGS, to get, set or delete TMS tags.
+             Change default shift staging pool from PUBLIC to shift1
+             Add program FAT2SQL - convert entire RZ file to SQL
+             Add routine FMVMIO - user hook routine for FZ D/A
+             for binary exchange format files on IBMVM.
+             Protect against error opening input file in FMFZI
+             Option D in SEARCH (FMSHOW really): write KUMAC file
+             to remove matching entries
+             Use FORTRAN I/O by default for FX, FXN files.
+             This is default for Zebra 3.67 and above, unless Y
+             specified on FZFILE.
+             Fix bugs in FMOPEN for SHIFT. N.B. must use -lsun for
+             XY routines. To get debug from XY routines:
+             setenv RFIO_TRACE 3
+Version 1.48=Issue QUERY LIBRARY in FMQTMS IF=QVID to determine if
+             library is active or not. Libraries beginning with a '*'
+             are apparently inactive by definition.
+             Issue option X on FZENDx in FMCLOS if C I/O selected in FMOPEN
+             Return true RC from SYSREQ in IQUEST(1) (FMQMED)
+             312 = volume unavailable only fatal in FMRZIN when key not
+             specified.
+             Allow staging disks upto 210 MB IF=CERNVM. Default to
+             sequential access for FZ files on disk.
+             Support date & time ranges in SEARCH
+             Mods for DESY.
+Version 1.47=Add FATPURGE.COM to delete old files in [.DONE]
+             Add FATRL.COM - modified RDRLIST.COM to copy files send to
+             VAX via SENDFILE to [.TODO] directory
+             Add FAT2VAX exec to send updates via Interlink
+             Support MVS in FATSRV.
+             Add FMUSER for MVS systems (adapted from KPREFI)
+             Add /*DECK, $!DECK lines to REXX/DCL patches
+Version 1.46=Fix PREFIX support in FMOPEN, FMFIND, FMMAKE
+             Support range of Copy Levels, Media types in FMRZIN, FMLS(C)
+Version 1.45=Fix bug in FATCAT - reset IC after call to XZLS
+             Fix bug in RM command for freeing volumes
+             Permit use of FMGETV/C/I, FMPUTV/C/I from novice interface
+             (LBANK=-1)
+             Add example pgm using novice interface in patch EXAMPLE.
+             Add example installation procedures
+             Perform checks on input parameters in FMINIT, FMSTRT
+             Set location code to the value given by a call to FMSETL
+             (or set/loc) in FMKADD, FMKADT, FMADDD, FMADDT
+Version 1.44=Add commands SET/COPYLEVEL, MEDIATYPE and SHOW commands
+             FZFILE options: T only if read directly from tape.
+             Add command SET/LOC
+             Check that location code of each candidate is found
+             in location code vector specified by user (FMRZIN)
+             Modify for use with ORACLE on FATCAT(IBMRT).
+             Oracle RTL compiled without -qextname
+             Requires trailing _ on ORACLE interface routines,
+             Common/FOFILE/ and CLTOU.
+Version 1.43=Check status from stage -o in FMCLOS (APOL3)
+             VID prefix support for all calls to FMQTMS.
+             Change key allocation in FMALLK: now use maxkey+1
+             Change FMACNT to check env variable FMACNT
+             FMQTMS, FMGTMS: iquest(1) = -1 if -TMS
+             Add routine FMQMED to return media type and mount flag
+             Add options AFIU to FMRMC (All,Free,Interactive and Unlock)
+             Support search options as for FMSEAR.
+             Use C I/O for Zebra FZ if IQUEST(10) = 1
+             Look at environmental variable FMHOST (Unix, VAXVMS)
+             Use this as nodename, if set.
+Version 1.42=Bug fix in FMNODE for VAXclusters
+             Fix bugs in FMTMS patch for SYSREQ retry
+             Revert to CART for APOL3 - old stage still on LEPICS
+             Fix bugs in FMCOPC, FMRCOP.
+             Fix bug in FMFZI - return code from VMCMS undefined.
+             Add example EXEC/COM/SCRIPT for running pgm FATNEW.
+             Fix INQUIRE bug in FMKUIP routines for VM.
+             Fix typo in FMOPEN. Add -h in fmld, fmseac, fmlsc, fmfc.
+             Support options -V,-W in FMLD
+             IBMMVS version. Current implementation assumes that all files
+             are catalogued.
+Version 1.41=Add stage -o for APOL3 in FMCLOS. Reinstall and test on Apollo
+             Support non-CERN catalogues: variable FATSYS (server, pgms),
+             INIT //fatsys/group (KUIP)
+             Modify FC command to support CHOPT: count #file/dir,
+             #subdirs/dir.
+             Use FMLFIL in FMLSC, FMSEAC
+             Fix bugs in FMLDIR. Restore code for NLEVEL in FMTREE, support
+             in LD command. Fix bug in SEARCH for NMATCH=n.
+             Change CART to CT1 in FMMAKE (this is now returned by the TMS
+             for manual 3480s)
+             Retry in FMALLO if first tape from Q CONTENTS has been
+             allocated away from under us...
+             Add protection in FMOTOZ for bad ORACLE information.
+             Fix bugs in FMATCH, FMOTOZ, FMLD.
+Version 1.40=CNL201
+Version 1.39=Fix bugs in FMLDIR. Add FMLFIL, FMFILS.
+             Add return codes for SYSREQ(TCP)
+             Use FMSREQ to perform call to sysreq with retry
+             Add calls to L3 stage script in FMOPEN, FMFIND, FMMAKE
+             Add FMFILC - like FC in FM shell.
+             New calling sequences for GETENVF, SLEEPF.
+             Fix bugs in SHIFT version
+             Add IBM MACROS (needed for MVS version) to FATCDES.
+             Add program FATCAT to send updates to FATCAT upon
+             arrival in RDR and poll for new updates at wakeup
+             interval.
+Version 1.38=SHIFT code for sfget (DSN is [pool.user]/unix-dsn)
+             Add MVS routines from DESY
+             Split FMOPEN, FMFIND, FMMAKE
+             Add routine FMFNME to generate extended unique file name -
+             not suitable for VM systems.
+Version 1.37=Add Patch FATULOK. Example program to unlock FATMEN RZ file.
+             Current version will unlock 'CERN.FATRZ' in current directory
+             Put large arrays in FMALLK, FMLIST, FMLDIR into commons.
+             Add options K (keep) and P (autoput) to FMOPEN
+             Modify FMQTMS so that the correct media type (taken from
+             bank) is returned if volume unknown or TMS option not
+             installed. Media type is passed to FMQTMS via IQUEST(11).
+Version 1.36=Add patches DCL, SCRIPT to contain sample command files/
+             scripts to start FATMEN server.
+             Add variable FMWAKEUP (FATMEN$WAKEUP on VAX) to define
+             FATSRV wakeup interval
+             Fix all warnings reported by Apollo compiler.
+             Return in FMOPEN for Unix systems without tape support
+             (currently only Cray, Shift)
+             Extra protection in FMINIT if logical name/env. variable
+             pointing to FATMEN catalogue is not defined.
+             Fix bug in FMLD for bad pathnames
+Version 1.35=Fix bug in FMRM if non-existant key is specified
+             Use XYOPN in FMOPEN for SHIFT disk files
+             Add WRTAPE support in FMCOPY for VAX
+             Add option MEDIA in ADD/TAPE and FMADDT. (For NA44)
+Version 1.34=Fix bug in FMALLK, extra debug in FMFZI.
+             Use stagewrt in FMCOPY for Cray
+             Add SHIFT support: use stagein/stageout scripts in FMOPEN.
+             All SHIFT files are assumed to be accessed via RFAS routines.
+             Current support only for FZ binary files...
+             Add routines FMULOK, FMPOOL to unlock (enable write) and
+             transfer a tape from one pool to another. Modify FMSHOW
+             to display the host on which a disk file resides, rather
+             than that from which it was catalogued.
+             Add DCB/Generic device support in VAX version
+             Move 'fix' for check on robot/manual to FMQTMS
+             Add extra print out in FMFZI.
+             Fix bug in FMQTMS introduced by VID prefix support.
+             Add command SEARCH to allow searches on DSN, HOST, VID and
+             USER. Output is piped to FMSHOW.
+             Add option Z in FMCOPY - use STAGE OUT for output file
+             Add routine FMGBYK (get by key-serial-number).
+             Modify FMLS to support options I (sort in Increasing order)
+             and 1 (display only one entry per generic name).
+             Option W in FMLS - multi-column output
+             Modify FMSHOW to call FMSHO2 in case of options B (brief=80 cols.)
+             or E (extended=132 cols.) listing. Modify FMOPEN to take
+             file size for STAGE request from IQUEST(11) if option O(verride)
+             is specified. Fix bug in FMLD for output redirection.
+Version 1.33=Add routines FMSETL, M, C, U to set the list of (<100)
+             location codes, media types, copy levels and logical units
+             for use in FATMEN selection and for use by FMCOPY etc.
+             Add routine FMPUSE to print usage information.
+             Add routine FMUNIQ to return a unique list of file names
+             in specified directory. Selection may be made under normal
+             keys mask, as for FMSELK.
+             Add routines FMJULI/FMDATE/FMDAYS to provide conversion to
+             and from julian date and delta time.
+             New entry point FMDCB - provide DCB or take from 'model DCB'
+             Add routine FMFZCP to copy an FZ file from LUNI to LUNO.
+             Called by FMCOPY. Logical units required by FMCOPY may
+             be set in IQUEST(11-12).
+             Change size of RZ file to 65000 records (new protection in RZ)
+             Fix bug in FMKEYS/FMSELK.
+             Close and reopen RZ file in FATSRV on return from FMFZI.
+             This ensures that updates are seen by clients.
+Version 1.32=FMPEEK/FMPOKE routines - return information from FATMEN bank
+             in vector/ copy vector to FATMEN bank with optional catalogue
+             update.
+             Rename FMADDT/FMADDD to FMKADT, FMKADD. Add routines FMADDT,
+             FMADDD in patch FATUOUS. Add routine FMSTRT -
+             "Novice" initialisation routine which also initialises Zebra
+             Suppress call to RZDELK in FMFZI for MOD operations
+             Add option L in FMOPEN - override Label information with
+             DCB from catalogue or user-supplied bank
+             Add routine FMLDIR - provide <> wild-card support plus
+             context pointer.
+             Support wild-cards in any location in LD command.
+             Add routine FMCOPC - command line copy routine. Permit copy
+             to named VID, tape allocated from pool, remote copy (via
+             CSPACK) or copy according to two existing catalogue entries.
+             Add entry point FMGTMS to obtain FATMEN oriented details from TMS
+             Change calling sequence of FATUOUS interface to match CERNLIB
+             standard. Fix bug in FMLD for -R option, VID-prefix handling
+             in FMADDT.
+Version 1.31=Add 2MB to file size on VMSTAGE request, if < 200 MB
+             Modify FMPUTC/FMGETC to support VID prefix field
+             VMSTAK now also for HPO. Use KERNLIB version of GETENV
+             Add ZABEND routine for FATMEN shell - avoid ZPOSTM
+             Support VMIO in FMOPEN for DDNAMEs like VM%%F%%%
+             Update mode corresponds to FMOPEN option X
+             Add pilot patches for CERNVM, LEPICS and FRCPN11 (ugh)
+             Add routine FMMANY - match many files, selecting
+             according to < or >.
+             Add routine FMCHOP - check options against allowed values
+             Output to search list on VAX: use disk with most space
+             Add routine FMKEYS. As RZKEYS, but with IFIRST,ILAST
+             to avoid the use of large arrays.
+             Use QUERY VID instead of QVOL (IN2P3 only, temporary!)
+             Return immediately after STAGE command in FMOPEN if NOWAIT
+             Support output redirection in LS, LD
+             Add patch FATUOUS - novice interface
+             Add routine FMFILE - as FMOPEN but no LBANK
+             Add routine FMPREF to convert VID prefices to/from
+             CHARACTER/INTEGER
+             Support STRONG TYPING IF=TYPE in PATCHY sequences
+             Add call to FMUPRT in FMSHOW, FMUSEL in FMRZIN
+             Add PATCH FMTMS for TMS interface routines (FMALLO,
+             FMQTMS and FMLOCK)
+             Add entry point FMSCAN - FMLIST + FMSORT + FMGET
+             Add DA as valid file format: open ACCESS='DIRECT'
+             in FMOPEN for format DA or it option X is given.
+             Support full wild carding of generic name in FMLS
+             Support RZOPEN in FMOPEN, RZEND in FMCLOS
+             Provide interface to DUMPTAPE (IBM, Cray)
+             Extend FATOPTS to numeric options
+Version 1.30=CNL 200
+Version 1.25=Fix bug in FMCOPY - close both input & output files
+             if an error occurs opening the output file
+             Fix bug in tape allocation in FMOPEN
+             Free tape unit correctly in FMCLOS for output volumes
+             Lift bank in FMADDD/T only on first entry. Add FFX
+             as valid file format.
+             Use FMBOOK in FMSMCF - save address in link area
+             FORTRAN version of FAFNDF based on SZLS from CSPACK.
+             Use RZOPEN from FAOPEN
+             Extend IFLAG in FOPUT: add only if not already present
+Version 1.24=Move FMALLK to patch FATSRV.
+             Fix bug in FMCOPY when called from FMSMCF (infinite loop)
+             Treat characters following a blank in DSN as a comment.
+             Correct FMQTMS, FMALLO for VAX.
+             Print DSN stacked in FMOPEN if LOGL >= 0
+Version 1.23=Extra protection in FMFZI for file deletion.
+             Fix bug in FMCOPY for VBS files. Remove unecessary
+             protection in FMSMCF for unknown VIDs.
+             Add TESTFAT KUMAC - example test macro in PATCH FATTEST
+Version 1.22=Try to reduce size of program. Limit number of directories
+             that can be displayed in FMLD to 10000, number of
+             copies of a file to 1000 (parameter MAXCOP).
+Version 1.21=Ensure that VMOPEN error codes are passed back to user
+             Force updating of KEYS vectors from BANKS in FMCOPY
+             Option C in FMCOPY - use STAGE CHANGE, option S, using
+             STAGE for input file (C implies STAGE for input and output)
+             No FORTRAN open in FMOPEN if using IOPACK.
+             Add sequence FATPARA in FMEXST.
+             Add flag NOSMCF for LEPICS - no TMS or robot access
+             Fix bug in FMLIST for call to FMFNMS (no wild cards)
+             Increase FORMAT statement for key serial number and loc.code
+             Set MAXKEY to 10000. Always put DCB on Cray STAGE
+             Use -S sbin option on Cray
+Version 1.20=CNL 199
+Version 1.18=For input tapes, must use 'EXEC STAGE CLEAR' in FMCLOS
+             CTRANS, CSQMCH now in KERNFOR.
+             Add parameter lengths of character fields
+             Fix conversion of LUN to DDNAME in FMOPEN for IOFILEnn
+             Attempt reconnect to ORACLE if IRC=3114 or 6065
+             Erase FATMEN RDRFILE after successful processing.
+             Fast exit in FATSERV EXEC in case unprocessed file exists
+             Increase working space to 200K words in FATSRV.
+             Save current directory in FMLS for restore at end
+             Add routine VMSTAK. Print shortest/longest record in FMCOPY
+Version 1.17=Fix bug in FMSMCF for check on robot/manual.
+             Convert TMS density to SETUP/STAGE format
+Version 1.16=Check bank address in FMVERI using MZCHLS
+             Add routines FMGETV, FMPUTV, FMGETC and FMPUTC to get and
+             put information to/from FATMEN bank.
+             Add FATSTACK exec for LABELDEF FID ? in FMOPEN.
+             Add routine FMFILL to fill FATMEN bank with default
+             values according to CHOPT. Old FMFILL renamed to FAFILL.
+             Set MNTTYP to 'R' if TMS unavailable and vid = Innnnn
+             Add routine FMEXST to check if entry already exists.
+             Ensure that Media type is set (keys and bank) in FMFILL,
+             FMALLO, FMCOPY.
+             Call EXEC FATSTACK to stack FID for FMOPEN option T
+             Fix bug in FMFZI for call to FMCOMP, default density
+             in FMQTMS=38K (not 38000).
+             Use VMCLOS in FMCLOS for DDNAMEs like VM%%F%%%.
+             If STAGE fails, retry using larger disk size up to max.
+             CP DETACH tape unit (option D in FMCLOS)
+             Use new version of SYSREQ (one line per CHARACTER element)
+             Protect in FMVERI against blanks, unseen chars in GENAM.
+             Update use count in FMOPEN only for input datasets
+             Output datasets require U option in FMCLOS
+             Add option E to FMOPEN - issue SETUP (END
+             Save vaddr of tape unit used in FMOPEN, free in FMCLOS.
+             Save and reset current directory in FMCPC, FMMVC.
+             Extend FMCOPY - disk-disk, disk-tape, tape-disk, tape-tape
+             via VMIO. Fix bug in FMALLO for curious length TMS replies
+             Rewrite FMRM. If more than one match is found, key serial
+             number must be specified.
+Version 1.15=Fix bug in FMFZI in call to FMCOMP.
+             Set date/time of cataloging, last access and use count
+             in FMSMCF. Add -K option on stagein (Cray)
+             Add Apollo version of GETENV (FMGENV)
+             RC=3 from TMS, use defaults IF=TMSTEST, ELSE sleep
+             for 1 minute and then retry.
+             Option G in FMALLO - change control group to *None
+             to allow GROUP access to the tape allocated.
+             FMLIST calls FMFNMS if PATH contains no wildcards
+             Labeltype in lower case on Cray
+             Add routine FMSMCF to make automatic copy into SMCF
+             (FMOPEN option D, CERN specific routine!)
+             Add flag TMSTEST (for CERN until all tapes in TMS)
+             Modify FATSERV to support FATOWNERS and FATOPERATORS
+             lists from NAMES file. Apollo version with local catalogue
+Version 1.14=Add routine FMCOPY - copy dataset from GENAM1 to GENAM2
+             using STAGE CHANGE, COPYTAPE, DISKTAPE, TAPEDISK or ZFTP.
+             Add option S in FMOPEN - update bank with file size from
+             VMSTAGE. Add option N in FMOPEN - do not specify DSN on
+             STAGE/LABELDEF command. Stop in FAOPEN if RZ file not found.
+Version 1.13=Add shell command MAKE. Add print out to FMCLOS.
+             Add DCB to FILEDEF for VM/CMS disk files. Print use count
+             in FMLS/FMSHOW (option P).
+             Add OPEN to FMOPEN routine, unless option U(seropen)
+             Support C(lear), D(rop), E(nd), F(zstat), P(ut), U(pdate)
+             options in FMCLOS. Add routines FML2DD, FMDD2L to convert
+             FORTRAN logical unit to corresponding DDNAME.
+             Add call to FZFILE in FMOPEN, if option F is chosen.
+             Add optional parameters RECFM, LRECL, BLOCK, FSIZE in
+             FMADDT/D. Add support for 3420s (media type 3) in FMRZIN
+             Use mode 4 for VM VBS disk files.
+             Support remote non-Bitnet servers. Pull updates over
+             using ZFTP based utility. Polling interval defined by
+             remote installation.
+Version 1.12=Fix bug in FMSHOW for user supplied bank.
+             Add flags SETUP and STAGE to allow sites to enforce tape
+             processing style.
+             Add entry FMOPEN - just options RTUW for now
+             Use TMS to allocate tapes in FMALLO
+             TMS QUERY CONTENTS LIBRARY <lib> user <pool> slot 1
+             TMS GETPOOL VID <vid> FROM <pool>
+Version 1.11=Add C routines for Cray to find next file in a directory
+             (from Phil Defert). Fix bug in FAT4WARD when no remote
+             servers are specified.
+             Add exec FAT2CERN to forward updates to CERNVM, unless
+             they originated there.
+             Activate FAT4WARD if on CERNVM (forward last update to
+             remote servers)
+             Add routine FMBOOK - create bank with FATMEN format at
+             L, LSUP and JBIAS specified by user.
+             Fix bug in FMMV - protect bank address in LTDSFA
+             Add command VIEW, to edit a local disk file, using KUEDIT.
+             Use TMS to determine MNTTYP in FMRZIN. Get labeltype,
+             generic device from TMS (FMFIND/MAKE)
+             Add interface to TMS (FMLS/FMSHOW) + patchy flag TMS.
+             Set warning in FMVERI if VID unknown to TMS.
+             Update use count (MUSCFA) and last access date in
+             FMFIND/MAKE. Increment in FMFIND, set to 1 in FMMAKE.
+             Modify FMTOVM to issue dispose from Cray to CERNVM
+             VM:   Nick names    FATSYS, FATGRP, fatgrp
+             VMS:  Logical names FATMEN$SYSTEM, FATMEN$GROUP, DISK$fatgrp
+             Unix: Variables     FATSYS, FATGRP, fatgrp
+             Send logging message to server only on CERNVM
+             Add interface to TMS via routine FMQTMS. Use flag TMS
+             to allow sites without TMS to continue.
+             Use variables for UNIX systems to determine location of
+             FATMEN RZ file (FMgroup=/u/mf/fml3, for ex.) and
+             group for which this server is running (FATMEN)
+             Use count stored in MSYWFA+1(=MUSCFA)
+Version 1.10=Enable CONVEX flag. Introduce FFATMEN patch
+Version 1.08=Fix bug in FMALLK when directory is empty.
+             Allow VAX server to run under any account.
+Version 1.07=Fix bug in FMVERI for check on user words.
+             Fix bugs in 1.06. Bad +SELF in FATMDI. Fix bugs in VAXVMS
+             version. FATMEN logical names now in GROUP table.
+             Add patch FATNEW (to create new RZ file)
+             Ensure that directory is reset in FMFNDC
+Version 1.06=Fix bug in FMVERI - copy level may be 0. Add EXECs to PAM
+             Calls to FMONIT in FMFIND/MAKE rather than FMGET
+             Add routine FMVERI, return extra information via IQUEST
+             in FMLIFT, FMKDIR. Extend FMOPEN/FMCLOS.
+             IQUEST(11) = 1 : generic name already exists
+             IQUEST(12) = 0 : path name already exists
+             IQUEST(12) = 1 : path name does not exist
+             Numeric ranges (m:n) supported in FMLIST
+Version 1.05=Add routine FMSORT - call SORTCH (modified from SORTZV)
+             Fix problem in FMFZI - allocate next key using FMALLK
+             In case of MOD or REP operation, re-use old key.
+             Add DCB on STAGE OUT /FILEDEF commands (VM only)
+             Add routines FMUPTM/FMPKTM - as DBxxx but with return code
+             Use mode 6 for RZ files on VM (unless mode=*)
+             Fix bugs in FMATCH. Add routine CSQMCH (squeeze multiple
+             characters) Add FMSHOW example print out routine.
+             Use DEVTYP SMCF for robot, if VID =Innnnn and MMTPFA=2
+             Introduce flag DECS for DEC MIPS. Modify C code to
+             use +SELF rather than #IFDEF.
+             Add journaling of FZ files. Use AUTOPUT option on
+             STAGE OUT command. Tidy LOGL.
+Version 1.04=Retry connect to ORACLE up to 5 times. Reinit RZ if
+             error from RZFILE. Add FMALLO on VM systems
+             New versions of SQL/DS compatible FOxxx routines.
+             Cleanup pilot patches. Modify for AIX. Default for CD is PWD
+             Find KEYS(1) using FMSELK,FMCOMP in FMFZI (for
+             remote delete to work).
+             Allow NOWAIT option in FMFIND, if CHLUN=NOWAIT
+             Add routine FMCOMP to compare banks pointed to
+             by two generic names.
+             Add routine FMLIST - combine FMTREE with FMFNMS and wild
+             card support for directory names.
+             Add G option to FMLS - list full generic name
+             Support VAXclusters and DFS in FATMEN selection.
+             VAXclusters treated as a single node, DFS disk
+             taken after local disk but before local tape.
+             (DFS logical name must be in LNM$SYSTEM_TABLE).
+             New routine FMSELB to allow user to perform select on
+             contents of FATMEN bank.
+Version 1.03=Fix bug in call to RZIN - don't use 'S' option.
+             Server now uses FATLIB.
+             Rewrite FMATCH subroutine. Add LOGLEVEL to FMLS
+             Bugs fixes and enhancements from DELPHI installation.
+             Add debug print to FOPUT. Add patch TAPELOAD.
+             Add PROGRAM FATO2F - recover from ORACLE /SQL and send to
+             server as FZ file(s).
+             Add DSN to STAGE command. Add UPDATE command to CDF.
+             Bugs in FMLIFT/FMLINK fixed (IQUEST/IRC uninitialised)
+             Fix bug in FMFILL for user-allocated tapes
+             Error message in FMRM if key vector cannot be found
+             Add routines FMMOD and FMUPDT
+             Examine REXX variable FREE_BLOCKS to determine number
+             of records to preformat in RZ file (for FATMEN server)
+             Modify FMFZI, FMZTOR and FOPUT to support equivalent
+             of DISP=NEW, OLD, MOD.
+             Add routine FMSELK to allow selection of files on
+             basis of keys vector (e.g. media type, copy level etc.)
+             Add SIZE qualifier on input STAGE requests. Sizes are
+             based on current VMSTAGE disk sizes.
+             Selection of best copy (local_disk>robot_tape>manual_tape)
+             Improved logging: Level -3 Suppress all log messages
+                                     -2 Error messages
+                                     -1 Terse logging
+                                      0 Normal (FMINIT, FMEND etc.)
+                                      1 Log to watch   FM calls
+                                      2 Log to monitor FM decisions
+                                      3 Debug messages
+             Add PATCH FATSTAT, to print statistics on usage
+             of FATMEN RZ database. Current version VM only.
+Version 1.02=Bugs reported by CHARM2.
+             Conform to CERN Program Library convention for flags
+             Preformat RZ file before call to RZMAKE by writing
+             2500 records (fills 85% of a 20 cylinder disk)
+Version 1.01=Coincide with version 1.00 of documentation
+             Add IRC to all FM calls, make FMATCH a subroutine
+             Use KIPRMT to set KUIP prompt, rather than KUEXEC
+Version 1.00=Meddle meeting of 19/10/89
+             and CERN Library release of CNL196
+File and Tape Management Package
+  Requires:
+          CERN libraries,
+          HEPVM (VM/CMS systems),
+          VMS 4.6 or greater (VAX/VMS systems),
+          Apollo SR10        (Apollo systems),
+          Unicos             (Cray systems).
+ 
+  Enhancements to external packages:
+  Requests from LFATMEN list:
+          <> wild-card support (Daniel Lellouch) (done, FMLDIR)
+          <n1-n2> in FATMEN selection            (fmnext)
+          Wild card support in LS, LD            (done)
+          Output to disk files for LS, LD        (done)
+          COPY command in FM shell               (done for local files)
+          Select disk with max. space for output to search lists (VAX) (done)
+  To be clarified:
+  For FORTRAN 90:
+          Hollerith     (FMSTRT, FMINIT, FMVERS)
+          UCOPY         (FMMODU)
++PATCH,FATFLAGS,IF=$DOC. EXPLANATION OF SOME OF THE PATCHY FLAGS
++DECK,BLANKDEK.
++USE,TYPE.    To activate 'STRONG TYPING' for patchy sequences
++USE,TMS.     For systems running the HEPVM Tape Management System (TMS)
++USE,TMSTEST. Use defaults for tapes unknown to TMS
++USE,PREFIX.  For systems supporting VID prefices  (FRCPN11)
++USE,QVID.    For systems without the QVOL command (FRCPN11)
++USE,HEPVM.   To activate HEPVM specific code (SETUP, STAGE etc.) (default)
++USE,SETUP.   To force tape access via SETUP
++USE,STAGE.   To force tape access via STAGE
++USE,SQL.     To activate the SQL code (only in server)
++USE,VMBATCH. If you are running VMBATCH from Systems Center
++USE,VMTAPE.  If you are running VMTAPE  from Systems Center
++USE,VMTMC.   If user tapes are catalogue in the VMTAPE TMC
++USE,CERNVM,IF=CERN,IF=IBMVM.
++PATCH,FATDOC,IF=$DOC.
++PATCH,*FATCAT.
++DECK,BLANKDEK.
++USE,IBMRT,FATCAT.
++PATCH,*DSYIBM.
++DECK,BLANKDEK.
++USE,FATASM.
++USE,NEWLIB.
++USE,DSYIBM.
++USE,IBMMVS.
++USE,FPACK.
++USE,CSPACK.
++PATCH,*GSIIBM.
++DECK,BLANKDEK.
++USE,GSI.
++USE,IBMMVS.
++PATCH,*SHIFT.
++DECK,BLANKDEK.
++USE,SHIFT.
++PATCH,*CERNVM.
++DECK,BLANKDEK.
++USE,TMS.
++USE,TMSTEST,T=INHIBIT.
++USE,CERNVM.
++USE,CERN.
++PATCH,*CERNVMB.
++DECK,BLANKDEK.
++USE,TMS.
++USE,CERNVMB.
++PATCH,*FNAL.
++DECK,BLANKDEK.
++USE,FNAL.
++PATCH,*FRCPN11.
++DECK,BLANKDEK.
++USE,TMS.
++USE,QVID.
++USE,PREFIX.
++PATCH,*LEPICS.
++DECK,BLANKDEK.
++USE,TMS.
++USE,LEPICS.
++PATCH,*UVVM.
++DECK,BLANKDEK.
++USE,TAPESYS.
++PATCH,*APOL3.
++DECK,BLANKDEK.
++USE,TMS,T=INHIBIT.
++USE,TMSTEST,T=INHIBIT.
++USE,APOL3.
++PATCH,*VXCERN.
++DECK,BLANKDEK.
++USE,VXCERN.
++PATCH,*FATRZCHK.
++DECK,BLANKDEK.
++USE,P=QCDE.
++USE,P=FATCDES.
++USE,P=FFATMEN.
++USE,P=FATRZCHK.
++PATCH,*FAT2SQL.
++DECK,FAT2SQL.
++USE,FAT2SQL,FFATMEN,FATCDES.
+*CMZ :          18/09/91  16.22.40  by  Jamie Shiers
++PATCH,*FATSQL.
++DECK,BLANKDEK.
++USE,*FOGET.
++USE,*FOPUT.
++USE,*FODEL.
++USE,FMLOGI.
++USE,FATCDES.
++USE,SQLINT.
+*CMZ :          18/09/91  16.22.40  by  Jamie Shiers
++PATCH,*FATUSER.
++DECK,BLANKDEK.
++USE,QCDE.
++USE,FATCDES.
++USE,FATUSER.
++USE,FFATMEN.
++PATCH,*FATO2Z.
++DECK,BLANKDEK.
++USE,QCDE.
++USE,FATCDES.
++USE,*SQL.
++USE,FATO2Z.
++USE,FMOTOZ.
+CUSE,P=FATBODY,D=FATMDI.
++USE,P=FATSRV,D=FMALLK.
++PATCH,*FATO2F.
++DECK,BLANKDEK.
++USE,QCDE.
++USE,P=FATCDES.
++USE,*SQL.
++USE,FATO2F.
++USE,FMOTOZ.
++PATCH,*FATNEW.
++DECK,BLANKDEK.
++USE,FATCDES.
++USE,FFATMEN.
++USE,FATNEW.
++PATCH,*FATSRV.
++DECK,BLANKDEK.
++USE,P=QCDE.
++USE,P=FATCDES.
++USE,P=FATSRV.
++USE,P=FFATMEN.
++PATCH,*FATSEND.
++DECK,FATSEND.
++USE,P=QCDE.
++USE,P=FATCDES.
++USE,P=FFATMEN.
++USE,P=FATSEND.
+*CMZ :          18/09/91  16.22.40  by  Jamie Shiers
++PATCH,*FMCDF.
++DECK,BLANKDEK.
++USE,FMCDF.
+*CMZ :          18/09/91  16.22.40  by  Jamie Shiers
++PATCH,*FATMEN.
++DECK,BLANKDEK.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FMKUIP.
++USE,FMCDF.
++PATCH,*FMKUIP.
++DECK,BLANKDEK.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FMKUIP.
++USE,FMCDF.
++PATCH,*FATLIB.
++DECK,BLANKDEK.
++USE,FFATMEN.   Flags for FATMEN
++USE,FATCDES.   CDEs for FATMEN
++USE,FMINT.     FATMEN interface
++USE,FATUTIL.   Utility routines - documented
++USE,FMUTIL.    Utility routines - undocumented
++USE,FATUOUS.   Novice user interface
++USE,FMTMS.     FATMEN<->TMS interface routines
++USE,FATBODY.   FATMEN routines for Zebra interface
++USE,FATUSER.   Dummy user selection routines
++USE,L3UTIL.    L3 utility routines - for backward compatibility
++USE,FMVAX,IF=VAXVMS. VAX specific routines (for interface to STAGE)
++PATCH,*FMFIND.
++DECK,blankdek.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FMFIND.
++PATCH,*FMGET.
++DECK,blankdek.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FMGET.
++PATCH,*CHEOPSIF.
++DECK,BLANKDEK.
++USE,FFATMEN.   Flags for FATMEN
++USE,FATCDES.   CDEs for FATMEN
++USE,CHEOPSIF.  Special interface for CHEOPS
++PATCH,*CHEOPS2F.
++DECK,CHEOPS2F.
++USE,P=CHEOPS2F.
++USE,P=FFATMEN.
++USE,P=FATCDES.
+*CMZ :          23/04/92  10.45.49  by  Jamie Shiers
++PATCH,*SQL.
++DECK,BLANKDEK.
++USE,SQLCOM.
++USE,FMZTOR.
++USE,FFATMEN.
++PATCH,*FODEL.   PILOT PATCH FOR FODEL
++DECK,BLANKDEK.
++USE, SQLCOM, FODEL.
++PATCH,*FOGET.   PILOT PATCH FOR FOGET
++DECK,BLANKDEK.
++USE, SQLCOM, FOGET.
++PATCH,*FOPUT.   PILOT PATCH FOR FOPUT
++DECK,BLANKDEK.
++USE, SQLCOM, FOPUT.
++PATCH,*FATSCAN2.
++DECK,BLANKDEK.
+*CMZ :  1.66/06 27/11/91  09.28.33  by  Jamie Shiers
++USE,P=FFATMEN.
++USE,P=FATCDES.
++USE,P=EXAMPLE,D=FATSCAN2.
++PATCH,*FATCHK.
++DECK,blankdek.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FATCHK.
++PATCH,*FATBACK.
++DECK,blankdek.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FATBACK.
++PATCH,*FATOUCH.
++DECK,BLANKDEK.
++USE,FATCDES,FFATMEN.
++USE,P=EXAMPLE,D=FATOUCH.
++PATCH,*FATPARA.
++DECK,BLANKDEK.
+*CMZ :  1.66/06 06/01/92  09.25.51  by  Jamie Shiers
+*CMZ :          06/01/92  09.25.51  by  Jamie Shiers
++USE,FATCDES.
++USE,FATPARA.
++PATCH,*FATSREQ.
++DECK,blankdek.
++USE,FFATMEN.
++USE,FATCDES.
++USE,FATSREQ.
++PATCH,*STGSERV.
++DECK,STGSERV.
++USE,STGSERV,IF=VAXVMS.
++PATCH,FFATMEN.
++DECK,BLANKDEK.
++USE, IBM,    IF=IBMMVS,IBMVM.
++USE, UNIX,   IF=ALLIANT,APOLLO,CONVEX,CRAY,IBMAIX,UNISYS.
++USE, UNIX,   IF=DECS,GOULD,HPUX,IBMRT,MACMPW,MIPS,SGI,SUN.
++USE, UNIX,   IF=NEXT,QMVAOS.
++USE, APOL3,  IF=APOLLO.
++USE, FMC,    IF=UNIX,IF=*FATLIB.
++USE, FMH,    IF=UNIX,IF=*FATLIB.
++USE, FATASM, IF=IBMMVS,IF=*FATLIB.
++USE, VAX,    IF=VAXVMS,VAXULX.
++USE, DOUBLE, IF=IBM, VAX, NORD.
++USE, DOUBLE, IF=UNIX, IF=-SINGLE.
++USE, QMIBMXA,IF=IBM.
++USE, VMCENTER,IF=FERMI,IF=IBMVM.
++USE, VMBATCH, VMTAPE,IF=VMCENTER.
++USE, HEPVM,   IF=IBMVM,IF=-VMTAPE,IF=-VMBATCH.
++USE, VAXTAP,  IF=VAXVMS.
++USE, QXCAPT,  IF=CRAY.
++USE, QX_SC,   IF=SUN, SGI, DECS, CONVEX, IBMRT, HPUX, AIX370, APOF77.
++USE, QX_SC,   IF=NEXT,QMVAOS.
++USE, QXNO_SC, IF=APOLLO,IF=-APOF77.
++USE, BSD,     IF=APOLLO, SGI, SUN.
++USE, SYS5,    IF=IBMRT, DECS, HPUX.
++USE, DCL,     IF=VAXVMS,IF=*FATLIB.
++USE, SCRIPT,  IF=UNIX,IF=*FATLIB.
++USE, REXX,    IF=IBMVM,IF=*FATLIB.
++PATCH,FATHEAD,IF=$DOC.
++PATCH,FATCDES.
++DECK,FATCDES.
++KEEP,FATSTAT.
+*
+*     Count number of server operations:
+*        Number of different users, nodes, files, commands,
+*        PUTs, MODs, DELs, MKDIRs, RMDIRs, OPENs and CLOSEs.
+*        NFMUSR and NMFNOD not currently counted
+*     Problems:
+*        Number of warnings from RZDELK
+*        Number of PUTs for existing entries
+*        Number of REPs for non-existing entries
+*        Number of DELs for non-existing entries
+*        Number of BAD  (unrecognised) commands
+*        Number of logging records
+*
+      COMMON/FATSTAT/NFMUSR,NFMNOD,NFMFIL,NFMCOM,NFMPUT,
+     +               NFMMOD,NFMDEL,NFMMDR,NFMRMD,NFMOPN,
+     +               NFMCLS,NFMPDK,NFMPRP,NFMPDL,NFMBAD,
+     +               NFMLOG
++KEEP,FAUSTO.
+      PARAMETER (KOHOLL=0)
+      PARAMETER (KLHOLL=70)
+ 
+      PARAMETER (KOREAL=KOHOLL+KLHOLL)
+      PARAMETER (KLREAL=20)
+ 
+      PARAMETER (KODATE=KOREAL+KLREAL)
+      PARAMETER (KLDATE=10)
+ 
+      PARAMETER (KOCMOD=KODATE+KLDATE)
+      PARAMETER (KLCMOD=20)
+ 
+      PARAMETER (KOFILE=KOCMOD+KLCMOD)
+      PARAMETER (KLFILE=10)
+ 
+      PARAMETER (KOTMS =KOFILE+KLFILE)
+      PARAMETER (KLTMS =20)
+ 
+      PARAMETER (KOCFAT=KOTMS +KLTMS )
+      PARAMETER (KLCFAT=20)
+ 
+      PARAMETER (KLINT = KLDATE+KLCMOD+KLFILE+KLTMS+KLCFAT)
+*
+*     Hollerith block
+*
+      PARAMETER (KFMSYS=KOHOLL+2)
+      PARAMETER (KFMGRP=KOHOLL+7)
+      PARAMETER (KFMTIT=KOHOLL+12)
+      PARAMETER (KFMUSR=KOHOLL+31)
+      PARAMETER (KFMHST=KOHOLL+41)
+      PARAMETER (KFMTYP=KOHOLL+51)
+      PARAMETER (KFMOS =KOHOLL+61)
+*
+*     MB counts
+*
+      PARAMETER (KFMMBR=KOREAL+1)
+      PARAMETER (KFMMBW=KOREAL+2)
+      PARAMETER (KFZMBR=KOREAL+3)
+      PARAMETER (KFZMBW=KOREAL+4)
+      PARAMETER (KFMMBC=KOREAL+5)
+      PARAMETER (KFMMBN=KOREAL+6)
+      PARAMETER (KFMMBQ=KOREAL+7)
+*
+*     Dates and times
+*
+      PARAMETER (KFMIDQ=KODATE+1)
+      PARAMETER (KFMIDS=KODATE+2)
+      PARAMETER (KFMIDE=KODATE+3)
+*
+*     Catalogue modifications
+*
+      PARAMETER (KFMADD=KOCMOD+1)
+      PARAMETER (KFMADL=KOCMOD+2)
+      PARAMETER (KFMADT=KOCMOD+3)
+      PARAMETER (KFMMDR=KOCMOD+4)
+      PARAMETER (KFMRDR=KOCMOD+5)
+      PARAMETER (KFMRLN=KOCMOD+6)
+      PARAMETER (KFMRTR=KOCMOD+7)
+      PARAMETER (KFMRMF=KOCMOD+8)
+      PARAMETER (KFMCPF=KOCMOD+9)
+      PARAMETER (KFMMVF=KOCMOD+10)
+      PARAMETER (KFMMOD=KOCMOD+11)
+      PARAMETER (KFMTCH=KOCMOD+12)
+*
+*     File accesses (OPENs, CLOSEs, COPYs)
+*
+      PARAMETER (KFMOPN=KOFILE+1)
+      PARAMETER (KFMCLS=KOFILE+2)
+      PARAMETER (KFMCPY=KOFILE+3)
+      PARAMETER (KFMCPQ=KOFILE+5)
+      PARAMETER (KFMCPN=KOFILE+5)
+*
+*     SYSREQ and TMS operations
+*
+      PARAMETER (KFMSRQ=KOTMS+1)
+      PARAMETER (KFMQVL=KOTMS+2)
+      PARAMETER (KFMAVL=KOTMS+3)
+      PARAMETER (KFMASP=KOTMS+4)
+      PARAMETER (KFMPOL=KOTMS+5)
+      PARAMETER (KFMLCK=KOTMS+6)
+      PARAMETER (KFMULK=KOTMS+7)
+      PARAMETER (KFMDTG=KOTMS+8)
+      PARAMETER (KFMGTG=KOTMS+9)
+      PARAMETER (KFMSTG=KOTMS+10)
+*
+*     Catalogue processing
+*
+      PARAMETER (KFMBNK=KOCFAT+1)
+      PARAMETER (KFMGET=KOCFAT+2)
+      PARAMETER (KFMGTK=KOCFAT+3)
+      PARAMETER (KFMSHW=KOCFAT+4)
+      PARAMETER (KFMSCN=KOCFAT+5)
+      PARAMETER (KFMLOP=KOCFAT+6)
+      PARAMETER (KFMLDR=KOCFAT+7)
+      PARAMETER (KFMLFL=KOCFAT+8)
+      PARAMETER (KFMSRT=KOCFAT+9)
+      PARAMETER (KFMRNK=KOCFAT+10)
+      PARAMETER (KFMSLK=KOCFAT+11)
+      PARAMETER (KFMMTC=KOCFAT+12)
+ 
++KEEP,FAUST.
+*
+*     FATMEN USer STatistics
+*
+*     Adds, MKDIRS, RMDIRS etc.
+*
+      INTEGER      NFADDD,NFADDL,NFADDT,NFMDIR,NFRDIR,NFRLNK,NFRTRE,
+     +             NFRMFL,NFCPFL,NFMVFL,NFMODI,NFTOUC
+*
+*     OPENs, CLOSEs, COPYs etc.
+*
+      INTEGER      NFOPEN,NFCLOS,NFCOPY,NFCOPR,NFCOPQ
+*
+*     TMS operations
+*
+      INTEGER      NFSREQ,NFQVOL,NFAVOL,NFASPC,NFPOOL,NFLOCK,NFULOK,
+     +             NFDTAG,NFGTAG,NFSTAG
+*
+*     Catalogue operations
+*
+      INTEGER      NFBANK,NFGET, NFGETK,NFSHOW,NFSCAN,NFLOOP,NFLDIR,
+     +             NFLFIL,NFSORT,NFRANK,NFSELK,NFMTCH
+*
+*     # MB read/written
+*
+      REAL         FATMBR,FATMBW,FATMZR,FATMZW,FATMBC,FATMBQ,FATMBN
+*
+*     Stuff
+*
+      INTEGER      NFSTAD,NFSTAT
+ 
+      COMMON/FAUST/NFADDD,NFADDL,NFADDT,NFMDIR,NFRDIR,NFRLNK,NFRTRE,
+     +             NFRMFL,NFCPFL,NFMVFL,NFMODI,NFTOUC,
+     +             NFOPEN,NFCLOS,NFCOPY,NFCOPR,NFCOPQ,
+     +             NFSREQ,NFQVOL,NFAVOL,NFASPC,NFPOOL,NFLOCK,NFULOK,
+     +             NFDTAG,NFGTAG,NFSTAG,
+     +             NFBANK,NFGET, NFGETK,NFSHOW,NFSCAN,NFLOOP,NFLDIR,
+     +             NFLFIL,NFSORT,NFRANK,NFSELK,NFMTCH,
+     +             NFSTAD,NFSTAT,
+     +             FATMBR,FATMBW,FATMZR,FATMZW,FATMBC,FATMBQ,FATMBN
++KEEP,FACARD.
+      COMMON/FACARD/IWIDTH,CARD
+      CHARACTER*132 CARD
++KEEP,FATMON.
+*
+*     Fatmen monitoring information
+*     IHOWFA: how was file accessed?
+*     ITIMFA: elapsed time in FMOPEN (in seconds)
+*     CHFNFA: fully qualified file name, except VM
+*
+      CHARACTER*255 CHFNFA
+      COMMON/FATMON/IHOWFA,ITIMFA,CHFNFA
+*     Local disk (standard file system)
+      PARAMETER (JLOCFA=1)
+*     VM shared file system
+      PARAMETER (JSFSFA=2)
+*     MSCP (VAXcluster)
+      PARAMETER (JMSCFA=3)
+*     Andrew file system
+      PARAMETER (JAFSFA=4)
+*     OSF distributed file system
+      PARAMETER (JOSFFA=5)
+*     DEC DFS
+      PARAMETER (JDFSFA=6)
+*     Sun NFS
+      PARAMETER (JNFSFA=7)
+*     DECnet
+      PARAMETER (JDECFA=8)
+*     CSPACK server
+      PARAMETER (JCSPFA=9)
+*     FPACK server
+      PARAMETER (JFPKFA=10)
+*     RFIO
+      PARAMETER (JRFIFA=11)
+*     Lachman OSM
+      PARAMETER (JOSMFA=12)
+*     Unitree
+      PARAMETER (JUNIFA=13)
+*     Adstar ADSM
+      PARAMETER (JDSMFA=14)
+*     E-MASS
+      PARAMETER (JEMSFA=15)
+*     Stage required
+      PARAMETER (JSTGFA=31)
+*     TPMNT (=not staged)
+      PARAMETER (JTPMFA=32)
++KEEP,FATDUMMY.
+      IF(IDEBFA.GE.2) PRINT *,CHROUT,'dummy user exit called'
++KEEP,FATSHIFT.
+*
+*     Shift configuration file
+*
+      COMMON/FMSHIFT/LSHCONF,LTPCONF,SHCONF,TPCONF
+      CHARACTER*255  SHCONF,TPCONF
++KEEP,FATAPOL3.
+      COMMON/FMAPOL3/IAPOL3
++KEEP,FATCLIO.
+      COMMON/FMCLIO/ICLIO
++KEEP,FATMSS.
+      COMMON/FATMSS/IFMMSS
++KEEP,FATGET.
+      COMMON/FATGET/ISFGET
++KEEP,FATVAXRC.
+* sequence FATVAXRC
+      IF(.NOT.ISTAT) THEN
+         CALL LIB$SIGNAL(%VAL(ISTAT))
+         IRC = 42
+      ENDIF
++KEEP,FMQUED.
+      COMMON/FMQUED/LQUED,CHQUED
+      CHARACTER*255 CHQUED
++KEEP,FATSTRUCT,IF=F90.
+*
+*     Draft F90 derived data type for mapping to FATMEN bank
+*
+      TYPE FATBANK
+*
+*     Generic file description
+*
+         CHARACTER*256 FILE_NAME
+         CHARACTER*8   HOST_NAME
+         INTEGER       COPY_LEVEL
+         INTEGER       MEDIA_TYPE
+         INTEGER       LOCATION_CODE
+*
+*     Disk description
+*
+         CHARACTER*16  HOST_TYPE
+         CHARACTER*12  HOST_SYSTEM
+*
+*     Tape description
+*
+         CHARACTER*8   VSN
+         CHARACTER*8   VID
+         INTEGER       VID_PREFIX
+         INTEGER       DENSITY
+         INTEGER       VOLUME_SEQUENCE_NUMBER
+         INTEGER       FILE_SEQUENCE_NUMBER
+*
+*     File description
+*
+         INTEGER       START_RECORD
+         INTEGER       END_RECORD
+         INTEGER       START_BLOCK
+         INTEGER       END_BLOCK
+*
+*     Physical description
+*
+         CHARACTER*4   RECORD_FORMAT
+         INTEGER       RECORD_LENGTH
+         INTEGER       BLOCK_LENGTH
+         INTEGER       FILE_SIZE
+         INTEGER       USE_COUNT
+*
+*     Logical description
+*
+         CHARACTER*4   LOGICAL_FORMAT
+         CHARACTER*4   USER_FORMAT
+*
+*     Dates and times
+*
+         INTEGER       DATE_CREATED
+         INTEGER       DATE_CATALOGUED
+         INTEGER       DATE_ACCESSED
+*
+*     Creation information
+*
+         CHARACTER*8   CREATED_BY_OWNER
+         CHARACTER*8   CREATED_BY_ACCOUNT
+         CHARACTER*8   CREATED_ON_NODE
+         CHARACTER*8   CREATED_BY_JOB
+*
+*     File protection
+*
+         INTEGER       FILE_PROTECTION_MASK
+*
+*     User words
+*
+         INTEGER       USER_WORDS(10)
+*
+*     System words
+*
+         INTEGER       SYSTEM_WORDS(10)
+      END TYPE FATBANK
++SELF.
+ 
++KEEP,CHEOPS.
+*
+*     CHEOPS error messages
+*
+      PARAMETER    (NKEOPS=5)
+      CHARACTER*80 MKEOPS(NKEOPS)
+      DATA         MKEOPS(1)/'Inquire on dataset failed'/,
+     +             MKEOPS(2)/'Dataset not regular'/,
+     +             MKEOPS(3)/'Cannot open dataset'/,
+     +             MKEOPS(4)/'Cannot close dataset'/,
+     +             MKEOPS(5)/'Transaction expired'/
+*define CC_OK                   0
+*define CC_STATONDATASETFAILS   1
+*define CC_DATASETNOTREGULAR    2
+*define CC_CANNOTOPENDATASET    3
+*define CC_CANNOTCLOSEDATASET   4
+*define CC_TRANSACTIONEXPIRED   5
++KEEP,FMSHFT.
+      COMMON/FMSHFT/SHFNAM,SHUNAM,SHPOOL,SHUSER
+      CHARACTER*255 SHFNAM,SHUNAM
+      CHARACTER*16  SHPOOL,SHUSER
+ 
++KEEP,FATLAB0.
+      CHARACTER*6   VAXLAB(3)
+      CHARACTER*2   IBMLAB(3)
++KEEP,FATLAB1.
+      DATA          IBMLAB(1)/'SL'/,IBMLAB(2)/'NL'/IBMLAB(3)/'AL'/
+      DATA          VAXLAB(1)/'EBCDIC'/,
+     +              VAXLAB(2)/'NONE  '/,
+     +              VAXLAB(3)/'ASCII '/
++KEEP,FATLAB.
++CDE,FATLAB0.
++CDE,FATLAB1.
+ 
++KEEP,FASPAC.
+      COMMON/FASPAC/NPRIFA,NSECFA
++KEEP,FARSTG.
+*
+*     Wait time for remote job:
+*        IWTNET - time to wait if network is down
+*        IWTACK - time for acknowledgement
+*        IWTPND - time when entry is pending
+*        IWTEXE - time when entry is executing
+*
+      COMMON/FARSTG/IWTNET,IWTACK,IWTPND,IWTEXE,MAXNET,MAXACK
++KEEP,FATRON.
+      COMMON/FATRON/LTHR,THRONG
+      CHARACTER*8   THRONG
++KEEP,FSTATE.
+      COMMON/FSTATE/MFPHAS
++KEEP,FATRAN0.
+      PARAMETER     (NTRANS=3)
+      COMMON/FATRAN/ITRANS
+      CHARACTER*8   CHTRNS(NTRANS),TRANSP(NTRANS)
++KEEP,FATRAN1.
+      DATA          CHTRNS/'T*CPIP','D*ECNET','C*HEOPS'/
+      DATA          TRANSP/'TCPIP ','DECNET','CHEOPS '/
++KEEP,FATRAN.
++CDE,FATRAN0.
++CDE,FATRAN1.
++KEEP,CZSOCK.
+      COMMON/CZSOCK/LUNCZ,IADTCP,LBUF,ISKIN,ISKOUT,IPROT,
+     +              JUNIT(99),JSKIN(99),JSKOUT(99),CUNODE,
+     +              CHNODE(99),CHUSER(99)
+      CHARACTER*12  CHNODE,CUNODE,CHUSER
+      PARAMETER (LNODE=12)
+      PARAMETER (LUSER=12)
+      PARAMETER (MAXSOC=99)
+*
+*     IPROT: 0 - TCP/IP (TCPAW)
+*            1 - DECnet (included in CZ)
+*     CHNODE & CHUSER store the node and user names that correspond
+*     to JUNIT
+*
++KEEP,FATSAT0.
+      COMMON/FATSAT/LSRCST,LDSTST,CHSRCE,CHDEST
+      CHARACTER*40  CHSRCE,CHDEST
+*
+*     CHEOPS sites
+*
+      PARAMETER   (NSITES=5)
+      CHARACTER*8 CHSITE(NSITES)
++KEEP,FATSAT1.
+      DATA        CHSITE(1)/'CERN    '/,
+     +            CHSITE(2)/'HELSINKI'/,
+     +            CHSITE(3)/'LISBON  '/,
+     +            CHSITE(4)/'SARDINIA'/,
+     +            CHSITE(5)/'ATHENS  '/
++KEEP,FATSAT.
++CDE,FATSAT0.
++CDE,FATSAT1.
+ 
+*
++KEEP,ERRNO.
+*
+*     Extract from /usr/include/sys/errno.h
+*             or   sys$library:errno.h
+*
+*define  ECONNRESET     54    /* Connection reset by peer */
+*define  ETIMEDOUT      60    /* Connection timed out */
+*define  ECONNREFUSED   61    /* Connection refused */
+      IFATRC(1)=54
+      IFATRC(2)=60
+      IFATRC(3)=61
+      IFATRC(4)=3
+      IRETRY(1)=60
+      IRETRY(2)=5
+      IRETRY(3)=5
+      IRETRY(4)=60
++KEEP,ERRSGI.
+*define  ECONNRESET     120   /* Connection reset by peer */
+*define  ETIMEDOUT      126   /* Connection timed out */
+*define  ECONNREFUSED   127   /* Connection refused */
+      IFATRC(1)=120
+      IFATRC(2)=126
+      IFATRC(3)=127
+      IFATRC(4)=3
+      IRETRY(1)=60
+      IRETRY(2)=5
+      IRETRY(3)=5
+      IRETRY(4)=60
++KEEP,ERRCRAY.
+*define  ECONNRESET     145   /* Connection reset by peer */
+*define  ETIMEDOUT      151   /* Connection timed out */
+*define  ECONNREFUSED   152   /* Connection refused */
+      IFATRC(1)=145
+      IFATRC(2)=151
+      IFATRC(3)=152
+      IFATRC(4)=3
+      IRETRY(1)=60
+      IRETRY(2)=5
+      IRETRY(3)=5
+      IRETRY(4)=60
++KEEP,FATINIT.
+      IF(SERNAM(1:4).EQ.'INIT') THEN
+         PRINT *,'Error - FATMEN has not been initialised'
+         RETURN
+      ENDIF
++KEEP,FATDCB.
+      COMMON/FATDCB/TYPE,HDSN,DISP,VOL,LABEL,IDCB,
+     +              UNIT,ISPACE,IUSED
+      INTEGER       TYPE,HDSN(14),DISP(3),VOL(2),LABEL(3),IDCB(4),
+     +              UNIT(2),ISPACE(4),IUSED(5)
+      COMMON/FATSPA/CHSPAC
+      CHARACTER*4   CHSPAC
++KEEP,FATNET.
+      PARAMETER (NERRS=4)
+      DIMENSION IFATRC(NERRS),IRETRY(NERRS)
++KEEP,SLATE.
+      COMMON/SLATE/IS(40)
+      INTEGER      IS
++KEEP,SLATEX.
+      COMMON/SLATEX_/IS(40)
+      INTEGER      IS
++KEEP,FAT.
+      PARAMETER (LURCOR=200000)
+      COMMON/FAT/IXSTOR,IXDIV,IFENCE(2),LEV,LEVIN,BLVECT(LURCOR)
+      DIMENSION    LQ(999),IQ(999),Q(999)
+      EQUIVALENCE (IQ(1),Q(1),LQ(9)),(LQ(1),LEV)
++KEEP,FATLNK.
+*
+      COMMON/FATLNK/LOPNBK,LCLSBK,LCP1BK,LCP2BK
++KEEP,FATUSR.
+*
+      COMMON /USRLNK/LUSRK1,LUSRBK,LADDBK,LUSRLS
++KEEP,FMAXCOP.
+*
+*     The following statement limits the maximum number of copies
+*     of a file that can exist, i.e. the maximum number of entries
+*     with the same generic name
+*
+      PARAMETER (MAXCOP=100)
++KEEP,FMNKEYS.
+      PARAMETER (LKEYFA=10)
++KEEP,FATOUT.
+      COMMON/FATOUT/OUTPUT,LPIPE
+      CHARACTER*80  OUTPUT
++KEEP,FARNGE.
+*     NFRNGE - range count (e.g. [8:10] = 3)
+*     IFRNGE - 8,9,10 (in previous example)
+      COMMON/FARNGE/NFRNGE(20),IFRNGE(100,20),
+     +              IFELEM(100,20),IFVAL(100,20)
++KEEP,FAEXCM. For FMEXTR
+      COMMON/FAEXCM/NFILES,NBAD
++CDE,FATOPTD.
++KEEP,FAMUCM. For FMMODU
+      COMMON/FAMUCM/IOPT,IWORDS(10),CHUCOM,CHUFRM,CHFILE
+      CHARACTER*80 CHUCOM
+      CHARACTER*4  CHUFRM
+      CHARACTER*20 CHFILE
++CDE,FATOPTD.
++KEEP,FAHUCM. For FMHUNT
++CDE,FMNKEYS.
+      COMMON/FAHUCM/KEYH(LKEYFA),CHFILE
+      CHARACTER*255 CHFILE
++KEEP,FALNCM. For FMRMLN/FALN
+      COMMON/FALNCM/LWRITE,NLINKS,NFILES,IOPTTD,IOPTTF,IOPTTP,IOPTTR
++KEEP,FASECM. For FMSEAC
+      COMMON/FASECM/LWRITE,NFILES,NDIRS,NMATCH,IOPT,
+     +              LDSN,LHOST,LVID,LUSER,LFORM,LCOMM,LSTR,
+     +              DSN,HOST,VID,USER,CHFILE,UFORM,COMM,CHSTR
+      CHARACTER*255 CHFILE,CHSTR
+      CHARACTER*255 HOST,VID,USER
+      CHARACTER*255 DSN,UFORM,COMM
++CDE,FATOPTD.
++KEEP,FALSCM. For FMLS(C)
+      COMMON/FALSCM/LWRITE,NFILES,NFILT,NDIRT,IOPT,CHFILE
+      CHARACTER*20  CHFILE
++CDE,FATOPTD.
++KEEP,FAFCCM. For FMFC
+      COMMON/FAFCCM/LWRITE,IOPTD,IOPTF,IOPTL,IOPTZ,
+     +              NFOUND,NMATCH,NDIRT,CHFILE
+      CHARACTER*20  CHFILE
++KEEP,FATSEA.
+      COMMON/FATSEA/IDCREA,ITCREA,JDCREA,JTCREA,
+     +              IDCATA,ITCATA,JDCATA,JTCATA,
+     +              IDLAST,ITLAST,JDLAST,JTLAST,
+     +              IUSER(2,10)
++KEEP,FATUWD.
+      COMMON/FATUWD/IFUSER(2,10)
++KEEP,FATKEY.
+      COMMON/FATKEY/NUMKEY,MFMKEY(KMXKEY),CHKEY
+      CHARACTER*8   CHKEY
++KEEP,FATLCC.
+*
+*     Location code definitions (from FATMEN.LOCCODES)
+*
+      PARAMETER (MXLCFA=99)
+      CHARACTER*255 CHLOCF
+      COMMON/FATLCC/NKLCFA,NLCCFA(MXLCFA),CHLOCF(MXLCFA)
++KEEP,FATLOC.
+      COMMON/FATLOC/NUMLOC,MFMLOC(KMXLOC)
++KEEP,FATCPL.
+      COMMON/FATCPL/NUMCPL,MFMCPL(KMXCPL)
++KEEP,FATMTP.
+      COMMON/FATMTP/NUMMTP,MFMMTP(KMXMTP)
++KEEP,FATLUN.
+      COMMON/FATLUN/NUMLUN,MFMLUN(KMXLUN),MFMLUA(KMXLUN)
++KEEP,FATSEL.
+*
+*     Common to store ranges for KEYS (for FATMEN selection)
+*
+      COMMON/FATSEL/MRMTFA(2),MRCLFA(2),MRLCFA(2)
++KEEP,FATINFO.
+*
+*     Common to store FATMEN information per LUN
+*     Access method (disk, stage, setup) and filemode (CMS only)
+*     Virtual address for tape drive
+*     This information is set by FMOPEN/FIND/MAKE and subsequently
+*     used by FMCLOS.
+*
+*     IFMODE: 0: FZin, 1: FZout, 2: RZ
+*     JFMODE: ICFOP from FMOPEN (Fortran, C, package I/O)
+*     LFMODE: 1=disk, 2=stage, 3=tape
+*
+      COMMON/FATINF/IVADDR(99),IDEV(99),  IFMODE(99),
+     +              JFMODE(99),LFMODE(99),IFPNTR(99),CHMODE(99)
+      CHARACTER*1   CHMODE
++KEEP,FATOSET.
+      DO 9999 I=1,36
+9999  IOPT(I) = 1
++KEEP,FATOPT0.
+      DIMENSION      IOPT(36)
+      EQUIVALENCE    (IOPT(1),IOPTA),(IOPT(2),IOPTB),(IOPT(3),IOPTC),
+     +               (IOPT(4),IOPTD),(IOPT(5),IOPTE),(IOPT(6),IOPTF),
+     +               (IOPT(7),IOPTG),(IOPT(8),IOPTH),(IOPT(9),IOPTI),
+     +               (IOPT(10),IOPTJ),(IOPT(11),IOPTK),(IOPT(12),IOPTL),
+     +               (IOPT(13),IOPTM),(IOPT(14),IOPTN),(IOPT(15),IOPTO),
+     +               (IOPT(16),IOPTP),(IOPT(17),IOPTQ),(IOPT(18),IOPTR),
+     +               (IOPT(19),IOPTS),(IOPT(20),IOPTT),(IOPT(21),IOPTU),
+     +               (IOPT(22),IOPTV),(IOPT(23),IOPTW),(IOPT(24),IOPTX),
+     +               (IOPT(25),IOPTY),(IOPT(26),IOPTZ),(IOPT(27),IOPT1),
+     +               (IOPT(28),IOPT2),(IOPT(29),IOPT3),(IOPT(30),IOPT4),
+     +               (IOPT(31),IOPT5),(IOPT(32),IOPT6),(IOPT(33),IOPT7),
+     +               (IOPT(31),IOPT5),(IOPT(32),IOPT6),(IOPT(33),IOPT7),
+     +               (IOPT(34),IOPT8),(IOPT(35),IOPT9),(IOPT(36),IOPT0)
+      CHARACTER*36   ALFNUM
++KEEP,FATOPT1.
+      DATA           ALFNUM/'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'/
+ 
++KEEP,FATOPTD.
++CDE,FATOPT0.
++CDE,FATOPT1.
+ 
++KEEP,FATOPTS.
+      CHARACTER*(*)  CHOPT
++CDE,FATOPTD.
+      CALL FMOPTC(CHOPT,ALFNUM,IOPT)
+*     CALL UOPTC(CHOPT,ALFNUM,IOPT)
++KEEP,FATOPTC.
+      CALL FMOPTC(CHOPT,ALFNUM,IOPT)
++KEEP,TMSREP.
+      PARAMETER     (LENREP=20)
+      CHARACTER*132 TMSREP(LENREP)
++KEEP,TMSDEF0.
+      CHARACTER*6  DENS
+      CHARACTER*8  LIB
+      CHARACTER*4  LABTYP
+      CHARACTER*1  MNTTYP
+      CHARACTER*8  MODEL
+      CHARACTER*7  ROBMAN(2)
++KEEP,TMSDEF1.
+      DATA         ROBMAN(1)/'-Robot '/,ROBMAN(2)/'-Manual'/
++KEEP,TMSDEF.
++CDE,TMSDEF0.
++CDE,TMSDEF1.
+ 
++KEEP,FATVID0.
+*
+*     Sequence FATVIDP - table of VID prefices
+*
+      CHARACTER*8 PREVID(6)
+      INTEGER     NTMS
+      PARAMETER   (NTMS=6)
++KEEP,FATVID1.
+      DATA        PREVID(1) /'CERN    '/,PREVID(2) /'IN2P3   '/,
+     +            PREVID(3) /'SACLAY  '/,PREVID(4) /'DESY    '/,
+     +            PREVID(5) /'RAL     '/,PREVID(6) /'SEFT    '/
+ 
++KEEP,FATVIDP.
++CDE,FATVID0.
++CDE,FATVID1.
+ 
++KEEP,FATFORM0.
+*
+*     Sequence FATFORM. File format (MFLFFA) and record format (MRFMFA)
+*     definitions
+*
+      PARAMETER (NFATFM=21)
+      CHARACTER*4 FATFRM(NFATFM)
+ 
+      PARAMETER (NRECFM=8)
+      CHARACTER*4 FRCFM(NRECFM)
+ 
+      INTEGER   FMXBLK,FMXREC
+ 
+> *
+> *     New tapes support block lengths 8 times ANSI standard
+> *
+      PARAMETER (FMXBLK=65536)
+      PARAMETER (FMXBLK=65536)
+*     PARAMETER (FMXREC=8192)
+*     PARAMETER (FMXREC=8192)
++KEEP,FATFORM1.
+      DATA FATFRM(1)/'FZ  '/,
+     +     FATFRM(2)/'FA  ' /,
+     +     FATFRM(3)/'FX  ' /,
+     +     FATFRM(4)/'FFX ' /,
+     +     FATFRM(5)/'RZ  ' /,
+     +     FATFRM(6)/'RX  ' /,
+     +     FATFRM(7)/'EP  ' /,
+     +     FATFRM(8)/'AS  ' /,
+     +     FATFRM(9)/'UN  ' /,
+     +     FATFRM(10)/'DA  ' /,
+     +     FATFRM(11)/'FXN ' /,
+     +     FATFRM(12)/'FPT ' /,
+     +     FATFRM(13)/'FPS ' /,
+     +     FATFRM(14)/'FPD ' /,
+     +     FATFRM(15)/'FPK ' /,
+     +     FATFRM(16)/'FPO ' /,
+     +     FATFRM(17)/'YBB ' /,
+     +     FATFRM(18)/'YBD ' /,
+     +     FATFRM(19)/'RWN ' /,
+     +     FATFRM(20)/'CWN ' /,
+     +     FATFRM(21)/'EBCD' /
+ 
+      DATA FRCFM(1)/'F   '/,
+     +     FRCFM(2)/'FB  '/,
+     +     FRCFM(3)/'V   '/,
+     +     FRCFM(4)/'VB  '/,
+     +     FRCFM(5)/'VBS '/,
+     +     FRCFM(6)/'VS  '/,
+     +     FRCFM(7)/'U   '/,
+     +     FRCFM(8)/'RMS '/
+ 
++KEEP,FATFORM.
++CDE,FATFORM0.
++CDE,FATFORM1.
+ 
++KEEP,FATSTG.
+*
+*     Sequence FATSTG. Media size and density definitions
+*     plus stage path name (first for L3)
+*
+      COMMON/FATSTG/ISIZSG,STGPTH
+      CHARACTER*255 STGPTH
+ 
++KEEP,FATTYP. Media type definitions
+      PARAMETER    (NMTYP=100)
+      COMMON/FATTYP/NFMTYP,CHMTYP,CHMGEN,CHMSIZ,
+     +              CHMDEN,CHMMNT,CHMLAB,MEDSIZ,
+     +              MEDDEN,MEDHWM,MEDMFL,MEDMFS
+      INTEGER       NFMTYP
+      INTEGER       MEDSIZ(NMTYP),MEDDEN(NMTYP),
+     +              MEDHWM(NMTYP),MEDMFL(NMTYP),
+     +              MEDMFS(NMTYP)
+      CHARACTER*8   CHMTYP(NMTYP),CHMGEN(NMTYP),
+     +              CHMSIZ(NMTYP),CHMDEN(NMTYP),
+     +              CHMMNT(NMTYP),CHMLAB(NMTYP)
+ 
++KEEP,FATMED0. Default media attributes
+      PARAMETER     (NMEDIA=14)
+*
+*     FATMEN media type
+*
+      DIMENSION     MFMMED(NMEDIA)
+*
+*     Generic device type
+*
+      CHARACTER*8   MFMGEN(NMEDIA)
+*
+*     Physical device type
+*
+      CHARACTER*8   MFMTYP(NMEDIA)
+*
+*     Default density
+*
+      CHARACTER*8   MFMDEN(NMEDIA)
+*
+*     Media size in Megabytes
+*
+      CHARACTER*8   MFMSIZ(NMEDIA)
+*
+*     Default mount type
+*
+      CHARACTER*1   MFMMNT(NMEDIA)
+*
+*     Default label type
+*
+      CHARACTER*2   MFMLAB(NMEDIA)
+ 
++KEEP,FATMED1.
+*     SYSREQ TMS Q DEVTYPES
+*     TMS Model
+      DATA          MFMTYP(1)/'DISK'/,MFMTYP(2)/'3480'/,
+     +              MFMTYP(3)/'3420'/,MFMTYP(4)/'8200'/,
+     +              MFMTYP(5)/'8500'/,MFMTYP(6)/'3490'/,
+     +              MFMTYP(7)/'DAT60'/,MFMTYP(8)/'DAT90'/,
+     +              MFMTYP(9)/'3490E'/,MFMTYP(10)/'AMPEX'/,
+     +              MFMTYP(11)/'REDWOOD'/,MFMTYP(12)/'DLT2'/,
+     +              MFMTYP(13)/'DAT120'/,MFMTYP(14)/'3590'/
+ 
+*     TMS Sort
+      DATA          MFMGEN(1)/'DISK'/,MFMGEN(2)/'CT1 '/,
+     +              MFMGEN(3)/'TAPE'/,MFMGEN(4)/'8MM '/,
+     +              MFMGEN(5)/'8MM '/,MFMGEN(6)/'CT2 '/,
+     +              MFMGEN(7)/'DAT '/,MFMGEN(8)/'DAT '/,
+     +              MFMGEN(9)/'CT2E'/,MFMGEN(10)/'DD2 '/,
+     +              MFMGEN(11)/'DD3 '/,MFMGEN(12)/'DLT '/,
+     +              MFMGEN(13)/'DAT '/,MFMGEN(14)/'NTP '/
+ 
+*     TMS density code
+      DATA          MFMDEN(1)/'N/A '/,MFMDEN(2)/'38K '/,
+     +              MFMDEN(3)/'6250'/,MFMDEN(4)/'43200'/
+     +              MFMDEN(5)/'86400'/,MFMDEN(6)/'38KDC'/,
+     +              MFMDEN(7)/'DDSC'/,MFMDEN(8)/'DDSC'/,
+     +              MFMDEN(9)/'....'/,MFMDEN(10)/'....'/,
+     +              MFMDEN(11)/'....'/,MFMDEN(12)/'10GC'/,
+     +              MFMDEN(13)/'DDSC'/,MFMDEN(14)/'10GC'/
+ 
+*     Maximum capacity
+      DATA          MFMSIZ(1)/'N/A'/, MFMSIZ(2)/'200'/,
+     +              MFMSIZ(3)/'200'/, MFMSIZ(4)/'2300'/,
+     +              MFMSIZ(5)/'5000'/,MFMSIZ(6)/'1000'/,
+     +              MFMSIZ(7)/'2000'/,MFMSIZ(8)/'5000'/,
+     +              MFMSIZ(9)/'2000'/,MFMSIZ(10)/'25000'/,
+     +              MFMSIZ(11)/'40000'/,MFMSIZ(12)/'10000'/,
+     +              MFMSIZ(13)/'4000'/,MFMSIZ(14)/'10000'/
+ 
+*     Default mount type
+      DATA          MFMMNT(1)/'M'/,   MFMMNT(2)/'M'/,
+     +              MFMMNT(3)/'M'/,   MFMMNT(4)/'M'/,
+     +              MFMMNT(5)/'M'/,   MFMMNT(6)/'M'/,
+     +              MFMMNT(7)/'M'/,   MFMMNT(8)/'M'/,
+     +              MFMMNT(9)/'M'/,   MFMMNT(10)/'M'/,
+     +              MFMMNT(11)/'M'/,  MFMMNT(12)/'M'/,
+     +              MFMMNT(13)/'M'/,  MFMMNT(14)/'M'/
+ 
+*     Default label type
+      DATA          MFMLAB(1)/'  '/,  MFMLAB(2)/'SL'/,
+     +              MFMLAB(3)/'SL'/,  MFMLAB(4)/'SL'/,
+     +              MFMLAB(5)/'SL'/,  MFMLAB(6)/'SL'/,
+     +              MFMLAB(7)/'SL'/,  MFMLAB(8)/'SL'/,
+     +              MFMLAB(9)/'SL'/,  MFMLAB(10)/'SL'/,
+     +              MFMLAB(11)/'SL'/, MFMLAB(12)/'SL'/,
+     +              MFMLAB(13)/'SL'/, MFMLAB(14)/'SL'/
+*
+*     Number of media types defined
+*
+      DATA          NFTYPS/14/
+*
+*     TMS density codes
+*
+*     Model  Density  Code     P
+*     ------ -------- -------- -
+*     3420   1600         1600 Y
+*     3420   6250         6250 Y
+*     3480   38KC           15 Y
+*     3480   38KD           20 Y
+*     3480   38K         38000 N
+*     3480   38000       38000 Y
+*     3490   38KCD          10 N
+*     3490   38KDC          10 Y
+*     8200   8200         8200 Y
+*     8200   8500         8500 Y
++KEEP,FATMED.
++CDE,FATMED0.
++CDE,FATMED1.
+ 
++KEEP,FATSHO.
+      COMMON/FATSHO/CWDSHO
+      CHARACTER*255 CWDSHO
++KEEP,FATUPD.
+      COMMON/FATUPD/MAXDEF,NGRDEF,NUPDT,MAXUPD,NGROUP,MAXVIO,NVIOL
++KEEP,FMPATH.
+      CHARACTER*255 PATH,FILE1,FILE2,CDIR
+      COMMON/FMKCOM/LCDIR,CDIR
+*
++KEEP,FATSYS.
+*
+*     Common to store name of service machine (IBM)
+*     or default directory (VAX, Unix)
+*
+      COMMON/FATSYS/STRMLF,IFMODX,SERNAM,SERMOD,FATNOD,DEFAULT,
+     +              FATTOP,TOPDIR,LOCALQ
+*     Mode at which server disk is accessed (VM)
+      CHARACTER*1   SERMOD
+*     Name of service machine
+      CHARACTER*20  SERNAM
+      CHARACTER*64  FATTOP
+      CHARACTER*16  TOPDIR
+      CHARACTER*80  FATNOD
+      CHARACTER*132 LOCALQ
+      CHARACTER*132 DEFAULT
+      LOGICAL       STRMLF
++KEEP,FTTBUG.
+      INTEGER         IDEBFA, IDIVFA, IKDRFA, KOFSFA, KOFUFA, LBFXFA
+     +              , LSAVFA, LTOPFA, LBBKFA, LBGNFA, LTDSFA, LBDSFA
+     +              , LPRTFA, NTOPFA, LUFZFA, IOUPFA, IOBKFA, IODSFA
+     +              , LLNLFA, LLNHFA
++KEEP,FATUSE.
++SEQ,FTTBUG,IF=TYPE.
+      COMMON /FATUSE/ IDEBFA, IDIVFA, IKDRFA, KOFSFA, KOFUFA, LBFXFA
+     +              , LSAVFA, LTOPFA, LBBKFA, LBGNFA, LTDSFA, LBDSFA
+     +              , LPRTFA, NTOPFA, LUFZFA, IOUPFA, IOBKFA, IODSFA
+     +              , LLNLFA, LLNHFA
++KEEP,FATBUG.
++SEQ,FTTBUG,IF=TYPE.
+      COMMON /FATUSE/ IDEBFA, IDIVFA, IKDRFA, KOFSFA, KOFUFA, LBFXFA
+     +              , LSAVFA, LTOPFA, LBBKFA, LBGNFA, LTDSFA, LBDSFA
+     +              , LPRTFA, NTOPFA, LUFZFA, IOUPFA, IOBKFA, IODSFA
+     +              , LLNLFA, LLNHFA
++KEEP,FATBANK.
+      COMMON /FABANK/FATFEN(22),LQ(9)
+      DIMENSION       IQ(2), Q(2)
+      EQUIVALENCE     (IQ(1),Q(1),LQ(9))
+*
+      COMMON /QUEST/  IQUEST(100)
+*
+      PARAMETER       (IKTYFA=33, KNSDFA=23, KLSDFA=26, MAXLFA=128)
+*     top directory fan-out bank    "UPFA"
+      PARAMETER       (MNOPFA=1, MLUNFA=2, MFLGFA=3, MTOTFA=4)
+      PARAMETER       (MCRDFA=5, MINPFA=6, MOUTFA=7, MTOPFA=8)
+      PARAMETER       (MNCHFA=9, MCHRFA=10, NDUPFA=MCHRFA+31)
+      PARAMETER       (NSLUFA=2)
+*     Book keeping "BKFA"
+      PARAMETER       (KLBKFA=1)
+      PARAMETER       (MSTAFA=1,MPNTFA=2,MCGNFA=3)
+      PARAMETER       (NWBKFA=3)
+*     Generic names bank
+      PARAMETER       (KLGNFA=2)
+*
+      COMMON /FATSTO/ LDIRFA, LBOUT,  LJNKFA
+      COMMON /FATUSE/ IDEBFA, IDIVFA, IKDRFA, KOFSFA, KOFUFA, LBFXFA
+     +              , LSAVFA, LTOPFA, LBBKFA, LBGNFA, LTDSFA, LBDSFA
+     +              , LPRTFA, NTOPFA, LUFZFA, IOUPFA, IOBKFA, IODSFA
+     +              , LLNLFA, LLNHFA
+      COMMON /FATSER/ LNEWFA, LOLDFA, LCOMP1, LCOMP2, LBANKR
+      COMMON /FATBNK/ LBKLUN(99)
+*
+      PARAMETER       (MXDMFA=100)
+*     COMMON /FATKYS/ IOTYFA(MXDMFA), KEYVFA(MXDMFA), NKEYFA, NWKYFA
+      COMMON /FATKYS/ IOTYFA(MXDMFA), KEYVFA(MXDMFA), NWKYFA
+*
++KEEP, FATBANK%, IF=$DOC.
++SEQ, FATBANK.
+ 
+             fan-out bank offsets
+ 
+    MNOPFA      Number of open files belonging to such "data base"
+    MLUNFA      logical unit of the RZ-file
+    MFLGFA
+    MTOTFA
+    MCRDFA
+    MINPFA
+    MOUTFA
+    MTOPFA
+    MNCHFA    number of character of the top directory name
+    MCHRFA    top directory name
+ 
+    NDUPFA    total number of word in the top directory
+ 
+    NSLUFA    Number of "system links in "UPFA" bank
+ 
+ 
+                Book-keeping bank   "BKFA"
+    KLBKFA    link offset in UPFA
+    NWBKFA    number of word for each "file"
+ 
+    MSTAFA    file status
+    MPNTFA    pointer in the generic names bank
+    MCGNFA    number of characters used by the gen.name
+ 
+                Generic names bank   "GNFA"
+    KLGNFA    link offset in UPFA
+ 
+    -5        number of word used
+ 
+ 
++KEEP, FTTPARA.
+      INTEGER MKSRFA,MKFNFA,MKCLFA,MKMTFA,MKLCFA,MKNBFA,NKDSFA
+      INTEGER MFQNFA,MHSNFA,MCPLFA,MMTPFA,MLOCFA,MHSTFA,MHOSFA,
+     +        MVSNFA,MVIDFA,MVIPFA,MDENFA,MVSQFA,MFSQFA,MSRDFA,
+     +        MERDFA,MSBLFA,MEBLFA,MRFMFA,MRLNFA,MBLNFA,MFLFFA,
+     +        MFUTFA,MCRTFA,MCTTFA,MLATFA,MCURFA,MCIDFA,MCNIFA,
+     +        MCJIFA,MFPRFA,MSYWFA,MUSWFA,MUCMFA,NWDSFA,MFSZFA,
+     +        MUSCFA,MDRPFA,MKDRFA
+ 
+      INTEGER NFQNFA,NHSNFA,NHSTFA,NHOSFA,NVSNFA,NVIDFA,NFLFFA,
+     +        NRFMFA,NFUTFA,NCURFA,NCIDFA,NCNIFA,NCJIFA,NUCMFA
+ 
+      INTEGER MFIEEE,MFEEEI,MFIBM, MFCRAY,MFVAX ,MFUNIX,MFULTR
+ 
+      INTEGER KMXLOC,KMXCPL,KMXMTP,KMXLUN
+      INTEGER MFMLOC,MFMCPL,MFMMTP,MFMLUN
+      INTEGER KMXKEY
+ 
+      INTEGER NCPLFA
+      INTEGER NMTPFA
+      INTEGER NLOCFA
+      INTEGER NVIPFA
+      INTEGER NDENFA
+      INTEGER NVSQFA
+      INTEGER NFSQFA
+      INTEGER NSRDFA
+      INTEGER NERDFA
+      INTEGER NSBLFA
+      INTEGER NEBLFA
+      INTEGER NRLNFA
+      INTEGER NBLNFA
+      INTEGER NCRTFA
+      INTEGER NCTTFA
+      INTEGER NLATFA
+      INTEGER NFPRFA
+      INTEGER NFSZFA
+      INTEGER NUSCFA
+      INTEGER NUSWFA
+      INTEGER NSYWFA
+ 
++KEEP,FATPARA.
+* Start of FATMEN sequence FATPARA
++SEQ,FTTPARA.
+*
+** ***     Data set bank mnemonics
+*
+*          Keys
+      PARAMETER ( MKSRFA= 1, MKFNFA= 2, MKCLFA=7, MKMTFA=8
+     1           ,MKLCFA= 9, MKNBFA=10, NKDSFA=10,MKDRFA=2)
+*
+** ***     Bank offsets
+*
+      PARAMETER ( MFQNFA=  1, MHSNFA= 65, MCPLFA= 67, MDRPFA= 67
+     1           ,MMTPFA= 68, MLOCFA= 69, MHSTFA= 70, MHOSFA= 74
+     2           ,MVSNFA= 77, MVIDFA= 79, MVIPFA= 81, MDENFA= 82
+     3           ,MVSQFA= 83, MFSQFA= 84, MSRDFA= 85, MERDFA= 86
+     4           ,MSBLFA= 87, MEBLFA= 88, MRFMFA= 89, MRLNFA= 90
+     5           ,MBLNFA= 91, MFLFFA= 92, MFUTFA= 93, MCRTFA= 94
+     6           ,MCTTFA= 95, MLATFA= 96, MCURFA= 97, MCIDFA= 99
+     7           ,MCNIFA=101, MCJIFA=103, MFPRFA=105, MSYWFA=106
+     8           ,MUSWFA=116, MUCMFA=126, NWDSFA=145
+     9           ,MFSZFA=MSYWFA,MUSCFA=MSYWFA+1)
+ 
+*
+** ***     Lengths of character fields in bytes
+*
+      PARAMETER ( NFQNFA = (MHSNFA-MFQNFA)*4,
+     +            NHSNFA = (MCPLFA-MHSNFA)*4,
+     +            NHSTFA = (MHOSFA-MHSTFA)*4,
+     +            NHOSFA = (MVSNFA-MHOSFA)*4,
+     +            NVSNFA = (MVIDFA-MVSNFA)*4,
+     +            NVIDFA = (MVIPFA-MVIDFA)*4,
+     +            NRFMFA = (MRLNFA-MRFMFA)*4,
+     +            NFLFFA = (MFUTFA-MFLFFA)*4,
+     +            NFUTFA = (MCRTFA-MFUTFA)*4,
+     +            NCURFA = (MCIDFA-MCURFA)*4,
+     +            NCIDFA = (MCNIFA-MCIDFA)*4,
+     +            NCNIFA = (MCJIFA-MCNIFA)*4,
+     +            NCJIFA = (MFPRFA-MCJIFA)*4,
+     +            NUCMFA = (NWDSFA-MUCMFA)*4)
+*
+** ***     Lengths of integer fields in words
+*
+      PARAMETER ( NCPLFA = 1  )
+      PARAMETER ( NMTPFA = 1  )
+      PARAMETER ( NLOCFA = 1  )
+      PARAMETER ( NVIPFA = 1  )
+      PARAMETER ( NDENFA = 1  )
+      PARAMETER ( NVSQFA = 1  )
+      PARAMETER ( NFSQFA = 1  )
+      PARAMETER ( NSRDFA = 1  )
+      PARAMETER ( NERDFA = 1  )
+      PARAMETER ( NSBLFA = 1  )
+      PARAMETER ( NEBLFA = 1  )
+      PARAMETER ( NRLNFA = 1  )
+      PARAMETER ( NBLNFA = 1  )
+      PARAMETER ( NCRTFA = 1  )
+      PARAMETER ( NCTTFA = 1  )
+      PARAMETER ( NLATFA = 1  )
+      PARAMETER ( NFPRFA = 1  )
+      PARAMETER ( NFSZFA = 1  )
+      PARAMETER ( NUSCFA = 1  )
+      PARAMETER ( NUSWFA = 10 )
+      PARAMETER ( NSYWFA = 10 )
+*
+*     Definitions of 'Copy Level' (i.e. Data representation)
+*     These definitions adhere to those used in FPACK
+*
+*     PARAMETER (MFIEEE= 1, MFEEEI= 5, MFIBM  =2, MFCRAY= 4,
+      PARAMETER (MFIEEE= 1, MFEEEI= 4, MFIBM  =2, MFCRAY= 5,
+     +           MFVAX = 3)
+ 
+*
+*     Maximum # of location codes, copy levels, media types and luns
+*
+      PARAMETER (KMXLOC=99, KMXCPL=99, KMXMTP=99, KMXLUN=99)
+      PARAMETER (KMXKEY=99)
+ 
+      INTEGER     IBTYPE(35)
+      INTEGER     IBOFFS(35)
+      INTEGER     IBLENG(35)
+      CHARACTER*6 CHBANK(35)
+* End of FATMEN sequence FATPARA
++KEEP,FMDREP.
+      PARAMETER     (NWFFAT=5)
+      COMMON/FMDREP/CHDREP
+      CHARACTER*30  CHDREP(NWFFAT)
++KEEP,FATCHAR.
+*
+** ***     Types (1 = integer, 2 = character, 3 = time)
+*
+      IBTYPE( 1)=2
+      IBTYPE( 2)=2
+      IBTYPE( 3)=1
+      IBTYPE( 4)=1
+      IBTYPE( 5)=1
+      IBTYPE( 6)=2
+      IBTYPE( 7)=2
+      IBTYPE( 8)=2
+      IBTYPE( 9)=2
+      IBTYPE(10)=1
+      IBTYPE(11)=1
+      IBTYPE(12)=1
+      IBTYPE(13)=1
+      IBTYPE(14)=1
+      IBTYPE(15)=1
+      IBTYPE(16)=1
+      IBTYPE(17)=1
+      IBTYPE(18)=2
+      IBTYPE(19)=1
+      IBTYPE(20)=1
+      IBTYPE(21)=2
+      IBTYPE(22)=2
+      IBTYPE(23)=3
+      IBTYPE(24)=3
+      IBTYPE(25)=3
+      IBTYPE(26)=2
+      IBTYPE(27)=2
+      IBTYPE(28)=2
+      IBTYPE(29)=2
+      IBTYPE(30)=1
+      IBTYPE(31)=1
+      IBTYPE(32)=1
+      IBTYPE(33)=2
+      IBTYPE(34)=1
+      IBTYPE(35)=1
+*
+** ***     Offsets
+*
+      IBOFFS( 1)=MFQNFA
+      IBOFFS( 2)=MHSNFA
+      IBOFFS( 3)=MCPLFA
+      IBOFFS( 4)=MMTPFA
+      IBOFFS( 5)=MLOCFA
+      IBOFFS( 6)=MHSTFA
+      IBOFFS( 7)=MHOSFA
+      IBOFFS( 8)=MVSNFA
+      IBOFFS( 9)=MVIDFA
+      IBOFFS(10)=MVIPFA
+      IBOFFS(11)=MDENFA
+      IBOFFS(12)=MVSQFA
+      IBOFFS(13)=MFSQFA
+      IBOFFS(14)=MSRDFA
+      IBOFFS(15)=MERDFA
+      IBOFFS(16)=MSBLFA
+      IBOFFS(17)=MEBLFA
+      IBOFFS(18)=MRFMFA
+      IBOFFS(19)=MRLNFA
+      IBOFFS(20)=MBLNFA
+      IBOFFS(21)=MFLFFA
+      IBOFFS(22)=MFUTFA
+      IBOFFS(23)=MCRTFA
+      IBOFFS(24)=MCTTFA
+      IBOFFS(25)=MLATFA
+      IBOFFS(26)=MCURFA
+      IBOFFS(27)=MCIDFA
+      IBOFFS(28)=MCNIFA
+      IBOFFS(29)=MCJIFA
+      IBOFFS(30)=MFPRFA
+      IBOFFS(31)=MSYWFA
+      IBOFFS(32)=MUSWFA
+      IBOFFS(33)=MUCMFA
+      IBOFFS(34)=MFSZFA
+      IBOFFS(35)=MUSCFA
+*
+** ***     Lengths
+*
+      IBLENG( 1)=NFQNFA
+      IBLENG( 2)=NHSNFA
+      IBLENG( 3)=NCPLFA
+      IBLENG( 4)=NMTPFA
+      IBLENG( 5)=NLOCFA
+      IBLENG( 6)=NHSTFA
+      IBLENG( 7)=NHOSFA
+      IBLENG( 8)=NVSNFA
+      IBLENG( 9)=NVIDFA
+      IBLENG(10)=NVIPFA
+      IBLENG(11)=NDENFA
+      IBLENG(12)=NVSQFA
+      IBLENG(13)=NFSQFA
+      IBLENG(14)=NSRDFA
+      IBLENG(15)=NERDFA
+      IBLENG(16)=NSBLFA
+      IBLENG(17)=NEBLFA
+      IBLENG(18)=NRFMFA
+      IBLENG(19)=NRLNFA
+      IBLENG(20)=NBLNFA
+      IBLENG(21)=NFLFFA
+      IBLENG(22)=NFUTFA
+      IBLENG(23)=NCRTFA
+      IBLENG(24)=NCTTFA
+      IBLENG(25)=NLATFA
+      IBLENG(26)=NCURFA
+      IBLENG(27)=NCIDFA
+      IBLENG(28)=NCNIFA
+      IBLENG(29)=NCJIFA
+      IBLENG(30)=NFPRFA
+      IBLENG(31)=NSYWFA
+      IBLENG(32)=NUSWFA
+      IBLENG(33)=NUCMFA
+      IBLENG(34)=NFSZFA
+      IBLENG(35)=NUSCFA
+*
+** ***     Character names of offsets
+*
+      CHBANK( 1)='MFQNFA'
+      CHBANK( 2)='MHSNFA'
+      CHBANK( 3)='MCPLFA'
+      CHBANK( 4)='MMTPFA'
+      CHBANK( 5)='MLOCFA'
+      CHBANK( 6)='MHSTFA'
+      CHBANK( 7)='MHOSFA'
+      CHBANK( 8)='MVSNFA'
+      CHBANK( 9)='MVIDFA'
+      CHBANK(10)='MVIPFA'
+      CHBANK(11)='MDENFA'
+      CHBANK(12)='MVSQFA'
+      CHBANK(13)='MFSQFA'
+      CHBANK(14)='MSRDFA'
+      CHBANK(15)='MERDFA'
+      CHBANK(16)='MSBLFA'
+      CHBANK(17)='MEBLFA'
+      CHBANK(18)='MRFMFA'
+      CHBANK(19)='MRLNFA'
+      CHBANK(20)='MBLNFA'
+      CHBANK(21)='MFLFFA'
+      CHBANK(22)='MFUTFA'
+      CHBANK(23)='MCRTFA'
+      CHBANK(24)='MCTTFA'
+      CHBANK(25)='MLATFA'
+      CHBANK(26)='MCURFA'
+      CHBANK(27)='MCIDFA'
+      CHBANK(28)='MCNIFA'
+      CHBANK(29)='MCJIFA'
+      CHBANK(30)='MFPRFA'
+      CHBANK(31)='MSYWFA'
+      CHBANK(32)='MUSWFA'
+      CHBANK(33)='MUCMFA'
+      CHBANK(34)='MFSZFA'
+      CHBANK(35)='MUSCFA'
++KEEP,FABALQ.
+      COMMON/FABALQ/NBLOKS
++KEEP,FATREG,IF=IBMMVS.
+         MACRO
+         REGISTER
+R0       EQU   0
+R1       EQU   1
+R2       EQU   2
+R3       EQU   3
+R4       EQU   4
+R5       EQU   5
+R6       EQU   6
+R7       EQU   7
+R8       EQU   8
+R9       EQU   9
+R10      EQU   10
+R11      EQU   11
+R12      EQU   12
+R13      EQU   13
+R14      EQU   14
+R15      EQU   15
+         MEND
++KEEP,FATBEG,IF=IBMMVS.
+         MACRO
+&NAME    BEG   &ID,&MODE=REUS,&WKSIZE=0,&SP=0,&BASE=12,&RMODE=24
+         GBLC  &RMD
+&RMD     SETC  '&RMODE'
+&NAME    CSECT
+         AIF   ('&RMODE' EQ '24').NOT311
+&NAME    RMODE ANY
+&NAME    AMODE ANY
+.NOT311  ENTRY &NAME
+         USING *,&BASE
+         ANF   &ID,MODE=&MODE,WKSIZE=&WKSIZE,SP=&SP,BASE=&BASE
+         MEND
++KEEP,FATANF,IF=IBMMVS.
+         MACRO
+&NAME    ANF   &ID,&MODE=REUS,&WKSIZE=0,&SP=0,&BASE=12
+         GBLC  &DY0ID,&MD
+         LCLA  &A,&B,&D
+         LCLC  &E,&F
+&F       SETC  '&SYSNDX'
+&MD      SETC  '&MODE'
+* ANF VERSION 2.4 (SUPPORTS PRNT MACRO AND EQUATED WORKSIZE)
+.* DIE VORIGE VERSION HEISST ANF8
+         AIF   ((T'&WKSIZE NE 'N') AND (T'&WKSIZE NE 'U')).ERROR4
+         AIF   (T'&SP NE 'N').ERROR5
+         AIF   (&SP GT 255).ERROR6
+         AIF   (T'&BASE NE 'N').ERROR7
+         AIF   ((&BASE GT 12) OR (&BASE LT 4)).ERROR8
+         AIF   ('&MODE' NE 'REUS').RENT
+         AIF   ('&ID' EQ '').NULLID
+         AIF   ('&ID' EQ '*').SPECID
+&D       SETA  K'&ID
+         AIF   (&D GT 8).ERROR1
+&A       SETA  ((K'&ID+4)/4)*4+80
+&E       SETC  '&ID'
+         CNOP  0,4
+&NAME    B     &A.(0,15)           BRANCH AROUND ID AND SA
+         DC    AL1(&D)             LENGTH OF ID
+         DC    CL&D'&E'
+         AGO   .CONTA
+.NULLID  ANOP
+         CNOP  0,4
+&NAME    B     80(0,15)            BRANCH AROUND SA
+         AGO   .CONTA
+.SPECID  AIF   ('&NAME' EQ '').CSECTN
+&E       SETC  '&NAME'
+&A       SETA  1
+.CONTB   AIF   ('&E'(1,&A) EQ '&E').CONTC
+&A       SETA  &A+1
+         AGO   .CONTB
+.CONTC   ANOP
+         AIF   ('&MODE' EQ 'RENT').CONTE
+&B       SETA  ((&A+4)/4)*4+80
+         CNOP  0,4
+&NAME    B     &B.(0,15)           BRANCH AROUND ID AND SA
+         DC    AL1(&A)             LENGTH OF ID
+         DC    CL&A'&E'
+         AGO   .CONTA
+.CSECTN  AIF   ('&SYSECT' EQ '').ERROR2
+&E       SETC  '&SYSECT'
+&A       SETA  1
+         AGO   .CONTB
+.ERROR2  MNOTE 12,'CSECT NAME NOT SPECIFIED'
+         AGO   .NULLID
+.CONTA   ANOP
+&DY0ID   SETC  '&SYSNDX'
+SAVE&F   DC    19F'0'              SAVE AREA
+         STM   14,12,12(13)        SAVE CALLER'S REGISTER
+         LR    &BASE,15            LOAD BASE
+         LA    3,SAVE&F            ADDRESS OF NEW SAVE AREA
+         ST    3,8(13)             FORWARD CHAIN
+         L     3,32(13)            RESTORE REG 3
+         ST    13,SAVE&F.+4        BACKWARD CHAIN
+         LA    13,SAVE&F           LOAD SAVE AREA REG
+         MEXIT
+.ERROR1  MNOTE 12,'IDENTIFICATION FIELD TOO LONG'
+         MEXIT
+.RENT    ANOP
+         AIF   ('&MODE' NE 'RENT').ERROR3
+         AIF   ('&ID' EQ '').RNULL
+         AIF   ('&ID' EQ '*').SPECID
+&D       SETA  K'&ID
+         AIF   (&D GT 8).ERROR1
+&A       SETA  ((&D+2)/2)*2+4
+&E       SETC  '&ID'
+&NAME    B     &A.(0,15)           BRANCH AROUND ID
+         DC    AL1(&D)             LENGTH OF ID
+         DC    CL&D'&E'
+         STM   14,12,12(13)        SAVE CALLER'S REGISTER
+         AGO   .CONTD
+.RNULL   ANOP
+&NAME    STM   14,12,12(13)        SAVE CALLER'S REGISTER
+         AGO   .CONTD
+.CONTE   ANOP
+&B       SETA  ((&A+2)/2)*2+4
+&NAME    B     &B.(0,15)           BRANCH AROUND ID
+         DC    AL1(&A)             LENGTH OF ID
+         DC    CL&A'&E'
+         STM   14,12,12(13)        SAVE CALLER'S REGISTER
+.CONTD   ANOP
+         LR    &BASE,15            LOAD BASE
+         CNOP  0,4                 ALIGN ON FULL WORD BOUNDARY
+         BAL   1,*+8               BRANCH AROUND SUBPOOL AND LENGTH
+         DC    AL1(&SP)            SUBPOOL ID
+         DC    AL3(&WKSIZE+88)     LENGTH VALUE
+         L     0,0(0,1)            LOAD SP AND LENGTH
+         SVC   10                  ISSUE GETMAIN SVC
+         XC    0(88,1),0(1)        CLEAR CHAIN FIELDS AND SAVE AREA
+         MVI   8(1),X'FF'          INDICATE LAST ON CHAIN
+         MVC   12(4,1),*-20        SAVE LENGTH AN SUBPOOL
+         MVC   0(4,1),12(13)
+         LA    15,FR&F
+         ST    15,12(13)
+         ST    13,20(1)            BACKWARD CHAIN
+         LR    15,13               SAVE OLD SAVE AREA POINTER
+         LA    13,16(1)            LOAD NEW SA REGISTER
+         ST    13,8(15)            FORWARD CHAIN
+         LM    15,1,16(15)         RESTORE ALL REGISTER
+         B     FO&F
+FR&F     ST    15,16(13)           SAVE RETURN CODE
+         LA    0,16                LENGTH OF PREFIX
+         L     1,8(13)             SAVE OLD SA POINTER
+         SR    1,0                 POINT TO PREFIX
+         MVC   12(4,13),0(1)
+         L     14,8(1)             LOAD 1-ST CHAIN POINTER
+         L     0,12(1)             LOAD 1-ST SUBPOOL AND LENGTH
+         BALR  10,0
+         B     12(10)
+         L     14,0(1)             LOAD CHAIN POINTER
+         L     0,4(1)              LOAD SUBPOOL AND LENGTH
+         LA    1,0(1)              CLEAR HIGH ORDER BYTE
+         SVC   10                  ISSUE FREEMAIN SVC
+         LA    1,0(14)             GET CHAIN POINTER
+         C     14,36(10)           LAST IN CHAIN
+         BNZ   4(10)               NO, BRANCH
+         LM    14,12,12(13)        RESTORE REGISTERS AFTER FREEMAIN
+         BR    14
+         DC    X'FF000000'
+FO&F     EQU   *
+         MEXIT
+.ERROR3  MNOTE 12,'MODE=&MODE INVALID'
+         MEXIT
+.ERROR4  MNOTE 12,'WKSIZE=&WKSIZE SHOULD BE SELF-DEFINING TERM OR NAME *
+               FIELD OF AN ''EQU'''
+         MEXIT
+.ERROR5  MNOTE 12,'SP=&SP SHOULD BE A SELF DEFINING TERM'
+         MEXIT
+.ERROR6  MNOTE 12,'SP=&SP GREATER 255 SPECIFIED'
+         MEXIT
+.ERROR7  MNOTE 12,'BASE=&BASE SHOULD BE A SELF DEFINING TERM'
+         MEXIT
+.ERROR8  MNOTE 12,'BASE CAN BE ONLY 4 TO 12'
+         MEND
++KEEP,FATSCHL,IF=IBMMVS.
+         MACRO
+&NAME    SCHL  &RET=,&MODE=
+&NAME    L     13,4(13)            RELOAD SA-REG
+         AIF   ('&RET' NE '').RETCODE
+         LM    14,12,12(13)        RELOAD REGISTERS
+         BR    14                  RETURN TO CALLER
+         MEXIT
+.RETCODE AIF   ('&RET'(1,1) EQ '(').REGIST
+         AIF   (T'&RET NE 'N').ADDRESS
+         LA    15,&RET             LOAD REG 15 WITH RET CODE
+         AGO   .FURTHER
+.REGIST  AIF   ('&RET(1)' EQ '15').FURTHER
+         LR    15,&RET(1)          LOAD REG 15 WITH SPECIF. REGISTER
+         AGO   .FURTHER
+.ADDRESS L     15,&RET             LOAD REG 15 FROM STORAGE
+.FURTHER LM    0,12,20(13)         RESTORE REG 0 TO 12
+         L     14,12(13)           RESTORE REG 14
+         BR    14                  RETURN TO CALLER
+         MEND
++KEEP, FATPARA%, IF=$DOC.
++SEQ, FATPARA.
+ 
+             K E Y S
+ 
+    MKSRFA      Key serial number
+    MKFNFA      File name
+    MKCLFA      Copy level
+    MKMTFA      Medium type
+    MKLCFA      Location type
+    MKNBFA      Number of bank in the data set linear chain
+ 
+    NKDSFA      Number of keys
+ 
+ 
+              B A N K
+ 
+words    field          type   length     description
+                              (in words)
+ 
+         ---------     generic description  -------------
+ 
+(* = NOT NULL in ORACLE or SQL/DS tables - filled in by FMLIFT)
+ 
+1-64  * fully qual. name H        64      in case of instance the generi
+                                          name of the corresponding data
+                                          set
+                                          dataset name has format
+                                          <user.addr>fn.ft on VM,
+                                          where '.addr' may be omitted.
+65-66 * host name        H         2      in case of tape the nearest
+                                          host to its physical
+                                          location
+                                          (maybe more words to clearly
+                                          state the location (lab.
+                                          bld. etc) would be needed)
+67    * copy level       I         1      0 master 1 duplicate
+                                        2 duplicate from a duplicate etc
+68    * location code    I         1   to find the nearest  (FATMEN code
+69    * medium type      I         1      3=tape, 2=cartridge,
+                                          4=exabyte, 1=disk
+                                          ...................
+                                          0=instance
+ 
+ 
+ 
+ 
+         ---------     disk description     -------------
+ 
+70-73   host type        H         4         only for disk files
+74-76   operating syst.  H         3           "
+ 
+         ---------     tape description     -------------
+ 
+77-78 * VSN              H         2         only for tapes
+79-80 * VID              H         2           "
+81      VID prefix       I         1           "
+82      Density          I         1           "
+83      vol. seq. numb.  I         1           "
+84    * file seq. numb.  I         1           "
+ 
+         ---------     file description     -------------
+ 
+85      start record #   I         1
+86      end   record #   I         1
+87      start block  #   I         1
+88      end   block  #   I         1
+ 
+         ---------  physical description    -------------
+ 
+89      record format    H         1
+90      record length    I         1        (in words!)
+91      block  length    I         1            "
+106     file   size      I         1        (in Megabytes, rounded up
+        = SYSWD0                             to next integer)
+ 
+         ---------  logical description     -------------
+ 
+92    * file format      H         1     FATMEN oriented
+                                         FZ=zebra native
+                                         FA=zebra ascii
+                                         FX=zebra exchange
+                                         RZ=zebra RZ
+                                         EP=EPIO
+                                         AS=normal Ascii
+                                         UN=unknown to FATMEN
+                                         ...............
+93      file user type   H         1     user oriented and user defined
+ 
+         ---------    dates and times       -------------
+ 
+94      creation date    I         1
+95      catalog. date    I         1
+96      last acc.date    I         1
+ 
+         ---------   creator identier       -------------
+ 
+97-98   user name creat. H         2     "creator" user name
+99-100  user id.    "    H         2               user id. UUUGG/UUU$GG
+                                                            or NFSID
+101-102 node id.    "    H         2               node id.
+103-104 job id.     "    H         2               job  id.
+                                         (user defined)
+ 
+         ---------      protections         -------------
+ 
+105      file protect.   I         1     (maybe just a pointer in a
+                                          ACL definition bank)
+ 
+         ---------       user area          -------------
+ 
+106-115  system words    I        10     (reserved)
+116-125  user words      I        10     (user defined)
+126-145  comment         H        20
+ 
++PATCH,PAMEND.
+*

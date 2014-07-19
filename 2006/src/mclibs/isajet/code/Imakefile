@@ -1,0 +1,42 @@
+DoIncludePackage(isajet)
+#include "pilot.h"
+
+SRCS_F= \ @@\
+	 amass.F charge.F cteq5l.F ctxc2i.F ctxi2c.F ctxin.F ctxout.F \ @@\
+	 dblpcm.F dblvec.F dboost.F decay.F decjet.F \ @@\
+	 domssm.F drllyn.F eebeg.F eemax.F elctrn.F epf.F evol01.F evol02.F \ @@\
+	 evol03.F evol05.F evol06.F evol07.F evolms.F evolve.F flavor.F \ @@\
+	 fortop.F frgjet.F frgmnt.F gamma.F getpt.F gettot.F heavyx.F \ @@\
+	 hevolv.F higgs.F idanti.F idgen.F iframs.F inisap.F ipartns.F \ @@\
+	 ipjset.F iprtns.F irmov0.F isabeg.F isaend.F isaevt.F isaini.F \ @@\
+	 isajet.F ispjet.F istrad.F iswdky.F jetgen.F \ @@\
+	 label.F lboost.F logerr.F \ @@\
+	 logic.F logp.F logphi.F logphw.F logpt.F logqm.F logqt.F logthw.F \ @@\
+	 logx.F logxw.F logyth.F logyw.F lstsq.F mbias.F mbset.F nogood.F \ @@\
+	 ordecr.F order.F prtevt.F prtlim.F ptfun.F qcdini.F qcdint.F \ @@\
+	 qcdinz.F qcdjet.F qcdt.F qcdz.F qfunc.F ranflux.F ranlux.F \ @@\
+	 readin.F rejfrg.F rejjet.F rescal.F reset.F setcon.F setdky.F \ @@\
+	 seth.F sethss.F setnxt.F settyp.F setw.F sigdy.F sigdy2.F sigee.F \ @@\
+	 sigfil.F siggam.F sigh.F sigh2.F sigh3.F sighss.F sigint.F sigqcd.F \ @@\
+	 sigsse.F sigssl.F sigssy.F sigssz.F sigtc.F sigtc2.F sigtc3.F \ @@\
+	 sigwh.F sigwhs.F sigww.F sigww2.F smszg.F ssgst.F ssgt.F \ @@\
+	 struc.F strucw.F timer.F twojet.F \ @@\
+	 twokin.F visaje.F \ @@\
+	 whiggs.F wpair.F wwkin.F wwss.F wwst.F wwtt.F wzss.F \ @@\
+	 wzst.F wzsu.F wztu.F xwwww.F xwwzz.F xzzww.F xzzzz.F ygenj.F \ @@\
+	 decps1.F decps2.F decss3.F dectau.F decva.F \ @@\
+	 dincgm.F ebeam.F estruc.F fbrbm.F spline.F ssfel.F \ @@\
+	 zzall.F zzstar.F \ @@\
+	 alqcd.F amgmw.F dhelas.F evol11.F kkgf1.F kkgf2.F kkgf3.F \ @@\
+	 logmgm.F logmgy.F logmij.F mginit.F muljet.F \ @@\
+	 setkkg.F sigkkg.F szjj1.F szjj2.F szjj3.F \ @@\
+	 szjj4.F szjj5.F szjj6.F szjj7.F zjj.F zjj0.F \ @@\
+	 zjj1.F zjj2.F zjj3.F zjj4.F zjj5.F zjj6.F zjj7.F
+
+#if defined(CERNLIB_VAX) && defined(CERNLIB_NOCERN)
+SRCS_F:= $(SRCS_F) datime.F 
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

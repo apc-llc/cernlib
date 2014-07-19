@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 calini.F calsim.F ehist.F getjet.F isaplt.F setup.F user.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

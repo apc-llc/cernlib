@@ -1,0 +1,102 @@
+*
+* $Id: iguide.dat,v 1.1.1.1 1996/04/01 15:01:43 mclareni Exp $
+*
+* $Log: iguide.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:43  mclareni
+* Mathlib gen
+*
+*
+    -------------------------------------------------------------------
+    Please refer to the corresponding Installation Guide in INSTALL PAM
+    -------------------------------------------------------------------
+
+                  GENLIB TEST SUITE HELP SHEET       T Hepworth 90.08.23
+
+This sheet is intended to aid in the addition of further test programs to
+the Genlib test suite.
+It is assumed that a fortran test program has been written and is then
+converted into patchy form following the following programming
+conventions:
+
+  CONVENTIONS USED INSIDE A TEST PROGRAM
+
+  Patchy flag  DOUBLE is set when a 32-bit machine is being used.
+  Patchy flag -DOUBLE is set when a 64-bit machine is being used.
+  Patchy flag -CMPXDOUB is used to avoid compiler errors caused by
+    source code of the type:   COMPLEX Z            {  see code for  }
+                               DATA Z / (1D0,2D0)/  {further examples}
+
+  Usually in a test, many individual function values are calculated by
+  the routines under test, and these values are compared with analytical
+  values which are stored inside data statements, inside the test
+  program. Individual errors are calculated (either absolute errors or
+  absolute relative errors), and the error of largest magnitude is
+  found using the following code sequence:
+
+      ERRMAX=0
+      DO 100 I=1,NT
+         .
+         .
+         SOL(I)= Approximate function value for Ith set of parameters
+       { ERROR(I)= ABS( SOL(I)-EXACT(I) )           {for absolute errors}
+       { ERROR(I)= ABS( (SOL(I)-EXACT(I))/SOL(I) )  {for relative errors}
+         ERRMAX= MAX( ERRMAX,ERROR(I) )
+100   CONTINUE
+
+  Since the calculated errors are always positive, ERRMAX will contain
+  the modulus of the largest error, which will, hopefully, be small.
+  The success of the test can then be assessed by using just one
+  comparison, viz,         (ERRMAX .LE. TSTERR),     where TSTERR is an
+  accuracy parameter. If this logical value is .TRUE. then the test was
+  successful, else the test failed.
+
+
+  CONVERTING A FORTRAN FILE TO THE REQUIRED CARD FORMAT
+
+  For a Program/Subroutine which tests the routine "code", the following
+  format is used:
+
+    +PATCH,code.
+    +DECK,codeM.
+          SUBROUTINE codeM
+    +SELF
+         :      :
+         :      :
+ [  +SEQ,IMP64,IF=DOUBLE.  ]     {optional replacement of source}
+                             {line "IMPLICIT DOUBLE PRECISION (A-H,O-Z)"}
+         :      :
+           Variable declarations
+         :      :
+    +CDE,IORC    {stores common variable LOUT, the output channel number}
+         :      :
+           End of non-executables
+          CALL HEADER('code',modep)   {print a page heading}
+            :     :
+            :     :
+              Test source
+            :     :
+            :     :
+          IRC= ITEST('code',ERRMAX .LE. TSTERR)  {test success of test}
+          CALL PAGEND('code')                    { print page ending  }
+          RETURN
+          END
+
+  References to the terminal output channel 6 should also be changed
+  to channel LOUT ...eg WRITE(6,*) X becomes WRITE(LOUT,*) X
+
+
+  INTRODUCING A NEW TEST PROGRAM TO THE SUITE
+
+  With a test program in the above patchy form:
+
+     1) Insert "+USE,code." in the patch SGENT.
+     2) Insert the lines "+SELF,IF=code.  "
+                         "      CALL codeM" in the patch A000.
+     3) Insert the cards file for the test, after the end of DECK,PAGEND.
+        preferably in the correct alphabetical order.
+
+
+** Note that code refers to the four letter routine name eg B100,C343
+
+A line commented with C*NS means a variable was declared but not supplied
+A line commented with C*RC means this line contains redundant code

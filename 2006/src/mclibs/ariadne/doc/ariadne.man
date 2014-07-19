@@ -1,0 +1,1043 @@
+
+
+
+
+                         Ariadne version 4.08
+                          Reference Manual
+
+
+                            L. L"onnblad
+
+
+                        CERN Theory Division
+                        Leif.Lonnblad@cern.ch
+
+
+   (original manual published in Computer Physics Communication [1])
+
+
+
+                              Abstract
+
+        The fourth version of the Ariadne program for generating QCD
+     cascades in the Colour Dipole Approximation is presented. A manual
+     for using the program is given together with a few sample programs.
+
+        NOTE: This ASCII file was produced from the original LaTeX doc-
+     ument by the dvi2tty program and does not contain all the sections of
+     the original paper. As a consequence some figures and equations ref-
+     ered to in the text are missing. The original document can be obtained
+     from the author in PostScript format.
+
+
+
+1   Introduction
+
+
+The Colour Dipole Model (CDM) [2-5] as implemented in the Ariadne pro-
+gram has had considerable success in describing data from both e+e- [6] and
+lepto-production [7] experiments.
+   The CDM differs from other QCD cascade models in that it in a natural
+way correctly treats most QCD coherence effects by describing the gluon
+bremsstrahlung in terms of radiation from colour dipoles between partons,
+instead of treating partons as independent emitters.
+   Ariadne is one of the "Lund family of Monte Carlo programs" and is
+not a complete event generator. It only generates the QCD cascade process
+and has to be interfaced to other programs which handles hard interactions,
+hadronization and particle decays. Standard interfaces to the JETSET [8-
+10], LEPTO [11] and PYTHIA [8,9,12] programs are included in the version
+presented in this paper.
+
+
+
+1.1   Update history
+
+
+The first version of Ariadne [13] only handled gluon radiation from primary
+quarks in e+e- collisions. Since then the program has evolved as follows
+
+
+   o version 2 [14]:  Included gluon emission from extended emitters to
+     describe the QCD showers in lepto-production.
+
+
+   o version 3 [15]:  Included also production of QQ^bar pairs from gluon
+     splitting.
+
+
+   o version 3.1: Adopted the new event record of JETSET version 7.1.
+
+
+   o version 3.2: Included preliminary facilities for generating dipole show-
+     ers in hadron-hadron collisions.
+
+
+   o version 3.3: Included a preliminary treatment of electro-magnetic dipole
+     radiation of photons.
+
+
+   o version 4.01: Completely rewritten, built around a new internal dipole
+     oriented event record.  The preliminary features of sub-versions 3.2
+     and 3.3 are properly included. Streamlined interfaces to the JETSET,
+     LEPTO and PYTHIA are introduced as well as a new jet clustering
+     routine, inspired by the CDM.
+
+
+   o version 4.02: Fixed bugs in connection with phase space restrictions
+     (in 4.01 the switch MSTA(11) was inactive and effectively set to 4 - see
+     section ??).  Also a bug related to the option MSTA(20) = 2, and to
+     the quark masses and charges in QED emissions was fixed.
+
+
+   o version 4.03: Added options for emissions from extended dipoles (see
+     description of MSTA(18), MSTA(25) and PARA(25) in section ??). Also
+     introduced two new sets of tuned parameters ('ALEPH' and 'EMC')
+     in subroutine ARTUNE. Please note that, in connection with this, a
+     few parameters and switches were given new default values.  Note
+     especially that the default is to automatically call ARTUNE('EMC)' in
+     subroutine ARINIT, hence the switch MSTA(3) must be set to 0 before
+     the call to ARINIT if the user wants to modify any parameters or
+     switches.
+
+     In previous releases, increased precision could be obtained by removing
+     the comment of an implicit double precision statement.  From this
+     release on, increased precision will be the default (see appendix A).
+
+
+   o version 4.04:  Fixed minor bug in ARCLUS and speeded up the clus-
+     tering algorithm.  Added minor features to ARCLUS to make it more
+     compatible with the LUCLUS routine.
+
+
+   o version 4.05:  Fixed bug in matrix element for the final state g->q-
+     qbar process (see MSTA(23)) and added a new option for this process
+     (MSTA(28)).
+
+     Introduced matching to the exact O(alpha_S) matrix elements for the
+     first emission in DIS (see MSTA(32) and MSTA(33)).
+
+     Introduced pomeron-like scattering procedure for remnant handling in
+     DIS and in hadron-hadron collisions (see MSTA(34)).
+
+     Introduced a preliminary (and un-documented) treatment of Drell-
+     Yan-like processes in hadron-hadron collisions (see MSTA(22)).
+
+     Revised the PYTHIA interface.  All PYTHIA sub-processes are now
+     possible (although no guarantee is given for the physical relevance of
+     adding a dipole shower to a given sub-process).
+
+     Changed default parameters and switches to reflect the new features.
+     In particular the default call to ARTUNE('EMC') has changed, and to
+     retain the behavior of version 4.04 a call to ARTUNE('4.04') should
+     be made instead.
+
+     When run with LEPTO or PYTHIA, the subroutines dealing with
+     structure functions in these programs are called from within Ariadne.
+     This complicates the installation procedure somewhat (see section
+     A.2).
+
+
+   o version 4.06: Fixed bug in the O(alpha_S) matrix element for boson-
+     gluon fusion diagram in DIS.
+
+     Introduced initial state g->q-qbar splitting into the cascade (with first
+     emission correced for the O(alpha_S) matrix element in case of DIS).
+
+     Changed default parameters and switches to reflect the new features.
+     In particular the default call to ARTUNE('EMC') has changed, and to
+     retain the behavior of version 4.05 (except for the bug above) a call to
+     ARTUNE('4.05') should be made instead.
+
+
+   o version 4.07: Included correction for O(alpha_S) matrix elements and
+     improved the treatment of Drell-Yan production.
+
+     Introduced a colour reconnection scheme governed by MSTA(35) and
+     PARA(26) (switched off by default).  This feature is so far not docu-
+     mented here.
+
+     Changed default treatment of extendedness. For remnants, mu is given
+     by the intrinsic p_T, which is now generated inside of Ariadne (see
+     MSTA(36), MSTA(37) and PARA(27)). By default the struck quark in
+     DIS is now extended with mu= Q.
+
+     Changed default parameters and switches to reflect the new features.
+     In particular, the default call to ARTUNE('EMC') has changed, and to
+     retain the behavior of version 4.06 a call to ARTUNE('4.06') should
+     be made instead.
+
+
+   o version 4.08: Fixed bug in orientation of emissions from qq^bar dipoles.
+     This mainly affects the general orientation of e+e- events i.e. the
+     thrust-axis distribution, but may also affect prompt photon production
+     in e+e-.
+
+
+
+1.2   Programming philosophy
+
+
+The program is a library of FORTRAN 77 subroutines to be called from
+a user supplied main program. Although there exist over fifty subroutines,
+only a handful are meant to be explicitly called by the user.
+   The interface to the main program as well as to other programs are
+handled through the event record in JETSET's LUJETS common block. The
+communication between different Ariadne routines is however handled by
+an internal dipole oriented event record in the ARSTRS, ARDIPS and ARPART
+common blocks, where the dipoles and partons are linked together to form
+"Lund-type" strings.
+
+
+
+1.3   About this manual
+
+
+This paper is divided into three parts.  The first part, section ??, explain
+the underlying physics processes modeled in Ariadne. Section ?? describes
+the actual program components and in section ?? a couple of sample main
+programs are given to illustrate how Ariadne is used.  In the appendix in-
+formation on how to obtain, install and test the program is given.
+
+
+
+2   The Colour Dipole Model
+
+
+This section has been left out as contains a lot of figures and equations which
+are not possible to reproduce in this ASCII file.
+
+
+
+3   Program Components
+
+
+inputcomponents
+
+
+
+References
+
+
+ [1]L. L"onnblad, Comput. Phys. Commun. 71 (1992) 15.
+
+
+ [2]G. Gustafson, Phys. Lett. B 175 (1986) 453.
+
+
+ [3]G. Gustafson, U. Pettersson, Nucl. Phys. B 306 (1988) 746.
+
+
+ [4]B. Andersson et al., Z. Phys. C 43 (1989) 625.
+
+
+ [5]B Andersson, G. Gustafson, L. L"onnblad,  Nucl. Phys. B 339
+    (1990) 393.
+
+
+ [6]OPAL Coll., M.Z. Akrawy et al., Z. Phys. C 47 (1990) 505.
+
+
+ [7]N. Magnussen et al., Generators for Deep Inelastic Scattering, in
+    Physics at HERA, edited by W. Buchm"uller, G. Ingelman, vol-
+    ume 3, p. 1167, DESY, 1991.
+
+
+ [8]T. Sj"ostrand, Comput. Phys. Commun. 82 (1994) 74.
+
+
+ [9]T. Sj"ostrand,  PYTHIA 5.7 and JETSET 7.4 physics and manual,
+    CERN-TH.7112/93, Dec. 1993, (revised Aug. 1994).
+
+
+[10]T. Sj"ostrand, Comput. Phys. Commun. 39 (1986) 347.
+
+
+[11]G. Ingelman,  LEPTO version 6.1,  in Physics at HERA, edited by
+    W. Buchm"uller, G. Ingelman, volume 3, p. 1366, DESY, 1991.
+
+
+[12]H-U.  Bengtsson,  T.  Sj"ostrand,   Comput. Phys. Commun. 46
+    (1987) 43.
+
+
+[13]U. Pettersson,  ARIADNE - A Monte Carlo for QCD Cascades in
+    the Colour Dipole Formulation, Lund Preprint LU-TP 88-5, 1988.
+
+
+[14]ARIADNE 2, Lund Preprint LU-TP 88-15, 1988.
+
+
+[15]ARIADNE 3, Lund Preprint LU TP 89-10, 1989.
+
+
+
+A    Appendix:  Technical Information
+
+
+The Ariadne program is written according to the FORTRAN 77 standard
+and should work on any platform with a FORTRAN 77 compiler.
+   To avoid name clashes when run together with other programs, all exter-
+nal names in Ariadne begins with the two character AR. All internal identi-
+fiers conforms to the standard FORTRAN 77 implicit declarations except for
+double precision and logical variables which are declared in all subroutines
+as
+
+
+     IMPLICIT DOUBLE PRECISION (D)
+     IMPLICIT LOGICAL (Q)
+
+
+   Ariadne performs a large amount of boost to and from the center of mass
+frames of the radiating dipoles which may give rise to precision problem when
+the program is used for simulations at very high energies.  To avoid these
+Ariadne has an additional declaration of double precision variables
+
+
+     IMPLICIT DOUBLE PRECISION (B)
+
+
+   On some machines double precision arithmetic is much slower than single
+precision, and if you feel that speed is more important than precision this
+latter double precision declaration may be commented out (in every routine).
+Note that possible warnings about non-conservation of four-momentum may
+be avoided by adjusting MSTA(9) and PARA(39) (see section ??).
+   The internal event record of Ariadne has a maximum number of partons,
+dipoles and strings which it can handle.  These number are defined in the
+parameter statement in each routine and are by default set to:
+
+
+     PARAMETER(MAXDIP=500,MAXPAR=500,MAXSTR=100)
+
+
+   These limits can of course be changed by the user, but it should be noted
+that generation of more than 500 partons in Ariadne most probably is an
+indication that an error has occurred.
+   Ariadne contains a block data routine ARDATA for setting the default
+values of the parameters and switches used.  When compiling Ariadne in
+separate modules, this block data routine should be compiled in the same
+module as ARINIT. Otherwise, since ARDATA is never actually referenced, it
+will not be linked and Ariadne will not be properly initialized.
+   Ariadne has to be loaded together with version 7.4 or later of the JET-
+SET program. In addition, when run in 'LEPTO' mode, it should be loaded
+together with version 6.3 or later of the LEPTO program and, when run in
+'PYTHIA' mode, together with version 5.7 or later of the PYTHIA program.
+
+
+
+A.1   Availability
+
+
+The program is available via anonymous ftp to freehep.scri.fsu.edu.
+Here the program resides in the directory freehep/event_generators/ariadne
+as the compressed tar-archive file ariadne-4.08.tar.Z (Forthcoming revi-
+sions will be numbered 4.09, 4.10 etc.).
+   The program is also available on E-mail request from the author (Leif.Lonnbl*
+ *ad@cern.ch).
+The program will then be sent as an E-mail message containing the latest
+revision of the code together with the latest revision of this manual in ASCII
+format.
+
+
+
+A.2   Installation
+
+
+If the program has been obtained through E-mail correspondence it should
+simply be extracted into a file and be compiled.
+   To install the program obtained via anonymous ftp, the compressed tar-
+file should be "un-compressed" and "un-tarred" which will create a directory
+called ariadne-4.08. This directory will contain, besides the actual code, a
+file called README containing all instructions needed to install the program.
+In addition there will be the files ariadne.man and ariadne.ps containing
+the latest revision of this manual in ASCII and Postscript format respec-
+tively.
+   Note that the distribution contains two dummy subroutines PYSTFU and
+LNSTRF. These are needed to avoid linking problems when not running with
+PYTHIA or LEPTO, and should be removed when running with PYTHIA
+or LEPTO respectively.
+
+
+
+A.3   Test Programs
+
+
+Ariadne contains a subroutine called ARTEST intended to be used for con-
+firming that the installation has been successful.  To use it, write a small
+program calling the routine (this program is included in the tar-distribution
+as the file atest.f):
+
+
+      PROGRAM TEST
+
+
+      CALL ARTEST(0)
+
+
+      END
+
+
+   When run, ARTEST will generate 10000 events randomly distributed in
+center of mass energy and check their consistency w.r.t. momentum conser-
+vation and colour flow. If Ariadne was successfully installed, a message
+
+
+    No errors experienced by Ariadne.
+
+
+   will be printed. If anything else is printed, such as
+
+
+  2 errors occurred in Ariadne.
+
+
+   please consult the author.
+   In the tar-distribution the sample programs described in section ?? are
+also included as the files jtest.f, ltest.f and ptest.f including dummy
+routines for parameter settings and analysis.
+
+
+
+B    Appendix: Description of Subroutines and Com-
+
+     mon Blocks
+
+
+This is a (no longer) complete list of the subroutines in Ariadne.
+
+
+   o SUBROUTINE ARRADG(ID)
+     Administers the emission of a gluon from dipole ID.
+
+
+   o REAL FUNCTION ARANGL(I1,I2)
+     Returns the angle between partons I1 and I2 in radians.
+
+
+   o SUBROUTINE ARBOCM(ID)
+     Boosts the partons in dipole ID to their center of mass frame.
+
+
+   o SUBROUTINE ARBOLE(THEL,PHI1,PHI2,
+     DBXL,DBYL,DBZL)
+     Boost partons to the hadronic c.m.s. of a LEPTO event. The reverse
+     transform is given by first rotation PHI2 around the z-axis, then THEL
+     around the y-axis, PHI1 around the x-axis and last boosting with DBXL,
+     DBYL and DBZL.
+
+
+   o SUBROUTINE ARBOPY(THEPY,PHIPY,
+     DBXPY,DBYPY,DBZPY)
+     Boost partons to the total c.m.s. of a PYTHIA event.  The reversed
+     transformation is achieved by calling LUDBRB(1,N,THEPY,PHIPY,DBXPY,DBYPY,D*
+ *BZPY).
+
+
+   o SUBROUTINE ARCASC
+     Contains the main loop over dipole emissions.
+
+
+   o SUBROUTINE ARCHEM(IMOD)
+     Checks that energy and momentum is conserved in Ariadne.
+
+
+   o SUBROUTINE ARCHKI(ID)
+     Checks that the emission generated for dipole ID is kinematically al-
+     lowed.
+
+
+   o SUBROUTINE ARCLUS(NJET)
+     Jet-clustering routine implementing the "inverse dipole radiation" al-
+     gorithm.
+
+
+   o SUBROUTINE ARCONT
+     Continues a dipole cascade peviously started with ARCASC.
+
+
+   o SUBROUTINE ARCOPA(IJ,IP,ITYP)
+     Copies a parton from position IJ in /LUJETS/ to position IP in /ARPART/.
+
+
+   o SUBROUTINE ARCOPJ
+     Copies particles to be considered jet-initiators to the end of /LUJETS/.
+
+
+   o SUBROUTINE ARCRDI(ID,IPA1,IPA3,IS,QED)
+     Creates a dipole entry in ID /ARDIPS/ from the partons at position
+     IPA1 and IPA3 in /ARPART/.
+
+
+   o SUBROUTINE ARDBRB(DTHE,DPHI,
+     DBEX,DBEY,DBEZ,NI,I)
+     Same as ARROBO below but with double precision arguments also for
+     the rotation angles.
+
+
+   o SUBROUTINE ARDUMP
+     Copies a partonic state from the internal event record to /LUJETS/.
+
+
+   o SUBROUTINE ARDUPH
+     Copies a photon radiated by Ariadne to /LUJETS/.
+
+
+   o REAL FUNCTION ARDYRE(IDE,BW,QRG1,QRG3)
+     Transfers the recoil of an emission to a Drell-Yan produced particle
+     if the emission and the particle are in the same phase space region.
+     Returns a negative number if no transfer was possible.  IDE is the
+     position of the emitting dipole, BW the total invariant mass, and QRG1
+     and QRG3 are .TRUE. if the corresponding dipole ends are recoil gluons.
+
+
+   o REAL FUNCTION ARECOI(BE0,DE1,DE2,DE3,
+     BP0,DP1,DP2,DP3,BALP,PT12)
+     Calculates the recoil angle in the strategy of MSTA(17) = 3. BE0, BE1,
+     BE2, BE3, BP0, BP1, BP2 and BP3 are the energy and momentum of the
+     incolved partons, BALP is the angle between partons 1 and 3 and PT12
+     is the invarioant p_T of the emission.
+
+
+   o SUBROUTINE AREMIT
+     Administers the actual emission from dipole ID.
+
+
+   o SUBROUTINE ARERRM
+     Prints out an error message and optionally stops the execution. If the
+     execution is allowed to continue the value of MSTA(13) will be set to
+     a value corresponding to the warning produced:
+
+
+        3 /LUJETS/ event record was not properly formatted.
+
+        9 Total four-momentum was not conserved in Ariadne.
+
+      10  A particle was found to have inconsistent four-momentum.
+
+      13  A dipole was found to have inconsistent invariant mass.
+
+      20  Selected sub-process in PYTHIA is not supported by Ariadne.
+
+      21  ARCLUS was not performed due to too many jet-initiators.
+
+
+   o SUBROUTINE AREVOL(PTMAX,PTMIN)
+     Perform a dipole shower evolution allowing emissions between PTMAX
+     and PTMIN.
+
+
+   o SUBROUTINE AREVST(ISIN)
+     Reverse the colour flow of string entry ISIN.
+
+
+   o SUBROUTINE AREXEC
+     This is the main routine in Ariadne. Given a partonic state in /LUJETS/
+     it administers the dipole radiation according to the options and pa-
+     rameters set in /ARDAT1/.
+
+
+   o SUBROUTINE AREXMA(I1,I3)
+     Makes partons I1 and I3 mass-less if extended.
+
+
+   o SUBROUTINE ARFIDY(NSAVE) Fix up event record after dipole shower
+     in Drell-Yan events.
+
+
+   o SUBROUTINE ARGDIG(ID)
+     Calculates the p_T^2 of a possible gluon emission from the colour dipole
+     ID assuming it is the first emission of a DIS event.
+
+
+   o SUBROUTINE ARGDIS(ID)
+     Prepare for the calculation of the p_T^2 of a possible gluon emission in
+     ARGDIG.
+
+
+   o REAL FUNCTION ARGPT2(ID)
+     Returns the generated p_T^2 for a possible emission from dipole ID. If
+     necessary it calls the relevant procedure to generate this p_T^2.
+
+
+   o SUBROUTINE ARGQCD(ID)
+     Calculates the p_T^2 of a possible emission from the colour dipole ID.
+
+
+   o SUBROUTINE ARGQCG(ID)
+     The gluon emission part of ARGQCD.
+
+
+   o SUBROUTINE ARGQCQ(ID)
+     The gluon splitting part of ARGQCD.
+
+
+   o SUBROUTINE ARGQED(ID)
+     Calculates the p_T^2 of a possible emission from the electro-magnetic
+     dipole ID.
+
+
+   o SUBROUTINE ARGTYP(I,ITYP)
+     Determines the colour state of a particle in /LUJETS/.
+
+
+   o SUBROUTINE ARINIT(MODE)
+     Initializes the Ariadne program.  The argument is a character string
+     indicating which program Ariadne is used with; 'JETSET', 'LEPTO',
+     'PYTHIA' or by itself - 'ARIADNE'.
+
+
+   o SUBROUTINE ARINQQ(IT,KQ,IRP,
+     PT2,ZQ,PHI,QFAIL)
+     Try to perform an initial-state g->q-qbar splitting given which tar-
+     get side IT, the flavour of the struck quark KQ, the position of the
+     chopped-off remnant particle, the p_T^2 (PT2), momentum fraction ZQ
+     and azimuthal angle PHI of the struck quark.  If the emission fails
+     QFAIL is set to .TRUE.
+
+
+   o REAL FUNCTION ARIPSF(A,N,X)
+     Return the integral from X to 1 of the function xA(1 - x)N.
+
+
+   o REAL FUNCTION ARIPT2(I1,I2,I3)
+     Returns the invariant p_T^2 of parton I2 w.r.t. the partons I1 and I3.
+
+
+   o SUBROUTINE ARJOIN(J1,J2,J3)
+     Clusters the three jet-entries J1, J2 and J3 in /LUJETS/ into two
+     according to a "reversed" dipole emission scenario.
+
+
+   o SUBROUTINE ARJOQQ(IQ1,IQ2)
+     Join the quark and anti-quark entries IQ1 and IQ2 into a gluon entry
+     located at MIN(IQ1,IQ2).
+
+
+   o SUBROUTINE ARJOST(IS1,IS2,IPA1,IPA2)
+     Join the string entries IS1 and IS2 in the ends IP1 and IP2.
+
+
+   o SUBROUTINE ARLEPT
+     The interface to LEPTO used by AREXEC for MSTA(32) = 1.
+
+
+   o SUBROUTINE ARMADE
+     Determined some mass-dependent factors for use in the veto-algorithm.
+
+
+   o REAL FUNCTION ARMASS(N,I)
+     Returns the square of the invariant mass of the N partons pointed to
+     in the vector I(N).
+
+
+   o SUBROUTINE ARMCDI(ARRNDX,ARRNDY,ARVETO)
+     Implements the veto-algorithm for generating a p_T^2 for any dipole
+     given the functions ARRNDX, ARRNDY and ARVETO.
+
+
+   o REAL FUNCTION ARMIPT(IF,IL)
+     Returns the minimum invariant p_T^2 of the partons between positions
+     IF and IL in /ARPART/.
+
+
+   o REAL FUNCTION ARNOFL(W,MNOFW)
+     Returns the number of flavors to be used to calculate alpha_s at a scale
+     W.
+
+
+   o SUBROUTINE ARORDJ
+     Orders the jet entries in /LUJETS/ according to their energy.
+
+
+   o SUBROUTINE ARORIE(I1,I2,I3,
+     BS,B1,B3,QR1,QR3,PT21,PT23)
+     Orients the partons I1, I2 and I3 in their center of mass frame, given
+     their energy fractions and their total invariant mass.
+
+
+   o SUBROUTINE ARPARS(NSTART,NEND)
+     Parses the /LUJETS/ common block between positions NSTART and
+     NEND, copying partons to be cascaded into the internal event record.
+
+
+   o REAL FUNCTION ARPCMS(S,SM1,SM2)
+     Returns the positive light-cone component of a particle momentum
+     when placed in the c.m.s. system of itself and an other particle, given
+     the two particle masses SM1 and SM2 and the total energy squared S.
+
+
+   o SUBROUTINE ARPHAS(IFIRST) Rotate event begining from entry IFIRST
+     to correctly take into account azimuthal asymmetries in gluon emission
+     in DIS.
+
+
+   o SUBROUTINE ARPOKI(IT,IQR,IDR,IRP,IDIR,
+     KFTF,KFPR,XPOM,TPOM,QFAIL)
+     Redistribute remnants assuming an incoming hadron IT, outgoing
+     hadron KFTF with a pomeron (or other colourless sub-object) with mo-
+     mentum fraction XPOM and viruality -TPOM giving a remnant of flavour
+     KFPR. IQR, IDR and IRP as in subroutine ARREMN.
+
+
+   o SUBROUTINE ARPOSF(KFT,KFSTR,X,XQ2,
+     XPOM,TPOM,KFTF,KFPR,XFP,XFPOM)
+     Returns some information about possible pomeron interaction.  The
+     arguments are the same as for ARUPOM in section ??.
+
+
+   o SUBROUTINE ARPRDA
+     Prints out the values of the parameters and switches used by Ariadne.
+
+
+   o SUBROUTINE ARPRDY
+     Make special preparations of the output from PYTHIA in case of a
+     Drell-Yan event.
+
+
+   o ARPTQQ(KF,KQ,PT2MAX,PT2MIN,
+     X,XQ2,XY,XP,ZQ,PHI)
+     Generate kinematical variables describing an initial state g->q-qbar
+     splitting.  KF is the target code, KQ the flavour of the struck quark,
+     PT2MAX and PT2MIN limits the possible p_T^2 of the emission, X, XQ2
+     and XY are the usual DIS parameters x, Q^2 and y.  XP is the ratio
+     between x and the momentum fraction of the incoming gluon, ZQ is
+     the momentum fraction and PHI the azimuthal angle of the struck
+     quark.
+
+
+   o SUBROUTINE ARPYTH
+     The interface to PYTHIA used by ARECEX.
+
+
+   o SUBROUTINE ARRADG(ID,NREM,SNR)
+     Performs the emission of a gluon from dipole ID.
+
+
+   o SUBROUTINE ARRADP(ID)
+     Performs the emission of a photon from dipole ID.
+
+
+   o SUBROUTINE ARRADQ(ID)
+     Performs the splitting of a gluon into a qq^bar pair in dipole ID.
+
+
+   o SUBROUTINE ARRECA(ID,IDS,IS1,IS3)
+     Recalls a full dipole entry to the internal event record, previously
+     stored away by ARSTOR.
+
+
+   o SUBROUTINE ARREMD(IREM)
+     Remove dipole entry IREM.
+
+
+   o SUBROUTINE ARREMG(IGI)
+     Remove gluon entry IGI.
+
+
+   o SUBROUTINE ARREMN(IT,IQR,IDR,IRP,IDIR)
+     Redistribute remnants on side IT given a single quark remnant in posi-
+     tion IQR and/or a di-quark remnant in position IDR and/or a chopped
+     off particle remnant in position IPR. IDIR indicates the direction along
+     the z-axis of the incomming parton.
+
+
+   o SUBROUTINE ARREMP(IREM)
+     Remove parton entry IREM.
+
+
+   o REAL FUNCTION ARNDX1(), ARNDX2() etc.
+     Different functions for generating a p_T^2 according to a Sudakov-
+     suppressed suppression, to be used by ARMCDI.
+
+
+   o REAL FUNCTION ARNDY1(), ARNDY2() etc.
+     Different functions for generating a rapidity according to a flat distri-
+     bution, to be used by ARMCDI.
+
+
+   o SUBROUTINE ARROBO(THE,PHI,
+     DBEX,DBEY,DBEZ,N,I)
+     Rotates and boost the N partons pointed to by the vector I(N). The
+     polar rotation is performed first (THE) followed by the azimuth rotation
+     (PHI) and the boost.
+
+
+   o SUBROUTINE ARSCAN(NSTART,NEND,NR,IR)
+     Same as ARPARS above but don't perfom any cascade. Instead put a
+     special marker any of the entries copied which are listed in the array
+     IR(NR).
+
+
+   o SUBROUTINE ARSPLG(IG,IFLAV)
+     Splits the gluon entry IG into a quark and an anti-quark entry with
+     flavors determined by IFLAV.
+
+
+   o SUBROUTINE ARSTOR(ID,IDS,IS1,IS3)
+     Stores away a full dipole entry in the internal event record for later
+     use.
+
+
+   o REAL FUNCTION ARSTRA(KF,KQ,X,XP,XQ2) Return the ratio of the struc-
+     ture function of flavour KQ in target KF evaluated at X/XP and XQ2 and
+     at X and XQ2.
+
+
+   o SUBROUTINE ARSUME(NULL,BSX,BSY,BSZ,BSE,BSM,NI,I)
+     Sum up energy and momentum of all entries listed in the array I(NI).
+     BSE, BSX, BSY and BSZ are the sum of the energy and momentum and
+     are set to zero befor summation if NULL = 0. BSM is the total invariant
+     mass.
+
+
+   o SUBROUTINE ARTEST(IPRINT)
+     A test program to check that Ariadne has been installed properly,
+     disguised as a subroutine.
+
+
+   o REAL FUNCTION ARTPT2(ID,SN,BX1IN,BX3IN,
+     Y1IN,Y2IN,Y3IN)
+     Calculate the minimum p_T of a radiated particle w.r.t.  any of the
+     original dipole ends for a given dipole ID. If ID is zero, use total in-
+     variant mass squared in SN, x1 and x3 in BX1IN and BX3IN together
+     with the scaled mass ssquared of the partons Y1IN, Y2IN and Y3IN.
+
+
+   o SUBROUTINE ARTUNE(SET)
+     Sets the parameters in Ariadne as described in section ??.
+
+
+   o SUBROUTINE ARUPDJ(I2,I1,I3)
+     Calculates the minimum invariant p_T^2 of a jet entry in /LUJETS/
+     with respect to any other pair of jet-entries.
+
+
+   o SUBROUTINE ARUPOM(KFT,KFSTR,X,XQ2,
+     XPOM,TPOM,KFTF,KFPR,XFP,XFPOM)
+     This is a dummy routine which can be used to implement a user de-
+     fined pomeron distribution and structure function. See section ?? for
+     details.
+
+
+   o REAL FUNCTION ARVET1(), ARVET2() etc.
+     Different routines for calculating the veto factor to be used by ARMCDI.
+
+
+   o REAL FUNCTION ARZCMS(S,SM1,SM2)
+     Returns the z component of a particle momentum when placed in the
+     c.m.s. system of itself and an other particle given the two particle
+     masses SM1 and SM2 and the total energy squared S.
+
+
+   The following common blocks are used in Ariadne:
+
+     COMMON /ARDAT1/ PARA(40),MSTA(40)
+
+
+   The parameters and switches used in Ariadne as explained in section ??.
+
+
+     COMMON /ARDAT2/ PQMAS(10)
+
+
+   The quark masses used in Ariadne as described in section ??.
+
+
+     COMMON /ARDAT3/ IWRN(40)
+
+
+   The number of errors and warnings of each kind experienced by Ariadne.
+
+
+     COMMON /ARPART/ BP(MAXPAR,5),IFL(MAXPAR),QEX(MAXPAR),
+    $               QQ(MAXPAR),IDI(MAXPAR),IDO(MAXPAR),
+    $               INO(MAXPAR),INQ(MAXPAR),XPMU(MAXPAR),
+    $               XPA(MAXPAR),PT2GG(MAXPAR),IPART
+
+
+
+   The internal representation of partons in Ariadne:
+
+
+   o BP(I,1) x-component of the momentum of parton I.
+
+
+   o BP(I,2) y-component of the momentum of parton I.
+
+
+   o BP(I,3) z-component of the momentum of parton I.
+
+
+   o BP(I,4) energy of parton I.
+
+
+   o BP(I,5) mass of parton I.
+
+
+   o IFL(I) flavor code of parton I.
+
+
+   o QEX(i) is .TRUE. if parton I is extended
+
+
+   o QQ(I) is .TRUE. if parton I is in a colour-3 or 3^bar state.
+
+
+   o IDI(I) position of "incoming" dipole in /ARDIPS/.
+
+
+   o IDO(I) position of "outgoing" dipole in /ARDIPS/.
+
+
+   o INO(I) The number of the emission in which parton I was produced.
+
+
+   o INQ(I) For a quark produced in gluon splitting, the position of the
+     corresponding anti quark, otherwisw zero.
+
+
+   o XPMU(I) Soft suppression parameter mu for parton I.
+
+
+   o XPA(I) Power in soft suppression - alpha - for parton I.
+
+
+   o IPART The number of partons presently in /ARPART/.
+
+
+     COMMON /ARDIPS/ BX1(MAXDIP),BX3(MAXDIP),
+    $       PT2IN(MAXDIP),SDIP(MAXDIP),IP1(MAXDIP),
+    $       IP3(MAXDIP),AEX1(MAXDIP),AEX3(MAXDIP),
+    $       QDONE(MAXDIP),QEM(MAXDIP),IRAD(MAXDIP),
+    $       ISTR(MAXDIP),ICOLI(MAXDIP),IDIPS
+
+
+   The internal representation of dipoles in Ariadne.
+
+
+   o BX1(ID) value of x1 generated for dipole ID.
+
+
+   o BX3(ID) value of x3 generated for dipole ID.
+
+
+   o PT2IN(ID) invariant p_T^2 generated for dipole ID.
+
+
+   o SDIP(ID) invariant mass squared of dipole ID.
+
+
+   o IP1(ID) position of parton 1 in /ARPART/.
+
+
+   o IP3(ID) position of parton 3 in /ARPART/.
+
+
+   o AEX1(ID) value of a=(mu/p_T)^alpha for parton 1.
+
+
+   o AEX3(ID) value of a=(mu/p_T)^alpha for parton 3.
+
+
+   o QDONE(ID) is .TRUE. if a p_Thas been generated for dipole ID.
+
+
+   o QEM(ID) is .TRUE. if ID corresponds to an EM-dipole.
+
+
+   o IRAD(ID) the type of emission generated for dipole ID. 0: gluon radi-
+     ation (or photon radiation for EM dipole). (-)n: qq^bar radiation of
+     flavor n splitting gluon 1 (3).
+
+
+   o ISTR(ID) The string entry in common block /ARSTRS/ to which dipole
+     ID belongs.
+
+
+   o ICOLI(ID) The colour index of dipole ID.
+
+
+   o IDIPS The number of dipoles currently in /ARDIPS/.
+
+
+     COMMON /ARSTRS/ IPF(MAXSTR),IPL(MAXSTR),
+    $       IFLOW(MAXSTR),PT2LST,IMF,IML,IO,QDUMP,ISTRS
+
+
+   The internal representation of strings in Ariadne
+
+
+   o IPF(IS) position of the first parton in /ARPART/.
+
+
+   o IPL(IS) position of the last parton in /ARPART/.
+
+
+   o IFLOW(IS) the direction of colour flow in string IS. A positive value
+     corresponds to IPF(ID) being a colour-3 parton.
+
+
+   o PT2LST p_T^2 of the last emission in Ariadne
+
+
+   o IMF The position of the first parton in the parent string in /LUJETS/.
+
+
+   o IML The position of the first parton in the parent string in /LUJETS/.
+
+
+   o IO The number of emissions performed for the parent string.
+
+
+   o QDUMP is .TRUE. if current event information has been copied into the
+     /LUJETS/ common block.
+
+
+   o ISTRS The number of strings currently in /ARSTRS/.
+
+
+     COMMON /ARINT1/ BC1,BC3,BZM,BZP,BP1,BM1,BP3,BM3,
+    $       B1,B2,B3,XT2,XT,Y,QQ1,QQ3,NE1,NE3,
+    $       S,W,C,CN,ALPHA0,XLAM2,IFLG,
+    $       XT2MP,XT2ME,XT2M,XT2C,XTS,XT3,XT1,
+    $       YINT,YMAX,YMIN,
+    $       Y1,Y2,Y3,SY1,SY2,SY3,SSY,
+    $       AE1,AE3,NXP1,NXP3,FQ1,FQ3
+
+
+   The common variables needed for the veto-algorithm in subroutine ARMCDI.
+
+
+     COMMON /ARINT2/ DBEX,DBEY,DBEZ,PHI,THE
+
+
+   Information of the boost vector and rotation angles for transformation
+of the radiating dipole back to the original Lorenz-frame.
+
+
+     COMMON /ARINT3/ DPTOT(5)
+
+
+   The total energy and momentum of the parton state being considered
+by Ariadne.
+
+
+     COMMON /ARINT4/ BASS(5),BASSX1,BASSX3,IFLASS
+
+
+   Information to fix azimuthal asymmetry for the first gluon emission in
+DIS. BASS(5) is the four-momentum an mass of the emitted gluon, BASSX1
+and BASSX3 are the x1 and x3 of the corresponding emission and IFLASS is
+the flavour of the gluon or zero if a foson-gluon fusion event.
+
+
+     COMMON /ARSTRF/ KFSAVE(2),XSAVE(2),XQ2SAV(2),XPQSAV(2,-6:6)
+
+
+   Structure function information in the current PYTHIA event. KFSAVE(IT)
+is the code for the target on side IT. XSAVE(IT) and XQ2SAV(IT) is the x
+and Q^2 of the incoming partons to the hard interaction on the corresponding
+sides and XPQSAV(IT,IFL) is x times the structure function of flavour IFL.
+
+
+
+                                  1

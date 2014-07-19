@@ -1,0 +1,7 @@
+SRCS_F=	 izbcd.F izbcdt.F izbcdv.F izchav.F izhnum.F lzbyt.F \ @@\
+	lzfind.F lzfval.F lzlast.F lzlong.F nzbank.F nzfind.F nzlong.F \ @@\
+	qnext.F zhtoi.F zitoh.F zkrak.F zkrakn.F znumid.F zpress.F \ @@\
+	zshunt.F zsort.F zsorth.F zsorti.F zsorv.F zsorvh.F zsorvi.F \ @@\
+	ztopsy.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,5 @@
+SRCS_F=	cdmake.F
+
+CernlibFortranProgramTarget(cdmake,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(cdmake,$(CERN_BINDIR))

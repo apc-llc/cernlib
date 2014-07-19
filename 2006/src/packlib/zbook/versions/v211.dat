@@ -1,0 +1,16 @@
+*
+* $Id: v211.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v211.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.11  840510
+C          2 more links added in the system bank
+C          CRAY AND PR1ME  versions introduced
+C          New routine ZBFORM (See documentation)
+C          Mods in ZEPIN,ZEPOUT,ZPRINT,ZINIT to take advantage of ZBFORM
+C          Changes to compile under IBM VS compiler
+C          PATCHY flag 'NORMAL' has been removed (default)
+C

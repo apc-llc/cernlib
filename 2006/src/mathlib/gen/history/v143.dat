@@ -1,0 +1,19 @@
+*
+* $Id: v143.dat,v 1.1.1.1 1996/04/01 15:01:35 mclareni Exp $
+*
+* $Log: v143.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:35  mclareni
+* Mathlib gen
+*
+*
+C C  Additions:
+C  ----------
+C  
+C  C341 BSKA  
+C  V135 RNGAMA Gama or Chi-square random numbers
+C  V136 RNPSSN Poisson random numbers
+C  V137 RNBNML Binomial random numbers
+C  V138 RNMNML Multinomial random numbers
+C  U111 RWIG3J
+C  U112 RTCLGN
+C

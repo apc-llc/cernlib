@@ -1,0 +1,28 @@
+*
+* $Id: cfribmib.F,v 1.1.1.1 1996/03/08 15:21:51 mclareni Exp $
+*
+* $Log: cfribmib.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:51  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_IBM)
+      SUBROUTINE CFRIBM(IARRAY,NW,MODE)
+C.+++++++ IBM VERSION ++++++++++
+C. CONVERTS THE FIRST NW WORDS OF IARRAY FROM IBM TO MACHINE FORMAT.
+C. THE NUMBERS MUST BE RIGHT ADJ., ZERO FILLED.
+C. MODE = 1 : CONVERT 16 BIT INTEGERS
+C.      = 2 : CONVERT 32 BIT INTEGERS (DUMMY IN IBM VERSION)
+C.      = 3 : CONVERT 32 BIT FLOATING (DUMMY IN IBM VERSION)
+      DIMENSION IARRAY( 1)
+      INTEGER*2 IW2(2)
+      EQUIVALENCE (IW2(1),IW4)
+      IF(MODE.NE.1)  GOTO 77777
+      IF(NW.LE.0)  GOTO 77777
+      DO 1  I=1,NW
+      IW4=IARRAY(I)
+    1 IARRAY(I)=IW2(2)
+77777 RETURN
+      END
+#endif

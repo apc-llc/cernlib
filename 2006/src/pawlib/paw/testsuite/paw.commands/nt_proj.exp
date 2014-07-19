@@ -1,0 +1,61 @@
+#
+#  nt_proj.exp  --
+#
+#  Original:  6-Feb-1996 15:12
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+catch {exec mkdir -p tmp} err
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# One dimensional histograms
+#
+
+paw_cmd { h/cr/1d 5000 'test histo 1d' 10 -25 25 }
+paw_dmp_cmp "Empty histogram" 5000
+paw_cmd { h/delete 5000 }
+
+paw_cmd { h/cr/1d 5001 'test histo 1d' 100 -5 5 }
+paw_cmd { n/proj 5001 10.x*2-1 }
+if { ! [ info exists PAW_BATCH ] } {
+	paw_cmd { h/plot 5001 }
+}
+paw_dmp_cmp "ntuple/project 5001 10.x*2-1" 5001
+paw_cmd { h/delete 5001 }
+
+
+#
+# Two dimensional histograms
+#
+
+paw_cmd { h/cr/2d 6000 'test histo 2d' 10 -25 25  20 -4 0 }
+paw_dmp_cmp "Empty histogram" 6000
+paw_cmd { h/delete 6000 }
+
+paw_cmd { h/cr/2d 6001 'test histo 2d' 40 -5 5 40 -5 5 }
+paw_cmd { n/proj 6001 10.x*2-1%y*pi }
+if { ! [ info exists PAW_BATCH ] } {
+	paw_cmd { h/plot 6001 }
+}
+paw_dmp_cmp "ntuple/project 6001 10.x*2-1%y*pi" 6001
+paw_cmd { h/delete 6001 }
+
+#
+# Cleanup after tests
+#
+
+paw_cmd { close 4 }

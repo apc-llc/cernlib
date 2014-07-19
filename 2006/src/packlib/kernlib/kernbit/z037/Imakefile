@@ -1,0 +1,6 @@
+SRCS_F= astcca.F astcch.F astdcc.F astdoc.F astecc.F astecs.F astint.F \ @@\
+	 astscs.F astxit.F
+
+SRCS_S= fiopat.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

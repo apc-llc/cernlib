@@ -1,0 +1,91 @@
+/* $Id: Ixx.tmpl,v 1.1.1.1 1995/12/20 15:26:43 cernlib Exp $
+ *
+ * $Log: Ixx.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: Ixx.tmpl,v 1.5 94/03/28 17:13:30 matt Exp $
+XCOMM
+XCOMM Definitions for using interface translator
+XCOMM
+
+#ifdef UseInstalled
+#define IxCmd ixx
+#else
+#define IxCmd $(CONTRIBSRC)/programs/ixx/ixx
+#endif
+
+#ifndef IXFlags
+#define IXFlags \
+-s BaseObject -m TypeObj -r RequestObj -stubclass Stub -p Xf $(EXTRA_IXFLAGS)
+#endif
+
+#ifndef IXIncludes
+#define IXIncludes -i '<X11/Fresco/_enter.h>'
+#endif
+
+IX = IxCmd
+IXFLAGS = IXFlags
+IXINCLUDES = IXIncludes
+
+.SUFFIXES: .idl
+
+#ifndef MakeIDLHeader
+#define MakeIDLHeader(name_idl,name_h,flags)				@@\
+headers:: name_h							@@\
+name_h: name_idl							@@\
+	@$(RM) name_h ix-name_h						@@\
+	@echo "Generating name_h from name_idl"				@@\
+	@$(CPP) $(CXXDEFINES) $(CXXINCLUDES) name_idl | \		@@\
+	    $(IX) $(IXFLAGS) $(IXINCLUDES) flags > ix-name_h		@@\
+	@$(MV) ix-name_h name_h						@@\
+	@chmod a-w name_h						@@\
+									@@\
+clean_headers::								@@\
+	@$(RM) name_h
+#endif
+
+#ifndef MakeHeader
+#define MakeHeader(name) \
+MakeIDLHeader(Interfaces/name.idl,name.h,NullParameter)
+#endif
+
+#ifndef MakeHeaderFlags
+#define MakeHeaderFlags(name,flags) \
+MakeIDLHeader(Interfaces/name.idl,name.h,-file Interfaces/name.idl flags)
+#endif
+
+#ifndef EditImplName
+#define EditImplName(dep,name,interfaces,tmp)				@@\
+all.sed:: dep								@@\
+dep:: interfaces							@@\
+	@$(RM) tmp							@@\
+	@echo "Editing" name						@@\
+	@cat interfaces | $(CPP) $(CXXDEFINES) $(CXXINCLUDES) | \	@@\
+	$(IX) $(IXFLAGS) -filter name > tmp				@@\
+	@$(MV) tmp name
+#endif
+
+.SUFFIXES: .sed
+
+#ifndef EditImpl
+#define EditImpl(name,interfaces) \
+EditImplName(name.sed,name.CCsuf,interfaces,new-name.CCsuf)
+#endif
+
+#ifndef EditImplHeader
+#define EditImplHeader(name,interfaces) \
+EditImplName(name.sed,name.h,interfaces,new-name.h)
+#endif
+
+INTERFACES_SLASH = /
+INTERFACES = Interfaces$(INTERFACES_SLASH)*.idl
+
+#ifndef DependHeaders
+#define DependHeaders()                                                 @@\
+depend::                                                                @@\
+	$(DEPEND) -o.h -s "# DO NOT DELETE" -- $(CXXINCLUDES) -- \
+	    $(INTERFACES)
+#endif

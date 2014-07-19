@@ -1,0 +1,48 @@
+*
+* $Id: fatcheck.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatcheck.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+# Check that the FATMEN server is running for all known servers
+# Restart if not, unless signal.stop file exists
+#
+ 
+typeset -l program
+typeset -l logfile
+typeset -l stopfile
+ 
+for i in /fatmen/*.log
+do
+pid=`cat $i | awk '{printf "%s\n",$14}'`
+server=`basename $i .log`
+echo
+echo Processing ${server}...
+if (test $pid)
+   then
+   echo Looking for server process for $server
+   if(ps -ae  | grep -s $pid )
+      then
+         echo FATSRV running PID = $pid
+      else
+         echo FATSRV not found
+   fi
+   else
+      echo Cannot find PID of server process for $server
+      stopfile=/fatmen/${server}/todo/signal.stop
+      if [ -f $stopfile ]
+      then
+         echo Server has been stopped - remove ${stopfile} to restart
+      else
+         program=/fatmen/${server}/fatserv
+         logfile=${program}.log
+         echo To start server, type
+         echo "nohup $program > $logfile &"
+      fi
+   fi
+done
+ 

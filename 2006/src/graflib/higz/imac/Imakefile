@@ -1,0 +1,6 @@
+SRCS_F=	 f_doback.F f_readwi.F imacplo.F imclip.F imclrwi.F \ @@\
+	imclsds.F imclswi.F imdrmde.F imflare.F imgetge.F imline.F \ @@\
+	imnocli.F imopnwi.F imreqlo.F imsetco.F imsetln.F imsetms.F \ @@\
+	imupdwi.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

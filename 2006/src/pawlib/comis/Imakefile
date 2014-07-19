@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= code comisftn dynam deccc
+
+#if defined(CERNLIB_IBM)
+LIBDIRS := $(LIBDIRS) csibmass
+#endif
+
+SUBDIRS= $(LIBDIRS) comis test
+
+TopOfPackage(comis)
+
+SubdirLibraryTarget(comis,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(comis)
+
+/* in dynam/Imakefile, the pilot is included : */
+DoIncludePackage(comis)

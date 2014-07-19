@@ -1,0 +1,13 @@
+*
+* $Id: v103.dat,v 1.1.1.1 1996/03/04 16:12:53 mclareni Exp $
+*
+* $Log: v103.dat,v $
+* Revision 1.1.1.1  1996/03/04 16:12:53  mclareni
+* Dzdoc/Zebpack
+*
+*
+*  Version 1.03  920717 21.15
+C- Introduction of DZDOC v5.05  on 920715  20.15
+C
+C- P=DZEDIT, D=RZFRA          Correct unit assignment
+C

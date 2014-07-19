@@ -1,0 +1,65 @@
+
+C **********************************************************************
+
+      SUBROUTINE LMRAZZ(YNEW,PNEW)
+
+C...This is the MINUIT routine RAZZIA.
+CC        CALLED ONLY BY SIMPLEX (AND IMPROV) TO ADD A NEW POINT
+CC        AND REMOVE AN OLD ONE FROM THE CURRENT SIMPLEX, AND GET THE
+CC        ESTIMATED DISTANCE TO MINIMUM.
+CC
+      COMMON
+     1/LMMINE/ ERP(30)  ,ERN(30)
+     2/LMPARI/ X(15)    ,XT(15)   ,DIRIN(15) ,MAXINT     ,NPAR
+     3/LMPARE/ U(30)              ,WERR(30)  ,MAXEXT     ,NU
+     4/LMLIMI/ ALIM(30) ,BLIM(30) ,LCODE(30) ,LCORSP(30) ,LIMSET
+     5/LMVARI/ V(15,15)
+     7/LMFIX / IPFIX(15),XS(15)   ,XTS(15)   ,DIRINS(15) ,NPFIX
+     7/LMFIX2/ GRDS(15) ,G2S(15)  ,GSTEPS(15),ABERFS(15)
+     C/LMCASC/ Y(16)    ,JH       ,JL
+     F/LMDERI/ GIN(30)  ,GRD(15)  ,G2(15)    ,GSTEP(15)  ,ABERF(15)
+     G/LMSIMV/ P(15,16) ,PSTAR(15),PSTST(15) ,PBAR(15)   ,PRHO(15)
+     J/LMVART/ VT(15,15)
+      COMMON
+     6/LMUNIT/ ISYSRD   ,ISYSWR   ,ISYSPU
+     8/LMTITL/ TITLE(13),DATE(2)  ,ISW(7)    ,NBLOCK
+     9/LMCONV/ EPSI     ,APSI     ,VTEST     ,NSTEPQ     ,NFCN ,NFCNMX
+     A/LMCARD/ CWORD    ,CWORD2   ,CWORD3    ,WORD7(7)
+     B/LMMINI/ AMIN     ,UP       ,NEWMIN    ,ITAUR      ,SIGMA,EPSMAC
+      COMMON /LPFLAG/ LST3
+      DIMENSION PNEW(15)
+      DO 10 I=1,NPAR
+10    P(I,JH)=PNEW(I)
+      Y(JH)=YNEW
+      IF(YNEW.GE.AMIN) GO TO 18
+      DO 15 I=1,NPAR
+15    X(I)=PNEW(I)
+      CALL LMINTO(X)
+      AMIN=YNEW
+      JL=JH
+18    CONTINUE
+      JH=1
+      NPARP1=NPAR+1
+20    DO 25 J=2,NPARP1
+      IF (Y(J) .GT. Y(JH))  JH = J
+25    CONTINUE
+      SIGMA = Y(JH) - Y(JL)
+      IF (SIGMA .LE. 0.)  GO TO 45
+      US = 1.0/SIGMA
+      DO 35 I= 1, NPAR
+      PBIG = P(I,1)
+      PLIT = PBIG
+      DO 30 J= 2, NPARP1
+      IF (P(I,J) .GT. PBIG)  PBIG = P(I,J)
+      IF (P(I,J) .LT. PLIT)  PLIT = P(I,J)
+   30 CONTINUE
+      DIRIN(I) = PBIG - PLIT
+      IF (ITAUR .LT. 1 )  V(I,I) = 0.5*(V(I,I) +US*DIRIN(I)**2)
+   35 CONTINUE
+   40 RETURN
+   45 IF(LST3.GE.1) WRITE (ISYSWR, 1000)  NPAR
+      GO TO 40
+ 1000 FORMAT('0***** FUNCTION VALUE DOES NOT SEEM TO DEPEND ON ANY ',
+     +'OF THE',I3,' VARIABLE PARAMETERS',/15X ,'VERIFY THAT STEP SIZES',
+     +' ARE BIG ENOUGH AND CHECK FCN LOGIC.',/1X,81(1H*)/1X,81(1H*)//)
+      END

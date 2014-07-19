@@ -1,0 +1,117 @@
+XCOMM $XConsortium: MOSXS.rules,v 1.1 97/12/12 15:34:45 sl Exp $
+
+/*
+ * MacOSX shared library rules
+ */
+
+#define HasSharedLibraries YES
+
+#define ForceNormalLib NO
+
+#ifndef SharedDataSeparation
+#define SharedDataSeparation YES
+#endif
+#ifndef SharedCodeDef
+#define SharedCodeDef
+#endif
+#ifndef SharedLibraryDef
+#define SharedLibraryDef -fno-common
+#endif
+
+#define ShLibIncludeFile <MacOSX.tmpl>
+
+#ifndef SharedLibraryLoadFlags
+#define SharedLibraryLoadFlags
+#endif
+#ifndef PositionIndependentCFlags
+#define PositionIndependentCFlags
+#endif
+
+
+
+
+/*
+ * InstallSharedLibrary - generate rules to install the shared library.
+ */
+#ifndef InstallSharedLibrary
+#define InstallSharedLibrary(libname,rev,dest)				@@\
+install:: Concat(lib,libname.dylib)					@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTBINFLAGS) Concat(lib,libname.dylib) $(DESTDIR)dest
+@@\
+
+#endif /* InstallSharedLibrary */
+
+/*
+ * NormalSharedLibraryTarget - generate rules to create a shared library;
+ * build it into a different name so that the we do not hose people by having
+ * the library gone for long periods.
+ */
+#ifndef SharedLibraryTarget
+#define SharedLibraryTarget(libname,rev,solist,down,up)			@@\
+AllTarget(Concat(lib,libname.dylib))					@@\
+									@@\
+Concat(lib,libname.dylib):  solist $(EXTRALIBRARYDEPS)			@@\
+	$(RM) $@~							@@\
+	(cd down; $(CC) -I/usr/X11R6/lib -dynamiclib -undefined suppress -install_name /usr/X11R6/lib/$@ -o up/$@~ $(SHLIBLDFLAGS) solist $(REQUIREDLIBS)) @@\
+	$(MV) $@~ $@							@@\
+	LinkBuildLibrary($@)						@@\
+									@@\
+clean::									@@\
+	$(RM) Concat(lib,libname.dylib)
+
+#endif /* SharedLibraryTarget */
+
+/*
+ * SharedDepLibraryTarget - generate rules to create a shared library.
+ */
+#ifndef SharedDepLibraryTarget
+#define SharedDepLibraryTarget(libname,rev,deplist,solist,down,up)	@@\
+AllTarget(Concat(lib,libname.dylib))					@@\
+									@@\
+Concat(lib,libname.dylib):  deplist $(EXTRALIBRARYDEPS)		@@\
+	$(RM) $@~							@@\
+	(cd down; $(CC) -I/usr/X11R6/lib -dynamiclib -undefined suppress -install_name /usr/X11R6/lib/$@ -o up/$@~ $(SHLIBLDFLAGS) solist $(REQUIREDLIBS)) @@\
+	$(RM) $@							@@\
+	$(MV) $@~ $@							@@\
+	LinkBuildLibrary($@)						@@\
+									@@\
+clean::									@@\
+	$(RM) Concat(lib,libname.dylib)
+
+#endif /* SharedDepLibraryTarget */
+
+/*
+ * SharedLibraryDataTarget - generate rules to create shlib data file;
+ */
+#ifndef SharedLibraryDataTarget
+#define SharedLibraryDataTarget(libname,rev,salist)
+#endif /* SharedLibraryDataTarget */
+
+#ifndef InstallSharedLibraryData
+#define InstallSharedLibraryData(libname,rev,dest)
+#endif /* InstallSharedLibraryData */
+
+/*
+ * SharedLibReferences - variables for shared libraries
+ */
+#ifndef SharedLibReferences
+#define SharedLibReferences(varname,libname,libsource,revname,rev)	@@\
+revname = rev								@@\
+Concat3(DEP,varname,LIB) = SharedLibDependencies(libname,libsource,revname) @@\
+Concat(varname,LIB) = LoaderLibPrefix Concat(-l,libname)		@@\
+LintLibReferences(varname,libname,libsource)
+#endif
+
+/*
+ * SharedDSLibReferences - variables for shared libraries
+ */
+#ifndef SharedDSLibReferences
+#define SharedDSLibReferences(varname,libname,libsource,revname,rev)	@@\
+revname = rev								@@\
+Concat3(DEP,varname,LIB) = SharedDSLibDependencies(libname,libsource,revname) @@\
+Concat(varname,LIB) = LoaderLibPrefix Concat(-l,libname) Concat3(Shared,libname,Reqs)		@@\
+LintLibReferences(varname,libname,libsource)
+#endif
+
+

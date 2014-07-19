@@ -1,0 +1,4 @@
++USE, ${PLINAME}.
++EXE, YDIFF,  D=NDIFF.
++USE, *PATCHY.
++PAM, 11, T=C,ATT   .patchy

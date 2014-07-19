@@ -1,0 +1,67 @@
+#
+#  nt_loop.exp  --
+#
+#  Original: 27-Feb-1996 14:01
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+catch {exec mkdir -p tmp} err
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+paw_cmd {uwfunc 10 sel.inc}
+
+set ret [ paw_file_cmp sel.inc paw.commands/sel.inc.ref -e /Creation:/d ]
+if { $ret } {
+	pass {Basic uwfunc}
+	set del_sel_inc 1
+} else {
+	set del_sel_inc 0
+	fail {Basic uwfunc}
+}
+
+set ret [ catch { exec /bin/cp paw.commands/testloop.f testloop.f } err ]
+if { $ret } {
+	clone_output $err
+}
+
+paw_cmd {for/file 55 testloop.out}
+paw_cmd {nt/loop 10 testloop.f(0.) 100}
+paw_cmd {for/close 55}
+
+set ret [ paw_file_cmp testloop.out paw.commands/testloop.out.ref -e /does_not_happen/d ]
+if { $ret } {
+	pass {ntuple/loop}
+
+	# Cleanup if all is OK
+	catch { exec /bin/rm testloop.out } err
+	if { $del_sel_inc } {
+		catch { exec /bin/rm sel.inc } err
+	}
+
+} else {
+	fail {ntuple/loop}
+}
+
+#
+# Cleanup after tests
+#
+
+set ret [ catch { exec /bin/rm testloop.f } err ]
+if { $ret } {
+	clone_output $err
+}
+
+paw_cmd { close 4 }

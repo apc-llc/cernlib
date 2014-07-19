@@ -1,0 +1,706 @@
+*
+* $Id: ztext.doc,v 1.1.1.1 1996/03/08 17:27:17 mclareni Exp $
+*
+* $Log: ztext.doc,v $
+* Revision 1.1.1.1  1996/03/08 17:27:17  mclareni
+* Isajet714
+*
+*
+
+                          ISAJET ZEBRA INTERFACE
+                     F.E. Paige and S.D. Protopopescu
+                            Physics Department
+                      Brookhaven National Laboratory
+                             Upton, NY 11973
+                              March 30, 1991
+
+
+     [1] Overview
+     ============
+
+      The ZEBRA  version of ISAJET  contains subroutines  which replace the
+usual  output package  for ISAJET  with one using  the CERN  package ZEBRA.
+This version  provides some  features which  are not part  of the  standard
+ISAJET  output. Momenta  and masses  of the  partons are  rescaled from the
+final  particles so that  they match  exactly  (this is not  so in ISAJET).
+Resonances   decaying  strongly are  not part  of the  particle  list while
+particles with heavy quarks decaying  weakly are part of a vertex list with
+the corresponding  vertex position  and appropriate  links to the particles
+belonging  to that  vertex.  Thus there  is no need  to  generate secondary
+vertices for charmed or other heavy quark particles and the event structure
+makes it easy to find which particles come from the decay of a heavy quark.
+The  association of  particles  with  parent partons  is also  made easy by
+reference  links. For simple  calorimeter  studies banks  are also provided
+with  energy sums  over  calorimeter  cells and  banks  containing only the
+leptons (see  below). If only those  are written  instead of particle banks
+the resulting files are more compact and require considerably less CPU time
+to analyze (albeit the information is rather limited). In addition jets are
+calculated by  using a cone  algorithm on the partons,  these can be useful
+for studying  efficiencies of jet finding  algorithms and comparing results
+to theoretical jets. The results of parton jets are in Zebra banks PJET.
+
+      NOTE: The present  version can only handle  one run at a time, so you
+cannot supply a command  file with many runs for  now. This problem will be
+fixed in a future release.
+
+    [2] Creating and running a job
+    ==============================
+
+    There are command files in BNLCL6::$2$DUA14:[ISAJET.ISALIBRARY] to make
+EXE files for event generation and analysis.
+
+    To make an EXE generating ISAJET events which are then written to
+a file in ZEBRA format users should run command file:
+
+$ @isa$area:MAKE_ISAJET_ZEBRA
+
+this starts from  ISAJET.PAM and  makes  ISAJET_ZEBRA.FOR, ISAJET_ZEBRA.OLB
+and  ISAJET_ZEBRA.EXE.  It requires  that  ISA$AREA de  defined as the area
+where ISAJET.PAM and command files  reside. It also requires that CERN$AREA
+be defined   as the area  for the  CERN  libraries. The above  command file
+assumes symbol YPATCHY is defined. If running on a machine other than a VAX
+looking at the command file should give a pretty good idea of what needs to
+be done.
+
+If you  already have ISAJET_ZEBRA.OLB you can run command file
+
+$ @isa$area:LINK_ISAJET_ZEBRA
+
+to make ISAJET_ZEBRA.EXE, this program runs with an interactive
+dialog to generate ISAJET instructions. You can supply your own
+ISARUN main program if you wish to bypass the dialog, see command
+file MAKE_ISAJET.COM for the simplest example.
+
+User can provide any of 3 logical functions to reduce the
+size of output files:
+1) EDIT(I)     = if false event will not be written out
+                 I is event number
+                 Zebra banks have not yet been generated, so
+                 user must work from standard ISAJET common blocks
+2) ISEDIT()    = same as EDIT but Zebra banks have been filled
+3) PEDIT(ID,P) = if false particle will not be included in
+                 the list of particles written out
+                 ID= particle ID, P(4)= particle momentum vector
+
+
+To generate a user program that reads an ISAJET output file in ZEBRA
+format users should run
+
+$ @isa$area:MAKE_ISZRUN
+this makes a sample user analysis subroutine ISZUSR and an ISZRUN.EXE
+program. ISZUSR gives an example of how to use the utility subroutines
+mentioned in next section for analysis.
+
+If user already has an ISZUSR subroutine he can generate ISZRUN.EXE by
+
+$ @isa$area:LINK_ISZRUN
+
+
+    [3] Utilities
+    =============
+
+    A number of utilities  are provided for the  user to make it easier for
+him to use the  information in ZEBRA form without  him having to learn much
+about  ZEBRA. It is   nevertheless  recommended that  the user  familiarize
+himself with ZEBRA by  reading the first chapter  of the ZEBRA manual. Also
+to make  full  use of  the power  of  ZEBRA users  may   eventually want to
+familiarize themselves with some of  the utilities provided with it such as
+MZDROP and ZSORT.
+
+o For every ZEBRA bank of name ISxx (most ISAJET ZEBRA banks start with
+  IS) there exist:
+    1) GZISxx : an integer function returning pointer to first bank in
+                the linear structure
+    2) GTISxx : a subroutine returning the contents of the bank
+    3) PRISxx : a subroutine generating a printout of the banks with name ISxx
+
+o To generate a full dump:
+        CALL PRTEVZ(unit #)
+  This subroutine calls all the PRISxx subroutines.
+
+o Users can provide a primary vertex for each event by:
+        CALL SETVTX(XYZ)
+  where XYZ is a 3-vector with values x,y,z
+  To supply a function for the vertex user should supply subroutine
+  INTVTX(XYZ) which returns an XYZ vector with each call. The
+  default returns 0,0,0.
+
+o The parameters for generating PJET banks can be controlled by
+      CALL PJPSET(N,ALG,ETCUT,DRCUT,MAXIT,IR,MUON)
+  where
+                                                          Default values
+          N     = NUMBER OF PJET ALGORITHMS                      1
+          ALG   = ALGORITHM TPYE 'CONE' OR 'ANGLE'            'CONE'
+          ETCUT = ET CUT FR PJET JETS                           5.0
+          DRCUT = CONE CUT (IN R OR ANGLE)                      0.45
+          MAXIT = MAXIMUM NUMBER OF ITERATIONS                   1
+          IR    = INIT RADIATION FLAG 0=USE IR,   1=NO IR        0
+          MUON  = MUON FLAG    0=NO MUONS, 1=use MUONS in PJET   0
+
+
+      Other subroutines of interest are:
+o ISZJET  find jets using ISCL banks
+o ISZUSR  example of a user subroutine for analysis
+
+
+
+    [4] Other Subroutines
+    =====================
+
+    We list here the subroutines that are part of ISAJET_ZEBRA:
+
+GENVTX  generate secondary vertices (for heavy quark decays)
+ISABFL  fill ISAB bank (begin of run bank)
+ISACFL  fill ISAC and ISCL banks (calorimeter description and
+        calorimeter cells with non-zero energy deposited).
+        Entry point ISACIN calculates all numbers needed for
+        calorimeter description.
+ISAEFL  fill ISAE bank (main header)
+ISAFFL  fill ISAF bank (end of run bank)
+ISAJFL  fill ISAJ banks (primary jets)
+ISALFL  fill ISAL banks (leptons)
+ISAPFL  fill ISV1 and ISP1 banks (vertices and particles)
+ISAQFL  fill ISAQ banks (secondary partons, both initial and final)
+ISCMFL  fill ISCM (copy of command instructions)
+ISMEAR  generates smeared calorimeter data (modifies ISCL banks)
+PJETFL  fill PJET banks (jets obtained from partons)
+QRECAL  to recalculate momenta and masses of partons starting
+        from the final particles
+
+
+
+
+
+   [5] Brief description of Zebra banks
+   ====================================
+
+      The beginning and end of run  records have Zebra banks named ISAB and
+ISAF  while  the  whole  event  hangs  from  Zebra  bank  ISAE. A  complete
+description of the banks is given in section [6].
+
+ISAB data describing event generation              (in beginning record)
+ISCM copy of command file used for event generation(       "           )
+ISAF cumulative results from run (in end record)
+ISAE general event information such as weight, type, etc.
+ISAJ primary jet momenta and masses
+ISAQ final and initial partons (momenta and masses)
+ISV1 primary and short lived vertices (heavy quarks), includes
+     id,mass and 4-momenta of decaying particle
+ISP1 particles associated with ISV1 (connected via a structural link)
+     id,mass and 4-momenta
+ISAC simple calorimeter description (no depth)
+ISCL energy deposition and cell description in calorimeter cell
+ISMR description of smearing parameters
+ISAL stable leptons (including neutrinos):id,mass and 4-momenta
+     with reference links to calorimeter cell and ISP1 if they
+     exist
+ISJT jets found by subroutine ISZJET.
+PJHD header for PJET banks
+PJET jets found adding over partons
+PJPT pointers to parton banks (ISAQ) contributing to a jet in PJET
+
+      Whether   banks    ISV1,ISP1,ISAC,ISCL  and  ISAL are  written out is
+optional. The ISARUN job  asks user to chose an  option ISAP, ISAC or ISAL.
+If ISAP is selected then  ISV1 and ISP1 are  written out, if ISAC then ISAC
+and  ISCL are   written out  and  if ISAL  then  ISAL  is  written out. Any
+combination can be selected, the  instruction ISAPISACISAL causes all banks
+to be written out.
+
+      The banks ISJT are created by calling ISZJET, the banks ISAC and ISCL
+must be available. One can create  the banks ISAC,ISCL and/or ISAL starting
+from a file  containing ISV1 and  ISP1 by calling  ISACFL and/or ISALFL for
+each event.
+
+
+
+   [6] Zebra banks documentation
+   =============================
+
+
+                     +------------------+
+                     |      ISAE        |
+                     | event descriptor |
+                     |                  |
+                     +------------------+
+        struc. link         |||   |  |
+                            |||   |  +------------------------------+
+                            |||   +-----------------------------+   |
+       +-------+------------+|                                  |   |
+       |       |             |                                  |   |
+  ______     ______       ______    ______                      |   |
+ | ISAJ \   | ISAQ \     | ISV1 |  | ISV1 \                     |   |
+ |  -1   >  |  -2   >    |  -3  |--| (-3)  >                    |   |
+ |______/   |______/     |______|  |______/                     |   |
+              :  ^         | :...<..: |                         |   |
+              :  :         |   [-2]   |                         |   |
+  [PJET -1].<..  :         |          |                         |   |
+                 : [-2] ______      ______                      |   |
+                 :.....| ISP1 \    | ISP1 \                     |   |
+  [PJET -3] ..<........|  -1   >   |  -1   >                    |   |
+                       |______/    |______/                     |   |
+                        : |[-1]      : : :                      |   |
+                    [-4]: v     <....: : :[-4]                  |   |
+                        : free  <......: :                      |   |
+                        v                v                      |   |
+                      ISV2             ISV2                     |   |
+                   (end vertex)     (end vertex)                |   |
+                                                                |   |
+                             +------------+---------------------+   |
+                             |            |                         |
+                             |            |                         |
+                         _________      ______                     ______
+                        |  ISAC   |    | ISAL \                   | PJHD \
+                        |   -6    |    |  -7   >                  |  -8   >
+                        |_________|    |______/                   |______/
+                              |                                     |
+            +-------+---------+--+                                 ______
+            |       |            |               [ISAQ -1]..>.....| PJET \
+         ______     ______       ______                           |  -1   >
+        | ISCL \   | ISMR \     | ISJT \                          |______/
+        |  -1   >  |  -2   >    |  -3   >                             |
+        |______/   |______/     |______/                           ______
+                                                                  | PJPT |
+                                                     [ISAQ]...<...|  -1  |
+                                                                  |______|
+
+     +-----------+            +-----------+
+     |    ISAB   |            |    ISAF   |
+     | begin run |            |  end  run |
+     |           |            |           |
+     +-----------+            +-----------+
+           |
+     +----------+
+     |   ISCM   |
+     |    -1    |
+     +----------+
+
+
+
+C=======================================================================
+C
+C  Bank name: ISAC
+C  Author   : SDP
+C  Date     : June 14,1989
+C
+C                    Calorimeter descriptor
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C     -3            struct.  to ISJT (jets found using ISZJET)
+C     -2            struct.  to smearing parameters (ISMR)
+C     -1            struct.  to calorimeter cells (ISCL)
+C      0            next     to next ISAC (only one at present)
+C     +1            up       to ISAE
+C     +2            origin   to ISAE for first and previous ISAC for others
+C ............................................................................
+C            I-5             calorimeter number
+C             -4             bank name,  'ISAC'
+C             -3             NL=2
+C             -2             NS=0
+C             -1             ND=6
+C              0             STATUS
+C             +1     I       number of phi cells
+C              2     I         "       eta     "
+C              3     F      phi cell size
+C              4     F      eta     "   "
+C              5     F      minimum eta
+C              6     F      maximum eta
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank name: ISAE
+C  Author   : SDP
+C  Date     : June 19,1986     DH add ISAM
+C
+C                Top level bank and event descriptor for ISAZEB
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C     -8            struct.  to PJHD (parton jet structure header)
+C     -7            struct.  to lepton bank (ISAL)
+C     -6            struct.  to pseudo cal. (ISAC)
+C     -5            struct.  to unassociated particles (ISP3)
+C     -4            struct.  to long lived vertices (ISV2)
+C     -3            struct.  to short  "      "     (ISV1)
+C     -2            struct.  to final/initial bank (ISAQ)
+C     -1            struct.  to primary jet (ISAJ)
+C      0            next     to next ISAE
+C     +1            up
+C     +2            origin
+C ............................................................................
+C            I-5             bank number
+C             -4             bank name,  'ISAE'
+C             -3             NL=7
+C             -2             NS=7
+C             -1             ND=18
+C              0             STATUS
+C             +1     I       event id(1)
+C              2     I       event id(2)
+C              3     I       event number
+C              4     I       reaction type
+C              5     I       number of primary jet banks
+C              6     I         "    of stable parton banks (final+initial)
+C              7     I         "    of PJET banks
+C              8     I         "    of particle banks
+C              9     I         "    of vertex banks
+C             10     I         "    of lepton banks
+C             11     F       cross section in microbarns
+C             12     F       weight
+C             13     F       effective q**2
+C             14     F       hard scattering invariant s
+C             15     F        "      "          "      t
+C             16     F        "      "          "      u
+C             17     D        Seed (part 1)
+C             18     D        Seed (part 2)
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank name: ISAJ
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C                Primary jet information
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C    L-1            ref. to parent primary (ISAJ) (0 if original)
+C     +0            next     to next jet (ISAJ)
+C     +1            up       to ISAE
+C     +2            origin   to ISAE
+C ............................................................................
+C            I-5             Primary jet number
+C             -4             bank name,  'ISAJ'
+C             -3             NL=0
+C             -2             NS=0
+C             -1             ND=9
+C              0             STATUS
+C             +1     I       jet ID
+C              2     F       px
+C              3     F       py
+C              4     F       pz
+C              5     F       p
+C              6     F       mass
+C              7     F       phi
+C              8     F       theta
+C              9     F       eta
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank name: ISAL
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C                  Lepton bank (from primary and short lived vertices)
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C    L-4            ref.  to particle bank  (ISP1)
+C     -3            ref.  to primary jet    (ISAJ)
+C     -2            ref.  to initial parton (ISAQ)
+C     -1            struct.  (free)
+C      0            next     to next ISAL
+C     +1            up       to ISAE
+C     +2            origin   to ISAE for first and previous ISAL for others
+C ............................................................................
+C            I-5             particle number
+C             -4             bank name,  'ISAL'
+C             -3             NL=4
+C             -2             NS=1
+C             -1             ND=9
+C              0             STATUS
+C             +1     I       ISAJET particle ID
+C              2     F       px
+C              3     F       py
+C              4     F       pz
+C              5     F       p
+C              6     F       mass
+C              7     F       phi
+C              8     F       theta
+C              9     F       eta
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank name: ISAQ
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C            Final and initial partons
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C    L-2            ref.  to PJET (parton structure jets)
+C     -1            ref.  to primary jet (ISAJ)
+C                            0 for initial parton
+C      0            next     to next ISAQ
+C     +1            up       to ISAE
+C     +2            origin   to ISAE for first and previous ISAQ for others
+C ............................................................................
+C            I-5             final/initial parton number
+C             -4             bank name,  'ISAQ'
+C             -3             NL=2
+C             -2             NS=0
+C             -1             ND=9
+C              0             STATUS
+C             +1     I       final/initial parton type
+C              2     F       px
+C              3     F       py
+C              4     F       pz
+C              5     F       E
+C              6     F       mass
+C              7     F       phi
+C              8     F       theta
+C              9     F       eta
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank name: ISCL
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C               Calorimeter cell bank
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C    L-2            ref.  to reconstructed jet (ISJT)
+C     -1            ref.  to parent parton (ISAQ)
+C      0            next     to next ISCL
+C     +1            up       to ISAC
+C     +2            origin   to ISAC for first and previous ISAL for others
+C ............................................................................
+C            I-5             cell number (ordinal)
+C             -4             bank name,  'ISCL'
+C             -3             NL=2
+C             -2             NS=0
+C             -1             ND=10
+C              0             STATUS
+C             +1     I       10000*(phi index) + y index
+C              2     I       10000*(# of charged trks) + # of gammas
+C              3     F       e.m. energy deposited
+C              4     F       had.  "        "
+C              5     F       sin(theta) at center of cell
+C              6     F       cos(theta)         "
+C              7     F       sin(phi)           "
+C              8     F       cos(phi)           "
+C              9     F       phi                "
+C             10     F       eta                "
+C===========================================================================
+
+
+
+
+C=======================================================================
+C
+C  Bank name: ISJT
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C                Jets found by ISZJET
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C     -1            to possible parent parton (ISAQ)
+C     +0            next     to next jet (ISJT)
+C     +1            up       to ISJT
+C     +2            origin   to ISAC
+C ............................................................................
+C            I-5             jet number
+C             -4             bank name,  'ISJT'
+C             -3             NL=0
+C             -2             NS=0
+C             -1             ND=6
+C              0             STATUS
+C             +1     F       ET (transverse energy)
+C              2     F       px
+C              3     F       py
+C              4     F       pz
+C              5     F       E
+C              6     F       mass
+C              7     F       phi
+C              8     F       theta
+C              9     F       eta
+C=======================================================================
+
+
+
+
+C=======================================================================
+C
+C  Bank name: ISP1
+C  Author   : SDP
+C  Date     : June 19,1986
+C
+C             Particle bank (from primary and short lived vertices)
+C
+C    LQ     Q/IQ
+C ___________________________________________________________________________
+C    L-5            ref.  to GCAH
+C    L-4            ref.  to secondary vertex (ISV2)
+C     -3            ref.  to primary jet    (ISAJ)
+C     -2            ref.  to initial parton (ISAQ)
+C     -1            struct.  (free)
+C      0            next     to next ISP1
+C     +1            up       to ISV1
+C     +2            origin   to ISV1 for first and previous ISP1 for others
+C ............................................................................
+C            I-5             particle number
+C             -4             bank name,  'ISP1'
+C             -3             NL=4
+C             -2             NS=1
+C             -1             ND=9
+C              0             STATUS
+C             +1     I       ISAJET particle ID
+C              2     F       px
+C              3     F       py
+C              4     F       pz
+C              5     F       E
+C              6     F       mass
+C              7     F       phi
+C              8     F       theta
+C              9     F       eta
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank Name : PJET
+C  Author    : Chip Stewart
+C  Date      :  7-NOV-1989 18:10:09.84
+C  Version   : 2.0
+C
+C  Bank description : PARTON JET BANK
+C      PJET is constructed by applying a jet algorithm (CONE or
+C      OPENING ANGLE) to either Partons given in the ISAQ bank
+C      or Paricles given in the ISP1 bank.
+C
+C     LQ     Q/IQ
+C-----------------------------------------------------------------------
+C     +2          Down   link to SPARE
+C     -1          Down   link to PJPT
+C      0          Next   link to
+C     +1          Up     link to PJHD
+C     +2          Origin link to PJHD
+C.......................................................................
+C             -5         Bank number
+C             -4         Bank name, 'PJET'
+C             -3         NL = 2
+C             -2         NS = 2
+C             -1         ND = 12
+C              0         Status
+C             +1     I   NV = 2 Version Number
+C              2     F   Et ( =Pt in version NV=1 )
+C              3     F   Px
+C              4     F   Py
+C              5     F   Pz
+C              6     F   E
+C              7     F   mass
+C              8     F   phi
+C              9     F   theta
+C             10     F   eta
+C             11     I   CLASS - (eg. for mapping PJET with RECO )
+C             12     I   NEXT
+C=======================================================================
+C
+C  Definitions:
+C  -----------
+C
+C  E  - Sum(Ei) over all the Partons/Particles included in the jet.
+C
+C  Px - Sum(Pxi).
+C  Py - Sum(Pyi).
+C  Pz - Sum(Pzi).
+C
+C  Et - Sum[Ei*sin(Thetai)]
+C
+C  Comment: In version NV=1 word 2 was Pt = SQRT ( Px**2 + Py**2 )
+C
+C  Mass - SQRT [ E**2 - ( Px**2 + Py**2 + Pz**2 )]
+C
+C  For Theta, Phi and Eta the following code was used
+C  to calculate them from Px,Py,Pz
+C
+C  PARAMETER( SMALL = 1.0E-5 )
+C  Phi=ATAN2(Py,Px+SMALL)   ;   IF(Phi.LT.0) Phi=Phi+TWOPI
+C  Theta=ACOS((Pz+SMALL)/(SQRT(Px*Px+Py*Py+Pz*Pz)+SMALL))
+C  Eta=-ALOG(TAN(Theta/2.)+SMALL)
+C
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank Name : PJHD
+C  Author    : Chip Stewart
+C  Date      :  7-NOV-1989 17:57:58.00
+C
+C  Bank description : Header for PJET structure
+C
+C     LQ     Q/IQ
+C-----------------------------------------------------------------------
+C     -2          DOWN   spare
+C     -1          DOWN   LINK TO PJET
+C      0          Next   link to PJHD
+C     +1          Up     link to ISAE
+C     +2          Origin link to ISAE
+C.......................................................................
+C             -5         Bank number
+C             -4         Bank name, 'PJHD'
+C             -3         NL = 2
+C             -2         NS = 2
+C             -1         ND = 8
+C              0         Status
+C              1     I   NV=2 Version number
+C              2     I   N_ALG - 1 for DR CONE , 2 for CMS OPEN ANGLE
+C              3     I   NJET - NUMBER OF PARTON JETS
+C              4     F   algorithm parameters DR_CONE_CUT/OPENING_ANGLE_CUT
+C              5     F   algorithm parameters JET_ET_CUT
+C              6     I   algorithm parameters MAX ITERATIONS
+C              7     I   Initial Radiation switch 0-use IR      1-no IR
+C              8     I   MUON switch (IF NV=1 MUON NOT USED) 
+C                        0-no MUONS    1-use MUONS
+C=======================================================================
+
+
+
+C=======================================================================
+C
+C  Bank Name : PJPT
+C  Author    : Chip Stewart
+C  Date      : 15-Dec-1989
+C
+C  Bank description : pointers to Partons (ISAQ) in a given jet
+C
+C     LQ     Q/IQ
+C-----------------------------------------------------------------------
+C     -N+1        Ref Link to parton bank ISAQ for Nth parton in this PJET
+C     -2          Ref Link to parton bank ISAQ for 1st    "    "  "    "
+C     -1          not used
+C      0          Next   link to none
+C     +1          Up     link to PJET
+C     +2          Origin link to PJET
+C.......................................................................
+C             -5         Bank number
+C             -4         Bank name, 'PJPT'
+C             -3         NL = N+1
+C             -2         NS = 0
+C             -1         ND = 1 - number of data words in PJPT bank = 1
+C              0         Status
+C             +1     I   Bank version (=1)
+C=======================================================================
+

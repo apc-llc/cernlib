@@ -1,0 +1,189 @@
+\newpage
+\section{Higher Order Processes\label{HIGHER}}
+
+      Higher order processes can be generated either by the QCD
+evolution or by supplying partons from an external generator.
+
+      Frequently it is interesting to generate higher-order processes
+with a particular branching in the QCD evolution or with a particular
+particle or group of particles being produced from the fragmentation.
+Examples include
+\begin{enumerate}
+\item Branching of jets into heavy quarks (e.g., $g \to b + \bar b$);
+\item Decay of such a heavy quark into a lepton or neutrino;
+\item Radiation of a photon, $W$, or $Z$ from a jet.
+\end{enumerate}
+It is important to realize that all of the cross sections and the QCD
+evolution in ISAJET are based on leading-log QCD, so generating such
+processes does not give the correct higher order QCD cross sections or
+``K factors'', even though it may produce better agreement with them in
+some cases. 
+
+       ISAJET does produce events with particular topologies which
+in many cases are the most important effect of higher order processes.
+In the heavy quark example, the lowest order process
+$$
+g + g \to Q + \bar Q
+$$
+produces back-to-back heavy quark pairs, whereas the splitting process
+$$      
+g + g \to g + g, \quad g \to Q + \bar Q
+$$
+produces collinear pairs. Such collinear pairs are essential to obtain
+agreement with experimental data on $b \bar b$ production, and they
+often are the dominant background for processes of interest.
+
+      Branchings such as the emission of a heavy quark pair, a photon,
+or a $W^\pm$ or $Z^0$ are rare, and since they may occur at any step
+in the evolution, one cannot force them to occur. Therefore,
+generation of such events is very slow. M. Della Negra (UA1) suggested
+first doing $n_1$ QCD evolutions for each hard scattering and
+rejecting events without the desired partons, then doing $n_2$
+fragmentations for each successful evolution. This generates the
+equivalent of $n_1 n_2$ events for each hard scattering, so the cross
+section must be divided by $n_1 n_2$. This algorithm can speed up the
+generation of $g \to b + \bar b$ splitting by a factor of ten for $n_1
+= n_2 = 10$.
+
+      Since the evolution and fragmentation steps are executed $n_1n_2$
+times even if good events are found, a single hard scattering can lead
+to multiple events. This does not change the inclusive cross sections,
+but it does mean that the fluctuations may be larger than expected.
+Hence it is important to choose the numbers $n_1$ and $n_2$ carefully.
+
+      The following entities are used in ISAJET for generating events 
+with multiple evolution and fragmentation:
+
+      \verb|NEVENT|: The number of primary hard scatterings to be
+generated. Set as usual on the input line with the energy.
+
+       \verb|SIGF|: The cross section for the selected hard
+scatterings divided by $n_1 \times n_2$. Hence the correct weight is
+SIGF/NEVENT, just as for normal running. (The cross section printed at
+the end of a run does not contain this factor.)
+
+       \verb|NEVOLVE|: The number $n_1$ of evolutions per hard
+scattering. This should never be set unless you supply a REJJET
+function. Do not confuse this with NOEVOLVE.
+
+       \verb|NHADRON|: The number $n_2$ of fragmentations for a given
+evolution. This should never be set unless you supply a REJFRG
+function. Do not confuse this with NOHADRON.
+
+       \verb|REJJET|: A logical function which if true causes the
+evolution to be rejected. The user must supply one to make the
+selections which he wants. The default always .FALSE. but includes an
+example as a comment.
+
+      \verb|REJFRG|: A logical function which if true causes the
+fragmentation to be rejected. The user must supply one to make the
+selections which he wants. The default always .FALSE. but includes an
+example as a comment.
+
+\noindent Note that one can also use function EDIT to make a final
+selection of the events. Of course ISAJET must be relinked if EDIT,
+REJJET or REJFRG is modified.
+
+      At the end of a run, the jet cross section, the cross section for
+the selected events, and the number and fraction of events selected are
+printed. The cross section SIGF stored internally is divided by $n_1
+\times n_2$ so that if the events are used to make histograms, then
+the correct weight per event is
+\begin{verbatim}
+      SIGF/NEVENT
+\end{verbatim}
+just as for normal events. Of course NEVENT now has a different meaning;
+it is in general larger than the number of events in the file but might
+be smaller if NEVOLVE and NHADRON are badly chosen.
+
+      NEVOLVE and NHADRON are set as parameters in the input. One wants
+to choose them to give better acceptance of the primary hard scatterings
+but not to give multiple events for one hard scattering. For lepton 
+production from heavy quarks the values
+\begin{verbatim}
+NEVOLVE
+10/
+NHADRON
+10/
+\end{verbatim}
+seem appropriate, giving reasonable efficiency. For radiation of photons
+from jets, NEVOLVE can be somewhat larger but NHADRON should be one, and
+REJFRG should always return .FALSE., since the selection is just on the
+parton process, not on the hadronization.
+
+      The loops over evolutions and fragmentations are done inside of
+subroutine ISAEVT and are always executed the same number of times even
+though ISAEVT returns after each generated event. Logical flag OK
+signals a good event, and logical flag DONE signals that the run is
+finished. If you control the event generation loop yourself, you should
+make use of these flags as in the following extract from subroutine
+ISAJET:
+\begin{verbatim}
+      ILOOP=0
+  101 CONTINUE
+        ILOOP=ILOOP+1
+        CALL ISAEVT(ILOOP,OK,DONE)
+        IF(OK) CALL ISAWEV
+      IF(.NOT.DONE) GO TO 101
+\end{verbatim}
+Otherwise you may get the wrong weights.
+
+      It is possible to supply to ISAJET events with partons generated
+by some other program that may have more accurate matrix elements for
+higher order processes. Because any such calculation must involve
+cutoffs ISAJET assumes that the partons were generated imposing some
+$R$ cutoff, where $R=\sqrt{\phi^2+\eta^2}$, and some $E_t$ cutoff.
+Given that information ISAJET will generate initial state radiation
+partons only below the Et cutoff and final state radiation inside the
+$R$ cutoff. The external partons can be supplied to ISAJET by calls to
+2 subroutines. To initialize ISAJET for externally supplied partons,
+use
+\begin{verbatim}
+      CALL INISAP(CMSE,REACTION,BEAMS,WZ,NDCAYS,DCAYS,ETMIN,RCONE,OK)
+\end{verbatim}
+where the inputs are
+
+\smallskip\noindent
+\begin{tabular}{lcl}
+      CMSE             &=& center of mass energy\\
+      REACTION         &=& reaction (only TWOJET and DRELLYAN are \\
+                       && implemented so far)\\
+      BEAMS(2)         &=& chose 'P ' or 'AP'\\
+      ETMIN            &=& minimum ET of supplied partons\\
+      RCONE            &=& minimum cone (R) between supplied partons\\
+      WZ               &=& option 'W', 'Z', or ' ' no $W$'s or $Z$'s\\
+      NDCAYS           &=& number of decay options (if 0, assume decay has\\
+                       &&  already been done)\\
+      DCAYS            &=& list of particles W or Z can decay into\\
+\end{tabular}
+\smallskip
+
+\noindent and the output is
+
+\smallskip\noindent
+\begin{tabular}{lcl}
+      OK   &=& TRUE if initialization is possible\\
+\end{tabular}
+\smallskip
+
+\noindent Then for each event use
+\begin{verbatim}
+      CALL IPARTNS(NPRTNS,IDS,PRTNS,IDQ,WEIGHT,WZDK)
+\end{verbatim}
+where the inputs are
+
+\smallskip\noindent
+\begin{tabular}{lcl}
+       NPRTNS          &=& number of partons, $\le10$\\
+       IDS(NPRTNS)     &=& ids of final partons\\
+       PRTNS(4,NPRTNS) &=& parton 4 vectors\\
+       IDQ(2)          &=& ids of initial partons\\
+       WEIGHT          &=& weight\\
+       WZDK            &=& if true last 2 partons are from W,Z decay\\
+\end{tabular}
+\smallskip
+
+      Further QCD radiation is then generated consistent with
+ETMIN and RCONE, and the partons are fragmented into hadrons as usual.
+If RCONE is set to a value greater than 1.5 no cone restriction is
+applied during parton evolution.

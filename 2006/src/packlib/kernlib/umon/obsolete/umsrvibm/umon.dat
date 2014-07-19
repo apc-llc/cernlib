@@ -1,0 +1,581 @@
+*
+* $Id: umon.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: umon.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umon.exec */
+/**********************************************************************/
+/************************  U   M O N  *********************************/
+/* 11.Nov.88 B.Pollermann, allows to set up program-usage-monitors    */
+/**********************************************************************/
+address command
+UmonAdmin='BERND MARQUINA'
+/*.Main */
+CALL GET_DATE
+CALL INITIALIZE; If result=99 Then EXIT
+DO FOREVER; 'WAKEUP (CC RDR SMSG FILE (UMON TIMES A)'
+SELECT
+ When rc=1 Then Do Queued(); pull flag sr c1 c2 parms
+  If flag^='*SMSG' Then iterate
+  If c1 ='!LOG!' Then Do; If ^s.c2.active Then Iterate
+    k=s.c2.counter; k=k+1; s.c2.counter=k
+    parse value time() with tim 6
+    s.c2.k=left(sr,9)||dat' 'tim' 'parms
+    If k <  20 Then Iterate
+    CALL WRITEOUT c2
+  End
+  Else Do; parse var parms moni parms
+    CALL !P '0 From: 'sr c1 c2 moni parms
+    If find('RUN_DOWN CP CMS EXEC CALL INT',c1) > 0 Then Do
+      CALL SPECIAL sr c1 c2 moni parms
+      Iterate
+    End
+    If ^abbrev('MONITOR',c2,3) & ^abbrev('LOGSHEET',c2,3) Then Do
+     "CP MSG "sr" 2nd parameter must be 'MONITOR' or 'LOGSHEET'"
+      CALL !P '1 Neither !LOG! nor  MONITOR  or  LOGSHEET'
+      Iterate
+    End
+    If find(UmonAdmin,sr) > 0 Then CALL COMMANDS moni sr parms
+    Else Do
+      if c1='CREATE' then do
+       'CP MSG 'sr' You are not allowed to use this command!'
+        CALL !P '1 illegal attempt to CREATE by 'sr; iterate
+      end
+      If s.moni.admin^=sr Then Do
+       "CP MSG "sr" MONITOR name '"moni"' is probably mispelled"
+        CALL !P '1 Monitor name mispelled or try for other monitor by 'sr
+      End
+      Else CALL COMMANDS moni sr parms
+    End
+  End /*Else*/
+ End /*Queued() for rc=1 */
+ When rc=3 Then Do
+   parse pull . . . . . c1 c2 parms; 'CONWAIT'; 'DESBUF'
+   If c1='CALL' Then interpret 'CALL 'c2 ''''parms''''
+ End
+ When rc=4 | rc=101 Then 'CP PURGE RDR ALL'
+ Otherwise NOP
+END /*SELECT*/
+END /*FOREVER*/
+/**********************************************************************/
+/************ S U B R O U T I N E S ***********************************/
+/**********************************************************************/
+/*.command  */
+COMMANDS: arg moni sr parms
+ If abbrev('MONITOR',c2,3) Then Select
+  when c1 = 'CREATE'   Then CALL CREATE 'C' moni sr parms
+  when c1 = 'MODIFY'   Then CALL CREATE 'M' moni sr parms
+  when c1 = 'KILL'     Then CALL KILL       moni sr
+  when c1 = 'QUERY'    Then CALL QUERY      moni sr
+ 
+  when c1 = 'ACTIVATE' Then CALL ADMIN 'ACTIVATE' moni sr
+  when c1 = 'BLOCK'    Then CALL ADMIN 'BLOCK'    moni sr
+  otherwise 'CP MSG 'sr' Valid  MONITOR  commands are:',
+                                    'ACTIVATE BLOCK QUERY   KILL MODIFY'
+ End
+ Else /* if c2='LOGSHEET' */ Select
+  when c1 = 'WRITEOUT'  Then CALL WRITEOUT moni sr
+  when c1 = 'SENDERASE' Then CALL SENDERASE 1 1 moni sr
+  when c1 = 'SEND'      Then CALL SENDERASE 1 0 moni sr
+  when c1 = 'ERASE'     Then CALL SENDERASE 0 1 moni sr
+  otherwise 'CP MSG 'sr' Valid  LOGSHEET  commands are: WRITEOUT SENDERASE'
+ End
+Return
+/**********************************************************************/
+/*.initialize */
+INITIALIZE: Procedure Expose s. disk_ids disk_links
+ arg from_times; if from_times^=1 Then from_times=0
+ drop s.;s.=0; disk_ids=''; disk_links=''; fid='MONITOR DEFINITIONS A0'
+'EXEC :CLEAN_DISK A P S Y'
+ 
+'EXECIO * DISKR 'fid' 0 (FINIS STEM DEFS.'
+ IF rc>0 THEN DO
+   temp='Problems reading 'fid': rc='rc' from EXECIO'
+   m.0=1; m.1=temp; CALL !MAIL 'BERND DESASTER!'
+   m.0=1; m.1=temp; CALL !MN   'BERND DESASTER!'
+   CALL !P '2' temp; Return 99
+ END
+ ELSE DO LNUM=5 to DEFS.0; mk=0
+  parse var defs.lnum 1 f 2 moni r d a p s o1 o2 o3 .
+  If f='*' Then iterate
+  CALL CHECK moni r d a p s
+  /* If anything wrong then 'v-block' the moni                       */
+  If result=-9 Then Do
+    If s='v-blocked' Then iterate /* i.e. warning given only once     */
+    If length(r) > 8 Then r='BERND'
+    If xaccount(r)='' Then r='BERND'; mk=mk+1;m.0=mk
+    m.mk='Due to errors during verification your monitor is v-blocked.'
+    m.0=mk
+    CALL !MAIL r "Initialization Failed for Monitor '"moni"'."
+    CALL !P "1 Monitor Initialization failed for monitor '"moni"'."
+    CALL W_DEF lnum moni r d a p 'v-blocked' o1 o2 o3
+  End
+  Else Do; lk=result; newocc=0
+    If s='v-blocked' Then do;new_st=1;s='modified';end; else new_st=0
+    s.moni=1
+    s.moni.link=lk
+    s.moni.da=d' 'a
+    If s='active' Then s.moni.active=1
+    If from_times Then Do
+      n=find('Monday Wednesday Friday',date('W'))
+      If n>0 Then Do; Interpret "o"n"=qdisk(lk,'PERCENT')";newocc=1; end
+    End
+    If newocc | new_st Then CALL W_DEF lnum moni r d a p s o1 o2 o3
+  End
+ END LNUM
+ If ^from_times Then Do
+   CALL WRITEOUT_ALL 'RESTART'
+ End
+Return
+/**********************************************************************/
+/*.create  */
+CREATE: Procedure Expose s. disk_ids disk_links
+ arg action moni sr r d a p .
+ mk=0; fid='MONITOR DEFINITIONS A0'; a=right(a,4,'0')
+ IF p^='' THEN DO
+  /* Does the specified moni already exist?                           */
+ 'EXECIO * DISKR 'fid' 5 (FIND / 'moni' / STEM T.'
+  SELECT
+  When rc=0 Then Do
+    If action = 'C' Then Do
+     "CP MSG "sr" Monitor '"moni"' already exists, use MODIFY"; Return
+    End
+    parse var t.1 . ro do ao po s o1 o2 o3 .; parse var t.2 . lnum
+    if r='=' then r=ro; if d='=' then d=do; if p='=' then p=po
+    if a='000=' then a=right(ao,4,'0')
+    If d||a = do||ao Then samedisk=1; Else samedisk=0
+  End
+  When rc=2 | rc=3 Then Do
+    If action = 'M' Then Do
+     "CP MSG "sr" There is no monitor '"moni"', use CREATE"; Return
+    End
+    lnum=0; samedisk=0; s=''
+  End
+  Otherwise Do
+    mk=mk+1; m.mk='Problems in reading 'fid' rc='rc'. See Bernd!'
+    m.0=mk; CALL !M sr; Return
+  End
+  END /*SELECT*/
+ /*Check whether new parms are any good, independent of what exists    */
+  CALL CHECK moni r d a p s
+  If result^=-9 Then Do; lk=result; a=right(a,4,'0')
+    If ^samedisk Then Do
+      /* Does the specified disk already exist?                        */
+     'EXECIO * DISKR 'fid' 5 (FIND / 'left(d,8) a' / ZONE 21 35 STEM T.'
+      If rc=0 Then Do; newdisk=0
+        parse var t.1 . . . . . se oe1 oe2 oe3 .
+      End
+      Else newdisk=1
+    End
+    If action='C' Then Do
+      mess='created'
+      if newdisk Then do; s='created'; o1='...';o2='...';o3='...'; end
+      else Do
+        if se='s-blocked' Then s=se; else s='created'
+        o1=oe1; o2=oe2; o3=oe3
+      end
+    End /*action='C'*/
+    Else /*action='M'*/ Do
+      mess='modified'
+      if samedisk then do;if s='created' then s='modified'; end
+      else do
+        if newdisk Then do; s='modified'; o1='...';o2='...';o3='...'; end
+        else do
+          o1=oe1; o2=oe2; o3=oe3
+          if se='s-blocked' then s=se; else s='modified'
+        end
+      end
+    End /*action='M'*/
+    CALL W_DEF lnum moni r d a p s o1 o2 o3
+    If result^=0 Then Do; mk=mk+1
+       m.mk='Problems in writing on 'fid' rc='result'. See Bernd!'
+       m.0=mk; CALL !M sr
+       Return
+    End
+    s.moni=1
+    s.moni.da=d' 'a
+    s.moni.link=lk
+    If s='active' Then s.moni.active=1; Else s.moni.active=0
+    mk=mk+1; m.mk='MONITOR for moni 'moni mess' successfully.'
+    Select
+     When s='active' Then mess='(logging will continue)'
+     When s='s_blocked' Then mess=,
+        'But its disk is blocked. Use SENDERASE to free the disk'
+     Otherwise mess='It can now be activated.'
+    End
+    mk=mk+1; m.mk=mess
+  End /*Return^=-9*/
+ 'FINIS MONITOR DEFINITIONS A0'
+ END /* Admin specified correct number of parameters                  */
+ ELSE DO
+   mk=mk+1;m.mk=' You must specify all parameters'
+   if action='M' then do
+     mk=mk+1;m.mk=" (you can use an '=' for those to be left unchanged)"
+   end
+ END
+ m.0=mk; CALL !MN sr 'FROM YOUR UMON SERVER:'
+Return
+/**********************************************************************/
+/*.kill */
+KILL: Procedure Expose s.
+ arg moni sr .
+ fid='MONITOR DEFINITIONS A0'
+'EXECIO * DISKR 'fid' 5 (FINIS FIND / 'moni' / STEM T.'
+ If rc=0 Then Do
+   parse var t.2 . lnum
+   parse var t.1 moni r d a p s o1 o2 o3 .; parse var t.2 . lnum
+   CALL W_DEF lnum moni r d a p 'killed' o1 o2 o3
+   s.moni.=0
+   m.1="Monitor '"moni"' killed."
+   m.0=1; CALL !MN sr
+ End
+ Else "CP MSG "sr" Monitor '"moni"' not found."
+Return
+/**********************************************************************/
+/*.query */
+QUERY: Procedure
+ arg moni sr .; f='MONITOR DEFINITIONS A0'
+ If moni='ALL' Then m.fid=f
+ Else Do
+  'EXECIO * DISKR 'f' 5 (FINIS FIND / 'moni' / STEM T.'
+   If rc=0 Then Do
+     parse var t.1 moni admin .
+     queue ':5 # ZONE 11 20 # ALL ^/ 'admin' / # DEL *'
+     queue 'TOP # GET 'f' 1 4 # FFILE T T A'
+    'XEDIT 'f' (NOPROF'; m.fid='T T A'
+   End
+   Else Do; "CP MSG "sr" Monitor '"moni"' not found."; Return; End
+ End
+ title='From your UMON SERVER: output from the QUERY command'
+ If qfile(m.fid,'RECNO') < 19 Then CALL !MN sr title
+ Else CALL !MAIL sr title
+Return
+/**********************************************************************/
+/*.admin-commands */
+ADMIN: Procedure Expose s.
+ arg action moni sr .
+ fid='MONITOR DEFINITIONS A0'
+'EXECIO * DISKR 'fid' 5 (FINIS FIND / 'moni' / STEM T.'
+ If rc=0 Then Do
+   parse var t.1 moni r d a p s o1 o2 o3 .; parse var t.2 . lnum
+   If action='BLOCK' Then Do; m.0=2
+     If s='s-blocked' Then Do
+       m.1="Monitor '"moni"' was already blocked for lack of space"
+       m.2="on the disk '"d a"'."
+     End
+     Else do; s='a-blocked'
+       m.1="Monitor '"moni"' blocked. As long as there is enough free space"
+       m.2="on the disk you can activate it whenever you want."
+     End
+     CALL W_DEF lnum moni r d a p s o1 o2 o3
+     s.moni.active=0
+   End
+   Else /* action='ACTIVATE' */ Do; m.0=2
+     If s='s-blocked' Then Do
+       m.1="Monitor '"moni"' is blocked for lack of space on the disk"
+       m.2=d a"'. I propose that you use 'SENDERASE' to free space."
+     End
+     Else do; s='active'
+       m.1="Monitor '"moni"' activated. Logging starts immediately."
+       m.2=''
+     End
+     CALL W_DEF lnum moni r d a p s o1 o2 o3
+     s.moni.active=1
+   End
+   CALL !MN sr
+ End
+ Else "CP MSG "sr" Monitor '"moni"' not found."
+Return
+/**************************************************************************/
+/*.writeout */
+WRITEOUT_ALL: Procedure Expose s.
+ arg reason
+'EXECIO * DISKR MONITOR DEFINITIONS A 1 (FINIS MARGIN 1 9 STEM TEMP.'
+ If rc>0 Then Do
+   NOP
+ End
+ Else Do k=5 to temp.0
+  parse var temp.k 1 f 2 moni .; If f='*' Then iterate
+  CALL WRITEOUT moni ',' reason
+ End k
+Return
+ 
+WRITEOUT: Procedure Expose s.
+ arg moni sr ',' reason
+ if ^s.moni.active & sr='' Then Return
+ if ^s.moni Then Do
+  "CP MSG "sr" There is no alive monitor called '"moni"'."
+   Return
+ end
+ k=s.moni.counter
+ If reason='CENTER' | reason ='MAINT' | reason = 'RESTART' Then reas=1
+ else reas=0
+ If k > 0 | reas Then Do
+  'RELEASE Z'
+  'ACCESS 's.moni.link' Z'
+   If rc>0 Then Do
+     CALL !P "2 Rc="rc" for ACCESS to "s.moni.da" for Monitor '"moni"'."
+     If sr^='' Then 'CP MSG 'sr' Serious problem with ACCESS to 's.moni.da
+     Return
+   End
+   bytes_left=qdisk('Z','BLKSIZE')*qdisk('Z','BLKLEFT')
+   If bytes_left/ 20 <  80 Then Call BLOCK_WARNING moni
+   k=s.moni.counter; s.moni.counter=0
+   If k > 0 Then do
+    'EXECIO 'k' DISKW 'moni' LOGSHEET Z (FINIS STEM S.'moni'.'
+     If rc>0 Then Do; CALL BLOCK moni rc; Return; End
+   end /* k > 0 */
+   If reas Then do; bra='<<<'
+     dat=date(); If length(dat)=10 Then dat=' 'dat;parse var dat dat 7
+     If reason='CENTER' Then ,
+        mess='UMON taken down for scheduled RUN DOWN of VM.'
+     If reason='MAINT'  Then ,
+        mess='UMON taken down for regular Thursday-maintenance.'
+     If reason='RESTART' Then do
+      'EXECIO 1 DISKR ALIVE UNTIL A 1 (VAR WHY_DOWN'
+       If why_down^='RUN DOWN    ' Then Do
+          mess='UMON died because of system crash!'
+         'EXECIO 1 DISKW 'moni' LOGSHEET Z (FINIS STRING',
+                                   '<<< UMON 'why_down' 'mess
+       End
+       mess='UMON restarted.'; bra='>>>'
+     end
+     parse value time() with tim 6
+    'EXECIO 1 DISKW 'moni' LOGSHEET Z (FINIS STRING',
+                   bra' UMON 'dat' 'tim' 'mess
+     If rc>0 Then Do; CALL BLOCK moni rc; Return; End
+   end /* there was a reason */
+ End /* k>0 and there was a reason */
+ If sr^='' Then 'CP MSG 'sr moni' LOGSHEET  written out.'
+Return
+/*********************************************************************/
+/*.senderase */
+SENDERASE: Procedure Expose s.
+ arg send erase moni sr .
+'RELEASE Z'
+'ACCESS 's.moni.link' Z'
+ If rc>0 Then Do
+   CALL !P "2 Rc="rc" for ACCESS to "s.moni.da" for Monitor '"moni"'."
+   If sr^='' Then 'CP MSG 'sr' Serious problem with ACCESS to 's.moni.da
+   Return
+ End
+ If send Then Do; k=s.moni.counter
+ 'EXECIO 'k' DISKW 'moni' LOGSHEET Z (FINIS STEM S.'moni'.'
+ 'EXEC SENDFILE 'moni' LOGSHEET Z TO 'sr
+ End
+ If erase Then Do
+  'ERASE 'moni' LOGSHEET Z'
+  'EXECIO * DISKR MONITOR DEFINITIONS A 5 (FIND / 'moni' / STEM T.'
+   If rc>0 Then Return
+   parse var t.1 2 moni r d a p s o1 o2 o3 . ; parse var t.2 . lnum
+   If s='s-blocked' Then Do
+     CALL W_DEF lnum moni r d a p 'a-blocked' o1 o2 o3
+    'CP MSG 'sr' You can now activate monitor 'moni
+   End
+ End
+ s.moni.counter=0
+Return
+/*.slaves */
+/**********************************************************************/
+/************ S L A V E S *********************************************/
+/**********************************************************************/
+CHECK: Procedure Expose s. m. mk disk_ids disk_links
+ /* If possible at CHECK sets s.moni.admin down here                 */
+ parse arg moni r d a p s .; accepted=1
+ If symbol(moni)='BAD' | pos('.',moni) > 0 Then do; accepted=0
+   mk=mk+1;m.mk=' Name of moni:' moni 'not a valid REXX symbol.'
+ End
+ If moni='ALL' Then do; accepted=0
+   mk=mk+1;m.mk=" 'ALL'  is not a valid moni name."
+ End
+ If length(moni) > 8 Then do; accepted=0
+   mk=mk+1;m.mk=' Name of moni:' moni 'is longer than 8 characters.'
+ End
+ /* The check for adminstrator MUST FOLLOW the moni-validity-check */
+ goodr=0; If length(r) <= 8 Then if xaccount(r) ^= '' then goodr=1
+ If ^goodr Then do; accepted=0
+   mk=mk+1;m.mk=' Logon-id of administrator: 'r' not a valid account.'
+ End; Else if accepted then s.moni.admin=r
+ goodd=0; If length(d) <= 8 Then if xaccount(d) ^= '' then goodd=1
+ If ^goodd Then do; accepted=0
+   mk=mk+1;m.mk=' Disk-id: 'd' not a valid account.'
+ End
+ If ^datatype(a,'X') Then do; accepted=0; goodd=0
+   mk=mk+1;m.mk=' Disk-addr: 'a' not a valid hexadecimal number.'
+ End
+ If goodd Then Do
+   da=d'"'strip(a,'L','0'); n=find(disk_ids,da)
+   If n=0 Then Do
+     l=qdisk('?','ADDRESS')
+    'CP LINK TO 'd a' AS 'l' M 'p
+     If rc>0 Then Do
+       mk=mk+1;m.mk=' Problem with LINKING to 'd a '(rc='rc')'
+       accepted=0
+     End
+     Else Do
+       disk_ids=disk_ids' 'da
+       disk_links=disk_links' 'l
+     End
+   End
+   Else l=word(disk_links,n)
+ End /* for goodd=1 */
+ If s^='' Then Do
+   temp='created modified active a-blocked s-blocked v-blocked'
+   If find(temp,s) = 0 Then Do
+     accepted=0
+     mk=mk+1;m.mk=" Status was '"s"' instead of one of the following:"
+     mk=mk+1;m.mk=' 'temp; mk=mk+1; m.mk=' '
+   End
+ End
+ If ^accepted Then Return -9
+Return l
+ 
+GET_DATE:
+ dat=date(); If length(dat)=10 Then dat=' 'dat; parse var dat dat 7
+Return
+ 
+W_DEF: Procedure
+ parse arg lnum moni admin disk_id disk_addr passw st o1 o2 o3 .
+ tmp=left(moni,9),
+     left(admin,9),
+     left(disk_id,8),
+     right(disk_addr,4,'0')' ',
+     left(passw,9),
+     left(st,11) right(o1,3) right(o2,3) right(o3,3)' %'
+ if st='killed' Then tmp='*'||translate(tmp,'.',' '); else tmp=' 'tmp
+'EXECIO 1 DISKW MONITOR DEFINITIONS A0 'lnum' F 72 (FINIS VAR TMP'
+Return rc
+ 
+/*.messages */
+!M: Procedure Expose m.
+ If ^datatype(m.0,'W') Then Return
+ arg addr .
+ Do k=1 to m.0; 'CP MSG 'addr m.k; End k
+ DROP m.
+Return
+ 
+!MN: Procedure Expose m.
+ parse arg addr title; addr=upper(addr)
+ If title='' Then title='FROM YOUR UMON SERVER:'
+ If FEXIST(m.fid) Then 'EXECIO * DISKR 'm.fid' 1 (FINIS STEM M.'
+ Else if ^datatype(m.0,'W') Then Return
+ If m.0=0 Then Return
+'EXEC TELL 'addr title
+ Do k=1 to m.0; 'EXEC TELL 'addr'    'm.k; End k
+ DROP m.
+Return
+ 
+!MAIL: Procedure Expose m.
+ parse arg addr title; addr=upper(addr)
+ If title='' Then title='FROM YOUR UMON SERVER:'
+ If ^FEXIST(m.fid) Then Do
+   If ^datatype(m.0,'W') Then Return; If m.0 < 1 Then Return
+   m.fid='DEFAULT MAIL A1'
+   If FEXIST(m.fid) Then 'ERASE 'm.fid
+  'EXECIO 'm.0' DISKW 'm.fid' (FINIS STEM M.'
+ End
+'EXEC MAIL 'addr' (NOLOG NOPROMPT FILE 'm.fid' NOEDIT SUBJECT 'title
+ DROP m.
+Return
+ 
+!P: Procedure Expose dat
+ parse arg level text
+ parse value time() with tim 6; t=dat' 'tim
+ SELECT
+  When level = 0 Then rem='  '
+  When level = 1 Then rem='U-P:'
+  When level = 2 Then rem='BUG:'
+  Otherwise Do; level=2; rem='??'; End
+ END
+ If level=2 Then Do
+  'GLOBALV SELECT *ERRORS GET NUM'
+   if ^datatype(num,'W') Then num=1; else num=num+1
+  'GLOBALV SELECT *ERRORS SETP NUM'
+ End
+'EXECIO 1 DISKW UMON PROTOCOL A5 (FINIS STRING 'rem t text
+Return
+ 
+/*                                                                 */
+BLOCK_WARNING: Procedure Expose s.
+ arg moni .
+ m.=' ';m.0=9
+ m.1="Disk '"s.moni.da"' is getting full due to "moni" LOGSHEET !"
+ m.2='Recording supposed to go onto this disk will soon stop.'
+ m.4='Please issue the command:'
+ m.6='   CP SMSG UMON SENDERASE LOGSHEET 'moni
+ m.8='If you do this in time, logging will continue smoothly.'
+ CALL !MAIL s.moni.admin "Disk '"s.moni.da"' is getting full"
+Return
+/*                                                                 */
+BLOCK: Procedure Expose s.
+ arg moni rc .
+ s.moni.active=0
+ CALL !P 1 "Rc="rc" for WRITEOUT EXECIO. Monitor '"moni"' s-blocked."
+'EXECIO * DISKR MONITOR DEFINITIONS A 5 (FIND / 'moni' / STEM T.'
+   If rc>0 Then Return
+ parse var t.1 2 moni r d a p s o1 o2 o3 . ; parse var t.2 . lnum
+ CALL W_DEF lnum moni r d a p 's-blocked' o1 o2 o3
+ m.=' ';m.0=13
+ m.1="Disk '"s.moni.da"' is full due to "moni" LOGSHEET !"
+ m.2='It cannot receive any logging any more.'
+ m.4='Please issue the command:'
+ m.6='   CP SMSG UMON SENDERASE LOGSHEET 'moni
+ m.8='Once you have emptied the disk you must activate the monitor'
+ m.10='by issuing the command:'
+ m.12='  CP SMSG UMON ACTIVATE MONITOR 'moni
+ CALL !MAIL s.moni.admin "Monitor '"moni"' Blocked."
+Return
+ 
+/*.time  */
+W_T: 'EXECIO 1 DISKW ALIVE UNTIL A1 1 F 12 (FINIS STRING 'dat' 'time();Return
+MIDNIGHT: arg action
+'CP SLEEP 2 MIN'
+ CALL WRITEOUT_ALL
+ If action='CLEAN_UP' Then Do
+  'XEDIT MONITOR DEFINITIONS A (PROFILE CLEAN_UP'
+  'FINIS MONITOR DEFINITIONS A'
+   CALL !P 0 'Clean up of MONITOR DEFINITIONS'
+ End
+ If qfile('UMON PROTOCOL A2','RECNO') > 1000 Then do
+  'EXEC SENDFILE UMON PROTOCOL A TO BERND'
+  'ERASE UMON PROTOCOL A'
+ End
+'GLOBALV INIT'
+ CALL GET_DATE
+ CALL INITIALIZE 1
+Return 0
+CHECK_DISKS:
+ NOP
+Return
+/**********************************************************************/
+SPECIAL: arg sr sprefix scommand sparms
+  srp=sr||sprefix
+  SELECT
+   WHEN srp='CONSOLERUN_DOWN' Then CALL RUN_DOWN 'CENTER' sr
+   WHEN srp='BERNDRUN_DOWN'   Then CALL RUN_DOWN 'MAINT'  sr
+   WHEN srp='BERNDCP'    Then 'CP  'scommand sparms
+   WHEN srp='BERNDCMS'   Then  scommand sparms
+   WHEN srp='BERNDEXEC'  Then 'EXEC 'scommand sparms
+   WHEN srp='BERNDCALL'  Then Nop
+   WHEN srp='BERNDINT'   Then Nop
+   OTHERWISE 'CP MSG 'sr '???'
+  END
+RETURN
+ 
+RUN_DOWN: Procedure Expose s.
+ arg reason sr
+ If reason = 'MAINT' Then Do
+   parse value time() with temp 3
+   If date('W')^='Thursday' | temp^=19 Then Do
+    'CP MSG 'sr' Not the right time or day!'; Return
+   end
+ End
+ CALL WRITEOUT_ALL reason
+'EXECIO 1 DISKW ALIVE UNTIL A1 1 F 12 (FINIS STRING RUN DOWN    '
+'CP LOGOUT'
+RETURN
+#endif

@@ -1,0 +1,94 @@
+#
+#  dyn_var.exp  --
+#
+#  Original:  4-Apr-1996 11:55
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for the tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Bool test
+#
+
+expr2_test bool	2 bvvec			false
+expr2_test bool	3 bvvec			false,true
+expr2_test bool	7 bvvec			false,true,false,true,false,true
+
+expr2_test bool	7 bvvec(3)		false
+expr2_test bool	7 bvvec(2:5)		true,false,true,false
+expr2_test bool	7 bvvec(:3)		false,true,false
+expr2_test bool	7 bvvec(4:)		true,false,true
+expr2_test bool	7 bvvec(2+i2-i2:5+i2-i2)	true,false,true,false
+
+expr2_test bool	2 bvmat			false,true,false
+
+expr2_test bool	7 bvmat(2,3)		true
+expr2_test bool	7 bvmat(2,2:5)		false,true,false,true
+expr2_test bool	7 bvmat(2,:3)		true,false,true
+expr2_test bool	7 bvmat(2,4:)		false,true,false
+expr2_test bool	7 bvmat(2,2+i2-i2:5+i2-i2) false,true,false,true
+
+expr2_test bool	7 bvmat(2+i2-i2,3)	true
+expr2_test bool	7 bvmat(2+i2-i2,2:5)	false,true,false,true
+expr2_test bool	7 bvmat(2+i2-i2,:3)	true,false,true
+expr2_test bool	7 bvmat(2+i2-i2,4:)	false,true,false
+expr2_test bool	7 bvmat(2+i2-i2,2+i2-i2:5+i2-i2) false,true,false,true
+
+expr2_test bool	7 bvmat(2:3,3)		true,false
+expr2_test bool	7 bvmat(2:3,2:5)		false,true,true,false,false,true,true,false
+expr2_test bool	7 bvmat(2:3,:3)		true,false,false,true,true,false
+expr2_test bool	7 bvmat(2:3,4:)		false,true,true,false,false,true
+expr2_test bool	7 bvmat(2:3,2+i2-i2:5+i2-i2) false,true,true,false,false,true,true,false
+
+
+#
+# Int32 test
+#
+
+expr2_test bool	2 ivvec			{ 2001}
+expr2_test bool	3 ivvec			{ 2001, 2002}
+expr2_test bool	7 ivvec			{ 2001, 2002, 2003, 2004, 2005, 2006}
+
+expr2_test bool	7 ivvec(3)		{ 2003}
+expr2_test bool	7 ivvec(2:5)		{ 2002, 2003, 2004, 2005}
+expr2_test bool	7 ivvec(:3)		{ 2001, 2002, 2003}
+expr2_test bool	7 ivvec(4:)		{ 2004, 2005, 2006}
+expr2_test bool	7 ivvec(2+i2-i2:5+i2-i2) { 2002, 2003, 2004, 2005}
+
+expr2_test bool	2 ivmat			{ 2011, 2021, 2031}
+
+expr2_test bool	7 ivmat(2,3)		{ 2023}
+expr2_test bool	7 ivmat(2,2:5)		{ 2022, 2023, 2024, 2025}
+expr2_test bool	7 ivmat(2,:3)		{ 2021, 2022, 2023}
+expr2_test bool	7 ivmat(2,4:)		{ 2024, 2025, 2026}
+expr2_test bool	7 ivmat(2,2+i2-i2:5+i2-i2) { 2022, 2023, 2024, 2025}
+
+expr2_test bool	7 ivmat(2+i2-i2,3)	{ 2023}
+expr2_test bool	7 ivmat(2+i2-i2,2:5)	{ 2022, 2023, 2024, 2025}
+expr2_test bool	7 ivmat(2+i2-i2,:3)	{ 2021, 2022, 2023}
+expr2_test bool	7 ivmat(2+i2-i2,4:)	{ 2024, 2025, 2026}
+expr2_test bool	7 ivmat(2+i2-i2,2+i2-i2:5+i2-i2) { 2022, 2023, 2024, 2025}
+
+expr2_test bool	7 ivmat(2:3,3)		{ 2023, 2033}
+expr2_test bool	7 ivmat(2:3,2:5)	{ 2022, 2032, 2023, 2033, 2024, 2034, 2025, 2035}
+expr2_test bool	7 ivmat(2:3,:3)		{ 2021, 2031, 2022, 2032, 2023, 2033}
+expr2_test bool	7 ivmat(2:3,4:)		{ 2024, 2034, 2025, 2035, 2026, 2036}
+expr2_test bool	7 ivmat(2:3,2+i2-i2:5+i2-i2) { 2022, 2032, 2023, 2033, 2024, 2034, 2025, 2035}
+
+
+#
+# Cleanup after the tests
+#
+paw_cmd { close 4 }

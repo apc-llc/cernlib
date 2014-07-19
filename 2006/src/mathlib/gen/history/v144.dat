@@ -1,0 +1,80 @@
+*
+* $Id: v144.dat,v 1.1.1.1 1996/04/01 15:01:34 uid1605 Exp $
+*
+* $Log: v144.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:34  uid1605
+* Mathlib gen
+*
+*
+C  Additions:
+C  ----------
+C
+C  B105 RPLNML - value of a polynomial
+C  C326 RCLAUS - Clausen function
+C  D102 RADAPT - Adaptive Gaussian quadrature
+C  D106 RGS56P - Gaussian quadrature with five and six point rules
+C  E102 MAXIZE - maximum and minimum elements of arrays
+C  E201 RLSQPM - least squares polynomial fit
+C  E222 RCHEBN - solution of overdetermined linear systems in the Chebyshev norm
+C  E409 RTRGSM - summation of trigonometric series
+C  
+C  Deletions:
+C  ----------
+C
+C  D111  GPINDP   MATHLIB    CNL 214    Use D103 GAUSS, D107 RGQUAD 
+C  D115  CHEBQU   MATHLIB    CNL 214    Use D103 GAUSS, D107 RGQUAD 
+C  E401  ECTRAD   MATHLIB    CNL 215    Use E408 RCHPWS 
+C  E410  CPSC     MATHLIB    CNL 215    Obsolete 
+C  F106  SPXINV   MATHLIB    CNL 211    Use F001 LAPACK 
+C  F202  LRCH     MATHLIB    CNL 211    Use F001 LAPACK 
+C  F230  DEFLS    MATHLIB    (*)        Obsolete 
+C  F600  SVD      MATHLIB    CNL 211    Use F001 LAPACK 
+C  H100  SIMPLE   MATHLIB    CNL 215    Use H101 RSMPLX 
+C  H300  ASSIGN   MATHLIB    CNL 215    Use H301 ASSNDX 
+C
+C  (*) already deleted, but not announced
+C
+C  Routine changes: 
+C  ---------------
+C
+C  E406 QCHECF Increase precision of PI
+C
+C  Name changes:
+C  -------------
+C 
+C  Code  Old     New
+C  ----  ---     ---
+C
+C  C200  ZEROX   RZEROX    Available on CDC and Cray only 
+C  C201  SNLEQ   RSNLEQ    Available on CDC and Cray only 
+C  C207  RTEQ3   RRTEQ3    Available on CDC and Cray only 
+C  C208  RTEQ4   RRTEQ4    Available on CDC and Cray only 
+C  C318  ELFUN   RELFUN   
+C  C322  FRSIN   RFRSIN   
+C        FRCOS   RFRCOS   
+C  C323  FERDR   RFERDR   
+C  C324  ATANI   RATANI   
+C  C330  ASLGF   RASLGF   
+C  C331  FCONC   RFCONC   
+C  C332  DILOG   RDILOG   
+C  C334  GAPNC   RGAPNC   
+C        GAGNC   RGAGNC   
+C  C336  SININT  RSININ   
+C        COSINT  RCOSIN   
+C  C339  DAWSON  RDAWSN   
+C  C342  STRH0   RSTRH0   
+C        STRH1   RSTRH1   
+C  C345  BZEJY   RBZEJY   
+C  D104  CAUCHY  RCAUCH    Available on CDC or Cray only 
+C  D105  TRIINT  RTRINT    Available on CDC or Cray only 
+C  D200  RKSTP   RRKSTP   
+C  D201  DEQBS   RDEQBS    Available on CDC or Cray only 
+C  D202  DEQMR   RDEQMR    Available on CDC or Cray only 
+C  D203  RKNYS   RRKNYS    Available on CDC or Cray only 
+C  D401  DERIV   RDERIV    Available on CDC or Cray only 
+C  E102  MAXFZE  MAXRZE   
+C        MINFZE  MINRZE   
+C  E406  CHECF   RCHECF    Available on CDC or Cray only 
+C  F500  LIHOIN  RLHOIN   
+C  U501  DJMNB   RDJMNB    Available on CDC or Cray only 
+C

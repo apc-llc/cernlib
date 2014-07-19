@@ -1,0 +1,39 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+C          This Pam file contains test programs of CERN KERNNUM
+C          library routines. Use one of these steering patches:
+C
+C             APOLLO  for   APOLLO
+C             CDC           CDC 875 NOS/BE with FTN5
+C             CONVEX        CONVEX
+C             CRAY          CRAY XMP UNICOS with CFT77
+C             DECS          DECSTATION 3100 WITH F77
+C             HPUX          HP/UX 9000 Series
+C             IBMVM         IBM VM/CMS with VS FORTRAN
+C             IBMMVS        IBM MVS with SIEMENS FORTRAN 77
+C             IBMRT         IBM RISC 6000 with AIX and XLF
+C             LINUX         LINUX system on IBM PC
+C             NORD          NORSK DATA NORD 500
+C             SGI           SILICON GRAPHICS IRIS WITH F77
+C             SUN           SUN SPARC WITH F77
+C             UNIVAC        UNIVAC 1100
+C             VAX           DIGITAL EQUIPMENT VAX
+C
+C          Installation of KERNCHK has been validated for patches
+C                 APOLLO, CRAY, IBM, IBMRT and VAX,
+C          but for none of the other patches mentioned above.
+C
+C          Use steering patch
+C
+C             NUMDPRNT      to generate diagnostics,
+C             NUMEPRNT      to test error messages,
+C             NUMESTOP      to test error stops,
+C             NUMOWNCOde    to test KERNNUM's system functions,
+C             NUMTIME       to obtain timing information.
+C

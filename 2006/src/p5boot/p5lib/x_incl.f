@@ -1,0 +1,76 @@
+CDECK  ID>, X_INCL.
+      SUBROUTINE X_INCL (LDOSEQ)
+
+C-    Process   +INCLUDE, sname1, ...
+C-        if LDOSEQ is zero this is called from DOXQT;
+C-        otherwise the call is from X_SEQ giving the bank
+C-        with the c/c +INCL
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+      COMMON /MUSEBC/ MX_FORC, MU_GLOB, MU_PAT, MU_DECK, MU_INH, MU_FORG
+     +,               MX_TRAN, MX_FORG, MX_SINH, MX_SELF, NVEXDK(6)
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+      COMMON /M_ANAC/LOWAN,KDOAN,LDOAN,LUPAN,MODEAN,MEXAN,LEVAN,KKM5AN
+     +,              NEWDEC,NEWCTL,NEWFOR,NEWNIL,NEWINC
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*80
+      EQUIVALENCE (LINE,TEXT)
+
+
+      IF (LDOSEQ.NE.0)  THEN
+          LDO = LDOSEQ
+          CALL CCKRAK (IQ(LDO+1))
+        ELSE
+          LDO = LDOAN
+        ENDIF
+
+      JCCTYP = 0
+
+   22 IXNAME = MCCPAR(JCCPZ+1)
+      LINE(1:10) = '#include "'
+C-                  _:.=+=.: 1_:
+      CALL NA_GET (IXNAME,LINE,11)
+      NTX = NESLAT
+      CALL CUTOL (LINE(11:NTX))
+      LINE(NTX:NTX+2) = '.h"'
+      NTX = NTX + 2
+      TEXT(NTX+1) = CHAR(NEWLN)
+      MLIAD(2) = NTX + 1 + NCHNEWL
+
+      LQ(LSERV-2) = LQ(LDO-2)
+      IQ(LSERV+1) = 1
+      IQ(LSERV+2) = 1
+      IQ(LSERV+3) = -99
+
+      IF (NVEXDK(2).NE.0)  THEN
+          CALL DPLINE (-1, '    ', NTX,LINE)
+        ENDIF
+
+      IF (NVEXDK(1).NE.0)  CALL DPEXE (LSERV)
+
+      JCCPZ = JCCPZ + 3
+      NCCPZ = NCCPZ - 1
+      IF (NCCPZ.GT.0)              GO TO 22
+      RETURN
+      END

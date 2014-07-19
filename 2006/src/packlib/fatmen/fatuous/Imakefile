@@ -1,0 +1,4 @@
+SRCS_F=	 fmaddd.F fmaddt.F fmfend.F fmfile.F fmpeek.F fmpoke.F \ @@\
+	fmstrt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

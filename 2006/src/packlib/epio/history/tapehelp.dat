@@ -1,0 +1,20 @@
+*
+* $Id: tapehelp.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: tapehelp.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+#if (defined(CERNLIB_TAPEFORM))&&(defined(CERNLIB_VAX))
+1 TAPEFORMAT
+WARNING TO MAGTAPE USERS: In our data acquisition programs, we make use
+of the byte-swap option in the magtape driver. See IBM VAX News 67 for
+details. People who use magtape for other purposes should make sure that
+the unit is in NOSWAP mode.
+ Users who wish to put
+the magtape into byte-swap mode must remember to MOUNT the tape before
+issuing the     TAPEFORMAT SWAP     command
+and they should do a     TAPEFORMAT NOSWAP     command
+before DISMounting the tape.
+#endif

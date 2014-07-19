@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 chdirf.F getcwdf.F getenvf.F jumpad.F jumpx2.F qnexte.F renamef.F \ @@\
+	 uctoh.F uctoh1.F uh1toc.F uhtoc.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

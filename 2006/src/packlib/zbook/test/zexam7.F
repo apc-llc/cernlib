@@ -1,0 +1,78 @@
+*
+* $Id: zexam7.F,v 1.1.1.1 1996/03/08 12:01:14 mclareni Exp $
+*
+* $Log: zexam7.F,v $
+* Revision 1.1.1.1  1996/03/08 12:01:14  mclareni
+* Zbook
+*
+*
+#include "zbook/pilot.h"
+      SUBROUTINE ZEXAM7
+C
+C   EXAMPLE  7:  - USAGE OF ZWRITE AND ZREAD
+C
+      COMMON/ZCOMM/Z(1),ID1,ID2,ID3,WS(1)
+      DIMENSION IZ(1000),IWS(1)
+      EQUIVALENCE (IZ(1),Z(1)), (IWS(1),WS(1))
+C
+#if defined(CERNLIB_CDC)
+      DIMENSION INDEX(501)
+C
+      CALL OPENMS (1,INDEX,501,0)
+#endif
+#if defined(CERNLIB_IBM)
+C     DEFINE FILE 1(500,100,U,INDEX)
+      OPEN (UNIT=1,STATUS='NEW',ACCESS='DIRECT',RECL=2000)
+#endif
+#if defined(CERNLIB_UNIVAC)
+      DEFINE FILE 1(500,100,U,INDEX)
+#endif
+#if defined(CERNLIB_VAX)
+      DEFINE FILE 1(500,200,U,INDEX)
+#endif
+#if defined(CERNLIB_CRAY)||defined(CERNLIB_CONVEX)
+      OPEN (1,ACCESS='DIRECT',FORM='UNFORMATTED',RECL=4000)
+#endif
+#if defined(CERNLIB_APOLLO)||defined(CERNLIB_UNIX)
+      OPEN (1,STATUS='SCRATCH',ACCESS='DIRECT',RECL=400)
+#endif
+C
+C   INITIALISATION
+C
+      CALL ZINIT (Z,WS,1000)
+C
+      LUNIT  = 1
+      NREC   = 500
+      LREC   = 100
+C
+C
+      CALL ZDISK (Z,LUNIT,NREC,LREC)
+C
+C   BOOKING AND FILLING OF A BANK
+C
+      CALL ZBOOK (Z,ID1,10)
+      IF (ID1.EQ.0)                              GO TO 999
+C
+      CALL VFILL (Z(ID1+1),10,999.)
+C
+C   WRITE THE BANK ON DISK
+C
+      KEY    = 1
+      CALL ZWRITE (Z,ID1,LUNIT,KEY)
+C
+C   DROP IT
+C
+      CALL ZDROP (Z,ID1)
+C
+C   READ IN MEMORY THE BANK PREVIOUSLY WRITTEN ON DISK
+C
+      CALL ZREAD (Z,ID3,LUNIT,KEY)
+C
+C   PRINT IT
+C
+      CALL ZPRINT (Z,ID3,12HOLD ID: ID1$,1HF,2,8)
+C
+      CALL ZCLOSE(Z,LUNIT)
+C
+  999 RETURN
+      END

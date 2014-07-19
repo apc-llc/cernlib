@@ -1,0 +1,6 @@
+SRCS_F=	 cdbank.F cdkeyr.F cdkeyt.F cdkytg.F cdlddi.F cdldic.F \ @@\
+	cdldup.F cdopts.F cdpars.F cdpath.F cdprky.F cdprnt.F cdropn.F \ @@\
+	cdrzin.F cdsblc.F cdsopn.F cdtopn.F cduvtx.F cdvers.F cdwtop.F \ @@\
+	icdtyp.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

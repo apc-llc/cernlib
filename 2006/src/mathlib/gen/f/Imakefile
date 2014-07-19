@@ -1,0 +1,34 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F=	bakvec.F balanc.F balbak.F bisect.F cbabk2.F cbal.F cinvit.F \ @@\
+	combak.F comhes.F comlr.F comlr2.F dircos.F eiscg1.F eiscg2.F \ @@\
+	eisch1.F eisch2.F eisch3.F eisch4.F eisrg1.F eisrg2.F eisrs1.F \ @@\
+	eisrs2.F eisrs3.F eisrs4.F eisst1.F eisst2.F eisst3.F eisst4.F \ @@\
+	elmbak.F elmhes.F eltran.F figi.F figi2.F gather.F hqr.F hqr2.F \ @@\
+	htribk.F htridi.F imtql1.F imtql2.F invit.F mxdipr.F ortbak.F \ @@\
+	orthes.F ortran.F polrot.F ratqr.F rlhoin.F tinvit.F tql1.F \ @@\
+	tql2.F trbak1.F tred1.F tred2.F tsturm.F \ @@\
+	
+
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) ilsum.F lihoin64.F scatter.F \ @@\
+	wheneq.F whenfge.F whenfgt.F whenfle.F whenflt.F whenige.F \ @@\
+	whenigt.F whenile.F whenilt.F whenne.F
+#else
+SRCS_F:= $(SRCS_F) lihoin128.F 
+#endif
+
+#if defined(CERNLIB_UNIX) || defined(CERNLIB_VAX)
+SRCS_F:= $(SRCS_F) iilz.F 
+#endif
+
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

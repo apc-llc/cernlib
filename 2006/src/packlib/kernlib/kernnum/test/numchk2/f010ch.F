@@ -1,0 +1,93 @@
+*
+* $Id: f010ch.F,v 1.1.1.1 1996/02/15 17:48:42 mclareni Exp $
+*
+* $Log: f010ch.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:42  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+      SUBROUTINE F010CH(NREP,NMAX,KMAX,A,AREF,B,BREF,W,R,OKPK)
+      LOGICAL OKPK,OK
+      DIMENSION A(2),AREF(2),B(2),BREF(2),W(2),R(2)
+      DIMENSION EPS(3),RATMAX(3),MRATIO(3)
+      EXTERNAL REQN,RINV,REQINV,DEQN,DINV,DEQINV,CEQN,CINV,CEQINV
+      EXTERNAL RVCPY,RVDIST,DVCPY,DVDIST,CVCPY,CVDIST
+#include "kernnumt/sysdat.inc"
+      REAL             RR(6), RD(6), RC(6)
+      DOUBLE PRECISION DR(3)
+      COMPLEX          CR(3)
+      EQUIVALENCE (RD(1),DR(1)), (RC(1),CR(1))
+      DATA RR / 3.333E20, 0,     4.444E20, 0,    5.555E20, 0 /
+      DATA DR / 3.333D20,        4.444D20,       5.555D20   /
+      DATA CR / (3.333E20,3.33),(4.444E20,4.44),(5.555E20,5.55)/
+      DATA MRATIO/20,50,20/
+C
+C  TEST-ROUTINE FOR F010 ($EQN, $INV, $EQINV, WHERE $=R,D,C.)
+C
+C  THE NUMBER OF ELEMENTS IN THE ARRAYS SHOULD NOT BE LESS THAN
+C     A,AREF   ... 2*(NMAX**2)
+C     B,BREF   ... 2*NMAX*KMAX
+C     W        ... 2*NMAX
+C     R        ... NMAX
+C
+C  CALLS ... ALL SUBROUTINES IN LIBRARY PACKAGE F010.
+C        ... CERN PACKAGES F002 AND F003.
+C        ... TEST-ROUTINES F010MG, F010$, F010M$ ($=R,D,C).
+C        ... RVDIST, DVDIST, CVDIST (CHECK3)
+C
+C  START.
+      OKPK=.FALSE.
+      IF(NREP.LE.0) RETURN
+      IDIM=NMAX
+      KMIN=0
+      EPS(1)=RELPRT(1)
+      EPS(2)=RELPRT(2)
+      EPS(3)=RELPRT(1)
+      ITEST=0
+      IFAIL=0
+      RATMAX(1)=0.
+      RATMAX(2)=0.
+      RATMAX(3)=0.
+      DO 4 JREP=1,NREP
+         DO 3 N=1,NMAX
+            DO 2 K=KMIN,KMAX
+               DO 1 ITYPE=1,3
+                  IF(ITYPE.EQ.1)
+     *              CALL F010R(N,K,KMAX,IDIM,A,AREF,B,BREF,W,R,RESID)
+                  IF(ITYPE.EQ.2)
+     *              CALL F010D(N,K,KMAX,IDIM,A,AREF,B,BREF,W,R,RESID)
+                  IF(ITYPE.EQ.3)
+     *              CALL F010C(N,K,KMAX,IDIM,A,AREF,B,BREF,W,R,RESID)
+                  RATIO=RESID/EPS(ITYPE)
+                  IF(RATIO.GE.FLOAT(MRATIO(ITYPE))) IFAIL=IFAIL+1
+                  ITEST=ITEST+1
+                  RATMAX(ITYPE)=AMAX1(RATMAX(ITYPE),RATIO)
+    1          CONTINUE
+    2       CONTINUE
+    3    CONTINUE
+    4 CONTINUE
+      OKPK=IFAIL.EQ.0
+      IF(.NOT.OKPK) WRITE(*,2000) IFAIL,ITEST,(RATMAX(I),I=1,3)
+#if !defined(CERNLIB_NUMDE)
+      IF(      ERPRNT .AND.       ERSTOP) WRITE(*,1001)
+      IF(      ERPRNT .AND. .NOT. ERSTOP) WRITE(*,1002)
+      IF(.NOT. ERPRNT .AND.       ERSTOP) WRITE(*,1003)
+      CALL F010MG(A,R,B,OK,REQN,RINV,REQINV,RVCPY,RVDIST,RR)
+      OKPK  =  OKPK.AND.OK
+      CALL F010MG(A,R,B,OK,DEQN,DINV,DEQINV,DVCPY,DVDIST,RD)
+      OKPK  =  OKPK.AND.OK
+      CALL F010MG(A,R,B,OK,CEQN,CINV,CEQINV,CVCPY,CVDIST,RC)
+      OKPK  =  OKPK.AND.OK
+#endif
+      RETURN
+#if !defined(CERNLIB_NUMDE)
+ 1001 FORMAT(/'  39 ERROR AND ABEND MESSAGES SHOULD NOW FOLLOW ...')
+ 1002 FORMAT(/'  39 ERROR MESSAGES SHOULD NOW FOLLOW ...')
+ 1003 FORMAT(/'  39 ABEND MESSAGES SHOULD NOW FOLLOW ...')
+#endif
+ 2000 FORMAT( // 18H ***** F010CH ... , I4, 13H FAILURES IN , 1P,
+     *        I4, 8H  TESTS.
+     *        / 5X, 14HRESMAX/RELPR =, E9.1, 5H (R),, E9.1, 5H (D),,
+     *        E9.1, 5H (C). )
+      END

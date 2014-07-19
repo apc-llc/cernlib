@@ -1,0 +1,179 @@
+*
+* $Id: gibmup1.dat,v 1.1.1.1 1996/02/15 17:52:59 mclareni Exp $
+*
+* $Log: gibmup1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:59  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIBM)
+
+          UP-DATE RECORD FOR GENIBM VERSIONS 1.01 TO 1.99
+          -----------------------------------------------
+
+
+          FIRST RELEASE OF THE GENIBM MINI-PAM :   1-NOV-76
+
+---------------------------------------------------------------------
+
+UPDATE  1.02 :   26-FEB-78
+--------------------------
+
+Replacing file  GENIBM 1.01  761110 18.20
+
+New patches :   P= *GIBM370, IBM370
+
+New decks :     P=IBM360,  D=RANNOR, RNDM, UBITS
+
+Corrections :   P=IBM360,  D=IUBIN   GUARD AGAINST VERY LARGE OVERFLOWS
+                           D=IUCHAN  AVOID MACRO 'REGISTER'
+                           D=UCOPY2  BUG FIXED
+                           D=UCOPYN  HANDLE INTEGERS, NOT FLOATING
+
+---------------------------------------------------------------------
+
+UPDATE  1.03 :  15-JULY-78
+--------------------------
+
+Replacing file  GENIBM 1.02  780226 12.10
+
+New patches :   P= IBMOBSOL            OBSOLETE GENSEC ROUTINES
+                                       AFROMI, IOFPAR, MXADD, MXDMA, MXDMAL
+
+New decks :     P=IBM360,  D=TIMEX
+
+Corrections :   P=*GIBM, *GIBM370      ADD   +USE, XVECT.
+
+                P=IBM370,  D=UCOPY370  SYMBOL 'UCOPY' WAS DOUBLE DEFINED
+                           D=UZERO370  SYMBOL 'UZERO' WAS DOUBLE DEFINED
+
+                P=IBM360,  D=AFROMI, ..., RANNOR, SORTZV   Deleted
+                           D=INCBYT    BUG FIXED
+
+---------------------------------------------------------------------
+
+UPDATE  1.04 :  18-DEC-78
+-------------------------
+
+Replacing file  GENIBM 1.03  780714 19.36
+
+New patches :   P= XVECTIBM            IBM VERSION OF XIN - ROUTINES
+
+New decks :     P=IBM370,  D=TIMEX     TAKEN OUT OF IBM360
+
+                P=IBM360,  D=GSHOW     PRINTS GENSEC VERSION USED
+
+                           D=XSETIO    RECOVERY OF 'LIST EXCEEDS DATA'
+
+Corrections :   P=*GIBM, *GIBM370      ADD   +USE, XVECTIBM
+
+---------------------------------------------------------------------
+
+UPDATE  1.05 :   5-FEB-79
+-------------------------
+
+Replacing file  GENIBM 1.04  781218 21.42
+
+Corrections :   P=IBM360, D=IUBIN,IUCHAN     BRING ROUNDING BY EPSILON
+
+---------------------------------------------------------------------
+
+UPDATE  1.06 :  18-MAY-79
+-------------------------
+
+Replacing file  GENIBM 1.05  790205 21.24
+
+Corrections :   P=XVECTIBM                 DELETE LOGIC CHANGED
+
+New decks :     P=XVECTIBM, D=XINBML       ML VERSIONS OF XINB, XINBS
+                            D=XINBSML      TO SOLVE THE LENGTH PROBLEM
+
+---------------------------------------------------------------------
+
+UPDATE  1.07 :  30-MAY-79
+-------------------------
+
+Replacing file  GENIBM 1.06  790518 12.56
+
+Corrections :   P=XVECTIBM, D=XINBML       FORMAL CHANGE TO AVOID
+                            D=XINBSML      PROBLEMS WITH PRELIB
+                P=IBM360,   D=REENT
+
+---------------------------------------------------------------------
+
+UPDATE  1.08 :  27-MAY-80
+-------------------------
+
+Replacing file  GENIBM 1.07  790530 22.33
+
+Corrections :   P=*GIBM + *GIBM370     INHIBIT USE OF D=ACOS IN P=TCGEN
+
+New decks :     P=IBM360   D=FREQ      ROUTINE ERF WITH ENTRIES ERF/ERFC REMOVED
+
+---------------------------------------------------------------------
+
+UPDATE  1.09 :  19-JAN-82
+-------------------------
+
+Replacing file  GENIBM 1.08  800527 12.23
+
+New decks :     P=IBM370, D=VZERO370    VZERO TAKEN OUT FROM UZERO
+                P=IBM360, D=ERF         TO DELETE FORTRAN ERF
+                   D=UZERO,VZERO        SEPARATED FROM UFILL,VFILL
+                   D=FLOARG,INTARG      NEW ROUTINES FOR KERNLIB
+
+Deleted :       P=IBM360, D=FREQ        FORTRAN FREQ CAN NOW BE USED
+
+Corrections :   P=*GIBM370              +USE,QMIBM ADDED
+                P=XVECTIBM, D=XINCF     REMOVE TAGS
+                P=IBM370, D=UZERO370    ENTRIES VZERO/VBLANK REMOVED
+                P=IBM360, D=IUBACK,IULOOK,ULEFT   HANDLING OF /SLATE/
+                   D=LOCF               ENTRY XLOC REMOVED
+                   D=MATIN1             NEW VERSION
+                   D=RNDM               NEW VERSION
+                   D=UBITS              ENTRY TUBITS REMOVED
+                   D=UFILL,VFILL        ENTRIES UZERO,VZERO REMOVED
+
+GETTING READY FOR KERNLIB
+---------------------------------------------------------------------
+
+UPDATE  1.10 :   1-FEB-82
+-------------------------
+
+Replacing file  GENIBM 1.09  820120 10.44
+
+TRANSLATE BY PROGRAM FOR KERNLIB
+
+---------------------------------------------------------------------
+
+UPDATE  1.11 :  28-MAR-82
+-------------------------
+
+Replacing file  GENIBM 1.10  820201 21.10
+
+New patches :   *KI...    KERN IBM PILOTS
+
+New deck :      D=XOUTCF, P=XVECTIBM
+
+Correction :    D=XINCF,  P=XVECTIBM     FORMAT FOR LONG RECORDS
+
+NEW ORDINARY KERNLIB ROUTINES :   BLOW, BUNCH
+
+NEW SYSTEM ROUTINES FOR KERNLIB : ABEND, ABUSER, LINEPG, FIO999,
+                                  GOPARM, JOBNAM, NOARG
+
+---------------------------------------------------------------------
+
+UPDATE  1.12 :  29-MAR-82
+-------------------------
+
+Replacing file  GENIBM 1.11  820328 18.40
+
+TIDY UP COMMENTS AND PILOTS FOR KERNLIB
+
+---------------------------------------------------------------------
+
+              KERNIBM 2.00  =  GENIBM 1.12
+
+---------------------------------------------------------------------
+#endif

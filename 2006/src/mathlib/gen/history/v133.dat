@@ -1,0 +1,74 @@
+*
+* $Id: v133.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v133.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+* Version 1.33
+C  Global changes:
+C  ----------------
+C- introduce GEFLAGS patch, SINGLE, DOUBLE flags
+C- Remove variables which are not used (flagged by C*NS)
+C
+C- Routine changes:
+C  ----------------
+C  B100 BINOM    Add deck name
+C  C200 ZEROX    New
+C  C201 SNLEQ    Declare EXTERNAL SUB,FCN
+C  C203 NZEROS   NZEROS: remove S      (not used)
+C  C207 RTEQ3    Do not use REAL*16 on UNIX
+C  C208 RTEQ4    Do not use REAL*16 on UNIX
+C  C306 GAMMA    WGAMMA: remove W,D    (not used)
+C  C307 DIGAM    WDIGAM: remove W,D    (not used)
+C  C311 LEGFN    TRDZ  : remove CLOGOK (not used)
+C  C320 CELFUN   CELFUN: remove K      (not used)
+C  C321 CGPLG    Define WGPLG as COMPLEX*16 for non-IBM machines
+C  C331 FCONC    Add deck name
+C  C333 CLOGAM   WLOGAM: remove W,D    (not used)
+C  C334 GAPNC    New
+C  C338 CEXPIN   New
+C  C340 BSIR3    Code revised+ bug fixed
+C  C400 NEWTON   Obsolete routine deleted from source and binary
+C  D104 CAUCHY   D104F1: declare EXTERNAL F
+C  D105 TRINT    declare EXTERNAL F
+C  D110 RGMLT    Add deck name, declare EXTERNAL FSUBn
+C                Correct bug in xGMLT2-6 getting "FSUB1" instead
+                 of FSUBn as external routine name.
+C  D111 GPINDP   Remove THREE,RANDER,ERROR (not used)
+                 declare EXTERNAL FUNC
+C  D113 CGAUSS   CGAUSS, WGAUSS: declare EXTERNAL F
+C  D114 RIWIAD   RIWIAD: remove XLOC   (not used)
+C  D115 CHEBQU   declare external FUNC
+C  D151 DIVON4   INTGRL: remove INTPNT (not used)
+C                SPLIT : remove SUM,DEVMAX,DFLOAT (not used)
+C                RECPAR: remove COORD  (not used)
+C                NMDCHL: remove IQ     (not used)
+C                FEASMV: remove DABS   (not used)
+C  D201 DEQBS    Add deck name, declare EXTERNAL SUB
+C  D202 DEQMR    Add deck name, declare EXTERNAL SUB
+C  D401 DERIV    Add deck name, declare EXTERNAL F
+C  D508 LINSQ    Add deck name
+C  D510 FUMILI   Put back COMMON/DF/
+C  D600 FRED1    declare EXTERNAL F,G,H in FREDn
+C  E211 RCSPLN   New
+C  E221 CHEB     Set BIG=10**37 for SUN
+C  E406 DCHECF   declare EXTERNAL F
+C  E410 CPSC     declare EXTERNAL F
+C  F220 INVIT    Set trailing DIMENSION of RM3 to *
+C  F500 LIHOIN   Set trailing DIMENSIONs to *
+C  G106 GAMDIS   Revised
+C  H100 SIMPLE   FINDPC: remove QQ,MAXD(not used)
+C  I303 RDWORD   RDWORD: remove RDENDB (not used)
+C                RDIGI : remove CHAR   (not used)
+C                RALPH : remove CHAR   (not used)
+C                RDINT : remove XXXXXX,RALPH (not used)
+C                RDMANT: remove RDIGI ,RALPH (not used)
+C  M214 CVTVAX   Optimized version introduced
+C  U100 CLEBS    CLEBS : remove L1,L2,IL,LR1 (not used)
+C  U501 DJMNB    Add deck name
+C  V107 RNDM2    Provide general UNIX version (original from ALLIANT)
+C  V401 GRAPH    Initialize IFILWD as -1 for UNIX
+C  W601 MLR      Obsolete routine deleted from source and binary
+C

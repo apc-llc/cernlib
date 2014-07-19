@@ -1,0 +1,10 @@
+SRCS_F=	 ipdef.F ipdlin.F ipdraw.F ipend.F ipfon.F ipfout.F \ @@\
+	ipinit.F ipiout.F ipjout.F ipltyp.F iplwid.F ipmark.F ipmove.F \ @@\
+	ipdpat.F ippstr.F iprng.F ipscol.F ipspec.F ipsvrt.F iptext.F \ @@\
+	iptlin.F iptmac.F ipttex.F ipzone.F ipkout.F
+
+#ifdef CERNLIB_QMVAOS
+SpecialFortranLibObjectRule(iptext,iptext,FortranNoSaveFlags,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

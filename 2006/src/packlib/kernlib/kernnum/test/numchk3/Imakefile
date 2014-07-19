@@ -1,0 +1,6 @@
+SRCS_F= \ @@\
+	 check3.F e106ch.F f002ch.F f003ch.F f004ch.F f011ch.F f012ch.F \ @@\
+	 g900ch.F g901ch.F n001ch.F nrdist.F taadd.F tadiv.F tamul.F \ @@\
+	 tamula.F tamuna.F tasca.F tascl.F tascs.F tasub.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

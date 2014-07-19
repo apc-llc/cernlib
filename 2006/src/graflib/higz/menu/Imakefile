@@ -1,0 +1,4 @@
+SRCS_F=	 igcmp.F igdelm.F igdime.F iggch.F iggdef.F ighigh.F \ @@\
+	igmenu.F igsmp.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

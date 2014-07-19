@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:47 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:47  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSUN)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNSUN
+              ----------------------------------------
+
+
+UP-DATE  1.11:   28-Sep-1995
+----------------------------
+
+Replacing File   KERNSUN  1.10  950124 19.06
+
+Deleted:      dummy TRACEQ              use from KERNFOR
+
+---------------------------------------------------------------------
+
+#endif

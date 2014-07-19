@@ -1,0 +1,26 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:14 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:14  mclareni
+* Kernlib
+*
+*
+*               for PDP 10/20
+* This directory was created from kernfor.car patch qmpdp
+#ifndef CERNLIB_B36
+#define CERNLIB_B36
+#endif
+#ifndef CERNLIB_B36M
+#define CERNLIB_B36M
+#endif
+#ifndef CERNLIB_A5
+#define CERNLIB_A5
+#endif
+#ifndef CERNLIB_A5M
+#define CERNLIB_A5M
+#endif
+*               ISA standard routines, ISHFT, IOR, etc
+#ifndef CERNLIB_QISASTD
+#define CERNLIB_QISASTD
+#endif

@@ -1,0 +1,91 @@
+*
+* $Id: patchy_flags,v 1.1.1.1 1996/03/08 12:01:16 mclareni Exp $
+*
+* $Log: patchy_flags,v $
+* Revision 1.1.1.1  1996/03/08 12:01:16  mclareni
+* Zbook
+*
+*
+*  Flags  patch
+* This directory was created from zbook.car patch fzbook
+#if defined(CERNLIB_IBMAIX)
+#ifndef CERNLIB_AIX370
+#define CERNLIB_AIX370
+#endif
+#endif
+#if defined(CERNLIB_IBMMVS)||defined(CERNLIB_IBMVM)
+#ifndef CERNLIB_IBM
+#define CERNLIB_IBM
+#endif
+#endif
+#if defined(CERNLIB_ALLIANT)||defined(CERNLIB_APOLLO)||defined(CERNLIB_CONVEX)||defined(CERNLIB_IBMAIX)||defined(CERNLIB_NECSX)||defined(CERNLIB_UNISYS)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_DECS)||defined(CERNLIB_HPUX)||defined(CERNLIB_IBMRT)||defined(CERNLIB_SGI)||defined(CERNLIB_SUN)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_AMIGAUX)||defined(CERNLIB_CDCUX)||defined(CERNLIB_GOULD)||defined(CERNLIB_IPSC)||defined(CERNLIB_MACMPW)||defined(CERNLIB_MACAUX)||defined(CERNLIB_MIPS)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_MSDOS)||defined(CERNLIB_IBMUX)||defined(CERNLIB_LINUX)||defined(CERNLIB_NEXT)
+#ifndef CERNLIB_UNIX
+#define CERNLIB_UNIX
+#endif
+#endif
+#if defined(CERNLIB_VAXVMS)||defined(CERNLIB_VAXULX)
+#ifndef CERNLIB_VAX
+#define CERNLIB_VAX
+#endif
+#endif
+#if defined(CERNLIB_CDC)||defined(CERNLIB_CRAY)
+#ifndef CERNLIB_SINGLE
+#define CERNLIB_SINGLE
+#endif
+#endif
+#if defined(CERNLIB_IBM)||defined(CERNLIB_VAX)||defined(CERNLIB_NORD)
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+#endif
+#if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_SINGLE))
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+#endif
+#if defined(CERNLIB_IBM)
+#ifndef CERNLIB_QMIBMXA
+#define CERNLIB_QMIBMXA
+#endif
+#endif
+#if defined(CERNLIB_ND100B16)||defined(CERNLIB_ND100B32)||defined(CERNLIB_ND50)||defined(CERNLIB_ND500)||defined(CERNLIB_NORD50)||defined(CERNLIB_NORD500)
+#ifndef CERNLIB_NORD
+#define CERNLIB_NORD
+#endif
+#endif
+#if defined(CERNLIB_PR1ME)
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+#endif
+#if defined(CERNLIB_APOLLO)
+#ifndef CERNLIB_QXNO_SC
+#define CERNLIB_QXNO_SC
+#endif
+#endif
+#if defined(CERNLIB_CRAY)
+#ifndef CERNLIB_QXCAPT
+#define CERNLIB_QXCAPT
+#endif
+#endif
+*   SUN,SGI,DEC,CVX,IRS,HPX,IBX
+#if (!defined(CERNLIB_QXNO_SC))&&(!defined(CERNLIB_QXCAPT))
+#ifndef CERNLIB_QX_SC
+#define CERNLIB_QX_SC
+#endif
+#endif

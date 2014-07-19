@@ -1,0 +1,31 @@
+*
+* $Id: v222.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v222.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.22  900916 16.00
+C-  New patches/flags:
+C     SZBOOK:  Source patch
+C     FZBOOK:  Flags  patch
+C     DZBOOK:  Documentation patch (originally in P=HISTORY + P=INFORM)
+C              segmenting version updates in decks
+C
+C-  Reorganization of the pam structure
+C   > Rename P=TEST to P=TZBOOK.
+C   > Split  P=ZBOOK,D=ZJUMP into the different machine versions
+C   > Enable CONVEX version as CRAY
+C
+C-  Modifications
+C   > P=ZBOOK         . Create sequence WLENGTH for ZEPDEF,ZEPIN,ZEPOUT
+C   > P=ZBOOK,D=ZJUMP . Add C-version for UNIX
+C   > P=ZBOOK,D=ZTRAP . Use LOCB in UNIX version
+C   > P=ZBOOK,D=ZEPDEF. Use sequence WLENGTH
+C   > P=ZBOOK,D=ZEPIN . Use sequence WLENGTH
+C   > P=ZBOOK,D=ZEPOUT. Use sequence WLENGTH
+C   > P=ZBOOK,D=ZINIT . Add LOUT for UNIX
+C   > P=ZBOOK,D=ZIODO . Add READ/WRITE for UNIX
+C   > P=ZEXAM,D=ZEXAM7. Correct OPEN(UNIT=1) for IBM, add OPEN for UNIX
+C

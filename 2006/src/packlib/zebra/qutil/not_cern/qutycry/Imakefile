@@ -1,0 +1,4 @@
+SRCS_F=	 izbcd.F izbcdt.F izbcdv.F izchav.F izhnum.F zhtoi.F \ @@\
+	zitoh.F zrecapl.F zrecok.F zrecov.F zrecpr.F zsetrec.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

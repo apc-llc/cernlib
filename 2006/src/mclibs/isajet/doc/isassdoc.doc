@@ -1,0 +1,245 @@
+*
+* $Id: isassdoc.doc,v 1.2 1996/12/04 17:39:53 cernlib Exp $
+*
+* $Log: isassdoc.doc,v $
+* Revision 1.2  1996/12/04 17:39:53  cernlib
+* Version 7.22 from author
+*
+*
+* This directory was created from /afs/cern.ch/user/m/mclareni/isajet/isajet.car patch isassdoc
+                             ISASUSY 7.21
+            Decay Modes in the Minimal Supersymmetric Model
+                                   
+                              Howard Baer
+                       Florida State University
+                         Talahassee, FL 32306
+                                   
+                            Frank E. Paige
+                    Brookhaven National Laboratory
+                            Upton, NY 11973
+                                   
+                           S.D. Protopopescu
+                    Brookhaven National Laboratory
+                            Upton, NY 11973
+
+                              Xerxes Tata
+                         University of Hawaii
+                          Honolulu, HI 96822
+
+
+
+      The code in patch ISASUSY of ISAJET calculates decay modes of
+supersymmetric particles based on the work of H. Baer, M. Bisset, D.
+Dzialo (Karatas), X. Tata, J. Woodside, and their collaborators. The
+calculations assume the minimal supersymmetric extension of the
+standard model.  Supersymmetric grand unification is assumed by
+default in the chargino and neutralino mass matrices, although the
+user can override this by specifying arbitrary U(1) and SU(2) gaugino
+masses at the weak scale. The squark, left and right slepton and
+sneutrino masses are treated as arbitrary.  Soft breaking masses are
+input for the 3rd generation; mass eigenstates are computed from
+these.  Most calculations are done at the tree level, but one-loop
+results for gluino loop decays, H -> GM GM and H -> GL GL, loop
+corrections to the Higgs mass spectrum and couplings, and QCD
+corrections to H -> q qbar are included. The Higgs masses have been
+calculated using the effective potential approximation including both
+top and bottom Yukawa and mixing effects.  Mike Bisset and Xerxes Tata
+have contributed the Higgs mass, couplings, and decay routines. Note
+that e+e- annihilation to SUSY particles and SUSY Higgs bosons have
+been included in ISAJET versions >7.11. The following are NOT included
+in this version:
+
+    * WH and ZH Higgs production mechanisms in hadronic collisions
+
+    * Large tan(beta) solution (tan(beta)<=10 should be chosen)
+
+    * Non-degenerate 1st and 2nd generation sfermions
+
+These and other processes may be added in future versions as the physics
+interest warrants. Note that the details of the masses and the decay
+modes can be quite sensitive to choices of standard model parameters
+such as the QCD coupling ALFA3 and the quark masses.  To change these,
+you must modify subroutine SSMSSM. By default, ALFA3=.12.
+
+      All the mass spectrum and branching ratio calculations in ISASUSY
+are performed by the call to
+
+      SUBROUTINE SSMSSM(XM1,XM2,XMG,XMS,XMTL,XMTR,XMLL,XMLR,XMNL
+     $,XTANB,XMHA,XMU,XMT,XAT,XMBR,XAB,IALLOW)
+
+where the following are taken to be independent parameters:
+
+      XM1    = U(1) gaugino mass
+             = computed from XMG if > 1E19
+      XM2    = SU(2) gaugino mass
+             = computed from XMG if > 1E19
+      XMG    = gluino mass
+      XMS    = common u,d,s,c squark mass
+      XMTL   = left soft breaking stop mass 
+      XMTR   = right soft breaking stop mass
+      XMBR   = right soft breaking sbottom mass
+      XMLL   = left slepton mass
+      XMLR   = right slepton mass
+      XMNL   = sneutrino mass
+      XTANB  = tan(beta) = ratio of vev's
+             = 1/R (of old Baer-Tata notation).
+      XMU    = mu = SUSY Higgs mass
+             = -2*m_1 of Baer et al.
+      XMHA   = pseudo-scalar Higgs mass
+      XMT    = top quark mass
+      XAT    = stop squark trilinear term
+      XAB    = sbottom squark trilinear term
+
+The variable IALLOW is returned:
+
+      IALLOW = 1 if Z1SS is not LSP, 0 otherwise
+
+All variables are of type REAL except IALLOW, which is INTEGER, and all
+masses are in GeV. The notation is taken to correspond to that of Haber
+and Kane, although the Tata Lagrangian is used internally. All other
+standard model parameters are hard wired in this subroutine; they are
+not obtained from the rest of ISAJET. The theoretically favored range of
+these parameters is
+
+      50 < M(gluino) < 2000 GeV
+      50 < M(squark) < 2000 GeV
+      50 < M(slepton) < 2000 GeV
+      -1000 < mu < 1000 GeV
+      1 < tan(beta) < mt/mb
+      100 < M(top) < 200 GeV
+      50 < M(HA) < 1000 GeV
+      M(t_l), M(t_r) < M(squark)
+      M(b_r) ~ M(squark)
+      -1000 < A_t < 1000 GeV
+      -1000 < A_b < 1000 GeV
+
+It is assumed that the lightest supersymmetric particle is the lightest
+neutralino Z1. Some choices of the above parameters may violate this
+assumption, yielding a light chargino or light stop squark lighter than
+Z1SS. In such cases SSMSSM does not compute any branching ratios and
+returns IALLOW = 1.
+
+      SSMSSM does not check the parameters or resulting masses against
+existing experimental data. SSTEST provides a minimal test. This routine
+is called after SSMSSM by ISAJET and ISASUSY and prints suitable warning
+messages.
+
+      SSMSSM first calculates the other SUSY masses and mixings and puts
+them in the common block /SSPAR/:
+
+#include "sspar.inc"
+
+It then calculates the widths and branching ratios and puts them in the
+common block /SSMODE/:
+
+#include "ssmode.inc"
+
+Decay modes for a given particle are not necessarily adjacent in this
+common block.  Note that the branching ratio calculations use the full
+matrix elements, which in general will give nonuniform distributions in
+phase space, but this information is not saved in /SSMODE/.  In
+particular, the decays H -> Z + Z* -> Z + f + fbar give no indication
+that the f + fbar mass is strongly peaked near the upper limit.
+
+      All IDENT codes are defined by parameter statements in the PATCHY
+keep sequence SSTYPE:
+
+#include "sstype.inc"
+
+These are based on standard ISAJET but can be changed to interface with
+other generators.  Since masses except the t mass are hard wired, one
+should check the kinematics for any decay before using it with possibly
+different masses.
+
+      Instead of specifying all the SUSY parameters at the electroweak
+scale using the MSSMi commands, one can instead use the SUGRA parameter
+to specify in the minimal supergravity framework the common scalar mass
+M_0, the common gaugino mass M_(1/2), and the soft trilinear SUSY
+breaking parameter A_0 at the GUT scale, the ratio tan(beta) of Higgs
+vacuum expectation values at the electroweak scale, and sign(mu), the
+sign of the Higgsino mass term.  The renormalization group equations are
+solved iteratively using Runge-Kutta numerical integration, as follows:
+
+      (1) The RGE's are run from the weak scale M_Z up to the GUT scale,
+      where alpha_1 = alpha_2, taking all thresholds into account. We use
+      two loop RGE equations for the gauge couplings only.
+
+      (2) The GUT scale boundary conditions are imposed, and the RGE's
+      are run back to M_Z, again taking thresholds into account.
+
+      (3) The masses of the SUSY particles and the values of the soft 
+      breaking parameters B and mu needed for radiative symmetry are
+      computed, e.g.
+           mu**2(M_Z) = (M_H1**2 - M_H2**2 * tan**2(beta)) 
+                        /(tan**2(beta)-1) - M_Z**2/2
+
+      (4) The 1-loop radiative corrections are computed.
+
+      (5) The process is then interated until stable results are
+      obtained.
+
+This is essentially identical to the procedure used by several other
+groups. Other possible constraints such as b-tau unification and limits
+on proton decay have not been included.
+
+      Patch ISASSRUN of ISAJET provides a main program SSRUN and some
+utility programs to produce human readable output.  These utilities must
+be rewritten if the IDENT codes in /SSTYPE/ are modified.  To create the
+stand-alone version of ISASUSY with SSRUN, run YPATCHY on isajet.pam
+with the following cradle:
+
+\+USE,*ISASUSY.                         Select all code
+\+USE,NOCERN.                           No CERN Library
+\+USE,IMPNONE.                          Use IMPLICIT NONE
+\+EXE.                                  Write everything to ASM
+\+PAM.                                  Read PAM file
+\+QUIT.                                 Quit
+
+Compile, link, and run the resulting program, and follow the prompts for
+input.  Patch ISASSRUN also contains a main program SUGRUN that reads
+the SUGRA parameters, solves the renormalization group equations, and
+calculates the masses and branching ratios.  To create the stand-alone
+version of ISASUGRA, run YPATCHY with the following cradle:
+
+\+USE,*ISASUGRA.                        Select all code
+\+USE,NOCERN.                           No CERN Library
+\+USE,IMPNONE.                          Use IMPLICIT NONE
+\+EXE.                                  Write everything to ASM
+\+PAM.                                  Read PAM file
+\+QUIT.                                 Quit
+
+To produce the documentation, run YPATCHY with the following cradle:
+
+\+USE,CDESUSY,ISASSDOC
+\+EXE
+\+PAM
+\+QUIT
+
+This documentation is automatically appended to that for ISAJET.
+
+      ISASUSY is written in ANSI standard Fortran 77 except that
+IMPLICIT NONE is used if +USE,IMPNONE is selected in the Patchy cradle. 
+All variables are explicitly typed, and variables starting with
+I,J,K,L,M,N are not necessarily integers.  All external names such as
+the names of subroutines and common blocks start with the letters SS. 
+Most calculations are done in double precision.  If +USE,NOCERN is
+selected in the Patchy cradle, then the Cernlib routines EISRS1 and its
+auxiliaries to calculate the eigenvalues of a real symmetric matrix and
+DDILOG to calculate the dilogarithm function are included.  Hence it is
+not necessary to link with Cernlib.
+
+      The physics assumptions and details of incorporating the Minimal
+Supersymmetric Model into ISAJET have appeared in a conference
+proceedings entitled
+
+      H. Baer, F. Paige, S. Protopopescu and X. Tata,
+      "Simulating Supersymmetry with ISAJET 7.0/ISASUSY 1.0", 
+      
+which has appeared in the proceedings of the workshop on "Physics at
+Current Accelerators and Supercolliders", ed. J. Hewett, A. White and
+D. Zeppenfeld, (Argonne National Laboratory, 1993). Detailed
+references may be found therein. Users wishing to cite an appropriate
+source may cite the above report.
+
+
+

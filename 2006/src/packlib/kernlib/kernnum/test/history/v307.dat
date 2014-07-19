@@ -1,0 +1,13 @@
+*
+* $Id: v307.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v307.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.07  910815 16.00
+C-  Refresh P=FKERNNUM with new machines
+C
+C-  Declare GAMMA,DGAMMA intrinsic functions on IBM RISC 6000
+C

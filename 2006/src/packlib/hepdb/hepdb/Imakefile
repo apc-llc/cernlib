@@ -1,0 +1,15 @@
+INCLUDES= caopti.inc caopts.inc cbconc.inc cbsrvr.inc cbsrvrn.inc \ @@\
+	ccdisp.inc cdcblk.inc cdcdes.inc cdfold.inc cdilun.inc \ @@\
+	cdkeys.inc cdlscm.inc cdlufm.inc cdlupc.inc cdnamc.inc \ @@\
+	cdoccm.inc cdopen.inc cdrnge.inc cdtime.inc cdulnk.inc \ @@\
+	cdunit.inc cduscm.inc cdwacm.inc cfzlun.inc cinitl.inc \ @@\
+	ckkeys.inc clinks.inc cmulop.inc cplots.inc crccom.inc \ @@\
+	csavbk.inc ctkxin.inc ctmpak.inc ctpath.inc cuserf.inc \ @@\
+	cviews.inc cxlink.inc czpack.inc doc.inc dxused.inc fzstat.inc \ @@\
+	hdbkeys.inc hdblun.inc hdbopt.inc hdbopta.inc hdboptc.inc \ @@\
+	hdboptd.inc hdbopts.inc hdbpara.inc hdbpha.inc l3bits.inc \ @@\
+	l3bitx.inc l3cores.inc nwpaw.inc p3dbl3.inc qftitlch.inc \ @@\
+	quest.inc slate.inc pilot.h \@@\
+	caopti.doc caopts.doc cbsrvr.doc cdcblk.doc
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),hepdb)

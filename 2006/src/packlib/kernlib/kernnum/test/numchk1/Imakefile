@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 check1.F e100ch.F e104ch.F e105ch.F e208ch.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

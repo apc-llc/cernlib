@@ -1,0 +1,44 @@
+*
+* $Id: fmlnc.F,v 1.1.1.1 1996/03/07 15:17:44 mclareni Exp $
+*
+* $Log: fmlnc.F,v $
+* Revision 1.1.1.1  1996/03/07 15:17:44  mclareni
+* Fatmen
+*
+*
+#include "fatmen/pilot.h"
+      SUBROUTINE FMLNC
+ 
+      CHARACTER*255 CHSRCE,CHTRGT,CHTEMP
+      CHARACTER*80  CHCOMM
+      CHARACTER*8   CHOPT
+ 
+      DIMENSION     IVECT(10)
+      EQUIVALENCE   (IVECT(1),IW1),(IVECT(2),IW2),(IVECT(3),IW3),
+     +              (IVECT(4),IW4),(IVECT(5),IW5),(IVECT(6),IW6),
+     +              (IVECT(7),IW7),(IVECT(8),IW8),(IVECT(9),IW9),
+     +              (IVECT(10),IW10)
+ 
+      CALL KUGETC(CHTEMP,LSRCE)
+      CALL FMFIXF(CHTEMP,CHSRCE)
+      LSRCE = LENOCC(CHSRCE)
+      CALL KUGETC(CHTEMP,LTRGT)
+      CALL FMFIXF(CHTEMP,CHTRGT)
+      LTRGT = LENOCC(CHTRGT)
+      CALL KUGETC(CHCOMM,LCOMM)
+      CALL KUGETI(IW1)
+      CALL KUGETI(IW2)
+      CALL KUGETI(IW3)
+      CALL KUGETI(IW4)
+      CALL KUGETI(IW5)
+      CALL KUGETI(IW6)
+      CALL KUGETI(IW7)
+      CALL KUGETI(IW8)
+      CALL KUGETI(IW9)
+      CALL KUGETI(IW10)
+      CALL KUGETC(CHOPT,LOPT)
+ 
+      CALL FMLN(CHSRCE(1:LSRCE),CHTRGT(1:LTRGT),CHCOMM(1:LCOMM),
+     +   IVECT,CHOPT(1:LOPT),IRC)
+ 
+      END

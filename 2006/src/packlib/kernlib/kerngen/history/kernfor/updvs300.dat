@@ -1,0 +1,251 @@
+*
+* $Id: updvs300.dat,v 1.1.1.1 1996/02/15 17:50:43 mclareni Exp $
+*
+* $Log: updvs300.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:43  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNFOR)
+
+       UP-DATE RECORD FOR THE GENSEC VERSIONS 3.01 TO 3.99
+       ---------------------------------------------------
+
+       FIRST RELEASE OF THE  GENSEC MINI-PAM : 4-DEC-1976
+
+---------------------------------------------------------------------
+
+UP-DATE  3.02 :  18-OCT-1977
+----------------------------
+
+REPLACING FILE   GENSEC 2.14 761204 19.17
+
+NEW DECKS :        P=TCGEN,  D= RANNOR, UBITS, UFLINT
+
+CORRECTIONS :      P=TCGEN,  D= IUBIN, IUCHAN, IUHIST
+                             ASSURE ROUNDING UPWARDS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.03 :  29-APR-1978
+----------------------------
+
+REPLACING FILE   GENSEC 3.02  771018 16.47
+
+
+NEW DECKS :     D=FLPSOR, INTSOR      CERN PROGRAM LIBRARY M103
+
+CORRECTIONS:    D=SORTZV      NEW VERSION FROM PROGLIB  M101
+                D=SORTX       NEW VERSION FROM PROGLIB  M106
+
+DELETES:        D=FLTSOR, INTSOR    DISTURBING ROUTINES OF OLD SORTZV
+
+TRIVIAL:        D=DOTI, ERF      TIDIED UP
+
+---------------------------------------------------------------------
+
+UP-DATE  3.04 :  15-JUNE-1978
+-----------------------------
+
+REPLACING FILE   GENSEC 3.03  780501 19.21
+
+
+CORRECTIONS:    D=SORTX      BROUGHT BACK FROM VERSION 3.02
+                             THE ROUTINE TAKEN FROM CERN PROG. LIB FOR 3.03
+                        DOES NOT PRESERVE THE ORIGINAL ORDER FOR EQUAL KEYS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.05 :  15-JULY-1978
+-----------------------------
+
+REPLACING FILE   GENSEC 3.04  780614 18.17
+
+
+NEW PATCH:       P=XVECT
+
+---------------------------------------------------------------------
+
+UP-DATE  3.06 :  15-SEPT-1978
+-----------------------------
+
+REPLACING FILE   GENSEC 3.05  780714 16.04
+
+
+NEW DECKS:      P=TCGEN, D= IUFNBL, UTRANS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.07 :  15-NOV-1978
+----------------------------
+
+REPLACING FILE   GENSEC 3.06  780916 12.51
+
+
+MOVED AND CORRECTED FOR IBM   D=AFROMI  FROM P=TCGEN TO P=TCGENR
+
+---------------------------------------------------------------------
+
+UP-DATE  3.08 :  18-DEC-1978
+----------------------------
+
+REPLACING FILE   GENSEC 3.07  781115 19.08
+
+
+NEW DECKS :     P=TCGEN, D=GSHOW, GSHOWF   TO PRINT GENSEC VERSION USED
+
+---------------------------------------------------------------------
+
+UP-DATE  3.09 :  27-APR-1979
+----------------------------
+
+REPLACING FILE   GENSEC 3.08  781218 23.26
+
+
+NEW DECKS :     P=TCGEN, D=IUMODE
+
+CORRECTIONS:    P=TCGEN, D=GSHOWF   ADD HOOK FOR USER MESSAGE
+
+---------------------------------------------------------------------
+
+UP-DATE  3.10 :  12-DEC-1979
+----------------------------
+
+REPLACING FILE   GENSEC 3.09  790427 10.50
+
+
+CORRECTIONS:    P=TCGEN, D=SORTZV   CHECK FOR  N.LE.1
+
+---------------------------------------------------------------------
+
+UP-DATE  3.11 :  16-JULY-1980
+-----------------------------
+
+REPLACING FILE   GENSEC 3.10  791212 15.57
+
+
+NEW PATCHES:    P=QM...                    MACHINE TYPE PATCHES
+
+CORRECTIONS:    P=XVECT, D=XINCF,XOUTCF    FORMATS MODIFIED FOR A4
+
+                P=TCGEN, D=ACOS,ERF RE-ORGANIZE RETURN FROM FUNCTIONS
+                                    WITH MULTIPLE ENTRY-POINTS,
+                                    GENERAL FIX OF SPECIAL NORD 50 BUG
+
+                         D=UFLINT   ALLOW SEQUENCE INSTEAD OF TAGS
+
+THIS UP-DATE STARTS PREPARING THE CHANGE FROM TAGS TO PATCHY CONDITIONALS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.12 :  30-JULY-1980
+-----------------------------
+
+REPLACING FILE   GENSEC 3.11  800716 19.41
+
+
+CORRECTIONS:    P=TCGEN, D=IUMODE       CALLING SEQUENCE CHANGED
+
+---------------------------------------------------------------------
+
+UP-DATE  3.13 :  28-JAN-1981
+----------------------------
+
+REPLACING FILE   GENSEC 3.12  800730 17.24
+
+
+CORRECTIONS:    P=TCGEN, D=IULOOK       FIX FOR NORD 50
+                         D=TRACEQ       TIDY UP FOR VAX ET AL
+
+---------------------------------------------------------------------
+
+UP-DATE  3.14 :  30-NOV-1981
+----------------------------
+
+REPLACING FILE   GENSEC 3.13  810128 14.51
+
+
+CORRECTIONS :   P=TCGEN, D=GSHOW, GSHOWF, TCDUMP, TRACEQ
+                CORRECT FORMATS FOR FORTRAN 77 COMPATIBILITY
+
+NEW ROUTINES :  P=TCGEN, D=UCTOH1, UCTOH, UH1TOC, UHTOC
+
+OBSOLETED :     P=TCGEN, D=ACOS, LORENC, LOTRAN, MXADD, MXDMA, MXDMAL
+                           XIN123, XOUT123, XWRBCD
+
+RE-ORDER P=TCGEN TO BE READY FOR KERNLIB.
+ALL MATH ROUTINES (SECTIONS A-H) GO TO THE END OF THIS PATCH,
+IN THE ORDER EXPECTED TO BE DELIVERED FROM CERN MATH SECTION.
+
+---------------------------------------------------------------------
+
+UP-DATE  3.15 :  13-JAN-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.14  811130 21.52
+
+CORRECTIONS:    ERF            SPLIT INTO ERF AND FREQ SEPARATE
+                MATIN1         DIAGNOSTIC PRINT REMOVED
+                FLPSOR,INTSOR  MAKE STANDARD FORTRAN
+                VCOPY,VFIX,VFLOAT     TEST  N.LE.0  ON ENTRY
+
+ALL YSHIFT TAGS HAVE BEEN REPLACED BY PATCHY IF'S
+
+---------------------------------------------------------------------
+
+UP-DATE  3.16 :  25-JAN-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.15  820113 19.30
+
+CORRECTIONS:    FREQ          CORRECT FOR PRECISION ON CDC
+
+TRANSLATION BY PROGRAM FOR STANDARD KERNLIB HEADER CARDS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.17 :   4-FEB-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.16  820126 20.00
+
+
+NEW DECKS :     P=TCGEN, D=BLOW,BUNCH       FOR KERNLIB
+
+CORRECTIONS:    P=TCGEN, D=UBITS            NEW VERSION
+                         D=FINT,PROB        IMPROVED COMPUTATIONS
+
+---------------------------------------------------------------------
+
+UP-DATE  3.18 :  12-FEB-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.17  820204 15.19
+
+NEW PATCH :     P=QMUNO      FOR UNIVAC FTN WITH O-OPTION
+
+---------------------------------------------------------------------
+
+UP-DATE  3.19 :  29-MAR-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.18  820212 10.56
+
+TIDY COMMENTS FOR KERNLIB, FORMATS IN GSHOW CHANGED
+
+---------------------------------------------------------------------
+
+UP-DATE  3.20 :  30-MAR-1982
+----------------------------
+
+REPLACING FILE   GENSEC 3.19  820329 18.27
+
+ADD IF=QMUNO SELECTION TO IUMODE, TRACEQ, UFLINT
+
+---------------------------------------------------------------------
+
+               KERNFOR 4.00  =  GENSEC 3.20
+
+---------------------------------------------------------------------
+
+#endif

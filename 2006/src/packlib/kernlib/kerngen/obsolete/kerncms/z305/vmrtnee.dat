@@ -1,0 +1,12 @@
+*
+* $Id: vmrtnee.dat,v 1.1.1.1 1996/02/15 17:51:55 mclareni Exp $
+*
+* $Log: vmrtnee.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:55  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_QCMS4)
+/*DECK ID>, vmrtne.exec */
+/**/ pw='DOCONS'("INHIBIT") ; Push pw
+#endif

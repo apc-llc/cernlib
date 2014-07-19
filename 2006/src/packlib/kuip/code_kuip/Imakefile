@@ -1,0 +1,41 @@
+#define IHaveCDF
+
+SRCS_C=	getline.c kalias.c kbrow.c kedit.c kexec.c khash.c kicon.c \ @@\
+	kienbr.c kipiaf.c kkern.c kmacro.c kmath.c kmenu.c kmisc.c \ @@\
+	kmodel.c kmterm.c kuinit.c kutrue.c kuvers.c kuwhag.c	   \ @@\
+	kuwhat.c kvect.c
+
+#ifdef CERNLIB_WINNT
+SRCS_C :=$(SRCS_C) kmutil0.c
+CDEBUGFLAGS = NoOpCDebugFlags
+#endif
+
+SRCS_F=	kiargc.F kibres.F kiclos.F kictoi.F kicton.F kidate.F	\ @@\
+	kierrf.F kiinit.F kilexp.F kilogn.F kilun.F kindex.F	\ @@\
+	kindot.F kintoc.F kisndv.F kivind.F kudpar.F kugetv.F	\ @@\
+	kuinqf.F kulogn.F kuopen.F kuread.F kuvcre.F kuvdel.F	\ @@\
+	kuvec.F kuvect.F kuwrit.F kxcopv.F kxcrv1.F kxcrv2.F	\ @@\
+	kxdelv.F kxlisv.F kxreav.F kxunit.F kxvope.F kxwriv.F	\ @@\
+	kxdsig.F
+	
+
+SRCS_CDF= kuipcdf.cdf
+
+#if defined(CERNLIB_QMVAOS)
+SpecialFortranLibObjectRule(kxcopv,kxcopv,-O2,NullParameter)
+#endif
+
+#if defined(CERNLIB_IBMMVS)
+SRCS_F := $(SRCS_F) kdialo.F kprefi.F putgeti.F kmvsed.F kmvspg.F kmvssh.F 
+SCRS_S = kprefb.s put.s putget.s userid.s
+#endif
+
+#if defined(CERNLIB_IBMVM) || defined(CERNLIB_IBMMVS)
+SRCS_F := $(SRCS_F) k77calls.F kuserid.F
+#endif
+
+#if defined(CERNLIB_NEWLIB)
+SRCS_F := $(SRCS_F) itoft.F 
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

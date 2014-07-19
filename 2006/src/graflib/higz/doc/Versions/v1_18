@@ -1,0 +1,99 @@
+*
+* $Id: v1_18,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_18,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.18/10 22/06/93  17.28.47  by  O.Couet
+*-- Author :    O.Couet   30/04/93
+*
+*::>          VERSION  1.18/10   930622 17.28
+*
+*   In the FALCO driver the marker type 3 (*) in known. This implies
+*      mods in IGPM.
+*   Mod in IGAXIS to have a better alignment for the vertical right
+*      labeled axis.
+*   Line type for FALCO implemented (merlant@csnvs1.in2p3.fr).
+*   Bug fixed in ISCHH (patch IKERNEL): in case of FALCO, CHHE was
+*      not stored in the pictures.
+*
+*::>          VERSION  1.18/09   930611  9.40
+*
+*   Bug fixed in ICLWK in case one the workstation was a PS file.
+*   New version of IGTABL and IGTAB6 to allow POL etc.. with
+*      Gouraud shading surfaces.
+*
+*::>          VERSION  1.18/08   10/06/93 17.50.50
+*
+*   In IKERNEL/IOPWK for the X11 version the string :0.0 is append after
+*      the display name/adress only if ":" is not yet in the name.
+*   New primitive ICA to draw cell arrays.
+*   Remove bug in IGSSE (introduced with the changes for DECGKS)
+*
+*::>          VERSION  1.18/07   930601 17.22
+*
+*   Changes in IKERNEL/IOPWK for the X11 version to allow to change
+*      the HIGZ window name. In higz_windows.dat after the adress
+*      of the host it is possible to give the window name.
+*
+*::>          VERSION  1.18/06   930528  9.32
+*
+*   Improvment in IPSCOL (set the PostScript Color): if the color is
+*      black, the operator "setgray" is used instead of "setrgbcolor"
+*      because on some color printers black is better with "setgray".
+*
+*::>          VERSION  1.18/05   930527 15.01
+*
+*   LINUX version introduced. <balashov@main1.jinr.dubna.su>
+*   New version of hidden line removal algorithm for Polar, Cylindrical,
+*      and Sperical coordinates.
+*   Bug fixed in IGTCCH: CHBUF is now erased before to be filled.
+*
+*::>          VERSION  1.18/04   930526 14.08
+*
+*   Bug fixed in IKFILE: on IBM/VM the string CCHOST was too long.
+*
+*::>          VERSION  1.18/03   930525 17.06
+*
+*   Mods for the GKSGRAL,NEWLIB version in IGSA, IGSG ad IGWKTY
+*      (Harald Butenschoen)
+*
+*::>          VERSION  1.18/02   930525 10.13
+*
+*   The string CHHOST in HIKERC was too small it is now 80 characters.
+*      (mjk@illini.physics.utah.edu)
+*   "IF=" on PATCH cards.
+*   In the X11 driver, the class hint is now equal to "HIGZ" (W.Brueckner).
+*
+*::>          VERSION  1.18/01   930511 17.24
+*
+*   The X11 mode to draw the cursor in ixreqlo is define according to
+*      the XServerVendor output.
+*   In IGMETA, if LUN=999, the metafile is deactivated AND closed.
+*   New routine IGMETN to set the metafile name. It is usefull for
+*      some HIGZ version (ATCGKS, MSDOS ...)
+*   Mods in IH routine to have the angle on the first coordinate with
+*      Polar, Cylindrical and Spherical reprsentations.
+*   Bug fixed in ntmgt: #include <stdio.h> was missing for SUN
+*   New routine IGTCCH to translate IGTEXT control characters (in a string)
+*      into their printable version.
+*
+*::>          VERSION  1.18/00   930430 12.57
+*
+*   New C deck NTMGT to manage dynamically the NT. Now used only with X11.
+*   Mods in IZPICT and IZSELN: The NT banks have now the same name in order
+*      to describe there structure with dzdoc.
+*   In IGTEXT, XW,YW and WDTH are now initialized to 0.
+*   Mods in various routines for DECGKS on VAX (Lynn Garren <GARREN@FNPSP>).
+*   Now the number of colors in HILUT is 256.
+*   New options POL, CYL, SPH, and PSD in IGTABL.
+*   Sequences are now splited in hicdes, and QFTITLECH is used to set
+*      the version number.
+*   Logarithmic scales on X and Y axis are now available for Lego and Surface
+*      plots. It implies mods in many routines around IGTABL and also
+*      in IGAXIS: with options W and G the label were not correct.
+*   The X11 mode to draw the cursor in ixreqlo is now "GXxor" which seems
+*      to work in a better way than "GXinvert".
+*

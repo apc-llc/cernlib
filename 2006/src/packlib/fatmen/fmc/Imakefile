@@ -1,0 +1,3 @@
+SRCS_C=	 faexit.c fmactc.c fmhstc.c fmjob.c fmuser.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

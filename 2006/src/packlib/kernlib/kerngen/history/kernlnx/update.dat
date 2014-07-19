@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:45 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:45  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNLNX)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNLNX
+              ----------------------------------------
+
+
+UP-DATE  1.03:   18-July-1994
+----------------------------
+
+Replacing File   KERNLNX  1.02  940511 11.03
+
+Correct:      use the new C routines VXINVB, VXINVC from KERNFOR
+
+---------------------------------------------------------------------
+
+#endif

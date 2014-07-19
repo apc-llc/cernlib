@@ -1,0 +1,150 @@
+*
+* $Id: cdinpl.dat,v 1.1.1.1 1996/02/28 16:24:50 mclareni Exp $
+*
+* $Log: cdinpl.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:50  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB__CDF)
+>Name CDINPL
+ 
+>Menu /HEPDB
+ 
+>Menu PLOT
+>Guidance
+Plotting facilities inside HEPDB
+ 
+>Command CDHELP
+>Parameters
++
+TOPN   'Top directory name'                     C D='*'
+CFNAM  'File name'                              C D='KFNAME.FILEXT'
+>Guidance
+Display help information of a given directory from data base. This
+command will show the tree of directory on the screen. The user is
+supposed to pick the directory for whose the help information is
+required by positioning the cursor on the appropriate box and then
+pressing the left mouse button (on Apollo) or space bar on a standard
+terminal. The help information if avialable will be put into a file
+and displayed to the user through the standard editor.
+>Action CDACPL
+ 
+>Command CDPLOB
+>Parameters
+PATHN  'Pathname'                               C
++
+NOBJ   'Number of data elements to be plotted'  I D=1
+NMASK  'Number of keys used for selection'      I D=0
+KEX    'Key index for the abcissa'              I D=3
+NST    'Step size for selection of data object' I D=1
+CHOPT  'Character option'                       C D=' '
+LUNI   'Logical unit number of auxiliary file'  I D=0
+CFNAM  'Name of the auxiliary file'             C D=' '
+>Guidance
+Plot data element(s) versus a key element for a given directory.
+CHOPT guides the selection of data objects in a directory, as well as
+the mode of display of the data objects.
+ CHOPT = 'P'  a symbol to be drawn at each point
+              (Default is a line to be drawn through the points)
+       = 'L'  a line to be drawn through the points
+              (needed only when symbol and line both to be drawn)
+       = 'S'  all elements shown on the same plot
+              (Default is a seperate plot for each variable)
+       = 'X'  assumes validity range packed ala CDPKTS
+The list of key and object elements to be plotted and the specification
+of the selection on key values can be supplied through prompts or by
+an auxiliary file.
+>Action CDACPL
+ 
+>Command CDPLOT
+>Parameters
+ALIAS  'Alias name'                             C
+CHTAG  'Name of the data element to be plotted' C
++
+NMASK  'Number of keys used for selection'      I D=0
+CHOPT  'Character option'                       C D=' '
+LUNI   'Logical unit number of auxiliary file'  I D=0
+CFNAM  'Name of the auxiliary file'             C D=' '
+>Guidance
+Plot the time evolution of a given data element from a given directory.
+The directory is addressed by its alias name and the data element is
+addressed by a tag uniquely identifying the data element inside the
+directory. CHOPT guides the selection of data objects in a directory,
+as well as the mode of display of the data objects.
+ CHOPT = 'P'  a symbol to be drawn at each point
+              (Default is a line to be drawn through the points)
+       = 'X'  assumes validity range packed ala CDPKTS
+The specification of the selection on key values can be supplied through
+prompts or by an auxiliary file.
+>Action CDACPL
+ 
+>Command CDPLOV
+>Parameters
+PATHN  'Pathname'                               C
++
+NOBJ   'Pair of elements to be plotted'         I D=1
+NMASK  'Number of keys used for selection'      I D=0
+NST    'Step size for selection of data object' I D=1
+CHOPT  'Character option'                       C D=' '
+LUNI   'Logical unit number of auxiliary file'  I D=0
+CFNAM  'Name of the auxiliary file'             C D=' '
+>Guidance
+Plot data element(s) versus data element(s) for a given directory.
+CHOPT guides the selection of data objects in a directory, as well as
+the mode of display of the data objects.
+ CHOPT = 'L'  line to be drawn through the points
+       = 'P'  a symbol to be drawn at each point
+              (If L or P not chosen, a default marker to be drawn
+               at each point)
+       = 'X'  assumes validity range packed ala CDPKTS
+The list of pair of object elements to be plotted and the specification
+of the selection on key values can be supplied through prompts or by
+an auxiliary file.
+>Action CDACPL
+ 
+>Command CDPLTI
+>Parameters
+PATHN  'Pathname'                               C
++
+NMASK  'Number of keys used for selection'      I D=0
+CHOPT  'Character option'                       C D=' '
+LUNI   'Logical unit number of auxiliary file'  I D=0
+CFNAM  'Name of the auxiliary file'             C D=' '
+>Guidance
+Plot validity time of data objects in a directory.
+CHOPT guides the selection of data objects in a directory.
+ CHOPT = 'X'  assumes validity range packed ala CDPKTS
+Detail is given in the HEPDB documentation.
+The specification of the selection on key values can be supplied through
+prompts or by an auxiliary file.
+>Action CDACPL
+ 
+>Command CDREAD
+>Parameters
++
+TOPN   'Top Directory name'                     C D='*'
+CFNAM  'Display file name (.FILEXT)'            C D='KFNAME.FILEXT'
+CHOPT  'Character option'                       C D='H'
+>Guidance
+Displays the directory structure of the RZ-file as specified by
+the user through the Top directory name (by default it uses the
+first data base file opened). The user can then pick the wanted
+directory using the mouse button 1 by positioning on the last node.
+Displays the User Keys in the directory specified on the screen,
+in Horizontal or in Vertical mode. Displays data when the first
+column in mode 'H' or 'D' in mode 'V' is overwritten by '*'
+ CHOPT = 'H' : Displays data in horizontal mode
+       = 'V' : Displays data in vertical mode
+       = 'X' : Assumes validity range packed ala CDPKTS
+>Action CDACPL
+ 
+>Command CDTREE
+>Parameters
++
+TOPN   'Top Directory name'                     C D='*'
+>Guidance
+Draw the tree of directories in the file given by the top directory
+name.
+>Action CDACPL
+#endif

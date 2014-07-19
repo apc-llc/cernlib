@@ -1,0 +1,23 @@
+INCLUDES=	 cheops.inc czsock.inc dtmpak.inc errcray.inc errno.inc \ @@\
+	errsgi.inc fabalq.inc facard.inc faexcm.inc fafccm.inc \ @@\
+	fahucm.inc falncm.inc falscm.inc famucm.inc farnge.inc \ @@\
+	farstg.inc fasecm.inc faspac.inc fat.inc fatanf.inc \ @@\
+	fatapol3.inc fatbank.inc fatbeg.inc fatbug.inc fatcdes.inc \ @@\
+	fatchar.inc fatclio.inc fatcpl.inc fatdcb.inc fatdummy.inc \ @@\
+	fatform.inc fatform0.inc fatform1.inc fatget.inc fatinfo.inc \ @@\
+	fatinit.inc fatkey.inc fatlab.inc fatlab0.inc fatlab1.inc \ @@\
+	fatlcc.inc fatlnk.inc fatloc.inc fatlun.inc fatmed.inc \ @@\
+	fatmed0.inc fatmed1.inc fatmon.inc fatmss.inc fatmtp.inc \ @@\
+	fatnet.inc fatopt0.inc fatopt1.inc fatoptc.inc fatoptd.inc \ @@\
+	fatopts.inc fatoset.inc fatout.inc fatpara.inc fatran.inc \ @@\
+	fatran0.inc fatran1.inc fatreg.inc fatron.inc fatsat.inc \ @@\
+	fatsat0.inc fatsat1.inc fatschl.inc fatsea.inc fatsel.inc \ @@\
+	fatshift.inc fatsho.inc fatstat.inc fatstg.inc fatstruct.inc \ @@\
+	fatsys.inc fattyp.inc fatupd.inc fatuse.inc fatusr.inc \ @@\
+	fatuwd.inc fatvaxrc.inc fatveri.inc fatvid0.inc fatvid1.inc fatvidp.inc \ @@\
+	faust.inc fausto.inc fmaxcop.inc fmdrep.inc fmnkeys.inc \ @@\
+	fmpath.inc fmqued.inc fmshft.inc fstate.inc fttbug.inc \ @@\
+	fttpara.inc qftitlch.inc slate.inc slatex.inc tmsdef.inc \ @@\
+	tmsdef0.inc tmsdef1.inc tmsrep.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),fatmen)

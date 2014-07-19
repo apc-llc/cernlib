@@ -1,0 +1,16 @@
+SRCS_F=	cfact.F cfeqn.F cfinv.F \ @@\
+	dfact.F dfeqn.F dfinv.F \ @@\
+	rfact.F rfeqn.F rfinv.F \ @@\
+	tmprnt.F
+
+#if defined(CERNLIB_DECS) && ! defined(CERNLIB_QMVAOS)
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+
+#if defined(CERNLIB_MACOSX)
+FDEBUGFLAGS := -O0 $(FDEBUGFLAGS) -O0
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

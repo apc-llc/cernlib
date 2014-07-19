@@ -1,0 +1,19 @@
+MACRO PAWTEST6
+Exec ALLDEF
+Mess '**********************************************'
+Mess '*                CHAIN test                  *'
+Mess '**********************************************'
+Mess
+Mess 'The test chain is: '
+Chain test pawdemo.hbook pawdemo.hbook pawdemo.hbook
+cd //test
+Chain test>
+1d 12345 ' ' 100 -5 5
+nt/proj 12345 //test/30.x
+Mess
+Mess 'The number of events in the chain should be : 30000'
+mess 'The number of events in the chain is        : '//$HINFO(12345,'ENTRIES')
+Mess
+Chain -test
+*
+RETURN

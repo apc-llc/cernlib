@@ -1,0 +1,3 @@
+SRCS_F=	 cron.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

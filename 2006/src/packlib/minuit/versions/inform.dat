@@ -1,0 +1,12 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/03/07 14:31:32 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:32  mclareni
+* Minuit
+*
+*
+*  General information
+C MINUIT   0.00      000000 00.00 CERN Program Library     D506 MINUIT
+C          FUNCTION MINIMISATION AND ERROR ANALYSIS. F.JAMES CN/CERN
+C

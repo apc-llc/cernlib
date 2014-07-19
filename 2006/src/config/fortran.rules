@@ -1,0 +1,495 @@
+/* $Id: fortran.rules,v 1.20 1997/05/30 16:25:18 mclareni Exp $
+ *
+ * $Log: fortran.rules,v $
+ * Revision 1.20  1997/05/30 16:25:18  mclareni
+ * Remove extra #define for SGI
+ *
+ * Revision 1.19  1997/05/07 08:41:16  mclareni
+ * Put back MakeFortranSource for SGI to handle continuation lines
+ *
+ * Revision 1.18  1997/03/17 15:56:42  gunter
+ * add archive-shared-debug to .d in dependecy
+ *
+ * Revision 1.17  1997/02/28 10:39:10  gunter
+ * many mods for WNT
+ *
+ * Revision 1.16  1996/11/05 08:30:53  cernlib
+ * check for program to have -x after link,if not this is an error.
+ *
+ * 1996/05/20 12:12:59  cernlib
+ * VF. CppFortranObjectRule rule has been changed slightly
+ *
+ * Revision 1.15  1996/05/01 11:56:59  cernlib
+ * make possible to split cpp from f77 on sgi
+ *
+ * Revision 1.14  1996/04/23 12:56:19  cernlib
+ * Add CernlibCcProgramTarget.
+ * Show cernlibs we link with.
+ *
+ * Revision 1.13  1996/04/09 15:43:04  cernlib
+ * Restore  $(FORTRANALLDEFINES) in the CppFortranObjectRule in the
+ * FortranDoesCpp part
+ *
+ * Revision 1.12  1996/04/02 21:04:59  thakulin
+ * Mods inspired by the Apogee and EPC ports (make !FortranDoesCpp work,
+ * Add fsuf macro).
+ *
+ * Revision 1.11  1996/04/01 15:48:56  cernlib
+ * Adapt to fortran not being able to redirect object files.
+ *
+ * Revision 1.10  1996/04/01 15:32:21  cernlib
+ * Objects depend on .d files;
+ * programs depend on libraries given by cernlib
+ *
+ * Revision 1.9  1996/03/19 14:48:56  cernlib
+ * Make object file depend on .d file; this interm forces recompile on
+ * change of makefile
+ *
+ * Revision 1.8  1996/03/08 17:12:10  cernlib
+ * *** empty log message ***
+ *
+ * Revision 1.7  1996/03/06 11:04:18  cernlib
+ * Imake.tmpl : Correct rule to run kuipc
+ * fortran.rules: echo makedepend
+ * site.def: undef MakeCmd before #define ( Sun has this defined to ..openwin...)
+ * *.cf : small mods
+ *
+ * Revision 1.6  1996/03/04 17:30:40  cernlib
+ * Parametrize Ansi C compiel options. other small mods
+ *
+# Revision 1.5  1996/02/23  17:16:42  cernlib
+# add provsions for X11/ Motfid include files.
+# and some other small corrections
+#
+# Revision 1.4  1996/02/01  16:08:36  cernlib
+# Various changes in FOTRANDEFINES ( for IBM, and Makedepend)
+# make cc default c compiler in aix
+# use /usr/lib/X11/bin/makedepend on SunOS and Solaris
+#
+# Revision 1.3  1996/01/25  11:23:11  cernlib
+# Values for IMAKE and MAKEDEPEND are used from env. variables if defined, else
+#    from command search path.
+# Correct fortran options for local (not archive,..) compilation.
+#
+# Revision 1.2  1996/01/11  13:45:06  cernlib
+# correct FortranDepend rule to use FORTRANALLDEFINES
+#
+# Revision 1.1  1995/12/21  14:07:18  cernlib
+# files as of end 1995
+#
+ *
+ */
+/*
+ *  All macro of this file. Macros marked ** are for use in Imakefiles.
+ *                                        *  used in other config files
+ *                                        -  internal to this file
+ *
+ * Fsuf  -- Suffix for Fortran not yet preprocessed
+ * fsuf  -- Suffix for Fortran after preprocessing
+ * FortranDoesCpp -- YES or NO
+
+ * FortranLinkRule(program,options,objects,libraries) 
+ *	NormalFortranProgramTarget(program,objects,deplibs,locallibs,syslibs)
+** CernlibFortranProgramTarget(program,objects,deplibs,locallibs,cernlibs)
+ * CernlibFortranLinkRule(pgm,ldoption,objs,libs,cernlibs)
+ * SimpleFortranProgramTarget(program)				
+ * FortranProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib)	
+ * ComplexFortranProgramTarget(program)				
+
+ * MakeFortranSource(src,dst) RemoveFiles(dst)			
+ * ObjectFortranCompile(options) -- compile fragment for normal Fortran file
+ * CppFortranObjectRule()  -- rules to compile non library fortran routines
+ * LibObjFortranCompile(dir,options)		
+** SpecialFortranObjectRule(baseobj,basedep,options,cppoptions)	
+ * SpecialFortranLibObjectRule(baseobj,basedep,options,cppoptions)	
+ * SpecialFortranArchiveObjectRule(baseobj,basedep,options,cppoptions)
+ * SpecialFortranSharedObjectRule(baseobj,basedep,options,cppoptions)
+ * SpecialFortranDebugObjectRule(baseobj,basedep,options,cppoptions)
+ * LibObjCompile(dir,options) -- 			
+ * NormalLibraryObjectRule()					
+ * DebugLibraryObjectRule()					
+ * SharedLibraryObjectRule()					
+ * MakeDepend(dir,flags)\
+ * CDepend(dir,flags) MakeDepend(dir,$(ALLDEFINES) flags)
+ * FortranDepend(dir,flags) MakeDepend(dir,$(ALLDEFINES) flags)
+ * NormalFortranLibObjectRule()					
+ * DebugFortranLibObjectRule()					
+ * SharedFortranLibObjectRule()					
+ * DEBUG()  -- temporary for debuging config files.							
+
+ */
+
+/*
+ *  Define a suffix for the Fortran compiler
+ */
+
+#ifndef Fsuf
+#define Fsuf F
+#endif
+
+#ifndef fsuf
+#define fsuf f
+#endif
+
+
+#ifndef FortranDoesCpp
+#define FortranDoesCpp YES
+#endif
+
+/*
+ * FortranLinkRule - link a fortran program
+ */
+#ifndef FortranLinkRule
+#define FortranLinkRule(program,options,objects,libraries) \
+	$(FCLINK) -o program options objects libraries $(EXTRA_LOAD_FLAGS) \ @@\
+	 || RemoveFile(program)						@@\
+	@if [ ! -x program ] ; then set -e;	\			@@\
+	 echo Error: program not executable;RemoveFile(program);\	@@\
+	 exit 1; else exit 0;fi
+
+#endif
+
+
+/*
+ * NormalFortranProgramTarget - generate rules to compile and link the indicated
+ * program; since it does not use any default object files, it may be used for
+ * multiple programs in the same Imakefile.
+ */
+#ifndef NormalFortranProgramTarget
+#define	NormalFortranProgramTarget(program,objects,deplibs,locallibs,syslibs) \
+ProgramTargetName(program): objects deplibs				@@\
+	RemoveTargetProgram($@)						@@\
+	FortranLinkRule($@,$(FCLDOPTIONS),objects,locallibs $(LDLIBS) syslibs)	@@\
+									@@\
+									@@\
+clean::									@@\
+	RemoveFile(ProgramTargetName(program))				@@\
+
+#endif /* NormalFortranProgramTarget */
+
+/*
+ * Create a list of dependency libraries for libs coming via cernlib ..
+ *
+ */
+#ifndef CernlibDependLibrary
+#define CernlibDependLibrary(cernlibs)\
+$(filter-out +%,$(filter-out -%,$(shell cernlib cernlibs)))
+#endif
+
+/* Helper to use cernlib command
+ */
+#ifndef CernlibCmd
+#define CernlibCmd(libraries)cernlib libraries
+#endif
+/*
+ * CernlibFortranProgramTarget - rule to link fortran program using
+ *   cernlib utility to find give all required libraries ( ie. no extra
+ *   syslibs needed.
+ */
+#ifndef CernlibFortranProgramTarget
+#define CernlibFortranProgramTarget(program,objects,deplibs,locallibs,cernlibs)\
+ProgramTargetName(program): SetWin32ObjSuffix(objects) deplibs CernlibDependLibrary(cernlibs)	@@\
+	RemoveTargetProgram($@)						@@\
+	@echo "Linking with cern libraries"				@@\
+	@cernlib cernlibs						@@\
+	CernlibFortranLinkRule($@,$(FCLDOPTIONS),objects,locallibs $(LDLIBS),CernlibCmd(cernlibs)) @@\
+									@@\
+clean::									@@\
+	RemoveFile(ProgramTargetName(program))				@@\
+
+#endif /*CernlibFortranProgramTarget */
+
+/*
+ * CernlibFortranLinkRule - link using fortran linker and cernlib
+ */
+#ifndef CernlibFortranLinkRule
+#define CernlibFortranLinkRule(pgm,ldoption,objs,libs,cernlibs)\
+	FortranLinkRule(pgm,ldoption,objs,libs `cernlibs`)
+#endif
+
+/*
+ * CernlibCcProgramTarget - rule to link program using
+ *   cernlib utility to find give all required libraries ( ie. no extra
+ *   syslibs needed.
+ */
+#ifndef CernlibCcProgramTarget
+#define CernlibCcProgramTarget(program,objects,deplibs,locallibs,cernlibs)\
+ProgramTargetName(program): objects deplibs CernlibDependLibrary(cernlibs) @@\
+	RemoveTargetProgram($@)						@@\
+	@echo "Linking with cern libraries"				@@\
+	@cernlib cernlibs						@@\
+	CernlibLinkRule($@,$(LDOPTIONS),objects,locallibs $(LDLIBS),cernlib cernlibs) @@\
+									@@\
+clean::									@@\
+	RemoveFile(ProgramTargetName(program))				@@\
+
+#endif /*CernlibCcProgramTarget */
+
+/*
+ * CernlibLinkRule - link using fortran linker and cernlib
+ */
+#ifndef CernlibLinkRule
+#define CernlibLinkRule(pgm,ldoption,objs,libs,cernlibs)\
+	LinkRule(pgm,ldoption,objs,libs `cernlibs`)
+#endif
+
+
+#ifndef SimpleFortranProgramTarget
+#define SimpleFortranProgramTarget(program)				@@\
+	OBJS = program.Osuf						@@\
+	SRCS = program.Fsuf						@@\
+									@@\
+ComplexFortranProgramTarget(program)
+#endif /* SimpleFortranProgramTarget */
+
+#ifndef FortranProgramTargetHelper
+#define FortranProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib)	@@\
+ProgramTargetName(program): $(objs:.o=.Osuf) $(deplib)			@@\
+	RemoveTargetProgram($@)						@@\
+	FortranLinkRule($@,$(FCLDOPTIONS),$(objs:.o=.Osuf),locallib $(LDLIBS) syslib) @@\
+									@@\
+InstallProgram(program,$(BINDIR))					@@\
+InstallManPage(program,$(MANDIR))
+#endif
+
+#ifndef ComplexFortranProgramTarget
+#define ComplexFortranProgramTarget(program)				@@\
+	PROGRAM = ProgramTargetName(program)				@@\
+									@@\
+AllTarget(ProgramTargetName(program))					@@\
+									@@\
+FortranProgramTargetHelper(program,SRCS,OBJS,DEPLIBS,$(LOCAL_LIBRARIES),NullParameter) @@\
+									@@\
+	DependTarget()							@@\
+									@@\
+clean::									@@\
+	RemoveFile($(PROGRAM))						@@\
+
+#endif /* ComplexFortranProgramTarget */
+
+/*
+ * MakeFortranSource(src,dst) - apply either Cpp or a simple copy
+ *                              command to create a "real" Fortran file
+ *                              when "native" Fortran has a lack of CPP features
+ *                              and/or treats another file-extension.
+ */
+#if (!defined(MakeFortranSource)) && (!FortranDoesCpp)
+#ifndef CERNLIB_SGI
+#define MakeFortranSource(src,dst) RemoveFiles(dst)			@@\
+	$(FPP) $(FORTRANALLDEFINES) < src > dst
+#else   /* SGI */
+#define MakeFortranSource(src,dst) RemoveFiles(dst)			@@\
+	sed -e "/^#[ ]*else/s/else/elif 1/" src > Concat(s_,dst)	@@\
+	$(FPP) $(FORTRANALLDEFINES) Concat(s_,dst)			@@\
+	$(MV) $(subst .fsuf,.i,Concat(s_,dst)) dst
+#endif  /* SGI */
+#endif  /* MakeFortranSource */
+
+/*
+ * ObjectFortranCompile(options) - compile fragment for normal Fortran file
+ */
+#ifndef ObjectFortranCompile
+#if     FortranDoesCpp
+#ifdef SGIArchitecture
+#define ObjectFortranCompile(options) RemoveFile($@)			@@\
+	sed -e "/^#[ ]*else/s/else/elif 1/" $< > s_$(<F)		@@\
+	RunFortranCompile(options $(FORTRANOPTIONS) $(FORTRANALLDEFINES),s_$(<F))
+#else
+#define ObjectFortranCompile(options) RemoveFile($@)			@@\
+	RunFortranCompile(options $(FORTRANOPTIONS) $(FORTRANALLDEFINES),$<)
+#endif
+#else
+#define ObjectFortranCompile(options) RemoveFile($@)			@@\
+	MakeFortranSource($<,$(<F:.Fsuf=.fsuf))				@@\
+ifneq ($(MAKEFORTRANSOURCEONLY),yes)					@@\
+	RunFortranCompile(options $(FORTRANOPTIONS),$(<F:.Fsuf=.fsuf))	@@\
+endif									@@\
+ifneq ($(SAVEFORTRANSOURCE),yes)						@@\
+	RemoveFile($(<F:.Fsuf=.fsuf))					@@\
+endif
+#endif
+#endif
+
+#ifndef RunFortranCompile
+#ifndef FortranCannotRedirectObject
+#define RunFortranCompile(options,source)\
+	$(FC) -c options -o $@ source
+#else
+#define RunFortranCompile(options,source)\
+	$(FC) -c options source && mv $(@F) $@
+#endif
+#endif
+
+#ifndef CppFortranObjectRule
+#define CppFortranObjectRule()						@@\
+.SUFFIXES: .Fsuf							@@\
+									@@\
+.Fsuf.Osuf:								@@\
+	ObjectFortranCompile($(FDEBUGFLAGS))
+#endif
+
+/* LibObjFortranCompile is used to compile ALL fortran ending up in a library
+ *  It just calls ObjectFortranCompile(options), but is separate to provide
+ *  for a compiler wich will not allow to redirect output (object)
+ */
+#ifndef LibObjFortranCompile
+#define LibObjFortranCompile(dir,options) ObjectFortranCompile(options) 
+#endif
+
+
+#ifndef SpecialFortranObjectRule
+#define SpecialFortranObjectRule(baseobj,basedep,options,cppoptions)	@@\
+baseobj.Osuf:	basedep.Fsuf						@@\
+	ObjectFortranCompile(options cppoptions)
+#endif /* SpecialFortranObjectRule */
+
+#ifndef SpecialFortranLibObjectRule
+#define SpecialFortranLibObjectRule(baseobj,basedep,options,cppoptions)	@@\
+SpecialFortranArchiveObjectRule(baseobj,basedep,options,cppoptions)	@@\
+SpecialFortranSharedObjectRule(baseobj,basedep,options,cppoptions)	@@\
+SpecialFortranDebugObjectRule(baseobj,basedep,options,cppoptions)
+#endif
+
+#ifndef SpecialFortranArchiveObjectRule
+#define SpecialFortranArchiveObjectRule(baseobj,basedep,options,cppoptions) @@\
+archive/baseobj.Osuf:   basedep.Fsuf archive/basedep.d			@@\
+	LibObjFortranCompile(archive,options cppoptions)
+#endif
+
+#ifndef SpecialFortranSharedObjectRule
+#define SpecialFortranSharedObjectRule(baseobj,basedep,options,cppoptions) @@\
+shared/baseobj.Osuf:   basedep.Fsuf shared/basedep.d			@@\
+	LibObjFortranCompile(shared,options cppoptions)
+#endif
+
+#ifndef SpecialFortranDebugObjectRule
+#define SpecialFortranDebugObjectRule(baseobj,basedep,options,cppoptions) @@\
+debug/baseobj.Osuf:   basedep.Fsuf debug/basedep.d			@@\
+	LibObjFortranCompile(debug,options cppoptions)
+#endif
+
+
+
+#if defined(LibObjCompile) && (!defined(CERNLIB_WINNT))
+#undef LibObjCompile
+#endif
+
+#ifndef LibObjCompile
+#define LibObjCompile(dir,options) RemoveFile($@)			@@\
+	$(CC) -c options $(CCOPTIONS) $(ALLDEFINES) $< -o $@
+#endif
+
+
+#ifdef NormalLibraryObjectRule
+#undef NormalLibraryObjectRule
+#endif
+#ifndef NormalLibraryObjectRule
+#define NormalLibraryObjectRule()					@@\
+archive/%.Osuf : %.c archive/%.d					@@\
+	LibObjCompile(archive,$(CDEBUGFLAGS))				@@\
+									@@\
+archive/%.d : %.c							@@\
+	CDepend(archive,$(_NOOP_))
+#endif
+
+#ifdef DebugLibraryObjectRule
+#undef DebugLibraryObjectRule
+#endif
+#ifndef DebugLibraryObjectRule
+#define DebugLibraryObjectRule()					@@\
+debug/%.Osuf : %.c debug/%.d						@@\
+	LibObjCompile(debug,DebuggableCDebugFlags)			@@\
+									@@\
+debug/%.d : %.c								@@\
+	CDepend(debug,$(_NOOP_))
+#endif
+
+#ifdef SharedLibraryObjectRule
+#undef SharedLibraryObjectRule
+#endif
+#ifndef SharedLibraryObjectRule
+#define SharedLibraryObjectRule()					@@\
+shared/%.Osuf : %.c shared/%.d						@@\
+	LibObjCompile(shared,$(CDEBUGFLAGS) $(PICFLAGS))		@@\
+									@@\
+shared/%.d : %.c							@@\
+	CDepend(shared,$(_NOOP_))
+#endif
+
+
+#ifndef MakeDepend
+#define MakeDepend(dir,flags)\
+	-@if [ ! -d dir ] ; then mkdir dir; fi				@@\
+	@ $(TOUCH) $@.tmp						@@\
+	 $(DEPEND) -f$@.tmp -p dir/ -- flags $<				@@\
+	@ sed 's=$*\.o=& $@=g' $@.tmp > $@				@@\
+	@ RemoveFiles($@.tmp $@.tmp.bak)
+#endif
+
+#ifndef CDepend
+#define CDepend(dir,flags) MakeDepend(dir,$(ALLDEFINES) flags)
+#endif
+
+#ifndef FortranDepend
+#define FortranDepend(dir,flags) MakeDepend(dir,$(FORTRANALLDEFMDEPEND) flags)
+#endif
+
+NormalLibraryObjectRule()
+DebugLibraryObjectRule()
+SharedLibraryObjectRule()
+
+#ifdef NormalFortranLibObjectRule
+#undef NormalFortranLibObjectRule
+#endif
+#ifndef NormalFortranLibObjectRule
+#define NormalFortranLibObjectRule()					@@\
+archive/%.Osuf : %.F archive/%.d					@@\
+	LibObjFortranCompile(archive,$(FDEBUGFLAGS))			@@\
+									@@\
+archive/%.d : %.F							@@\
+	FortranDepend(archive,$(_NOOP_))
+#endif
+
+#ifdef DebugFortranLibObjectRule
+#undef DebugFortranLibObjectRule
+#endif
+#ifndef DebugFortranLibObjectRule
+#define DebugFortranLibObjectRule()					@@\
+debug/%.Osuf : %.F debug/%.d						@@\
+	LibObjFortranCompile(debug,DebuggableFortranDebugFlags)		@@\
+									@@\
+debug/%.d : %.F								@@\
+	FortranDepend(debug,$(_NOOP_))
+#endif
+
+#ifdef SharedFortranLibObjectRule
+#undef SharedFortranLibObjectRule
+#endif
+#ifndef SharedFortranLibObjectRule
+#define SharedFortranLibObjectRule()					@@\
+shared/%.Osuf : %.F shared/%.d						@@\
+	LibObjFortranCompile(shared,$(FDEBUGFLAGS) $(PIFFLAGS))		@@\
+									@@\
+shared/%.d : %.F							@@\
+	FortranDepend(shared,$(_NOOP_))
+#endif
+
+
+CppFortranObjectRule()
+
+NormalFortranLibObjectRule()
+DebugFortranLibObjectRule()
+SharedFortranLibObjectRule()
+
+/* If HasFortran */
+#include <biglib.rules>
+
+#ifndef DEBUG
+#define DEBUG()							@@\
+debug:								@@\
+	@echo PACKAGE_INCLUDES= $(PACKAGE_INCLUDES)		@@\
+	@echo ALLINCLUDES=$(ALLINCLUDES)			@@\
+	@echo ALLDEFINES=$(ALLDEFINES)				@@\
+	@echo FORTRANALLDEFINES=$(FORTRANALLDEFINES)
+#endif
+

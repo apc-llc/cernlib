@@ -1,0 +1,25 @@
+*
+* $Id: v140.dat,v 1.1.1.1 1996/04/01 15:01:36 mclareni Exp $
+*
+* $Log: v140.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:36  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.40  930603  12.30
+C
+C  Routine changes:
+C  ----------------
+C  G100 PROB  G.Folger 930708 : change UP from 340 to 170, fixes underflow
+C
+C  Global changes:
+C--  G.Folger    Introduce changes for LINUX/MSDOS
+C--
+C
+C  Routine changes:
+C  ----------------
+C  D501 LEAMAX   New
+C  D503 DMINFC   New. D509 must be removed from KERNLIB
+C  E210 NORBAS   New
+C  N002  MTLSET  updated
+C--

@@ -1,0 +1,13 @@
+*
+* $Id: v102.dat,v 1.1.1.1 1996/03/04 16:12:53 mclareni Exp $
+*
+* $Log: v102.dat,v $
+* Revision 1.1.1.1  1996/03/04 16:12:53  mclareni
+* Dzdoc/Zebpack
+*
+*
+*  Version 1.02  920310  6.45
+C- Introduction of DZDOC v5.01  on 920304   3.30
+C
+C- P=DZEDIT, D=MFTOPS        declaration of POLYMARKER_TYPE was left out
+C

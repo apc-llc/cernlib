@@ -1,0 +1,260 @@
+#
+#  util.exp  --
+#	Utility procedures for Paw testing.
+#
+#  Original: 18-Oct-1995 11:32
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+
+
+#
+# Execute one PAW command
+#
+
+proc paw_cmd { the_cmd } {
+	exp_send "$the_cmd\r"
+	expect {
+		-gl "PAW > "
+			{ }
+		-gl "!!!!! ZFATAL"
+			{ error "Internal error (zfatal) on '$the_cmd'" }
+		-gl "\*\*\* Break \*\*\*"
+			{ error "Internal error (signal) on '$the_cmd'" }
+		-gl "In-line trace-back"
+			{ error "Internal error (signal) on '$the_cmd'" }
+		timeout
+			{ error "timeout on '$the_cmd'" }
+	}
+}
+
+
+#
+# Switch on/off a set of qp logging flags
+#
+
+proc qp_flags { state } {
+	if { $state == "quiet" } {
+		paw_cmd {flag verbose 0}
+		paw_cmd {flag symtab 0}
+		paw_cmd {flag name 0}
+		paw_cmd {flag stack 0}
+		paw_cmd {flag cache 0}
+		paw_cmd {flag dump 0}
+		paw_cmd {flag trace 0}
+		paw_cmd {flag tree 0}
+		paw_cmd {flag seg 0}
+	} elseif { $state == "verbose" } {
+		paw_cmd {flag verbose 1}
+		paw_cmd {flag symtab 0}
+		paw_cmd {flag name 0}
+		paw_cmd {flag stack 0}
+		paw_cmd {flag cache 1}
+		paw_cmd {flag dump 0}
+		paw_cmd {flag trace 0}
+		paw_cmd {flag tree 1}
+		paw_cmd {flag seg 1}
+	} else {
+		warning "qp_flags received unexpected argument: $state"
+	}
+}
+
+
+#
+# Test COMIS routines in QP expressions
+#
+
+proc comis_test { theType o1 result} {
+	set name "Comis test $theType $o1 -> $result"
+	set ok 0 ;
+
+	regexp {^[^\(7]*} $o1 theFile
+
+	if [ catch " exec cp paw.qp.name/$theFile . " err ] {
+		clone_output $err
+		fail $name 
+	}
+
+	exp_send "n/dump 10.$o1 ! 1 1\r"
+	expect {
+		-gl "FILE WAS NOT OPEN"
+			{ fail "Comis error on $name" }
+
+		-gl "$result\r"
+			{ set ok 1 ; continue -expect }
+		-gl "PAW > "
+			{
+				if { $ok } {
+					pass $name
+				} else {
+					fail $name
+				}
+			}
+		timeout	
+			{ fail "timeout on $name" }
+	}
+
+	catch " exec rm -f $theFile " err
+}
+
+
+#
+# Test expressions at a given event
+#
+proc expr_test { theType evt o1 result} {
+	set ok 0 ;
+	set name "Expression test $theType event=$evt $o1 -> $result"
+	exp_send "n/dump 10.$o1 ! 1 $evt\r"
+	expect {
+		-gl "$result\r"
+			{ set ok 1 ; continue -expect }
+		-gl "PAW > "
+			{
+				if { $ok } {
+					pass $name
+				} else {
+					fail $name
+				}
+			}
+		timeout	
+			{ fail "timeout on $name" }
+	}
+}
+
+
+#
+# Test expressions at a given event
+#
+proc expr2_test { theType evt o1 result} {
+	set ok 0 ;
+	set name "Expression test $theType event=$evt $o1 -> $result"
+	exp_send "n/dump 10.$o1 ! 1 $evt\r"
+	expect {
+		-gl "\r\n$result\r"
+			{ set ok 1 ; continue -expect }
+		-gl "PAW > "
+			{
+				if { $ok } {
+					pass $name
+				} else {
+					fail $name
+				}
+			}
+		timeout	
+			{ fail "timeout on $name" }
+	}
+}
+
+
+#
+# Test literals in QP expressions (use event 1)
+#
+
+proc literal_test { theType o1 result} {
+	expr_test $theType 1 $o1 $result
+}
+
+
+#
+# Compare a histogram with a reference dump
+#
+
+proc paw_dmp_cmp { name id } {
+
+	catch {exec cp paw.commands/hisdmp.f . } err
+
+	paw_cmd " call hisdmp.f($id,'tmp/hist_$id.dmp') "
+
+	set ret [catch "exec cmp tmp/hist_$id.dmp paw.commands/hist_$id.dmp" err]
+	if { $ret } {
+		clone_output "$err"
+		fail $name
+	} else {
+		pass $name
+		catch {exec rm tmp/hist_$id.dmp } err
+	}
+
+	catch {exec rm hisdmp.f } err
+}
+
+
+#
+# Compare a file with a reference file
+#
+
+proc paw_file_cmp { file file_ref args } {
+
+	set temp "tmp/tmp.[pid]"
+	set reftmp "tmp/ref.[pid]"
+
+	if [ catch {
+		eval "exec sed $args < $file > $temp"
+		} err
+	] {
+		clone_output "$err"
+		clone_output "paw_file_cmp: sed of $file failed"
+		return 0
+	}
+
+	if [ catch {
+		eval "exec sed $args < $file_ref > $reftmp"
+		} err
+	] {
+		clone_output "$err"
+		clone_output "paw_file_cmp: sed of $file_ref failed"
+		return 0
+	}
+
+	set ret [catch "exec cmp $temp $reftmp" err]
+	if { $ret } {
+		clone_output "$err"
+	} else {
+		catch { exec rm -f $temp $reftmp } err
+	}
+
+	return [expr ! $ret]
+}
+
+
+#
+# Generate a postscript file from a command and compare with
+# reference
+#
+
+proc paw_ps_cmp { tst ref } {
+
+	return [ paw_file_cmp $tst $ref -e /%%Title/d -e /%%CreationDate/d -e /%%Creator/d ]
+
+}
+
+
+proc graphics_output_test { name theCmd } {
+	global paw_use_window
+	global timeout
+
+	set timeout_save [set timeout]
+	set timeout [expr $timeout_save * 2]
+
+	if { $paw_use_window } {
+		set lun 66
+	} else {
+		set lun -66
+	}
+	paw_cmd "f/file 66 tmp/$name.ps"
+	paw_cmd "meta $lun -111"
+
+	paw_cmd $theCmd
+	paw_cmd "f/close 66"
+
+	if [paw_ps_cmp tmp/$name.ps paw.commands/$name.ref.ps] {
+		pass $name
+
+		# Cleanup if all is OK
+		catch { exec rm -f tmp/$name.ps } err
+
+	} else {
+		fail $name
+	}
+
+	set timeout $timeout_save
+}

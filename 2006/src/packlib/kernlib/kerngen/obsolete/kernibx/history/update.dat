@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:54:30 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:30  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIBX)
+
+
+              Up-date record for the Pam-file  KERNIBX
+              ----------------------------------------
+
+
+Up-date  1.06 :  24-Feb-1994
+----------------------------
+
+Replacing File   KERNIBX  1.05  920521 16.29
+
+Correct:      a bug in IE3FOS (correction copied from KERNIBM)
+
+---------------------------------------------------------------------
+
+#endif

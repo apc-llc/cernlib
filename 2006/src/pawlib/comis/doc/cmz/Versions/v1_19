@@ -1,0 +1,204 @@
+*
+* $Id: v1_19,v 1.1.1.1 1996/02/26 17:16:36 mclareni Exp $
+*
+* $Log: v1_19,v $
+* Revision 1.1.1.1  1996/02/26 17:16:36  mclareni
+* Comis
+*
+*
+*CMZ :          22/11/95  11.18.25  by  Julian Bunn
+*-- Author :    Unknown   11/04/95
+*
+* 22/11/95  10.41.07
+*
+* Mods to CSCALI,CSCALR,CSCALD for WINNT.
+*
+* 29/09/95  13.10.58
+*
+* fixed two bugs in COMIS:
+*
+* 1) character string converts to upper case if the "'" sign is in 72 position.
+* 2) i/o error in case FORMAT(2A).
+*
+*
+* 24/04/95  18.16.47
+*
+*    Bug was fixed in MLETTE routine, '_' was not allowed in some
+*    cases
+*
+* 14/04/95  15.40.35
+*
+*    mods in csfile,mcline,cspdir,csalphch,csanumch
+*
+* 12/04/95  09.36.40
+*
+*     Shared libraries for ALPHA/OSF
+*
+*::>          VERSION  1.19/00   11/04/95 09.01.59
+*
+*
+*     Bugfix in CS_HLSHL for SUN.
+*
+*     Added csvers()
+*
+* history records from 1.18 version was lost, so i added it here
+* V.Berezhnoi 12/04/95
+*
+******DECK,V1_18.
+******::>          VERSION  1.18/14   18/01/95 14.25.56
+*
+*     Several improvements in COMIS-translater have been made:
+*      - restrictions on order of type declarations are removed;
+*      - BLOCK DATA statement is allowed;
+*      - Implied length arrays are allowed.
+*
+*     Some modifications have been made to support dynamicaly
+*     arguments type checking in PAW-COMIS interface:
+*      - Extensions to CSEXT to specify the type and dimensions
+*        of arguments
+*   name [.type] [( type [ ( [dim,...,dim] ) ] , ... )] , ...
+*
+*   type -> i | r | c*inumber | l | d | [se] | x
+*   dim  -> inumder | *
+*
+* ex: 'cstypar.s(int,int,char*1,int,int,int(7),int)#'
+*
+*       - New subroutine added
+*        CSTYPAR (IADDR,IPAR,TYPE,ISIZE,NVDIM,IVDIM,IERR)
+*
+*::>          VERSION  1.18/13   18/10/94 11.12.02
+*
+*     Changes to support the case of a routine calling other routines
+*     for dynamic compilation and linking.  (this was a fatal error)
+*
+*::>          VERSION  1.18/12   14/10/94 13.28.10
+*
+*     Bug fix in CSPTLI
+*
+*::>          VERSION  1.18/11   30/09/94 14.32.48
+*
+*     Include directives can be nested.
+*
+*     Changes in CSLISTX routine, additional argument IADDR
+*           CALL CSLISTX(cbname,iaddr,ioffs,nel)
+*
+*     New integer function CSLISTC(IADDR,NEXT)
+*     for given routine with address IADDR returns address of
+*     called routines.
+*
+*::>          VERSION  1.18/10   15/09/94 18.48.37
+*
+*    Mods for cscrexec, csrmsl routines.
+*
+*::>          VERSION  1.18/09   08/09/94 09.40.57
+*
+*     Dynamic linking for SGIs, select the flag SHL, use f77 options
+*                                                      -nocpp  -backslash
+*
+*::>          VERSION  1.18/08   04/08/94 16.20.24
+*
+*     Changes in: CSTRAN, CSCTLI and CSDVLN.
+*     A user reported a problem with the following selection function JETS
+*     When we call CSLISTX, you return correctly the following variables
+*     OBJECT,COUNT,NUMBER,PX,X13. But you also return an additional variable
+*     at offset 49 (X13 is returned correctly at offset 41) and NEL=1550.
+*
+*::>          VERSION  1.18/07   14/07/94 14.13.37
+*
+*     Modify CSINCL to support INCLUDE ? for PAW ntuples
+*
+*     Modify CSRD and CSF77 for INCLUDE ?
+*
+*     When INCLUDE ? is given, COMIS will call the PAW routine PAWUWF
+*     to get the ntuple definition to be written on local file COMIS.INC
+*
+*::>          VERSION  1.18/06   07/07/94 15.04.28
+*
+*     Modify COMIS input from keyboard to work with PAW++
+*     New deck CSSINPAW
+*
+*::>          VERSION  1.18/05   05/07/94 08.52.31
+*
+*     Routine CSNUMB modified to support free format in WRITE.
+*
+*::>          VERSION  1.18/04   27/06/94 18.03.06
+*
+*     Change some error messages in CSTERR
+*
+*     Modification in CSNOTB to allow upper/lower case in format fields
+*
+*::>          VERSION  1.18/03   21/06/94 18.17.11
+*
+*     Fix bug in CSREPV for the case of 3-D vectors
+*
+*     Bug fix in CSRD (VM only) for INCLUDE directives
+*
+*     Rename JUMPT routines to JUMPC routines
+*
+*::>          VERSION  1.18/02   18/04/94 16.50.00
+*
+*     New flag added PIAF to have possibility call KUVECT for
+*     vector's name in slave processes
+*
+*     In SHL exec ksh replaced by sh
+*
+*     For IBM changes in file name treatment, routine CSFLCH
+*
+*::>          VERSION  1.18/01   30/03/94 12.56.29
+*
+*     Dynamic loading for AIX,SUN. use a flag SHL.
+*     New patch added RSIBM
+*
+*     correction in CSIPPD: replace 4H  constants by ICHAR values
+*
+*::>          VERSION  1.18/00   22/03/94 14.54.18
+*
+*     changes in routines which returns 4HS   , now they returns
+*     ichar(S)
+*
+*     New routines added CSHEXT('name',ext_name,noargs)
+*                        CSHFAST(line,ext_name)
+*
+*     New routine added CSRMSL(NAME) to unload shl with name
+*        CHPATH//NAME//'.sl'
+*
+*     Treatment of CALL HFILL(.....) added
+*
+*     The format I edit descriptor can be "Iw.m"
+*
+*     New rules for file extentions:
+*       file...77, file.c file.sl file.csl
+*
+*     New directive "!SET ['string' what]"  added to fullfil
+*     SHLOPTions
+*     !SET     shows current values
+*     New release of CSPDIR routine
+*
+*     New version of CSLISTX routine introduced
+*
+*     New flag WINNT added,
+* seq: +SELF,IF=SGI,IBMRT,DECS,HPUX,SUN,MSDOS.  replaced by
+*      +SELF,IF=UNIX,IF=STDUNIX.
+*
+* seq: +SELF,IF=UNIX,IF=-SGI,IF=-IBMRT,IF=-DECS,IF=-HPUX,IF=-SUN,IF=-MSDOS.
+* repl by  +SELF,IF=UNIX,IF=-STDUNIX.
+*
+*      Now it is possible to call a function without args.
+*         i.e.   r=fun0()
+*
+*      Routine CSFRES replaced by CSLFRE
+*
+*     If file name ended with .sl for the time being just
+*     shl-library name loaded
+*
+*     New routine added CSHLOPT(string,what)
+*     if what=
+*           'path' CHPATH=string
+*           'f77'  CHF77 =string
+*           'cc'   CHCC  =string
+*
+*     1) cscrsl now creates all needed files in CWD
+*     2) if file name ended with .c cc compiler invokes
+*     3) if shl containts unresolved symbols it does not load
+*
+

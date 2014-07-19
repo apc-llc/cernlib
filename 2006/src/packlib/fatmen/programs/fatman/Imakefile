@@ -1,0 +1,3 @@
+SRCS_F=	 fathead.F fatplog.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

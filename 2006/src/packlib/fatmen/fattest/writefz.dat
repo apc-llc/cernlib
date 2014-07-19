@@ -1,0 +1,47 @@
+*
+* $Id: writefz.dat,v 1.1.1.1 1996/03/07 15:18:02 mclareni Exp $
+*
+* $Log: writefz.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:18:02  mclareni
+* Fatmen
+*
+*
+************************************************************************
+*
+*     Create a dummy FZ file for testing purposes
+*
+************************************************************************
+      PROGRAM WRITEFZ
+      DIMENSION IQ(2),Q(2),LQ(8000)
+      COMMON/PAWC/PAW(50000)
+      EQUIVALENCE (LQ(1),LMAIN),(IQ(1),LQ(9)),(Q(1),IQ(1))
+      COMMON/QUEST/IQUEST(100)
+      CHARACTER*80 CARD
+      CHARACTER*8  DELTIM
+      DIMENSION    IUHEAD(400)
+      DIMENSION    IOCR(100)
+      PARAMETER (JBIAS=2)
+      PARAMETER (IEVENT=0)
+      CALL HLIMIT(50000)
+*
+*     Create an eXchange mode file, record length = 32400 bytes
+*     Open statement should be modified for VM/CMS or MVS
+*     (FILE=/fname)
+*
+      CALL FZFILE(1,8100,'OX')
+      OPEN(1,FILE='fxfile.dat',ACCESS='SEQUENTIAL',FORM='UNFORMATTED',
+     +    STATUS='NEW')
+      DO 30 K=1,2
+         DO 20 I=1,3
+            CALL FZRUN(1,0,10,IUHEAD)
+            DO 10 J=1,10
+               NUH = 400
+               CALL FZOUT(1,IXDIV,LENTRY,1,'Z',2,400,IUHEAD)
+   10       CONTINUE
+            CALL FZRUN(1,-1,10,IUHEAD)
+   20    CONTINUE
+         PRINT *,'CALLING FZENDO'
+         CALL FZENDO(1,'E')
+   30 CONTINUE
+*
+  999 END

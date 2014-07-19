@@ -1,0 +1,8 @@
+SRCS_F=	 mzcote.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(mzcote,mzcote,'-WF,-P',NullParameter)
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

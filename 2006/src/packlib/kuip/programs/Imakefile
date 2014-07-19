@@ -1,0 +1,18 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+MotifDependantMakeVar(KXTERM,kxterm)
+
+
+#if ! defined(CERNLIB_WINNT)
+SUBDIRS= kuipc $(KXTERM)
+#endif
+
+#if defined(CERNLIB_UNIX) && !defined(CERNLIB_WINNT)
+SUBDIRS := $(SUBDIRS) kuesvr 
+#endif
+
+InstallBinSubdirs($(SUBDIRS))
+
+DelegateTarget(bin/kuipc,kuipc)

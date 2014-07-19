@@ -1,0 +1,75 @@
+CDECK  ID>, CCPROC.
+      SUBROUTINE CCPROC
+
+C-    Finish control-card processing of CCKRAK for PATCHY
+
+      PARAMETER (KM1=1,KM2=2,KM3=4,KM4=8,KM5=16,KM6=32,KM7=64,KM8=128,
+     +  KM9=256, KM10=512, KM11=1024, KM12=2048, KM13=4096, KM14=8192,
+     +  KM15=16384, KM16=32768, KM17=65536, KM18=131072, KM19=262144)
+      PARAMETER (KQGARB=1,KQARRV=3,KQKEEP=4,KQPREP=5,KQMAIN=6,KQPAST=8)
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+C--------------    End CDE              --------------------------------
+
+      IAND (IZV,IZW) = AND (IZV, IZW)
+      IOR  (IZV,IZW) =  OR (IZV, IZW)
+
+C----              Evaluate truth-value and EXE-bits for  IF-parameters
+
+      IF (NCCPIF.EQ.0)             RETURN
+      IF (MOPUPD.NE.0)             RETURN
+      LQ(LLPAST-1) = LQPAST
+      MEXEB = 0
+      MTRUE = KM5
+      LS   = JCCPIF
+      JSEP = MCCPAR(LS)
+
+C--                Start new AND-group
+
+   21 MLTRU = 0
+
+C--                Next parameter
+
+   22 LPU = KQFIND (MCCPAR(LS+1),2,KQMAIN,NVUTY(1))
+      IF (LPU.EQ.0)  THEN
+          CALL CREAPD (MCCPAR(LS+1),-1,-1)
+          LPU = LCRP
+        ENDIF
+
+      IQ(LPU+1) = IOR (IQ(LPU+1), KM6)
+      MXUS  = IQ(LPU)
+      MEXEB = IOR (MEXEB, MXUS)
+
+      IF (JSEP.LT.0)  MXUS= NOT(MXUS)
+      MLTRU = IOR(MLTRU, MXUS)
+
+      LS   = LS + 3
+      JSEP = MCCPAR(LS)
+      IF (IABS(JSEP).EQ.1)         GO TO 22
+      MTRUE = IAND(MTRUE, MLTRU)
+      IF (JSEP.NE.0)               GO TO 21
+
+C--                Finished
+
+      MXCCIF = IAND (MEXEB,15)
+      IF (IAND(MTRUE,KM5).EQ.0)  JCCIFV= 1
+      RETURN
+      END

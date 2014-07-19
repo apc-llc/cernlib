@@ -1,0 +1,31 @@
+*
+* $Id: w16movn5.s,v 1.1.1.1 1996/03/08 15:21:59 mclareni Exp $
+*
+* $Log: w16movn5.s,v $
+* Revision 1.1.1.1  1996/03/08 15:21:59  mclareni
+* Epio
+*
+*
+#if defined(CERNLIB_ND50)||defined(CERNLIB_ND500)
+       MODULE M_W16MOV
+% CALL W16MOV(SOURCE,N1,TARGET,N2,N3)
+% MOVES 16 BIT WORDS IN PACKED FORM. OVERLAP ALLOWED.
+% VERSION 811001
+       EXPORT W16MOV
+       ROUTINE W16MOV
+       LIB W16MOV
+VBAS:  STACK FIXED
+PAR:   W BLOCK 5
+       ENDSTACK
+W16MOV:  ENTF VBAS
+       W4:=IND(B.PAR+16)
+       IF <= GO BACK
+       W1:=IND(B.PAR+4)
+       W1-1
+       W2:=IND(B.PAR+12)
+       W2-1
+       H BMOVE IND(B.PAR)(R1),IND(B.PAR+8)(R2),IND(B.PAR+16)
+BACK:  RET
+       ENDROUTINE
+       ENDMODULE
+#endif

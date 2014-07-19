@@ -1,0 +1,9 @@
+SRCS_F= hqbin.F hqd.F hqdd.F hqddj.F hqddjn.F hqdj.F hqdjn.F hqdn.F \ @@\
+	hqend.F hqf.F hqfer.F hqfnl.F hqfpl.F hqgetf.F hqgiv.F hqin.F \ @@\
+	hqinit.F hqlif1.F hqlif2.F hqlif3.F hqlsqc.F hqlsqu.F hqmxa1.F \ @@\
+	hqmxa2.F hqmxa3.F hqmxb1.F hqmxb2.F hqmxb3.F hqmxc1.F hqmxc2.F \ @@\
+	hqmxc3.F hqmxli.F hqout.F hqpois.F hqputf.F hqsig.F hqsig1.F \ @@\
+	hqsig2.F hqsig3.F hqsiga.F hqsolv.F hqssv.F hquad.F hqwave.F \ @@\
+	hqwrif.F hqxi.F hqmnu.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

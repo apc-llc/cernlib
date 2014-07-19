@@ -1,0 +1,3 @@
+SRCS_F=	 zend.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

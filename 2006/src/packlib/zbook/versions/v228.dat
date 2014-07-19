@@ -1,0 +1,11 @@
+*
+* $Id: v228.dat,v 1.1.1.1 1996/03/08 12:01:14 mclareni Exp $
+*
+* $Log: v228.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:14  mclareni
+* Zbook
+*
+*
+*  Version 2.28  940830 14.20
+C Fix +SELF in ZERROR (JDS)
+C

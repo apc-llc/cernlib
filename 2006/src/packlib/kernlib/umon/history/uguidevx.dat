@@ -1,0 +1,51 @@
+*
+* $Id: uguidevx.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: uguidevx.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_VAXVMS)
+ 
+旼컴컴컴컴커                                                           旼컴컴커
+| UMON     |                 CERN COMPUTER CENTRE                      | Z020 |
+읕컴컴컴컴켸                    PROGRAM LIBRARY                        읕컴컴켸
+ 
+Author: F.Carminati                              Library: KERNLIB, VAX/VMS only
+______                                           _______
+Submitter:                                                Submitted: 1989.03.01
+_________                                                 _________
+Language: VAX FORTRAN                                       Revised: -
+________                                                    _______
+                           Usage Monitor for VAX/VMS
+                           컴컴컴컴컴컴컴컴컴컴컴컴�
+UMCOM is an usage monitor package for VAX/VMS systems. Usage log requests are
+performed either via Fortran calls or via DCL commands.
+Structure:      Complete program and subroutine package
+_________
+                User Entry Names: UMCOM, UMLOG
+Usage:                 CALL UMCOM(CMD,MONITOR,TEXT)
+_____
+                CMD    A character variable constant or expression whose first
+                       two letters are interpreted as a command to UMON. See
+                       long write-up for possible commands.
+                MONITOR  A character variable containing the name of the moni-
+                       tor to be affected by the command. The maximum name
+                       length for a monitor is 8 characters.
+                TEXT   A character variable containing information related to
+                       the command given. If string is longer than 80 charac-
+                       ters it will be truncated.
+                       CALL UMLOG(MONITOR,TEXT)
+                MONITOR  Character containing the name of the monitor.  A moni-
+                       tor can be eight characters long at most. If MONITOR is
+                       longer than eight characters, only the first eight char-
+                       acters will be considered.
+                TEXT   Character string containing the text to be logged. If
+                       TEXT is longer than 80 characters, only the first 80
+                       characters will be used.
+Method:         The long write-up should be consulted.
+______
+Long Write-up:  Available
+_____________
+#endif

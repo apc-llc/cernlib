@@ -1,0 +1,14 @@
+SRCS_F= gukine.F guout.F gustep.F main.F ufiles.F ugeom.F uginit.F uglast.F \ @@\
+	uhinit.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(exam6,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib)
+
+TestTarget(exam6,gexam6.dat,gexam6.input)
+
+gexam6.input: g321x6.inp
+	$(CP) $< $@
+
+gexam6.dat: exam6.dat
+	$(CP) $< $@

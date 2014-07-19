@@ -1,0 +1,57 @@
+*
+* $Id: fatqueue.dat,v 1.2 1996/04/16 06:43:41 jamie Exp $
+*
+* $Log: fatqueue.dat,v $
+* Revision 1.2  1996/04/16 06:43:41  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /fatmen/fm*
+ 
+   do
+ 
+      typeset -u fatgrp
+      fatpath=$i
+      fatgrp=`basename $i`
+      eval $fatgrp=$fatpath;export $fatgrp
+#
+# Look for startable servers (fatserv exists)
+#
+      if [ -x ${i}/fatserv ]
+      then
+#
+# Pending files?
+#
+      todo=`ls ${i}/todo/aa* 2> /dev/null | wc -l`
+      if [ ${todo} != "0" ]
+      then
+         echo ${todo} pending files in TODO for ${fatgrp} | \
+            mail -s " ${fatgrp}: TODO backlog " fatcat-mgr@zfatal.cern.ch
+      fi
+ 
+      todo=`ls ${i}/todo/zz* 2> /dev/null | wc -l`
+      if [ ${todo} != "0" ]
+      then
+         echo ${todo} ZZ files in TODO for ${fatgrp} | \
+            mail -s " ${fatgrp}: TODO backlog " fatcat-mgr@zfatal.cern.ch
+      fi
+ 
+      if [ -d ${i}/tovm ]
+      then
+      tovm=`ls ${i}/tovm | wc -l`
+      if [ ${tovm} != "0" ]
+      then
+         subject=`echo ${fatgrp}: TOVM backlog`
+         echo ${tovm} pending files for transmission to CERNVM for ${fatgrp} | \
+            mail -s " ${subject} " fatcat-mgr@zfatal.cern.ch
+      fi
+      fi
+      fi
+   done

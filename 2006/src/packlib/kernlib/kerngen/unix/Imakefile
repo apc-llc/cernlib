@@ -1,0 +1,39 @@
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_HPUX)
+LIBDIRS=hpxgs
+#else
+#if defined(CERNLIB_SUN) || defined(CERNLIB_SOLARIS)
+LIBDIRS=sungs
+#else
+#if defined(CERNLIB_LNX) && !defined(CERNLIB_GFORTRAN)
+LIBDIRS=lnxgs
+#else
+#if defined(CERNLIB_IRTD)
+LIBDIRS=irtdgs
+#else
+#if defined(CERNLIB_GFORTRAN)
+LIBDIRS=gfortgs
+#else
+#undef IHaveSubdirs
+all::
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#endif
+#endif
+#endif
+#endif
+#endif
+
+#ifdef IHaveSubdirs
+
+SUBDIRS= $(LIBDIRS)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(kerngen,$(LIBDIRS))
+
+#endif
+

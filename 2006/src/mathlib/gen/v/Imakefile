@@ -1,0 +1,51 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F=	binomi.F corgen.F corset.F funlux.F funpre.F funran.F funzer.F \ @@\
+	graph.F hisran.F iget.F munomi.F normco.F permu.F \ @@\
+	pgraph.F poissn.F ran3d.F rangam.F ranlux.F rg32.F rm48.F \ @@\
+	rnbnml.F rndm2.F rngama.F rnhran.F rnmnml.F rnorml.F rnormx.F \ @@\
+	rnpssn.F rn3dim.F rvnspc64.F trevni.F tup.F
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) rvnspc.F 
+#else
+SRCS_F:= $(SRCS_F) dvnspc128.F 
+#endif
+
+#if defined(CERNLIB_VAX)
+SRCS_F:= $(SRCS_F)  rnorthvx.F
+#endif
+
+#if defined(CERNLIB_UNIX)
+SRCS_F:= $(SRCS_F)  rnorthux.F
+#endif
+
+#if defined(CERNLIB_VAXVMS) && !defined(CERNLIB_FORTRAN)
+SRCS_S= norranvx.s nranvx.s rn32ml.s
+#endif
+
+#if !defined(CERNLIB_VAX) || defined(CERNLIB_FORTRAN)
+SRCS_F:= $(SRCS_F) nranf.F rn32.F
+#endif
+
+#if defined(CERNLIB_UNIX) || defined(CERNLIB_QMALPH)
+SRCS_F:= $(SRCS_F) norranux.F 
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#if defined(CERNLIB_SUN) || defined(CERNLIB_QMVAOS)
+SpecialFortranLibObjectRule(norranux,norranux,-O1,NullParameter)
+#endif
+
+#if defined(CERNLIB_QMALPH)
+SpecialFortranObjectRule(norranux,norranux,/NOOPTIMIZE,NullParameter)
+#endif
+

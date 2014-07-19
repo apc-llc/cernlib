@@ -1,0 +1,102 @@
+*
+* $Id: f2in.F,v 1.1.1.1 1996/01/11 14:14:36 mclareni Exp $
+*
+* $Log: f2in.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:36  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      FUNCTION F2IN(X,IT)
+C     *******************
+C-- INITIAL PARTON DENSITIES TIMES X
+C-- IEICHT=0  -- FROM NA3 DRELL-YAN PAIR PRODUCTION EXPERIMENT
+C-- IEICHT=1,2 -- FROM EICHTEN ET AL., SET 1 AND 2, RESPECTIVELY
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/alqgen.inc"
+#include "cojets/eicht.inc"
+#include "cojets/itapes.inc"
+      DATA ICALL/0/
+      IF(ICALL.GT.0) GO TO 5
+      ICALL=1
+      BBBB1=0.5
+      BBBB2=4.3
+      BBBB3=5.3
+      AU=2./BETAEU(BBBB1,BBBB2)
+      AD=1./BETAEU(BBBB1,BBBB3)
+      AS=.25
+      QE2=QZEV**2
+5     CONTINUE
+      IF(IT.EQ.1) GO TO 10
+      IF(IT.EQ.2) GO TO 20
+      IF(IT.EQ.3) GO TO 30
+      IF(IT.EQ.4) GO TO 40
+      IF(IT.EQ.5) GO TO 50
+      IF(IT.EQ.6) GO TO 60
+      IF(IT.EQ.7) GO TO 70
+C-- U
+10    IF(IEICHT.EQ.1) GO TO 11
+      IF(IEICHT.EQ.2) GO TO 12
+      F2IN=AU*SQRT(X)*(1.-X)**3.3+AS*(1.-X)**7.7
+      RETURN
+11    F2IN=EICHT1(X,QE2,2)+EICHT1(X,QE2,4)
+      RETURN
+12    F2IN=EICHT2(X,QE2,2)+EICHT2(X,QE2,4)
+      RETURN
+C-- UB
+20    IF(IEICHT.EQ.1) GO TO 21
+      IF(IEICHT.EQ.2) GO TO 22
+      F2IN=AS*(1.-X)**7.7
+      RETURN
+21    F2IN=EICHT1(X,QE2,4)
+      RETURN
+22    F2IN=EICHT2(X,QE2,4)
+      RETURN
+C-- D
+30    IF(IEICHT.EQ.1) GO TO 31
+      IF(IEICHT.EQ.2) GO TO 32
+      F2IN=AD*SQRT(X)*(1.-X)**4.3+AS*(1.-X)**7.7
+      RETURN
+31    F2IN=EICHT1(X,QE2,3)+EICHT1(X,QE2,4)
+      RETURN
+32    F2IN=EICHT2(X,QE2,3)+EICHT2(X,QE2,4)
+      RETURN
+C-- DB
+40    IF(IEICHT.EQ.1) GO TO 41
+      IF(IEICHT.EQ.2) GO TO 42
+      F2IN=AS*(1.-X)**7.7
+      RETURN
+41    F2IN=EICHT1(X,QE2,4)
+      RETURN
+42    F2IN=EICHT2(X,QE2,4)
+      RETURN
+C-- S AND SB
+50    IF(IEICHT.EQ.1) GO TO 51
+      IF(IEICHT.EQ.2) GO TO 52
+      F2IN=AS*(1.-X)**7.7
+      RETURN
+51    F2IN=2.*EICHT1(X,QE2,5)
+      RETURN
+52    F2IN=2.*EICHT2(X,QE2,5)
+      RETURN
+C-- TOTAL QUARKS
+60    IF(IEICHT.EQ.1) GO TO 61
+      IF(IEICHT.EQ.2) GO TO 62
+      XU=(1.-X)**3.3
+      F2IN=SQRT(X)*(AU*XU+AD*XU*(1.-X))+5.*AS*(1.-X)**7.7
+      RETURN
+61    F2IN=EICHT1(X,QE2,2)+EICHT1(X,QE2,3)
+      F2IN=F2IN+4.*EICHT1(X,QE2,4)+2.*EICHT1(X,QE2,5)
+      RETURN
+62    F2IN=EICHT2(X,QE2,2)+EICHT2(X,QE2,3)
+      F2IN=F2IN+4.*EICHT2(X,QE2,4)+2.*EICHT2(X,QE2,5)
+      RETURN
+C-- GLUON
+70    F2IN=FGLU(X)
+      RETURN
+      END

@@ -1,0 +1,42 @@
+DoIncludePackage(higz)
+#include "pilot.h"
+
+SRCS_F=	ica.F igadid.F igarc.F igarc1.F igarc2.F igarc3.F \ @@\
+	igarc4.F igasci.F igaxi0.F igaxi1.F igaxi2.F igaxi3.F igaxi4.F \ @@\
+	igaxis.F igbox.F igcell.F igchwk.F igcles.F igcli1.F igclip.F \ @@\
+	igcolm.F igconv.F igdate.F igdwk.F igelli.F igend.F igerr.F \ @@\
+	igfa.F igfbox.F iggfin.F iggif.F ighatc.F ighcx.F ighcxy.F \ @@\
+	ighis1.F ighist.F ighr01.F ightor.F iginit.F igiwin.F igiwty.F \ @@\
+	iglbl.F iglev.F igloc.F igloc2.F igm100.F igmess.F \ @@\
+	igmetn.F igparf.F igpave.F igphst.F igpick.F igpid.F \ @@\
+	igpie.F igpkfa.F igpkpl.F igpkpm.F igpm.F igpxmp.F igq.F \ @@\
+	igqwk.F igrap1.F igrap2.F igraph.F igrtoh.F \ @@\
+	igset.F igset1.F igsrap.F igsse.F igstr.F igsvie.F igtab1.F \ @@\
+	igtab2.F igtab3.F igtab4.F igtab5.F igtab6.F igtabl.F igtcch.F \ @@\
+	igterm.F igtext.F igwkty.F igzset.F iml.F ipm4id.F \ @@\
+	ipmid.F
+
+
+#ifndef CERNLIB_WINNT
+SRCS_F := $(SRCS_F) igxmes.F 
+#endif
+
+#if !defined(CERNLIB_DI3000)
+SRCS_F := $(SRCS_F) igmeta.F igrng.F
+#endif
+
+#if defined(CERNLIB_X11)
+SRCS_F := $(SRCS_F) igobj.F igrsiz.F 
+#endif
+
+
+#ifdef CERNLIB_NEXT
+SpecialFortranLibObjectRule(igtext,igtext,NullParameter,NullParameter)
+#endif
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(igwkty,igwkty,"-WF,-P" $(FDEBUGFLAGS),NullParameter)
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

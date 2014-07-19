@@ -1,0 +1,44 @@
+*
+* $Id: datime.dat,v 1.1.1.1 1996/02/15 17:52:56 mclareni Exp $
+*
+* $Log: datime.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:56  mclareni
+* Kernlib
+*
+*
+datime : proc (id, it);
+ 
+/* *****************************************************************
+   *                                                               *
+   * datime(id,it)  id=10000*an+100*mois+jour                      *
+   *                it=100*heure+minute                            *
+   *                                                               *
+   ***************************************************************** */
+ 
+/* declarations des subroutiunes */
+ 
+dcl  clock_ entry () returns (fixed bin (71));
+dcl  decode_clock_value_$date_time entry (fixed bin (71), fixed bin
+, fixed bin, fixed bin, fixed bin
+, fixed bin, fixed bin, fixed bin (71), fixed bin, char (3)
+, fixed bin (35));
+ 
+/* declarations des variables */
+ 
+dcl (clock, microsecond) bin fixed (71);
+dcl (id, it, code) bin fixed (35);
+dcl (month, year, dom, hour, minute, second, dow) fixed bin;
+dcl  zone char (3);
+ 
+ 
+ 
+          zone = "";
+          clock = clock_ ();
+          call decode_clock_value_$date_time (clock, month, dom, year
+, hour, minute, second, microsecond, dow, zone, code);
+          id = 10000* (year-1900)+100*month+dom;
+          it = 100*hour+minute;
+     END datime;
+#ifdef CERNLIB_TCGEN_DATIME
+#undef CERNLIB_TCGEN_DATIME
+#endif

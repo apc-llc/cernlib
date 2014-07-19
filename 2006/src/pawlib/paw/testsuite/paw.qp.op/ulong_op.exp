@@ -1,0 +1,97 @@
+#
+#  ulong_op.exp  --
+#
+#  Original: 29-Mar-1996 12:06
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+untested	"UInt64 operators"
+
+# #
+# # Scalar -
+# #
+# 
+# expr_test	uint	1	z'ffffffff'-u2		z'fffffc17'
+# expr_test	uint	2	z'ffffffff'-u2		z'fffffc16'
+# 
+# expr_test	uint	1	uval-z'0'		z'0'
+# expr_test	uint	2	uval-z'0'		z'deadbeaf'
+# expr_test	uint	3	uval-z'0'		z'ffffffff'
+# 
+# expr_test	uint	1	uval-z'0'		z'0'
+# expr_test	uint	2	uval-z'deadbeaf'	z'0'
+# expr_test	uint	3	uval-z'ffffffff'	z'0'
+# 
+# expr_test	uint	2	z'fff'-u2		z'c16'
+# 
+# 
+# #
+# # Scalar +
+# #
+# 
+# expr_test	uint	1	z'0'+uval		z'0'
+# expr_test	uint	2	z'0'+uval		z'deadbeaf'
+# expr_test	uint	3	z'0'+uval		z'ffffffff'
+# 
+# expr_test	uint	1	z'ffffffff'+uval	z'ffffffff'
+# 
+# expr_test	uint	2	z'11111110'+uval	z'efbecfbf'
+# 
+# 
+# #
+# # Scalar *
+# #
+# 
+# expr_test	uint	1	z'0'*uval		z'0'
+# expr_test	uint	2	z'0'*uval		z'0'
+# expr_test	uint	3	z'0'*uval		z'0'
+# 
+# expr_test	uint	1	z'1'*uval		z'0'
+# expr_test	uint	2	z'1'*uval		z'deadbeaf'
+# expr_test	uint	3	z'1'*uval		z'ffffffff'
+# 
+# expr_test	uint	1	z'10'*u2		z'3e80'
+# 
+# 
+# #
+# # Scalar /
+# #
+# 
+# expr_test	uint	1	uval/z'1'		z'0'
+# expr_test	uint	2	uval/z'1'		z'deadbeaf'
+# expr_test	uint	3	uval/z'1'		z'ffffffff'
+# 
+# expr_test	uint	2	uval/z'deadbeaf'	z'1'
+# expr_test	uint	3	uval/z'ffffffff'	z'1'
+# 
+# expr_test	uint	1	z'3e80'/u2		z'10'
+# 
+# 
+# #
+# # Scalar unary -
+# #
+# 
+# expr_test	uint	1	-uval			0
+# expr_test	uint	1	-u2			-1000
+# expr_test	uint	2	-u2			-1001
+# 
+
+#
+# Cleanup after tests
+#
+
+paw_cmd { close 4 }

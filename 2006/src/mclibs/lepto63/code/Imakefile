@@ -1,0 +1,12 @@
+SRCS_F= \ @@\
+	 dcross.F dfun.F dlower.F dqcd.F dqcdi.F dsigma.F dsigm2.F dupper.F dvnopt.F \ @@\
+	 flgint.F flintg.F flipol.F flqint.F fltabl.F fltint.F gadap.F \ @@\
+	 gadap2.F gadapf.F lazimu.F leaswi.F lecswi.F lepto.F leptod.F \ @@\
+	 leptox.F lflav.F lframe.F linit.F lkinem.F lmcmnd.F lmeps.F \ @@\
+	 lmidat.F lminew.F lminto.F lmpint.F lmprin.F lmrazz.F lmsimp.F \ @@\
+	 lnstrf.F lprikt.F lprwts.F lqcdpr.F lqev.F lqgev.F lqmcut.F \ @@\
+	 lqqbev.F lremh.F lscale.F lsci.F lshowr.F lsigmx.F lsmall.F  ltimex.F \ @@\
+	 lwbb.F lweits.F lxp.F lxsect.F lyremn.F lyspli.F lysspa.F lystfu.F \ @@\
+	 lzp.F riwfun.F riwibd.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

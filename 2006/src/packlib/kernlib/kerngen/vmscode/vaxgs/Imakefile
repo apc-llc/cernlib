@@ -1,0 +1,7 @@
+SRCS_F= ffrvax.F ftovax.F qnextd.F uflint.F uhollr.F
+
+#ifdef CERNLIB_QMALPH
+SRCS_F := $(SRCS_F) qnext.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

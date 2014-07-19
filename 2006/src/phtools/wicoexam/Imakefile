@@ -1,0 +1,5 @@
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(wicot,wicoex.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(wicot,NullParameter,NullParameter)

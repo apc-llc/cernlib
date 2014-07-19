@@ -1,0 +1,20 @@
+*
+* $Id: jbytet.dat,v 1.1.1.1 1996/02/15 17:52:56 mclareni Exp $
+*
+* $Log: jbytet.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:56  mclareni
+* Kernlib
+*
+*
+jbytet   : proc (msk, a, la, nbits) returns (bin fixed (35));
+ 
+dcl (temp, msk, a, la, nbits) bin fixed (35);
+          temp = 0;
+          substr (unspec (temp), 37-nbits, nbits) =
+substr (unspec (a), 38-la-nbits, nbits);
+          unspec(temp) = unspec(temp) & unspec(msk);
+          return (temp);
+     END jbytet;
+#ifdef CERNLIB_TCGEN_JBYTET
+#undef CERNLIB_TCGEN_JBYTET
+#endif

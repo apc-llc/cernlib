@@ -1,0 +1,20 @@
+*
+* $Id: v146.dat,v 1.1.1.1 1996/04/01 15:01:32 mclareni Exp $
+*
+* $Log: v146.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:32  mclareni
+* Mathlib gen
+*
+*
+* 1.46/01   950315 
+C
+C  Routine changes:  
+C  ---------------
+C  
+C  USRTRM.  L. Garren - initilize COUNT variable
+C  PROB     G.Folger    one more protection against underflow:
+C                         chi2/ndf > 100 ( ndf >=2 ) -->> prob=0.
+C  D107     G.Folger    add RGQUAD for 32 bit machines ( ie. +DOUBLE)
+C
+C  D501     KSK,        remove false calls to dvset
+C

@@ -1,0 +1,8 @@
+SRCS_C=	about.c att_color.c att_define_color.c att_font.c \ @@\
+	att_general.c att_geometry.c att_main.c attatch.c axis.c \ @@\
+	chain_tree.c cuts.c file.c histo.c init.c mail.c ntuple.c \ @@\
+	ntwork.c readfs.c scan.c style.c utils.c
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)

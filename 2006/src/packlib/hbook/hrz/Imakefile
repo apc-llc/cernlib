@@ -1,0 +1,5 @@
+SRCS_F= hrendc.F hrendf.F hrenid.F hrfile.F hrget.F hrin.F hrmake.F \ @@\
+	hrmdir.F hropen.F hrout.F hrput.F hrsort.F hrzcd.F hrzin.F \ @@\
+	hrzkey.F hrzld.F hrzout.F hscr.F  hreadonedir.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

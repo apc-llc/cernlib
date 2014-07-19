@@ -1,0 +1,3 @@
+SRCS_S= dibdx.s dxdib.s sibsx.s sxsib.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

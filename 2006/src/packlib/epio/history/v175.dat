@@ -1,0 +1,15 @@
+*
+* $Id: v175.dat,v 1.1.1.1 1996/03/08 15:21:46 mclareni Exp $
+*
+* $Log: v175.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:46  mclareni
+* Epio
+*
+*
+*  Version 1.75  9412?? 10.00
+C- Remove unused flag AOSF64 in Patch *EPIO.
+C
+C- The Ultrix ISHFTC problem is still there, so use the faster Aleph
+C   versions of CFRIBMSV, CTOIBSTV and BTSWPSTV for STF77VX.
+C   The ishftc versions are kept in CFRIBMSH, CTOIBSHF, BTSWPSHF.
+C

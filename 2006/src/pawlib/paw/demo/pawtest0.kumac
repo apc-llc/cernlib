@@ -1,0 +1,15 @@
+Macro PAWTEST0
+message Create file pawdemo.hbook from ZEBRA alphanumeric file pawdemo.txt
+histo/file 21 pawdemo.hbook 1024 n
+fra pawdemo.txt
+ld
+close 21
+message Create file pawdemo.higz from ZEBRA alphanumeric file pawtests.txt
+pict/file 22 pawdemo.higz 1024 n
+fra pawtests.txt
+ld
+pict/plot pawtest1
+Waiting
+pict/plot pawtest2
+close 22
+return

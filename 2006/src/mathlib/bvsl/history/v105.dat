@@ -1,0 +1,12 @@
+*
+* $Id: v105.dat,v 1.1.1.1 1996/03/21 17:19:53 mclareni Exp $
+*
+* $Log: v105.dat,v $
+* Revision 1.1.1.1  1996/03/21 17:19:53  mclareni
+* Bvsl
+*
+*
+* Version 1.05   930902 11.30
+C- Introduce the following patches/flags:
+C   > NEXT, LINUX
+C

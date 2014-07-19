@@ -1,0 +1,19 @@
+*
+* $Id: v108.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v108.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+*  Version 1.08  920316  1.00
+C- Additions:
+C  > Z264 IARGC   Emulation of UNIX function on Vax/VMS (to join KERNVAX)
+C  > Z313 JOBINFO Add Vax/VMS version
+C  > T001 TIMAX   Only for CERN, because of the accounting factor
+C  > T002 UNALIGN Allow unaligned_data_access - HPUX    (to join KERNHPX)
+C
+C- Corrections:
+C  > M442 NAMEFD  Open files on Vax SHARED,on IBM with ACTION='READ'
+C  > T000 INITC   Enable also for MVS (M.Dahlinger, GSI)
+C

@@ -1,0 +1,63 @@
+CDECK  ID>, PGSIZE.
+      SUBROUTINE PGSIZE (MODE,IXOPT)
+
+C-    Set (MODE=0) or print (=1) page size
+C.    started 17-jan-94
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      COMMON /QPAGE/ NQLMAX,NQLTOL,NQLTOK,NQCMAX,NQCPGH,NQPAGE
+     +,              NQWYLDO,NQWYL,NQNEWH,NQJOIN,NQDKNO,NQDKPG
+      COMMON /QUNIT/ IQREAD,IQPRNT, IQTTIN,IQTYPE, IQOFFL,IQRTTY,IQRSAV
+     +,              IQRFD,IQRRD,IQRSIZ, NQLPAT,NQUSED,NQLLBL, NQINIT
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*80
+      EQUIVALENCE (LINE,SLLINE)
+
+      DIMENSION    LILENG(5)
+      DATA LILENG  / 56, 62, 74, 84, 98 /
+
+
+
+      IF (MODE.NE.0)               GO TO 41
+      DO 24  J=1,5
+      IF (JBIT(MOPTIO(34),J+26).NE.0)  NQLMAX= LILENG(J)
+   24 CONTINUE
+
+      CALL NA_GET (IXOPT,LINE,1)
+      NN = NDSLAT
+
+      J  = 0
+   26 J  = J + 1
+      IF (J.GE.NN)                 GO TO 29
+      NL = ICDECI (LINE,J,NN)
+      IF (NDSLAT.LT.2)             GO TO 26
+      IF (NL.LT.20)                GO TO 26
+      NQLMAX = NL
+
+   29 CALL MQPAGE
+      RETURN
+
+   41 CALL DPBLAN (1)
+      WRITE (IQPRNT,9041) NQLMAX, LILENG
+      RETURN
+
+ 9041 FORMAT (' Page size used:',I5,' lines per page'
+     F/' Available with option  O:',I3,
+     F'  1:',I3,'  2:',I3,'  3:',I3,'  4:',I3)
+      END

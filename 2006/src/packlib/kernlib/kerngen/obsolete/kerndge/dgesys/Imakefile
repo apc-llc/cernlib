@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 datime.F datimh.F traceq.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 amoni.F brfrac.F eudcin.F eudini.F eudtab.F eudtit.F idloc.F \ @@\
+	 inibrn.F invert.F nampoi.F ordbr.F sqd.F toponi.F wglu.F whvy.F \ @@\
+	 wlqu.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

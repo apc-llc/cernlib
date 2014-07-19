@@ -1,0 +1,6 @@
+INCLUDES=	 hepevt.inc ludat1.inc ludat2.inc ludat3.inc \ @@\
+	ludat4.inc ludatr.inc lujets.inc nmxhep.inc pyint1.inc \ @@\
+	pyint2.inc pyint3.inc pyint4.inc pyint5.inc pyint6.inc \ @@\
+	pypars.inc pysubs.inc rkbbvc.inc rkzfco.inc rkzsco.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),jetset74)

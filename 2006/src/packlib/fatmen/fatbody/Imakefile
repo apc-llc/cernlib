@@ -1,0 +1,8 @@
+SRCS_F=	 fafill.F farini.F fatini.F fatmdi.F fmbook.F fmexst.F \ @@\
+	fmlift.F fmlogl.F fmrzin.F ftrend.F
+
+#ifdef CERNLIB_SHIFT
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

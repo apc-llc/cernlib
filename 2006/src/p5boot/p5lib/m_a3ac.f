@@ -1,0 +1,61 @@
+CDECK  ID>, M_A3AC.
+      SUBROUTINE M_A3AC
+
+C-    Content analysis stage 3:
+C-    scan the material of the +REPL etc being defined
+C-    return JCCBAD non-zero to signal c/line with syntax error at LDOAN
+C.    started 8-dec-93
+
+      PARAMETER  (MCCNIL=1,  MCCKIL=2,  MCCINC=3,  MCCCDE=4,  MCCSEQ=5,
+     + MCCXSQ=6,  MCCTRU=7,  MCCFAL=8,  MCCELS=9,  MCCEND=10,
+     +            MCCSEL=11, MCCSES=12, MCCFAU=13, MCCSKI=14,
+     +            MCCKEE=15, MCCDEL=16, MCCREP=17, MCCADB=18, MCCADD=19,
+     + MCCUSE=20, MCCXDI=21, MCCDIV=22, MCCLIS=23, MCCEXE=24, MCCIMI=25,
+     + MCCASM=26, MCCUPD=27, MCCNAM=28, MCCGAP=29, MCCMOR=30, MCCONL=31,
+     + MCCFOR=32, MCCSUS=33, MCCOPT=34, MCCOP2=35, MCCSHO=36, MCCPAM=37,
+     + MCCQUI=38, MCCEOD=39, MCCDEC=40, MCCPAT=41, MCCTIT=42)
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+      COMMON /M_ANAC/LOWAN,KDOAN,LDOAN,LUPAN,MODEAN,MEXAN,LEVAN,KKM5AN
+     +,              NEWDEC,NEWCTL,NEWFOR,NEWNIL,NEWINC
+C--------------    End CDE              --------------------------------
+
+
+   22 CALL M_A3NX
+      IF (LDOAN.EQ.0)              RETURN
+      IF (JCCTYP.GE.MCCSEL)        RETURN
+      IF (JCCTYP.LT.MCCKIL)        GO TO 22
+      IF (JCCTYP.EQ.MCCXSQ)        GO TO 22
+
+      CALL M_KRAK (0)
+      IF (JCCBAD.NE.0)             RETURN
+      GO TO 22
+C!
+C!-           check delayed control-cards for +REPL +ADB +ADD
+C!
+C! 78 JSLA = IQ(LDOAN+1)
+C!    JSLE = JSLA + IQ(LDOAN+2)
+C!    JSLG = JSLA
+C! 79 IF (JSLG.GE.JSLE)            GO TO 77
+C!    CALL NEXTCC ('-',JSLG,JSLE,JSLF,JCCTYP)
+C!    IF (JCCTYP.EQ.0)             GO TO 77
+C!    JSLG = JSLF + 1
+C!    IF (JCCTYP.EQ.MCCNIL)        GO TO 79
+C!    CALL CCKRAK (JSLF)
+C!    IF (JCCBAD.EQ.0)             GO TO 79
+C!    IF (JSLF.NE.JSLA)  LDOAN = M_SPLIT (LDOAN,JSLF)
+C!    CALL FAILCC (1, 'Bad syntax for delayed c/l')
+C!    GO TO 79
+      END

@@ -1,0 +1,4 @@
+SRCS_F=	 cdbrca.F cdcbcn.F cdcdl1.F cdexam05.F cdl1et.F \ @@\
+	cdmatt.F cdmodp.F cexam05.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

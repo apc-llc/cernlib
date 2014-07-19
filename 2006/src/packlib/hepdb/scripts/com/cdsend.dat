@@ -1,0 +1,124 @@
+*
+* $Id: cdsend.dat,v 1.1.1.1 1996/02/28 16:23:57 mclareni Exp $
+*
+* $Log: cdsend.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:57  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDSEND.COM
+$ !
+$ ! Command file to move updates between 'slave' and 'master'
+$ !
+$ ! Invoked by CDSERV.COM from the account CDHEPDB on current node
+$ !
+$ ! Assumes correct UID & GID mapping for directories on 'master'
+$ !    MULTINET CONFIGURE /NFS
+$ !    NFS-CONFIG>add uid cdhepdb 102 3
+$ !    NFS-CONFIG>ctrl-z
+$ !
+$ set noon
+$ !
+$ ! List of servers
+$ !
+$   cdservers = "CDCPLEAR,CDCHORUS,CDNOMAD"
+$ !
+$ ! Master & slave definitions
+$ !
+$   slave     = f$trnlnm("SYS$NODE") - "::"
+$   master    = "HEPDB"
+$ !
+$ ! UIC
+$ !
+$   our_uic   = f$getjpi("","UIC")
+$ !
+$ main_loop:
+$   nserver   = 0
+$ !
+$ ! Loop over all servers
+$ !
+$ loop_servers:
+$   server    = f$element(nserver,",",cdservers)
+$   nserver   = nserver + 1
+$   if server .eqs. "," then goto sleep
+$ !
+$   write sys$output "Processing ''server'..."
+$ !
+$ ! Look for files waiting to be sent to 'master'
+$ !
+$ to_hepdb:
+$    journal_file = f$search("DISK$MF:[''server'.TO''master']*.*")
+$ !
+$    if journal_file .eqs. "" then goto from_hepdb
+$ !
+$ ! Skip 'active' files
+$ !
+$    if f$locate("]ZZ",journal_file) .lt. f$length(journal_file) then -
+goto to_hepdb
+$ !
+$ ! Build remote file name
+$ !
+$   istart = f$locate("]",journal_file) + 1
+$   remote_file = "''master':[''server'.TODO]ZZ" + -
+       f$extract(istart+2,f$length(journal_file),journal_file)
+$ !
+$ ! Copy the file over
+$ !
+$   copy 'journal_file' 'remote_file' /log /noconfirm
+$ !
+$ ! Rename remote file and delete local file if it was ok
+$ !
+$   if $severity .eq. 1
+$      then
+$         remote_update = "''master':[''server'.TODO]" + -
+             f$extract(istart,f$length(journal_file),journal_file)
+$         rename 'remote_file' 'remote_update' /nolog /noconfirm
+$         if $severity .eq. 1 then delete /nolog /noconfirm 'journal_file'
+$   endif
+$ !
+$   goto to_hepdb
+$ !
+$ ! Look for files to be pulled over from 'master'
+$ !
+$ from_hepdb:
+$    journal_file = f$search("HEPDB:[''server'.TO''slave']*.*")
+$ !
+$    if journal_file .eqs. "" then goto loop_servers
+$ !
+$ ! Skip 'active' files
+$ !
+$    if f$extract(0,2,journal_file) .eqs. "ZZ" then goto from_hepdb
+$ !
+$ !  Check UIC (to see if we will be able to delete remote file)
+$ !
+$   remote_uic = f$file_attributes(journal_file,"UIC")
+$   if remote_uic .nes. our_uic then goto from_hepdb
+$ !
+$ ! Build local file name
+$ !
+$   istart = f$locate("]",journal_file) + 1
+$   local_file = "DISK$MF:[''server'.TODO]ZZ" + -
+       f$extract(istart+2,f$length(journal_file),journal_file)
+$ !
+$ ! Copy the file over
+$ !
+$   copy 'journal_file' 'local_file' /log /noconfirm
+$ !
+$ ! Rename local file and delete remote file if it was ok
+$ !
+$   if $severity .eq. 1
+$      then
+$         local_update = "DISK$MF:[''server'.TODO]" + -
+             f$extract(istart,f$length(journal_file),journal_file)
+$         rename 'local_file' 'local_update' /log /noconfirm
+$         if $severity .eq. 1 then delete /log /noconfirm 'journal_file'
+$   endif
+$ !
+$   goto from_hepdb
+$ !
+$ sleep:
+$   wait 00:10:00
+$   write sys$output "Wakeup at ''f$time()'"
+$   goto main_loop
+#endif

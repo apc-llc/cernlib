@@ -1,0 +1,22 @@
+SRCS_F= \ @@\
+	 siallm.F siarch.F siarra.F siassi.F sibool.F sickon.F siclrp.F \ @@\
+	 sicmpl.F sicmpr.F sicoma.F sicomp.F sideli.F sidiag.F sidstp.F \ @@\
+	 sieige.F sieost.F sierro.F siersy.F sieval.F sifam0.F sifam1.F \ @@\
+	 sifam2.F sifam3.F sifam4.F sifam5.F sifam6.F sifam7.F sifind.F \ @@\
+	 sigecd.F sigini1.F sigma.F sigmac.F sigmae.F sigmtp.F sigop1.F \ @@\
+	 sigop2.F sigsee.F sigtt2.F siinps.F sikons.F silbc7.F sildrv.F \ @@\
+	 silif1.F silskk.F silstk.F simstk.F simult.F simvco.F sindle.F \ @@\
+	 sindlf.F sindxi.F sinerr.F sinext.F singet.F sinmcd.F sinstr.F \ @@\
+	 sintrp.F sinumb.F sinvco.F sinvde.F sionam.F siop1c.F siop2c.F \ @@\
+	 siopr2.F siorde.F siout.F sioutp.F siprin.F siprit.F siquad.F \ @@\
+	 sirefr.F sirnws.F siroun.F sisavp.F sistak.F sistr2.F sistri.F \ @@\
+	 sisumn.F sisymb.F sisysf.F sisyso.F sitrac.F sitrax.F siupna.F \ @@\
+	 siustk.F siustr.F sivari.F siwait.F siwhat.F six3st.F
+
+SRCS_C= sivers.c
+
+#ifdef CERNLIB_SGI
+FDEBUGFLAGS=-O1
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

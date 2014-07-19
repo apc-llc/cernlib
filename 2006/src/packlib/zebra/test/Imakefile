@@ -1,0 +1,91 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= cq cqaux cqhi fqtest jqtest mzcote tzebra
+SUBDIRS= $(LIBDIRS)
+
+#ifndef CERNLIB_VAX
+
+EXTRA_INCLUDES=-I$(TOP)$(CURRENT_DIR) -I$(VPATH)
+export EXTRA_INCLUDES
+
+#else
+
+/*export EXTRA_INCLUDES would easier, but VMS gmake does not understand this yet
+  Also += is not understood by gmake 
+  Do not remove any of the \, unless you want to create trouble
+  GF (12-Jan-96)
+ */
+EXTRA_INCLUDES=-I$(TOP)$(CURRENT_DIR)]
+MAKEFLAGS:=EXTRA_INCLUDES\=\-I$(TOP)$(CURRENT_DIR)]
+#endif
+
+#ifdef CERNLIB_HPUX
+FORTRANOPTIONS += -WF,-P
+#endif
+
+DefinePackageLibrary(zebtlib)
+
+SubdirLibraryTarget(zebtlib,$(LIBDIRS))
+
+.PHONY: testmz testfz testfc testjz testrz
+
+testmz: zebmz1
+
+testfz: zebfz1 zebfz2 zebfz3 zebfz4 zebfz5 zebfz6 zebfz7 zebfz8 zebfz9
+
+testfc: zebfc1 zebfc2 zebfc3
+
+testjz: zebjz1
+
+testrz: zebrz1 zebrz2 zebrz3
+
+CernlibFortranProgramTarget(zebmz1,zebmz1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+CernlibFortranProgramTarget(zebfz1,zebfz1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz2,zebfz2.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz3,zebfz3.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz4,zebfz4.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz5,zebfz5.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz6,zebfz6.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz7,zebfz7.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz8,zebfz8.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfz9,zebfz9.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+CernlibFortranProgramTarget(zebfc1,zebfc1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfc2,zebfc2.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebfc3,zebfc3.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+CernlibFortranProgramTarget(zebjz1,zebjz1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+CernlibFortranProgramTarget(zebrz1,zebrz1.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebrz2,zebrz2.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+CernlibFortranProgramTarget(zebrz3,zebrz3.o,$(PACKAGE_LIB),$(PACKAGE_LIB),kernlib)
+
+TestTarget(zebmz1,zxtest.dat,NullParameter)
+
+TestTarget(zebfz1,NullParameter,NullParameter)
+TestTarget(zebfz2,NullParameter,NullParameter)
+TestTarget(zebfz3,NullParameter,NullParameter)
+TestTarget(zebfz4,NullParameter,NullParameter)
+TestTarget(zebfz5,NullParameter,NullParameter)
+TestTarget(zebfz6,NullParameter,NullParameter)
+TestTarget(zebfz7,NullParameter,NullParameter)
+TestTarget(zebfz8,NullParameter,NullParameter)
+TestTarget(zebfz9,NullParameter,NullParameter)
+
+TestTarget(zebfc1,NullParameter,NullParameter)
+TestTarget(zebfc2,NullParameter,NullParameter)
+TestTarget(zebfc3,NullParameter,NullParameter)
+
+TestTarget(zebjz1,jztest.dat,NullParameter)
+
+TestTarget(zebrz1,NullParameter,NullParameter)
+TestTarget(zebrz2,NullParameter,NullParameter)
+TestTarget(zebrz3,NullParameter,NullParameter)
+
+
+CopyFile(zxtest.data,zxtest.dat)
+CopyFile(jztest.data,jztest.dat)
+

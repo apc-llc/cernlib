@@ -1,0 +1,160 @@
+*
+* $Id: v2_06,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_06,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :  2.06/20 03/03/95  18.36.01  by  O.Couet
+*-- Author :    O.Couet   09/11/94
+*
+*::>          VERSION  2.06/20   03/03/95 18.36.01
+*
+* Mod in the CDF. The xample given in the NT/DUPLICATE command are now
+* correct. The "include ?" facility is exaplin in the command UWFUNC.
+*
+*::>          VERSION  2.06/19   01/03/95 18.29.58
+*
+* New command VERSION, bugfix and extension of BUGREPORT.
+*
+*::>          VERSION  2.06/18   01/03/95 14.04.16
+*
+* Bug fixed in PAQCUT. It now check if the cut exist.
+*
+* 01/03/95  11.21.53
+* Bug fixed in HGETID. The mod made in 2.06/14 was incorrect. The
+* seach of free histo ID was wrong. This bug has been shown in stacked
+* lego plots.
+*
+* 28/02/95  13.34.23
+* The old option E in the call to FZENDO in PAZFZ has been removed.
+*
+* 28/02/95  13.33.43
+* FZENDI and FZENDO are now called with option X in PAWFOP.
+*
+*::>          VERSION  2.06/17   27/02/95 10.01.40
+*
+* HPLONT and IGONT removed from PAWCS
+*
+* 23/02/95  11.00.49
+* HFITHN added in PAWCS
+*
+*::>          VERSION  2.06/16   22/02/95 16.01.29
+*
+* Bug fixed (F.Rademakers) in PFINDF1: The EQUIVALENCE was not
+* correctly manged in the UWFUNC generated functions.
+*
+*::>          VERSION  2.06/15   20/02/95 14.36.12
+*
+* 20/02/95  13.53.35
+* #define __TIME_T 1
+* added in tcpiaf
+*
+* 20/02/95  13.35.49
+* Flag QCDEC added in tcpiaf.
+*
+*::>          VERSION  2.06/14   14/02/95 15.09.35
+*
+* Mods in HGETID: If a histogram didn't exist in the current dir, then
+* the histogram with the same id in the PAWC directory gets erased.
+*
+* 13/02/95  09.47.48
+* #define stat_2 stat added in TCPIAF
+*
+*::>          VERSION  2.06/13   06/02/95 11.05.44
+*
+* Bug fixing in the staging part of PIAF (Timo Hakulinen):
+*
+* Patch CPAW: TCPIAF. File name normalisation for files to be staged.
+* Patch PIAFS: PIAFC PSEXEC PSTAGE: Routine to call special utility
+*              for spreaded files (ls, cp etc ..)
+* Patch STAGERD (All the decks are modified): Cosmetics changes
+*
+* 01/02/95  09.39.55
+* The control on expiration is removed (VERTIM routine).
+*
+*::>          VERSION  2.06/12   31/01/95 14.06.33
+*
+* PNUTIL has been modified to improve the infos given by the command
+* NT/READ (error messages, number of events read etc ...)
+*
+*::>          VERSION  2.06/11   31/01/95 09.47.34
+*
+* New HELP for the command in the menu /GRAPHICS/PRIMITIVES: each
+* command has now an example.
+*
+* The commands SMK, SMPCI etc ... are now obsolete.
+*
+* Mod in PBHIST to take care of the new histogram title format.
+*
+*::>          VERSION  2.06/10   19/01/95 10.39.30
+*
+* Bug fixed in pawsel: the arrays of characters were not managed
+* correctly in the command NT/PLOT.
+*
+* The help(s) of PROX, PROY, BANX etc ... has been completed.
+*
+*::>          VERSION  2.06/09   16/01/95 14.58.16
+*
+* Bug fixed in file.c. The character array lun was dimensionned to 5.
+* But it may have up to 6 characters: LUN20\0  . Now the dimension is 6.
+*
+* Protections added in PAFEYN (commands ARCHELIX and HELIX).
+*
+* Version Number changed in PALOGS
+*
+* HFPANEL and FITPCDES are now selected in *PAW.
+*
+*::>          VERSION  2.06/08   12/01/95 15.56.51
+*
+* New PATCH: SCRIPTS. It contains 3 decks (IBM, UNIX and VAX). Each
+* deck is the script file used to start paw on IBM/VM, UNIX and VAXes
+* machines.
+*
+*::>          VERSION  2.06/07   09/01/95 18.25.49
+*
+* Bug fixed ine PACUTS in order to be able to read one single
+* cut into a cut file.
+*
+*::>          VERSION  2.06/06   16/12/94 16.23.11
+*
+* Mods in CMOTIF (cuts file init style) to support ~/filename
+*
+*::>          VERSION  2.06/05   16/12/94 10.13.51
+*
+* Improvments in the help of SWN and SVP.
+*
+* The fix in $matrix (VERSION 2.06/02) has been removed by the XBAE
+* changes in 2.06/04. It is now fixed again.
+*
+*::>          VERSION  2.06/04   08/12/94 11.44.12
+*
+* Reverts to the previous version of the XBAE widgets for VMS. Maybe one
+* day they will work on VMS too.
+*
+*::>          VERSION  2.06/03   24/11/94 17.11.57
+*
+* Mods in histo for the Scale widget.
+*
+* Development version of PIAF for VMS.
+*
+*::>          VERSION  2.06/02   21/11/94 15.23.54
+*
+* Mods in matrix (XBAE). An input parameter "offset" has been renamed
+* because of a clash with a #define (the problem appears only on
+* VAX/VMS)
+*
+* Modif in $MATRIX: there was an extra "," in an enum statement. This
+* produced an compilation error on Ultrix.
+*
+*::>          VERSION  2.06/01   21/11/94 10.30.25
+*
+* The menu OBSOLETE in now removed. (command GAUSS EXP etc ..)
+*
+*::>          VERSION  2.06/00   09/11/94 17.10.20
+*
+* Bug fixed in PPROJ0 and PPROJN: In expression like:
+*              NT/PLOT 10.func.f 2
+* the weight was not correct.
+*

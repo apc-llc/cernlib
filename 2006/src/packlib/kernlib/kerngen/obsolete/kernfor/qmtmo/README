@@ -1,0 +1,34 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:15 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:15  mclareni
+* Kernlib
+*
+*
+*       for Transputer
+* This directory was created from kernfor.car patch qmtmo
+#ifndef CERNLIB_B32
+#define CERNLIB_B32
+#endif
+#ifndef CERNLIB_A4
+#define CERNLIB_A4
+#endif
+#ifndef CERNLIB_HEX
+#define CERNLIB_HEX
+#endif
+*                 IEEE floating point
+#ifndef CERNLIB_QIEEE
+#define CERNLIB_QIEEE
+#endif
+*               ISA standard routines, ISHFT, IOR, etc
+#ifndef CERNLIB_QISASTD
+#define CERNLIB_QISASTD
+#endif
+*       Hollerith storage not orthodox
+#ifdef CERNLIB_QORTHOLL
+#undef CERNLIB_QORTHOLL
+#endif
+#ifndef CERNLIB_QDEFAULT
+#define CERNLIB_QDEFAULT
+#endif

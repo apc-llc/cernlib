@@ -1,0 +1,18 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= genbod fowl wico
+
+SUBDIRS= $(LIBDIRS) wicoexam
+
+TopOfPackage(phtools)
+
+SubdirLibraryTarget(phtools,$(LIBDIRS))
+
+InstallLibrary(phtools,$(CERN_LIBDIR))
+InstallSharedLibrary(phtools,$(CERN_LEVEL),$(CERN_SHLIBDIR))
+
+TestSubdirs(wicoexam)
+
+install.include:

@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 tmaxmu.F trandm.F tscale.F tsortn.F ttrigo.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

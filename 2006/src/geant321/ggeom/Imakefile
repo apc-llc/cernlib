@@ -1,0 +1,37 @@
+SRCS_F= gbstat.F gcent.F gdtom.F gfatt.F gfclim.F gfcoor.F \ @@\
+	gfcord.F gfcvol.F gfipar.F gflcar.F gflphi.F gflrad.F gflthe.F \ @@\
+	gfmoth.F gfpara.F gfstat.F gfupar.F gfvolu.F ggcave.F ggdpar.F \ @@\
+	ggdspe.F ggdvlp.F ggnlev.F ggord.F ggordq.F ggperp.F ggppar.F \ @@\
+	ggvchk.F ginctu.F gingtr.F ginme.F ginpar.F ginpco.F ginpgo.F \ @@\
+	ginrot.F gintco.F gintrp.F gitran.F glmoth.F glvolu.F \ @@\
+	gmedin.F gmediv.F gmepos.F gmtod.F gnbox.F gncone.F \ @@\
+	gnctub.F gneltu.F gnhype.F gnobox.F gnocon.F \ @@\
+	gnoctu.F gnoelt.F gnohyp.F gnopar.F gnopco.F gnopg1.F gnopgo.F \ @@\
+	gnosph.F gnotr1.F gnotr2.F gnotr9.F gnotra.F gnotrp.F gnotub.F \ @@\
+	gnpara.F gnpcon.F gnpgo1.F gnpgon.F gnsphr.F gntrap.F gntrp.F \ @@\
+	gntube.F gprotm.F gprotx.F gpstat.F gpvolu.F gpvolx.F grmtd.F \ @@\
+	grmul.F grot.F grpar.F gsagtr.F gsaphi.F gsatt.F gschk.F gscvol.F \ @@\
+	gsdvn.F gsdvn2.F gsdvs.F gsdvs2.F gsdvt.F gsdvt2.F gsdvx.F gsipar.F \ @@\
+	gsnear.F gsnext.F gsngtr.F gsord.F gspos.F gsposp.F gsrotm.F \ @@\
+	gsunea.F gsvolu.F gtrain.F gtrmul.F gtrnsf.F gvdcar.F gvdlim.F \ @@\
+	gvdphi.F gvdrad.F gvdthe.F gvgrad.F gvlong.F gvpsqr.F gvsafe.F \ @@\
+	gvsign.F
+
+#ifdef CERNLIB_OLD
+SRCS_F:= $(SRCS_F) gmedi2.F gnex2.F
+#else
+SRCS_F:= $(SRCS_F) gmedia.F gnext.F
+#endif
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

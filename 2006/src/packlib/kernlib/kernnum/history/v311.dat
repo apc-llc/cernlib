@@ -1,0 +1,23 @@
+*
+* $Id: v311.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v311.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.11  950529
+C-  Remove activation of :
+C-     C300, was activated as:
+C+USE,     C300FORT.
+C+USE,     C300FORT, D=ERF,      T=INHIBIT, IF=NUMCD, IF=-NUMOWNCODE.
+C+USE,     C300FORT, D=ERF,DERF, T=INHIBIT, IF=NUMIB, IF=-NUMOWNCODE.
+C+USE,     C300FORT, D=ERF,DERF, T=INHIBIT, IF=NUMUC, IF=-NUMOWNCODE.
+C+USE,     C300FORT, D=DERF,DFREQ,       T=INHIBIT,IF=-NUMLOPRE.
+C
+C-     C305, was activated as:
+C+USE,     C305FORT.
+C+USE,     C305FORT, T=INHIBIT, IF=NUMIB,NUMUC,IBMRT, IF=-NUMOWNCODE.
+C
+C-        D209.
+C-

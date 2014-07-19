@@ -1,0 +1,3 @@
+SRCS_F=	 cdexam06.F cdrl1e.F cexam06.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

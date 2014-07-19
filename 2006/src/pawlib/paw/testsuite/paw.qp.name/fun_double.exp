@@ -1,0 +1,238 @@
+#
+#  fun_double.exp  --
+#
+#  Original:  2-Apr-1996 14:16
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# sin(x)
+#
+
+expr_test	double	2	sin(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	sin(dpi/6*i7)		5.00000000000000d-01
+expr_test	double	2	sin(dpi/4*i7)		7.07106781186547d-01
+expr_test	double	2	sin(dpi/3*i7)		8.66025403784439d-01
+expr_test	double	2	sin(dpi/2*i7)		1.00000000000000d+00
+expr_test	double	2	sin(-dpi/2*i7)		-1.00000000000000d+00
+
+# don't bother to test arguments larger then dpi/2 because errors are to large
+# on most systems
+
+
+#
+# cos(x)
+#
+
+expr_test	double	2	cos(0d0*i7)		1.00000000000000d+00
+expr_test	double	2	cos(dpi/6*i7)		8.66025403784439d-01
+expr_test	double	2	cos(dpi/4*i7)		7.07106781186548d-01
+expr_test	double	2	cos(dpi/3*i7)		5.00000000000000d-01
+
+# don't bother to test arguments larger then dpi/2 because errors are to large
+# on most systems
+#expr_test	double	2	cos(dpi/2*i7)		0.00000000000000d+00
+#expr_test	double	2	cos(-dpi/2*i7)		0.00000000000000d+00
+
+
+#
+# tan(x)
+#
+
+expr_test	double	2	tan(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	tan(dpi/4*i7)		1.00000000000000d+00
+expr_test	double	2	tan(-dpi/4*i7)		-1.00000000000000d+00
+
+
+#
+# sqrt(x)
+#
+
+expr_test	double	2	sqrt(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	sqrt(1d0*i7)		1.00000000000000d+00
+expr_test	double	2	sqrt(4d0*i7)		2.00000000000000d+00
+
+expr_test	double	2	sqrt(-1d0*i7)	{Sqrt of negative number}
+
+#
+# exp(x)
+#
+
+expr_test	double	2	exp(0d0*i7)		1.00000000000000d+00
+expr_test	double	2	exp(1d0*i7)		2.71828182845905d+00
+expr_test	double	2	exp(-1d0*i7)		3.67879441171442d-01
+
+
+#
+# log(x)
+#
+
+expr_test	double	2	log(1d0*i7)		0.00000000000000d+00
+expr_test	double	2	log(2.71828182845905d0*i7) 1.00000000000000d+00
+expr_test	double	2	log(3.67879441171442d-01*i7) -1.00000000000000d+00
+
+expr_test	double	2	log(0d0*i7)	{Log of zero or negative number}
+expr_test	double	2	log(-8d0*i7)	{Log of zero or negative number}
+
+
+#
+# abs(x)
+#
+
+expr_test	double	1	abs(dval)		1.79769313486232d+308
+expr_test	double	2	abs(dval)		1.23450000000000d+04
+expr_test	double	3	abs(dval)		2.22507385850720d-308
+expr_test	double	4	abs(dval)		0.00000000000000d+00
+expr_test	double	5	abs(dval)		2.22507385850720d-308
+expr_test	double	6	abs(dval)		1.23450000000000d+04
+expr_test	double	7	abs(dval)		1.79769313486232d+308
+
+
+#
+# log10(x)
+#
+
+expr_test	double	2	log10(1d0*i7)		0.00000000000000d+00
+expr_test	double	2	log10(1d1*i7)		1.00000000000000d+00
+expr_test	double	2	log10(1d-1*i7)		-1.00000000000000d+00
+
+expr_test	double	2	log10(0d0*i7)	{Log10 of zero or negative number}
+expr_test	double	2	log10(-8d0*i7)	{Log10 of zero or negative number}
+
+
+#
+# asin(x)
+#
+
+expr_test	double	2	asin(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	asin(1d0*i7)		1.57079632679490d+00
+expr_test	double	2	asin(-1d0*i7)		-1.57079632679490d+00
+
+expr_test	double	2	asin(1.0000000000001d0*i7) {Asin domain error}
+expr_test	double	2	asin(-1.0000000000001d0*i7) {Asin domain error}
+
+
+#
+# acos(x)
+#
+
+expr_test	double	2	acos(0d0*i7)		1.57079632679490d+00
+expr_test	double	2	acos(1d0*i7)		0.00000000000000d+00
+expr_test	double	2	acos(-1d0*i7)		3.14159265358979d+00
+
+expr_test	double	2	acos(1.0000000000001d0*i7) {Acos domain error}
+expr_test	double	2	acos(-1.0000000000001d0*i7) {Acos domain error}
+
+#
+# atan(x)
+#
+
+expr_test	double	2	atan(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	atan(1d0*i7)		7.85398163397448d-01
+expr_test	double	2	atan(-1d0*i7)		-7.85398163397448d-01
+
+
+#
+# sinh(x)
+#
+
+expr_test	double	2	sinh(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	sinh(1d0*i7)		1.17520119364380d+00
+expr_test	double	2	sinh(-1d0*i7)		-1.17520119364380d+00
+
+
+#
+# cosh(x)
+#
+
+expr_test	double	2	cosh(0d0*i7)		1.00000000000000d+00
+expr_test	double	2	cosh(1d0*i7)		1.54308063481524d+00
+expr_test	double	2	cosh(-1d0*i7)		1.54308063481524d+00
+
+
+#
+# tanh(x)
+#
+
+expr_test	double	2	tanh(0d0*i7)		0.00000000000000d+00
+expr_test	double	2	tanh(1d0*i7)		7.61594155955765d-01
+expr_test	double	2	tanh(-1d0*i7)		-7.61594155955765d-01
+
+
+#
+# mod(x,y)
+#
+
+expr_test	double	2	mod(0d0*i7,1d0)		0.00000000000000d+00
+expr_test	double	2	mod(7d0*i7,3d0)		1.00000000000000d+00
+expr_test	double	2	mod(-7d0*i7,3d0)	-1.00000000000000d+00
+
+expr_test	double	2	mod(7d0*i7,0d0)	{Mod with divisor of zero}
+
+
+#
+# atan2(x,y)
+#
+
+expr_test	double	2	atan2(0d0*i7,1d0)	0.00000000000000d+00
+expr_test	double	2	atan2(1d0*i7,0d0)	1.57079632679490d+00
+expr_test	double	2	atan2(0d0*i7,-1d0)	3.14159265358979d+00
+expr_test	double	2	atan2(-1d0*i7,0d0)	-1.57079632679490d+00
+
+
+#
+# sign(x,y)
+#
+
+expr_test	double	2	sign(0d0*i7,1d0)	0.00000000000000d+00
+expr_test	double	2	sign(0d0*i7,-1d0)	0.00000000000000d+00
+expr_test	double	2	sign(5d0*i7,1d0)	5.00000000000000d+00
+expr_test	double	2	sign(5d0*i7,-1d0)	-5.00000000000000d+00
+expr_test	double	2	sign(-5d0*i7,1d0)	5.00000000000000d+00
+expr_test	double	2	sign(-5d0*i7,-1d0)	-5.00000000000000d+00
+
+
+#
+# dint(x)
+#
+
+expr_test	double	1	fint(dval)		-1.79769313486232d+308
+expr_test	double	2	fint(dval)		-1.23450000000000d+04
+expr_test	double	3	fint(dval)		0.00000000000000d+00
+expr_test	double	4	fint(dval)		0.00000000000000d+00
+expr_test	double	5	fint(dval)		0.00000000000000d+00
+expr_test	double	6	fint(dval)		1.23450000000000d+04
+expr_test	double	7	fint(dval)		1.79769313486232d+308
+
+
+#
+# frac(x)
+#
+
+expr_test	double	1	frac(dval)		0.00000000000000d+00
+expr_test	double	2	frac(dval)		0.00000000000000d+00
+expr_test	double	3	frac(dval)		-2.22507385850720d-308
+expr_test	double	4	frac(dval)		0.00000000000000d+00
+expr_test	double	5	frac(dval)		2.22507385850720d-308
+expr_test	double	6	frac(dval)		0.00000000000000d+00
+expr_test	double	7	frac(dval)		0.00000000000000d+00
+
+
+#
+# Cleanup after tests
+#
+paw_cmd { close 4 }

@@ -1,0 +1,91 @@
+*
+* $Id: sisumn.F,v 1.1.1.1 1995/12/12 14:36:20 mclareni Exp $
+*
+* $Log: sisumn.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:20  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.09/04 26/10/93  09.49.20  by  Carlo E. Vandoni
+*-- Author :
+      SUBROUTINE SISUMN
+C
+C...  PAW VERSION  ...  MAY 1988
+C
+C
+C    ..................................................
+#include "sigma/sigc.inc"
+#include "sigma/pawc.inc"
+#include "sigma/siclin.inc"
+C
+      DIMENSION DIM(10)
+C
+      CALL SITRAC(' SISUMN    ')
+C
+      DO 33 J=1,2
+      CALL SISTAK(J-1,MP,MN)
+      IF(MN.EQ.MISIDX) GOTO 918
+  33  CONTINUE
+      DIM(1)=0.0
+C
+      CALL SINGET(IDUM,0,DIM)
+      IF(IERRNO.NE.0)RETURN
+      IF(LENGTH.NE.1) CALL SINERR(2)
+      IF(LENGTH.NE.1) RETURN
+      STEP=DYNA(IADDR)
+C
+C   CONSIDER FIRST ARGUMENT,  IT IS SOURCE
+       DIM(1)=1.0
+      CALL SINGET(ISI,1,DIM)
+      IF(IERRNO.NE.0)RETURN
+      IF(ISI.GE.3) CALL SINERR(56)
+      IF(ISI.GE.3) RETURN
+      LA2=IADDR
+C      LENROW=DIM(1)
+C      NROW=LENGTH/LENROW/MODE
+C   GET AREA FOR ANSWER. MODE ALREADY SET BY NGET(1... ABOVE
+      ISTRI=0
+       CALL SIGTT2(IADDR,LENGTH,NDIM,DIM)
+      IF(IERRNO.NE.0)RETURN
+      IF(LENGTH.EQ.1)CALL SINERR(65)
+      IF(LENGTH.EQ.1)RETURN
+      LA1=IADDR
+C
+      ISTEP=STEP
+      IF(ISTEP.GT.LENGTH) CALL SINERR(64)
+      IF(ISTEP.LE.0) CALL SINERR(64)
+      IF(IERRNO.NE.0) RETURN
+      IN=0
+      IOU=0
+      KOU=1
+      IF(ISTEP.EQ.1)GO TO 919
+      DYNA(IOU+LA1)=DYNA(IN+LA2)
+101   CONTINUE
+      IOU=IOU+1
+      IN=IN+1
+      DYNA(IOU+LA1)=DYNA(IOU+LA1-1)+DYNA(IN+LA2)
+      KOU=KOU+1
+      IF(IOU.EQ.LENGTH)GOTO 100
+      IF(KOU.NE.ISTEP)GOTO 101
+103   CONTINUE
+      IOU=IOU+1
+      IN=IN+1
+      IF(IOU.EQ.LENGTH)GOTO 100
+      DYNA(IOU+LA1)=DYNA(IOU+LA1-1)-DYNA(IN+LA2-ISTEP)+DYNA(IN+LA2)
+      GOTO 103
+919   CONTINUE
+       DO 920 J=1,LENGTH
+       DYNA(LA1+J-1)=DYNA(LA2+J-1)
+920    CONTINUE
+       GOTO 999
+100   CONTINUE
+C   IADDR IS UNCHANGED, FURTHERMORE A SCALAR RESULT IS IMPOSSIBLE
+      CALL SISTR2(2)
+      RETURN
+C
+918   CONTINUE
+C   MISSING INDEX MEANINGLESS
+      CALL SINERR(18)
+C
+ 999  END

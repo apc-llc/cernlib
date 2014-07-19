@@ -1,0 +1,84 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:54:23 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:23  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerndge.car patch kerndge
+#if !defined(CERNLIB_KERNDGE)
+ 
+              KERNLIB ROUTINES PARTICULAR TO DATA GENERAL
+ 
+---------------------------------------------------------------------
+ 
+             THIS FILE CONTAINS THE FOLLOWING PATCHES :
+ 
+*KDGE     PILOT-PATCH SELECTING THE FULL STANDARD GENERAL KERNLIB
+                                         FOR THE MV ECLIPSE
+ 
+QMDGE     DGE MACHINE PATCH
+ 
+DGEGS     DGE VERSIONS OF GENERAL KERNLIB ROUTINES, ECLIPSE
+ 
+DGESYS    DGE VERSIONS OF KERNLIB SYSTEM ROUTINES, ECLIPSE
+ 
+=====================================================================
+ 
+ 
+              UP-DATE RECORD FOR THE PAM-FILE  KERNDGE
+              ----------------------------------------
+ 
+ 
+UP-DATE  1.08 :  20-Nov-1989
+----------------------------
+ 
+REPLACING FILE   KERNDGE 1.07  891003 18.13
+ 
+New decks :   LOCB           return the byte adr of a variable
+ 
+Deleted :     routines which are now available from KERNFOR :
+              JBIT, JBYTxx, MBYTxx, MCBYT, MSBxxx,
+              SBITx, SBYTxx
+              PKBYT, UPKBYT, ABEND
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.07 :   3-Oct-1989
+----------------------------
+ 
+REPLACING FILE   KERNDGE 1.06  870525 15.19
+ 
+New decks :    KERNGT        to eventually replace GSHOW
+ 
+Corrections :  DATIME        introduce /SLATE/
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.06 :  24-MAY-1987
+----------------------------
+ 
+REPLACING FILE   KERNDGE 1.05  860514 19.55
+ 
+NEW DECKS :    P=DGEGS, D=JBYTOR, MBYTET, MBYTOR, MCBYT
+                        D=MCBYT,  MSBIT,  MSBIT0, MSBIT1, MSBYT,
+ 
+CORRECTIONS :  P=QMDGE   sequences Q$SBIT, Q$CBYT added
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.05 :  14-MAY-1986
+----------------------------
+ 
+REPLACING FILE   KERNDGE 1.04  860221 13.23
+ 
+CORRECTIONS :  P=QMDGE   sequences Q$ANDOR, Q$SHIFT added
+ 
+---------------------------------------------------------------------
+ 
+          FIRST RELEASE OF THE KERNDGE  PAM :  21-FEB-1986
+ 
+---------------------------------------------------------------------
+ 
+#endif

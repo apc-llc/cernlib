@@ -1,0 +1,124 @@
+*
+* $Id: v1_19,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_19,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.19/17 22/10/93  17.59.07  by  O.Couet
+*-- Author :    O.Couet   28/06/93
+*
+*::>          VERSION  1.19/17   22/10/93 17.59.07
+*
+*   Mods in IGRAP1 in order to draw Curves with in infinite number
+*      of point (ZEBRA banks replace HIGRAF common block). Mods also
+*      in IGRAPH to take advantage of the new version of IGRAP1.
+*
+*::>          VERSION  1.19/16   22/10/93 09.34.26
+*
+*   Bug fixed in IZGRAP in case the original data are in a zebra bank.
+*   The format in IZPICT (for the listing) are now I5 instead of I2.
+*
+*::>          VERSION  1.19/15   12/10/93 12.10.10
+*
+*   Bug fixed in IGAXIS (case NULL 9.999 10).
+*   Optimization in IGAXIS. In case of overlap, the alphanumeric labels
+*      are rotated.
+*   Mods in IGTABL, IZTABL and IZDNB to allow 2D plots with more than 999
+*      bins (with subranges).
+*
+*::>          VERSION  1.19/14   07/10/93 15.33.40
+*
+*   Flag NOVAGKS suppressed.
+*   Useless pilot patches *GKSGRAL, *DECGKS, *SUNGKS, *GPR, *GL, *X11 and
+*      *DI3000 are removed. The installation of HIGZ should be done with
+*      the pilot patch *HIGZ.
+*   For DecStation Color, GXinvert should be use for rubberbanding.
+*
+*::>          VERSION  1.19/13   01/10/93 10.54.59
+*
+*   Speed improvments in IPM4ID (3-4 times faster).
+*   Mods in IGWKTY. For UNIX machines wokstation type read is done via
+*      a C routine (IXGETL) in order to allow:
+*      $ paw < filename
+*                       or
+*      $ cat filename | paw
+*
+*::>          VERSION  1.19/12   28/09/93 17.37.09
+*
+*   Bug fixed in IZGRAP: The BASL attributes was not flaged.
+*   Bug fixed in IRQST for FALCO: the output parameter L was not correct.
+*   IGSG is now called in ISLN for the FALCO driver.
+*   New routine IPM4ID to draw NT/PLOT id.x%y%z%t
+*
+*::>          VERSION  1.19/11   27/09/93 11.59.25
+*
+*   In IGTCCH the character % is translated into '"Y#'
+*
+*::>          VERSION  1.19/10   15/09/93 11.16.41
+*
+*   Changes in IGTAB5, and IGTABL to be able to define the log option
+*      from the calling sequence and not via COMMON.
+*   Bug fixed in IZMERG.
+*
+*::>          VERSION  1.19/09   06/09/93 11.29.16
+*
+*   Mods in IGRAPH: when it was called with an invalid CHOPT (for
+*      example '?'), a blank CHOPT was stored in the picture and
+*      the image produced with IZPICT was different from the original.
+*   Bug fixed in IKBOX. For the 7879 driver and solid filled areas,
+*      IGHATC was not called correctly.
+*
+*::>          VERSION  1.19/08   03/09/93 17.08.41
+*
+*   Flag QMALPH added in *HIGZ.
+*   The routine ixgetwi in x11int is now a FORTRAN callable routine.
+*
+*::>          VERSION  1.19/07   31/08/93 09.39.07
+*
+*   Mods in the PATCH IMAC: New version of imacplo an f_readwi.
+*      The deck imacevl is now obsolete.
+*
+*::>          VERSION  1.19/06   27/08/93 17.15.44
+*
+*   Improvments in the vertical centering of rotated texts. This
+*     implies mods in the ITX routines (IKERNEL, IGKS and IDI3000)
+*     and in the routine IPTEXT.
+*   Small Improvments in the 3d function drawing (PATCH IH).
+*
+*::>          VERSION  1.19/05   26/08/93 11.58.10
+*
+*   Improvments in the 3d function drawing (PATCH IH). It is
+*      also possible to draw with hidden lines removal.
+*
+*::>          VERSION  1.19/04   25/08/93 10.19.48
+*
+*   Changes for CONVEX (V.Balashov).
+*   Bug fixed in IOPKS in the pathes IGKS an IDI3000: The string
+*      CHVERS was not initialized.
+*
+*::>          VERSION  1.19/03   24/08/93 12.03.26
+*
+*   New flag WINNT introduced.
+*   In IGTEXT, IA is saved for MACMPW (Cees Delaat).
+*   Lot of changes in the IMAC PATCH (Cees Delaat).
+*
+*::>          VERSION  1.19/02   930729 13.07
+*
+*   Unreachable code suppressed in IGTAB6.
+*   IF=HIGZEXAM on +PATCH,HIGZEXAM.
+*   CHDEFT has now 256 in IGMENU (instead of 80). (Roger Ruber
+*      RUBER@JPNKEKVX.BITNET)
+*   Bug fixed in IPDEF for the not A4 landscape PS file.
+*
+*::>          VERSION  1.19/01   930705 12.42
+*
+*   Protection added in IGMENU if the multiple choices ended with ','.
+*
+*::>          VERSION  1.19/00   930628 12.14
+*
+*   Protection added in IPTEXT: if the text size is less or equal
+*      to zero, a RETURN is performed.
+*   The EPS files contain now a showpage.
+*

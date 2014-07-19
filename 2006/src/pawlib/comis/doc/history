@@ -1,0 +1,156 @@
+*
+* $Id: history,v 1.1.1.1 1996/02/26 17:16:36 mclareni Exp $
+*
+* $Log: history,v $
+* Revision 1.1.1.1  1996/02/26 17:16:36  mclareni
+* Comis
+*
+*
+* This directory was created from /afs/cern.ch/user/m/mclareni/orig/comis.car patch history
+*CMZ :  1.11/04 16/07/91  08.48.50  by  Rene Brun
+*-- Author :
+C
+C          22.08.89
+C   1) Added routine CSEXPR(TEXTEXPR,JADDR)
+C   2) Symbol _ can be used in names now
+C   3) More correct treatments of tabs for VAX version
+C   4) Small letters in character 'constant' now  avaliable
+C   5) Some modifications are made for I/O codes
+C
+C          01.09.89  Removed bugs:
+C   1) in REAL and INT intrinsic functions
+C   2) x=-1. if(x.eq.-1)... now works correctly
+C
+C          11.09.89
+C   Changes are made for i/o statements:
+C   1) read ([unit=]lun, [fmt=]fmt [ [,err=lab] [,end=lab] [,iostat=iv] )ilist
+C   2) write([unit=]lun, [fmt=]fmt [ [,err=lab] [,iostat=iv] )olist
+C      fmt can be character constant: i.e. '(A)'
+C   3) new descriptors are added to format: Tn,TLn,TRn,n(....),On,Zn
+C      example: format(T2,4(O8,TR4,Z8,TL8,I8),:,I6//)
+C      Now comis not support nP,S,SS,SP,BN,BZ format_descriptors only.
+C
+C          15.09.89
+C    New facilites of i/o now are avaliable:
+C    1) Unformatted sequential input/output
+C    2) Unformatted direct access input/output
+C    3) Formatted  direct access input/output
+C            There are restrictions on unformatted i/o list:
+C      a) read(lun) n,(buf(i),i=1,n)   is wrong and ,i am sorry,
+C         this case not detected. Be carefully!!!
+C      b) read(lun) string(2:i)   will cause wrong resault
+C
+C    File's name for IBM converts from " file.ext " to " /file ext "
+C
+C          17.09.89
+C    1) The INQUIRE statement added to comis i/o statements:
+C         INQUIRE(FILE=file,slist)
+C       or
+C         INQUIRE(UNIT=lun,slist)
+C    2) Mods are made for the MPDSK and MDPAUS routines.
+C         Now MDPAUS routine types prompt CONTINUE?(Y/N):
+C         if reply was Y it try continue execution;
+C         if reply was N then the STOP statement executed;
+C         else repeats prompt.
+C
+C          20.09.89
+C    A interface with kuip vectors is added to comis.
+C    A statement:       VECTOR A(25,12,4),B(16),C(*),D
+C    can be used in comis routines to declare kuip vectors,
+C    if PAW version of comis was created.
+C
+C          22.09.89
+C    The shift of kuip vectors during garbage now are taken into
+C    account.
+C    Quit statement, if it is first line, can be reduced to q.
+C    LUNINP added to common /CSUNIT/LUNINP, .... for kuip macros
+C    needs.
+C
+C         25.09.89
+C   Up to 15 arguments now are avaliable for call f77 routines
+C   from comis's level.
+C
+C         03.10.89
+C   The cstran, csintx and csintz are splited into several routines.
+C   The keywords PARAMETER and DIMENSION cannot be reduced  to
+C   PAR and DIM.
+C
+C        04.10.89
+C   Mods. are made in CSSINP routine like kupros.
+C   MJSUBR routine replaced by JUMPAD from cernlib.
+C   MJWORD routine replaced by LOCF   from cernlib.
+C   CASETW routine replaced by VFILL  from cernlib.
+C
+C       12.10.89
+C   Exit or Ex can be used with the same action as quit
+C   Patchy flag DECS added for select Decstaton version
+C   (for select this version UNIX flag also needed)
+C    +patch,deccc. contents c-routines needed for comis.
+C
+C       08.11.89
+C   Mods for SUN in CSCALI,etc.
+C
+C       12.04.90
+C   Zero length character constant ( '' ) can used now.
+C
+C   Bug was fixed in the output statements ( print, write )
+C   in a case then user calls from F77 level CS-routine
+C   with constant arguments, for example:
+C        CALL CSCALL( 'cstest',2,3,4)
+C   and CS-routine defined as:
+C        subroutine cstest(ia,ib)   print *,ia,ib   end  .
+C   Now it works correctly.
+C
+C       27.04.90
+C   1)  Complex data type are included in comis now.
+C     The comis complex functions may be called from
+C     f77 level in the following way:
+C       cx=csccal('name',npar,p1,...,pn)
+C   or
+C       cx=cscjcl(jaddr, npar,p1,...,pn)
+C   or
+C       cx=cscfun(string ,p1,...,pn)
+C   or
+C       cx=cscjfn(jaddr,str1,p1,...,pn)
+C  letter C must be used for complex parameter type description
+C  Ex: string='cs_cx_fun(R,C)' to call cs_cx_fun with two arguments
+C  of real and complex types.
+C   2)  Almost full set of f77 intrinsic functions are implemented,
+C       excepting CHAR, LLT, LLE, LGT, LGE
+C
+C       29.04.90
+C       New comis directives are added:
+C   !help   -- types list of the comis directives
+C   !show   -- types help about show
+C   !show   memory   -- shows comis memory state
+C   !show   routines -- shows list of currently known routines
+C   !show   commons  -- shows list of common/global blocks
+C   !show   names common_name -- shows declarations of /common_name/
+C   !remove cs_routine_name   -- removes cs_routine
+C
+C       06.05.90
+C       New comis directive added:
+C   !clear   -- clears comis intenal memory
+C    The same action can be done by call from f77 level
+C    routine CSDCLR.
+C    The quit med_editor command cause skip source lines until eof.
+C
+C       08.06.90
+C    MVS version introduced (from A.Michalon cradle)
+C        Note that the IBMMVS version implies KUIP is used.
+C
+C       16.07.90
+C    Bug corrected in CSKCAL for DECS version (A.Nathaniel)
+C
+C       18.07.90
+C    Bugs corrected by V.Berezhnoi (.NOT. endh)
+C
+C
+C       27.07.90
+C    Parameter LCSTK changed from 333 to 1200 in common/CSCSTK/
+C    to allow more than 19 continuation lines in routines
+C    generated by the UWFUNC command of PAW.
+C
+C       16.07.91
+C    Changes in CSIBMASS for XA mode (H.Butenschoen DESY)
+C

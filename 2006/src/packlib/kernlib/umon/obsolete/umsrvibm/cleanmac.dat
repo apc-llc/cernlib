@@ -1,0 +1,22 @@
+*
+* $Id: cleanmac.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: cleanmac.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, clean_up.xedit */
+/* Subroutine of STATSERV EXEC */
+':5 # SET ZONE 1 1'
+'ALL /*/'
+ If rc=0 Then 'COMMAND DELETE *'
+'ALL'
+':5 # SET ZONE 1 *'
+'SORT * A 11 35 1 10'
+'BOT'
+'INPUT *_________ Lines above existed before 'date() time()' ____________*'
+'RECFM F # LRECL 72 # FILE'
+EXIT
+#endif

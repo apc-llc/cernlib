@@ -1,0 +1,3 @@
+SRCS_F=	 dzrt.F main.F rzcget.F rzt.F rztin.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

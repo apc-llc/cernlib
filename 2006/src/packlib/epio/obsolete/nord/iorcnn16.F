@@ -1,0 +1,30 @@
+*
+* $Id: iorcnn16.F,v 1.1.1.1 1996/03/08 15:21:57 mclareni Exp $
+*
+* $Log: iorcnn16.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:57  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND100B16)
+      FUNCTION IORCNV(NERR)
+C     *********************
+C   CONVERTS FROM NORD FILE ERROR TO EP PACKET FORMAT (IBM)
+C   NERR   = NORD FILE ERROR
+C   IORCNV = EP FILE ERROR
+C   SIMPLIFY ERROR SYSTEM : EOF,EOT DETECTED OK
+C   ALL OTHER ERRORS TREATED LIKE ILLEGAL ARGUMENT
+C   82/06/03  JOP
+      DIMENSION NFE(2),NEP(2)
+      DATA NFE/3,102/
+      DATA NEP/2,  4/
+      NER1=NERR
+      DO 10 I=1,2
+   10 IF(NER1.EQ.NFE(I)) GOTO 20
+      IORCNV=1
+77777 RETURN
+   20 IORCNV=NEP(I)
+      GOTO 77777
+      END
+#endif

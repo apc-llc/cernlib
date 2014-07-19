@@ -1,0 +1,126 @@
+*
+* $Id: fqtopen.inc,v 1.3 1997/09/02 15:16:18 mclareni Exp $
+*
+* $Log: fqtopen.inc,v $
+* Revision 1.3  1997/09/02 15:16:18  mclareni
+* WINNT corrections
+*
+* Revision 1.2  1997/03/14 17:22:19  mclareni
+* WNT mods
+*
+* Revision 1.1.1.1.2.1  1997/01/21 11:34:08  mclareni
+* All mods for Winnt 96a on winnt branch
+*
+* Revision 1.1.1.1  1996/03/06 10:47:01  mclareni
+* Zebra
+*
+*
+*
+* fqtopen.inc
+*
+#if defined(CERNLIB_QMALT)
+# if defined(CERNLIB_QFIXDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=3600,RECL=3600)
+# endif
+
+#elif defined(CERNLIB_QMAPO)
+# if defined(CERNLIB_QFIMDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,RECL=40000)
+# elif defined(CERNLIB_QFINDAN)||defined(CERNLIB_QFICDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,RECL=10000)
+# elif defined(CERNLIB_QFIXDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,RECL=3600)
+# endif
+
+#elif defined(CERNLIB_QMCRY)
+# if defined(CERNLIB_QFIDDAN)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=7200)
+# endif
+
+#elif defined(CERNLIB_QMCV64)
+# if defined(CERNLIB_QFIXDAN)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=7200,RECL=7200)
+# elif defined(CERNLIB_QFIXDAX)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=3600,RECL=3600)
+# elif defined(CERNLIB_QFIDDAN)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=7200)
+# endif
+
+#elif defined(CERNLIB_QMCV32)
+# if defined(CERNLIB_QFIXDAN)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=3600,RECL=3600)
+# elif defined(CERNLIB_QFIXDAX)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=3600,RECL=3600)
+# elif defined(CERNLIB_QFIDDAN)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=3600)
+# endif
+
+#elif defined(CERNLIB_QMDOS) || defined(CERNLIB_WINNT)
+# if (defined(CERNLIB_QFIXDANY))&&(defined(CERNLIB_QF2C) || (defined(CERNLIB_WINNT) && !defined(_ALPHA_)))
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            BLOCKSIZE=3600,RECL=3600)
+# elif (defined(CERNLIB_QFIXDANY))&&(defined(CERNLIB_QFDEC))&&(defined(_ALPHA_))
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +           RECL=900)
+# elif (defined(CERNLIB_QFIMDAX))
+#   if defined(CERNLIB_QFDEC) && defined(_ALPHA_)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECL=900)
+#   else
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECL=3600)
+#   endif
+# elif (defined(CERNLIB_QFINDAN))
+#   if defined(CERNLIB_QFDEC) && defined(_ALPHA_) 
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECL=900)
+#   else
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECL=3600)
+#   endif
+# elif defined(CERNLIB_QFIDDANY) 
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=3600)
+# elif defined(CERNLIB_QFILDANY)||defined(CERNLIB_QFIRDANY)
+      CALL CFOPEN (LUNPTR(JF), 0, 900, CHCL, 0, FQNAME(JF), ISTAT)
+# elif 1
+#  if defined(CERNLIB_QFIDDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=3600)
+#  elif defined(CERNLIB_QFILDANY)||defined(CERNLIB_QFIRDANY)
+      CALL CFOPEN (LUNPTR(JF), 0, 900, CHCL, 0, FQNAME(JF), ISTAT)
+#  elif 1
+       OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM)
+#  endif
+#endif
+
+#elif defined(CERNLIB_QMVAX)
+# if defined(CERNLIB_QFIXDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            RECORDTYPE='FIXED',BLOCKSIZE=3600,RECL=900)
+# elif defined(CERNLIB_QFIDDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=900)
+# elif defined(CERNLIB_QFILDANY)||defined(CERNLIB_QFIRDANY)
+      CALL CFOPEN (LUNPTR(JF), 0, 900, CHCL, 0, FQNAME(JF), ISTAT)
+# elif 1
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM)
+# endif
+#elif 1
+# if defined(CERNLIB_QFIDDANY)
+      OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM,
+     +            ACCESS='DIRECT',RECL=3600)
+# elif defined(CERNLIB_QFILDANY)||defined(CERNLIB_QFIRDANY)
+      CALL CFOPEN (LUNPTR(JF), 0, 900, CHCL, 0, FQNAME(JF), ISTAT)
+# elif 1
+       OPEN (LUNFZ,FILE=FQNAME(JF),STATUS=CHST,FORM=CHFM)
+# endif
+#endif

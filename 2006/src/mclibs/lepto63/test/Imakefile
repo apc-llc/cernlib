@@ -1,0 +1,10 @@
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(demo,demo.o,$(PACKAGE_LIB),$(PACKAGE_LIB),jetset74 pdflib804 mathlib)
+
+CernlibFortranProgramTarget(demo2,demo2.o,$(PACKAGE_LIB),$(PACKAGE_LIB),jetset74 pdflib804 mathlib)
+
+TestTarget(demo,NullParameter,NullParameter)
+TestTarget(demo2,NullParameter,NullParameter)
+

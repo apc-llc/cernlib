@@ -1,0 +1,132 @@
+*
+* $Id: fatwrite.dat,v 1.1.1.1 1996/03/07 15:18:03 mclareni Exp $
+*
+* $Log: fatwrite.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:18:03  mclareni
+* Fatmen
+*
+*
+      PROGRAM FATWRT
+      PARAMETER (LURCOR=200000)
+      COMMON/CRZT/IXSTOR,IXDIV,IFENCE(2),LEV,LEVIN,BLVECT(LURCOR)
+      DIMENSION    LQ(999),IQ(999),Q(999)
+      EQUIVALENCE (IQ(1),Q(1),LQ(9)),(LQ(1),LEV)
+#include "fatpara.inc"
+*
+      COMMON /USRLNK/LUSRK1,LUSRBK,LUSRLS
+*
+      COMMON /QUEST/IQUEST(100)
+*
+      PARAMETER       (LKEYFA=10)
+      DIMENSION KEYS(LKEYFA)
+*
+*
+*     Initialise ZEBRA
+*
+      CALL MZEBRA(0)
+      CALL MZSTOR(IXSTOR,'/CRZT/','Q',IFENCE,LEV,BLVECT(1),BLVECT(1),
+     +            BLVECT(5000),BLVECT(LURCOR))
+      CALL MZLOGL(IXSTOR,-3)
+ 
+*
+* *** Define user division and link area like:
+*
+      CALL MZDIV  (IXSTOR, IXDIV, 'USERS', 50000, LURCOR, 'L')
+      CALL MZLINK (IXSTOR, '/USRLNK/', LUSRK1, LUSRLS, LUSRK1)
+*
+*     Unit for RZ database
+*
+      LUNRZ = 1
+      LUNFZ = 2
+ 
+*         read mode
+      CALL FMLOGL(3)
+      CALL FMINIT(IXSTOR,LUNRZ,LUNFZ,'//CERN/CNDIV',IRC)
+*
+*     Book a new FATMEN bank: JBIAS = 2: s/a bank at LUSRBK
+*
+      JBIAS = 2
+      CALL FMBOOK('//CERN/CNDIV/JAMIE/WRITETEST',
+     +            KEYS,LUSRBK,LSUP,JBIAS,IRC)
+      IF(IRC.NE.0) PRINT *,'RETURN CODE ',IRC,' FROM FMBOOK'
+*
+*     Fill in the fields we want...
+*
+*  File name...
+      NCH = 23
+      CALL FMPUTC(LUSRBK,'$HOME/fatmen/fxfile.dat',
+     +            MFQNFA,NCH,IRC)
+*  File format (FZ binary exchange)...
+      CALL FMPUTC(LUSRBK,'FX  ',MFLFFA,4,IRC)
+*  Data type or copy level... (none)
+      IQ(LUSRBK+MCPLFA) = 0
+*  Host name...
+      CALL FMPUTC(LUSRBK,'CERNVM',MHSNFA,6,IRC)
+*  Record format (fixed length records)...
+      CALL FMPUTC(LUSRBK,'F   ',MRFMFA,4,IRC)
+*  Record length in bytes...
+      IQ(LUSRBK+MRLNFA) = 34200
+*  Block length in bytes...
+      IQ(LUSRBK+MBLNFA) = 34200
+*  File size in MB...
+      IQ(LUSRBK+MFSZFA) = 1
+*  Comment...
+      CALL FMPUTC(LUSRBK,'Sample FZ file',MUCMFA,14,IRC)
+*  User words...
+ 
+      DO 10 I=1,10
+10       IQ(LUSRBK+MUSWFA+I-1) = IRNDM(DUMMY)
+ 
+*
+*     Print bank contents
+*
+      CALL FMSHOW('//CERN/CNDIV/JAMIE/WRITETEST',LUSRBK,KEYS,'A',IRC)
+*
+*     Check bank contents
+*
+      CALL FMVERI('//CERN/CNDIV/JAMIE/WRITETEST',LUSRBK,KEYS,' ',IRC)
+      IF(IRC.NE.0) PRINT *,'Return code ',IRC,' from FMVERI'
+*
+*     Open the file...
+*
+      CALL FMOPEN('//CERN/CNDIV/JAMIE/WRITETEST','22',LUSRBK,'WF',IRC)
+*
+*     and write some data...
+*
+      CALL WRITFZ(22)
+*
+*     close the file...
+*     Options: Update bank with file size from FZINFO
+*              Call FZENDx
+*              Update catalogue and drop bank
+*
+      CALL FMCLOS('//CERN/CNDIV/JAMIE/WRITETEST','22',LUSRBK,'EFUZ',IRC)
+ 
+      CALL FMEND(IRC)
+      PRINT *,'Return code ',IRC,' from FMEND'
+*
+      END
+ 
+      SUBROUTINE WRITFZ(LUN)
+      PARAMETER (LURCOR=200000)
+      COMMON/CRZT/IXSTOR,IXDIV,IFENCE(2),LEV,LEVIN,BLVECT(LURCOR)
+      DIMENSION    LQ(999),IQ(999),Q(999)
+      EQUIVALENCE (IQ(1),Q(1),LQ(9)),(LQ(1),LEV)
+      COMMON/QUEST/IQUEST(100)
+      DIMENSION    IUHEAD(400)
+      DIMENSION    IOCR(100)
+      PARAMETER (JBIAS=2)
+      PARAMETER (IEVENT=0)
+ 
+      DO 30 K=1,2
+         DO 20 I=1,3
+            CALL FZRUN(LUN,0,10,IUHEAD)
+            DO 10 J=1,10
+               NUH = 400
+               CALL FZOUT(LUN,IXDIV,LENTRY,1,'Z',2,400,IUHEAD)
+   10       CONTINUE
+            CALL FZRUN(LUN,-1,10,IUHEAD)
+   20    CONTINUE
+   30 CONTINUE
+*
+  999 END

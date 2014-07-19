@@ -1,0 +1,11 @@
+SRCS_S= \ @@\
+	 ccmmpy.s ccumpy.s cmadd.s cmbil.s cmcpy.s cmmna.s cmmns.s cmmpa.s \ @@\
+	 cmmps.s cmmpy.s cmmpyc.s cmran.s cmscl.s cmset.s cmsub.s cmutl.s \ @@\
+	 crscl.s cumna.s cumns.s cumpa.s cumps.s cumpy.s cumpyc.s dmadd.s \ @@\
+	 dmbil.s dmcpy.s dmmna.s dmmns.s dmmpa.s dmmps.s dmmpy.s dmran.s \ @@\
+	 dmscl.s dmset.s dmsub.s dmutl.s drscl.s dumna.s dumns.s dumpa.s \ @@\
+	 dumps.s dumpy.s rmadd.s rmbil.s rmcpy.s rmmna.s rmmns.s rmmpa.s \ @@\
+	 rmmps.s rmmpy.s rmran.s rmscl.s rmset.s rmsub.s rmutl.s rrscl.s \ @@\
+	 rumna.s rumns.s rumpa.s rumps.s rumpy.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

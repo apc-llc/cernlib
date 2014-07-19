@@ -1,0 +1,63 @@
+*
+* $Id: cdjourn.dat,v 1.1.1.1 1996/02/28 16:23:59 mclareni Exp $
+*
+* $Log: cdjourn.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:59  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, CDJOURN.EXEC */
+/*---------------------------------------------------------------------*/
+/*                                                                     */
+/*                                                                     */
+/*              #    #  ######  #####   #####   #####                  */
+/*              #    #  #       #    #  #    #  #    #                 */
+/*              ######  #####   #    #  #    #  #####                  */
+/*              #    #  #       #####   #    #  #    #                 */
+/*              #    #  #       #       #    #  #    #                 */
+/*              #    #  ######  #       #####   #####                  */
+/*                                                                     */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+ 
+Parse arg fn1 ft1 fm1 fn2 ft2 fm2
+ 
+/* Move file1 to file2, checking that there is enough disk space
+   on target disk. A cleanup is triggered if required
+ */
+ 
+need = QFILE(fn1 ft1 fm1,"BLKNO")
+ 
+free = QDISK(fm2,"BLKLEFT")
+ 
+if need > free/2 then do
+ 
+   'MAKEBUF'
+ 
+   'LFILE * * 'fm2 '(SORT TIME STACK'
+ 
+   If RC = 28 then exit /* No files on the disk! */
+ 
+   n = queued()
+ 
+   do n-1
+ 
+      Pull fn3 ft3 fm3 .
+ 
+      Say 'Erasing 'fn3 ft3 fm3
+      'ERASE 'fn3 ft3 fm3
+ 
+      free = QDISK(fm2,"BLKLEFT")
+ 
+      if need < free/2 then leave
+ 
+   end
+ 
+end
+ 
+'COPYFILE 'fn1 ft1 fm1 fn2 ft2 fm2
+ 
+'ERASE    'fn1 ft1 fm1
+ 
+#endif

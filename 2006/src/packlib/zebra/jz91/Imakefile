@@ -1,0 +1,4 @@
+SRCS_F=	 jzend.F jzin.F jzinit.F jzlift.F jzlog.F jzonly.F \ @@\
+	jzout.F jzroot.F jzsetf.F jztell.F jztrac.F jzwind.F jzzero.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

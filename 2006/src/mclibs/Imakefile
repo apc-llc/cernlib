@@ -1,0 +1,19 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= ariadne cojets eurodec herwig fritiof \ @@\
+	 isajet jetset lepto63 pdf photos pythia
+
+SUBDIRS = $(LIBDIRS)
+
+TestSubdirs($(LIBDIRS))
+
+InstallLibSubdirs($(LIBDIRS))
+
+INCLUDEDIRS= ariadne cojets eurodec herwig fritiof \ @@\
+	 isajet jetset lepto63 pdf pythia
+
+InstallIncludeSubdirs($(INCLUDEDIRS))
+

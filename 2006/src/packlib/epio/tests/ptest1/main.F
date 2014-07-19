@@ -1,0 +1,107 @@
+*
+* $Id: main.F,v 1.1.1.1 1996/03/08 15:21:44 mclareni Exp $
+*
+* $Log: main.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:44  mclareni
+* Epio
+*
+*
+#include "pilot.h"
+#if defined(CERNLIB_CDC)
+      PROGRAM PTEST(OUTPUT,TAPE11,TAPE12,TAPE13)
+#endif
+#include "testc.inc"
+C--- RESET DEBUG FLAG
+      DBUGFL=.FALSE.
+C--- NWOUT = NO. OF WORDS / RECORD
+      NWOUT=500
+C--- NREC = NO. OF IDENTICAL RECORDS WRITTEN EACH TIME
+      NREC=3
+      NH=9
+      PRINT 2001
+      CALL EPINIT
+#if defined(CERNLIB_IBM)
+      CALL VMCMS(
+     -'FILEDEF IOFILE11 DISK EPIOT1 DATA A (RECFM U BLOCK 3600',IVMERR)
+      CALL VMCMS(
+     -'FILEDEF IOFILE12 DISK EPIOT2 DATA A (RECFM U BLOCK 3600',IVMERR)
+      CALL VMCMS(
+     -'FILEDEF IOFILE13 DISK EPIOT3 DATA A (RECFM U BLOCK 3600',IVMERR)
+#endif
+#if (!defined(CERNLIB_VAXLONG))&&(!defined(CERNLIB_STRA))&&(!defined(CERNLIB_UNIX))
+C--- WRITE WRONG BLOCK, REWIND + TEST
+      CALL TEST1
+      PRINT 2003
+#endif
+#if defined(CERNLIB_IBM)
+      CALL VMCMS('ERASE EPIOT1 DATA A',IVMERR)
+#endif
+C--- DEFINE HEADER
+      DO 1  I=1,NH
+    1 IH(I)=100+I
+C--- WRITE TEST DATA ONTO UNIT 11
+      NPASS=1
+#if defined(CERNLIB_VAXLONG)
+        CALL EPSETW(11,1,NVAXLONG*2,IERR)
+*    TEST 32 BIT PHYSICAL HEADERS
+#endif
+#if defined(CERNLIB_PH32BIT)
+      CALL EPSETW(11,29,1,IERR)
+#endif
+*       TEST standard fortran random access
+#if defined(CERNLIB_STRA)
+      CALL EPSETW(11,33,1,IERR)
+      CALL EPSETW(12,33,1,IERR)
+      CALL EPSETW(13,33,1,IERR)
+#endif
+      CALL WR11
+      PRINT 2004,NPASS
+      NPASS=2
+C--- SET NEW BLOCK SIZE
+*    Restrict to fixed length for Unix
+#if (!defined(CERNLIB_STF77))&&(!defined(CERNLIB_STF77VX))
+      CALL EPSETW(11,1,1440,IERR)
+      IF(IERR.NE.0)  CALL ERREX(1)
+#endif
+C--- WRITE AGAIN
+      CALL WR11
+      PRINT 2004,NPASS
+C--- RESET BLOCK SIZE
+#if (!defined(CERNLIB_STF77))&&(!defined(CERNLIB_STF77VX))
+      CALL EPSETW(11,1,1800,IERR)
+      IF(IERR.NE.0)  CALL ERREX(2)
+#endif
+      CALL EPRWND(11,IBUF11,IERR)
+      IF(IERR.NE.0)  CALL ERREX(36)
+C--- READ 11, WRITE 12 + 13
+#if defined(CERNLIB_VAXLONG)
+        CALL EPSETW(11,1,NVAXLONG*2,IERR)
+#endif
+      CALL RWR123
+      N=2*ICALL
+      PRINT 2005,N
+C--- REWIND ALL THREE, READ BACK AND CHECK WITH
+C    HEADER BUFFER CUT, DATA BUFFER CUT, NORMAL BUFFER
+      CALL TEST2
+C--- TERMINATE
+      PRINT 3001
+      STOP
+#if !defined(CERNLIB_CDC)
+2001  FORMAT('1 ++++++++++ EPTEST1 - START OF EXECUTION ++++++++')
+2003  FORMAT(/,' ROUTINE TEST1 SUCCESSFUL')
+2004  FORMAT(/,' ROUTINE WR11 SUCCESSFUL, PASS =',I5)
+2005  FORMAT(/,' ROUTINE RWR123 SUCCESSFUL - NO. OF REC.S =',I10,//)
+3001  FORMAT(///,1X,10(10H++++++++++),//,
+     1          '        EPTEST1 - NORMAL TERMINATION, ALL TESTS DONE',
+     2    //,   1X,10(10H++++++++++),/////)
+#endif
+#if defined(CERNLIB_CDC)
+2001  FORMAT("1 ++++++++++ EPTEST1 - START OF EXECUTION ++++++++")
+2003  FORMAT(/," ROUTINE TEST1 SUCCESSFUL")
+2004  FORMAT(/," ROUTINE WR11 SUCCESSFUL, PASS =",I5)
+2005  FORMAT(/," ROUTINE RWR123 SUCCESSFUL - NO. OF REC.S =",I10,//)
+3001  FORMAT(///,1X,10(10H++++++++++),//,
+     1          "        EPTEST1 - NORMAL TERMINATION, ALL TESTS DONE",
+     2    //,   1X,10(10H++++++++++),/////)
+#endif
+      END

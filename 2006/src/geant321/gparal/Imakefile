@@ -1,0 +1,20 @@
+#if defined(CERNLIB_IBMRT)
+SRCS_F=	gpabort.F gplast.F gprun.F gptrigi.F gpdefrng.F  \ @@\
+	gpreadrng.F gpsumhr.F gpwriterng.F checkstr.F gpinit.F gprocs.F \ @@\
+	gptrigi.F pbarrier.F grun.F ginit.F
+
+EXTRA_DEFINES=-DCERNLIB_TYPE -DCERNLIB_PARA
+EXTRA_INCLUDES=-I/usr/lpp/ppe.poe/include
+FC=mpxlf
+
+SubdirLibraryTarget(geant321_parallel,NullParameter)
+
+InstallLibrary(geant321_parallel,$(CERN_LIBDIR))
+
+CopyFile(../gbase/grun.F,grun.F)
+
+CopyFile(../gbase/ginit.F,ginit.F)
+
+#endif
+
+

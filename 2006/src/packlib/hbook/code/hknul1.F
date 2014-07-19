@@ -1,0 +1,2 @@
+      SUBROUTINE HKNUL1(LINE,ID1,X,W)
+      END

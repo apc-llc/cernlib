@@ -1,0 +1,53 @@
+#
+#  function.exp  --
+#
+#  Original:  6-Sep-1995 12:28
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+
+#
+# Setup for the tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Zero argument funtions
+#
+literal_test	Float32		pi		3.141593e+00
+literal_test	Float64		dpi		3.14159265358979d+00
+
+literal_test	bool		true		true
+literal_test	bool		false		false
+
+literal_test	UInt32		uint32_min	z'0'
+literal_test	UInt32		uint32_max	z'ffffffff'
+
+#literal_test	UInt64		uint64_min	z'0'	
+#literal_test	UInt64		uint64_max	z'ffffffffffffffff'
+
+untested	"Constants of type UInt64"
+
+literal_test	Int32		int32_min	-2147483648
+literal_test	Int32		int32_max	2147483647
+
+#literal_test	Int64		int64_min	-2147483648
+#literal_test	Int64		int64_max	2147483647
+untested	"Constants of type Int64"
+
+literal_test	Float32		float32_min	1.175494e-38
+literal_test	Float32		float32_max	3.402823e+38
+
+literal_test	Float64		float64_min	2.22507385850720d-308
+literal_test	Float64		float64_max	1.79769313486232d+308
+
+#
+# Cleanup after the tests
+#
+paw_cmd { close 4 }

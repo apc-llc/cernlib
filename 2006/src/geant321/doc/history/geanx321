@@ -1,0 +1,18 @@
+*
+* $Id: geanx321,v 1.1.1.1 1995/10/24 10:19:48 cernlib Exp $
+*
+* $Log: geanx321,v $
+* Revision 1.1.1.1  1995/10/24 10:19:48  cernlib
+* Geant
+*
+*
+* This directory was created from geanx321.car patch history
+*CMZ :  3.21/02 29/03/94  15.41.33  by  S.Giani
+*-- Author :
+*
+*                     29-8-1990
+*
+*          Commands SCAN/SLIST changed to provide a list of SCAN volumes
+*          if no argument is given and to delete SCAN bank if a '.' is
+*          entered as the only argument. Interactive check of the existence
+*          of the volumes entered

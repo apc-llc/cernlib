@@ -1,0 +1,4 @@
+SRCS_C= \ @@\
+	 traceqc.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

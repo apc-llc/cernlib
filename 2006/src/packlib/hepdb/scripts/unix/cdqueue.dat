@@ -1,0 +1,48 @@
+*
+* $Id: cdqueue.dat,v 1.1.1.1 1996/02/28 16:24:01 mclareni Exp $
+*
+* $Log: cdqueue.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:01  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /hepdb/cd*
+ 
+   do
+ 
+      typeset -u cdgrp
+      cdpath=$i
+      cdgrp=`basename $i`
+      eval $cdgrp=$cdpath;export $cdgrp
+#
+# Look for startable servers (cdserv exists)
+#
+      if [ -x ${i}/cdserv ]
+      then
+#
+# Pending files?
+#
+      todo=`ls ${i}/todo | wc -l`
+      if [ ${todo} != "0" ]
+      then
+         echo ${todo} pending files for ${cdgrp} | \
+            mail -s $cdgrp hepdb-mgr@zfatal.cern.ch
+      fi
+ 
+      if [ -d ${i}/tovm ]
+      then
+      tovm=`ls ${i}/tovm | wc -l`
+      if [ ${tovm} != "0" ]
+      then
+         echo ${tovm} pending files for transmission to CERNVM for ${cdgrp} | \
+            mail -s $cdgrp hepdb-mgr@zfatal.cern.ch
+      fi
+      fi
+      fi
+   done
+#endif

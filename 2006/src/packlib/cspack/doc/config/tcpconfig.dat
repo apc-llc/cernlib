@@ -1,0 +1,44 @@
+*
+* $Id: tcpconfig.dat,v 1.1.1.1 1996/03/08 15:44:18 mclareni Exp $
+*
+* $Log: tcpconfig.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+* Cspack
+*
+*
+# Add these lines to /etc/inetd.conf (/usr/etc/inetd.conf on Silicon Graphics)
+# (TWG$TCP:[NETDIST]SERVICES.; on VAX/VMS systems with Wollongong TCP/IP)
+pawserv 345/tcp
+zserv   346/tcp
+sysreq  4001/tcp
+#if defined(CERNLIB_UNIX)
+# Add these lines to /etc/services
+pawserv stream tcp nowait root /cern/pro/bin/pawserv pawserv
+zserv stream tcp nowait root /cern/pro/bin/zserv zserv
+#endif
+#if (defined(CERNLIB_VAXVMS))&&(defined(CERNLIB_TWG))
+# Add these lines to TWG$TCP:[NETDIST.ETC]SERVERS.DAT
+# PAWSERV: For the PAW Master server application.
+service-name    Pawserv
+program         CERN:[PRO.EXE]PAWSERV.EXE
+socket-type SOCK_STREAM
+socket-options SO_ACCEPTCONN | SO_KEEPALIVE
+socket-address  AF_INET , 345
+working-set     300
+INIT     TCP_Init
+LISTEN      TCP_Listen
+CONNECTED   TCP_Connected
+SERVICE         Run_Program
+ 
+# ZSERV: For the ZEBRA File server application.
+service-name    Zserv
+program         CERN:[PRO.EXE]ZSERV.EXE
+socket-type SOCK_STREAM
+socket-options SO_ACCEPTCONN | SO_KEEPALIVE
+socket-address  AF_INET , 346
+working-set     200
+INIT     TCP_Init
+LISTEN      TCP_Listen
+CONNECTED   TCP_Connected
+SERVICE         Run_Program
+#endif

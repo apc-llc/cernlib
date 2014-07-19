@@ -1,0 +1,138 @@
+*
+* $Id: fatuse.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatuse.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATUSE.EXEC */
+/*---------------------------------------------------------------------*/
+/*                           F A T U S E    E X E C                    */
+/*                           ----------------------                    */
+/*                                                                     */
+/* 12/04/90 Modified to count FINDs and MAKEs rather than GETs         */
+/* 03/04/90 J.D. Shiers                                                */
+/*                                                                     */
+/* EXEC to measure FATMEN usage from FATSERV LOG files on server disks.*/
+/* For a given group, counts: Number of users                          */
+/* For each user,     counts: Number of INITs, Number of FINDs, MAKEs  */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+Parse upper arg fatgroup from to '(' opt .
+ 
+If fatgroup = '' then do
+   Say "Please supply name of group"
+   exit 1
+   end
+ 
+Say 'Look at usage statistics for group 'fatgroup
+ 
+If strip(from) ^= '' then Say "From "from
+                     else from = '00/00/00'
+If strip(to)  ^= '' then Say "To   "to
+                    else to = '99/99/99'
+ 
+If substr(fatgroup,1,2) ^= 'FM' then fatgroup = 'FM' || fatgroup
+ 
+'EXEC GIME 'fatgroup '(NONOTICE QUIET STACK'
+Pull fatmode .
+'EXECIO * DISKR FATSERV LOG 'fatmode
+ 
+nusers   = 0
+fusers   = ''
+ninit    = 0
+nshell   = 0
+nfind    = 0
+nmake    = 0
+nstrange = 0
+nline    = 0
+nlines   = queued()
+ 
+Do queued()
+   Pull line
+   nline = nline + 1
+ 
+   If nline = 1      then parse var line sd st .
+   If nline = nlines then parse var line ed et .
+ 
+   If index(line,'*FATLOG*') = 0 then iterate
+   Parse var line dd .
+   If dd < from then iterate
+   If dd > to   then iterate
+ 
+   Parse var line . '*FATLOG*' . fuser facc . verb noun adjective .
+ 
+/* Encountered this user already?                                      */
+ 
+ If index(fusers,fuser||'/') = 0 then do
+   nusers = nusers + 1
+   fusers = fusers || fuser || '/'
+   end
+ 
+ 
+/* Count number of INITs, FINDs and MAKEs                              */
+ 
+   Select
+ 
+   When verb = 'INIT' then do
+      If adjective = 'SHELL' then nshell = nshell + 1
+                             else ninit  = ninit  + 1
+      end
+ 
+   When verb = 'FMFIND.' then do
+      nfind = nfind + 1
+      end
+ 
+   When verb = 'FMMAKE.' then do
+      nmake = nmake + 1
+      end
+ 
+   When verb = 'END' then do
+      end
+ 
+   Otherwise do
+      nstrange = nstrange + 1
+      end
+ 
+   end /*Select*/
+ 
+   end
+ 
+len    = 69 + length(fatgroup)
+equals = copies('=',len)
+ 
+Say 'FATMEN log for group 'fatgroup 'runs from 'sd st' to 'ed et
+Say equals
+Say ''
+Say 'Selected period: 'from ' to 'to
+Say ''
+Say 'Total number of users              = 'nusers
+Say 'Total number of INITs (FORTRAN)    = 'ninit
+Say 'Total number of INITs (SHELL)      = 'nshell
+Say 'Total number of FINDs              = 'nfind
+Say 'Total number of MAKEs              = 'nmake
+Say 'Total number of unrecognised lines = 'nstrange
+ 
+'EXEC DROP 'fatmode '(QUIET)'
+ 
+if opt = '' then exit
+ 
+ 
+fn = "FATUSERS "||substr(fatgroup,3) || ' ' || qdisk("MAX","MODE")
+ 
+Say 'List of users will be stored in 'fn
+ 
+if fexist(fn) then "ERASE "fn
+ 
+fusers = translate(fusers,' ','/')
+ 
+i = 0
+ 
+do words(fusers)
+i = i + 1
+  fuser = word(fusers,i)
+  "EXECIO 1 DISKW "fn "(STRING" fuser
+  end
+ 
+  "FINIS "fn

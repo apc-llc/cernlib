@@ -1,0 +1,16 @@
+*
+* $Id: fatnft.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatnft.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATNFT.EXEC */
+/*  Send update to VAX using NFT */
+ 
+fat_date = date("JULIAN")
+fat_time = remove(time(""),':')
+fat_file = "FAT"||fat_date || " FZ" || fat_time
+ 
+'EXEC NFT SEND 'vax_file ' FATMEN.RDRFILE '

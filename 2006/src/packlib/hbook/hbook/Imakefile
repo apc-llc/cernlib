@@ -1,0 +1,15 @@
+INCLUDES=	 czbuff.inc czcbuf.inc czsock.inc hcache.inc \ @@\
+	hcbits.inc hcbont.inc hcbook.inc hcdifb.inc hcdire.inc \ @@\
+	hcfast.inc hcfit1.inc hcfit2.inc hcfit3.inc hcfit6.inc \ @@\
+	hcfitd.inc hcfitd1.inc hcfitf.inc hcfitr.inc hcfits.inc \ @@\
+	hcflag.inc hcform.inc hchoptm.inc hck.inc hcmail.inc \ @@\
+	hcmcpm.inc hcmcpm1.inc hcmcpm2.inc hcminpu.inc hcnt.inc \ @@\
+	hcntpar.inc hcntpaw.inc hcopt.inc hcpar0.inc hcpar1.inc \ @@\
+	hcpar2.inc hcpiaf.inc hcpout.inc hcprin.inc hcqcom.inc \ @@\
+	hcqcor.inc hcqcor1.inc hcqcor2.inc hcrecv.inc hcrlf.inc \ @@\
+	hcrlf1.inc hcrlf2.inc hcsave.inc hcset.inc hctit.inc \ @@\
+	hcunit.inc hcvers.inc hmac1.inc hmac2.inc hmac3.inc hmac4.inc \ @@\
+	hmac5.inc hmac6.inc hmachine.inc hntcur.inc jbyt.inc jbyt1.inc \ @@\
+	jbyt2.inc jbyt3.inc jbyt4.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),hbook)

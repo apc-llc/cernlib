@@ -1,0 +1,64 @@
+CDECK  ID>, HWHSNG. 
+*CMZ :-        -20/09/95  14.59.15  by  Mike Seymour
+*-- Author :    Mike Seymour
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHSNG
+C     PARTON-PARTON SCATTERING VIA COLOUR SINGLET
+C     MEAN EVWGT = SIGMA IN NB
+C     TREATS ALL PARTONS ON EQUAL FOOTING WITH HWHSNM(ID1,ID2,S,T)
+C     PROVIDING THE MATRIX ELEMENT SQUARED FOR PARTON TYPES ID1 AND ID2
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG59.INC'
+      INTEGER ID1,ID2
+      DOUBLE PRECISION HWRGEN,HWRUNI,HWHSNM,EPS,RCS,ET,EJ,KK,KK2,
+     & YJ1INF,YJ1SUP,Z1,YJ2INF,YJ2SUP,Z2,FACT,S,T,U,HCS
+      SAVE HCS
+      PARAMETER (EPS=1.D-9)
+      IF (GENEV) THEN
+        RCS=HCS*HWRGEN(0)
+      ELSE
+        EVWGT=0.
+        CALL HWRPOW(ET,EJ)
+        KK=ET/PHEP(5,3)
+        KK2=KK**2
+        IF (KK.GE.1.) RETURN
+        YJ1INF=MAX( YJMIN , LOG((1.-SQRT(1.-KK2))/KK) )
+        YJ1SUP=MIN( YJMAX , LOG((1.+SQRT(1.-KK2))/KK) )
+        IF (YJ1INF.GE.YJ1SUP) RETURN
+        Z1=EXP(HWRUNI(1,YJ1INF,YJ1SUP))
+        YJ2INF=MAX( YJMIN , -LOG(2./KK-1./Z1) )
+        YJ2SUP=MIN( YJMAX ,  LOG(2./KK-Z1) )
+        IF (YJ2INF.GE.YJ2SUP) RETURN
+        Z2=EXP(HWRUNI(2,YJ2INF,YJ2SUP))
+        XX(1)=0.5*(Z1+Z2)*KK
+        IF (XX(1).GE.1.) RETURN
+        XX(2)=XX(1)/(Z1*Z2)
+        IF (XX(2).GE.1.) RETURN
+        COSTH=(Z1-Z2)/(Z1+Z2)
+        S=XX(1)*XX(2)*PHEP(5,3)**2
+        T=-0.5*S*(1.-COSTH)
+        U=-S-T
+C---SET EMSCA TO HARD PROCESS SCALE (APPROX ET-JET)
+        EMSCA=SQRT(2.*S*T*U/(S*S+T*T+U*U))
+        FACT=GEV2NB*0.5*ET*EJ*(YJ1SUP-YJ1INF)*(YJ2SUP-YJ2INF)
+     $      /(16*PIFAC*S**2)
+        CALL HWSGEN(.FALSE.)
+      ENDIF
+C
+      HCS=0.
+      DO 20 ID1=1,13
+        IF (DISF(ID1,1).LT.EPS) GOTO 20
+        DO 10 ID2=1,13
+          IF (DISF(ID2,1).LT.EPS) GOTO 10
+          HCS=HCS+FACT*DISF(ID1,1)*DISF(ID2,2)*HWHSNM(ID1,ID2,S,T)
+          IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(ID1,ID2,3412,90,*30)
+ 10     CONTINUE
+ 20   CONTINUE
+      EVWGT=HCS
+      RETURN
+C---GENERATE EVENT
+ 30   IDN(1)=ID1
+      IDN(2)=ID2
+      IDCMF=15
+      CALL HWETWO
+ 999  END

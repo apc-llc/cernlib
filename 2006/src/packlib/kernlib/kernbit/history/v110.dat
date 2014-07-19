@@ -1,0 +1,14 @@
+*
+* $Id: v110.dat,v 1.1.1.1 1996/02/15 17:47:44 mclareni Exp $
+*
+* $Log: v110.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:44  mclareni
+* Kernlib
+*
+*
+*  Version 1.10  930226  1.10
+C- Corrections:
+C  > M433 INDEXX  force declaration of WORD as EXTERNAL (Absoft -NeXT)
+C  > M442 NAMEFD  New version
+C  > Z264 IARGC   treat quote-delimited strings as single args
+C

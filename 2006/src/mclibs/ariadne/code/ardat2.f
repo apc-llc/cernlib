@@ -1,0 +1,2 @@
+      COMMON /ARDAT2/ PQMAS(10)
+      SAVE /ARDAT2/

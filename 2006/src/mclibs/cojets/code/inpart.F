@@ -1,0 +1,149 @@
+*
+* $Id: inpart.F,v 1.1.1.1 1996/01/11 14:14:38 mclareni Exp $
+*
+* $Log: inpart.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:38  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE INPART(ICH,IFLA,X,PX,PY,WG)
+C     **************************************
+C-- GENERATES ONE INITIAL PARTON (CALLED BY PREGEN)
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/alqgen.inc"
+#include "cojets/bkwg.inc"
+#include "cojets/cfun1.inc"
+#include "cojets/entrev.inc"
+#include "cojets/itapes.inc"
+#include "cojets/qcds.inc"
+#include "cojets/tabqrk.inc"
+      EXTERNAL FUN1,FUN3
+      DIMENSION TBKWG(2,7)
+      DATA ICALL/0/
+C
+C-- INITIALIZATION - PREPARE  X  TABLES
+      IF(ICALL.GT.0) GO TO 50
+      ICALL=1
+      NBIN=127
+      DBIN=1./FLOAT(NBIN-1)
+      HDBIN=DBIN/2.
+      XVMIN=DBIN
+      EPSI=.001
+C-- QUARKS
+      XV(1)=0.
+      DO 8 J=1,5
+      TABQRK(1,J)=0.
+      DO 8 IX=2,NBIN
+      X1=DBIN*FLOAT(IX-2)
+      X2=X1+DBIN
+      XV(IX)=X1+HDBIN
+      IF(X2.LE.XMIN) GO TO 9
+      X1=MAX(X1,XMIN)
+      IFUN=J
+      TABQRK(IX,J)=ASIMP(LOG(X1),LOG(X2),EPSI,M,2,FUN1)
+      GO TO 8
+9     TABQRK(IX,J)=0.
+      XVMIN=X2+DBIN
+8     CONTINUE
+      DO 1 IX=1,NBIN
+      TABQRK(IX,6)=0.
+      DO 1 J=1,5
+      TABQRK(IX,6)=TABQRK(IX,6)+TABQRK(IX,J)
+1     CONTINUE
+      WGQ=0.
+      DO 10 IX=1,NBIN
+10    WGQ=WGQ+TABQRK(IX,6)
+      AQLIAS=0.
+      DO 3 IX=1,NBIN
+      TQLIAS(IX)=TABQRK(IX,6)*BKWEIG(XV(IX))
+3     AQLIAS=AQLIAS+TQLIAS(IX)
+      DO 6 IX=1,NBIN
+6     TQLIAS(IX)=TQLIAS(IX)/AQLIAS
+      CALL ALIAS(LQLIAS,TQLIAS,NBIN)
+C-- GLUONS
+      TABQRK(1,7)=0.
+      DO 11 IX=2,NBIN
+      X1=DBIN*FLOAT(IX-2)
+      X2=X1+DBIN
+      IF(X2.LE.XMIN) GO TO 12
+      X1=MAX(X1,XMIN)
+      TABQRK(IX,7)=ASIMP(LOG(X1),LOG(X2),EPSI,M,2,FUN3)
+      GO TO 11
+12    TABQRK(IX,7)=0.
+11    CONTINUE
+      WGG=0.
+      DO 13 IX=1,NBIN
+13    WGG=WGG+TABQRK(IX,7)
+      AGLIAS=0.
+      DO 5 IX=1,NBIN
+      TGLIAS(IX)=TABQRK(IX,7)*BKWEIG(XV(IX))
+5     AGLIAS=AGLIAS+TGLIAS(IX)
+      DO 7 IX=1,NBIN
+7     TGLIAS(IX)=TGLIAS(IX)/AGLIAS
+      CALL ALIAS(LGLIAS,TGLIAS,NBIN)
+C
+      DO 21 J=6,7
+      TBKWG(1,J)=0.
+      TBKWG(2,J)=0.
+      DO 22 IX=1,NBIN
+      TBKWG(1,J)=TBKWG(1,J)+TABQRK(IX,J)*BKWEIG(XV(IX))
+      TBKWG(2,J)=TBKWG(2,J)+TABQRK(IX,J)
+22    CONTINUE
+      FBKWG(J)=TBKWG(1,J)/TBKWG(2,J)
+21    CONTINUE
+C
+      AL1=LOG(XMIN)
+      AL2=LOG(XVMIN)
+      DO 14 J=1,7
+      J1=J
+      F2XQV(J)=MAX(F2IN(XMIN,J1),F2IN(XVMIN,J1))
+      DO 16 L=1,100
+      X=EXP(CJRN(L)*(AL2-AL1)+AL1)
+      F2XQV(J)=MAX(F2XQV(J),F2IN(X,J1))
+16    CONTINUE
+14    CONTINUE
+50    CONTINUE
+C
+C-- GENERATION OF PARTON INITIATING INITIAL CASCADE - X AND FLAVOR FIRST
+      IF(ICH.EQ.LGLUS) GO TO 200
+C-- QUARK
+      IX=INT(CJRN(0)*NBIN)+1
+      IF(CJRN(0).GT.TQLIAS(IX)) IX=LQLIAS(IX)
+      X=XV(IX)
+      IF(X.GE.XVMIN) GO TO 110
+105   X=EXP(CJRN(0)*(AL2-AL1)+AL1)
+      IF(CJRN(0).GT.F2IN(X,6)/F2XQV(6)) GO TO 105
+110   CONTINUE
+      CALL GEFLA(IX,IFLA,JFLA)
+      BKWG=BKWEIG(X)
+      WG=WGQ/BKWG*FBKWG(6)
+      GO TO 300
+C-- GLUON
+200   CONTINUE
+      IX=INT(CJRN(0)*NBIN)+1
+      IF(CJRN(0).GT.TGLIAS(IX)) IX=LGLIAS(IX)
+      X=XV(IX)
+      IF(X.GE.XVMIN) GO TO 210
+205   X=EXP(CJRN(0)*(AL2-AL1)+AL1)
+      IF(CJRN(0).GT.F2IN(X,7)/F2XQV(7)) GO TO 205
+210   CONTINUE
+      IFLA=LGLUS
+      BKWG=BKWEIG(X)
+      WG=WGG/BKWG*FBKWG(7)
+      JFLA=7
+300   CONTINUE
+C-- TRANSVERSE MOMENTUM
+310   PT2=-PT2INT*LOG(CJRN(0))
+      IF(PT2/(X*S).GT.X) GO TO 310
+      PT=SQRT(PT2)
+      PHI=PI2*CJRN(0)
+      PX=PT*COS(PHI)
+      PY=PT*SIN(PHI)
+      RETURN
+      END

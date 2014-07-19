@@ -1,0 +1,27 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:52:31 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:31  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNSUN)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNCRY
+              ----------------------------------------
+
+
+UP-DATE  1.19 :  11-May-1994
+----------------------------
+
+Replacing file   KERNCRY  1.18  921020 17.29
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+Delete:            p=CRYGS,d=JUMPAD,JUMPX2     use KERNFOR
+
+---------------------------------------------------------------------
+
+#endif

@@ -1,0 +1,664 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:43 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:43  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNFOR)
+
+UP-DATE  4.41 :  24-Jan-1995
+----------------------------
+
+Replacing file   KERNFOR  4.40  940929 16.15
+
+Correct:      p=TCGEN, D=CCOSUB,CENVIR     bug if overflow
+              p=CCGEN, D=TMREAD            return NCH also if failure
+              use posix version of SIGNALF on SUN
+
+---------------------------------------------------------------------
+
+UP-DATE  4.40 :  29-Sept-1994
+----------------------------
+
+Replacing file   KERNFOR  4.39  940322 12.57
+
+New patches:  P=*KUUX                   pilot for an Unknown Unix machine
+              P=QMOS9                   for Microware OS-9
+              P=P5_CC, P5_CI, P5BOOT    for Patchy bootstrap export
+
+New option:   P=QINTCOPY                copy vectors as integers
+              P=QINTZERO                zero vectors as integers
+
+Correct:      p=TCGEN, D=UCOPY et al.   copy integers if QINTCOPY
+                       D=UZERO,VZERO    zero integers if QINTZERO
+                       D=ICNUMU         underscore alphabetic, not numeric
+              D=FCASPLIT                correct for LINUX
+              p=CCGEN,d=JUMPXN, JUMPTN  extend to 9 parameters
+
+---------------------------------------------------------------------
+
+UP-DATE  4.39 :  28-Feb-1994
+----------------------------
+
+Replacing file   KERNFOR  4.38  931110 15.04
+
+New Decks:    P=TCGEN, D=ICEQU      test equality
+                       D=CCOSUB     copy with token substitution
+                       D=CENVIR     environment variables subst
+              P=CCGEN, D=EXITF      to exit with status code
+              P=TCGEN, D=EXITF
+              P=TCGEN, D=ACCESSF
+
+Correct:      P=UTYGEN, D=FCASPLIT  to allow long commands (VAX)
+              P=UTYGEN, D=XBANNER   use GETARG on all machines
+              P=CCGENCI, D=CIOPEI   to have default permissions 644
+              P=CCGENCF             include-file for the VAX
+              P=TCGEN, D=GSHOWF     to have the "what"-identifier
+              P=TCGEN, D=CCOPYL, CCOPYR, CCOPIV   bug for NCH=0
+              P=CCGEN, D=INTRAC,LSTATI,TIMEL      remove material for MS-DOS
+                                                  (put it on KERNDOS)
+
+              P=UTYGEN, D=FCASPLIT      to implement Windows/NT
+              P=CCGEN, D=TMPROI
+
+Change:       P=QMCVX -> QMCV64
+              P=QMCVY -> QMCV32
+
+Delete:       P=CCGEN, D=LONGJMP    obsolete
+
+Delete use:   P=TCGEN, D=SETFMT,SORTX      obsolete
+                       D=UFLINT,UHOLLR,MATIN1
+                       D=MXEQU,POWEZE,SMXINV
+
+New patch:    P=CCGENCX             re-organize usage of CCGENCI and CF
+
+New options:  P=QF_DEC, QF_F2C, QF_MSOFT    Fortran dialects
+              P=QF_IBM  instead of old QMIBMFVS
+              P=QF_SIEM            old QMIBMFSI (Siemens)
+
+              P=QS_UNIX  operating system is UNIX
+
+---------------------------------------------------------------------
+
+UP-DATE  4.38 :  8-Nov-1993
+----------------------------
+
+Replacing file   KERNFOR  4.37  931103 12.20
+
+New Decks:   P=TCGEN, D=ICNUMU
+
+Correct:     P=CCGEN,   D=TIMEL    include system time counting
+             P=CCGEN,   D=SIGNALF  for signal handling under
+                                   MSDOS with Gcc compiler
+             P=CCGEN,   D=CHDIRI,  GETWDI,  INTRAC,  TIMEL, STATI,
+                        D=GETGIDF, GETPIDF, GETUIDF, LSTATI.
+                        to compile with MSC under Windows/NT
+             P=CCGENCF, D=CFOPEI,
+             P=CCGENCI, D=CIOPEI.
+
+             P=UTYGEN, D=FCASPLIT  to write 0 char. for blank lines
+
+---------------------------------------------------------------------
+
+UP-DATE  4.37 :  1-July-1993
+----------------------------
+
+Replacing file   KERNFOR  4.36  930609 17.40
+
+Correct:     P=CCGENCI, D=CIGET,CIPUT    VAX: parameter by descriptor
+             P=CCGENCF, D=.              adapt include file for Posix
+             P=CCGEN,   D=STATF, STATI   mod. for VAX
+                        D=ACCESSF, ACCESI
+                        D=TMINIT, TMPRO, TMPROI, TMREAD
+
+---------------------------------------------------------------------
+
+UP-DATE  4.36 :  2-June-1993
+----------------------------
+
+Replacing file   KERNFOR  4.35  930318 15.53
+
+New patch:   P=QMVAOS            for VAX Alpha with OSF, 32-bit
+
+New Decks:   P=CCGEN, D=GETGIDF, GETUIDF
+             P=CCGEN, D=LSTATF, LSTATI
+             P=CCGEN, D=READLNF, READLNI
+             P=CCGEN, D=SETENVF, SETENVBSD, SETENVSY5
+             P=CCGEN, D=SIGBSD, SIGPOSIX  for signal handling
+             P=TCGEN, D=ICINQ, ICINQL, ICINQU
+
+Correct:     P=TCGEN, D=CSETVI,CSETVM   improve error indication
+             P=TCGEN, D=ICNTH,/L,/U     variable array size problem
+             P=UTYGEN, D=FCASPLIT
+             P=CCGEN              change 'long' to 'int' everywhere
+             P=CCGEN, D=JUMPXN
+             P=CCGEN, D=TIMEL     use resource limits
+
+---------------------------------------------------------------------
+
+UP-DATE  4.35 :   8-Mar-1993
+----------------------------
+
+Replacing file   KERNFOR 4.34  930112 19.54
+
+New Decks :    P=TCGEN, D=CCOPIV, CSETVI, CSETVM
+
+Correct :      P=TCGEN,D=ICHEXI,ICOCTI,NCHEXI,NCOCTI   use shift
+
+Delete :       P=CCGEN, D=TMNBUF, TMPROM  obsolete
+
+---------------------------------------------------------------------
+
+UP-DATE  4.34 :  12-Jan-1993
+----------------------------
+
+Replacing file   KERNFOR 4.33  920703 12.04
+
+New Decks :    P=CCGEN, D=ACCESSF,ACCESI
+               P=TCGEN, D=UNLINKF                 Fortran default
+
+Correct :      P=TCGEN,D=LOCF             bug in Fortran default
+
+               P=CCGEN, D=DATIME,DATIMH,JUMPXN,JUMPTN
+               P=CCGENCF, D=CFPERM
+               P=CCGENCI, D=CIPERM     correct handling of externals
+
+---------------------------------------------------------------------
+
+UP-DATE  4.33 :  11-May-1992
+----------------------------
+
+Replacing file   KERNFOR 4.32  920229 19.42
+
+New Decks :    P=TCGEN, D=CSETOI, ICOCTI, NCDECI, NCHEXI, NCOCTI
+               P=CCGENCF, D=CFPERM                to set permissions
+               P=CCGENCI, D=CIPERM                to set permissions
+
+Correct :      FCASPLIT           add -O option for cc
+                                  add char-length options for IBM
+                                  Apollo with f77
+               P=CCGENCF, D=CFOPEI                to use permissions
+               P=CCGENCI, D=CIOPEI                to use permissions
+               P=TCGEN, D=ICNTH, ICNTHL, ICNTHU   fix a bug
+
+---------------------------------------------------------------------
+
+UP-DATE  4.32 :  29-Feb-1992
+----------------------------
+
+Replacing file   KERNFOR 4.31  911113 18.15
+
+New Decks :    P=TCGEN, D=CCOPYL, CCOPYR    copy character strings
+
+Correct :      GMTIMEF                      for Apollo
+               FCASPLIT                     correct format statement
+                                            Fortran options for Apollo
+               CIOPEN of P=CCGENCI          remove message
+
+---------------------------------------------------------------------
+
+UP-DATE  4.31 :  11-Nov-1991
+----------------------------
+
+Replacing file   KERNFOR 4.30  910816 12.23
+
+New Patch :    P=CCGENCI                    new CIOPACK
+
+New Decks :    P=TCGEN, D=IUWEED            to find infinite
+               P=CCGEN, D=UNLINKF           C interface
+
+Correct :      XBANNER                      single banner page
+               XINB,XINBF,XINBS             return IOSTAT code
+               ABEND in CCGEN + TCGEN       set return-code 7
+               BLOW,BUNCH                   missing DIMENSION
+               CSETHI                       use mask + shift
+
+---------------------------------------------------------------------
+
+UP-DATE  4.30 :  19-Aug-1991
+----------------------------
+
+Replacing file   KERNFOR 4.29  910731 19.17
+
+New machine:   CVY for Convex 32-bit mode
+
+Correct :      default UBLOW and UBUNCH     (for Convex)
+               FCASPLIT                     add new options
+               XBANNER                      (for Convex)
+               CCGENCF                      (include-files for Cray)
+
+---------------------------------------------------------------------
+
+UP-DATE  4.29 :  18-July-1991
+----------------------------
+
+Replacing file   KERNFOR 4.28  910513 21.11
+
+New flag   QSIGJMP  to use posix version of setjmp/longjmp
+New default sequence LUNSTP for standard output printing
+
+Change patch names :   QMIBMSI --> QMIBMFSI   Fortran Siemens
+                       QMIBMVS --> QMIBMFVS   Fortran VS
+
+New Patch :    P=PROJSHIFT                  for the SHIFT project
+               P=QMAMX                      for Amiga Unix
+
+New Decks :    P=CCGEN, D=JMPSET, JMPLONG   for setjmp/longjmp
+               P=CCGEN, D=TMINIT            to initialize TM
+               P=CCGEN, D=TMPRO,  TMPROI    to print a prompt
+               P=TCGEN, D=CKRACK
+
+Correct :      P=CCGEN, D=QNEXTE            use posix
+               P=CCGEN, D=QNEXTE            remove undocumented feature
+               P=CCGEN, D=LOCF              use shift, not division
+               P=CCGENCF                    re-organize include-files
+               P=TCGEN, D=KERNGT,GSHOWF     handle LUN=0
+               CSETDI, CSETHI               small correction for NGSLAT
+
+Obsolete :     P=CCGEN, D=SETJMPF, LONGJMP, TMPROM
+
+---------------------------------------------------------------------
+
+UP-DATE  4.28 :  13-May-1991
+----------------------------
+
+Replacing file   KERNFOR 4.27  910426 11.31
+
+Correct :      P=CCGENCF, D=CFOPEI     fix bug
+
+---------------------------------------------------------------------
+
+UP-DATE  4.27 :  26-Apr-1991
+----------------------------
+
+Replacing file   KERNFOR 4.26  910319  0.10
+
+Correct :      P=CCGENCF               re-write
+               P=CCGEN, D=QNEXTE,TIMEL change name of variable init
+
+---------------------------------------------------------------------
+
+UP-DATE  4.26 :  13-Mar-1991
+----------------------------
+
+Replacing file   KERNFOR 4.25  901023 10.53
+
+New Patches :  P=CCGENCF          CF routines in C
+               P=CCGENU           C utilities
+               P=QMHPX            for HP UNIX
+
+New Decks :    P=CCGEN :          Fortran interfaces
+                 D=CHDIRF, GETENVF, GETPIDF, GETWDF, KILLF
+                 D=PERRORF, RENAMEF, SIGNALF, SLEEPF, STATF, SYSTEMF
+                 D=CTIMEF, GMTIMEF
+
+               P=CCGEN, D=JUMPTN          new routine
+               P=TCGEN, D=CFWEOF, FFSIZE  dummy routines
+
+Correct :      P=CCGEN     new flags QX_SC, QXNO_SC, QXCAPT
+               D=FCASPLIT, XBANNER     add HPX
+               D=UCOPY2                bug for SGI for N=1
+
+---------------------------------------------------------------------
+
+UP-DATE  4.25 :  22-Oct-1990
+----------------------------
+
+Replacing file   KERNFOR 4.24  900423 19.05
+
+New Decks :    P=UTYGEN, D=XBANNER
+               P=CCGEN,  D=TMNBUF, TMPROM, TMREAD
+
+Correct :      RANECUSQ, RANECU, RANECQ    for QMIBX
+               FCASPLIT                    for QMIRT, QMVMI
+
+---------------------------------------------------------------------
+
+UP-DATE  4.24 :  24-Apr-1990
+----------------------------
+
+Replacing file   KERNFOR 4.23  891215 15.17
+
+New Patches :  UTYGEN        general utility programs
+               QMIBX         for IBM 3090 with AIX
+               QMSGI         name change from QMSIG
+
+New Decks :    LONGJMP of P=CCGEN
+               CSQMCH, CTRANS, ICHEXI       of CHPACK
+
+Correct :      INTRAC, JUMPXN, TIMEL of P=CCGEN
+
+---------------------------------------------------------------------
+
+UP-DATE  4.23 :  15-Dec-1989
+----------------------------
+
+Replacing file   KERNFOR 4.22  890913 21.13
+
+New Patches :  CCGEN         general C routines
+               QDEFAULT      default setting of options
+               Q$BITSEQ      standard sequences Q$JBIT etc
+               QMSGI         for Silicon Graphics
+               QMMPW         for MAC II
+
+New Decks :    CSETHI, ICTYPE   of CHPACK
+               RNDM          a default for 32-bit, IEEE machines
+               LOCB          a default working on several machines
+               ABEND         a dummy default
+               JUMPXN        a dummy default
+               TRACEQX       the old TRACEQ for CDC,PDP,UNIVAC
+               TRACEQ        a dummy default
+               JOBNAM        a dummy default
+
+Correct :      Introduce the new QISASTD / QMILSTD options in :
+               CBYT,   JBIT,   JBYT,   JBYTET, JBYTOR
+               MBYTET, MBYTOR, MCBYT,  MSBIT,  MSBIT0, MSBIT1, MSBYT
+               SBIT,   SBIT0,  SBIT1,  SBYT,   SBYTOR
+               PKBYT,  UPKBYT
+
+               IUFORW              for ASCII machines
+               CHTOI, ITOCH        new version for ASCII machines
+
+               Turn into usable defaults :
+               LOCF, UBLOW, UBUNCH
+               FLOARG, INTARG, IUMODE, UFLINT
+
+---------------------------------------------------------------------
+
+UP-DATE  4.22 :  13-Sep-1989
+----------------------------
+
+Replacing file   KERNFOR 4.21  890323 13.28
+
+New Decks :    CSQMBL, ICLOCL      of CHPACK
+               VIZPRI              visual printing routine
+
+Correct :      ICDECI              NGSLAT=0 also if terminated by blank
+               DATIME (dummy)      to load /SLATE/
+
+---------------------------------------------------------------------
+
+UP-DATE  4.21 :  23-mar-1989
+----------------------------
+
+Replacing file   KERNFOR 4.20  881028 16.01
+
+New Patches :  P=QMCVX          machine patch for Convex
+               P=QMTMO          machine patch for Transputer
+               P=QMVMI          machine patch for VAX with MIPS proc.
+
+New Decks :    KERNGT, SORTR, SORTD, SORTI
+               LVSMI, LVSMX, LVSDMI, LVSDMX, LVSIMI, LVSIMX
+               RANMAR and subsidiary
+               RANECU and subsidiary
+               CFILL, CLEFT, CRIGHT, CSETDI
+               ICDECI, ICFIND, ICFMUL, ICFILA, ICFNBL
+               ICLOC, ICLOCU, ICLUNS, ICNEXT
+               ICNTH, ICNTHL, ICNTHU, ICNUM, ICNUMA, LNBLNK
+
+Correct :      CLTOU, CUTOL     speed up
+               LENOCC           speed up
+               ATG, PROXIM      re-written
+               many             change dummy DIMENSION A(2) -> A(*)
+                                       for speed with some compilers
+                                change ALOG, ALOG10, MIN0, MAX0 etc
+                                       to LOG, LOG10, MIN, MAX etc
+               JBIT,JBYT,JBYTET,JBYTOR      true defaults
+               SBIT,SBIT0,SBIT1,SBYTOR      true defaults
+               UCTOH,UCTOH1,UHTOC,UH1TOC    true defaults
+               MBYTET,MBYTOR,MCBYT,MSBIT/0/1,MSBYT   new defaults
+               PKBYT,UPKBYT                          new defaults
+               remove the dependency on the F77 option
+
+---------------------------------------------------------------------
+
+UP-DATE  4.20 :  28-oct-1988
+----------------------------
+
+Replacing file   KERNFOR 4.19  880728 17.19
+
+New Patch :    P=QMSUN          machine patch for SUN
+
+Correct :      MBYTOR           correct (fatal) typing error
+               PKCHAR,UPKCH,UCTOH1,UCTOH,UH1TOC,UHTOC
+                                avoid variable names CHAR,ICHAR,INT
+
+---------------------------------------------------------------------
+
+UP-DATE  4.19 :  28-JUL-1988
+----------------------------
+
+Replacing file   KERNFOR 4.18  880425 20.38
+
+New Decks :    D=NOARG          dummy version
+
+New Patch :    P=QMALT          machine patch for Alliant
+
+Correct :      IULAST           use reverse loop
+               XINB, XINBS      clean up
+
+---------------------------------------------------------------------
+
+UP-DATE  4.18 :  25-APR-1988
+----------------------------
+
+Replacing file   KERNFOR 4.17  870922 23.17
+
+New Decks :    D=IUCOLA, IUFILA
+
+Corrections :  D=RANNOR                  test on zero
+               D=CFROMI                  fix problem
+
+               D=PKCHAR,UHOLLR,UOPT,UPKCH,UTRANS
+                          use PARAMETER instead of DATA statem.
+
+---------------------------------------------------------------------
+
+UP-DATE  4.17 :  22-SEP-1987
+----------------------------
+
+Replacing file   KERNFOR 4.16  870601 15.46
+
+Corrections :  P=TCGEN, D=SBYTOR                  to use IOR
+                        D=PKCHAR,UHOLLR,UOPT,UPKCH,UTRANS
+                          change local variables to standard names
+
+---------------------------------------------------------------------
+
+UP-DATE  4.16 :  1-JUNE-1987
+----------------------------
+
+Replacing file   KERNFOR 4.15  861204 21.05
+
+New Decks :    P=TCGEN, D=JBYTOR, MBYTET, MBYTOR, MCBYT
+                        D=MSBIT,  MSBIT0, MSBIT1, MSBYT
+                        D=BITPOS, IBITS,  ISHFTC, MVBITS
+
+Corrections :  P=TCGEN, D=JBYTET                  to use IAND
+                        D=VZERO                   to set integer zero
+                        D=TRCHLU,TRCHUL         to use DSQRT if necc.
+
+               Remove material specific to NORD 50 and CII SIGMA
+               from the KERNLIB Pam-files
+
+---------------------------------------------------------------------
+
+UP-DATE  4.15 :   4-DEC-1986
+----------------------------
+
+Replacing file   KERNFOR 4.14  860514 15.32
+
+New Decks :    P=TCGEN, D=IE3FOD, IE3FOS, IE3TOD, IE3TOS
+
+Corrections :  P=TCGEN : TR-Package :  use some internal double prec.
+
+---------------------------------------------------------------------
+
+UP-DATE  4.14 :  14-MAY-1986
+----------------------------
+
+Replacing file   KERNFOR 4.13  860226  9.52
+
+New Decks   :  P=TCGEN, D=CLTOU, CUTOL
+
+---------------------------------------------------------------------
+
+UP-DATE  4.13 :  26-FEB-1986
+----------------------------
+
+Replacing file   KERNFOR 4.12  850702 17.48
+
+New Decks   :  P=TCGEN, D=CFROMI, IFROMC
+
+---------------------------------------------------------------------
+
+UP-DATE  4.12 :  2-JULY-1985
+----------------------------
+
+Replacing file   KERNFOR 4.11  850529 14.35
+
+New Deck    :  P=TCGEN, D=VLINCO         routine VLINE with new name
+                                         to avoid clash
+                                         with the VERSATEC Library
+
+---------------------------------------------------------------------
+
+UP-DATE  4.11 :  29-MAY-1985
+----------------------------
+
+Replacing file   KERNFOR 4.10  850326 18.37
+
+Corrections :  P=XVECT, D=XINB, XINBS       ADD F77 MODE, TO LIMIT
+               P=TCGEN, D=CHTOI             ADD F77 FLAG ON DECK
+               P=TCGEN, D=TIMEL             STANDARD DUMMY TIME =9999
+
+---------------------------------------------------------------------
+
+UP-DATE  4.10 :  20-MAR-1985
+----------------------------
+
+Replacing file   KERNFOR 4.09  840827 17.04
+
+New Decks :    P=TCGEN, D=UOPTC             CHAR. VERSION OF UOPT
+               P=TCGEN, D=LENOCC            CHAR LENGTH OCCUPIED
+               P=TCGEN, D=INTRAC,TIMEST     GENERAL DUMMIES
+Corrections :  P=TCGEN, D=CHTOI             CHANGE CHARACTER SET
+
+---------------------------------------------------------------------
+
+UP-DATE  4.09 :  27-AUG-1984
+----------------------------
+
+Replacing file   KERNFOR 4.08  840613 20.50
+
+New Deck :     P=TCGEN, D=QNEXTE               FOR 'NEXT EVENT'
+
+---------------------------------------------------------------------
+
+UP-DATE  4.08 :  13-JUN-1984
+----------------------------
+
+Replacing file   KERNFOR 4.07  830704 20.54
+
+New Patch :    P=QMAPO                         FOR THE APOLLO
+
+New Decks :    P=TCGEN, D=CHTOI, SORCHA        F 77 ONLY
+
+Tidy up :      P=TCGEN, D=PKBYT, UPKBYT        for ease of conversion
+
+Correction :   P=TCGEN, D=IUBACK,IUFORW,IUNEXT,SETFMT    CLEAN DATA
+                        D=UBLANK,ULEFT,URIGHT,USET,VBLANK
+
+---------------------------------------------------------------------
+
+UP-DATE  4.07 :  24-JUN-1983     RE-DONE : 4-JULY-83
+----------------------------
+
+Replacing file   KERNFOR 4.06  830526 19.53
+
+Add sequence calls Q$JBIT for statement functions JBIT + JBYT
+
+Correction :   P=TCGEN, D=LOREN4          FAULTY USE OF DSQRT IF=B48M
+
+---------------------------------------------------------------------
+
+UP-DATE  4.06 :  26-MAY-1983
+----------------------------
+
+Replacing file   KERNFOR 4.05  821202 23.47
+
+READY CONDITIONALS FOR 64 BITS  (B64)
+
+New Patch :   P=QMCRY   FOR THE CRAY
+
+Corrections:  P=TCGEN, D=FLOARG,INTARG,IUMODE,UFLINT   ADD IF=QMCRY
+                         JBYTPK,SBYTPK                 ADD IF=B64
+                         PKBYT,UPKBYT,PKCHAR,UPKCH
+
+                       D=VDIST      FIX FOR BUG IN CDC F77 COMPILER
+
+---------------------------------------------------------------------
+
+UP-DATE  4.05 :   2-DEC-1982
+----------------------------
+
+Replacing file   KERNFOR 4.04  821124 21.28
+
+Corrections:  P=TCGEN, D=TIMED,TIMEL,TIMX  (DUMMY ROUTINES) BUG FIXED
+
+---------------------------------------------------------------------
+
+UP-DATE  4.04 :  24-NOV-1982
+----------------------------
+
+Replacing file   KERNFOR 4.03  821008 12.19
+
+New Patch :   P=TCNUM
+
+Corrections:  P=TCGEN, D=LORENB,LORENF,LOREN4
+                       INTERNALLY DOUBLE PREC. ON 32-BIT MACHINES
+
+Deletions :   P=TCGEN, D=ERF,FREQ,FINT,PROB
+                       THE OFFICIAL SOURCE IS NOW ON KERNNUM
+                       TO BE SURE THEY ARE PRESENT AND WORKING
+                       COPIES ARE KEPT IN P=TCNUM
+
+---------------------------------------------------------------------
+
+UP-DATE  4.03 :   8-OCT-1982
+----------------------------
+
+Replacing file   KERNFOR 4.02  820801 12.00
+
+New Decks :   P=TCGEN -  DUMMIES FOR ROUTINES TO BE SPECIALLY WRITTEN
+                      JBIT, JBYT, LOCF, SBIT, SBYT, UBLOW, UBUNCH
+                      DATIME, DATIMH, TIMED, TIMEL, TIMEX
+
+---------------------------------------------------------------------
+
+UP-DATE  4.02 :  23-JUL-1982
+----------------------------
+
+Replacing file   KERNFOR 4.01  820528 12.54
+
+New Patch :   P=QMHRR         MACHINE PATCH FOR THE HARRIS COMPUTER
+
+New Decks :   P=TCGEN, D=FLOARG, INTARG
+
+Corrections:  P=TCGEN, D=FINT    NEW VERSION
+
+---------------------------------------------------------------------
+
+UP-DATE  4.01 :  28-MAY-1982
+----------------------------
+
+Replacing file   KERNFOR 4.00  820401 12.00
+
+Corrections :      P=TCGEN,  D= JBYTET, SBYTOR
+                             NON-ANSI DEFAULTS BROUGHT BACK
+
+---------------------------------------------------------------------
+
+#endif

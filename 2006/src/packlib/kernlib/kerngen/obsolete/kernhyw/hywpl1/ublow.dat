@@ -1,0 +1,36 @@
+*
+* $Id: ublow.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: ublow.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+ublow  : proc (it, iv, n);
+ 
+/* *****************************************************************
+   *                                                               *
+   * ublow(it,iv,n) it en a4 dans iv a1                            *
+   *                si n=0 rien faire                              *
+   *                si n< 0 message erreur                         *
+   *                                                               *
+   ***************************************************************** */
+ 
+dcl  com_err_ entry () options (variable);
+dcl (it (*), iv (*)) bin fixed (35);
+dcl  ivv (n) char (4) based (addr (iv));
+dcl  itt char (n) based (addr (it));
+dcl (n, i) bin fixed (35);
+          if n = 0 then return;
+          if n <0 then do;
+               call com_err_ (0, "ublow", "n est negatif");
+               return;
+          end;
+          do i = 1 to n;
+               ivv (i) = substr (itt, i, 1);
+          end;
+          return;
+     END ublow;
+#ifdef CERNLIB_TCGEN_UBLOW
+#undef CERNLIB_TCGEN_UBLOW
+#endif

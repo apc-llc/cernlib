@@ -1,0 +1,37 @@
+#
+#  string.exp  --
+#
+#  Original:  3-Jul-1995 12:16
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+
+literal_test string {''}				 {'                                '}
+# Single quotes in strings is problematic. Kuip does something, but not consistent.
+# The lexer should be fixed once kuip gets its act together.
+# literal_test string {''''}				 {''                               '}
+# literal_test string {'Once upon a time in the west ...'} {'Once upon a time in the west ...'}
+literal_test string {'12345678901234567890123456789012'} {'12345678901234567890123456789012'}
+literal_test string {'aap'}				 {'aap                             '}
+
+untested "literal_test string: Update test for single quote handling"
+untested "literal_test string: Update test for case preservation"
+
+#
+# Cleanup after tests
+#
+paw_cmd { close 4 }

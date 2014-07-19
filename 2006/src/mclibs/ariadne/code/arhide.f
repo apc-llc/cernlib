@@ -1,0 +1,2 @@
+      COMMON /ARHIDE/ PHAR(400),MHAR(400)
+      SAVE /ARHIDE/

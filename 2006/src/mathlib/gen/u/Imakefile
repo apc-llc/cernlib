@@ -1,0 +1,19 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F=	clebs.F clebsg.F djmnb64.F dtclgn64.F dwig3j64.F \ @@\
+	u100dv.F u100fc.F u100pm.F u100pr.F
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) dwig9j64.F rdjmnb.F rtclgn.F rwig3j.F
+#else
+SRCS_F:= $(SRCS_F) djmnb.F djmnb128.F dtclgn.F dwig3j.F
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

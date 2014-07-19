@@ -1,0 +1,18 @@
+*
+* $Id: fatlib.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatlib.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATLIB.COM
+$ypatchy cern:[pro.src.car]zebra.car fmint.for :go <<!
+&use,qcde.
+&use,vaxvms,*fatlib.
+&use,tms,t=inhibit.
+&exe.
+&pam,11,r=qcde,t=c.
+&pam,12,t=c,a. fatmen.cards
+&quit
+$for fmint.for

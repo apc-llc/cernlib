@@ -1,0 +1,3 @@
+SRCS_F=	 fmsize.F fmstat.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

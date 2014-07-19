@@ -1,0 +1,17 @@
+cvs commit: Examining .
+Removing Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/shift/Imakefile,v  <--  Imakefile
+new revision: delete; previous revision: 1.9
+done
+Removing checkin;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/shift/checkin,v  <--  checkin
+new revision: delete; previous revision: 1.2
+done
+Removing shift.tar;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/shift/shift.tar,v  <--  shift.tar
+new revision: delete; previous revision: 1.15
+done
+Checking in kuip/code_motif/iconwidget.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kuip/code_motif/iconwidget.c,v  <--  iconwidget.c
+new revision: 1.2; previous revision: 1.1
+done

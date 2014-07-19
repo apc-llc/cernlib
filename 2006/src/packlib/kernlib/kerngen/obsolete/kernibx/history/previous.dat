@@ -1,0 +1,74 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:54:30 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:30  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIBX)
+
+Up-date  1.05 :  11-May-1992
+----------------------------
+
+Replacing File   KERNIBX 1.04  910719 13.18
+
+New decks :   LENOCC, LNBLNK                      for speed
+
+---------------------------------------------------------------------
+
+Up-date  1.04 :  18-July-1991
+----------------------------
+
+Replacing File   KERNIBX 1.03  910315 17.06
+
+Deleted :     P=IBXSYS, D=QNEXTE                 use default on KERNFOR
+              P=IBXSYS, D=KWNOCR                 was temporary
+
+---------------------------------------------------------------------
+
+Up-date  1.03 :  15-Mar-1991
+----------------------------
+
+Replacing File   KERNIBX 1.02  900803 10.33
+
+New decks :   SIGNALF
+
+Correct :     Connect P=CCGEN of KERNFOR
+              D=RNDM, KWNORCR                    bugs fixed
+
+Deleted :     CHDIR, GETCWD, GETENV, PERROR, RENAME
+
+---------------------------------------------------------------------
+
+Up-date  1.02 :   1-Aug-1990
+----------------------------
+
+Replacing File   KERNIBX 1.01  900530 15.00
+
+New patch :   *KIBXVF
+
+New decks :   CHDIR, GETCWD, GETENV, PERROR, RENAME, SIGNAL, SYSTEM
+
+Deleted :     INTRAC
+
+Correct :     Connect CCGEN, D= INTRAC, TMNBUF, TMPROM, TMREAD
+
+---------------------------------------------------------------------
+
+Up-date  1.01 :  30-May-1990
+----------------------------
+
+Replacing File   KERNIBX 1.00  900328 19.00
+
+New patch :   QMIBXVF        routines using the vector facility
+
+Correct :     General tidying up of version 1.00
+
+---------------------------------------------------------------------
+
+          First release of the KERNIBX  Pam :  28-Mar-1990
+
+---------------------------------------------------------------------
+
+#endif

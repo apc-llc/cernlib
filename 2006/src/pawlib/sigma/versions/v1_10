@@ -1,0 +1,36 @@
+*
+* $Id: v1_10,v 1.1.1.1 1995/12/12 14:36:21 mclareni Exp $
+*
+* $Log: v1_10,v $
+* Revision 1.1.1.1  1995/12/12 14:36:21  mclareni
+* Imported sources
+*
+*
+*CMZ :          25/02/94  16.30.48  by  Rene Brun
+*-- Author :    Carlo E. Vandoni   26/10/93
+*
+* The routine  SIGINI has been renamed SIGINI1 to avoid clash
+* with an OPAL routine.
+*
+*::>          VERSION  1.10/03   10/02/94 17.18.05
+*
+*   Variable JMOD changed to JMIP (again to comply with some features
+*   of a MIPS FORTRAN compiler).
+*
+* MSDOS version introduced in pilot patch
+*
+*
+*::>          VERSION  1.10/02   31/01/94 14.19.57
+*
+* WINNT version introduced in pilot patch
+*
+*::>          VERSION  1.10/01   27/01/94 15.57.46
+*
+* The routine  SIGINT has been renamed SIGINI to avoid clash
+* with a GEANT user' routine.
+*
+*::>          VERSION  1.10/00   26/10/93 14.50.15
+*
+* A number of un-needed SEQ removed.
+* Minor code optimization (removal of un-needed arguments
+* in function calls.

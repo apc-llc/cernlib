@@ -1,0 +1,18 @@
+*
+* $Id: v5_13,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_13,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.13/01 22/07/92  17.35.21  by  O.Couet
+*-- Author :    O.Couet   14/07/92
+*
+*::>          VERSION  5.13/01   920722 17.35
+*
+*   Mods in HPLF to take care about the new DOUBLE PRECISION version
+*     of the HGAUS routine.
+*
+*::>          VERSION  5.13/00   920714 16.00
+*

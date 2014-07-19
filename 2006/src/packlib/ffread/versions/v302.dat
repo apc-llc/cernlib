@@ -1,0 +1,13 @@
+*
+* $Id: v302.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v302.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.02   861203
+C
+C- Correct bug in FFCARD which caused incorrect handling of
+C  E-format input with exponents greater than 1 digit.
+C

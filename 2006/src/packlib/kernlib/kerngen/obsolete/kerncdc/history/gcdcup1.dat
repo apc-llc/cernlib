@@ -1,0 +1,281 @@
+*
+* $Id: gcdcup1.dat,v 1.1.1.1 1996/02/15 17:51:11 mclareni Exp $
+*
+* $Log: gcdcup1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:11  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNCDC)
+ 
+         UP-DATE RECORD FOR GENCDC VERSIONS 1.01 TO 1.99
+         -----------------------------------------------
+ 
+ 
+         FIRST RELEASE OF THE GENCDC  MINI-PAM : 1-NOV-76
+ 
+---------------------------------------------------------------------
+ 
+ 
+UPDATE  1.02 :  18-OCT-77
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.01 761115 15.41
+ 
+NEW DECKS :     P=XSCOPE,      D=IXFPZL
+                P=CDCFTN,      D=NORRAN, RNDM, UBITS, UFLINT
+                P=CDCSYS,      D=DUMRZL,+, FNBLAN, FNZERO
+ 
+CORRECTIONS :   P=CDCFTN,      D= IUBIN, IUCHAN, IUHIST
+                               ASSURE ROUNDING UPWARDS
+ 
+BUGS FIXED :    P=CDCFTN,      D=TRASAT, TRATSA
+ 
+COMMENTS ONLY CORRECTED IN   P=CDCFTN, D=LORENB, LORENF
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.03 :   20-DEC-77
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.02  771018 17.33
+ 
+NEW DECKS :     P=CDC60SYS,    D=NAMJOB, PRFIFET+LDFIFET
+                P=CDCSYS,      D=WEOR
+ 
+CORRECTIONS :   P=CDCSYS,      D=TRAC0Q
+                               ALLOW FOR TRACE-BACK OF ONLY 1 LEVEL
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.04 :   11-FEB-78
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.03  771220 12.22
+ 
+CORRECTIONS :   P=CDCFTN,      D=IUBIN,IUCHAN,IUHIST
+                               SERIOUS BUG WITH LARGE OVERFLOWS FIXED
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.05 :   3-MAY-78
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.04  780211 21.45
+ 
+NEW DECKS :     P=XSCOPE,    D=XREADB, XREADC, XREADS
+                             TO UNCOUPLE LOADING OF BINARY/CODED IO-ROUTINES
+ 
+                P=CDCFTN,    D=FLPSOR, INTSOR
+                P=CDCSYS,    D=DETACH             SHORT VERSION OF RETRNF
+ 
+CORRECTIONS :   P=XSCOPE,    D=XREAD    TO USE XREADB + XREADC
+                P=CDCFTN,    D=POWEZE   ENTRY TIDIED UP
+                             D=SORTZV   ENTRY/EXIT LINE CORRECTED
+                P=CDCSYS,    D=RETRNF   CORRECTED FOR SCOPE 3.4
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.06 :  14-JUNE-78
+--------------------------
+ 
+REPLACING FILE  GENCDC 1.05  780503 18.49
+ 
+NEW DECKS :     P=CDCFTN,    D=IUBACK,IUFORW,ULEFT,URIGHT,USET
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.07 :  18-DEC-78
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.06  780614 18.10
+ 
+NEW PATCH :     P=XVECTCDC.
+ 
+NEW DECK :      P=CDCFTN,    D=GSHOW   TO PRINT GENSEC VERSION USED
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.08 :  26-JAN-79
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.07  781218 22.25
+ 
+NEW PATCHES :   P=*GNOS, CDCNOS         FOR THE NOS OPERATING SYSTEM
+ 
+NEW DECK :      P=CDCFTN,    D=FNNUM
+ 
+MODIFIED :      P=CDCFTN,    D=KFILE    TO ALSO HANDLE CONVENTIONS OF
+                                        FORTRAN VERSION 4.7
+                P=CDCSYS,    D=NAMEZB   CHANGE NAMEZB TO NAMEZZ
+                                        TO KEEP CERN PROGLIB HAPPY
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.09 :  29-JAN-79
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.08  790126 21.42
+ 
+CORRECTED :     P=CDCNOS,    D=EQUBUF   ARGUMENTS WERE INVERTED
+ 
+DELETED :       P=CDCSYS,    D=DATEZB,IDATZA      OBSOLETE ROUTINES
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.10 :   6-APR-79
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.09  790129 22.44
+ 
+CORRECTED :     P=CDCNOS,    D=DETACH,EQUBUF   PSEUDO-OP 'SST' ADDED
+ 
+NEW DECK :      P=CDCFTN,    D=IUMODE
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.11 :   1-AUG-80
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.10  790406 16.42
+ 
+CORRECTED :     P=XSCOPE3, D=IXLONG, IXPTR, IXRL + P=XSCOPE, D=IXFPZL
+ 
+                   USE   IXPTRZL  FOR  IXPTR   EVERYWHERE
+                         IXRLZL        IXRL
+                         IXFPZL        IXFP
+ 
+                P=*GCDC                 ADD  +USE, QMCDC
+                                        MACHINE SELECTOR FOR GENSECPAM
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.12 :  11-NOV-80
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.11  800801 14.39
+ 
+NEW PATCHES :   P= *GNOSBE & CDCNOSBE               FOR SYSTEM NOS/BE
+ 
+NEW DECKS :        D=JOBNAM          TO EVENTUALLY REPLACE D=NAMJOB
+ 
+CORRECTED :     P= *GNOS   & CDCNOS, BLANK DECKS    SLIGHT SHUFFLING
+ 
+                P=*GCDC, D=DELETES   CONNECT ML VERSION OF TR-PACK
+ 
+DELETED : P=CDCSYS, D=NAMEZB, NAMEZBP     BECAUSE OF THE PROGLIB
+                    USE NAMEZZ INSTEAD OF NAMEZB, EXCEPT FOR THE NAMES
+                    NAMEZZ IS AN IDENTICAL COPY
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.13 :  11-JAN-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.12  801110 18.31
+ 
+NEW PATCHES :   P= *GCDCV76  PILOT FOR CDC 7600, FORTRAN V
+                   XIOCDCV   XIN ROUTINES FOR FORTRAN V
+ 
+NEW DECKS :     P= CDCFTN, D=UCTOH,UHTOC     NEW ROUTINES
+                P= CDCFTN, D=FLOARG,INTARG           FOR KERNLIB
+                P= CDC76SYS, D=LBCMZB                FOR KERNLIB
+ 
+CORRECTED :     P= XVECTCDC,D=XINCF,  P=XSCOPE,XREADC   REMOVE TAGS
+                P= CDCFTN, D=UBLOW,UBUNCH   ADDED ENTRIES UCTOH1,UH1TOC
+                P= CDCSYS, D=DATIME         ADD US-DATE OPTION
+                P= CDCSYS, D=DUMRZLX, REPDMP2    FORMATS TIDIED FOR FV
+                P= CDCSYS, D=TRACEQR,TRAC1Q   IMPROVE DIAGNOSTICS
+---------------------------------------------------------------------
+ 
+UPDATE  1.14 :  14-JAN-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.13  820113 18.51
+ 
+NEW DECKS :     P= CDC76SYS, D=TIMED      IMPROVE PRECISION
+---------------------------------------------------------------------
+ 
+UPDATE  1.15 :  27-JAN-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.14  820114 17.46
+ 
+CONVERSION BY PROGRAM FOR KERN LIB
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.16 :  29-JAN-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.15  820127 15.00
+ 
+DELETED :       P=CDCFTN, D=MXADD,MXDMA,MXDMAL     LONG OBSOLETE
+                P=CDCNOSBE, D=EQUBUF     USE NEW DEFAULT
+                P=CDCNOS,   D=EQUBUF     USE NEW DEFAULT
+ 
+NEW PATCHES :   PILOTS FOR FORTRAN 5
+ 
+NEW DECKS :     P=XSCOPE, D=LXBITS
+                P=CDCFTN, D=BLOW,BUNCH   FOR KERNLIB
+                P=CDC60SYS, D=EQUBUF     OLD DEFAULT MOVED TO THIS
+                P=CDCSYS,   D=EQUBUF     NEW DEFAULT
+                P=CDCSYS, D=NOARG        FOR KERNLIB
+ 
+CORRECTED :     FIX TROUBLE UNDER NOS WITH MACRO 'STORE OC=NOP'
+                P=CDCNOS, D=DETACH,EQUBUF
+ 
+                SET SIGN BIT IN X1 FOR CALL TO SYSTEM GETFIT.
+                P=XSCOPE2,  D=LXBITS
+                P=XSCOPE3,  D=IXPTR,IXRL
+                P=XSCOPE,   D=IXFPZL,XTPCH2
+                P=CDCNOSBE, D=DETACH,EQUBUF,RETRNF
+                P=CDCNOS,   D=DETACH,EQUBUF,LOAFIT
+                P=CDC60SYS, D=LDFIFET
+                P=CDCSYS,   D=DETACH,RETRNF,WEOR
+                P=CERN7600, D=INBCD,OUTBCD
+ 
+                CORRECT FOR FORTRAN 77
+                P=CDCNOS,   D=DMPFIT
+                P=CDCSYS,   D=NAMEZZ
+---------------------------------------------------------------------
+ 
+UPDATE  1.17 :   4-FEB-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.16  820129 19.38
+ 
+RE-ORGANISE PATCHES  P=CDCNOSBE + CDCNOS
+ 
+---------------------------------------------------------------------
+ 
+UPDATE  1.18 :  17-MAR-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.17  820204 18.00
+ 
+RE-ORGANISE PILOT PATCHES : RENAME *G... TO *K... FOR KERNLIB
+                            MAKE NEW *G... TO SELECT *K...
+                            FOR EASY TRANSITION
+ 
+CORRECTED :   CHANGE ALL BLANK CARDS IN ASSEMBLER ROUTINES TO *
+              (OUR ASSEMBLER DOES NOT OBJECT)
+ 
+              REMOVE QUOTES FROM COMMENT-FIELDS TO AVOID TROUBLE
+ 
+              P=CDCNOS, D=RETRNF      BUG CORRECTED
+---------------------------------------------------------------------
+ 
+UPDATE  1.19 :  29-MAR-82
+-------------------------
+ 
+REPLACING FILE  GENCDC 1.18  820317 14.30
+ 
+TIDY UP FOR KERNLIB
+ 
+---------------------------------------------------------------------
+ 
+                  KERNCDC 2.00  =  GENCDC 1.19
+ 
+---------------------------------------------------------------------
+#endif

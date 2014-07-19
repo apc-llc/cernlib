@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= dzdoc hplot
+
+SUBDIRS= $(LIBDIRS) higz
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(graflib,$(LIBDIRS))
+
+InstallLibrary(graflib,$(CERN_LIBDIR))
+
+InstallLibSubdirs(higz)
+
+TestSubdirs(higz)
+
+InstallBinSubdirs(dzdoc)
+
+InstallIncludeSubdirs($(SUBDIRS))

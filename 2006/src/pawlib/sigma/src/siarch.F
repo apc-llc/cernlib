@@ -1,0 +1,403 @@
+*
+* $Id: siarch.F,v 1.1.1.1 1995/12/12 14:36:15 mclareni Exp $
+*
+* $Log: siarch.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:15  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.09/00 26/07/93  16.22.11  by  Carlo E. Vandoni
+*-- Author :
+
+      SUBROUTINE SIARCH(CNAMES,NCODE,NOTAB,L)
+
+      SAVE CNEXCL,CNSYFU,CLISIM,CLIEXP,CNAMSE,CNSIXX
+      SAVE NEXCLA,NSYFUN,LISIMP,LIEXPR,NAMSEP,NSIX
+      CHARACTER CNAMES*8
+      CHARACTER CNEXCL(43)*8
+      CHARACTER CNSYFU(63)*8
+      CHARACTER CLISIM( 9)*8
+      CHARACTER CLIEXP(10)*8
+      CHARACTER CNAMSE( 4)*8
+      CHARACTER CNSIXX(17)*8
+      DIMENSION NEXCLA(43)
+      DIMENSION NSYFUN(63)
+      DIMENSION LISIMP( 9)
+      DIMENSION LIEXPR(10)
+      DIMENSION NAMSEP( 4)
+      DIMENSION NSIX(17)
+      LOGICAL L
+C---  NEXCLA
+      DATA CNEXCL( 1)/'NEXCLA  '/
+      DATA NEXCLA( 1)/ 43/
+      DATA CNEXCL( 2)/'NOTRACK '/
+      DATA NEXCLA( 2)/035/
+      DATA CNEXCL( 3)/'ERASE   '/
+      DATA NEXCLA( 3)/104/
+      DATA CNEXCL( 4)/'FRAME   '/
+      DATA NEXCLA( 4)/113/
+      DATA CNEXCL( 5)/'GRID    '/
+      DATA NEXCLA( 5)/114/
+      DATA CNEXCL( 6)/'AXES    '/
+      DATA NEXCLA( 6)/115/
+      DATA CNEXCL( 7)/'NOAX    '/
+      DATA NEXCLA( 7)/116/
+      DATA CNEXCL( 8)/'LOGX    '/
+      DATA NEXCLA( 8)/117/
+      DATA CNEXCL( 9)/'LOGY    '/
+      DATA NEXCLA( 9)/118/
+      DATA CNEXCL(10)/'LINX    '/
+      DATA NEXCLA(10)/119/
+      DATA CNEXCL(11)/'LINY    '/
+      DATA NEXCLA(11)/120/
+      DATA CNEXCL(12)/'NOFRAME '/
+      DATA NEXCLA(12)/121/
+      DATA CNEXCL(13)/'NORMAL  '/
+      DATA NEXCLA(13)/122/
+      DATA CNEXCL(14)/'LIBRARY '/
+      DATA NEXCLA(14)/207/
+      DATA CNEXCL(15)/'DELETE  '/
+      DATA NEXCLA(15)/208/
+      DATA CNEXCL(16)/'PLOT    '/
+      DATA NEXCLA(16)/125/
+      DATA CNEXCL(17)/'NOPLOT  '/
+      DATA NEXCLA(17)/126/
+      DATA CNEXCL(18)/'USD     '/
+      DATA NEXCLA(18)/209/
+      DATA CNEXCL(19)/'NOGRID  '/
+      DATA NEXCLA(19)/128/
+      DATA CNEXCL(20)/'USERS   '/
+      DATA NEXCLA(20)/210/
+      DATA CNEXCL(21)/'SCALE   '/
+      DATA NEXCLA(21)/130/
+      DATA CNEXCL(22)/'NOSCALE '/
+      DATA NEXCLA(22)/137/
+      DATA CNEXCL(23)/'CHAIN   '/
+      DATA NEXCLA(23)/302/
+      DATA CNEXCL(24)/'NOCHAIN '/
+      DATA NEXCLA(24)/303/
+      DATA CNEXCL(25)/'PRINT   '/
+      DATA NEXCLA(25)/304/
+      DATA CNEXCL(26)/'NOPRINT '/
+      DATA NEXCLA(26)/305/
+      DATA CNEXCL(27)/'LABELS  '/
+      DATA NEXCLA(27)/306/
+      DATA CNEXCL(28)/'BYE     '/
+      DATA NEXCLA(28)/307/
+      DATA CNEXCL(29)/'HALT    '/
+      DATA NEXCLA(29)/308/
+      DATA CNEXCL(30)/'WAIT    '/
+      DATA NEXCLA(30)/308/
+      DATA CNEXCL(31)/'CLEAR   '/
+      DATA NEXCLA(31)/309/
+      DATA CNEXCL(32)/'NAMES   '/
+      DATA NEXCLA(32)/310/
+      DATA CNEXCL(33)/'PUNCH   '/
+      DATA NEXCLA(33)/311/
+      DATA CNEXCL(34)/'STOP    '/
+      DATA NEXCLA(34)/312/
+      DATA CNEXCL(35)/'STATUS  '/
+      DATA NEXCLA(35)/313/
+      DATA CNEXCL(36)/'HELP    '/
+      DATA NEXCLA(36)/314/
+      DATA CNEXCL(37)/'NEWS    '/
+      DATA NEXCLA(37)/315/
+      DATA CNEXCL(38)/'DUMP    '/
+      DATA NEXCLA(38)/317/
+      DATA CNEXCL(39)/'SMALL   '/
+      DATA NEXCLA(39)/329/
+      DATA CNEXCL(40)/'LARGE   '/
+      DATA NEXCLA(40)/330/
+      DATA CNEXCL(41)/'REWIND  '/
+      DATA NEXCLA(41)/331/
+      DATA CNEXCL(42)/'VERS    '/
+      DATA NEXCLA(42)/332/
+      DATA CNEXCL(43)/'NOERA   '/
+      DATA NEXCLA(43)/333/
+C---  NSYFUN
+      DATA CNSYFU( 1)/'NSYFUN'/
+      DATA NSYFUN( 1)/63/
+      DATA CNSYFU( 2)/'PI      '/
+      DATA NSYFUN( 2)/0001 /
+      DATA CNSYFU( 3)/'SIN     '/
+      DATA NSYFUN( 3)/1001 /
+      DATA CNSYFU( 4)/'COS     '/
+      DATA NSYFUN( 4)/1002 /
+      DATA CNSYFU( 5)/'SQRT    '/
+      DATA NSYFUN( 5)/1003 /
+      DATA CNSYFU( 6)/'EXP     '/
+      DATA NSYFUN( 6)/1004 /
+      DATA CNSYFU( 7)/'LOG     '/
+      DATA NSYFUN( 7)/1005 /
+      DATA CNSYFU( 8)/'ATAN    '/
+      DATA NSYFUN( 8)/1006 /
+      DATA CNSYFU( 9)/'ABS     '/
+      DATA NSYFUN( 9)/1007 /
+      DATA CNSYFU(10)/'INT     '/
+      DATA NSYFUN(10)/1008 /
+      DATA CNSYFU(11)/'LOG10   '/
+      DATA NSYFUN(11)/1009 /
+      DATA CNSYFU(12)/'TANH    '/
+      DATA NSYFUN(12)/1010 /
+      DATA CNSYFU(13)/'DBLE    '/
+      DATA NSYFUN(13)/1101 /
+      DATA CNSYFU(14)/'SNGL    '/
+      DATA NSYFUN(14)/1102 /
+      DATA CNSYFU(15)/'CONJ    '/
+      DATA NSYFUN(15)/1103 /
+      DATA CNSYFU(16)/'REAL    '/
+      DATA NSYFUN(16)/1104 /
+      DATA CNSYFU(17)/'IMAG    '/
+      DATA NSYFUN(17)/1105 /
+      DATA CNSYFU(18)/'STRING  '/
+      DATA NSYFUN(18)/1106 /
+      DATA CNSYFU(19)/'NUMBER  '/
+      DATA NSYFUN(19)/1107 /
+      DATA CNSYFU(20)/'EIGVAL  '/
+      DATA NSYFUN(20)/1608 /
+      DATA CNSYFU(21)/'EIGVEC  '/
+      DATA NSYFUN(21)/1609 /
+      DATA CNSYFU(22)/'INV     '/
+      DATA NSYFUN(22)/1601 /
+      DATA CNSYFU(23)/'DET     '/
+      DATA NSYFUN(23)/1602 /
+      DATA CNSYFU(24)/'MOD     '/
+      DATA NSYFUN(24)/2201 /
+      DATA CNSYFU(25)/'ATAN2   '/
+      DATA NSYFUN(25)/2202 /
+      DATA CNSYFU(26)/'SIGN    '/
+      DATA NSYFUN(26)/2203 /
+      DATA CNSYFU(27)/'CPLX    '/
+      DATA NSYFUN(27)/2204 /
+      DATA CNSYFU(28)/'MULT    '/
+      DATA NSYFUN(28)/2603 /
+      DATA CNSYFU(29)/'MAXV    '/
+      DATA NSYFUN(29)/1301 /
+      DATA CNSYFU(30)/'MINV    '/
+      DATA NSYFUN(30)/1302 /
+      DATA CNSYFU(31)/'DIFFV   '/
+      DATA NSYFUN(31)/1303 /
+      DATA CNSYFU(32)/'DEL     '/
+      DATA NSYFUN(32)/1304 /
+      DATA CNSYFU(33)/'SUMV    '/
+      DATA NSYFUN(33)/1305 /
+      DATA CNSYFU(34)/'PROD    '/
+      DATA NSYFUN(34)/1306 /
+      DATA CNSYFU(35)/'LS      '/
+      DATA NSYFUN(35)/2205 /
+      DATA CNSYFU(36)/'SMAX    '/
+      DATA NSYFUN(36)/1401 /
+      DATA CNSYFU(37)/'SMIN    '/
+      DATA NSYFUN(37)/1402 /
+      DATA CNSYFU(38)/'ANY     '/
+      DATA NSYFUN(38)/1403 /
+      DATA CNSYFU(39)/'NCO     '/
+      DATA NSYFUN(39)/1501 /
+      DATA CNSYFU(40)/'TP      '/
+      DATA NSYFUN(40)/0604 /
+      DATA CNSYFU(41)/'TRACE   '/
+      DATA NSYFUN(41)/0605 /
+      DATA CNSYFU(42)/'DROP    '/
+      DATA NSYFUN(42)/0606 /
+      DATA CNSYFU(43)/'PROJ    '/
+      DATA NSYFUN(43)/2610 /
+      DATA CNSYFU(44)/'ORDER   '/
+      DATA NSYFUN(44)/2611 /
+      DATA CNSYFU(45)/'SUMN    '/
+      DATA NSYFUN(45)/2612 /
+      DATA CNSYFU(46)/'QUAD    '/
+      DATA NSYFUN(46)/2613 /
+      DATA CNSYFU(47)/'EVAL    '/
+      DATA NSYFUN(47)/3614 /
+      DATA CNSYFU(48)/'?QUT    '/
+      DATA NSYFUN(48)/3615 /
+      DATA CNSYFU(49)/'BESCJ   '/
+      DATA NSYFUN(49)/3616 /
+      DATA CNSYFU(50)/'VMAX'/
+      DATA NSYFUN(50)/1401/
+      DATA CNSYFU(51)/'VMIN'/
+      DATA NSYFUN(51)/1402/
+      DATA CNSYFU(52)/'LVMAX'/
+      DATA NSYFUN(52)/1404/
+      DATA CNSYFU(53)/'LVMIN'/
+      DATA NSYFUN(53)/1405/
+C      DATA CNSYFU(50)/'INPUT   '/
+C      DATA NSYFUN(50)/10517/
+C      DATA CNSYFU(51)/'READ    '/
+C      DATA NSYFUN(51)/10518/
+C      DATA CNSYFU(52)/'EOF     '/
+C      DATA NSYFUN(52)/10519/
+C      DATA CNSYFU(53)/'ERROR   '/
+C      DATA NSYFUN(53)/10520/
+
+C      DATA CNSYFU(54)/'SYSPARM '/
+C      DATA NSYFUN(54)/10523/
+C      DATA CNSYFU(55)/'MYOP    '/
+C      DATA NSYFUN(55)/10701/
+C
+      DATA CNSYFU(54)/'IMAX '/
+      DATA NSYFUN(54)/1404/
+      DATA CNSYFU(55)/'IMIN'/
+      DATA NSYFUN(55)/1405/
+C
+      DATA CNSYFU(56)/'MIN  '/
+      DATA NSYFUN(56)/2206/
+      DATA CNSYFU(57)/'MAX '/
+      DATA NSYFUN(57)/2207/
+      DATA CNSYFU(58)/'MINXV '/
+      DATA NSYFUN(58)/2208/
+      DATA CNSYFU(59)/'MAXXV'/
+      DATA NSYFUN(59)/2209/
+C
+      DATA CNSYFU(60)/'DIFF   '/
+      DATA NSYFUN(60)/1303 /
+      DATA CNSYFU(61)/'SUM    '/
+      DATA NSYFUN(61)/1305 /
+C
+      DATA CNSYFU(62)/'VSUM    '/
+      DATA NSYFUN(62)/1406 /
+      DATA CNSYFU(63)/'FREE  '/
+      DATA NSYFUN(63)/1407 /
+C
+C---   LISIMP
+      DATA CLISIM( 1)/'LISIMP  '/
+      DATA LISIMP( 1)/  9/
+      DATA CLISIM( 2)/'GLOBAL  '/
+      DATA LISIMP( 2)/413/
+      DATA CLISIM( 3)/'DELETE  '/
+      DATA LISIMP( 3)/506/
+      DATA CLISIM( 4)/'READ    '/
+      DATA LISIMP( 4)/503/
+      DATA CLISIM( 5)/'INPUT   '/
+      DATA LISIMP( 5)/504/
+      DATA CLISIM( 6)/'PROTECT '/
+      DATA LISIMP( 6)/507/
+      DATA CLISIM( 7)/'DEPROTEC'/
+      DATA LISIMP( 7)/508/
+      DATA CLISIM( 8)/'CROSS   '/
+      DATA LISIMP( 8)/509/
+      DATA CLISIM( 9)/'DEFWIND '/
+      DATA LISIMP( 9)/510/
+C---  LIEXPR
+      DATA CLIEXP( 1)/'LIEXPR  '/
+      DATA LIEXPR( 1)/ 10/
+      DATA CLIEXP( 2)/'PRINT   '/
+      DATA LIEXPR( 2)/501/
+      DATA CLIEXP( 3)/'WRITE   '/
+      DATA LIEXPR( 3)/502/
+      DATA CLIEXP( 4)/'GET     '/
+      DATA LIEXPR( 4)/512/
+      DATA CLIEXP( 5)/'PUT     '/
+      DATA LIEXPR( 5)/513/
+      DATA CLIEXP( 6)/'REWIND  '/
+      DATA LIEXPR( 6)/514/
+      DATA CLIEXP( 7)/'PURGE   '/
+      DATA LIEXPR( 7)/515/
+      DATA CLIEXP( 8)/'RELEASE '/
+      DATA LIEXPR( 8)/516/
+      DATA CLIEXP( 9)/'SYSIN   '/
+      DATA LIEXPR( 9)/521/
+      DATA CLIEXP(10)/'SYSOUT  '/
+      DATA LIEXPR(10)/522/
+C---  NAMSEP
+      DATA CNAMSE( 1)/'NAMSEP  '/
+      DATA NAMSEP( 1)/ 4/
+      DATA CNAMSE( 2)/'CONTINUE'/
+      DATA NAMSEP( 2)/407/
+      DATA CNAMSE( 3)/'RETURN  '/
+      DATA NAMSEP( 3)/406/
+      DATA CNAMSE( 4)/'END     '/
+      DATA NAMSEP( 4)/403/
+C---  NSIX
+      DATA CNSIXX( 1)/'NSIX    '/
+      DATA NSIX( 1)/ 17/
+      DATA CNSIXX( 2)/'EDIT    '/
+      DATA NSIX( 2)/505/
+      DATA CNSIXX( 3)/'LIMIT   '/
+      DATA NSIX( 3)/318/
+      DATA CNSIXX( 4)/'LOAD    '/
+      DATA NSIX( 4)/601/
+      DATA CNSIXX( 5)/'SAVE    '/
+      DATA NSIX( 5)/602/
+      DATA CNSIXX( 6)/'COPY    '/
+      DATA NSIX( 6)/603/
+      DATA CNSIXX( 7)/'LENGTH  '/
+      DATA NSIX( 7)/319/
+      DATA CNSIXX( 8)/'DIGITS  '/
+      DATA NSIX( 8)/320/
+      DATA CNSIXX( 9)/'XLENGTH '/
+      DATA NSIX( 9)/321/
+      DATA CNSIXX(10)/'YLENGTH '/
+      DATA NSIX(10)/322/
+      DATA CNSIXX(11)/'XTICKS  '/
+      DATA NSIX(11)/323/
+      DATA CNSIXX(12)/'YTICKS  '/
+      DATA NSIX(12)/324/
+      DATA CNSIXX(13)/'XLABELS '/
+      DATA NSIX(13)/325/
+      DATA CNSIXX(14)/'YLABELS '/
+      DATA NSIX(14)/326/
+      DATA CNSIXX(15)/'XDIVS   '/
+      DATA NSIX(15)/327/
+      DATA CNSIXX(16)/'YDIVS   '/
+      DATA NSIX(16)/328/
+      DATA CNSIXX(17)/'SETW    '/
+      DATA NSIX(17)/511/
+      CALL SITRAX(' SIARCH  ')
+      L=.FALSE.
+
+      IF(NOTAB.EQ.1) GO TO 10
+      IF(NOTAB.EQ.2) GO TO 20
+      IF(NOTAB.EQ.3) GO TO 30
+      IF(NOTAB.EQ.4) GO TO 40
+      IF(NOTAB.EQ.5) GO TO 50
+C---  NOTAB=6, TABLES CNSIXX,NSIX
+      N=NSIX(1)
+      DO 16 I=2,N
+      IF(CNAMES.EQ.CNSIXX(I)) GO TO 6
+  16  CONTINUE
+      GOTO 999
+C---  NOTAB=5, TABLES CNAMSE,NAMSEP
+  50  N=NAMSEP(1)
+      DO 15 I=2,N
+      IF(CNAMES.EQ.CNAMSE(I)) GO TO 5
+  15  CONTINUE
+      GOTO 999
+C---  NOTAB=4, TABLES CLIEXP,LIEXPR
+  40  N=LIEXPR(1)
+      DO 14 I=2,N
+      IF(CNAMES.EQ.CLIEXP(I)) GO TO 4
+  14  CONTINUE
+      GOTO 999
+C---  NOTAB=3, TABLES CLISIM,LISIMP
+  30  N=LISIMP(1)
+      DO 13 I=2,N
+      IF(CNAMES.EQ.CLISIM(I)) GO TO 3
+  13  CONTINUE
+      RETURN
+C---  NOTAB=2, TABLES CNSYFU,NSYFUN
+  20  N=NSYFUN(1)
+      DO 12 I=2,N
+      IF(CNAMES.EQ.CNSYFU(I)) GO TO 2
+  12  CONTINUE
+      GOTO 999
+C---  NOTAB=1, TABLES CNEXCL,NEXCLA
+  10  N=NEXCLA(1)
+      DO 11 I=2,N
+      IF(CNAMES.EQ.CNEXCL(I)) GO TO 1
+  11  CONTINUE
+      GOTO 999
+   6  NCODE=NSIX(I)
+      GO TO 100
+   5  NCODE=NAMSEP(I)
+      GO TO 100
+   4  NCODE=LIEXPR(I)
+      GO TO 100
+   3  NCODE=LISIMP(I)
+      GO TO 100
+   2  NCODE=NSYFUN(I)
+      GO TO 100
+   1  NCODE=NEXCLA(I)
+ 100  L=.TRUE.
+ 999  END

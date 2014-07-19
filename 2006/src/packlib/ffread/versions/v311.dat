@@ -1,0 +1,17 @@
+*
+* $Id: v311.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v311.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.11   910723 13.00
+C
+C- New patches/flags
+C     AMIGAUX, CDCUX, IBMPC, IBMUX, NECSX
+C
+C- Routine changes:
+C  > P=FFFREAD             : Replace B32 flag by DOUBLE
+C  > P=SFFREAD ,D=FFGO     : Comment out reading of RECFM=V input files
+C

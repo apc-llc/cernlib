@@ -1,0 +1,13 @@
+SRCS_F= rzallo.F rzcdir.F rzchcy.F rzclos.F rzcop1.F \ @@\
+	rzcopy.F rzdate.F rzdelk.F rzdelt.F rzdlok.F rzend.F rzexpd.F \ @@\
+	rzfdir.F rzfile.F rzfree.F rzfrf1.F rzfrfz.F rzhfra.F rzhook.F \ @@\
+	rzhtoa.F rzin.F rzink.F rzinpa.F rzins.F rziodo.F rziphd.F \ @@\
+	rzkeep.F rzkeyd.F rzkeys.F rzldi1.F rzldir.F rzlinc.F rzlind.F \ @@\
+	rzllok.F rzlock.F rzlogl.F rzmake.F rzmdir.F rzmods.F rzndir.F \ @@\
+	rzobkn.F rzopen.F rzophd.F rzout.F rzpaff.F rzpass.F rzpath.F \ @@\
+	rzprnk.F rzpurf.F rzpurg.F rzquot.F rzrdir.F rzread.F rzrenk.F \ @@\
+	rzrtop.F rzsame.F rzsave.F rzscan.F rzstat.F rzstrip.F \ @@\
+	rzstrir.F rztof1.F rztofz.F rzused.F rzvcyc.F rzver1.F \ @@\
+	rzver2.F rzveri.F rzvers.F rzvin.F rzvout.F rzwrt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

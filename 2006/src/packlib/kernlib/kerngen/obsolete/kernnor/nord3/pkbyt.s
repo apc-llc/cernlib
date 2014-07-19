@@ -1,0 +1,65 @@
+*
+* $Id: pkbyt.s,v 1.1.1.1 1996/02/15 17:54:49 mclareni Exp $
+*
+* $Log: pkbyt.s,v $
+* Revision 1.1.1.1  1996/02/15 17:54:49  mclareni
+* Kernlib
+*
+*
+       MODULE M_PKBYT
+%
+% CERN PROGLIB# M422    PKBYT           .VERSION KERNNOR  1.05  810521
+% ORIG.  H.OVERAS, CERN, 810527
+%
+% M422 CALL PKBYT(IV,XVM,J,N,MPAK)    PACK BYT-VECTOR
+%                                     MPAK=NBITS,INWORD
+       EXPORT PKBYT
+       ROUTINE PKBYT
+       LIB PKBYT
+VBAS:  STACK FIXED
+PAR:   W BLOCK 5
+INWORD:W BLOCK 1
+INCR:  W BLOCK 1
+JH1:   W BLOCK 1
+N1:    W BLOCK 1
+NBIT:  BY BLOCK 1
+       ENDSTACK
+PKBYT:  ENTF VBAS
+       W SUB3 IND(B.PAR+12),1,B.N1
+       IF<GO OUT:H
+       W2 CLR
+       W BYCONV IND(B.PAR+16),B.NBIT
+       IF>GO L11
+       BY SET1 B.NBIT
+       W MOVE 32,B.INWORD
+       GO L12
+L11:   W4:=1
+       W MOVE IND(B.PAR+16)(R4),B.INWORD
+L12:   W SUB3 B.INWORD,1,B.INCR
+       W4:=IND(B.PAR+8)
+       W4-1
+       IF<=GO L17
+       W3 DIV4 R4,B.INWORD,R1
+       W SUB3 B.INCR,R3,B.JH1
+       BY3*B.NBIT
+       GO L22
+L17:   W1 CLR
+L21:   W ADD3 R2,B.INCR,B.JH1
+       W3 CLR
+L22:   W COMP2 B.JH1,B.N1
+       IF<=GO L24
+       W MOVE B.N1,B.JH1
+L24:   W4:=IND(B.PAR)(R2)
+       W4 PUTBF IND(B.PAR+4)(R1),BY3,B.NBIT
+       BY3+B.NBIT
+       W LOOPI R2,B.JH1,L24
+       W2 COMP B.N1
+       IF>GO OUT
+       W1+1
+       GO L21
+OUT:   RET
+       ENDROUTINE
+       ENDMODULE
+#ifdef CERNLIB_TCGEN_PKBYT
+#undef CERNLIB_TCGEN_PKBYT
+#endif

@@ -1,0 +1,36 @@
+*
+* $Id: iguideib.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: iguideib.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+ 
+Necessary steps to be taken for UMON installation on VM
+ 
+  0) Create a service machine named UMON
+      - one minidisk 191, 1 cyl
+      - privilege to execute the CP command MSGNOH
+ 
+  1) Copy all the UMON files onto its A-disk
+ 
+      - make sure that the file  MONITOR DEFINITIONS has the
+        RECFM F and the LRECL 72
+ 
+  2) Modify the UMON EXEC:
+     Set the variable  UmonAdmin to the accounts of those users
+     who should be entitled to Create monitors
+ 
+  3) Start UMON and make sure that it is always running in a disconnected
+     state
+ 
+  4) Install the help files UMON_COMMANDS HELPINFO
+                     and    UMON_INTRO    HELPINFO
+ 
+       --------------------------------------
+You now can test UMON by creating your first monitor
+(same syntax as modify, but not mentioned in the helpfiles for
+ reasons of confidentiality)
+#endif

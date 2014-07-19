@@ -1,0 +1,6 @@
+SRCS_F=	 fafldr.F fafndf.F fmallk.F fmcdf.F fmcfgl.F fmfc.F \ @@\
+	fmfilc.F fmfind.F fmget.F fmld.F fmldir.F fmls.F fmlsc.F \ @@\
+	fmltgt.F fmmake.F fmmany.F fmopen.F fmscan.F fmseac.F fmselk.F \ @@\
+	getenv.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

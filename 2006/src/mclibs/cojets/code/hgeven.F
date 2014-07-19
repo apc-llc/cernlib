@@ -1,0 +1,338 @@
+*
+* $Id: hgeven.F,v 1.1.1.1 1996/01/11 14:14:38 mclareni Exp $
+*
+* $Log: hgeven.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:38  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE HGEVEN
+C     *****************
+C-- HANDLES EVENT GENERATION
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/alqgen.inc"
+#include "cojets/cmpsca.inc"
+#include "cojets/entrev.inc"
+#include "cojets/event.inc"
+#include "cojets/evtype.inc"
+#include "cojets/forgen.inc"
+#include "cojets/idrun.inc"
+#include "cojets/iflghv.inc"
+#include "cojets/imlf.inc"
+#include "cojets/inmat.inc"
+#include "cojets/intype.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jetset.inc"
+#include "cojets/kdump.inc"
+#include "cojets/keybre.inc"
+#include "cojets/khadro.inc"
+#include "cojets/maxn.inc"
+#include "cojets/mflain.inc"
+#include "cojets/nevol.inc"
+#include "cojets/nflav.inc"
+#include "cojets/nleave.inc"
+#include "cojets/nquaz.inc"
+#include "cojets/parq.inc"
+#include "cojets/parqua.inc"
+#include "cojets/pthard.inc"
+#include "cojets/qcds.inc"
+#include "cojets/thrfla.inc"
+#include "cojets/tleave.inc"
+#include "cojets/ttends.inc"
+#include "cojets/tweigh.inc"
+      DIMENSION TV(2),UV(2),WGV(2,6),WFDSDT(6),WTDS(2)
+C
+      DATA IEVTOL/0/
+      DATA ICALL/0/
+C
+      IF(ICALL.EQ.0) CALL PREGEN
+      ICALL=1
+700   IFIREF=0
+      WEIGHT=1.
+C
+C-- DECIDE WHETHER IT IS A MINBIAS (SMALL PT) EVENT OR NOT
+      IF(KMPSCA.GT.1) GO TO 3
+      IF(PTMGE.GT.PTMIN) GO TO 3
+      IF(KPRHEV.GT.0) GO TO 3
+      IF(KMPSCA.EQ.1.AND.CJRN(0).GT.FRAGEH) GO TO 300
+3     CONTINUE
+C-- GENERATE HARD QSQ (=2STU/(S**2+T**2+U**2), ABOUT =PT**2)
+      CALL GEQSQ(ALQ,IALQ)
+      QSQ=EXP(ALQ*ALQZM+ALLAM2)
+      PTHARD=SQRT(QSQ)
+      YQSQ=LOG(ALQ)
+      XMIN=XMINJ
+      ALQF=ALQFJ
+      YF=YFJ
+      FACTW=PI/(BALPH*LOG(QSQ/ALAMB**2))**2
+      IF(IPTWGT.EQ.0) GO TO 205
+      WEIGHT=PTWGTM/PTWGT(QSQ)*WEIGHT
+205   CONTINUE
+      WEIGOR=WEIGHT
+C-- GENERATE COLLISION CHANNEL
+      IFIRE=0
+      NITGE=0
+      RR=CJRN(0)
+      DO 10 IW=1,5
+      IPACH=IW
+      IF(RR.LT.WGALQ(IALQ,IW,1)) GO TO 11
+10    CONTINUE
+11    CONTINUE
+1     CONTINUE
+      NITGE=NITGE+1
+C-- GENERATE PAIR OF INITIAL PARTONS
+      CALL GEPAIR
+C-- GENERATE PARTON CASCADE (LLA QCD)
+      JBOOK=2
+      DO 12 IB=1,2
+      NBOOK(IB)=1
+      MBOOK(IB)=0
+      ISTOP(IB)=0
+12    IBACK(IB)=0
+      IBEAM=1
+      ZERO=0.
+      CALL Q2GEN(IFLING(1),ZERO,YIN1,QSQIN1)
+      CALL BOOK(IFLING(1),0,XMING(1),YIN1,XING(1),PXING(1),PYING(1)
+     +,ZERO,YF)
+      IBACK(IBEAM)=0
+100   CONTINUE
+      IBEAM=1
+      CALL EVOL(1,YQSQ)
+      MMBOOK=MAX(MMBOOK,MBOOK(1))
+      IF(ISTOP(1).EQ.1) GO TO 200
+      IBS=1
+      MBOOK(2)=0
+      IBEAM=2
+      CALL Q2GEN(IFLING(2),ZERO,YIN2,QSQIN2)
+      CALL BOOK(IFLING(2),0,XMING(2),YIN2,XING(2),PXING(2),PYING(2)
+     +,ZERO,YF)
+      IBACK(IBEAM)=0
+      ISTOP(IBEAM)=0
+150   CONTINUE
+      CALL EVOL(1,YQSQ)
+      MMBOOK=MAX(MMBOOK,MBOOK(2))
+      IF(ISTOP(2).EQ.1) GO TO 100
+C-- PREPARE TO ENTER HARD PROCESS
+      IFLA1=PARACT(1,1,1)
+      XM1=PARACT(1,3,1)
+      XP1=PARACT(1,5,1)
+      PX1=PARACT(1,6,1)
+      PY1=PARACT(1,7,1)
+      MFLA1=ABS(IFLA1)
+      IFLA2=PARACT(1,1,2)
+      XM2=PARACT(1,3,2)
+      XP2=PARACT(1,5,2)
+      PX2=PARACT(1,6,2)
+      PY2=PARACT(1,7,2)
+      SHAT=(XP1*XP2+XM1*XM2)*S-2.*(PX1*PX2+PY1*PY2)
+      IF(SHAT.LT.3.*QSQ) GO TO 150
+      MFLA2=ABS(IFLA2)
+      IM=IMATCH(MFLA1,MFLA2)
+      IF(IM.NE.2) GO TO 212
+      IF(IFLA1*IFLA2.LT.0) IM=3
+212   CONTINUE
+      IF(IM.NE.9) GO TO 272
+      IF(IFLA1*IFLA2.LT.0) IM=10
+272   CONTINUE
+      IF(KPRHEV.EQ.0.OR.KPRHEV.GE.3) GO TO 218
+      IF(KPRHEV.EQ.1) GO TO 273
+      IF(KPRHEV.EQ.2) GO TO 274
+273   IF(IM.NE.3.AND.IM.NE.5.AND.IM.NE.10) GO TO 150
+      IF(SHAT.LE.THRFLA(KFRFLA)) GO TO 150
+      GO TO 218
+274   IF(IM.LE.5) GO TO 150
+      IF(MFLA1.NE.KFRFLA.AND.MFLA2.NE.KFRFLA) GO TO 150
+      IF(SHAT.LE.AM2HEV(KFRFLA)) GO TO 150
+218   CONTINUE
+C-- THRESHOLD CONDITION PASSED - CALCULATE MATRIX ELEMENTS
+      IFIRE=1
+      FACTWS=FACTW/SHAT**2
+      DSQ=SQRT(ABS(1.-4./(1.+SHAT/QSQ)))
+      TV(1)=-SHAT*.5*(1.+DSQ)
+      TV(2)=-SHAT*.5*(1.-DSQ)
+      UV(1)=-SHAT-TV(1)
+      UV(2)=-SHAT-TV(2)
+      CALL DSDT(IM,SHAT,TV(1),UV(1),WTDS(1),WFDSDT)
+      DO 216 L=1,6
+216   WGV(1,L)=WFDSDT(L)
+      CALL DSDT(IM,SHAT,TV(2),UV(2),WTDS(2),WFDSDT)
+      DO 217 L=1,6
+217   WGV(2,L)=WFDSDT(L)
+      WGT=1.E10
+      IF(DSQ.GT.0.)
+     *WGT=(WTDS(1)+WTDS(2))*FACTWS/(DSQ*(QSQ/SHAT+1.)**2)
+      IF(WGT.LT.1.E-30) GO TO 150
+      RTU=WTDS(1)/(WTDS(1)+WTDS(2))
+      NIT=0
+C-- HANDLE FLUCTUATIONS FROM MEAN WEIGHT (TO HAVE WEIGHT=1 EVENTS)
+      WGTX=(SQRT(FLOAT(NEVENT)*WGALQ(IALQ,IPACH,3))/4.+1.)
+     *    *WGALQ(IALQ,IPACH,2)
+      WGT=MIN(WGT,WGTX)
+      NLOOP=WGT/WGALQ(IALQ,IPACH,2)+1
+210   IF(WGT.GT.WGALQ(IALQ,IPACH,2)) GO TO 211
+      IF(WGT.LT.CJRN(0)*WGALQ(IALQ,IPACH,2)) GO TO 150
+211   CONTINUE
+      NIT=NIT+1
+      IF(NIT.GT.2*NLOOP) GO TO 150
+      WGT=WGT-WGALQ(IALQ,IPACH,2)
+C-- Q.N. FINAL PARTONS
+      ITU=1
+      IF(CJRN(0).GT.RTU) ITU=2
+      IFLAF1=IFLA1
+      IFLAF2=IFLA2
+      LF=1
+      IF(IM.NE.3.AND.IM.NE.5.AND.IM.NE.10) GO TO 260
+      IF(KPRHEV.EQ.1) THEN
+        LF=KFRFLA
+        GO TO 230
+      ENDIF
+      RW=CJRN(ITU)*WTDS(ITU)
+      WCHT=0.
+      DO 221 L=1,6
+      LF=L
+      WCHT=WCHT+WGV(ITU,L)
+      IF(RW.LT.WCHT) GO TO 230
+221   CONTINUE
+230   IF(IM.EQ.5) GO TO 250
+      IF(IM.EQ.10) GO TO 255
+C-- QB-Q ANNIHILATION CHANNEL
+      IF(LF.EQ.1) GO TO 260
+      IF(LF.GT.2) GO TO 233
+      IR=INT(2.*CJRN(LF))+1
+      I3=SIGN(MOD(ABS(IFLA1)-1+IR,3)+1,IFLA1)
+      IFLAF1=I3
+      IFLAF2=-IFLAF1
+      GO TO 260
+233   IF(LF.GT.3) GO TO 234
+      IFLAF1=LGLUS
+      IFLAF2=LGLUS
+      GO TO 260
+234   IFLAF1=LF
+      IFLAF2=-IFLAF1
+      GO TO 260
+C-- G-G ANNIHILATION CHANNEL
+250   IF(LF.GT.1) GO TO 251
+      IFLAF1=LGLUS
+      IFLAF2=LGLUS
+      GO TO 260
+251   IF(LF.GT.3) GO TO 252
+      IR=INT(3*CJRN(LF))+1
+      IFLAF1=IR
+      IFLAF2=-IFLAF1
+      GO TO 260
+252   IFLAF1=LF
+      IFLAF2=-IFLAF1
+      GO TO 260
+C-- QHB-QH ANNIHILATION CHANNEL
+255   IF(LF.EQ.1) GO TO 260
+      IF(LF.GT.2) GO TO 256
+      IR=INT(3.*CJRN(LF))+1
+      IFLAF1=IR
+      IFLAF2=-IFLAF1
+      GO TO 260
+256   IF(LF.GT.3) GO TO 257
+      IFLAF1=LGLUS
+      IFLAF2=LGLUS
+      GO TO 260
+257   IFLAF1=LF
+      IFLAF2=-IFLAF1
+C
+260   CONTINUE
+C
+      IF(WEIGHT.LT.1.E-30) RETURN
+C-- PARTONS HAVE INTERACTED
+      SHARD=SHAT
+      IF(KEYBRE.LT.2)
+     *CALL TEVOL(IBS)
+      IF(KEYBRE.GE.2) THEN
+        NQUA=NQUAZ
+        NJSET=NJSETZ
+      ENDIF
+      CALL HARD(1,1,IFLAF1,IFLAF2,SHAT,TV(ITU))
+      IBS=2
+      IF(WEIGHT.LT.1.E-30) GO TO 215
+      IF(IFLGHV.EQ.1) GO TO 210
+      IF(KMPSCA.GT.1) GO TO 350
+      NPART=0
+      NQUAC=NQUA
+      IF(KHADRO.EQ.1)
+     *CALL HADRON(1,NQUAC,1)
+      IF(WEIGHT.LT.1.E-30) GO TO 215
+      IF(IFLGHV.EQ.1) GO TO 210
+      CALL TOPDCY
+      IF(WEIGHT.LT.1.E-30) GO TO 215
+      IF(IFLGHV.EQ.1) GO TO 210
+      MNQUA=MAX(MNQUA,NQUA)
+      MNJSET=MAX(MNJSET,NJSET)
+      NEVENT=NEVENT+1
+      TWEIGH=TWEIGH+WEIGHT
+      TENTRS=TENTRS+1.
+      CALL FEVINJ
+      IF(NOUNST) CALL STABPH
+      CALL FILLH
+      IF(INTYPE.EQ.0) THEN
+        IF(NEVENT.LE.NDUMP.AND.(MOD(NEVENT,NJUMP).EQ.1.OR.NJUMP.EQ.1))
+     *  CALL DUMPEV
+      ELSE IF(INTYPE.EQ.1.AND.IEVT.NE.IEVTOL) THEN
+        IF(IEVT.LE.NDUMP.AND.(MOD(IEVT,NJUMP).EQ.1.OR.NJUMP.EQ.1))
+     *  CALL DUMPEV
+        IEVTOL=IEVT
+      ENDIF
+      IF(INTYPE.EQ.0) THEN
+        IF(KMPSCA.EQ.1.AND.NEVENT.GE.NLEAVE) RETURN
+      ELSE IF(INTYPE.EQ.1) THEN
+        IF(KMPSCA.EQ.1.AND.IEVT.GE.NLEAVE) RETURN
+      ENDIF
+      GO TO 351
+C-- MULTIPLE PARTON PROCESS SET-UP
+350   CALL WRITEH
+351   CONTINUE
+      IFIREF=1
+      GO TO 210
+215   CONTINUE
+      WGT=WGT+WGALQ(IALQ,IPACH,2)
+      WEIGHT=WEIGOR
+      GO TO 210
+200   CONTINUE
+      IF(IFIRE.EQ.0) GO TO 1
+      IF(IFIREF.EQ.0) GO TO 700
+      RETURN
+C
+C-- MINBIAS EVENTS
+300   CONTINUE
+      QSQ=0.
+      PTHARD=0.
+      NQUA=NQUAZ
+      NJSET=NJSETZ
+      WEIGHT=1.
+      WEIGHT=WEIGHT*(1.-PROPTW)/(1.-FRAGEH)
+      NPART=0
+      IF(KHADRO.EQ.1)
+     *CALL HADRON(1,0,1)
+      IF(WEIGHT.LT.1.E-30) GO TO 300
+      NEVENT=NEVENT+1
+      TWEIMN=TWEIMN+WEIGHT
+      CALL FEVINJ
+      IF(NOUNST) CALL STABPH
+      CALL FILLH
+      IF(INTYPE.EQ.0) THEN
+        IF(NEVENT.LE.NDUMP.AND.(MOD(NEVENT,NJUMP).EQ.1.OR.NJUMP.EQ.1))
+     *  CALL DUMPEV
+      ELSE IF(INTYPE.EQ.1.AND.IEVT.NE.IEVTOL) THEN
+        IF(IEVT.LE.NDUMP.AND.(MOD(IEVT,NJUMP).EQ.1.OR.NJUMP.EQ.1))
+     *  CALL DUMPEV
+        IEVTOL=IEVT
+      ENDIF
+      IF(INTYPE.EQ.0) THEN
+        IF(KMPSCA.EQ.1.AND.NEVENT.GE.NLEAVE) RETURN
+      ELSE IF(INTYPE.EQ.1) THEN
+        IF(KMPSCA.EQ.1.AND.IEVT.GE.NLEAVE) RETURN
+      ENDIF
+      RETURN
+      END

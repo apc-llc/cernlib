@@ -1,0 +1,15 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(libraries)
+
+SUBDIRS= code test kapack
+
+TopOfPackage(kapack)
+
+SubdirLibraryTarget(kapack,code)
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(kapack)

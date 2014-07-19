@@ -1,0 +1,42 @@
+*
+* $Id: xxreqf.F,v 1.1.1.1 1996/04/01 15:03:22 mclareni Exp $
+*
+* $Log: xxreqf.F,v $
+* Revision 1.1.1.1  1996/04/01 15:03:22  mclareni
+* Mathlib gen
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_gen/pilot.h"
+      SUBROUTINE XXREQF
+*
+***** SOUS-PROGRAMME APPELE PAR REQQ ,FILLEMAN ET REQTAPE
+*
+***** CETTE ROUTINE COPIE LA TABLE TAB CONTENUE DANS LE COMMUN
+*     REQPR SUR LA TABLE TAG UTILISEE DANS XXREQC.
+*     SI LE CODE DE RETOUR IER VAUT 24B ( FNT SPACE CRITICAL ) ,
+*     XXREQF SWAPPE LE JOB PENDANT 10 SEC ET RECOMMENCE LA SEQUENCE
+*     PRECEDENTE JUSQU A CE QUE IER SOIT DIFFERENT DE 24B SINON
+*     ELLE RECOPIE TAG SUR TAB ET IER SUR RC
+*
+      IMPLICIT INTEGER(A-Z)
+      COMMON /REQPR/ TAB(9),RC
+      COMMON /XREQTAG/ TAG(9),IER
+1     DO 3 I=1,9
+      TAG(I)=TAB(I)
+3     CONTINUE
+      CALL XXREQC
+#if !defined(CERNLIB_F4)
+      IF (IER.NE.O"24") GO TO 2
+#endif
+#if defined(CERNLIB_F4)
+      IF (IER.NE.24B) GO TO 2
+#endif
+      CALL WAIT(10)
+      GO TO 1
+2     RC=IER
+      DO 4 I=1,9
+      TAB(I)=TAG(I)
+4     CONTINUE
+      RETURN
+      END

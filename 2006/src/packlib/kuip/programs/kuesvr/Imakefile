@@ -1,0 +1,4 @@
+
+NormalProgramTarget(kuesvr,kuesvr.o,NullParameter,NullParameter,NullParameter)
+
+InstallProgram(kuesvr,$(CERN)/$(CERN_LEVEL)/bin)

@@ -1,0 +1,520 @@
+Checking in config/Imake.cf;
+/afs/cern.ch/asis/share/cern/CVS/config/Imake.cf,v  <--  Imake.cf
+new revision: 1.6; previous revision: 1.5
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/config/MacOSX.cf,v
+done
+Checking in config/MacOSX.cf;
+/afs/cern.ch/asis/share/cern/CVS/config/MacOSX.cf,v  <--  MacOSX.cf
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/config/MacOSX.rules,v
+done
+Checking in config/MacOSX.rules;
+/afs/cern.ch/asis/share/cern/CVS/config/MacOSX.rules,v  <--  MacOSX.rules
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/config/MacOSX.tmpl,v
+done
+Checking in config/MacOSX.tmpl;
+/afs/cern.ch/asis/share/cern/CVS/config/MacOSX.tmpl,v  <--  MacOSX.tmpl
+initial revision: 1.1
+done
+Checking in config/linux.cf;
+/afs/cern.ch/asis/share/cern/CVS/config/linux.cf,v  <--  linux.cf
+new revision: 1.20; previous revision: 1.19
+done
+Checking in geant321/gtrak/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/geant321/gtrak/Imakefile,v  <--  Imakefile
+new revision: 1.4; previous revision: 1.3
+done
+Checking in geant321/peanut/bimsel.F;
+/afs/cern.ch/asis/share/cern/CVS/geant321/peanut/bimsel.F,v  <--  bimsel.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mathlib/bvsl/test/tsbvsl.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/bvsl/test/tsbvsl.F,v  <--  tsbvsl.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mathlib/gen/b/rsrtnt64.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/b/rsrtnt64.F,v  <--  rsrtnt64.F
+new revision: 1.2; previous revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/mathlib/gen/b/rsrtnt64p1.inc,v
+done
+Checking in mathlib/gen/b/rsrtnt64p1.inc;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/b/rsrtnt64p1.inc,v  <--  rsrtnt64p1.inc
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/mathlib/gen/b/rsrtnt64p2.inc,v
+done
+Checking in mathlib/gen/b/rsrtnt64p2.inc;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/b/rsrtnt64p2.inc,v  <--  rsrtnt64p2.inc
+initial revision: 1.1
+done
+Checking in mathlib/gen/c/celfun64.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/c/celfun64.F,v  <--  celfun64.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mathlib/gen/c/wpsipg.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/c/wpsipg.F,v  <--  wpsipg.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mathlib/gen/d/cfstft.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/d/cfstft.F,v  <--  cfstft.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mathlib/gen/tests/b300m.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/tests/b300m.F,v  <--  b300m.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mathlib/gen/tests/c327m.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/tests/c327m.F,v  <--  c327m.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mathlib/gen/tests/c342m.F;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/tests/c342m.F,v  <--  c342m.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mathlib/gen/v/v107z0.inc;
+/afs/cern.ch/asis/share/cern/CVS/mathlib/gen/v/v107z0.inc,v  <--  v107z0.inc
+new revision: 1.4; previous revision: 1.3
+done
+Checking in mclibs/ariadne/test/test.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/ariadne/test/test.F,v  <--  test.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/cojets/code/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/cojets/code/Imakefile,v  <--  Imakefile
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/cojets/cojdata/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/cojets/cojdata/Imakefile,v  <--  Imakefile
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/cojets/cojtapew/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/cojets/cojtapew/Imakefile,v  <--  Imakefile
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/cojets/test/test.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/cojets/test/test.F,v  <--  test.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mclibs/fritiof/test/fritioft.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/fritiof/test/fritioft.F,v  <--  fritioft.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/herwig/code/hwhiga.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/herwig/code/hwhiga.F,v  <--  hwhiga.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/herwig/code/hwuli2.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/herwig/code/hwuli2.F,v  <--  hwuli2.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/herwig/test/test.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/herwig/test/test.F,v  <--  test.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/isajet/code/sigqcd.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/isajet/code/sigqcd.F,v  <--  sigqcd.F
+new revision: 1.4; previous revision: 1.3
+done
+Checking in mclibs/isajet/test/isajett.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/isajet/test/isajett.F,v  <--  isajett.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mclibs/jetset/jetset/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/jetset/jetset/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in mclibs/jetset/pythia/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/jetset/pythia/Imakefile,v  <--  Imakefile
+new revision: 1.4; previous revision: 1.3
+done
+Checking in mclibs/jetset/test/test.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/jetset/test/test.F,v  <--  test.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/lepto63/test/demo.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/lepto63/test/demo.F,v  <--  demo.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/lepto63/test/demo2.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/lepto63/test/demo2.F,v  <--  demo2.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/pdf/npdf/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pdf/npdf/Imakefile,v  <--  Imakefile
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/pdf/pdf/w5051p3.inc;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pdf/pdf/w5051p3.inc,v  <--  w5051p3.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/pdf/spdf/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pdf/spdf/Imakefile,v  <--  Imakefile
+new revision: 1.10; previous revision: 1.9
+done
+Checking in mclibs/pythia/code/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pythia/code/Imakefile,v  <--  Imakefile
+new revision: 1.9; previous revision: 1.8
+done
+Checking in mclibs/pythia/code/visaje.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pythia/code/visaje.F,v  <--  visaje.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in mclibs/pythia/test/test.F;
+/afs/cern.ch/asis/share/cern/CVS/mclibs/pythia/test/test.F,v  <--  test.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/cspack/sysreq/log.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/cspack/sysreq/log.c,v  <--  log.c
+new revision: 1.4; previous revision: 1.3
+done
+Checking in packlib/cspack/tcpaw/tcpaw.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/cspack/tcpaw/tcpaw.c,v  <--  tcpaw.c
+new revision: 1.10; previous revision: 1.9
+done
+Checking in packlib/hepdb/hepdb/l3bits.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/hepdb/hepdb/l3bits.inc,v  <--  l3bits.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/hepdb/hepdb/l3bitx.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/hepdb/hepdb/l3bitx.inc,v  <--  l3bitx.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kernbit/z268/systems.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernbit/z268/systems.c,v  <--  systems.c
+new revision: 1.5; previous revision: 1.4
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_cbyt.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_cbyt.inc,v  <--  q_cbyt.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_isabit.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_isabit.inc,v  <--  q_isabit.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_jbit.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_jbit.inc,v  <--  q_jbit.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_jbytet.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_jbytet.inc,v  <--  q_jbytet.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_sbit.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_sbit.inc,v  <--  q_sbit.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_sbyt.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_sbyt.inc,v  <--  q_sbyt.inc
+new revision: 1.4; previous revision: 1.3
+done
+Checking in packlib/kernlib/kerngen/kerngen/q_shift.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/kerngen/q_shift.inc,v  <--  q_shift.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/tcgen/ibits.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgen/ibits.F,v  <--  ibits.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgen/kerngt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgen/kerngt.F,v  <--  kerngt.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/tcgen/utrans.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgen/utrans.F,v  <--  utrans.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/cbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/cbyt.F,v  <--  cbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/iucomh.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/iucomh.F,v  <--  iucomh.F
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kerngen/tcgens/jbit.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/jbit.F,v  <--  jbit.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/jbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/jbyt.F,v  <--  jbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/jbytet.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/jbytet.F,v  <--  jbytet.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/jbytor.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/jbytor.F,v  <--  jbytor.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/mbytet.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/mbytet.F,v  <--  mbytet.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/mbytor.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/mbytor.F,v  <--  mbytor.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/mcbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/mcbyt.F,v  <--  mcbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/msbit.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/msbit.F,v  <--  msbit.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/msbit0.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/msbit0.F,v  <--  msbit0.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/msbit1.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/msbit1.F,v  <--  msbit1.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/msbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/msbyt.F,v  <--  msbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/pkbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/pkbyt.F,v  <--  pkbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/rndm.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/rndm.F,v  <--  rndm.F
+new revision: 1.4; previous revision: 1.3
+done
+Checking in packlib/kernlib/kerngen/tcgens/sbit.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/sbit.F,v  <--  sbit.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/sbit0.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/sbit0.F,v  <--  sbit0.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/sbit1.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/sbit1.F,v  <--  sbit1.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/sbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/sbyt.F,v  <--  sbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/sbytor.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/sbytor.F,v  <--  sbytor.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/upkbyt.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/upkbyt.F,v  <--  upkbyt.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/vblank.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/vblank.F,v  <--  vblank.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/lnxgs/ublow.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/lnxgs/ublow.F,v  <--  ublow.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/lnxgs/ubunch.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/lnxgs/ubunch.F,v  <--  ubunch.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/lnxppcgs/ublow.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/lnxppcgs/ublow.F,v  <--  ublow.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/tcgens/lnxppcgs/ubunch.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/tcgens/lnxppcgs/ubunch.F,v  <--  ubunch.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kernlib/kerngen/unix/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/Imakefile,v  <--  Imakefile
+new revision: 1.2; previous revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/Imakefile,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/Imakefile,v  <--  Imakefile
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/getarg.c,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/getarg.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/getarg.c,v  <--  getarg.c
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/irndm.F,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/irndm.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/irndm.F,v  <--  irndm.F
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/ishftr.c,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/ishftr.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/ishftr.c,v  <--  ishftr.c
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/lshift.c,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/lshift.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/lshift.c,v  <--  lshift.c
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/qnext.F,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/qnext.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/qnext.F,v  <--  qnext.F
+initial revision: 1.1
+done
+RCS file: /afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/rdmin.F,v
+done
+Checking in packlib/kernlib/kerngen/unix/gfortgs/rdmin.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kerngen/unix/gfortgs/rdmin.F,v  <--  rdmin.F
+initial revision: 1.1
+done
+Checking in packlib/kernlib/kernnum/d704fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/d704fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kernnum/f002fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/f002fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kernnum/f003fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/f003fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kernnum/f004fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/f004fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kernnum/f010fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/f010fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kernlib/kernnum/f011fort/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kernlib/kernnum/f011fort/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/kuip/kuip/kfor.h;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kuip/kuip/kfor.h,v  <--  kfor.h
+new revision: 1.5; previous revision: 1.4
+done
+Checking in packlib/kuip/kuip/ksys.h;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kuip/kuip/ksys.h,v  <--  ksys.h
+new revision: 1.6; previous revision: 1.5
+done
+Checking in packlib/minuit/examples/fcnk0.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/minuit/examples/fcnk0.F,v  <--  fcnk0.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zbook/test/zexam5.F;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zbook/test/zexam5.F,v  <--  zexam5.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/fq/fzdaeof.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/fq/fzdaeof.inc,v  <--  fzdaeof.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_and.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_and.inc,v  <--  q_and.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_andor.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_andor.inc,v  <--  q_andor.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_jbit.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_jbit.inc,v  <--  q_jbit.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/zebra/zebra/q_jbyt.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_jbyt.inc,v  <--  q_jbyt.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_jbytet.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_jbytet.inc,v  <--  q_jbytet.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/zebra/zebra/q_jbytor.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_jbytor.inc,v  <--  q_jbytor.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_mbytet.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_mbytet.inc,v  <--  q_mbytet.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_mbytor.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_mbytor.inc,v  <--  q_mbytor.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_or.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_or.inc,v  <--  q_or.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_sbit.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_sbit.inc,v  <--  q_sbit.inc
+new revision: 1.3; previous revision: 1.2
+done
+Checking in packlib/zebra/zebra/q_sbit0.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_sbit0.inc,v  <--  q_sbit0.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_sbit1.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_sbit1.inc,v  <--  q_sbit1.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_sbyt.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_sbyt.inc,v  <--  q_sbyt.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_shift.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_shift.inc,v  <--  q_shift.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_shiftl.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_shiftl.inc,v  <--  q_shiftl.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_shiftr.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_shiftr.inc,v  <--  q_shiftr.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/zebra/zebra/q_xor.inc;
+/afs/cern.ch/asis/share/cern/CVS/packlib/zebra/zebra/q_xor.inc,v  <--  q_xor.inc
+new revision: 1.2; previous revision: 1.1
+done
+Checking in patchy/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/patchy/Imakefile,v  <--  Imakefile
+new revision: 1.5; previous revision: 1.4
+done
+Checking in patchy/patchy.car;
+/afs/cern.ch/asis/share/cern/CVS/patchy/patchy.car,v  <--  patchy.car
+new revision: 1.4; previous revision: 1.3
+done
+Checking in pawlib/comis/code/cscrexec.F;
+/afs/cern.ch/asis/share/cern/CVS/pawlib/comis/code/cscrexec.F,v  <--  cscrexec.F
+new revision: 1.7; previous revision: 1.6
+done
+Checking in pawlib/paw/fmotif/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/pawlib/paw/fmotif/Imakefile,v  <--  Imakefile
+new revision: 1.3; previous revision: 1.2
+done
+Checking in pawlib/paw/programs/Imakefile;
+/afs/cern.ch/asis/share/cern/CVS/pawlib/paw/programs/Imakefile,v  <--  Imakefile
+new revision: 1.25; previous revision: 1.24
+done
+Checking in pawlib/sigma/src/siallm.F;
+/afs/cern.ch/asis/share/cern/CVS/pawlib/sigma/src/siallm.F,v  <--  siallm.F
+new revision: 1.2; previous revision: 1.1
+done
+Checking in scripts/cernlib;
+/afs/cern.ch/asis/share/cern/CVS/scripts/cernlib,v  <--  cernlib
+new revision: 1.44; previous revision: 1.43
+done

@@ -1,0 +1,12 @@
+*
+* $Id: v217.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v217.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.17  851120
+C            Minor correction in ZPRINT
+C            Correction for mode 0 read in ZEPIN
+C

@@ -1,0 +1,8 @@
+SRCS_F=	 czclos.F czdumm.F czgeta.F czgetc.F czopen.F \ @@\
+	czputa.F czputc.F czrand.F czrtim.F czstop.F czswap.F cztcp.F
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) czgtlg.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

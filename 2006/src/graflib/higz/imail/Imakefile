@@ -1,0 +1,3 @@
+SRCS_F=	 imfin.F imfout.F imint.F imtek.F imwrit.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

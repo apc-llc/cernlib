@@ -1,0 +1,37 @@
+*
+* $Id: fatstart.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatstart.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATSTART.EXEC */
+/*                      F A T _ S T A R T                     */
+   If QCONSOLE("DISCO") then nop
+                        else do
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        Say "+++ Type #CP DISC to disconnect +++"
+                        end
+'IDENTIFY (STACK'
+Parse pull . . locnode .
+ 
+If locnode = 'CERNVM' then do
+ 
+/* Start FAT_server FORTRAN Program, which calls FATSERV EXEC */
+   'EXEC GIME JAMIE (NONOTICE'
+   'EXEC ORARUN FATSRV ' /*FATMEN*/
+   end
+ 
+   else do
+ 
+/* Start FAT_Rserver FORTRAN Program, which calls FATSERV EXEC */
+   'NAMEFIND :NICK FATGRP (STACK'
+   If RC^=0 then 'ID (STACK'
+   Pull FATMAN .
+   'EXEC CERNLIB'
+   'LOADMOD FATSRV'
+   'START'
+ 
+   end

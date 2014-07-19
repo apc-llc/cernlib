@@ -1,0 +1,9 @@
+DoIncludePackage(paw)
+#include "pilot.h"
+
+#if defined(CERNLIB_MOTIF)
+SRCS_C=	caption.c clip.c matrix.c version.c
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+

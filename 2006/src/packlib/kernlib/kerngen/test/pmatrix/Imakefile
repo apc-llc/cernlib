@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 tmxm.F tmxtrp.F tmxuty.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

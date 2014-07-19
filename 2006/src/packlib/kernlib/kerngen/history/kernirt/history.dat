@@ -1,0 +1,27 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:45 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:45  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernirt.car patch kernirt
+#if !defined(CERNLIB_KERNIRT)
+
+              KERNLIB ROUTINES PARTICULAR TO THE IBM RT
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KIRT     Pilot-patch selecting the standard KERNLIB for IBM RT
+
+QMIRT     IBM RT machine patch
+
+IRTPROGS  Utility programs to run on IBM RT
+
+IRTGS     IBM RT versions of general KERNLIB routines
+
+=====================================================================
+#endif

@@ -1,0 +1,48 @@
+;
+; $Id: qnexte.s,v 1.1.1.1 1996/02/15 17:50:29 mclareni Exp $
+;
+; $Log: qnexte.s,v $
+; Revision 1.1.1.1  1996/02/15 17:50:29  mclareni
+; Kernlib
+;
+;
+ .TITLE QNEXTE
+;++
+; CERN PROGLIB# Z041    QNEXTE          .VERSION KERNVAX  2.27  880712
+; ORIG.  E. PAGIOLA     OCT. 81
+; MOD.   2/3/88 JZ, 14/6/88 FCA
+;
+;    ON FIRST ENTRY QNEXTE SAVES THE CURRENT FRAME + STACK POINTERS
+;    AND CALLS QNEXT.
+;    ON RE-ENTRY IT RESETS FP + SP TO THE SAVED VALUES,
+;    THUS WIPING OUT THE STACK FOR ALL INTERMEDIATE CALLS,
+;    AND AGAIN CALLS QNEXT.
+;--
+        .WEAK   QNEXT
+        .PSECT  $LOCAL,PIC,REL,LCL,NOSHR,NOEXE,RD,WRT,LONG
+
+QNXFP:  .LONG    0
+QNXSP:  .LONG    0
+ADREX:  .ADDRESS QNEXT
+
+        .PSECT  $CODE,PIC,CON,REL,LCL,SHR,EXE,RD,NOWRT,LONG
+
+        .ENTRY  QNEXTE,^M<R2,R3,R4,R5,R6,R7,R8,R9,R10,R11>
+        TSTL    QNXFP
+        BNEQ    30$
+        MOVL    FP,QNXFP
+        MOVL    SP,QNXSP
+        BRB     40$
+
+;--     NON-FIRST ENTRIES
+
+30$:    MOVL    QNXFP,FP
+        MOVL    QNXSP,SP
+
+40$:    TSTL    ADREX
+        BNEQ    44$
+        CALLS   #0,QNEXTD
+
+44$:    CALLS   #0,QNEXT
+        RET
+        .END

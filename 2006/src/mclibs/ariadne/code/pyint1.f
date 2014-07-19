@@ -1,0 +1,2 @@
+      COMMON /PYINT1/ MINT(400),VINT(400)
+      SAVE /PYINT1/

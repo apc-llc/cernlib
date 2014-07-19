@@ -1,0 +1,278 @@
+*
+* $Id: ioconout.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: ioconout.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[10] OUTPUT COMMON BLOCKS WITH IOCON
+
+      Contents:
+        i) Final jet parameters are in /PARQUA/.
+       ii) Full parton cascades are in /JETSET/.
+      iii) Particle parameters are in /EVENT/.
+       iv) Event features are in /PTHARD/, /EVINT/ and /PMBIAS/.
+        v) Cross section and number of events are in /TOTAL/.
+
+      Units are GeV for energy and momentum, radians for angles,
+millibarns for the cross section.
+
+      The positive z axis is defined by the initial antiproton direction.
+
+
+#include "cojets/parqua.inc"
+
+PARQUA(I,1) = px of final jet I.
+PARQUA(I,2) = py of final jet I.
+PARQUA(I,3) = pz of final jet I.
+PARQUA(I,4) = p0 of final jet I.
+PARQUA(I,5) = mass of final jet I.
+PARQUA(I,6) = internal flavor code of final jet I. For quarks, 1-6
+              corresponding to up, dn, st, ch, bt, tp, in order.
+              Negative for antiquarks. 0 for gluons. For diquarks,
+              IQ1*10+IQ2 where IQ1 and IQ2 are the codes for the lighter
+              and heavier quarks, resp.. For antidiquarks, a minus sign
+              is added in front.
+PARQUA(I,7) = origin of final jet I: -1/-2, parton originated from 1st/2nd
+              initial parton, resp.; 1/2, parton originated from 1st/2nd
+              scattered or Z/W decay parton, resp..
+JETQUA(I)   = jetset number of final jet I.
+NQUA        = no. of final jets.
+MAXQUA      = dimension control parameter.
+
+PARQUA parameters are left to their parton shower values, except in W, Z and
+top particles decays where they are recalculated summing over the jet
+particles.
+
+
+#include "cojets/jetset.inc"
+
+NJSET       = number of partons.
+PJSET(1,I)  = px of parton I.
+PJSET(2,I)  = py of parton I.
+PJSET(3,I)  = pz of parton I.
+PJSET(4,I)  = p0 of parton I.
+PJSET(5,I)  = mass of parton I.
+JORIG(I)    = JPACK*JET+K if I is a decay product of parton K, in /JETSET/.
+              If K=0 then I is a primary parton.
+            = -(JPACK*JET+K) if I is a parton originating from a decaying
+              particle (e.g. a top particle), the same parton being coded
+              as particle K in PARHAD; if stable particles only are
+              retained, K gives the JETSET number of the jet to which the
+              decaying particle belongs.
+              (JET = 1,2 for final jets. JET = 11,12 for initial jets.)
+JTYPE(I)    = IDENT code for parton I.
+JDCAY(I)    = JPACK*K1+K2 if K1 and K2 are decay products of I.
+              If JDCAY(I)=0 then I is a final parton in the parton shower.
+MXJSET      = dimension for /JETSET/ arrays.
+JPACK       = packing integer for /JETSET/ arrays.
+
+PJSET parameters are left to their parton shower values, except in W, Z and
+top particles decays where they are recalculated summing over the jet
+particles.
+
+
+#include "cojets/event.inc"
+
+NEVENT      = event number.
+ECM         = cms energy.
+PARHAD(I,1) = px of particle I.
+PARHAD(I,2) = py of particle I.
+PARHAD(I,3) = pz of particle I.
+PARHAD(I,4) = p0 of particle I.
+PARHAD(I,5) = mass of particle I.
+PARHAD(I,6) = internal type id of particle I. Occasionally it may correspond
+              to a parton (e.g. a top particle decay product). The code is
+              then the same as that used in PARQUA(I,6) but multiplied by
+              1000. Internal particle id's are listed in the particle-decay
+              table printed by the program.
+PARHAD(I,7) = no. of final jet in /PARQUA/ originating particle I.
+            = 0 for beam jets particles.
+            = -1/-2 for particles originating from 1st/2nd lepton in
+              leptonic decays of Drell-Yan produced Z/W/GAMMA.
+            = -1 for a stable, Drell-Yan produced Z/W/GAMMA.
+NPART       = no. of particles.
+WEIGHT      = event weight if weighted events are generated, =1 if events are
+              unweighted.
+IORIG(I)    = IPACK*JET+K if I is a decay product of particle K.
+            = -(IPACK*JET+K) if I is a primary particle of jet K
+              in /JETSET/. If only stable particles are retained, all
+              jet particles are IORIG coded as primary jet particles.
+            = 0 if I is a primary beam jet particle.
+              (JET = 1,2 for final jets. JET = 11,12 for initial jets.
+              JET = 0 for beam jets.)
+IDENT(I)    = external IDENT code for particle I.
+IDCAY(I)    = IPACK*K1+K2 if decay products are K1-K2 inclusive.
+              If IDCAY(I)=0 then particle I is stable.
+IPACK       = packing integer for particles.
+MXPART      = dimension control parameter.
+
+
+#include "cojets/pthard.inc"
+
+PTHARD      = SQRT(QSQFFF), where QSQFFF is the Field-Feynman-Fox
+              evolution variable. It approximates the parton pt generated
+              in the hard scattering. Set to zero for pure beam jets events.
+
+#include "cojets/evint.inc"
+
+Arrays have been set up to accomodate information for multiple parton
+collisions in the same event, although only single parton collisions are
+treated in the present version of the program. (The last entry in the
+arrays is the particle collision number in the event, ranging from 1 to
+NMULP.)
+LEVTYP      = event type (=IEVTYP).
+NMULP       = number of parton collisions in the event (1 at present).
+XINGV(I,1)  = p0+pz fraction of initial (unevolved) parton I.
+PXINGV(I,1) = px of initial (unevolved) parton I.
+PYINGV(I,1) = py of initial (unevolved) parton I.
+IFINGV(I,1) = internal code of initial (unevolved) parton I.
+XACTV(I,1)  = p0+pz fraction of interacting parton I.
+PXACTV(I,1) = px of interacting parton I.
+PYACTV(I,1) = py of interacting parton I.
+IFACTV(I,1) = internal code of interacting parton I.
+LEV(1)      = type of parton collision (same code as for IEVTYP).
+LINV(1), LFINV(1) = initial and final channel codes for the parton
+              collision.
+              For IEVTYP=1
+                   LINV=0,  LFINV=0: pure beam jets event
+                   LINV=1,  LFINV=1: Q-Q --> Q-Q NON-ID.
+                   LINV=2,  LFINV=1: Q-Q --> Q-Q ID.
+                   LINV=3,  LFINV=1: QB-Q --> QB-Q ANNIH. F=I
+                            LFINV=2: QB-Q --> QB-Q ANNIH. F.NE.I
+                            LFINV=3: QB-Q --> G-G
+                            LFINV=4-6: QB-Q --> QHB-QH (CH,BT,TP, resp.)
+                   LINV=4,  LFINV=1: Q-G --> Q-G
+                   LINV=5,  LFINV=1: G-G --> G-G
+                            LFINV=2: G-G --> Q-QB
+                            LFINV=4-6: G-G --> QHB-QH (CH,BT,TP, resp.)
+                   LINV=6,  LFINV=1: Q-QH --> Q-QH
+                   LINV=7,  LFINV=1: G-QH --> G-QH
+                   LINV=8,  LFINV=1: QH-QH --> QH-QH NON-ID.
+                   LINV=9,  LFINV=1: QH-QH --> QH-QH ID.
+                   LINV=10, LFINV=1: QHB-QH --> QHB-QH  F=I
+                            LFINV=2: QHB-QH --> QB-Q F=LIGHT
+                            LFINV=3: QHB-QH --> G-G
+                            LFINV=4-6: QHB-QH --> QHB-QH F.NE.I (CH,BT,TP,
+                                                                 resp.)
+              For IEVTYP=2,3,4:
+                   LINV is the internal code of the intermediate vector
+                   boson:     GM     Z0     W+     W-
+                               1      2      3      4
+                   LFINV is the boson decay channel code, with the same
+                   conventions as for IDECBO in input.
+
+SHV(1)      = Mandelstam s for parton hard scattering, square mass
+              of Z/W/GAMMA in Drell-Yan production of the same.
+QSQV(1)     = for hard scattering, it is the FFF evolution variable.
+              For DRELLYAN Z/W/GAMMA production it coincides with SHV.
+THV(1)      = Mandelstam t for parton hard scattering.
+COSCMV(1)   = cosinus of polar angle of first primary parton, or particle
+              in Z/W/GAMMA leptonic decays, in the parton cms.
+PHIV(1)     = azimuth of first primary parton, or particle
+              in Z/W/GAMMA leptonic decays, in the parton cms.
+PCMV(1)     = momentum of primary partons, or particles
+              in Z/W/GAMMA leptonic decays, in the parton cms.
+AMV(I,1)    = mass of primary parton/particle I.
+IFLFV(I,1)  = internal code of primary parton/particle I.
+P4LABV(1,1) = px in the lab system of primary parton/particle pair.
+P4LABV(2,1) = py in the lab system of primary parton/particle pair.
+P4LABV(3,1) = pz in the lab system of primary parton/particle pair.
+P4LABV(4,1) = p0 in the lab system of primary parton/particle pair.
+PFLABV(1,I,1) = px in the lab system of primary parton/particle I.
+PFLABV(2,I,1) = py in the lab system of primary parton/particle I.
+PFLABV(3,I,1) = pz in the lab system of primary parton/particle I.
+PFLABV(4,I,1) = p0 in the lab system of primary parton/particle I.
+
+
+#include "cojets/pmbias.inc"
+
+PMBIAS(1)   = px of beam jets system.
+PMBIAS(2)   = py of beam jets system.
+PMBIAS(3)   = pz of beam jets system.
+PMBIAS(4)   = p0 of beam jets system.
+PMBIAS(5)   = invariant mass of beam jets system.
+
+
+#include "cojets/total.inc"
+
+SIGTOT      = total X-section for generated events in millibarns (includes
+              K-factor, effects of semi-leptonic decay forcing for heavy
+              flavor particles, Z/W decay BR if Z/W decay is forced -- does
+              not include effects of FORCE for particle decays).
+NEVNTS      = total number of generated events.
+
+
+      The functions AMASS(IDENT), CHARGE(IDENT), and LABEL(IDENT) are
+available to determine the mass, charge, and character*8 label of particle
+with external code IDENT.
+
+      The function IDEXT(IDINT) converts internal parton/particle codes to
+external IDENT codes.
+
+      CALL DUMPEV causes the current event to be printed, with stable
+particles only if this option has been chosen.
+
+      In QED radiative leptonic decays of Drell-Yan produced Z/W/GAMMA, the
+coding of the decay in the /EVENT/ particle stream goes through two steps:
+  i) the decay of the boson into two leptons, as from the decay table, which
+      are off the mass shell if undergoing radiation;
+ ii) the decay of the charged lepton(s), off the mass shell, into photons
+     and final lepton(s), on the mass shell.
+      If there are two charged lepton secondaries, photons are aggregated
+to the final charged lepton closer in angle, when calculating the off-shell
+mass of primary leptons. If a charged lepton does not radiate, it appears
+in the first step only.
+      If only stable particles are retained, information about the lepton
+of origin of the decay products is retained in IORIG, through the JET
+parameter, and in PARHAD(I,7).
+
+      In top particle decays, there are jets among the secondaries. The
+coding of the decay follows two paths: the jet cascade and the particle
+cascade.
+      If unstable particles are retained, the two paths cross each other.
+The origin of the decaying top particle can be traced back to the top jet of
+origin, through IORIG in the particle cascade. (The JDCAY of the final top
+jet in the parton cascade is set to 0.). When the top particle decays, the
+decay coding goes through two steps:
+  i) the decay of the top particle into the 3 primary leptons/partons, as
+     from the decay table;
+ ii) the radiative decays of the primary charged leptons and the jet
+     developments of the partons.
+      Primary decay leptons which do not decay radiatively appear only
+once, in the first step. If they radiate, the decay coding parallels the
+one used for leptonic decays of Drell-Yan produced Z/W/GAMMA.
+      Primary decay partons appear both in /EVENT/, coded as particles, and
+in /JETSET/ coded as jets. Their IORIG's in /EVENT/ give the top particle
+as origin. Their JORIG's in /JETSET/ give the corresponding partons in
+/EVENT/ as origins. A negative sign in front of their JORIG's signals that
+they do not result from a parton cascade, but from the decay of a particle.
+The IORIG's of primary particles in a decay jet gives the jet in /JETSET/
+as their origin, according to the general convention. Thus, when following
+the genealogy of a stable particle in a decay jet backwards, one moves
+in general through the following steps:
+  i) first, a cascade of unstable particles belonging to the jet, up to a
+     primary jet particle whose origin is a jet in /JETSET/,
+ ii) then, a QCD jet cascade coded in /JETSET/, up to a primary jet whose
+     origin is a parton coded as particle in /EVENT/,
+iii) finally, the decaying top particle.
+      The IDCAY of the top particle identifies the 3 primary decay products
+in the particle stream. The IDCAY's of the latter identify the primary
+particles resulting from their respective decays or jet developments.
+For a parton, that means all primary particles generated by all the jets
+originated by the parton. Thus, following the particles genealogy forward,
+by means of IDCAY, provides a description limited to the particle stream.
+(Having IDCAY referring to the particle stream only is a necessary
+consequence of having JDCAY referring to jets only, with JDCAY=0
+characterizing a final jet in the QCD shower.)
+      If stable particles only are retained, top decay particles and jets
+have their origins modified, so as to jump over the missing unstable
+particles, which include also the decaying top particle. Thus, the JORIG's
+of primary decay jets give the top jet, to which the decaying top particle
+belongs, as their origins. The IORIG's of particles generated in decay jets
+give the jet in /JETSET/, to which the particles belong, as their origin. In
+both cases, a minus sign is put in front.
+
+
+

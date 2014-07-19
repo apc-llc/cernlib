@@ -1,0 +1,78 @@
+*
+* $Id: cstfor.F,v 1.1.1.1 1996/02/26 17:16:40 mclareni Exp $
+*
+* $Log: cstfor.F,v $
+* Revision 1.1.1.1  1996/02/26 17:16:40  mclareni
+* Comis
+*
+*
+#include "comis/pilot.h"
+*CMZ :  1.11/01 24/01/91  11.37.05  by  Rene Brun
+*-- Author : V.Berezhnoi
+      PROGRAM CST
+************************************************************
+*                                                          *
+*   THIS PROGRAM PRODUCES THE SPECIAL FILE CONTAINING TWO  *
+*   TABLES: THE TABLE OF COMMON-BLOCKS' ADDRESSES AND THE  *
+*   TABLE OF ROUTINES' ADDRESSES. BOTH TABLES CAN BE       *
+*   ACCESSED LATER BY PROGRAM DEALING WITH COMIS.          *
+*   THIS PROGRAM TAKES THE MAP-FILE OF THE TASK AS THE     *
+*   INPUT AND PRODUCES SPECIAL-FORMAT FILE WITH TWO TABLES *
+*   AS THE OUTPUT. THE PROGRAM CONSISTS OF TWO PARTS:      *
+*   SYSTEM-DEPENDENT PART, BEGINNING HERE, AND SYSTEM-     *
+*   INDEPENDENT ONE, BEGINNING WITH SUBROUTINE SIINI.      *
+*                                                          *
+************************************************************
+      PARAMETER (MDSIZE=110006,NCHAN=2,NPSIZ=127)
+*
+*   NPSIZ  - PAGE SIZE
+*   MDSIZE - SIZE OF DYNAMIC MEMORY
+*   NCHAN  - NUMBER OF CHANNEL FOR CST-FILE
+*
+      COMMON /MDPOOL/ IQ(MDSIZE)
+      COMMON /JKEYS/ JSECT,JCRF,JSBN,JPSECT,JSYMB,JOVR,JMM,JPM,
+     *               JMR,JKFS,JFF,JBLAN
+      CHARACTER*80 FILENM
+*+SEQ,CSPAR,CSPNTS.
+      COMMON/CSPNTS/MRECU(50),JTOPA
+      COMMON/COMIS/IA(100)
+      JTOPA=%LOC(IA(1))/4-1
+*
+*   FIRST READ THE NAME OF CST-FILE:
+*
+      CALL LIB$GET_FOREIGN(FILENM,,LENF)
+*
+*   OPEN THAT FILE:
+*
+      OPEN (UNIT=NCHAN,FILE=FILENM(1:LENF),STATUS='NEW',
+     *      ACCESS='DIRECT',RECL=NPSIZ,RECORDTYPE='FIXED',
+     *      ORGANIZATION='RELATIVE',FORM='UNFORMATTED',
+     *      EXTENDSIZE=3,ERR=10)
+*
+*   SYSTEM-INDEPENDENT INITIALIZATION:
+*
+      CALL SIINI(MDSIZE,NPSIZ,NCHAN)
+*
+*   INITIALIZE THE ADDRESSES OF KEY STRINGS:
+*
+      JSECT=MJSCHA('Program Section Synopsis')
+      JBLAN=MJCHAR(6H$BLANK)
+      JCRF=MJSCHA('Symbol Cross Reference')
+      JSBN=MJSCHA('Symbols By Name')
+      JPSECT=MJCHAR(5HPsect)
+      JSYMB=MJCHAR(6HSymbol)
+      JOVR=MJCHAR(3HOVR)
+      JMM=MJCHAR(4H----)
+      JPM=MJCHAR(4H+---)
+      JMR=MJCHAR(2H-R)
+      JKFS=MJSCHA('Key for special')
+      JFF=MJCHAR(12)
+*
+      CALL PROCED
+*
+      CLOSE (UNIT=NCHAN)
+      GO TO 20
+*
+   10 CALL TISTR('CST -- CAN''T OPEN '//FILENM(1:LENF))
+*
+   20 END

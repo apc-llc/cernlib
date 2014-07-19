@@ -1,0 +1,14 @@
+SRCS_F= fcnk0.F minexam.F
+OBJS  = fcnk0.o minexam.o
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+DefinePackageLibrary(NullParameter)
+
+#ifdef CERNLIB_WINNT
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+
+CernlibFortranProgramTarget(minuit,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(minuit,NullParameter,NullParameter)

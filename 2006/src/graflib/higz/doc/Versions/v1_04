@@ -1,0 +1,33 @@
+*
+* $Id: v1_04,v 1.1.1.1 1996/02/14 13:10:20 mclareni Exp $
+*
+* $Log: v1_04,v $
+* Revision 1.1.1.1  1996/02/14 13:10:20  mclareni
+* Higz
+*
+*
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.04/00   881104
+*
+*    New routine IUWK
+*    Changes in IGRNG (call to IUWK)
+*    IPM changed to GPM in routine IPL (recursivity from IPM)
+*    Bug corrected in IZSCHU.
+*    DECGKS version introduced.
+*    PostScript Interface introduced (-111=Portrait -112=Landscape).
+*    Character height and position of the PostScript Font are OK.
+*    Minor bugs corrected.
+*    Bugs corrected in IZGED in order to be called in STYLE G of PAW
+*    The alphanumeric axis labels are now stored in the ZEBRA structure
+*    The clipping is supported in the PostScript interface
+*    The menu position in IGMENU are given in % of the screen size
+*    Improvement in IGMENU and IZGED (Menu FILES introduced).
+*    Line width introduced in IZGED
+*    Bug corrected in IGAXIS in case of NDIV.LE.3
+*    Bug corrected in IGSET if AWLN<0
+*    Error with a local ZEBRA link corrected in IZGED
+*    Bug corrected in IZLBL
+*    New option 'M' in IGAXIS
+*

@@ -1,0 +1,67 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:44 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:44  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerndos.car patch kerndos
+#if !defined(CERNLIB_KERNDOS)
+
+              KERNLIB routines particular to MS-DOS
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KDOS     Pilot-patch selecting KERNLIB for MS-DOS
+
+*KDECWNT  Pilot-patch selecting KERNLIB for Windows NT with DEC Fortran
+
+QMDOS     Machine patch MS-DOS
+
+DOSPROGS  MS-DOS utility programs
+
+DOSGS     MS-DOS variants of KERNLIB routines
+
+=====================================================================
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNDOS
+              ----------------------------------------
+
+      New pilot patch:  *KDECWNT for DEC with Windows /NT
+      New decks:        INTRAC, LSTATI, TIMEL, TMPROI, 
+                        SLEEPF.
+
+      Change of options:  F2C -> QF_F2C,  NDP -> QF_NDP
+
+          New decks: BTEST, IBCLR, IBITS, IBSET have been introduce for F2C.
+          Flag QGETCWD have been introduced 16.07.93 11:32 V.E.Fine
+          New seq, F2C have been introduced to compiler under F2C
+
+          To provide CERNLIB's under Windows/NT and GNU-sh as well
+                   #ifdef WIN32
+            and
+                   #ifder __GNUC__
+          options have been introduced for C sources.
+          11-07-93 V.E.Fine CERN/JINR
+
+          F2C-ish version have been introduced now 03-12-92 23:49am
+           F2C-flag has been set by default.
+
+          Note: F2C RSHIFT is arithmetic right shift.
+          ----- This means sign bits are shifted in at the high end
+
+
+          Update in PUTGET to work with SuperVGA mode 11-27-92 11:09am
+          Small bug in PUTGET 09-14-92 07:34pm
+---------------------------------------------------------------------
+
+          First release of the KERNDOS  Pam :   24 June 1992
+
+---------------------------------------------------------------------
+
+C====================================================================
+#endif

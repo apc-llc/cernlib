@@ -1,0 +1,83 @@
+*
+* $Id: kaxmaj.F,v 1.1.1.1 1996/03/08 11:40:53 mclareni Exp $
+*
+* $Log: kaxmaj.F,v $
+* Revision 1.1.1.1  1996/03/08 11:40:53  mclareni
+* Kapack
+*
+*
+#include "kapack/pilot.h"
+      SUBROUTINE KAXMAJ(MAJNAM,*,*)
+*
+*.....GET THE MAJOR ENTRY CORRESPONDING TO THE SPECIFIED MAJOR NAME:
+*
+*     THE MOST RECENTLY USED MAJOR ENTRIES ARE KEPT IN A STACK.
+*     ENTRIES 0 AND 1 ARE IDENTICAL AND ARE THE MOST RECENTLY USED.
+*
+* MODIFIED 1987/05/06 TO INCLUDE A CALL TO KAXNAM IN THE DO 1 LOOP
+* SINCE MAJKEY IS NOT STACKED AND IT MUST BE REFRESHED. FAILURE TO DO
+* SO CAN RESULT IN KADELM DELETING THE WRONG MAJOR NAME.
+*                        PAM VERSION 2.08 H.RENSHALL, DD, CERN.
+*
+#include "kapack/kax000.inc"
+#include "kapack/kax020.inc"
+#include "kapack/kax02c.inc"
+#include "kapack/kax0a0.inc"
+*
+      CHARACTER MAJNAM*(*)
+*
+*-----------------------------------------------------------------------
+*
+*.....RETURN IMMEDIATELY IF THE REQUEST IS AT THE TOP OF THE STACK
+      IF ( LUNKAF.EQ.KUNIT(0) .AND. MAJNAM.EQ.KMAJOR(0) )  RETURN
+*
+*.....INVALIDATE THE LAST USE INDICATOR
+      IA(10)= 0
+*
+*.....IF THE REQUEST IS ELSEWHERE IN THE STACK MOVE IT TO THE TOP
+      DO  1  I = 2, LMQ
+         LPUSH = I
+         IF ( KUNIT(I) .LT. 0 )  GO TO 2
+         IF ( LUNKAF.EQ.KUNIT(I) .AND. MAJNAM.EQ.KMAJOR(I) )  THEN
+            KMAJOR(0) = KMAJOR(I)
+            KLDEF(0)  = KLDEF(I)
+            KLMAX(0)  = KLMAX(I)
+            KROOT(0)  = KROOT(I)
+            KUNIT(0)  = KUNIT(I)
+            CALL KAXNAM(MAJNAM,MAJKEY,*11)
+            GO TO 3
+         ENDIF
+ 1    CONTINUE
+*
+*.....REQUEST NOT IN THE STACK SO CONVERT THE NAME TO AN INTERNAL KEY
+ 2    CALL KAXNAM(MAJNAM,MAJKEY,*11)
+*
+*.....GET THE REQUESTED ENTRY FROM THE KA-FILE
+      CALL KAXGET(1,MAJKEY,1,LOC,*12)
+*
+*.....STORE IT AT THE TOP OF THE STACK
+      IPTR      = LOC + NRCW + IA(LOC+NRCW)
+      KMAJOR(0) = MAJNAM
+      KLDEF(0)  = IA(IPTR+1)
+      KLMAX(0)  = IA(IPTR+2)
+      KROOT(0)  = IA(IPTR)
+      KUNIT(0)  = LUNKAF
+*
+*.....PUSH DOWN THE STACK, (ALL ENTRIES BELOW LPUSH REMAIN UNCHANGED)
+ 3    DO  4  I = LPUSH, 1, -1
+         KMAJOR(I) = KMAJOR(I-1)
+         KLDEF(I)  = KLDEF(I-1)
+         KLMAX(I)  = KLMAX(I-1)
+         KROOT(I)  = KROOT(I-1)
+         KUNIT(I)  = KUNIT(I-1)
+ 4    CONTINUE
+*
+*.....SUCCESSFUL COMPLETION
+      RETURN
+*
+*.....ERROR PROCESSING
+ 11   RETURN 1
+*
+ 12   RETURN 2
+*
+      END

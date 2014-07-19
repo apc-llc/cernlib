@@ -1,0 +1,28 @@
+*
+* $Id: igm100.F,v 1.1.1.1 1996/02/14 13:10:36 mclareni Exp $
+*
+* $Log: igm100.F,v $
+* Revision 1.1.1.1  1996/02/14 13:10:36  mclareni
+* Higz
+*
+*
+#include "higz/pilot.h"
+*CMZ :  1.12/00 12/02/91  12.22.25  by  O.Couet
+*-- Author :    O.Couet   12/02/91
+      LOGICAL FUNCTION IGM100(METAFL)
+*
+      IGM100=.FALSE.
+#if defined(CERNLIB_GKSGRAL)
+      IF(METAFL.EQ.12201.OR.METAFL.EQ.12202.OR.METAFL.EQ.101.OR.
+     +  (METAFL.GE.4011.AND.METAFL.LE.4230).OR.
+     +  (METAFL.GE.14401.AND.METAFL.LE.14420))IGM100=.TRUE.
+#endif
+#if defined(CERNLIB_ATCGKS)
+      IF((METAFL.GE.10100.AND.METAFL.LE.10300).OR.
+     +   (METAFL.GE.1500.AND.METAFL.LE.1505).OR.
+     +   (METAFL.GE.1900.AND.METAFL.LE.1905).OR.
+     +   (METAFL.GE.5300.AND.METAFL.LE.5350).OR.
+     +   (METAFL.GE.6300.AND.METAFL.LE.6307))IGM100=.TRUE.
+#endif
+*
+      END

@@ -1,0 +1,35 @@
+*
+* $Id: cdmove.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdmove.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDMOVE.COM
+$ !
+$ ! Command file to launch CDMOVE
+$ !
+$   node = f$trnlnm("SYS$NODE")
+$   time = f$time()
+$   pid  = f$getjpi("","PID")
+$   write sys$output "CDMOVE starting on ''node' at ''time'"
+$   write sys$output "Process id: ''pid'"
+$ !
+$ ! Define list of groups for whom updates are to be processed
+$ !
+$   cdgroups:==cdcplear,cdchorus
+$ !
+$ ! For each group, define directory where names file resides
+$ !
+$   cdcplear:==disk$mf:[cdcplear]
+$   cdchorus:==disk$mf:[cdchorus]
+$ !
+$ ! Set the wakeup interval and loglevel
+$ !
+$   cdwakeup:==60
+$   cdlogl  :==1
+$ !
+$   RUN CERN:[PRO.EXE]CDMOVE
+#endif

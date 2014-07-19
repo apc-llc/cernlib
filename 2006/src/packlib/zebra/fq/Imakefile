@@ -1,0 +1,27 @@
+SRCS_F=	 fzcffn.F fzcffx.F fzcopy.F fzendi.F fzendo.F fzficr.F \ @@\
+	fzfile.F fzhook.F fziacn.F fzialn.F fziasc.F fzichh.F \ @@\
+	fzidat.F fzidia.F fzidum.F fziffn.F fziffx.F fzilin.F fzimtb.F \ @@\
+	fzin.F fzinfo.F fzinxt.F fzipha.F fziphd.F fziphm.F fziphr.F \ @@\
+	fziprl.F fzirec.F fzirel.F fzitrn.F fzlimi.F fzloc.F \ @@\
+	fzlogl.F fzmach.F fzmemo.F fzoaln.F fzoapk.F fzoasc.F \ @@\
+	fzodat.F fzoffn.F fzoffx.F fzon1.F fzon2.F fzon3.F fzon4.F \ @@\
+	fzon5.F fzon6.F fzophr.F fzorec.F fzotab.F fzotrn.F \ @@\
+	fzotxt.F fzout.F fzrun.F fzudat.F
+
+#if !defined(CERNLIB_UNIX) \
+   || defined(CERNLIB_DECS) || defined(CERNLIB_CERNLIB_QMVAOS) \
+   || defined(CERNLIB_WINNT) || (defined(CERNLIB_LINUX) && !defined(CERNLIB_PPC))
+
+/* data format is NOT IEEE big endian --> need to convert */
+
+SRCS_F := $(SRCS_F) fzicv.F fzitrx.F fzocv.F fzotrx.F
+#endif
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(fzichh,fzichh,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fziffn,fziffn,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fziffx,fziffx,'-WF,-P',NullParameter)
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

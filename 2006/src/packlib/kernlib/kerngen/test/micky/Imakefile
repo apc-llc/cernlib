@@ -1,0 +1,4 @@
+SRCS_F= chkver.F exitrc.F minit.F mveric.F mverif.F mverii.F \ @@\
+	mveuns.F newguy.F prtest.F tchdir.F time77.F timing.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,31 @@
+/* $Id: bsd.cf,v 1.1.1.1 1995/12/20 15:26:40 cernlib Exp $
+ *
+ * $Log: bsd.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:40  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: bsd.cf,v 1.22 95/01/05 19:30:02 kaleb Exp $
+
+#define OSName            4.3bsd
+XCOMM operating system:  OSName
+#define OSMajorVersion    4
+#define OSMinorVersion    3
+
+#define BootstrapCFlags -DNOSTDHDRS
+#define StandardDefines -DNOSTDHDRS -DCSRG_BASED
+#define HasVoidSignalReturn NO
+#define HasBsearch NO
+#define DirFailPrefix -
+#define AvoidNullMakeCommand	YES
+
+#define BuildServer NO
+
+#ifdef VaxArchitecture
+#define UnalignedReferencesAllowed YES	       /* if arbitrary deref is okay */
+#endif
+
+#if OSMajorVersion >= 4 && OSMinorVersion >= 3
+#define SetTtyGroup YES
+#endif

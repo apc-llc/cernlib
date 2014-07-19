@@ -1,0 +1,27 @@
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_WINNT)
+LIBDIRS=wntgs
+#elif defined(CERNLIB_DOS)
+LIBDIRS=dosgs
+#else
+#if defined(CERNLIB_MPW)
+LIBDIRS=mpwgs
+#else
+#undef IHaveSubdirs
+all::
+
+#endif
+#endif
+
+#ifdef IHaveSubdirs
+
+SUBDIRS= $(LIBDIRS)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(kerngen,$(LIBDIRS))
+
+#endif
+

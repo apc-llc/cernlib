@@ -1,0 +1,33 @@
+SRCS_F= abbrch.F ainel.F akeka.F altra.F altraf.F amga.F ankeka.F \ @@\
+	bamjev.F beexi.F bekeka.F berttp.F beta.F betarn.F betrst.F \ @@\
+	bkeka.F bklass.F bnkeka.F calumo.F calumv.F chanwt.F corevt.F \ @@\
+	corrin.F datar3.F decaux.F difevv.F dost.F drelab.F eexi.F \ @@\
+	eexlvl.F ekeka.F energi.F enrg.F evdeex.F eventv.F evevap.F \ @@\
+	evvini.F ferevv.F ferhav.F fisfra.F fkdeca.F fkdres.F fkener.F \ @@\
+	fkerup.F fkflav.F fkimpu.F fksigi.F fkvert.F fkzero.F fpower.F \ @@\
+	fprob.F gamrn.F geta.F hadden.F hadevv.F hadrin.F hadriv.F \ @@\
+	hevhin.F hinhev.F hklass.F hypero.F iefun.F incini.F index2.F \ @@\
+	kinpar.F kpois.F lortra.F nizl.F nizlnw.F nucevv.F nucrel.F \ @@\
+	nucriv.F nudisv.F nuprel.F parjet.F pmprab.F poli.F qnrg.F \ @@\
+	raco.F rakekv.F rbkekv.F rchanv.F rotat.F samcst.F sfecfe.F \ @@\
+	shptot.F sigel.F sihael.F sitsao.F stalin.F tchoic.F threpd.F \ @@\
+	trafo.F trahad.F trans.F ttrans.F twopad.F twopar.F verein.F \ @@\
+	xlamb.F xseneu.F xsepro.F 
+
+#ifdef CERNLIB_OLDNAME
+SRCS_F:= $(SRCS_F) decay.F dres.F energy.F erup.F flavor.F impuls.F \ @@\
+	sigint.F vertex.F zeroin.F
+#endif
+ 
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

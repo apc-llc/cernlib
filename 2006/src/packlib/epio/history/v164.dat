@@ -1,0 +1,19 @@
+*
+* $Id: v164.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v164.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.64
+C   Random access to standard input files extended to Cray (courtesy of
+C   M. Corden).
+C   IMPORTANT: the binary file type on the Cray must be -s sbin
+C   as in the example in the PATCH PTEST4.
+C   Routines affected - EPBLIN, EPREAD
+C   Introduction of pilot patch *EPIO
+C   Vectorized version of BTSWAP for IBM-3090 VF
+C   Turn F77 into -F4.
+C   Put IBMASSL into ASMA.
+C

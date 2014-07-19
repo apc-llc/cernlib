@@ -1,0 +1,12 @@
+*
+* $Id: v104.dat,v 1.1.1.1 1996/03/21 17:19:53 mclareni Exp $
+*
+* $Log: v104.dat,v $
+* Revision 1.1.1.1  1996/03/21 17:19:53  mclareni
+* Bvsl
+*
+*
+* Version 1.04   920719 23.00
+C- Introduce the following patches/flags:
+C   > IPSC, MSDOS
+C

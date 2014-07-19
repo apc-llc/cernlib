@@ -1,0 +1,14 @@
+SRCS_F= \ @@\
+	 bkisae.F bkisaj.F bkisaq.F bkiscm.F bkisjt.F bkismr.F bkisv1.F \ @@\
+	 bkpjet.F bkpjhd.F bkpjpt.F build_pjet.F cedit.F edit.F genvtx.F \ @@\
+	 grlink.F gslink.F gzisac.F gzisaj.F gzisal.F gzisam.F gzisaq.F \ @@\
+	 gziscl.F gziscm.F gzisjt.F gzismr.F gzisv1.F gzisv2.F gzpjet.F \ @@\
+	 gzpjhd.F gzpjpt.F intvtx.F inzcom.F inzlnk.F is1trk.F isa_runno.F \ @@\
+	 isa_smear.F isa_weight.F isabfl.F isacfl.F isadmp.F isaefl.F \ @@\
+	 isaffl.F isajfl.F isalfl.F isaobr.F isaoer.F isapfl.F isaqfl.F \ @@\
+	 isasrt.F isawbg.F isawev.F isawnd.F isazeb.F ischar.F iscmfl.F \ @@\
+	 isedit.F islbnk.F ismear.F isnumq.F ispeta.F opangl.F pedit.F \ @@\
+	 pjangl.F pjcone.F pjetfl.F pjisaq.F pjlink.F pjpget.F pjptfl.F \ @@\
+	 qrecal.F random.F swords.F word.F zabend.F zvertx.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

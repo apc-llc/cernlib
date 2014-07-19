@@ -1,0 +1,62 @@
+*
+* $Id: kaxrd.F,v 1.1.1.1 1996/03/08 11:40:53 mclareni Exp $
+*
+* $Log: kaxrd.F,v $
+* Revision 1.1.1.1  1996/03/08 11:40:53  mclareni
+* Kapack
+*
+*
+#include "kapack/pilot.h"
+      SUBROUTINE KAXRD(NBLOCK,IBUFF,NWORDS)
+*
+*.....READ A SPECIFIED BLOCK
+*
+#include "kapack/kax000.inc"
+#include "kapack/kax020.inc"
+#include "kapack/kax050.inc"
+*
+      INTEGER IBUFF(NWORDS)
+*
+*-----------------------------------------------------------------------
+*
+      IBLOCK = NBLOCK
+      IF ( IBLOCK.LT.1 .OR. IBLOCK.GT.NBLKS )  GO TO 91
+      IF ( NWORDS.LT.1 .OR. NWORDS.GT.LBLK  )  GO TO 92
+*
+      READ(LUNKAF,ERR=93,IOSTAT=IOS,REC=IBLOCK) IBUFF
+      IF ( IOS .NE. 0 )  GO TO 93
+      IF ( IBUFF(1) .NE. IBLOCK )  GO TO 94
+*
+*.....STORE THE NUMBER OF LEVELS IF A ROOT BLOCK HAS BEEN READ
+      IF ( IBUFF(1) .EQ. IBUFF(4) )  LEVELS = IBUFF(5)
+*
+*.....SUCCESSFUL COMPLETION
+      RETURN
+*
+*.....ERROR PROCESSING
+ 91   WRITE(MSG,191) IBLOCK, LUNKAF, NBLKS
+      GO TO 99
+*
+ 92   WRITE(MSG,192) NWORDS, LUNKAF, LBLK
+      GO TO 99
+*
+ 93   WRITE(MSG,193) IBLOCK, LUNKAF, IOS
+      GO TO 99
+*
+ 94   WRITE(MSG,194) LUNKAF, IBLOCK, IBUFF(1)
+      GO TO 99
+*
+ 99   CALL KAXMSG(LUNERR,MSG)
+      CALL KAXEND
+*
+ 191  FORMAT('CRNKA261 KAXRD: KAPACK SYSTEM ERROR OR CORRUPT FILE,
+     +        REQUEST TO READ BLOCK ',I11,' FROM UNIT ',I3,
+     +       ' WHICH HAS ',I11,' BLOCKS')
+ 192  FORMAT('CRNKA262 KAXRD: REQUEST TO READ ',I11,' WORDS FROM
+     +        UNIT ',I3,' WHICH HAS A BLOCK LENGTH OF ',I11,' WORDS')
+ 193  FORMAT('CRNKA263 KAXRD: I/O ERROR WHILE READING BLOCK ',I11,
+     +       ' FROM UNIT ',I3,', IOSTAT = ',I11)
+ 194  FORMAT('CRNKA264 KAXRD: INVALID BLOCK NUMBER OR IDENTIFIER ON
+     +        UNIT ',I3,', NUMBER = ',I11,', IDENTIFIER = ',I11)
+*
+      END

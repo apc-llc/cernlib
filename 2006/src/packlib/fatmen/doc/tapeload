@@ -1,0 +1,984 @@
+*
+* $Id: tapeload,v 1.1.1.1 1996/03/07 15:17:35 mclareni Exp $
+*
+* $Log: tapeload,v $
+* Revision 1.1.1.1  1996/03/07 15:17:35  mclareni
+* Fatmen
+*
+*
+* This directory was created from fatmen.car patch tapeload
+      PROGRAM TAPELOAD
+*...TAPELOAD
+*.    FATMEN utility program to read tape details from a number of files
+*.    ,extracting and processing the relevant information,before storing
+*.    it within the FATMEN file catalogue.The 3 types of file that must
+*.    be made available to the program are as follows:
+*.       1. A file of tape Volume Serial Numbers,identifying each tape
+*.          file to be processed - these having already been staged as
+*.          seperate disk files of the same name.
+*.       2. A number of tape files staged onto disk,each containing the
+*.          compulsory header and data components,and optionally a
+*.          trailer component.
+*.       3. A file containing run information for a number of tapes,this
+*.          being inclusive of a generic name,a list of detectors not in
+*.          use during the run,various other tape information and
+*.          possibly a user comment.
+*.    Only the information required for each catalogue entry is
+*.    extracted from the above.Where an entry cannot be made the FATMEN
+*.    default is allowed to take effect.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      : ERRSET MZEBRA MZSTOR MZLOGL MZLINK FMINIT FMLIFT
+*.              FMLINK UCTOH  DBPKTM DZSHOW FMPUT
+*.              HDRTRL BINTCM GETTAP CONCAT FATDAT
+*. CALLED     :
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+*--- Assign data set mnemonics for bank keys.
+*
+#include "fatpara.inc"
+*
+      PARAMETER (LURCOR=200000)
+      COMMON /CRZT/ IXSTOR,IXDIV,IFENCE(2),LEV,LEVIN,BLVECT(LURCOR)
+      DIMENSION LQ(999),IQ(999),Q(999)
+      EQUIVALENCE (IQ(1),Q(1),LQ(9)),(LQ(1),LEV)
+*
+      COMMON /USRLNK/ LUSRK1,LUSRBK,LUSRLS
+      COMMON /QUEST/ IQUEST(100)
+      PARAMETER (LKEYFA=10)
+      DIMENSION KEYS(LKEYFA)
+*
+      INTEGER ICTRX,IPTRG,IUNITA,IUNITB,IUNITC,IRC,IOSTAT
+      PARAMETER (IUNITA=3,IUNITB=9,IUNITC=8)
+      INTEGER NRECS
+      INTEGER IOFILE,NBYTES
+      PARAMETER (IOFILE = 1)
+*
+      INTEGER IDATE,ITIME,IPACK
+      INTEGER IBLKLN(2),IRECLN(2),ITAPDV(2),ITAPDN(7)
+      INTEGER IVLSQN(2),IDSSQN(2),ICRDAT(2),IBLKCT(2)
+      INTEGER ICPLVL,ILOCCD,IMEDTP,ISTREC,IENREC,ISTBLK
+      INTEGER IFLSIZ,IDUMMY
+*
+      CHARACTER*80 CBUFF
+      CHARACTER*54 CGNAME
+      CHARACTER*7 CBDISP
+      CHARACTER*17 CDATID(2)
+      CHARACTER*4 CFATFM,CLABEL,CDSSQN,CLABRQ(2,2)
+      CHARACTER*6 CINVSN,CVLSLN,CVISID
+      CHARACTER*1 CRECFT(2)
+      CHARACTER*80 CDETOT,CCOM1,CCOM2,COMMNT
+*
+      LOGICAL BERROR,BDIFF
+      LOGICAL BINTCM
+      DATA    NSHOWN/0/
+*
+*--- Declare common blocks,containing the arrays responsible for storing
+*--- the Header and Trailer fields from the staged TAPE files.
+*
+      COMMON /TAPDL1/ CDATID,CRECFT
+      COMMON /TAPDL2/ IBLKLN,IRECLN,ITAPDV,IVLSQN,IDSSQN,ICRDAT,IBLKCT
+*
+*--- Assign defaults to the file catalogue fields,for which values are
+*--- not supplied in either the Tape file or the Run Information file.
+*--- Additionally,set values within a number of arrays,to be used for
+*--- reference during processing.
+*
+      DATA ICPLVL,ILOCCD,IMEDTP /0,1,2/
+     +     ISTREC,IENREC,ISTBLK,IFLSIZ /0,0,0,0/
+     +     ITIME /0/
+     +     ITAPDN /200,556,800,1600,6250,0,38000/
+     +     CFATFM /'FX'/
+     +     CLABRQ(1,1),CLABRQ(1,2) /'HDR1','HDR2'/
+     +     CLABRQ(2,1),CLABRQ(2,2) /'EOF1','EOF2'/
+*
+*--- Surpress error messages for error 219.
+*
+      CALL ERRSET(219,0,-1,1,1)
+*
+*--- Initialise Zebra,create short term divisions and set the log level.
+*
+      CALL MZEBRA(-3)
+      CALL MZSTOR(IXSTOR,'/CRZT/','Q',IFENCE,LEV,BLVECT(1),BLVECT(1),
+     +            BLVECT(5000),BLVECT(LURCOR))
+      CALL MZLOGL(IXSTOR,IXDIN,'USERS',50000,LURCOR,'L')
+*
+*--- Define user link area.
+*
+      CALL MZLINK(IXSTOR,'/USRLNK/',LUSRK1,LUSRLS,LUSRK1)
+*
+*--- Set unit numbers for the RZ database.
+*
+      LUNRZ = 1
+      LUNFZ = 2
+*
+*--- Initialise FATMEN for OPAL.
+*
+      CALL FMINIT(IXSTOR,LUNRZ,LUNFZ,'//CERN/OPAL',IRC)
+*
+*--- Read bank display option from the Tape VSN file,specifying whether
+*--- each bank is to be displayed on the terminal for validation before
+*--- committing it to FATMEN.
+*
+*     Modified 6/2/90 JDS
+*     READ(IUNITC,FMT='(A7)',END=80) CBDISP
+      READ(IUNITC,*,END=80)          NDISP
+*
+*--- If an invalid value has been supplied for the bank display option,
+*--- then issue an error message and branch to terminate program
+*--- execution.
+*
+*     IF (CBDISP.NE.'DISPLAY'.AND.CBDISP.NE.'NO DISP') THEN
+*        PRINT*,' Invalid bank display option in tape VSN file.'
+*        PRINT*,' '
+*        PRINT*,' EXECUTION COMPLETED - NO PROCESSING HAS TAKEN PLACE.'
+*        GO TO 90
+*     ENDIF
+*
+*--- Loop to repeatedly read the filename of the next staged tape file
+*--- from the file of Volume Serial Numbers and open it for subsequent
+*--- processing.
+*
+10    CONTINUE
+         READ(IUNITC,FMT='(A6)',END=80) CINVSN
+         PRINT*,' PROCESSING TAPE FILE: ',CINVSN
+         OPEN(IUNITA,FILE='/'//CINVSN//' FATINFO *')
+         BERROR = .FALSE.
+         BDIFF = .FALSE.
+         NRECS = 0
+*
+*--- Loop to read and process successive labels(records) from the
+*--- current tape file's header.
+*
+20       CONTINUE
+            NRECS = NRECS + 1
+*
+*--- If an error has occured in reading the header labels or all labels
+*--- have been read,then exit the loop.
+*
+            IF (BERROR.OR.NRECS.GT.3) GO TO 30
+*
+*--- Read a label or if the end of file is reached,branch to cease
+*--- processing the current tape file.
+*
+            READ(IUNITA,FMT='(A)',END=70,IOSTAT=IOSTAT) CBUFF
+*
+*--- Store the label identifier.
+*
+            CLABEL = CBUFF(1:4)
+*
+*--- If the first label is being processed then test the label
+*--- identifier for being that of the VOL1 label,storing the labels
+*--- details or flaging an error accordingly.If the first label is not
+*--- being processed then call HDRTRL to extract and store HDR1/HDR2
+*--- details.
+*
+            IF (NRECS.EQ.1) THEN
+*
+               IF (CLABEL.EQ.'VOL1') THEN
+                  CVLSLN = CBUFF(5:10)
+               ELSE
+                  BERROR = .TRUE.
+               ENDIF
+*
+            ELSE
+               CALL HDRTRL(CBUFF,CLABEL,CLABRQ(1,NRECS-1),NRECS-1,1,
+     +                     BERROR)
+            ENDIF
+*
+*--- If an error has occured in processing the header labels then issue
+*--- the appropriate error message.
+*
+            IF (BERROR) THEN
+               PRINT*,'    Error in processing HEADER'
+               PRINT*,'    - missing or unexpected additional record.'
+            ENDIF
+ 
+*
+*--- Loop back to read and process the next header label.
+*
+            GO TO 20
+30       CONTINUE
+*
+*--- If an error occured in processing the header labels then branch to
+*--- cease processing the current tape file.
+*
+         IF (BERROR) GO TO 70
+*
+*--- Loop to repeatedly read Tape file data records,until encountering
+*--- the first trailer label or end of file marker.In the latter case
+*--- the program branches to the data processing section and does not
+*--- attempt to read and store trailer label fields.
+*
+35       CONTINUE
+            READ(IUNITA,FMT='(A)',END=65) CBUFF
+            IF (CBUFF(1:4).EQ.'EOF1') GO TO 40
+            GO TO 35
+40       CONTINUE
+*
+*--- Loop to read and process successive labels from the Tape file's
+*--- trailer.This procedure is almost identical to that employed to
+*--- read header labels,except that a VOL1 label is not expected.
+*
+         NRECS = 1
+50       CONTINUE
+            CLABEL = CBUFF(1:4)
+            CALL HDRTRL(CBUFF,CLABEL,CLABRQ(2,NRECS),NRECS,2,BERROR)
+*
+            IF (BERROR) THEN
+               PRINT*,'    Error in proecssing TRAILER'
+               PRINT*,'    - missing or unexpected additional record.'
+               GO TO 60
+            ENDIF
+*
+            READ(IUNITA,FMT='(A)',END=60) CBUFF
+            NRECS = NRECS + 1
+            IF (NRECS.GT.2.OR.BERROR) GO TO 60
+            GO TO 50
+60       CONTINUE
+*
+*--- If an error occured in processing the trailer labels then branch
+*--- to cease processing the current tape file.
+*
+         IF (BERROR) GO TO 70
+*
+*--- Call function BINTCM for each array containing 2 corresponding
+*--- integer fields,taken from the HDR1 and EOF1(if it existed,
+*--- otherwise 0's are contained in the appropriate positions) labels.
+*--- The function returns a boolean value,depicting whether the 2 fields
+*--- differ or not.
+*
+         BDIFF = BINTCM(IVLSQN,BDIFF)
+         BDIFF = BINTCM(IDSSQN,BDIFF)
+         BDIFF = BINTCM(ICRDAT,BDIFF)
+         BDIFF = BINTCM(IBLKCT,BDIFF)
+*
+*--- Perform the same test as BINTCM on the character array CRECFT.
+*
+         IF (CRECFT(1).EQ.' ') THEN
+            IF (CRECFT(2).NE.' ') CRECFT(1) = CRECFT(2)
+         ELSE
+         IF (CRECFT(1).NE.CRECFT(2).AND.CRECFT(2).NE.' ') BDIFF = .TRUE.
+         ENDIF
+*
+*--- If an EOF2 label existed then perform similar comparisons between
+*--- the corresponding fields of the HDR2 and EOF2 labels,setting a flag
+*--- if they differ.
+*
+         IF (NRECS.EQ.2) THEN
+            IF (CDATID(1).NE.CDATID(2)) BDIFF = .TRUE.
+            IF (IBLKLN(1).NE.IBLKLN(2)) BDIFF = .TRUE.
+            IF (IRECLN(1).NE.IRECLN(2)) BDIFF = .TRUE.
+            IF (ITAPDV(1).NE.ITAPDV(2)) BDIFF = .TRUE.
+         ENDIF
+*
+*--- If the information extracted from the header and trailer is
+*--- inconsistant,then issue an error message and branch to cease
+*--- processing the current tape file.
+*
+         IF (BDIFF) THEN
+            PRINT*,'    HEADER-TRAILER information not consistant'
+            PRINT*,'    - details have not been stored.'
+            GO TO 70
+         ENDIF
+*
+65       CONTINUE
+*
+*--- Call subroutine GETTAP to locate and read the relevent details from
+*--- the appropriate entry in the Run Information file.The identifier
+*--- for such details being the Tape file's Volume Serial Number.A flag
+*--- is returned to indicate the success of GETTAP's search.
+*
+         CALL GETTAP(IUNITB,CVLSLN,CVISID,CGNAME,IDUMMY,CDETOT,CCOM1,
+     +               CCOM2,BERROR)
+*
+*--- If an entry has not been located then branch to cease processing
+*--- the current tape(an error message having already been issued by
+*--- GETTAP).
+*
+         BERROR = .NOT.BERROR
+         IF (BERROR) GO TO 70
+*
+*--- Call subroutine CONCAT to pack the 3 comment fields returned by
+*--- GETTAP into a single field,for insertion into the FATMEN file
+*--- catalogue.
+*
+         CALL CONCAT(CDETOT,CCOM1,CCOM2,COMMNT)
+*
+*--- Set a pointer to the end of the Generic filename returned by GETTAP
+*
+         IPTRG = INDEX(CGNAME,' ')
+         IF (IPTRG.EQ.0) IPTRG = 55
+*
+*--- Create a new ZEBRA bank for the current tapes' data set,with a
+*--- Generic name consisting of the concatenation of the string
+*--- '//CERN/OPAL' and the Generic file name returned by GETTAP.
+*
+         CALL FMLIFT('//CERN/OPAL/'//CGNAME(1:IPTRG-1),KEYS,'3480','U'
+     +               ,IRC)
+*
+*--- Derive the address of the bank and associate it with the Generic
+*--- name.
+*
+         CALL FMLINK('//CERN/OPAL/'//CGNAME(1:IPTRG-1),LFAT,IRC)
+*
+*--- Fill some fields of the bank with the values held for them in the
+*--- the tape data set variables/arrays,with the aid of the previously
+*--- defined bank offsets and the subroutine UCTOH(for char/hollerith
+*--- variables).Those fields not corresponding to tape data set
+*--- variables/arrays are left holding the defaults assigned by
+*--- FMLIFT.
+*
+         CALL UCTOH(CDATID(1),IQ(LFAT+MFQNFA),4,17)
+         IQ(LFAT+MCPLFA) = ICPLVL
+         IQ(LFAT+MLOCFA) = ILOCCD
+         IQ(LFAT+MMTPFA) = IMEDTP
+         CALL UCTOH(CVLSLN,IQ(LFAT+MVSNFA),4,6)
+         CALL UCTOH(CVISID,IQ(LFAT+MVIDFA),4,6)
+         IQ(LFAT+MDENFA) = ITAPDN(ITAPDV(1)+1)
+         IQ(LFAT+MVSQFA) = IVLSQN(1)
+         IQ(LFAT+MFSQFA) = IDSSQN(1)
+         IQ(LFAT+MSRDFA) = ISTREC
+         IQ(LFAT+MERDFA) = IENREC
+         IQ(LFAT+MSBLFA) = ISTBLK
+         IQ(LFAT+MEBLFA) = IBLKCT(1)
+         CALL UCTOH(CRECFT(1),IQ(LFAT+MRFMFA),4,1)
+         IQ(LFAT+MRLNFA) = IRECLN(1)
+         IQ(LFAT+MBLNFA) = IBLKLN(1)
+         IQ(LFAT+MFSZFA) = IFLSIZ
+         CALL UCTOH(CFATFM,IQ(LFAT+MFLFFA),4,4)
+         CALL FATDAT(ICRDAT(1),IDATE)
+         CALL FMPKTM(IDATE,ITIME,IPACK,IRC)
+         IQ(LFAT+MCRTFA) = IPACK
+         CALL UCTOH(COMMNT,IQ(LFAT+MUCMFA),4,80)
+*
+*--- Consider the bank display option and either display or don't
+*--- display the new ZEBRA bank accordingly.
+*
+*        IF (CBDISP.EQ.'DISPLAY') THEN
+         IF (NSHOWN.LT.NDISP) THEN
+            CALL DZSHOW('ZEBRA BANK',IXSTOR,LFAT,'B',0,0,0,0)
+            PRINT*,' '
+            NSHOWN = NSHOWN + 1
+         ENDIF
+*
+*--- Commit the bank to FATMEN as a new file catalogue entry.
+*
+         CALL FMPUT('//CERN/OPAL/'//CGNAME(1:IPTRG-1),LFAT,IRC)
+*
+*--- Rewind the Run Information file and close the current Tape file,
+*--- before returning to read and process the next Tape file.
+*
+         REWIND IUNITB
+         CLOSE(IUNITA)
+         GO TO 10
+*
+*--- If an error occurred during the processing of the current tape,then
+*--- this piece of code is branched to,in order to issue an error
+*--- message before preparing and returning to read the next Tape file.
+*
+70    CONTINUE
+         IF (IOSTAT.LT.0) THEN
+            PRINT*,'    Error in commencing procesing'
+            PRINT*,'    - file is either empty or non-existant.'
+         ENDIF
+         PRINT*,' ATTEMPTING TO CONTINUE.....'
+         PRINT*,' '
+         REWIND IUNITB
+         CLOSE(IUNITA)
+         GO TO 10
+80    CONTINUE
+*
+*--- Termination sequence
+*
+      PRINT*,' PROCESSING COMPLETED'
+90    CONTINUE
+      STOP
+      END
+*
+*
+      BLOCK DATA TAPEVR
+*...TAPEVR
+*.    Block data subprogram to initialise the named common blocks of
+*.    TAPDL1 and TAPDL2.
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log
+*.
+*.**********************************************************************
+*.
+      INTEGER IBLKLN(2),IRECLN(2),ITAPDV(2)
+      INTEGER IVLSQN(2),IDSSQN(2),ICRDAT(2),IBLKCT(2)
+      CHARACTER*17 CDATID(2)
+      CHARACTER*1 CRECFT(2)
+*
+      COMMON /TAPDL1/ CDATID,CRECFT
+      COMMON /TAPDL2/ IBLKLN,IRECLN,ITAPDV,IVLSQN,IDSSQN,ICRDAT,IBLKCT
+*
+*--- Initialise the array elements intended to hold the EOF1 tape
+*--- details and assign defaults to those intended to hold the HDR2 and
+*--- EOF2 details.
+*
+      DATA CDATID(2) /' '/
+     +     IVLSQN(2),IDSSQN(2),ICRDAT(2),IBLKCT(2) /0,0,0,0/
+     +     CRECFT /'U','U'/
+     +     IBLKLN /3600,3600/
+     +     IRECLN /3600,3600/
+     +     ITAPDV /6,6/
+*
+      END
+*
+*
+      SUBROUTINE GETTAP(IUNITB,REFTAP,TAPNUM,GENAME,DATE,DETOUT,COM1,
+     +                  COM2,BOOL)
+*...GETTAP
+*.    This subroutine processes the Run Information file, extracting
+*.    the generic name and attributing the additional information to
+*.    the relevant variable names.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      :
+*. CALLED     : TAPELOAD
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : P.A.Eccles
+*. VERSION    :
+*. CREATED    : 26-Oct-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      IMPLICIT NONE
+      CHARACTER*80 LINE,DETOUT,COM1,COM2
+      CHARACTER*54 GENAME
+      CHARACTER*6  TAPNUM,REFTAP
+      CHARACTER    FLAG,MARKER
+      INTEGER      IUNITB,DATE,UWORDS,NOCOM
+      LOGICAL      BOOL
+ 
+************************************************************************
+*
+* VARIABLE DESCRIPTIONS::-
+*
+*        CHARACTER:-
+*             LINE       =  File record
+*             DETOUT     =  Comment on the detectors not working
+*                           when the tape was taken
+*             COM1,COM2  =  User comments on the tapes contents
+*             GENAME     =  Generic tape name
+*             TAPNUM     =  Tape number from the label
+*             REFTAP     =  Tape number being requested
+*             FLAG       =  Symbol of a comment being of type DETOUT
+*             MARKER     =  Tempory store to hold a records first
+*                           character to see if it matches to the FLAG
+*             BOOL       =  Boolian marker for a tapes presence
+*                           within the input file
+*
+*        INTEGER:-
+*             IUNITB     =  Unit number associated with the input file
+*             DATE       =  Tapes creation date
+*             UWORDS     =  Number of comment records following
+*             NOCOM      =  Integer boolian for a comments presence
+*
+*        LOGICAL:-
+*             BOOL       =  Boolian marker for a tapes presence
+*                           within the input file
+*
+************************************************************************
+ 
+* --- Initalise the data names
+      LINE   = ' '
+      DETOUT = ' '
+      COM1   = ' '
+      COM2   = ' '
+      GENAME = ' '
+      TAPNUM = ' '
+      MARKER = ' '
+      FLAG   = '@'
+      UWORDS = 0
+      DATE   = 0
+      NOCOM  = 0
+      BOOL   = .FALSE.
+ 
+* --- Format definitions
+90    FORMAT (A80)
+100   FORMAT (A6,4X,A54,16X)
+110   FORMAT (10X,I1,11X,I6,52X)
+ 
+* --- Main program
+120   CONTINUE
+      READ (IUNITB,FMT = 90,END=150) LINE
+      READ (LINE,FMT = '(A6)') TAPNUM
+      IF (TAPNUM.EQ.REFTAP) THEN
+         BOOL = .TRUE.
+         READ (LINE,FMT = '(10X,A54)') GENAME
+         READ (IUNITB,FMT = 110,END=140) UWORDS, DATE
+         IF (UWORDS.EQ.0) THEN
+            DETOUT = 'No detectors out.'
+            COM1   = 'No comments.'
+            COM2   = ' '
+            GO TO 150
+         ENDIF
+         IF (UWORDS.EQ.1) THEN
+            READ (IUNITB,FMT= 90,END=140) LINE
+            READ (LINE,FMT='(A1)') MARKER
+            IF (MARKER.EQ.FLAG) THEN
+               WRITE (DETOUT,FMT='(A79)') LINE(2:80)
+               COM1 = 'No comments.'
+               COM2 = ' '
+            ELSE
+               IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +         .OR.(LINE(11:14).EQ.'SIMD')) THEN
+                  NOCOM = 1
+                  GO TO 130
+               ELSE
+                  DETOUT = 'No detectors out.'
+                  WRITE (COM1,FMT=90) LINE
+                  COM2   = ' '
+               ENDIF
+            ENDIF
+         ENDIF
+         IF (UWORDS.EQ.2) THEN
+            READ (IUNITB,FMT= 90,END=140) LINE
+            READ (LINE,FMT='(A1)') MARKER
+            IF (MARKER.EQ.FLAG) THEN
+               WRITE (DETOUT,FMT='(A79)') LINE(2:80)
+               READ (IUNITB,FMT=90,END=140) LINE
+               IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +         .OR.(LINE(11:14).EQ.'SIMD')) THEN
+                  NOCOM = 1
+                  GO TO 130
+               ELSE
+                  WRITE (COM1,FMT=90) LINE
+                  COM2 = ' '
+               ENDIF
+            ELSE
+               IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +         .OR.(LINE(11:14).EQ.'SIMD')) THEN
+                  NOCOM = 1
+                  GO TO 130
+               ELSE
+                  DETOUT = 'No detectors out.'
+                  WRITE (COM1,FMT= 90) LINE
+               ENDIF
+               READ (IUNITB,FMT= 90,END=140) LINE
+               IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +         .OR.(LINE(11:14).EQ.'SIMD')) THEN
+                  NOCOM = 1
+                  GO TO 130
+               ELSE
+                  WRITE (COM2,FMT= 90) LINE
+               ENDIF
+            ENDIF
+         ENDIF
+         IF (UWORDS.EQ.3) THEN
+            READ (IUNITB,FMT= 90,END=140) LINE
+            IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +      .OR.(LINE(11:14).EQ.'SIMD')) THEN
+               NOCOM = 1
+               GO TO 130
+            ELSE
+               WRITE (DETOUT,FMT='(A79)') LINE(2:80)
+            ENDIF
+            READ (IUNITB,FMT= 90,END=140) LINE
+            IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +      .OR.(LINE(11:14).EQ.'SIMD')) THEN
+               NOCOM = 1
+               GO TO 130
+            ELSE
+               WRITE (COM1,FMT= 90) LINE
+            ENDIF
+            READ (IUNITB,FMT= 90,END=140) LINE
+            IF ((LINE(11:14).EQ.'LEPD').OR.(LINE(11:14).EQ.'COSM')
+     +      .OR.(LINE(11:14).EQ.'SIMD')) THEN
+               NOCOM = 1
+               GO TO 130
+            ELSE
+               WRITE (COM2,FMT= 90) LINE
+            ENDIF
+         ENDIF
+      ELSE
+         GO TO 120
+      ENDIF
+ 
+* --- Error message when a comment isn't found when UWORDS > 0
+130   CONTINUE
+      IF (NOCOM.EQ.1) PRINT*,' Comment not found when expected tape ',
+     +                       REFTAP
+ 
+* --- Error message when a comment isn't found when UWORDS > 0 at EOF
+140   CONTINUE
+      IF (LINE.EQ.' ') PRINT*,' Comment not found when expected tape ',
+     +                       REFTAP
+ 
+150   CONTINUE
+      END
+*
+*
+      SUBROUTINE HDRTRL(CBUFF,CLABEL,CLABRQ,NRECS,ISUB,BERROR)
+*...HDRTRL
+*.    Subroutine to extract and store the relevant details from either
+*.    of the 2 header labels,HDR1 and HDR2,or either of the 2 trailer
+*.    labels,EOF1 and EOF2.The label itself is supplied as a parameter,
+*.    along with the identifier of the label type expected.If the
+*.    expected label is not discovered then no tape details will be
+*.    extracted and in the case of a HDR1 label,an error message given.
+*.    Note that the HDR1 and EOF1,HDR2 and EOF2 labels should contain
+*.    the same information and this is duplicated in storage for later
+*.    consistancy comparisons.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      :
+*. CALLED     : TAPELOAD
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      INTEGER NRECS,ISUB
+      CHARACTER*80 CBUFF
+      CHARACTER*4 CLABEL,CLABRQ
+      LOGICAL BERROR
+*
+      INTEGER IBLKLN(2),IRECLN(2),ITAPDV(2)
+      INTEGER IVLSQN(2),IDSSQN(2),ICRDAT(2),IBLKCT(2)
+      CHARACTER*17 CDATID(2)
+      CHARACTER*1 CRECFT(2)
+      REAL RRECLN,RBLKLN
+*
+      COMMON /TAPDL1/ CDATID,CRECFT
+      COMMON /TAPDL2/ IBLKLN,IRECLN,ITAPDV,IVLSQN,IDSSQN,ICRDAT,IBLKCT
+*
+*--- If the first header/trailer label is being processed,check for the
+*--- derived and expected label identifiers matching.If so,the approp-
+*--- riate label character positions are read from and stored.Otherwise
+*--- an error is flaged.
+*
+      IF (NRECS.EQ.1) THEN
+*
+         IF (CLABEL.EQ.CLABRQ) THEN
+            CDATID(ISUB) = CBUFF(5:21)
+            READ(CBUFF(28:31),FMT='(I4)') IVLSQN(ISUB)
+            READ(CBUFF(32:35),FMT='(I4)') IDSSQN(ISUB)
+            READ(CBUFF(42:47),FMT='(I6)') ICRDAT(ISUB)
+            READ(CBUFF(55:60),FMT='(I6)') IBLKCT(ISUB)
+         ELSE
+            BERROR = .TRUE.
+         ENDIF
+*
+*--- The same procedure is adopted for the second header/trailer label,
+*--- except that no error is registered for missing labels(the HDR2 and
+*--- EOF2 labels are permitted not to exist).
+*
+      ELSE IF (NRECS.EQ.2.AND.CLABEL.EQ.CLABRQ) THEN
+         CRECFT(ISUB) = CBUFF(5:5)
+         READ(CBUFF(6:10),FMT='(F5.0)') RBLKLN
+         IBLKLN(ISUB) = INT(RBLKLN/4)
+         READ(CBUFF(11:15),FMT='(F5.0)') RRECLN
+         IRECLN(ISUB) = INT(RRECLN/4)
+         READ(CBUFF(16:16),FMT='(I1)') ITAPDV(ISUB)
+      ENDIF
+*
+      END
+*
+*
+      SUBROUTINE CONCAT(CDETOT,CCOM1,CCOM2,COMMNT)
+*...CONCAT
+*.    Subroutine to pack as many characters as possible from 3 comment
+*.    fields of 80 bytes in length,into a single 80 byte FATMEN comment
+*.    field.This involves regarding comment fields 1-3 as having
+*.    descending priority,removing the trailing spaces from each comment
+*.    field and inserting a seperating character string to distinguish
+*.    the 3 original comment fields.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      : IPOINT
+*. CALLED     : TAPELOAD
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      CHARACTER*80 CDETOT,CCOM1,CCOM2,COMMNT
+      INTEGER IPTR1,IPTR2,IPTR3,ICPTR
+*
+*--- Set pointers to the end of the 3 comment fields,by identifying the
+*--- position of the terminating string,'  ',within them.
+*
+      IPTR1 = INDEX(CDETOT,'  ')
+      IPTR2 = INDEX(CCOM1,'  ')
+      IPTR3 = INDEX(CCOM2,'  ')
+*
+      ICPTR = 1
+      COMMNT = ' '
+*
+*--- If the 1st comment field contains a value then store it within the
+*--- packed comment field and set a pointer to it's last character
+*--- position.The function IPOINT is called if the 1st comment fields
+*--- end pointer is set to 0(ie it could be either 79 or 80 chars in
+*--- length),to derive the correct end pointer value.
+*
+      IF (IPTR1.NE.1) THEN
+         IF (IPTR1.EQ.0) IPTR1 = IPOINT(IPTR1,CDETOT)
+         COMMNT(ICPTR:IPTR1-1) = CDETOT(1:IPTR1-1)
+         ICPTR = IPTR1
+      ENDIF
+*
+*--- Repeat testing and storage procedure for 2nd comment field,
+*--- inserting a seperating string into the packed comment field if a
+*--- 1st comment field existed.
+*
+      IF (IPTR2.NE.1.AND.ICPTR.LT.81) THEN
+         IF (IPTR2.EQ.0) IPTR2 = IPOINT(IPTR2,CCOM1)
+         IF (IPTR1.NE.1) COMMNT(ICPTR:ICPTR+2) = ' - '
+         ICPTR = ICPTR + 3
+*
+         IF (IPTR2-1.GT.(81-ICPTR)) THEN
+            COMMNT(ICPTR:80) = CCOM1(1:(81-ICPTR))
+            ICPTR = 81
+         ELSE
+            COMMNT(ICPTR:(ICPTR+IPTR2-2)) = CCOM1(1:IPTR2-1)
+            ICPTR = IPTR2
+*
+*--- Repeat testing and storage procedure for the 3rd comment field but
+*--- only if a 2nd comment field existed.
+*
+            IF (IPTR3.NE.1.AND.ICPTR.LT.81) THEN
+               IF (IPTR2.EQ.0) IPTR3 = IPOINT(IPTR3,CCOM2)
+               COMMNT(ICPTR:ICPTR+2) = ' - '
+               ICPTR = ICPTR + 3
+*
+               IF (IPTR3-1.GT.(81-ICPTR)) THEN
+                  COMMNT(ICPTR:80) = CCOM2(1:(81-ICPTR))
+               ELSE
+                  COMMNT(ICPTR:(ICPTR+IPTR3-2)) = CCOM2(1:IPTR3-1)
+               ENDIF
+*
+            ENDIF
+*
+         ENDIF
+*
+      ENDIF
+*
+      END
+*
+*
+      SUBROUTINE FATDAT(JDATE,IDATE)
+*...FATDAT
+*.    Subroutine to accept a Julian date of the form YYDDD and convert
+*.    it to the more conventional YYMMDD format.The latter format is the
+*.    one expected by the DBPKTM subroutine,used to produce a packed
+*.    date and time value for the Creation Date field of the file
+*.    catalogue.The Julian date format is supplied by the HDR1 label of
+*.    each files header.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      : UCOPY
+*. CALLED     : TAPELOAD
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : J.D.Shiers
+*. VERSION    :
+*. CREATED    :
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      INTEGER NDAYS(12),NLEAP(12)
+      CHARACTER*36 MONTHS
+*
+      DATA MONTHS/'JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC'/
+      DATA NDAYS/00,31,59,90,120,151,181,212,243,273,304,334/
+      DATA NLEAP/00,31,60,91,121,152,182,213,244,274,305,335/
+*
+*--- Seperate and store the year and day components of the Julian date.
+*
+      IYEAR = JDATE / 1000
+      IDAY  = JDATE - (IYEAR * 1000)
+*
+*--- Test for the year being one of the 4 recognised leap years and if
+*--- so,call the subroutine UCOPY to copy the cumulative day totals from
+*--- the leap year 'month' array,into the non-leap year 'month' array.
+*
+      IF (IYEAR .EQ. 84 .OR. IYEAR .EQ. 88 .OR.
+     +    IYEAR .EQ. 92 .OR. IYEAR .EQ. 96) CALL UCOPY(NLEAP,NDAYS,12)
+      IMON = 12
+*
+*--- Loop to identify the month in which the Julian day lies.
+*
+      DO 160 I=1,11
+*
+*--- If the Julian day lies between the current and the next months
+*--- cumulative day limits,then store the current month and calculate
+*--- and store the correct day of the month.
+*
+         IF ( IDAY .GT. NDAYS(I) .AND. IDAY .LE. NDAYS(I+1) ) THEN
+            IMON  = I
+            IDAY  = IDAY - NDAYS(I)
+         ENDIF
+*
+160   CONTINUE
+*
+*--- Assemble and store the calculated components of the conventional
+*--- date.
+*
+      IF ( IMON .EQ. 12) IDAY = IDAY - NDAYS(12)
+      IDATE = IYEAR*10000 + IMON * 100 + IDAY
+      RETURN
+ 
+      END
+*
+*
+      LOGICAL FUNCTION BINTCM(IARRAY,BDIFF)
+*...BINTCM
+*.    Function to compare corresponding integer fields from the HDR1
+*.    and EOF1 labels of a staged tape file.The comparison will only be
+*.    made if the 2 fields both hold non-zero values(ie both labels have
+*.    been supplied and values for both fields supplied).If the above is
+*.    true and the values differ then a flag is set to indicate this.If
+*.    however,the HDR1 field is 0 and the EOF1 field contains a value,
+*.    the value is copied into the HDR1 field,for later insertion into
+*.    the FATMEN file catalogue.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      :
+*. CALLED     : TAPELOAD
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      INTEGER IARRAY(2)
+      LOGICAL BDIFF
+ 
+      BINTCM = BDIFF
+*
+      IF (IARRAY(1).EQ.0) THEN
+         IF (IARRAY(2).NE.0) IARRAY(1) = IARRAY(2)
+      ELSE
+         IF (IARRAY(1).NE.IARRAY(2).AND.IARRAY(2).NE.0) BINTCM = .TRUE.
+      ENDIF
+ 
+      END
+*
+*
+      INTEGER FUNCTION IPOINT(IPTRN,CSTRNG)
+*...IPOINT
+*.    Function to accept a comment character string,which may be a
+*.    maximum of N bytes in length,identify it as being of N or N-1
+*.    bytes in length and set a length pointer accordingly.The pointer
+*.    is set to N+1 in the first instance and N-1 in the second,before
+*.    being returned as the functions value.This function is necessary
+*.    as the string length will register zero,in both of the above cases
+*.    ,when the terminating sting,'  ',is searched for.
+*.
+*. COMMON     :
+*. SEQUENCE   :
+*. CALLS      :
+*. CALLED     : CONCAT
+*.
+*. BANKS L    :
+*. BANKS U    :
+*. BANKS M    :
+*. BANKS D    :
+*.
+*. REPORT CONDITIONS
+*.
+*. AUTHOR     : G.J.Barlow
+*. VERSION    :
+*. CREATED    : 02-Nov-89
+*. LAST MOD   :
+*.
+*. Modification Log.
+*.
+*.**********************************************************************
+*.
+      INTEGER IPTRN
+      CHARACTER*80 CSTRNG
+ 
+      IF (CSTRNG(80:80).EQ.' ') THEN
+         IPOINT = IPTRN - 1
+      ELSE
+         IPOINT = 81
+      ENDIF
+ 
+      END

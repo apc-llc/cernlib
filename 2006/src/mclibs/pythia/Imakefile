@@ -1,0 +1,19 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(pythia6205)
+
+SUBDIRS= code test pythia
+
+TopOfPackage(pythia6205)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(pythia6205,code)
+
+InstallLibrary(pythia6205,$(CERN_LIBDIR))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(pythia)

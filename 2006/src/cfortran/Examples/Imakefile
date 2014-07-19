@@ -1,0 +1,11 @@
+FILES=	chbook-example.c chigz-example.c \ @@\
+        chplot-example.c hbook-cwn.c hbook-cwnc.c \ @@\
+        hbook-ntuple.c minuit-fcn.c minuit-fcn.f minuit-main.c \ @@\
+        pamain.c read_rwntuple.c \ @@\
+	
+
+#ifndef CERNLIB_VAXVMS
+InstallIncludes($(FILES),$(CERN_INCLUDEDIR),cfortran/Examples)
+#else
+InstallIncludes($(FILES),$(CERN_INCLUDEDIR),cfortran.examples)
+#endif

@@ -1,0 +1,2 @@
+      COMMON /ARDAT3/ IWRN(40)
+      SAVE /ARDAT3/

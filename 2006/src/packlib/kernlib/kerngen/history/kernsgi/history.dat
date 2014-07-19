@@ -1,0 +1,27 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:47 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:47  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernsgi.car patch kernsgi
+#if !defined(CERNLIB_KERNSGI)
+
+              KERNLIB ROUTINES PARTICULAR TO THE Silicon Graphics
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KSGI     Pilot-patch selecting the standard KERNLIB for Silicon Graphics
+
+QMSGI     Silicon Graphics machine patch
+
+SGIPROGS  Silicon Graphics utility programs
+
+SGIGS     Silicon Graphics versions of general KERNLIB routines
+
+=====================================================================
+#endif

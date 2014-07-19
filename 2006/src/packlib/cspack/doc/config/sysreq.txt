@@ -1,0 +1,50 @@
+#
+# $Id: sysreq.txt,v 1.2 2005/04/18 15:23:09 mclareni Exp $
+#
+# $Log: sysreq.txt,v $
+# Revision 1.2  2005/04/18 15:23:09  mclareni
+# Mods submitted by Kevin B. McCarty to fix insecure Cernlib uses of /tmp.
+#
+# Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+# Cspack
+#
+#
+#
+#       SHIFT configuration file
+#
+RFIO    NFS_ROOT        /shift          # nfs root path name
+#
+SYSREQ  AF              AF_INET         # Addressing family
+SYSREQ  TYPE            SOCK_STREAM     # Communication type
+SYSREQ  HOST            cerntms         # SYSREQ host name
+SYSREQ  RETRY           yes             # retry flag
+SYSREQ  MAXRETRY        10              # number of retries
+SYSREQ  ALARM           yes             # Operator alarm
+SYSREQ  TRACE           yes             # Trace flag
+#
+MSG     HOST            sun2            # message daemon host name
+MSG     LOGR            /var/log/msgr.log # msgr log file
+MSG     LOGI            /var/log/msgi.log # msgi log file
+#
+NET     shift1          shift1-u        # Use alternate host name
+NET     shd01           shd01-u         # Use alternate host name
+NET     shd02           shd02-u         # Use alternate host name
+NET     shd03           shd03-u         # Use alternate host name
+NET     shd04           shd04-u         # Use alternate host name
+NET     sn201           sn201-u         # Use alternate host name
+#
+DKCTRL      PORT     1500
+DKCTRL      PORT     1501
+DKCTRL      PORT     1502
+DPM      HOST     shift1
+DPM      PORT     1400
+DPM      HOST     shift1
+DPM      PORT     1401
+DPM      HOST     shift1
+DPM      PORT     1402
+DPM      HOST     shd01
+DPM      PORT     1400
+DPM      HOST     shd01
+DPM      PORT     1401
+DPM      HOST     shd01
+DPM      PORT     1402

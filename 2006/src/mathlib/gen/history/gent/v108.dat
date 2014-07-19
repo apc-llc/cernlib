@@ -1,0 +1,13 @@
+*
+* $Id: v108.dat,v 1.1.1.1 1996/04/01 15:01:43 mclareni Exp $
+*
+* $Log: v108.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:43  mclareni
+* Mathlib gen
+*
+*
+C  Deletions:
+C  ----------
+C
+C  D115 deactivated corresponding to deletion of routine from MATHLIB
+C

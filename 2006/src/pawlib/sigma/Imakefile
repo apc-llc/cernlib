@@ -1,0 +1,14 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(libraries)
+
+LIBDIRS= src
+SUBDIRS= $(LIBDIRS) sigma
+
+TopOfPackage(sigma)
+
+SubdirLibraryTarget(sigma,$(LIBDIRS))
+
+InstallIncludeSubdirs(sigma)

@@ -1,0 +1,18 @@
+*
+* $Id: v105.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v105.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.05  910320  8.20
+Add:          P=SYVM   , D=GETARG        Emulation of the Unix function
+              P=SYVM   , D=IARGC         emulation of the Unix function
+              P=SYVM   , D=SYSTEMF       emulation of the Unix function
+              P=SYVM   , D=SLEEPF        emulation of the Unix function
+              P=SYVM   , D=VMBRK         Interactive BREAK from FORTRAN
+ 
+Correct:      P=SYVM   , D=VMSTAK        Make it CMS4-compatible
+              P=SYVM   , D=VMRTNE        Make it CMS4-compatible
+ 

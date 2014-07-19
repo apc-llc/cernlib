@@ -1,0 +1,38 @@
+*
+* $Id: zbform.F,v 1.1.1.1 1996/03/08 12:01:11 mclareni Exp $
+*
+* $Log: zbform.F,v $
+* Revision 1.1.1.1  1996/03/08 12:01:11  mclareni
+* Zbook
+*
+*
+#include "zbook/pilot.h"
+      SUBROUTINE ZBFORM(IZ,SNAME,SFORM)
+*
+* author HG       7/4/84
+*
+*   BOOKS A FORMAT FOR A BANK. THE REFERENCE TO THE FORMAT
+*   IS THROUGH THE BANK NAME. FOR THE FORMAT CONVENTION,
+*   SEE ROUTINE ZECFOR.
+*
+*   INPUT
+*   IZ               STRUCTURE
+*   SNAME            BANK NAME (UP TO 4 CHARACTERS)
+*   SFORM            FORMAT
+*
+      DIMENSION IZ(*)
+      CHARACTER *(*) SFORM,SNAME
+      CHARACTER *4 SNAMEL
+      DIMENSION IBUF(51)
+*
+*--- GET OUTPUT UNIT
+      LOUT=IZ(IZ(1)+4)
+*--- CONVERT NAME TO HOLL.
+      SNAMEL=' '
+      SNAMEL(1:MIN(4,LEN(SNAME)))=SNAME
+      CALL UCTOH(SNAMEL,NAME,4,4)
+*--- CONVERT FORMAT
+      CALL ZECFOR(SFORM,50,NW,IBUF,LOUT)
+*--- PUT FORMAT AWAY
+      CALL ZPTFOR(IZ,NAME,NW,IBUF)
+      END

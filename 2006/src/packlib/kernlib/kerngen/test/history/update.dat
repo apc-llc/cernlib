@@ -1,0 +1,24 @@
+
+              Update record for file MICKY
+
+
+Update  2.71 :  12-June-1995
+----------------------------
+
+Replacing File   MICKY    2.70  940905 19.50
+
+Correct:      TTRIGO: function ATG has been moved from Kernlib
+              to Mathlib, Micky no longer tests this library function
+              (but has a statement-function version in-line for testing
+              the other trig. functions); re-write the tests a bit
+
+              Micky will now exit with a warning status if there
+              have been comparison failures:
+              status = 1 on Unix and IBM, 9 on VAX
+
+New Deck :    EXITRC    for the warning exit
+
+New Patch:    PM434     to test VXINVB, VXINVC
+
+---------------------------------------------------------------------
+

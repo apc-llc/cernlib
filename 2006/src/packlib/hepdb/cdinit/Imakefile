@@ -1,0 +1,4 @@
+SRCS_F=	 cdexpd.F cdfrst.F cdinit.F cdjour.F cdnew.F cdopen.F \ @@\
+	cdpaw.F cdshar.F cdudiv.F cdupdt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

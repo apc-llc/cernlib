@@ -1,0 +1,851 @@
+*
+* $Id: physics.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: physics.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[2] PHYSICS
+
+      COJETS has been originally developed to calculate the structure of
+hadronic events in electron-positron annihilation, with inclusion of multiple
+QCD radiation treated in the Leading Logarithm Approximation (LLA). Its first
+quantitative results were presented at the ECFA-LEP Workshop held in Rome,
+September 1979. Its algorithm for timelike parton showers reproduces analytic
+results within statistically accuracy, once kinematic constraints which are
+neglected in analytic calculations are disregarded (Nucl. Phys. B172 (1980)
+157 and Erratum B178 (1981) 545). A full Monte Carlo simulation program for
+electron-positron annihilation was obtained by integrating the QCD calculation
+with independent jet fragmentation according to the Field-Feynman model (Phys.
+Lett. 95B (1980) 133; Z. Physik C 7 (1980) 61; Comp. Phys. Comm. 24 (1981)
+119). Its comparison with experimental data has allowed to tune up the jet
+fragmentation model and the minimum mass cutoff in the timelike parton shower
+development.
+
+       The development of COJETS has later concentrated on pbar-p and p-p
+collisions. For this sake, an algorithm for the calculation of initial parton
+showers has been set up. It reproduces analytic results for the evolution of
+parton densities within statistically accuracy and includes production of
+heavy quark pairs due to perturbative gluon splitting, with proper treatment
+of the kinematic constraints associated with heavy quark masses (Phys. Lett.
+102B (1981) 341; Comp. Phys. Comm. 25 (1982) 253). The problem of properly
+generating the parton pt, which results from the hard scattering and also acts
+as evolution scale for the initial and final QCD showers, has been solved by
+having the actual event generation preceded by a pretabulation stage. (Nucl.
+Phys. B228 (1983) 381; Comp. Phys. Comm. 32 (1984) 139 and Erratum 34 (1985)
+431). Results from the algorithm have been checked against those of a
+conventional integration program using evolved parton densities, after
+neglectig final QCD radiation and pt effects in initial QCD radiation.
+Drell-Yan production of the intermediate vector bosons W and Z and
+electromagnetic Drell-Yan production of lepton pairs are also included in the
+program, the pt of the intermediate boson being entirely due to the initial
+QCD showers, as it is appropriate in the important region of phase-space
+(Phys. Rev. D31 (1985) 49; Comp. Phys. Comm. 32 (1984) 173 and Erratum 34
+(1985) 437).
+
+      The present file contains the code for simulating pbar-p and p-p
+collisions leading to jet production and Drell-Yan production of W, Z and
+virtual photons, decaying into leptons or jets. The calculation at the parton
+level is complemented by: i) a model for the independent fragmentation of
+parton jets with the Field-Feynman algorithm, extended to include heavy quark
+fragmentation and baryon production; ii) a longitudinal phase-space model for
+the beam jets. Other components of interest are: iii) a calculation of
+multiple QED radiation in leptonic decays of W, Z and Drell-Yan virtual
+photons, with a leading logarithm approximation corrected so as to reproduce
+the O(alpha) approximation for hard emitted photons; iv) a decay model for top
+particles, including multiple QCD and QED radiation effects with proper
+treatment of the phase-space available for radiation.
+
+      Details about the physical assumptions made in the program can be found
+in the quoted references. Here is a summary of them for the various program
+components.
+
+
+
+      1) HARD PARTON SCATTERING
+
+      The two-body matrix elements for the hard parton scattering with light
+constituents and fusion reactions are the standard ones (Combridge et al.,
+Phys. Lett. 70B (1977) 234; Combridge Nucl. Phys. B151 (1979) 429). In
+processes involving initial quarks with heavy flavors, the matrix elements
+have been calculated setting the masses of such quarks to zero. All the matrix
+elements can be found in subroutine DSDT and in the routines called by it, as
+indicated by in-line comment cards.
+
+      The QCD evolution variable, which also appears as argument of the QCD
+running coupling constant multiplying the hard scattering matrix elements, is
+chosen as:
+
+              Q**2 = 2*s*t*u/(s**2+t**2+u**2)
+
+(according to Field, Feynman and Fox), where s, t and u are the Mandelstam
+invariant variables for the parton subprocess. Near the forward and backward
+directions Q**2 approximates pt**2. In fusion processes, t and u in the
+expression are replaced by: tc = t - mq**2, uc = u - mq**2, where mq is the
+heavy quark mass. In this way Q**2 is always larger than mq**2 (it approaches
+this value at large s in the forward and backward directions), and therefore a
+singularity at small pt in the differential cross section is avoided.
+
+      A minimum Q**2 cutoff is imposed, so that the integrated QCD cross
+section represents a small fraction of the total inelastic cross section. If
+the program is run WITH pt generation forcing, this cutoff is practically
+irrelevant. If it is run WITHOUT pt generation forcing, the cutoff determines
+the relative amounts of pure beam jets events and jetty events, according to
+the ensuing ratio between the QCD and the total inelastic cross sections. When
+fusion is forced, there is no Q**2 cutoff if mq is larger than the initial
+evolution scale for the parton densities evolution. By default, the total
+inelastic cross section is calculated by a log(s) fit to pbar-p data at ISR
+and at 900 GeV (Nucl. Phys. B262 (1985) 689; UA5, Z.Physik C 32 (1986) 153).
+
+      Initial (unevolved) partons are given a primordial transverse momentum
+according to a Gaussian distribution with <pt**2> = 0.4 (GeV/c)**2, which is
+found to reproduce, together with the transverse momentum generated in the
+evolution, the transverse momentum data for Drell-Yan pairs (Nucl. Phys. B199
+(1982) 189).
+
+      Event generation, taking into account initial parton evolution, proceeds
+through a "Forward Evolution" algorithm. The "Backward Evolution" algorithm,
+later proposed by Sjostrand, makes adaptations of preexisting event generators
+without initial evolution relatively easy, but it has some drawbacks (R.O.,
+Talk at the XXIIIrd Rencontres de Moriond, Les Arcs, France, March 13-19,
+1988):
+
+i) The algorithm relies on an external parametrization for EVOLVED parton
+densities, with a frozen lambda parameter. Since the parametrization results
+from an inclusive analytic calculation, kinematic constraints associated with
+the generation of heavy quarks are treated crudely, and therefore results of
+flavor excitation calculations can only be qualitative.
+
+ii) Comparisons with ISAJET, which has adopted a backward evolution algorithm,
+have shown that the algorithm is more than an order of magnitude less
+efficient than the forward evolution algorithm at small and medium pt, and
+remains less efficient also when approaching the pt kinematic limit. That is
+due to the extra computing time required for sampling over evolved parton
+densities, which change in shape with Q**2 and are time consuming to
+calculate, and for handling the more complex Sudakhov form factors and parton
+splitting distributions, which contain integrals over the parton density
+parametrization varying with each parton splitting.
+
+      The forward evolution algorithm makes use of a pretabulation which
+requires a relatively small amount of computing time and considerably speeds
+up event generation. After having divided the Q**2 range into fine bins, for
+each initial (i.e. unevolved) two-parton channel i one develops NPS pairs of
+parton showers up to the maximum Q**2. As the showers develop with Q**2, for
+each (Q**2,Q**2+dQ**2) bin one accumulates the quantity:
+
+   T(i,Q**2) = I(i1)*I(i2)*[sum of contributing (d(sigma)/dt)*dt]/NPS
+
+where I(i1) and I(i2) are the integrals over the unevolved parton densities
+entering the two-parton channel i, with a minimum x determined by the minimum
+Q**2 cutoff and the colliding beam energy, the sum is extended to all
+interactions taking place between pairs of partons of the two showers with
+a Q**2 within the bin, d(sigma)/dt is the standard two-parton differential
+cross section with all final channels and both t values defined by Q**2
+included, dt is determined by the width of the Q**2 bin and by the
+subenergy of the two interacting partons. Initial partons are generated
+with a primordial transverse momentum, and the interaction subenergy is
+computed including the transverse momenta of the interacting partons. At
+the same time, for each initial two-parton channel i and each Q**2 bin one
+calculates: i) the mean cross section value S(i,Q**2) of d(sigma)/dQ**2,
+summed over all final channels and both values of t defined by Q**2, for
+varying s and the two-parton combination entering the hard scattering;
+ii) the mean number of parton hard scatterings occurring per pair of parton
+showers, N(i,Q**2), excluding from the mean pairs of parton showers for
+which no hard scattering is generated in the given Q**2 bin.
+
+      The sum of T(i,Q**2) over i and the Q**2 bins gives the total QCD
+cross-section, for the given Q**2 cutoff. Generation of an event starts by
+sampling i and Q**2 over T(i,Q**2)/N(i,Q**2). Then initial partons for the
+channel i are sampled, and their showers are developed up to Q**2. All parton
+pairs from the two showers are considered for initiating a hard scattering. In
+order to decide that, for each (evolved) parton pair one goes through the
+following steps:
+
+      i) verification that the threshold condition is satisfied;
+
+      ii) calculation of d(sigma)/dt for all possible two-parton final states
+and for both values of t defined by Q**2, together with the sum of all these
+values multiplied by the Jacobean dt/dQ**2, S';
+
+      iii) comparison of S' with S(i,Q**2): a) if RS = S'/S(i,Q**2) < 1, the
+hard scattering is accepted with probability RS, and the final state and t
+(within the possible pair of values) are sampled accordig to the corresponding
+d(sigma)/dt values; b) if RS >1, more than one hard scattering is generated
+with the same evolved parton pair by iterating the generation as in a), with
+subtraction of S(i,Q**2) from S' at each iteration.
+
+      If no hard scattering is generated within the pair of parton showers, a
+new pair of parton showers is generated with the same i and Q**2.
+
+      Each pair of parton showers can thus lead to the generation of several
+hard scatterings, because of the multiplicity of evolved parton pairs
+contributing and because of the possibility that for some of them RS > 1. The
+repetition of event generation when RS > 1 would be statistically unsafe if
+the variance of RS were too large. In practice that is not so, since the
+important channels which would potentially lead to high values of RS also
+essentially determine S(i,Q**2). Furthermore, important channels are dominated
+by gluon exchange which implies a d(sigma)/dt asymptotically constant with s.
+A particular situation develops for heavy flavor excitation, where the number
+of contributing parton pairs is especially small, whereas its d(sigma)/dt is
+large. Use of the specific forcing option for it is advised for an accurate
+determination of its contribution.
+
+      Some attention is required by the circumstance that the Jacobean
+dt/dQ**2 develops a square root singularity at threshold, i.e. t = u = -s/2.
+This integrable singularity, which cannot be avoided because of the quadratic
+nature of Q**2, can be easily tamed as any 1/sqrt(x) singularity (without
+change of variable). Truncating f(x) = 1/sqrt(x) at a value F =
+f(xm)*sqrt(N)/4 (i.e. taking min[f(x),F] instead of f(x)), where xm is the
+mean x distributed according to f(x) and N is the number of generations made
+so far, the error committed in calculating the integral of 1/sqrt(x) over the
+singularity by means of a crude Monte Carlo using the truncated f(x) is
+comparable to the statistical error. A similar corrective procedure is applied
+in the program for dt/dQ**2.
+
+      Storage requirements for the two initial parton showers are limited. By
+profiting of the degradation in x as Q**2 evolves, one can make a substantial
+pruning of partons which do not carry enough x to survive the threshold
+condition determined by the final Q**2 value. In addition to that, in the
+process of event generation the internal algorithm develops the showers by
+segments which, after being used up, are pruned away to leave space for other
+segments to develop. That is obtained by developing the shower trees with a
+depth first procedure based on a stack, which allows for easy backtracking to
+the next branch to develop after the current branch has been completely
+explored for possible interactions with the partons of the other shower. In
+order to have that, for each parton of the first shower (with enough x to
+interact at the given Q**2) one must develop a complete second shower.
+
+      Heavy quark production is included in the normal event generation,
+according to the mechanisms of fusion, flavor excitation and gluon
+splitting. The three mechanisms can also be separately forced. At a pt
+small with respect to the heavy quark mass, superimposing the three
+mechanisms leads to multiple counting. At such small pt's one is
+supposed to employ a full O(alphas**3) approximation, which is not yet
+available in exclusive form (the results of Nason et al. (1987) cover
+only the total and single inclusive cross section). A reasonable
+substitute for it is the O(alphas**2) approximation represented by the
+fusion process (to which radiation effects are added). It should be
+noted, though, that at small pt heavy quark fragmentation according to
+the Field-Feynman model is inadequate to describe production of heavy
+flavor particles at large xf.
+
+
+
+      2) DRELL-YAN
+
+      The production and decay of the intermediate vector bosons W and Z
+take full account of effects associated with the Breit-Wigner distribution
+of the W/Z mass. Besides this exact treatment, referred to as OPTION 1, the
+program also contains the old procedure, referred to as OPTION 0, in which
+production is treated in the narrow width approximation, with finite width
+effects simulated in the decay. Option 0 is about 3 times more efficient
+than option 1, but less precise, of course. E.g., it typically overestimates
+the cross section by about 10%. Option 1 is required for a quantitative
+discussion of the W/Z decay mass distribution, and is necessary when
+calculating top decay modes of W and Z for values of the top quark mass
+such that the decay threshold becomes close to the intermediate boson mass.
+The last point is especially relevant for W, whose contribution to the top
+quark yield dominates that from QCD t-tbar production also for top mass
+values close to the W mass.
+
+OPTION 1 (full Breit-Wigner dependence)
+---------------------------------------
+      For the production of the intermediate vector bosons W and Z, the QCD
+evolution variable Q**2 is identified with the square of the physical W/Z
+mass.
+
+      The transverse momentum of the vector boson is determined by the
+transverse momenta of the interacting quarks, resulting from the primordial
+transverse momenta of the initial (unevolved) partons and those generated in
+the parton showers.
+
+      The masses of W and Z are set to their standard model values, by
+default. Specifically:
+
+      M(W) = sqrt(PI*alpha/(XW*GF*sqrt(2)*(1-dr))
+
+      M(Z) = M(W)/cos(thws)
+
+where alpha = 1/137.03604, GF = 1.166372E-5 GeV**(-2), XW = sin(thws)**2,
+thws being the Weinberg-Salam angle, and dr represents Sirlin's radiative
+correction. dr depends on the value of the top mass mt:
+
+dr = 0.0709 - (alpha/(4*PI))*3*(1-XW)/(4*XW**2)*(mt**2-35.**2)/M(W)**2
+
+(for mt > 35. GeV; Hollik DESY 88-188).
+
+      The widths are calculated as:
+
+      Gamma(W) = GF*(sqrt(2)/PI)*M(W)**3
+
+      Gamma(Z) = GF*(sqrt(2)/PI)*M(Z)**3*[1-2*XW+(8/3)*XW**2]
+
+They are correspondingly reduced for the suppressions of the partial widths
+of decay modes involving top quarks, due to phase-space effects (see below).
+
+      The cross section is calculated during event generation. Pairs of
+initial parton showers are developed up to Q**2 = M(W/Z)**2, and
+contributions from interacting quark pairs generated in the showers are
+collected with probability
+
+P = [sigma(q+qbar --> W/Z --> f-fbar) of current q+qbar pair]
+            /[maximum sigma(q+qbar --> W/Z --> f-fbar)]
+
+and provided that the cms energy of q+qbar is above a threshold WZTHRS
+fixed by the user, which defaults to WZTHRS = M(W/Z)-4.*Gamma(W/Z). In top
+decay modes, WZTHRS is taken as the maximum between the input or default
+value and mt+mb+1 for W --> t + bbar, 2*mt+1 for Z --> t + tbar, where mb
+and mt are the bottom and top quark masses, respectively. Collection of the
+cross-section contribution also starts generation of an event. The cross
+section for W/Z --> f-fbar is then calculated at the end of event
+generation as:
+
+sigma(W/Z --> f-fbar) = I(all partons)**2
+                       *[maximum sigma(q+qbar --> W/Z --> f-fbar)]
+                       *[number of accepted contributions]
+                       /[number of generated pairs of parton showers]
+
+where I(all partons) is the integral over all (unevolved) parton densities,
+with a minimum x defined by M(W/Z) and the colliding beam energy.
+
+      For W, sigma(q+qbar --> W --> f-fbar) in millibarn is given by:
+
+sigma(q+qbar --> W --> f-fbar) = Kw*Ki*Kf
+                                *s/[(s-M(W)**2)**2+(M(W)*Gamma(W))**2]
+
+where:
+
+s  = cms energy square of the q+qbar pair
+
+Kw = PI*alpha**2/(36*XW**2)*(.19733)**2*10
+
+Ki = cos(thcabibbo)**2     for Cabibbo allowed initial state couplings
+     sin(thcabibbo)**2     for Cabibbo suppressed initial state couplings
+
+Kf = 1     for leptonic final states
+     3     for quark final states except t + bbar
+     3*[1-(Rt+Rb)/2-(Rt-Rb)**2/2]*sqrt[1-2*(Rt+Rb)+(Rt-Rb)**2]     for W -->
+           t + bbar with Rb = (mb/M(W))**2, Rt = (mt/M(W))**2
+
+Cabibbo suppressed decays of W are neglected.
+
+      For Z, sigma(q+qbar --> Z --> f-fbar) in millibarn is given by:
+
+sigma(q+qbar --> Z --> f-fbar) = Kz*Kf*sqrt(1-R)
+                                *[(2+R)*(K1/s + K2*(s-M(Z)**2)/DEN)
+                                  +(K3+R*K4)*s/DEN]
+
+where:
+
+s  = cms energy square of the q+qbar pair
+
+R  = 4*(mass(final fermion)/M(Z))**2 ; mass(final fermion) is always set to
+           zero except for top quarks
+
+DEN = [(s-M(Z)**2)**2+(M(Z)*Gamma(Z))**2]
+
+Kz = PI*alpha**2*(2/9)*(.19733)**2*10
+
+Kf = 1     for leptonic final states
+     3     for quark final states
+
+K1 = Qi**2*Qf**2
+
+K2 = -2.*Qi*Vi*Qf*Vf
+
+K3 = 2.*(Vi**2+Axi**2)*(Vf**2+Axf**2)
+
+K4 = (Vi**2+Axi**2)*(Vf**2-2.*Axf**2)
+
+where i and f refer to the initial and final channels, respectively, and
+
+Q  = electric charge of the lepton/quark in units of the electric charge
+     of the electron
+
+V  = A/sqrt[XW*(1-XW)]
+
+Ax = B/sqrt[XW*(1-XW)]
+
+with A and B defined by
+
+A = -(2/3)*XW+0.25,  B =  0.25        for charge +2/3 quarks
+
+A =  (1/3)*XW-0.25,  B = -0.25        for charge -1/3 quarks
+
+A =  XW-0.25      ,  B = -0.25        for charged leptons
+
+A =  0.25         ,  B =  0.25        for neutrinos
+
+      The polar angle th distribution between q and f in the cms of the two
+body process q + qbar --> W/Z --> f + fbar, where f is either a quark or a
+negative lepton or a neutrino, is generated as follows.
+
+      For W:
+
+dN/dcos(th) = [Ef + P*cos(th)]*[Efbar + P*cos(th)]
+
+where Ef and Efbar are the cms energies of f and fbar, respectively, and P
+is their common cms momentum.
+
+      For Z:
+
+dN/dcos(th) = C1 + C2*cos(th) + C3*cos(th)**2
+
+where
+
+C1 = K1*(1+R) + K2*(1+R)*FS1 + (K5 + R*K6)*FS2
+
+C2 = sqrt(1-R)*(K7*FS1 + K8*FS2)
+
+C3 = (1-R)*(K1 + K2*FS1 + K5*FS2)
+
+with
+
+FS1 = s*(s-M(Z)**2)/DEN
+
+FS2 = s**2/DEN
+
+K5 = K3/2
+
+K6 = (Vi**2+Axi**2)*(Vf**2-Axf**2)
+
+K7 = -4.*Qi*Axi*Qf*Axf
+
+K8 = 8.*Vi*Axi*Vf*Axf
+
+and the same notations as above.
+
+      For leptonic decay channels, multiple QED radiation of photons is
+calculated with a leading logarithm approximation, corrected so as to
+reproduce the O(alpha) approximation for hard photon emission (Nucl. Phys.
+B266 (1986) 633; Comp. Phys. Comm. 39 (1986) 127). For Z, the global angular
+distribution of the final state has been changed to account for Breit-Wigner
+dependence effects. Denoting by (phir1,thr,phir2) the Euler angles of the
+rotation performed on the final state after it is generated, their
+distribution is determined by
+
+dN/dphir1/dcos(thr)/dphir2 = (C1-C2/2)*[(Pm-Pm3)**2 + (Pp+Pp3)**2]
+                            +(C1+C2/2)*[(Pm+Pm3)**2 + (Pp-Pp3)**2]
+
+where C1 and C2 are defined above (R=0), Pm and Pp are the momenta of the
+negative and positive leptons, respectively, Pm3 and Pp3 are their
+corresponding components along the direction of the incoming quark as
+determined by the rotation (phir1,thr,phir2).
+
+      For leptonic decay channels, the straight O(alpha) approximation to
+calculate single QED radiation is also available, as an option (with
+routines developed by Berends and Kleiss, Z. Physik C27 (1985), 365).
+Generation of the Z decay angular distribution, however, neglects the
+effects of Z - GAMMA interference.
+
+      For decay channels involving quark-antiquark pairs, quarks are first
+developed into QCD showers and the final partons are then fragmented
+according to the Field-Feynman model. A correction procedure, involving
+separate Lorentz boosts for the systems of particles originated by the
+primary quark and antiquark, ensures that proper energy-momentum
+conservation is satisfied in the W/Z decay.
+
+      The program also calculates the production of the charged lepton pair
+continuum by the Drell-Yan mechanism within an invariant mass interval
+for the lepton pairs chosen by the user. The QCD evolution scale is set at a
+value corresponding to the peak value of the lepton pair cross section.
+Therefore the mass interval should not be chosen too large (that, on the
+other hand, would also be impractical for accumulating adequate statistics).
+Apart from such kinematic changes, the calculation proceeds as in the case
+of Z production with selection of a charged lepton decay channel.
+
+OPTION 0 (production in the narrow width approximation)
+-------------------------------------------------------
+      The delta function, fixing the subenergy of the interacting quark pair
+to the vector boson mass M, is replaced by a rectangular function, which is
+zero outside the interval (M**2-dM**2/2,M**2+dM**2/2) and equal to 1/dM**2
+inside it, so that its integral in M**2 is one (currently, dM/M = 0.05). The
+cross section is calculated during event generation. Pairs of initial parton
+showers are developed up to Q**2 = M**2, and contributions from interacting
+quark pairs generated in the showers are collected if their subenergies falla
+within the dM interval, so that one has:
+
+sigma(W/Z) = I(all partons)**2
+            *sigma(q+qbar --> W/Z)
+            /dM**2
+            *[number of accepted contributions]
+            /[number of generated pairs of parton showers]
+
+where I(all partons) is the integral over all (unevolved) parton densities,
+with a minimum x defined by M and the colliding beam energy, and
+sigma(q+qbar --> W/Z) in millibarn is given by:
+
+sigma(q+qbar --> W) = K*cos(thcabibbo)**2     for Cabibbo allowed couplings
+
+                    = K*sin(thcabibbo)**2     for Cabibbo suppressed couplings
+
+sigma(q+qbar --> Z) = 2*K*[0.25-(2/3)*XW+(8/9)*XW**2]   for charge +2/3 quarks
+
+                    = 2*K*[0.25-(1/3)*XW+(2/9)*XW**2]   for charge -1/3 quarks
+
+where K = GF*PI*(sqrt(2)/3)*[M(W/Z)*(1-dr)]**2*(.19733)**2*10.
+
+      Branching ratios for W and Z decays into pairs of leptons and quarks and
+decay angular distributions are as with option 1, but with kinematics frozen
+at the W/Z mass. Final decay states are generated with a Breit-Wigner
+distribution in invariant mass with width given by the Weiberg-Salam model
+(see above). The distribution is cut at masses differing from the W/Z mass
+by more than 4 times the width.
+
+      With option 0, production of the charged lepton pair continuum by the
+Drell-Yan mechanism is calculated without Z-GAMMA interference. Event
+generation occurs within the invariant mass interval for the virtual photon
+specified by the user. The QCD evolution scale is set at a value corresponding
+to the lower limit of the mass interval. The parton level cross section in
+millibarn is calculated according to the standard QED expression:
+
+dsigma(q + qbar --> virtual gamma --> l- + l+)/dM**2 =
+
+                            (4/3)*PI*alpha**2*eq**2/(3*M**2)*(.19733)**2*10
+
+where eq = 2/3 for charge +2/3 quarks and 1/3 for charge -1/3 quarks. The
+polar angle th distribution of the decay leptons in their cms is
+
+dN/dcos(th) = (1+cos(th)**2)
+
+
+
+      3) TIMELIKE PARTON SHOWERS
+
+      The only dynamical input needed for calculating the shower development
+is the LLA elementary parton splitting probability:
+
+dPE = alphas(Q**2)/(2*PI)*(dQ**2/Q**2)*integral(zm,zx,P(z),dz)
+
+where Q**2 is the evolution variable, representing the square of the off-shell
+mass of the parent parton, alphas(Q**2)=(b*ln(Q**2/lambda**2)) is the running
+coupling constant with b=(33-NF)/(12*PI) and NF=number of flavors, z is the
+fraction of the parent E+PL (energy + longitudinal momentum along the
+direction of the primary parton in the shower) carried by one of the secondary
+partons, zm and zx are the lower and upper limits, respectively, for the
+integral in z over the standard Altarelli-Parisi splitting function P(z)
+applying to the specific branching process (q --> q + g, g --> g + g, g --> q
++QBAR)
+that the pt of secondary partons with respect to the parent satisfies
+
+       pt**2 = z*(1-z)*[Q**2-q1**2/z-q2**2/(1-z)] > or = 0
+
+where q1**2 and q2**2 are the square masses of the secondaries (z
+corresponding to the fraction carried by the first secondary).
+
+      The probability that an off-shell parton with an initial Q1**2 remains
+unsplit down to a Q2**2, is given by the Sudakhov form factor
+
+      S(Q1**2,Q2**2) = exp{-integral(Q2**2,Q1**2,dPE/dQ**2,dQ**2)
+
+-dS/dQ2**2 gives the probability of splitting between Q2**2 and Q2**2+dQ2**2.
+
+      The parton shower is then developed as a conventional Markovian
+branching process (unitarity taking automatically care of virtual
+corrections). The shower stops when parton masses reach the minimum cutoff
+value. At each splitting, z is generated according to the relevant P(z)
+function. dPE is calculated setting q1**2 and q2**2 to their cutoff values.
+After z has been generated, the masses of the secondaries are generated
+starting from the maximum values defined by the pt condition. From them the
+value of pt is determined.
+
+      The parton mass cutoff has been set at 3 GeV, by default, from fits
+to electron-positron annihilation data over a wide energy range (also,
+6 GeV is the energy at which two jet phenomena start to show up in the SPEAR
+data). For heavy quarks, it is set to the value of the heavy quark mass
++0
+otherwise it is left to the light parton value. For the gluon splitting
+contribution to charm quark production, in order to avoid suppressing
+the near threshold region one should then set the light cutoff to a value
+lower than Mq + 0.5 GeV.
+
+      The maximum square mass (virtuality) of partons initiating the two final
+parton showers in a hard scattering has been set to (3/4)*Q**2, where Q**2 is
+the Field-Feynman-Fox variable for the scattering (3*Q**2 = s at the Q**2
+threshold). The virtuality of timelike partons emitted in the initial showers
+is determined by the kinematic bounds applying to them.
+
+      The Sudakhov form factors for the various parton species are calculated
+once for all and tabulated (it is a one variable tabulation). Alternatively,
+one can set zm and zx at some fixed, extreme values so that the Sudakhov can
+be calculated analytically. One then corrects by rejecting generated
+branchings which do not comply with the kinematic bounds. This procedure,
+though, is rather inefficient because of the infrared singularities in z.
+
+      Imposition of angular ordering, resulting from coherence effects, has
+been considered for inclusion in the program. It turns out, however, that the
+ensuing suppression of soft partons is quantitatively irrelevant for the
+energy flow. The effects on the parton multiplicity, not weighted by energy,
+are appreciable but cannot be distinguished from those due to an increase of
+the (theoretically arbitrary) parton mass cutoff (Z. Physik C 30 (1986) 257).
+Collins and Gottschalk (1986 Snowmass Proceedings, p. 303) have argued that
+the two effects can be sorted out by looking at the evolution over a very
+large Q range, but they neglect to consider the ambiguity in the choice of the
+initial parton virtuality. One should also note that angular ordering is not
+Lorentz invariant. In conclusion, no angular ordering on partons has been
+imposed in the program.
+
+
+
+      4) INITIAL PARTON SHOWERS
+
+      Spacelike parton showers are calculated by an algorithm which reproduces
+the inclusive results obtainable from the Altarelli-Parisi evolution equations
+within statistically accuracy. The algorithm is formally the same as for
+timelike parton showers, with modifications required by the different
+kinematic regime. In a parton splitting the Q**2 of the parent and that of one
+of the secondaries are negative (i.e. spacelike), whereas Q**2 is positive for
+the other secondary (timelike). (The further evolution of timelike secondaries
+is taken care of by the timelike shower algorithm.) The evolution variable
+Q**2 is thus negative and increases in absolute value from some low Q0**2, at
+which the input, unevolved parton densities have been experimentally
+determined, to the value set by the hard parton subprocess. By identifying
+Q**2 with the actual square mass of a parton and z with the E+PL fraction, one
+still gets the kinematic bounds from the pt condition, formally identical to
+that seen for timelike showers. Now the z of the spacelike secondary can reach
+zero, as far as kinematics at the local branching is concerned. An effective
+lower bound for z comes only from the threshold condition for the hard
+subprocess. Another new feature is that kinematic bounds from the pt condition
+no longer require that the Q**2 of the spacelike secondary be larger in
+absolute value than that of the parent. That is the so called lack of strong
+ordering in spacelike parton showers. In other words, the standard
+calculational scheme with a monotonically rising Q**2 does not reflect the
+actually less ordered structure of the underlying Feynman diagrams. This
+difference may be of limited relevance for inclusive calculations, but cannot
+be forgotten when using the calculation with exclusive kinematics. The
+treatment of exclusive kinematics is therefore ambiguous. Here are given
+details about how kinematics and kinematic bounds have been treated.
+
+      z is generated with a lower cutoff determined by the threshold condition
+for the hard subprocess.
+
+      The pt of parton secondaries in a branching with respect to their parent
+is calculated as
+
+      pt**2 = z*(1-z)*|Q**2|
+
+where Q**2 is the value of the evolution variable for the parent.
+
+      The kinematic parameters of final spacelike partons are obtained by
+setting their masses to zero. Thus for them
+
+      E-PL = PT**2/(E+PL)
+
+where PT is the transverse momentum with respect to the jet axis. Backward
+moving spacelike partons are not considered for interaction.
+
+      From the pt condition, the virtuality of timelike secondaries is set to
+
+      max(mt**2) = (1-z)*[Q**2-QS**2/z]
+
+where z refers to the spacelike secondary, Q**2 and QS**2 are the (negative)
+values of the evolution variable for the parent and the spacelike secondary,
+respectively. The actual mass mt of the timelike secondary is set by the
+timelike evolution process. For gluon splitting into a heavy quark-antiquark
+pair, the requirement that the right hand side be larger than mh**2, mh being
+the heavy quark mass, represents a threshold condition. If it is not
+satisfied, the splitting is rejected and evolution goes on. An important
+effect of this condition is that the timelike heavy quark carries a  larger
+E+PL fraction than the spacelike partner, on average.
+
+      The input for the unevolved parton densities comes from parametrizations
+obtained from fits to experimental data. By default, the parametrization of
+Eichten et al., set 1, is used. Also available are the parametrization of
+Eichten et al., set 2, and a parametrization obtained by the NA3 collaboration
+from a fit to their Drell-Yan data.
+
+
+
+      5) PARTON JET FRAGMENTATION
+
+      Quarks and gluons are fragmented into hadrons independently, according
+to the Field-Feynman fragmentation model extended to include heavy quarks and
+baryons. Gluons are fragmented as light quarks of random flavor, but with
+separate parameters controlling z and pt generation. The basic algorithm is
+corrected, so as to insure generation of forward moving particles only and
+to have exact energy conservation.
+
+      Starting with an initial quark or diquark, a quark-antiquark or
+diquark-antidiquark pair is generated. One of its members recombines with the
+original quark/diquark to form a meson or a baryon, and the left over one is
+used to iterate the process. With the current defaults, the probability of
+generating a diquark-antidiquark pair is 0.10. Quark flavors are generated
+with relative probabilities
+
+      u : d : s = 0.40 : 0.40 : 0.20
+
+The hadron resulting from the quark recombination carries a fraction z of the
+E+PL of the parent quark/diquark, according to a given distribution f(z)dz.
+Its transverse momentum results from the vector sum of the transversa momenta
+of the recombination quarks. The two members of the quark-antiquark or
+diquark-antidiquark pair are generated with transverse momenta with respect to
+the parent balancing each other and with a Gaussian distribution
+exp(-pt**2/sigma**2). Sigma can have different values for quark and gluon
+jets. At present, sigma = 0.6 GeV for both quark and gluon jets. For a
+light quark/diquark parent
+
+      f(z) dz = (1-a+3*a*(1-z)**2) dz, a = 0.77
+
+The parameter a can have different values for quark and gluon jets. At
+present, a = 0.77 for both quark and gluon jets. For a heavy quark/diquark
+parent, the form of Peterson et al. is adopted
+
+      f(z) dz = 1/(z*(1-1/z-epsilon/(1-z))**2) dz
+
+with epsilon = 0.25 for charm quarks, epsilon = 0.001 for bottom and top
+quarks.
+
+      As an option, the pt of hadrons can be generated with a Gaussian
+distribution and <pt**2> given by the seagull expression of Biddulph and
+Thompson (Comp. Phys. Comm., in press)
+
+      <pt**2> = sigma**2*[2*F*x*(1-x)/(1-x/2)*W/max(Ejet,Em)]
+
+where W is the E+PL of the parent quark/diquark, x is the fraction of W with
+respect to the E+PL of the jet initiating parton, Ejet is the total jet
+energy, F and Em are constants: F = 2, Em = 34 GeV.
+
+
+
+      6) BEAM JETS
+
+      The energy and momentum left over by the global hard subprocess,
+including fragmentation of parton jets, are converted into small pt hadrons
+according to a longitudinal phase-space model including leading baryon
+effects. The model has been constrained as much as possible using small pt
+data from ISR and CERN pbar-p collider experiments (UA1 and UA5). A comparison
+made by the UA1 collaboration with their data at total transverse energy Et
+higher than 200 GeV (Z. Physik C36 (1987) 33) shows that the model adequately
+describes the underlying plateau in jet profiles and its evolution with Et, as
+well as other features of high Et data for which its contribution is relevant.
+
+      Leading baryons are generated with a longitudinal distribution
+exp(-0.7*xf), and a pt distribution exp(-pt**2/0.15), as indicated by ISR
+data.
+
+      Remaining hadrons are generated with a multiplicity distribution
+following the deGroot KNO parametrization. Particle ratios are fixed according
+to the UA5 data
+
+  PI+&PI- : PI0 : ETA : K+&K- : K0&AK0 : P&AP : N&AN : L&AL : S+&AS-&S-&AS+ =
+
+  20.2    :10.1 : 3.5 : 2.5   : 2.7    : 1.5  : 1.5  : 0.5  : 0.25
+
+Particles are generated with a uniform rapidity distribution and a pt
+distribution exp[-c*sqrt(pt**2+m**2)], where m is the particle mass and c
+increases with multiplicity, so as to reproduce the rise of <pt> with
+charged multiplicity observed by UA1.
+
+
+
+      7) PARTICLE DECAYS
+
+      Particle decays are determined by the particle decay table, which is
+taken from ISAJET 6.00 (see [16]). Decay modes of antiparticles are taken
+as the charge conjugate decay modes of the corresponding particles.
+
+      Unless stated otherwise, the distribution of decay products is given
+by phase space.
+
+      Three-body semileptonic decays of heavy flavor particles are treated
+with a V-A matrix element:
+
+      |M|**2 = (PP,P2)*(P1,P3)
+
+where ( , ) indicates a scalar product between 4-momenta, PP is the 4-momentum
+of the decaying hadron, P3 that of the final hadron, and if the decaying
+particle contains a heavy quark with charge +2/3
+
+P1 = 4-momentum of the neutrino
+
+P2 = 4-momentum of the positive lepton
+
+whereas, if it contains a heavy quark with charge -1/3
+
+P1 = 4-momentum of the negative lepton
+
+P2 = 4-momentum of the antineutrino
+
+In addition, W propagator effects are included.
+
+      Similar treatment receives the decay tau -- > charged lepton + neutrinos
+(P1 corresponding to the charged lepton).
+
+      Decays of omega and phi into three pions include the matrix element
+
+      |M|**2 = |P+ X P-|**2
+
+where P+ and P- are the 3-momenta of the two charged pions in the cms, and
+X denotes the vector product.
+
+      Dalitz decays of pi0 and eta obey the Kroll-Wada distribution.
+
+      For top mesons, semileptonic decays are treated as two leptons + quark
+decays and non-leptonic decays as three quark decays. For top baryons, one
+quark is replaced by a diquark. The appropriate V-A matrix element and the W
+propagator are included. Quarks are then QCD evolved, and the corresponding
+parton showers fragmented into jets. Attention is paid to setting the
+appropriate initial scales for parton evolution, which gauge the phase space
+available for radiation. The virtual W mass and the mass of the remaining
+(bottom) jet are sampled according to: i) the W propagator distribution for
+the W mass, ii) the mass distribution resulting from QCD evolution for the
+jet, iii) the V-A matrix element, iv) the two body, W + jet, phase space. The
+virtual W is decayed, similarly to a real W, with its primary decay products
+correlated in direction to the remaining jet by the V-A matrix element. The
+decay model is appropriate for any top quark mass, below or above the W vector
+boson mass. QED multiple radiative effects for the charged lepton from
+the virtual W decay are included, with a LLA treatment. The Born
+approximation for QCD and QED exactly reproduces the analytic results
+of Jezabek and Kuehn, MPI-PAE/PTh 37/88, when fragmentation is disregarded.
+Differences between the O(alphas) results of these authors and the QCD
+LLA treatment in the program are discussed in the University of Bologna
+report DFUB 89-2, which also presents results for the QED radiation
+effects on the spectrum of the W decay charged lepton.
+
+      Optionally, particle decay modes can be defined without specifying all
+particle secondaries, leaving to a decay model (by Sjostrand) the task
+of supplementing the missing information. That is meant for handling groups of
+decay modes for which insufficient experimental information is available. That
+can be done by placing among the secondaries one or two quark-antiquark
+or quark-diquark pairs. For instance, the electron semileptonic decay of a
+pseudoscalar bottom meson SB, made of a st-bb quark-antiquark pair can be
+specified as
+
+      SB --> E+ + NUE + st + cb
+
+A non-leptonic decay of the same particle can be specified as
+
+      SB --> up + db + st + cb
+
+Correspondingly, for a spin 1/2 baryon like DUB, made of a dn-up-bt triple of
+quarks, one may have
+
+      DUB --> E- + ANUE + dn-up + ch
+
+or
+
+      DUB --> dn + ub + dn-up + ch
+
+      The decay model picks up the input from the decay table and
+generates a number of quark-antiquark pairs, so that by recombination a given
+number of hadrons is generated. For semileptonic decays the total number of
+decay particles, n, is set equal to 3. Otherwise n is distributed according
+to
+
+                    F(n)=N*exp((n-<n>)**2/(2*C))
+
+                    <n>=N0/2+C, n.GE.N0, n.GE.2, n.LE.10,
+
+                    N0=N(particles)+N(quark/diquark pairs)
+
+                    C=CND1+LOG((decaying particle mass)/CND2)
+
+                    CND1 = 1.8, CND2 = 0.8
+
+which comes from a fit to charged multiplicities in charm meson decays.
+Light quark flavors are generated with the same probabilities as in jet
+fragmentation.
+
+
+

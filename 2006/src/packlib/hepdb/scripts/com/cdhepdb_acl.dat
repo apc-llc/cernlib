@@ -1,0 +1,27 @@
+*
+* $Id: cdhepdb_acl.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdhepdb_acl.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDHEPDB_ACL.COM
+$ !
+$ ! Set ACL on [.TODO] and [.TOHEPDB] directories of server 'p1' so that
+$ ! gateway process can transfer updates.
+$ !
+$   if p1 .eqs. "" then exit
+$   p2 = "CDHEPDB"
+$ !
+$   set acl /object_type=file DISK$MF:['p1']TODO.DIR -
+/acl=(IDENTIFIER='p2',ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']TODO.DIR -
+/acl=(IDENTIFIER='p2',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$ !
+$   set acl /object_type=file DISK$MF:['p1']TOHEPDB.DIR -
+/acl=(IDENTIFIER='p2',ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']TOHEPDB.DIR -
+/acl=(IDENTIFIER='p2',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+#endif

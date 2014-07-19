@@ -1,0 +1,188 @@
+
+C **********************************************************************
+
+      SUBROUTINE LMSIMP
+
+C...This is the MINUIT routine SIMPLEX.
+CC        PERFORMS A MINIMIZATION USING THE SIMPLEX METHOD OF NELDER
+CC        AND MEAD (REF. -- COMP. J. 7,308 (1965)).
+      COMMON /LMINUI/ XKIN(4),UKIN(4),WKIN(4),AIN(4),BIN(4),
+     &MAXFIN,RELUP,RELERR,RELER2,FCNMAX
+      COMMON /LPFLAG/ LST3
+      COMMON
+     1/LMMINE/ ERP(30)  ,ERN(30)
+     2/LMPARI/ X(15)    ,XT(15)   ,DIRIN(15) ,MAXINT     ,NPAR
+     3/LMPARE/ U(30)              ,WERR(30)  ,MAXEXT     ,NU
+     4/LMLIMI/ ALIM(30) ,BLIM(30) ,LCODE(30) ,LCORSP(30) ,LIMSET
+     5/LMVARI/ V(15,15)
+     7/LMFIX / IPFIX(15),XS(15)   ,XTS(15)   ,DIRINS(15) ,NPFIX
+     7/LMFIX2/ GRDS(15) ,G2S(15)  ,GSTEPS(15),ABERFS(15)
+     C/LMCASC/ Y(16)    ,JH       ,JL
+     F/LMDERI/ GIN(30)  ,GRD(15)  ,G2(15)    ,GSTEP(15)  ,ABERF(15)
+     G/LMSIMV/ P(15,16) ,PSTAR(15),PSTST(15) ,PBAR(15)   ,PRHO(15)
+     J/LMVART/ VT(15,15)
+      COMMON
+     6/LMUNIT/ ISYSRD   ,ISYSWR   ,ISYSPU
+     8/LMTITL/ TITLE(13),DATE(2)  ,ISW(7)    ,NBLOCK
+     9/LMCONV/ EPSI     ,APSI     ,VTEST     ,NSTEPQ     ,NFCN ,NFCNMX
+     A/LMCARD/ CWORD    ,CWORD2   ,CWORD3    ,WORD7(7)
+     B/LMMINI/ AMIN     ,UP       ,NEWMIN    ,ITAUR      ,SIGMA,EPSMAC
+
+      DATA ALPHA,BETA,GAMMA,RHOMIN,RHOMAX / 1.0, 0.5, 2.0, 4.0, 8.0/
+      IF (NPAR .LE. 0)  RETURN
+      NPFN=NFCN
+      NPARP1=NPAR+1
+      RHO1 = 1.0 + ALPHA
+      RHO2 = RHO1 + ALPHA*GAMMA
+      WG = 1.0/FLOAT(NPAR)
+      IFLAG=4
+      IF(LST3.GE.5) WRITE(ISYSWR,100) EPSI
+      DO 2 I= 1, NPAR
+      IF (ISW(2) .GE. 1)  DIRIN(I) = SQRT(V(I,I)*UP)
+      IF (ABS(DIRIN(I)) .LT. 1.0E-10*ABS(X(I))) DIRIN(I)=1.0E-8*X(I)
+      IF(ITAUR.LT. 1)  V(I,I) =    DIRIN(I)**2/UP
+    2 CONTINUE
+      IF (ITAUR .LT. 1)  ISW(2) = 1
+C**       CHOOSE THE INITIAL SIMPLEX USING SINGLE-PARAMETER SEARCHES
+    1 CONTINUE
+      YNPP1 = AMIN
+      JL = NPARP1
+      Y(NPARP1) = AMIN
+      ABSMIN = AMIN
+      DO 10 I= 1, NPAR
+      AMING = AMIN
+      PBAR(I) = X(I)
+      BESTX = X(I)
+      KG = 0
+      NS = 0
+      NF = 0
+    4 X(I) = BESTX + DIRIN(I)
+      CALL LMINTO(X)
+      CALL LSIGMX(NPAR,GIN, F, U, 4)
+      NFCN = NFCN + 1
+      IF (F .LE. AMING)  GO TO 6
+C         FAILURE
+      IF (KG .EQ. 1)  GO TO 8
+      KG = -1
+      NF = NF + 1
+      DIRIN(I) = DIRIN(I) * (-0.4)
+      IF (NF .LT. 3)  GO TO 4
+      NS = 6
+C         SUCCESS
+    6 BESTX = X(I)
+      DIRIN(I) = DIRIN(I) * 3.0
+      AMING = F
+      KG = 1
+      NS = NS + 1
+      IF (NS .LT. 6)  GO TO 4
+C         LOCAL MINIMUM FOUND IN ITH DIRECTION
+    8 Y(I) = AMING
+      IF (AMING .LT. ABSMIN)  JL = I
+      IF (AMING .LT. ABSMIN)  ABSMIN = AMING
+      X(I) = BESTX
+      DO 9 K= 1, NPAR
+    9 P(K,I) = X(K)
+   10 CONTINUE
+      JH = NPARP1
+      AMIN=Y(JL)
+      CALL LMRAZZ(YNPP1,PBAR)
+      DO 20 I= 1, NPAR
+   20 X(I) = P(I,JL)
+      CALL LMINTO(X)
+      DO 30 I=1,NPAR
+   30 IF(ABS(DIRIN(I)).LE.ABS(EPSMAC*X(I))) DIRIN(I)=4.*EPSMAC*X(I)
+      IF (ISW(5) .GE. 1)  CALL LMPRIN(0,AMIN)
+      SIGMA = SIGMA * 10.
+      SIG2 = SIGMA
+      NCYCL=0
+C                                        . . . . .  START MAIN LOOP
+   50 CONTINUE
+C...Change in SIMPLX; error redefined for second call to LMSIMP.
+      UP=RELUP*ABS(AMIN)
+      EPSI=RELERR*UP
+      IF (SIG2 .LT. EPSI .AND. SIGMA.LT.EPSI)     GO TO 76
+      SIG2 = SIGMA
+      IF ((NFCN-NPFN) .GT. NFCNMX)  GO TO 78
+C         CALCULATE NEW POINT * BY REFLECTION
+      DO 60 I= 1, NPAR
+      PB = 0.
+      DO 59 J= 1, NPARP1
+   59 PB = PB + WG * P(I,J)
+      PBAR(I) = PB - WG * P(I,JH)
+   60 PSTAR(I)=(1.+ALPHA)*PBAR(I)-ALPHA*P(I,JH)
+      CALL LMINTO(PSTAR)
+      CALL LSIGMX(NPAR,GIN,YSTAR,U,4)
+      NFCN=NFCN+1
+      IF(YSTAR.GE.AMIN) GO TO 70
+C         POINT * BETTER THAN JL, CALCULATE NEW POINT **
+      DO 61 I=1,NPAR
+   61 PSTST(I)=GAMMA*PSTAR(I)+(1.-GAMMA)*PBAR(I)
+      CALL LMINTO(PSTST)
+      CALL LSIGMX(NPAR,GIN,YSTST,U,4)
+      NFCN=NFCN+1
+C         TRY A PARABOLA THROUGH PH, PSTAR, PSTST.  MIN = PRHO
+      Y1 = (YSTAR-Y(JH)) * RHO2
+      Y2 = (YSTST-Y(JH)) * RHO1
+      RHO = 0.5 * (RHO2*Y1 -RHO1*Y2) / (Y1 -Y2)
+      IF (RHO .LT. RHOMIN)  GO TO 66
+      IF (RHO .GT. RHOMAX)  RHO = RHOMAX
+      DO 64 I= 1, NPAR
+   64 PRHO(I) = RHO*PBAR(I) + (1.0-RHO)*P(I,JH)
+      CALL LMINTO(PRHO)
+      CALL LSIGMX(NPAR,GIN,YRHO, U,4)
+      NFCN = NFCN + 1
+      IF (YRHO .LT. Y(JL) .AND. YRHO .LT. YSTST)  GO TO 65
+      IF (YSTST .LT. Y(JL))  GO TO 67
+      IF (YRHO .GT. Y(JL))  GO TO 66
+C         ACCEPT MINIMUM POINT OF PARABOLA, PRHO
+   65 CALL LMRAZZ (YRHO,PRHO)
+      GO TO 68
+   66 IF (YSTST .LT. Y(JL))  GO TO 67
+      CALL LMRAZZ(YSTAR,PSTAR)
+      GO TO 68
+   67 CALL LMRAZZ(YSTST,PSTST)
+   68 NCYCL=NCYCL+1
+      IF (ISW(5) .LT. 2)  GO TO 50
+      IF (ISW(5) .GE. 3 .OR. MOD(NCYCL, 10) .EQ. 0) CALL LMPRIN(0,AMIN)
+      GO TO 50
+C         POINT * IS NOT AS GOOD AS JL
+   70 IF (YSTAR .GE. Y(JH))  GO TO 73
+      JHOLD = JH
+      CALL LMRAZZ(YSTAR,PSTAR)
+      IF (JHOLD .NE. JH)  GO TO 50
+C         CALCULATE NEW POINT **
+   73 DO 74 I=1,NPAR
+   74 PSTST(I)=BETA*P(I,JH)+(1.-BETA)*PBAR(I)
+      CALL LMINTO (PSTST)
+      CALL LSIGMX(NPAR,GIN,YSTST,U,4)
+      NFCN=NFCN+1
+      IF(YSTST.GT.Y(JH)) GO TO 1
+C     POINT ** IS BETTER THAN JH
+      IF (YSTST .LT. AMIN)  GO TO 67
+      CALL LMRAZZ(YSTST,PSTST)
+      GO TO 50
+C                                        . . . . . .  END MAIN LOOP
+   76 IF(LST3.GE.5) WRITE(ISYSWR,120)
+      GO TO 80
+   78 IF(LST3.GE.5) WRITE(ISYSWR,130)
+      ISW(1) = 1
+   80 DO 82 I=1,NPAR
+      PB = 0.
+      DO 81 J=1,NPARP1
+   81 PB = PB + WG * P(I,J)
+   82 PBAR(I) = PB - WG * P(I,JH)
+      CALL LMINTO(PBAR)
+      CALL LSIGMX(NPAR,GIN,YPBAR,U,IFLAG)
+      NFCN=NFCN+1
+      IF (YPBAR .LT. AMIN)  CALL LMRAZZ(YPBAR,PBAR)
+      CALL LMINTO(X)
+      IF (NFCNMX+NPFN-NFCN .LT. 3*NPAR)  GO TO 90
+      IF (SIGMA .GT. 2.0*EPSI)  GO TO 1
+   90 CALL LMPRIN(1-ITAUR, AMIN)
+      RETURN
+  100 FORMAT(' START SIMPLEX MINIMIZATION          ',8X   ,'CON',
+     +'VERGENCE CRITERION -- ESTIMATED DISTANCE TO MINIMUM (EDM) .LT.',
+     +E10.2 )
+120   FORMAT(1H ,'SIMPLEX MINIMIZATION HAS CONVERGED')
+130   FORMAT(1H ,'SIMPLEX TERMINATES WITHOUT CONVERGENCE')
+      END

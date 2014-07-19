@@ -1,0 +1,36 @@
+*
+* $Id: cdmake.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdmake.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#
+# Make a new database
+#
+# export CDFILE='name of the database file'
+  export CDFILE='test.dbs'
+ 
+# export CDPAIR='number of validity range pairs'
+  export CDPAIR=1
+ 
+# export CDPRE='number of records to be preformatted'
+  export CDPRE=100
+ 
+# export CDTOP='numeric ID for database'
+  export CDTOP=1
+ 
+# export CDQUO='number of records for database quota'
+  export CDQUO=65000
+ 
+# export CDRECL='record length of database file (words)'
+  export CDRECL=1024
+ 
+#
+# now run the job
+#
+ 
+  /cern/pro/bin/cdmake
+#endif

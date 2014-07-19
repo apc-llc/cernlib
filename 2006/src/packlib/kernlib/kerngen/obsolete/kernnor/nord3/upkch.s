@@ -1,0 +1,124 @@
+*
+* $Id: upkch.s,v 1.1.1.1 1996/02/15 17:54:51 mclareni Exp $
+*
+* $Log: upkch.s,v $
+* Revision 1.1.1.1  1996/02/15 17:54:51  mclareni
+* Kernlib
+*
+*
+       MODULE M_UPKCH
+%
+% CERN PROGLIB# M427    UPKCH           .VERSION KERNNOR  1.05  810521
+% ORIG.  H.OVERAS, CERN, 810609
+%
+% CALL UPKCH(AVM,IXV,N,MPAR)   UNPACK CHARACTER-VECTOR
+%                              MPAR=NBITS,NCHAR,NZONE,IGNOR,NFILL
+       IMPORT-D SLATE
+       EXPORT UPKCH
+       ROUTINE UPKCH
+       LIB UPKCH
+VBAS:  STACK FIXED
+PAR:   W BLOCK 4
+NBITS: W BLOCK 1
+NCHAR: W BLOCK 1
+NZONE: W BLOCK 1
+IGNOR: W BLOCK 1
+NM:    W BLOCK 1
+TEMP:  W BLOCK 1
+NBDONE:W BLOCK 1
+NBE:   W BLOCK 1
+JGM:   W BLOCK 1
+NBITSW:W DATA 32
+NHIGH: W BLOCK 1
+NLOW:  W BLOCK 1
+       ENDSTACK
+UPKCH:  ENTF VBAS
+       W1:=IND(B.PAR+8)
+       IF><GO IN
+       W STZ SLATE
+IN:    W1-1
+       W1=:B.NM
+       W1 CLR
+LP:    W MOVE IND(B.PAR+12)(R1),B.NBITS(R1)
+       W LOOPI R1,3,LP
+       W1 CLR
+       W2 CLR
+       W TEST B.NZONE
+       IF><GO L41:H
+L21:   W SUB3 B.NBITSW,B.IGNOR,B.JGM
+       W MOVE B.NBITS,B.NBE
+       W TEST B.NCHAR
+       IF=GO L22
+       W4:=1
+       W4-B.NCHAR
+       W4 MULAD B.NBITS,B.JGM
+       W4 COMP B.NBE
+       IF<GO L22
+       W4=:B.NBE
+L22:   W3:=B.JGM
+L24:   W3-B.NBITS
+       W4 GETBF IND(B.PAR)(R1),BY3,B.NBITS+3
+       W4=:IND(B.PAR+4)(R2)
+       W LOOPI R2,B.NM,L25
+       GO OUT:H
+L25:   W3 COMP B.NBE
+       IF>=GO L24
+       W1+1
+       GO L22
+L41:   W COMP2 B.NZONE,B.NBITSW
+       IF=GO L21
+       W SUB3 B.NBITSW,B.IGNOR,R3
+       W SUB3 B.NZONE,B.NBITS,B.NBE
+       W INCR B.NBE
+       W4:=B.NCHAR
+       IF=GO L42
+       W4 MULAD B.NBITS,B.IGNOR
+       W4 COMP B.NBE
+       IF>=GO L42
+       W4=:B.NBE
+L42:   W MOVE B.IGNOR,B.NBDONE
+L43:   W TEST R3
+       IF>=GO L44
+       W3+B.NBITSW
+       W1+1
+       GO L43
+L44:   W3-B.NBITS
+       IF<GO L51
+       W4 GETBF IND(B.PAR)(R1),BY3,B.NBITS+3
+       W4=:IND(B.PAR+4)(R2)
+       GO L58
+L51:   W3+B.NBITSW
+       W1+1
+       W4 DIV4 R3,8,B.TEMP
+       W4=:B.JGM
+       W SUB3 B.PAR,B.TEMP,B.TEMP
+       W4+B.NBITS
+       W4-B.NBITSW
+       IF>GO SPEC
+       W4 GETBF IND(B.TEMP)(R1),B.JGM+3,B.NBITS+3
+       W4=:IND(B.PAR+4)(R2)
+       GO L58
+SPEC:  W4=:B.NHIGH
+       W SUB3 B.NBITSW,B.JGM,B.NLOW
+       W4 GETBF IND(B.TEMP)(R1),B.JGM+3,B.NLOW+3
+       W4=:IND(B.PAR+4)(R2)
+       W SUB2 B.TEMP,4
+       W4 GETBF IND(B.TEMP)(R1),0:B,B.NHIGH+3
+       W SHL R4,B.NLOW+3
+       W ADD2 IND(B.PAR+4)(R2),R4
+L58:   W LOOPI R2,B.NM,L59
+OUT:   W INCR R1
+       W1=:SLATE
+       RET
+L59:   W ADD2 B.NBDONE,B.NBITS
+       W COMP2 B.NBDONE,B.NBE
+       IF<GO L44
+       W3-B.NZONE
+       W3+B.NBDONE
+       W3-B.IGNOR
+       GO L42
+       ENDROUTINE
+       ENDMODULE
+#ifdef CERNLIB_TCGEN_UPKCH
+#undef CERNLIB_TCGEN_UPKCH
+#endif

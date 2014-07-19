@@ -1,0 +1,13 @@
+*
+* $Id: v224.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v224.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.24  910815 10.00
+C-  Modifications
+C   > P=FZBOOK        . Update table of machines
+C                       Introduce QX_SC,QXNO_SC, QXCAPT in C-code
+C

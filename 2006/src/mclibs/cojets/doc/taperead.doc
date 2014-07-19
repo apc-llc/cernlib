@@ -1,0 +1,94 @@
+*
+* $Id: taperead.doc,v 1.1.1.1 1996/01/11 14:15:01 mclareni Exp $
+*
+* $Log: taperead.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:01  mclareni
+* Cojets
+*
+*
+[15] TAPE READING (FOR IOISA OUTPUT)
+
+      The output tape from COJETS can be read with the routines contained
+in patch COJTAPER. In order to use them, one must also use patch COJCDE,
+deck COJVER in patch COJDATA, and decks AMASS, CHARGE, LABEL, INTID, MOVLEV
+in patch COJETS. Differently from ISAJET, one must not read again the
+particle-decay table, whose content is included in the beginning record of
+the event tape, together with the other program parameters.
+
+      The pilot patch *COJPLT can be used to select all the routines
+necessary for tape reading, [5]. It also selects the routines of the sample
+program COJPLT, which reads the output tape and makes some histogramming
+(see below). In order to avoid selection of the latter it is sufficient to
+eliminate the +USE,COJPLT card from it.
+
+      The FORTRAN instruction
+      CALL RDTAPE(IDEV,IFL)
+will read a beginning record, an end record or an event (which can be
+more than one record). IDEV is the tape number and
+      IFL=0  for a good read,
+      IFL=-1 for an end of file.
+The information is restored to the common blocks described above. The
+type of record is contained in
+
+#include "cojets/rectp.inc"
+IRECTP            =100 for an event record
+IRECTP            =200 for a beginning record
+IRECTP            =300 for an end record
+IREC              =no. of physical records in event record, 0 otherwise
+
+      All the information listed in [14] (OUTPUT TAPE) is available.
+
+      The weight per event needed to produce a weighted histogram in millibarn
+units is SIGF/NEVENT. The integrated cross section SIGF corresponds to the
+given kinematic limits (PTFFFM and PTFFFX for TWOJET, QMIN and QMAX for QED
+DRELLYAN), to the selected decay mode for DRELLYAN, and to the possible
+forcing of the production of heavy quarks and of their semileptonic decays.
+It does NOT include the effects of FORCE. But it INCLUDES
+the effects of event editing done by the user through function EDIT.
+For lack of time, the job might have terminated before generating the
+requested number of events, NEVENT. NEVTAP always reports the actual number
+of events written on tape. Thus it is safer to use SIGF/NEVTAP as event
+weight rather than SIGF/NEVENT.
+      The value of SIGF can be obtained by reading through the tape until
+an end record (IRECTP=300) is found. It can be used at the end of histogram
+calculations for their normalization.
+
+      The functions AMASS(IDENT), CHARGE(IDENT), and LABEL(IDENT) are
+available to determine the mass, charge, and character*8 LABEL of particle
+with code IDENT. CALL PRTEVT(0) prints an event.
+
+        A sample program reading the output tape and making some
+histogramming with the package HBOOK of the CERN Program Library is
+contained in patch COJPLT. In order to use it one must make the
+following steps.
+
+  i)  Get the appropriate FORTRAN ASM file by running YPATCHY with the
+      *COJPLT pilot patch, [5].
+
+ ii)  Set up a MAIN program containing at least the following:
+
+      PROGRAM MAIN
+C
+C          MAIN PROGRAM FOR COJPLT
+C          TAPE NUMBERS ARE ARBITRARY
+C
+C          FILES TO BE CONNECTED INTERNALLY, WITH OPEN STATEMENTS,
+C          OR EXTERNALLY
+C
+      CALL COJPLT(i,j)
+C
+      STOP
+      END
+
+      The arguments of COJPLT are tape numbers for files, all of which
+should be opened by the main program (or assigned externally).
+      TAPEi: unit number of tape with the events.
+      TAPEj: output list unit.
+
+iii)  Link the CERN Program Library, in order to use HBOOK.
+
+      Patch COJPLT can be modified by the user to suit its needs. In line
+comment cards show where standard replacements should be made.
+
+
+

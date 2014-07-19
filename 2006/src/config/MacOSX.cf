@@ -1,0 +1,172 @@
+XCOMM platform:  $SFO: MOSXS.cf,v 1.0 95/11/19 23:21:00 sl Exp $
+
+#define OSVendor          Apple Computer, Inc.
+#ifdef MacOSXArchitecture
+#define OSName            MacOSX
+#define OSMajorVersion    DefaultOSMajorVersion
+#define OSMinorVersion    DefaultOSMinorVersion
+#define OSTeenyVersion    0
+#endif
+
+XCOMM #define ProjectRulesFile  <MacOSX.rules>
+XCOMM #define ProjectTmplFile   <MacOSX.tmpl>
+
+#define InstKmemFlags -m 2755 -g kmem
+/* #define ConstructMFLAGS		NO */
+
+#define HasNdbm     YES
+#define SetTtyGroup YES
+#define HasBsearch  YES
+#ifdef MacOSXArchitecture
+#define HasPutenv               YES
+#define MathLibrary             /**/
+#define DBMLibrary              /**/
+#define TermcapLibrary          /**/
+#define HasBSD44Sockets         YES
+#define HAS_SNPRINTF            YES
+#endif
+
+#define NeedConstPrototypes     YES
+#define NeedVarargsPrototypes   YES
+#define NeedFunctionPrototypes  YES
+#define NeedWidePrototypes      NO
+
+#define GzipFontCompression     YES
+#define CompressAllFonts        YES
+
+#ifndef HasShm
+# define HasShm			YES
+#endif
+#ifndef BuildGlxExt
+# define BuildGlxExt 	  	YES
+# define GlxUseNSGL             YES
+#endif
+#define BuildServer             YES
+#define BuildXprint             NO
+#define BuildFonts              YES
+#define BuildDPMS               NO
+
+#define TenonServer             YES
+#define XprtServer              NO
+#define XVendorString "Tenon Intersystems Xtools"
+#define XVendorRelease 1000
+#ifndef UseRgbTxt
+#define UseRgbTxt               YES
+#endif
+
+#define BuildPexExt             NO
+
+#ifndef BuildGLXLibrary
+# define BuildGLXLibrary	YES
+#endif
+
+/* no direct graphics extension */
+#define	BuildXF86DGA	NO
+
+/* no extra tablets and weird input devices */
+#define BuildXInputExt	NO
+
+/* Build Xinerama (aka panoramiX) extension */
+#define BuildXinerama		YES
+
+/* no Display Power Management extension */
+#define	BuildDPMSExt	NO
+
+# define BuildXvExt     NO
+#define OptimizedCDebugFlags -O0 -g -pipe
+#define ExtraLoadFlags -L/usr/X11R6/lib
+
+#define BuildExamples YES
+
+/*#define StandardDefines -DCERNLIB_LINUX -DCERNLIB_PPC -DCERNLIB_MACOSX \
+			-Dunix=unix -D__powerpc__ -D__DARWIN__ */
+#define StandardDefines -DCERNLIB_LINUX -DCERNLIB_MACOSX \
+			-Dunix=unix -D__DARWIN__ 
+/* -DX_NOT_POSIX -DX_LOCALE */
+
+#define HasVoidSignalReturn YES
+
+#ifndef DependFlags
+#define DependFlags -I/usr/include/ansi -I/usr/include/bsd
+#endif
+
+#define InstallCmd	install	/* unlink old */
+
+/* #define ArCmd libtool -a -o */
+#define ArCmd ar -r
+
+#ifndef RanlibCmd
+#define RanlibCmd	ranlib -c -s
+#endif
+
+/* see below for ServerDefines */
+
+#define PrimaryScreenResolution 95	/* for 17 inch screen */
+
+#define ServerCDebugFlags -O0 -g -pipe
+
+/* #define HasGcc YES */
+#ifndef HasGcc
+#define HasGcc YES
+#endif
+
+#undef CcCmd
+#undef CplusplusCmd
+#ifdef MacOSXArchitecture
+#if 0
+#define CcCmd cc -arch "ppc" -no-cpp-precomp -ftree-vectorize
+#define CplusplusCmd          c++ -no-cpp-precomp -ftree-vectorize
+#else
+#define CcCmd cc -ftree-vectorize
+#define CplusplusCmd  c++ -ftree-vectorize
+#endif
+#endif
+#ifndef CcCmd
+#define CcCmd cc
+#endif
+
+#define CppCmd        /usr/bin/cpp
+
+#include <MacOSX.rules>
+#include <xf86.rules>
+#undef XFree86Server
+/* #define GLX_DIRECT_RENDERING */
+
+#define f2cFortran              YES
+#define FortranCmd              gfortran
+#define XargsCmd                xargs
+#define FortranSaveFlags        /* -fno-automatic */ /* Everything static !? */
+#define OptimisedFortranFlags	-O0 -g -funroll-loops -fomit-frame-pointer \
+				-ftree-vectorize
+#define DefaultFCOptions        -fno-second-underscore
+/*#define CernlibSystem           -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX \
+				-DCERNLIB_PPC -DCERNLIB_QMGLIBC \
+				-DCERNLIB_MACOSX -DCERNLIB_GFORTRAN */
+
+#define CernlibSystem           -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX \
+				-DCERNLIB_QMGLIBC \
+				-DCERNLIB_MACOSX -DCERNLIB_GFORTRAN 
+
+/* #define CERNLIB_SHIFT NO */
+#define CERNLIB_LINUX
+#define CERNLIB_UNIX
+#define CERNLIB_LNX
+/*#define CERNLIB_PPC*/
+#define CERNLIB_QMGLIBC
+#define CERNLIB_MACOSX
+#define CERNLIB_GFORTRAN
+
+#define X11Includes             -I/usr/X11R6/include
+
+/*
+ *  Create a Make Variable to allow building with/out Motif
+ */
+#define MotifIncludes		-I/sw/include
+#undef MotifDependantMakeVar
+#define MotifDependantMakeVar(variable,value)                           @@\
+ifneq ($(strip $(HAVE_MOTIF)),)                                         @@\
+    variable=value                                                      @@\
+endif                                                                   @@\
+/* End  CERNLIB changes */
+
+

@@ -1,0 +1,11 @@
+MACRO PAWEX30
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 30                          *
+* Making slides with PAW and HIGZ                                        *
+**************************************************************************
+Exec ALLDEF
+alias/create mainfont -60
+opt zfl1
+exec discomp
+RETURN
+

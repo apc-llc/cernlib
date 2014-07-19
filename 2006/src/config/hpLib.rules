@@ -1,0 +1,93 @@
+/* $Id: hpLib.rules,v 1.2 1996/03/07 14:22:39 maartenb Exp $
+ *
+ * $Log: hpLib.rules,v $
+ * Revision 1.2  1996/03/07 14:22:39  maartenb
+ * - Fix position independent option.
+ *
+ * Revision 1.1.1.1  1995/12/20 15:26:40  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: hpLib.rules,v 1.4 93/09/11 17:57:18 rws Exp $
+
+/*
+ * HP shared library rules
+ */
+
+#ifndef HasSharedLibraries
+#define HasSharedLibraries YES
+#endif
+#ifndef SharedDataSeparation
+#define SharedDataSeparation NO
+#endif
+#ifndef SharedCodeDef
+#define SharedCodeDef /**/
+#endif
+#ifndef SharedLibraryDef
+#define SharedLibraryDef /**/
+#endif
+#ifndef ShLibIncludeFile
+#define ShLibIncludeFile <hpLib.tmpl>
+#endif
+#ifndef SharedLibraryLoadFlags
+#define SharedLibraryLoadFlags -b
+#endif
+#ifndef PositionIndependentCFlags
+#define PositionIndependentCFlags +Z
+#endif
+#ifndef UseInstalled
+#define ExtraLoadOptions -L$(USRLIBDIR)
+#endif
+
+/*
+ * InstallSharedLibrary - generate rules to install the shared library.
+ */
+#ifndef InstallSharedLibrary
+#define	InstallSharedLibrary(libname,rev,dest)				@@\
+install:: Concat(lib,libname.sl.rev) 					@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) $(INSTALLFLAGS) $(INSTLIBFLAGS) Concat(lib,libname.sl.rev) $(DESTDIR)dest @@\
+	$(RM) Concat($(DESTDIR)dest/lib,libname.sl)			@@\
+	$(LN) Concat(lib,libname.sl.rev) Concat($(DESTDIR)dest/lib,libname.sl)
+
+#endif /* InstallSharedLibrary */
+
+/*
+ * InstallSharedLibraryData - generate rules to install the shared library data
+ */
+#ifndef InstallSharedLibraryData
+#define	InstallSharedLibraryData(libname,rev,dest)
+#endif /* InstallSharedLibraryData */
+
+
+/*
+ * SharedLibraryTarget - generate rules to create a shared library;
+ * build it into a different name so that we do not hose people by having
+ * the library gone for long periods.
+ */
+#ifndef SharedLibraryTarget
+#define SharedLibraryTarget(libname,rev,solist,down,up)			@@\
+AllTarget(Concat(lib,libname.sl.rev))					@@\
+									@@\
+Concat(lib,libname.sl.rev):  solist					@@\
+	$(RM) $@~							@@\
+	(cd down; $(LD) -o up/$@~ $(SHLIBLDFLAGS) solist)		@@\
+	$(RM) $@ 							@@\
+	$(MV) $@~ $@							@@\
+	$(RM) Concat(lib,libname.sl)					@@\
+	$(LN) $@ Concat(lib,libname.sl)					@@\
+	LinkBuildLibrary($@)						@@\
+	LinkBuildLibrary(Concat(lib,libname.sl))			@@\
+									@@\
+clean::									@@\
+	$(RM) Concat(lib,libname.sl.rev) Concat(lib,libname.sl)
+
+#endif /* SharedLibraryTarget */
+
+/*
+ * SharedLibraryDataTarget - generate rules to create shlib data file;
+ */
+#ifndef SharedLibraryDataTarget
+#define SharedLibraryDataTarget(libname,rev,salist)
+#endif /* SharedLibraryTarget */

@@ -1,0 +1,10 @@
+SRCS_F=	 fatsend.F
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+NeedSysexe
+#endif
+
+CernlibFortranProgramTarget(fatsend,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(fatsend,$(CERN_BINDIR))

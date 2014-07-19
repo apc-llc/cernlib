@@ -1,0 +1,262 @@
+*
+* $Id: hwbded.F,v 1.1.1.1 1996/03/08 17:02:10 mclareni Exp $
+*
+* $Log: hwbded.F,v $
+* Revision 1.1.1.1  1996/03/08 17:02:10  mclareni
+* Herwig58
+*
+*
+*CMZ :          29/08/94  11.51.46  by  Unknown
+*-- Author :
+CDECK  ID>, HWBDED.
+*CMZ :-        -09/12/91  12.07.08  by  Mike Seymour
+*-- Author :    Mike Seymour
+C-----------------------------------------------------------------------
+      SUBROUTINE HWBDED(IOPT)
+C     FILL MISSING AREA OF DALITZ PLOT WITH 3-JET AND 2-JET+GAMMA EVENTS
+C     IF (IOPT.EQ.1) SET UP EVENT RECORD
+C     IF (IOPT.EQ.2) CLEAN UP EVENT RECORD AFTER SHOWERING
+C-----------------------------------------------------------------------
+#include "herwig58/herwig58.inc"
+      DOUBLE PRECISION X(3),W,WMAX,WSUM,WSQR,X1MIN,X1MAX,X2MIN,X2MAX,
+     &  QSCALE,GAMFAC,GLUFAC,R(3,3),CS,SN,M(3),E(3),LAMBDA,A,B,C,PTSQ,
+     &  EM,P1(5),P2(5),EMINT,HWBVMC,HWRGEN,HWUALF,HWUSQR,HWRSET,HWRGET
+      INTEGER WNUM,ID3,EMIT,NOEMIT,IHEP,JHEP,KHEP,ICMF,IOPT,IEDT(3),I,
+     &  NDEL,NTRY,TEMPRN(2),RN(2)
+      SAVE X,WMAX,WSUM,WNUM,WSQR
+      DATA EMINT,EMIT,ICMF,RN/0.0,2*0,567,890/
+      LAMBDA(A,B,C)=(A**2+B**2+C**2-2*A*B-2*B*C-2*C*A)/(4*A)
+      IF (IOPT.EQ.1) THEN
+C---FIND AN UNTREATED CMF
+        IF (EMIT.NE.0) RETURN
+        ICMF=0
+        DO 10 IHEP=1,NHEP
+ 10       IF (ICMF.EQ.0 .AND. ISTHEP(IHEP).EQ.110 .AND.
+     &    JDAHEP(2,IHEP).EQ.JDAHEP(1,IHEP)+1) ICMF=IHEP
+        IF (ICMF.EQ.0) RETURN
+        EM=PHEP(5,ICMF)
+        IF (EM.LT.2*HWBVMC(1)) RETURN
+C---INITIALIZE
+        IF (EM.NE.EMINT) THEN
+          WMAX=0
+          WSUM=0
+          WSQR=0
+          WNUM=0
+          A=HWRGET(TEMPRN)
+          B=HWRSET(RN)
+        ENDIF
+C---GENERATE X1,X2 ACCORDING TO 1/((1-X1)*(1-X2))
+        NTRY=0
+ 100    CONTINUE
+        IF (NTRY.GT.NBTRY) RETURN
+C---CHOOSE X1
+        M(1)=HWBVMC(1)
+        M(2)=HWBVMC(1)
+        M(3)=MIN(HWBVMC(13),HWBVMC(59))
+        X1MIN=(2*M(1)*EM-M(1)**2+M(2)**2+M(3)**2)/EM**2
+        X1MAX=0.8
+        IF (X1MIN.GT.X1MAX) RETURN
+        X(1)=1-(1-X1MAX)*((1-X1MIN)/(1-X1MAX))**HWRGEN(0)
+C---CHOOSE X2
+        X2MIN=MAX(X(1),1-X(1))
+        X2MAX=(4*X(1)-3+2*REAL(  CMPLX(  X(1)**3+135*(X(1)-1)**3,
+     &    3*HWUSQR(3*(128*X(1)**4-368*X(1)**3+405*X(1)**2-216*X(1)+54))*
+     &    (X(1)-1)  )**(1./3)  ))/3
+        X(2)=1-(1-X2MAX)*((1-X2MIN)/(1-X2MAX))**HWRGEN(1)
+C---CALCULATE WEIGHT
+        W=2 * LOG((1-X1MIN)/(1-X1MAX))*LOG((1-X2MIN)/(1-X2MAX)) *
+     &    (X(1)**2+X(2)**2)
+        IF (W.LT.0) W=0
+C---IF WE HAVEN'T GENERATED ANY EVENTS YET, FIND AVERAGE WEIGHT
+        IF (EM.NE.EMINT) THEN
+          WNUM=WNUM+1
+          WSUM=WSUM+W
+          WSQR=WSQR+W**2
+          IF (W.GT.WMAX) WMAX=W*1.15
+          IF (WNUM.LT.2000) GOTO 100
+          WSUM=WSUM/WNUM
+          WSQR=HWUSQR(WSQR-WSUM**2*WNUM)/WNUM
+          IF (WSQR/WSUM*100 .GT. 5) CALL HWWARN('HWBDED',1,*999)
+          EMINT=EM
+          B=HWRGET(RN)
+          C=HWRSET(TEMPRN)
+          GOTO 100
+        ENDIF
+C---OTHERWISE GENERATE UNWEIGHTED (X1,X2) PAIRS (EFFICIENCY IS ~50%)
+        IF (W.GT.WMAX) THEN
+          CALL HWWARN('HWBDED',2,*999)
+          WRITE (6,'(2(A,F6.3))') ' INCREASING WMAX FROM',WMAX,' TO',W
+          WMAX=W*1.15
+        ENDIF
+        NTRY=NTRY+1
+        IF (WMAX*HWRGEN(2).GT.W) GOTO 100
+C---CHECK INFRA-RED CUT-OFF FOR THIS PARTON TYPE
+        ID3=IDHW(JDAHEP(1,ICMF))
+        M(1)=HWBVMC(ID3)
+        M(2)=HWBVMC(ID3)
+        IF (X(1)*EM**2.LT.2*M(1)*EM-M(1)**2+M(2)**2+M(3)**2) RETURN
+C---SYMMETRIZE X1,X2
+        X(3)=2-X(1)-X(2)+(M(1)**2+M(2)**2+M(3)**2)/EM**2
+        IF (HWRGEN(5).GT.HALF) THEN
+          X(1)=X(2)
+          X(2)=2-X(3)-X(1)+(M(1)**2+M(2)**2+M(3)**2)/EM**2
+        ENDIF
+C---CHOOSE WHICH PARTON WILL EMIT
+        EMIT=1
+        IF (HWRGEN(6).LT.X(1)**2/(X(1)**2+X(2)**2)) EMIT=2
+        NOEMIT=3-EMIT
+        IHEP=JDAHEP(  EMIT,ICMF)
+        JHEP=JDAHEP(NOEMIT,ICMF)
+C---PREFACTORS FOR GAMMA AND GLUON CASES
+        QSCALE=HWUSQR((1-X(1))*(1-X(2))*(1-X(3)))*EM/X(NOEMIT)
+        GAMFAC=ALPFAC*ALPHEM*ICHRG(ID3)**2/(18*PIFAC)
+        GLUFAC=0
+        IF (QSCALE.GT.HWBVMC(13))
+     &    GLUFAC=CFFAC/(2*PIFAC)*HWUALF(1,QSCALE)
+C---IN FRACTION FAC*WSUM OF EVENTS ADD A GAMMA/GLUON
+        IF     (GAMFAC*WSUM .GT. HWRGEN(3)) THEN
+          ID3=59
+        ELSEIF (GLUFAC*WSUM .GT. HWRGEN(4)) THEN
+          ID3=13
+        ELSE
+          EMIT=0
+          RETURN
+        ENDIF
+C---CHECK INFRA-RED CUT-OFF FOR GAMMA/GLUON
+        M(3)=HWBVMC(ID3)
+        E(1)=0.5*EM*(X(1)+(M(1)**2-M(2)**2-M(3)**2)/EM**2)
+        E(2)=0.5*EM*(X(2)+(M(2)**2-M(3)**2-M(1)**2)/EM**2)
+        E(3)=EM-E(1)-E(2)
+        PTSQ=-LAMBDA(E(NOEMIT)**2-M(NOEMIT)**2,E(3)**2-M(3)**2,
+     &    E(EMIT)**2-M(EMIT)**2)
+        IF (PTSQ.LE.0) THEN
+          EMIT=0
+          RETURN
+        ENDIF
+C---STORE OLD MOMENTA
+        CALL HWVEQU(5,PHEP(1,JDAHEP(1,ICMF)),P1)
+        CALL HWVEQU(5,PHEP(1,JDAHEP(2,ICMF)),P2)
+C---GET THE NON-EMITTING PARTON'S CMF DIRECTION
+        CALL HWULOF(PHEP(1,ICMF),PHEP(1,JHEP),PHEP(1,JHEP))
+        CALL HWRAZM(ONE,CS,SN)
+        CALL HWUROT(PHEP(1,JHEP),CS,SN,R)
+        M(1)=PHEP(5,IHEP)
+        M(2)=PHEP(5,JHEP)
+        M(3)=RMASS(ID3)
+C---REORDER ENTRIES: IHEP=EMITTER, JHEP=NON-EMITTER, KHEP=EMITTED
+        NHEP=NHEP+1
+        IF (IDHW(IHEP).LT.IDHW(JHEP)) THEN
+          IHEP=JDAHEP(1,ICMF)
+          JHEP=NHEP
+        ELSE
+          IHEP=NHEP
+          JHEP=JDAHEP(1,ICMF)
+        ENDIF
+        KHEP=JDAHEP(2,ICMF)
+C---SET UP MOMENTA
+        PHEP(5,JHEP)=M(NOEMIT)
+        PHEP(5,IHEP)=M(EMIT)
+        PHEP(5,KHEP)=M(3)
+        PHEP(4,JHEP)=0.5*EM*(X(NOEMIT)+
+     &                  (M(NOEMIT)**2-M(EMIT)**2-M(3)**2)/EM**2)
+        PHEP(4,IHEP)=0.5*EM*(X(EMIT)+
+     &                  (M(EMIT)**2-M(NOEMIT)**2-M(3)**2)/EM**2)
+        PHEP(4,KHEP)=EM-PHEP(4,IHEP)-PHEP(4,JHEP)
+        PHEP(3,JHEP)=HWUSQR(PHEP(4,JHEP)**2-PHEP(5,JHEP)**2)
+        PHEP(3,IHEP)=( (PHEP(4,KHEP)**2-PHEP(5,KHEP)**2) -
+     &    (PHEP(4,IHEP)**2-PHEP(5,IHEP)**2) -
+     &    (PHEP(3,JHEP)**2) )*0.5/PHEP(3,JHEP)
+        PHEP(3,KHEP)=-PHEP(3,IHEP)-PHEP(3,JHEP)
+        PHEP(2,JHEP)=0
+        PHEP(2,IHEP)=0
+        PHEP(2,KHEP)=0
+        PHEP(1,JHEP)=0
+        PHEP(1,IHEP)=HWUSQR(PHEP(4,IHEP)**2-
+     &    PHEP(3,IHEP)**2-PHEP(5,IHEP)**2)
+        PHEP(1,KHEP)=-PHEP(1,IHEP)
+        PTSQ=-LAMBDA(PHEP(4,JHEP)**2-PHEP(5,JHEP)**2,
+     &    PHEP(4,KHEP)**2-PHEP(5,KHEP)**2,
+     &    PHEP(4,IHEP)**2-PHEP(5,IHEP)**2)
+C---ORIENT IN CMF, THEN BOOST TO LAB
+        CALL HWUROB(R,PHEP(1,IHEP),PHEP(1,IHEP))
+        CALL HWUROB(R,PHEP(1,JHEP),PHEP(1,JHEP))
+        CALL HWUROB(R,PHEP(1,KHEP),PHEP(1,KHEP))
+        CALL HWULOB(PHEP(1,ICMF),PHEP(1,IHEP),PHEP(1,IHEP))
+        CALL HWULOB(PHEP(1,ICMF),PHEP(1,JHEP),PHEP(1,JHEP))
+        CALL HWULOB(PHEP(1,ICMF),PHEP(1,KHEP),PHEP(1,KHEP))
+C---REORDER ENTRIES: IHEP=QUARK, JHEP=ANTI-QUARK, KHEP=EMITTED
+        IF (IHEP.EQ.NHEP) THEN
+          IHEP=JHEP
+          JHEP=NHEP
+        ENDIF
+C---STATUS, ID AND POINTERS
+        ISTHEP(JHEP)=114
+        IDHW(JHEP)=IDHW(KHEP)
+        IDHEP(JHEP)=IDHEP(KHEP)
+        IDHW(KHEP)=ID3
+        IDHEP(KHEP)=IDPDG(ID3)
+        JDAHEP(2,ICMF)=JHEP
+        JMOHEP(1,JHEP)=ICMF
+        JDAHEP(1,JHEP)=0
+C---COLOUR CONNECTIONS AND GLUON POLARIZATION
+        JMOHEP(2,JHEP)=IHEP
+        JDAHEP(2,IHEP)=JHEP
+        IF (ID3.EQ.13) THEN
+          JMOHEP(2,IHEP)=KHEP
+          JMOHEP(2,KHEP)=JHEP
+          JDAHEP(2,JHEP)=KHEP
+          JDAHEP(2,KHEP)=IHEP
+          GPOLN=((1-X(1))**2+(1-X(2))**2)/(4*(1-X(3)))
+          GPOLN=1/(1+GPOLN)
+        ELSE
+          JMOHEP(2,IHEP)=JHEP
+          JMOHEP(2,KHEP)=KHEP
+          JDAHEP(2,JHEP)=IHEP
+          JDAHEP(2,KHEP)=KHEP
+        ENDIF
+      ELSEIF (IOPT.EQ.2) THEN
+C---MAKE THREE-JET EVENTS FROM THE `DEAD-ZONE' LOOK LIKE TWO-JET EVENTS
+        IF (EMIT.EQ.0) THEN
+          RETURN
+        ELSEIF (EMIT.EQ.1) THEN
+          IHEP=JDAHEP(1,JDAHEP(1,ICMF)+1)
+          JHEP=JDAHEP(1,JDAHEP(1,ICMF))
+        ELSE
+          IHEP=JDAHEP(1,JDAHEP(2,ICMF))
+          JHEP=JDAHEP(1,JDAHEP(1,ICMF)+1)
+          JDAHEP(1,JDAHEP(2,ICMF))=JHEP
+          IDHW(JHEP)=IDHW(IHEP)
+          IF (ISTHEP(IHEP+1).EQ.100 .AND. ISTHEP(JHEP+1).EQ.100)
+     &      CALL HWVEQU(5,PHEP(1,IHEP+1),PHEP(1,JHEP+1))
+        ENDIF
+        JMOHEP(2,JDAHEP(1,ICMF))=JDAHEP(2,ICMF)
+        JDAHEP(2,JDAHEP(1,ICMF))=JDAHEP(2,ICMF)
+        JMOHEP(2,JDAHEP(2,ICMF))=JDAHEP(1,ICMF)
+        JDAHEP(2,JDAHEP(2,ICMF))=JDAHEP(1,ICMF)
+        CALL HWVEQU(5,P1,PHEP(1,JDAHEP(1,ICMF)))
+        CALL HWVEQU(5,P2,PHEP(1,JDAHEP(2,ICMF)))
+        CALL HWVSUM(4,PHEP(1,IHEP),PHEP(1,JHEP),PHEP(1,JHEP))
+        CALL HWUMAS(PHEP(1,JHEP))
+        JDAHEP(2,JHEP)=JDAHEP(2,IHEP)
+        IEDT(1)=JDAHEP(1,ICMF)+1
+        IEDT(2)=IHEP
+        IEDT(3)=IHEP+1
+        NDEL=3
+        IF (ISTHEP(IHEP+1).NE.100) NDEL=2
+        CALL HWUEDT(NDEL,IEDT)
+        DO 410 I=1,2
+          IHEP=JDAHEP(1,JDAHEP(I,ICMF))
+          JMOHEP(1,IHEP)=JDAHEP(I,ICMF)
+          IF (ISTHEP(IHEP+1).EQ.100) THEN
+            JMOHEP(1,IHEP+1)=JMOHEP(1,IHEP)
+            JMOHEP(2,IHEP+1)=JMOHEP(2,JMOHEP(1,IHEP))
+          ENDIF
+          DO 400 JHEP=JDAHEP(1,IHEP),JDAHEP(2,IHEP)
+            JMOHEP(1,JHEP)=IHEP
+ 400      CONTINUE
+ 410    CONTINUE
+        EMIT=0
+      ELSE
+        CALL HWWARN('HWBDED',500,*999)
+      ENDIF
+ 999  END

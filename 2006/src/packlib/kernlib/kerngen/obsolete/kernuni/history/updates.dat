@@ -1,0 +1,65 @@
+*
+* $Id: updates.dat,v 1.1.1.1 1996/02/15 17:53:52 mclareni Exp $
+*
+* $Log: updates.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:53:52  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_GENUNI)
+ 
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.02  15-DEC-76
+ 
+P=GUNI, D=ASORTZ,CLOKZB,DATEZB,ISORTZ,IZZA,SORTZV,TIMEZB,TIMEZZ
+                   CORRECT FAULTY HEADING COMMENT CARDS
+ 
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.03  17-JAN-77
+ 
+FINAL CLEAN-UP CORRECTIONS, FEED-BACK FROM ORSAY:
+ 
+P=GENUNI, D=JBYTET
+ 
+P=GUY, D=,INCBYT,IUCOMP,JBYTET,JBYTPK,LOCF,LVMAX,LVMINA,PKBYT,SBYTPK,UBLANK
+       D=UCOCOP,UCOPIV,UPKBYT,USWOP,VLINE,VMATL,VMAX,VMIN,VMINA,VMUL,VSCALE,VSUM
+       ALSO:  ALL DECKS HEADING COMMENTS CHANGED
+ 
+P=GUYSYS, D=DUMMY,IRNDM,RANNOR,READ$,RNDM
+ 
+P=GUYGERR$
+ 
+NEW ROUTINES FROM ORSAY:
+ 
+P=GUY, D=LORENB,LORENF,VADD,VSUM
+ 
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.04  21-MAR-78
+ 
+JRSBYT FROM ORSAY TURNED OUT TO BE WRONG,
+BRING BACK THE OLD COPENHAGEN VERSION INTO BOTH  P=GUNI AND P=GUY
+ 
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.05  24-FEB-81
+ 
+ALL GUY PATCHES HAVE BEEN RE-IMPORTED FROM ORSAY, WITH
+SOME PATCH NAMES CHANGED.
+ 
+OBSOLETE ROUTINES SUPPRESSED:  P=GUNI, D=CLOKZB, TIMEZB, TIMEZZ
+ 
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.06  12-FEB-82
+ 
+ADD +USE,QMUNI OR QMUNO TO THE PILOTS
+ 
+NEW DECKS: GSHOW
+ 
+DISABLE JRSBYT IN P=GUY WHICH HAS A BUG
+ 
+OBSOLETE ROUTINE SUPPRESSED:  P=GUNI, D=DATEZB,IZZA
+---------------------------------------------------------------------
+UPDATES FOR VERSION  1.07  19-JAN-83
+ 
+NEW PATCH :  XVECTUNI
+---------------------------------------------------------------------
+#endif

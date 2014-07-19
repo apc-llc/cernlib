@@ -1,0 +1,76 @@
+*
+* $Id: umlog.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: umlog.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umlog.exec */
+/**********************************************************************
+ *                                                                    *
+ * UMLOG EXEC V1.05                                                   *
+ *                                                                    *
+ * UMON logging utility                                               *
+ * Author: M.Marquina 90/08/17                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ * MARQUINA 90/09/19 Read also the flag file to add up monitoring     *
+ *          90/12/13 Do not overwrite original monitor name when using*
+ *                   the flag file                                    *
+ *          91/03/08 Cut the SMSG to the buffer length of UMON        *
+ *          91/04/02 Do not add extra information for normal monitors *
+ *          91/07/11 Suppress double logging of userid                *
+ *                   Fix logging of nested calls to UMLOG             *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg monitor flag text
+ 
+   ffile='XCALL'('FILEID')
+   If ffile="" Then ffile="CRNQDISK HISTORY"
+   umlist='SETENV'("UMON")
+   Parse Var ffile ffn fft .
+ 
+   If monitor="*" Then monitor=ffn
+ 
+   sfile="STATISTI ON:" 'FMODE'(ffile)
+   If 'FEXIST'(sfile) Then Do
+    'EXECIO 1 DISKR' sfile '( FINIS VAR UMLIS2'
+    If 'WORD'(umlis2,1)="ON:" Then Do
+       mlist='SUBWORD'(umlis2,2)
+/*     If fft^="HISTORY" Then text=fft ffn text
+*/     If mlist="*" Then mlist=monitor
+       umlist=umlist mlist
+    End
+   End
+ 
+   If 'FIND'(umlist,monitor)=0 Then Exit
+ 
+   wmon='EXECIO 0 CP (NOTYPE STRING SMSG UMON !LOG!'
+   wlen=123                    /* Buffer of SMSG for UMON-CERNVM */
+ 
+   umlog='SETENV'("UMLOG")     /* To trap aborted executions */
+   If 'LENGTH'(umlog)>wlen Then umlog='LEFT'(umlog,wlen)
+   'EXEC SETENV UMLOG'
+ 
+   user='BNAME'("USERID")
+   If flag=0 Then Do
+     If umlog^="" Then wmon umlog
+     'EXEC SHOWTIME ( START LIFO'
+     'EXEC SETENV UMLOG' monitor 'RIGHT'("-1",65) text
+     Exit
+   End
+   sinfo=""
+   If flag=1 Then Do
+     'EXEC SHOWTIME ( LIFO'
+     Pull sinfo
+     umlog=""
+     text=sinfo text
+   End
+   If 'LENGTH'(monitor text)>wlen Then text='LEFT'(text,wlen-11)
+   If umlog^="" Then wmon umlog
+                     wmon monitor text
+   Exit
+#endif

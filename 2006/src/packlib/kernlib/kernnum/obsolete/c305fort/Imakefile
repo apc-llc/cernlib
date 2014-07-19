@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 dgamma.F gamma.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,19 @@
+SRCS_C = kuipcc.c kkern.c
+OBJS = kuipcc.o kkern.o
+
+NormalProgramTarget(kuipc,$(OBJS),NullParameter,NullParameter,NullParameter)
+
+InstallProgram(kuipc,$(CERN_BINDIR))
+
+M4FILES= kbrow_q1.m4 kbrow_q2.m4 kbrow_q3.m4 kbrow_q4.m4 \ @@\
+	kmenu_q1.m4 kmenu_q2.m4 kmenu_q3.m4 kmenu_q4.m4 kmenu_q5.m4 \ @@\
+	klink_q1.m4
+
+HEADERS=$(M4FILES:.m4=.h)
+
+headers:: $(HEADERS)
+
+.SUFFIXES: .m4
+
+.m4.h:
+	$(M4) $(ALLINCLUDES) $< > $@

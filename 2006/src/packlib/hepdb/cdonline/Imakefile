@@ -1,0 +1,4 @@
+SRCS_F=	 cdchkcli.F cdcwsv.F cdgimgna.F cdgname.F cdgnode.F \ @@\
+	cdwlok.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,5 @@
+SRCS_F=	 erbcer.F erbctr.F erland.F ermcsc.F erpini.F erprop.F \ @@\
+	erstor.F ertrak.F ertrch.F ertrgo.F ertrnt.F erxyzc.F eufill.F \ @@\
+	eufilp.F eufilv.F eustep.F evolio.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

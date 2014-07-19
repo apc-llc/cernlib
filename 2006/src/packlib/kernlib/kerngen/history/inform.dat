@@ -1,0 +1,15 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/02/15 17:50:41 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:41  mclareni
+* Kernlib
+*
+*
+*  General information
+ 
+   At CERN we inhibited flag QMIBMXA to install this package on our
+   SIEMENS machine when it was running
+   CPLEVEL  : VM/SP Release 4, HPO level 42, Service Level 425
+   CMSLEVEL : VM/SP Release 4, Service Level 420
+ 

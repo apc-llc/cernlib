@@ -1,0 +1,24 @@
+*
+* $Id: v20x.dat,v 1.1.1.1 1996/03/08 11:50:43 mclareni Exp $
+*
+* $Log: v20x.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:43  mclareni
+* Ffread
+*
+*
+* Version 2.0x
+C         2.03  (851120)
+C             Bug corrected in routine FFGOR
+C
+C         2.02  (850912)
+C             CHARACTER VARIABLES  ALLOWED IN CALLS TO FFREAD ROUTINES
+C             PROTECTION WHEN TYPING LOWER CASE LETTERS
+C
+C         2.01  (850309)
+C             NORD50 VERSION INTRODUCED
+C
+C         2.00  (831024)
+C             NEW ROUTINES INTRODUCED
+C             FFINIT,FFSET,FFGET,FFGO
+C             (SEE FFREAD 2.00 DOCUMENTATION)
+C

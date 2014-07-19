@@ -1,0 +1,19 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+LIBDIRS= bvslftn
+
+SUBDIRS= $(LIBDIRS) test
+
+TopOfPackage(bvsl)
+
+SubdirLibraryTarget(bvsl,$(LIBDIRS))
+
+TestSubdirs(test)
+
+install.include:

@@ -1,0 +1,24 @@
+CDECK  ID>, MXJOIN.
+      SUBROUTINE MXJOIN (MPAT,MDEC)
+
+C-    Join EXE bits from MPAT and MDEC into MDEC
+
+      ISHFTL (IZW,NZB) = LSHIFT (IZW, NZB)
+      ISHFTR (IZW,NZB) = ISHFT (IZW, -NZB)
+      IAND (IZV,IZW) = AND (IZV, IZW)
+      IOR  (IZV,IZW) =  OR (IZV, IZW)
+
+      MOR  = IOR  (MPAT, MDEC)
+      MAND = IAND (MPAT, MDEC)
+      MINH = IAND (ISHFTR(MAND,5), 31)
+
+      NEW  = IAND (MINH, MOR)
+      MUSE = IAND (MINH, ISHFTR(MOR,10))
+      MSEL = IAND (MINH, ISHFTR(MOR,14))
+
+      NEW = IOR (NEW, ISHFTL(MINH, 5))
+      NEW = IOR (NEW, ISHFTL(MUSE,10))
+      NEW = IOR (NEW, ISHFTL(MSEL,14))
+      CALL SBYT (NEW, MDEC,1,18)
+      RETURN
+      END

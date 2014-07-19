@@ -1,0 +1,44 @@
+*
+* $Id: umcom.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: umcom.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umcom.exec */
+/**********************************************************************
+ *                                                                    *
+ * UMCOM EXEC V1.00                                                   *
+ *                                                                    *
+ * User Interface to UMON Service Machine                             *
+ * Author: M.Marquina 91/02/27                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg cmd umlist
+ 
+   If 'ABBREV'("CREATE",cmd,1)    Then Do
+     'CP SMSG UMON CREATE MONITOR' umlist
+     Exit
+   End
+   If 'ABBREV'("MODIFY",cmd,1)    Then Do
+     'CP SMSG UMON MODIFY MONITOR' umlist
+     Exit
+   End
+   If 'ABBREV'("ACTIVATE" ,cmd,1) Then cmd="ACTIVATE  MONITOR"
+   If 'ABBREV'("BLOCK"    ,cmd,1) Then cmd="BLOCK     MONITOR"
+   If 'ABBREV'("ERASE"    ,cmd,1) Then cmd="ERASE     LOGSHEET"
+   If 'ABBREV'("KILL"     ,cmd,1) Then cmd="KILL      MONITOR"
+   If 'ABBREV'("QUERY"    ,cmd,1) Then cmd="QUERY     MONITOR"
+   If 'ABBREV'("SEND"     ,cmd,1) Then cmd="SEND      LOGSHEET"
+   If 'ABBREV'("SENDERASE",cmd,5) Then cmd="SENDERASE LOGSHEET"
+   If 'ABBREV'("WRITEOUT" ,cmd,1) Then cmd="WRITEOUT  LOGSHEET"
+ 
+   Do n=1 to 'WORDS'(umlist)
+     'CP SMSG UMON' cmd 'WORD'(umlist,n)
+   End
+#endif

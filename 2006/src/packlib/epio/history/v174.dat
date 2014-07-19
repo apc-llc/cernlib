@@ -1,0 +1,27 @@
+*
+* $Id: v174.dat,v 1.1.1.1 1996/03/08 15:21:46 mclareni Exp $
+*
+* $Log: v174.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:46  mclareni
+* Epio
+*
+*
+*  Version 1.74  941020 10.00
+C- Correct VMS deck EPIOVAX. (Previous correction in 1.73 was only valid 
+C  for AXP).
+C- Add flags WINNT and LINUX for Windows/NT and Linux.
+C
+C- Add LOGICAL BTEST in decks CFRIBMSF, CFRIBMSV, CTOIBSTF, CTOIBSTV.
+C
+C- Return ierr=1 from EPOPEN when cfopen returns negative status.
+C   Extend this functionality to the VMS version in EPOPEN_VAX.
+C   Typically, this occurs when the input file does not exist, but
+C   recovery from any errors on opening files on reading and writing
+C   is now possible.
+C   Warning, one more argument for EPOPEN and EPOPEN_VAX, 
+C   but they should not normally be user callable.
+C   Related mods to EPBLIN, EPHEAD and EPTEST.
+C
+C   The Apollo version also suffers from this but the error handling
+C    is a bit special, so more work is involved. Wait for a request.
+C

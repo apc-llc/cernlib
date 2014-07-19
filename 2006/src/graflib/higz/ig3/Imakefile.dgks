@@ -1,0 +1,10 @@
+SRCS_F=	 iatr3.F ifa3.F igbrik.F igcone.F igcyl.F igsphe.F \ @@\
+	igtcop.F igtini.F igtmul.F igtnor.F igtor.F igtran.F igtref.F \ @@\
+	igtrot.F igtsca.F igttra.F ipl3.F ipm3.F ipm3id.F isvp3.F \ @@\
+	iswn3.F itx3.F
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

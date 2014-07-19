@@ -1,0 +1,40 @@
+*
+* $Id: v1_15,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_15,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.15/03 22/07/92  12.17.38  by  O.Couet
+*-- Author :    O.Couet   14/07/92
+*
+*::>          VERSION  1.15/03   920722 12.17
+*
+*   Bug corrected in IGSEE and ITX at the PATCHY level (MSDOS
+*      flag side effect).
+*   Change in IGINIT: the alpha numeric labels are now initialized
+*      with ' '. And in IGLBL: if the label list has N<50 labels, the
+*      labels form N+1 to 50 are reset to ' '.
+*   Bug fixed in IGADID: the IZPUSH parameter was not correct.
+*
+*::>          VERSION  1.15/02   920717 14.25
+*
+*   Bug fixed in lego and surface drawing: on VM legos with a small
+*      range on X or Y axis were shifted. some variables needed
+*      to be in DOUBLE PRECISION in the IH PATCH (on VM).
+*
+*::>          VERSION  1.15/01   920715 10.00
+*
+*   Change in IGCHWK. In the case of GKS OPND and LUNWIN were not
+*      initialized <GUNTER@CERNVM>.
+*   Change in IRQLC for ATCGKS (call to GPREC) (koellner@lbl.Bitnet).
+*
+*::>          VERSION  1.15/00   920714 16.29
+*
+*   New flag GKSIBM for the native version of GKS on IBM RS6000.
+*      To install this version of HIGZ the following selection are
+*      needed: +USE,*HIGZ,IBMRT,GKSIBM. (Roger Howard <RH2@CERNVM>).
+*   Mods in X11INT for IBM/VM: the static variable are now initialised
+*      with a "long NULL" (LNULL).
+*

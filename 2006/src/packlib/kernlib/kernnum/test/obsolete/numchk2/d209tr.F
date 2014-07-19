@@ -1,0 +1,36 @@
+*
+* $Id: d209tr.F,v 1.1.1.1 1996/02/15 17:48:40 mclareni Exp $
+*
+* $Log: d209tr.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:40  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+#if defined(CERNLIB_NEVER)
+      SUBROUTINE D209TR(X,YR)
+      DIMENSION YR(4),U(4)
+      DOUBLE PRECISION DA,DQ
+      COMMON /D209CM/N,ITRANS,A(4),Q(4,4),DA(4),DQ(4,4)
+C
+C  FOR J=1(1)N, SETS YR(J) TO THE SOLUTION OF THE SYSTEM OF FIRST OR-
+C  DER DIFFERENTIAL EQUATIONS WHOSE RIGHT-HAND SIDES ARE COMPUTED BY
+C  SUBROUTINE D209RH.
+C  CALLS ... CERN PACKAGES F002 AND F003.
+C
+C  STATEMENT FUNCTION.
+      TAN(X)=SIN(X)/COS(X)
+C
+C  START.
+      DO 1 J=1,N
+         AJ=A(J)
+         IF(J.EQ.1) U(J)=SIN(EXP(AJ*X))
+         IF(J.EQ.2) U(J)=TAN(AJ*X)
+         IF(J.EQ.3) U(J)=ALOG(1.+AJ*X)**2
+         IF(J.EQ.4) U(J)=EXP(SIN(AJ*X))
+    1 CONTINUE
+      IF(ITRANS.EQ.1) CALL RVCPY(N,U,U(2),YR,YR(2))
+      IF(ITRANS.EQ.2) CALL RMMPY(N,N,Q,Q(1,2),Q(2,1),U,U(2),YR,YR(2))
+      RETURN
+      END
+#endif

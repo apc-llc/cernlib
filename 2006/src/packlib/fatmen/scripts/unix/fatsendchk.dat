@@ -1,0 +1,28 @@
+#!/bin/ksh
+#
+# Check that the FATMEN 'fmsend' server is not stuck
+#
+
+. /afs/cern.ch/project/fatmen/scripts/fat0
+
+tail /fatmen/fmsend/fatserv.log > /fatmen/fmsend/check1
+
+diff /fatmen/fmsend/check0 /fatmen/fmsend/check1 > /dev/null 2>&1
+
+if [ $? -eq 0 ]
+
+then
+
+   logfile=/fatmen/fmsend/fatserv.log
+   lm=`ls -lLm ${logfile}`
+   subject=`echo ${0}: ${lm}`
+   tail ${logfile} | mail -s " ${subject} " fatcat-mgr@zfatal.cern.ch
+   (su - jamie;/afs/cern.ch/project/fatmen/scripts/restart_fatsend)
+   ps -ef | grep fmsend | mail -s " fmsend restarted " fatcat-mgr@zfatal.cern.ch
+
+else
+
+   mv /fatmen/fmsend/check1 /fatmen/fmsend/check0
+
+fi
+

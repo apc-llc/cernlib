@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 abend.F detach.F incmem.F jobnam.F timel.F xinb.F xinbf.F xinbs.F
+
+SRCS_S= \ @@\
+	 noarg.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

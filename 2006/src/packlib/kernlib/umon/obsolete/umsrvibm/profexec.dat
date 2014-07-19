@@ -1,0 +1,34 @@
+*
+* $Id: profexec.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: profexec.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, profile.exec */
+/*********************************************************************/
+/********=====================================================********/
+arg s; if s='' Then simulate=0; else simulate = 1
+address command
+/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+/* % */  IF "QCONSOLE"('DISCO') | simulate Then do               /* % */
+/* % */                                                          /* % */
+/* % */    'EXEC UMON'                                           /* % */
+/* % */                                                          /* % */
+/* % */  END                                                     /* % */
+/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+         ELSE DO
+          'CP SET PF6 RETRIEVE'
+          'CP SET PF21 IMMED CP SPOOL CON START *'
+          'CP SET PF22 IMMED CP SPOOL CON CLOSE STOP'
+          'CP SET PF23 IMMED READLOG'
+          'SET INPUT › AD'
+          'SET INPUT \ BD'
+          'SET INPUT º BD'
+          'CP SCREEN OUTAREA PINK'
+          'CP SCREEN VMOUT WHITE '
+         END
+Exit 0
+#endif

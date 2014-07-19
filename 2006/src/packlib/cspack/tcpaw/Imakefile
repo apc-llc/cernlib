@@ -1,0 +1,52 @@
+
+SRCS_C=	 tcpaw.c
+
+#if defined(CERNLIB_UCX)
+SRCS_C := $(SRCS_C) getservbyname.c
+#endif
+
+#if defined(CERNLIB_WINNT)
+#  define CERNLIB_TCPSOCK
+SRCS_C := $(SRCS_C) sleep.c
+#endif
+
+#if defined(CERNLIB_IBMVM) 
+
+ /*  This is the default for IBMVM, so make shure you define TCPSOCK
+  *   remove this to activate the Pascal version. */
+#define CERNLIB_TCPSOCK
+#if !defined(CERNLIB_TCPSOCK)
+SRCS_F=	 tcpawibm.F
+SRCS_S=	 readne.s
+else 
+SRCS_C := $(SRCS_C) sleep.c
+#endif
+#endif
+
+#if defined(CERNLIB_IBM) && !defined(CERNLIB_TCPSOCK)
+SRCS_F=	 tcpawibm.F
+#endif
+
+#if defined(CERNLIB_HPUX)
+/*  Cancel the default -Aa ansi compilation */
+CCOPTIONS=+Z +DA1.1
+#endif
+
+#if defined(CERNLIB_SGI)
+CCOPTIONS+=-cckr 
+#endif
+
+#if defined(CERNLIB_SOLARIS)
+CCOPTIONS+=-Xs
+#endif
+
+#ifdef CERNLIB_VAXVMS
+EXTRA_INCLUDES=-I[]
+DEFINES:= $(DEFINES) -DCOMPILE_NOPREFIX -DTGV
+CCOPTIONS:= $(CCOPTIONS) /stan\=vaxc/pref\=ansi
+#ifndef CERNLIB_QMALPH
+DEFINES:= $(DEFINES) -DDECC
+#endif
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

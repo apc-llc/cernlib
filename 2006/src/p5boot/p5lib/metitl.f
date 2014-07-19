@@ -1,0 +1,178 @@
+CDECK  ID>, METITL.
+      SUBROUTINE METITL (JSLF,NSLF)
+
+C-    Run nymerge
+C.    started 11-july-95
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      CHARACTER      CQDATEM*10, CQDATE*8, CQTIME*5
+      COMMON /QSTATE/NQERR,NQWARN,NQINFO,NQLOCK
+     +,              IQDATE,IQTIME, CQDATEM,CQDATE,CQTIME
+      COMMON /QPAGE/ NQLMAX,NQLTOL,NQLTOK,NQCMAX,NQCPGH,NQPAGE
+     +,              NQWYLDO,NQWYL,NQNEWH,NQJOIN,NQDKNO,NQDKPG
+      COMMON /QUNIT/ IQREAD,IQPRNT, IQTTIN,IQTYPE, IQOFFL,IQRTTY,IQRSAV
+     +,              IQRFD,IQRRD,IQRSIZ, NQLPAT,NQUSED,NQLLBL, NQINIT
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+      PARAMETER  (MCCNIL=1,  MCCKIL=2,  MCCINC=3,  MCCCDE=4,  MCCSEQ=5,
+     + MCCXSQ=6,  MCCTRU=7,  MCCFAL=8,  MCCELS=9,  MCCEND=10,
+     +            MCCSEL=11, MCCSES=12, MCCFAU=13, MCCSKI=14,
+     +            MCCKEE=15, MCCDEL=16, MCCREP=17, MCCADB=18, MCCADD=19,
+     + MCCUSE=20, MCCXDI=21, MCCDIV=22, MCCLIS=23, MCCEXE=24, MCCIMI=25,
+     + MCCASM=26, MCCUPD=27, MCCNAM=28, MCCGAP=29, MCCMOR=30, MCCONL=31,
+     + MCCFOR=32, MCCSUS=33, MCCOPT=34, MCCOP2=35, MCCSHO=36, MCCPAM=37,
+     + MCCQUI=38, MCCEOD=39, MCCDEC=40, MCCPAT=41, MCCTIT=42)
+      CHARACTER       CHTTNA*10, CHTTDT*20
+      COMMON /USETTC/  JTTNAM,JTTVER,JTTSLA,JTTDAT,JTTCOM
+     +,                NTTNA(5),  NTTDT,  NTTNORM, NTTALL
+     +,               CHTTNA(5), CHTTDT
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*128, LTEXT*128
+      EQUIVALENCE (LTEXT,TEXT)
+
+
+      JSL = JSLF
+      NSL = NSLF
+      CALL LN_GET (JSL,LINE,128)
+      NL = NDSLAT
+
+C--           copy   +TITLE. to output
+
+      JCCTYP = JPTYPE (LINE)
+      IF (JCCTYP.NE.MCCTIT)        GO TO 31
+
+      N  = MIN (NL,12)
+      JC = ICFIND (':', LINE,1,N)
+      IF     (JC.NE.NL)  THEN
+          IF (JC.LE.N)             GO TO 31
+        ENDIF
+
+      IF (NSL.EQ.1)                RETURN
+      CALL MESEND (JSL,1)
+      JSL = JSL + 1
+      NSL = NSL - 1
+      CALL LN_GET (JSL,LINE,128)
+      NL = NDSLAT
+
+C--           analyse true title line
+
+   31 CALL USETT (JSL)
+      JAOLD = JTTNAM
+      JEOLD = NL
+
+      IF (MOPTIO(21).NE.0)         GO TO 34
+      IF (LINE(1:2).NE.'C ')       GO TO 48
+      LTEXT = LINE(JTTNAM:NL)
+      NCHTX = NL+1 - JTTNAM
+      NCHTX = NCHTX + 1
+      TEXT(NCHTX) = CHAR (NEWLN)
+      MLIAD(2) = NCHTX + 1
+      CALL DPBLAN (0)
+      WRITE (IQPRNT,9048) NQDKNO, ' . ', LINE(JAOLD:JEOLD)
+      GO TO 46
+
+C----         title line update
+
+   34 IF (MOPTIO(6).NE.0)  MOPTIO(21) = 0
+      JTK = 1
+      IF (LINE(1:2).EQ.'C ')  JTK=JTTNAM
+
+C--           secondary version update
+
+      IF (MOPTIO(13).NE.0)         GO TO 36
+      IF (JTTSLA.EQ.0)             GO TO 36
+      LTEXT = LINE (JTK:JTTSLA)
+      NCHTX = JTTSLA+1 - JTK
+
+      N = ICDECI (LINE,JTTSLA+1,JTTSLA+6) + 1
+      CALL CSETDI (N, LTEXT,NCHTX+1,NCHTX+6)
+      CALL CLEFT     (LTEXT,NCHTX+1,NCHTX+6)
+      NCHTX = NESLAT + 1
+      GO TO 39
+
+C--           primary version update
+
+   36 IF (JTTVER.EQ.0)             GO TO 38
+      JA = ICNEXT (LINE,JTTVER,NL)
+      JE = NESLAT
+      JD = ICFIND ('.', LINE,JA,JE)
+      IF (NGSLAT.EQ.0)  JD= JA-1
+      N    = ICDECI (LINE,JD+1,JE) + 1
+      NDIG = NDSLAT
+
+      LTEXT = LINE (JTK:JE)
+      NCHTX = JE - JTK
+      JD    = JD+1 - JTK
+      IF (NDIG.NE.0)  CALL CSETDI (N, LTEXT,JD+1,NCHTX)
+      NCHTX = NCHTX + 2
+      GO TO 39
+
+C--           no version number present
+
+   38 LTEXT = LINE(JTK:NL) // '   /1'
+      NCHTX = NL+8 - JTK
+
+C--           update date/time
+
+   39 LTEXT(NCHTX+1:NCHTX+16) = CQDATEM // ' ' // CQTIME
+      NCHTX = NCHTX + 16
+
+C--           add the free comment
+
+      IF (JTTCOM.NE.0)  THEN
+          NCHTX = MAX (NCHTX+2,JTTCOM-1)
+          N     = NL+1 - JTTCOM
+          LTEXT(NCHTX+1:NCHTX+N) = LINE(JTTCOM:JTTCOM+N-1)
+          NCHTX = NCHTX + N
+        ENDIF
+      NCHPR = NCHTX
+      NCHTX = NCHTX + 1
+      TEXT(NCHTX) = CHAR (NEWLN)
+      MLIAD(2) = NCHTX + 1
+
+C----         new title line complete
+
+      CALL USETT (1)
+
+      CALL DPBLAN (0)
+      WRITE (IQPRNT,9045) NQDKNO, ' + ', LTEXT(JTTNAM:NCHPR)
+      WRITE (IQPRNT,9046)         ' - ', LINE(JAOLD:JEOLD)
+ 9045 FORMAT (4X,I6,A,A)
+ 9046 FORMAT (10X,A,A/)
+
+   46 CALL MESEND (1,1)
+
+      JSL = JSL + 1
+      NSL = NSL - 1
+      IF (NSL.EQ.0)                RETURN
+      GO TO 49
+
+C--           title unchanged
+
+   48 CALL DPBLAN (0)
+      WRITE (IQPRNT,9048) NQDKNO, ' . ', LINE(JAOLD:JEOLD)
+ 9048 FORMAT (4X,I6,A,A/)
+
+   49 CALL MESEND (JSL,NSL)
+      RETURN
+      END

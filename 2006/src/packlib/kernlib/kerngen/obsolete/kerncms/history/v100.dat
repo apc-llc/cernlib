@@ -1,0 +1,14 @@
+*
+* $Id: v100.dat,v 1.1.1.1 1996/02/15 17:51:41 mclareni Exp $
+*
+* $Log: v100.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:41  mclareni
+* Kernlib
+*
+*
+*  Version 1.00  890222 22.00
+      First release of the KERNCMS Pam :  22-feb-89
+ 
+         obtained by moving the VM/CMS material
+         from KERNIBM 2.25 to a separate Pam file
+ 

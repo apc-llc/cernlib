@@ -1,0 +1,45 @@
+DoIncludePackage(higz)
+#include "pilot.h"
+
+SRCS_C=	igvers.c
+
+#if defined(CERNLIB_FALCO) && !defined(CERNLIB_VAX)
+SRCS_C := $(SRCS_C) falint.c 
+#endif
+
+#if defined(CERNLIB_GIF)
+SRCS_C := $(SRCS_C) gifdecode.c gifencode.c imgpickpalette.c
+#endif
+
+#if defined(CERNLIB_UNIX) && defined(CERNLIB_CCREAD)
+SRCS_C := $(SRCS_C) ixgetl.c
+#endif
+
+#if defined(CERNLIB_NTC)
+SRCS_C := $(SRCS_C) ntmgt.c
+#endif
+
+#if defined(CERNLIB_X11) && !defined(CERNLIB_WINNT)
+SRCS_C := $(SRCS_C) rotated.c x11int.c
+#endif
+
+#if defined(CERNLIB_TKTCL)
+SRCS_C := $(SRCS_C) tkhigz.c
+#endif
+
+#if defined(CERNLIB_ZBUF)
+SRCS_C := $(SRCS_C) zbuffer.c
+#endif
+
+#if defined(CERNLIB_X11)
+INCLUDES:= $(INCLUDES) X11Includes
+#endif
+
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+DefaultCObjectRule(dgks)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

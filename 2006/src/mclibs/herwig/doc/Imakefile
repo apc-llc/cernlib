@@ -1,0 +1,3 @@
+
+InstallNonExecFile(herwig59,$(DOCDIR))
+

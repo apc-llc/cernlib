@@ -1,0 +1,51 @@
+*
+* $Id: v4_23,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_23,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :          27/07/95  17.22.32  by  Julian Bunn
+*-- Author :    Rene Brun   05/11/94
+*
+*::>          VERSION  4.23/02   05/05/95 11.19.28
+*
+*
+*::>          VERSION  4.23/01   22/02/95 14.34.06
+*
+*    New user routines HIJE and HXYE for returning errors on cells in
+*    2D histograms a la HIE,HXE.
+*
+*    New routine HBVERS in the C patch, that returns the version string.
+*
+*    Some error checking and extra calls to HBUG in the HFNT tree.
+*
+*    Modification to HCX to fix a bug produced when the routine was
+*    called with option 2 (get error) for a histogram without the
+*    required bank.
+*
+*    Extra argument IOPT added to HCXY in order to allow the caller
+*    to specify whether the contents (IOPT=1) or the error (IOPT=2)
+*    on the given cell is returned.
+*
+*    Bug corrected in HROUT. Problem was appearing in case of many
+*    subdirectories. Variable NLCDIR was not correctly set when returning
+*    to the parent level.
+*
+*    Deck HNTDUP: declare IDUM to be REAL*8 to make it double-word aligned.
+*
+*    Introduce DOUBLE PRECISION in HCX for Profile histograms
+*
+*    Adjust HREBIN to allow for non-equiwidth bins.
+*
+*::>          VERSION  4.23/00   05/11/94 09.36.29
+*
+*    HLDIR with CHOPT='N' works now also for disk directories.
+*
+*    Protect HMINUT when option Z is given (LINEAR was set to zero)
+*
+*    Protection in HFN in case HGIVEN is called immediatly before.
+*       LCONT pointer is now always recomputed.
+*
+*    Implement ../ style in HPATH.

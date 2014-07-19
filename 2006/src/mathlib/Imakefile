@@ -1,0 +1,22 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags 
+
+
+LIBDIRS= gen bvsl
+
+#ifndef WIN32
+ LIBDIRS := $(LIBDIRS) lapack
+#endif
+
+SUBDIRS= $(LIBDIRS)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(mathlib,$(LIBDIRS))
+
+InstallLibrary(mathlib,$(CERN_LIBDIR))
+
+InstallIncludeSubdirs($(LIBDIRS))
+
+TestSubdirs(gen bvsl)

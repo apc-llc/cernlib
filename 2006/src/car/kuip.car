@@ -1,0 +1,2257 @@
++TITLE.
+KUIP     2.07/08  24/01/96  17.26.56  PROGRAM LIBRARY KUIP = I202
++PATCH,$VERSION.
++DECK,V2_07.
+*CMZ :  2.07/08 24/01/96  17.26.56  by  Gunter Folger
+*-- Author :    Gunter Folger   06/03/95
+*
+*::>          VERSION  2.07/08   24/01/96 17.26.56
+*
+*
+* 21/11/95  17.23.46
+*
+*
+* 21/11/95  11.26.07
+*
+* NC. Change in KMENU (CKUIP) :
+*     1) in command mode, in HELP, put a "*" before real commands
+*        (not sub-menus).
+*     2) bug correction for VMS ("HELP", and "HELP NULL").
+*
+* 06/11/95  16.42.31
+*
+* NC. Change in mkdpan (CMOTIF) : bug correction for panel, e.g.:
+*     panel 0
+*     panel 1.01 'vec/pri-' 'print vector'
+*     panel 1.02 'vec/pri-' 'print -'
+*     panel 1.03 'vec/pri-'
+*     panel 0 d
+*
+* 22/06/95  14.53.05
+*
+*  NC. Change in KUXLISHLP iand $MKUXLIHLP (code generated from Architect)
+*  in order to avoid problem with "km_listSBox" (previously it was
+*  defined "extern" in 2 different include files).
+*
+*::>          VERSION  2.07/07   22/06/95 14.51.58
+*
+*
+* 16/06/95  16.09.58
+*
+*  GF. Protect for a NULL pointer in kmenu/interactive_find
+*
+*::>          VERSION  2.07/06   14/06/95 15.33.42
+*
+*  GF. Change definition/declaration of cdf_text, cdf_value
+*
+*::>          VERSION  2.07/05   12/06/95 17.52.08
+*
+*
+* 12/06/95  17.32.31
+*  GF. fixed problem with recursive vaiable assignment in
+*       kalias/*subst_var_alias
+*
+*
+*::>          VERSION  2.07/04   23/05/95 15.34.19
+*
+*  NC. Change logic for "new help machanism" (KMENU):
+*  For "HELP xxx" : if xxx is a valid command name and command is unique,
+*  then  print help as before (do not look for keywords "xxx" but add
+*  a "See also" message at the end for other commands with that keyword).
+*  In that case to have all commands (valid command name + keyword)
+*  do "HELP xxx -K(EYWORD)". if xxx is a valid command name but not
+*  unique do the same as "HELP xxx -K(EYWORD)" (print all commands,
+*  valid + keyword).
+*
+*  GF. Fixed problem with mod(); kmath_y affected.
+*      added ku_qcas() identicalto its fortran version
+*
+*::>          VERSION  2.07/03   09/05/95 17.27.59
+*
+*  GF. -fix several problems in kuvec
+*      -add check for trailing blanks to fill_arg_list (kexec); this avoids
+*         problems when an alias with trailing blanks is at the end of cmd.
+*      -make kxmexec aware of filecase setting in unix ( \ msdos).
+*
+*  NC.  Correction in "new" HELP for option EDIT/NOEDIT.
+*  Suppress all reference to /KUIP/CHELP and replace them by
+*  /KUIP/HELP.
+*
+*  NC. Put a more explicit message in "check_version" when the CDF
+*  has to be re-compiled (indicating which CDF causes the problem).
+*
+*::>          VERSION  2.07/02   03/04/95 14.28.00
+*
+*  NC. bug correction for popup menus in the graphics window with sub-menus
+*  (mkdgra).
+*
+*
+*::>          VERSION  2.07/01   07/03/95 15.53.53
+*
+*  NC. change resource "centerCommand" to an integer value (before it was
+*  a boolean) : 0 (False) means "normal" (cursor position), 1 (True)
+*  means "center" and -1 (new) means position (0,0).
+*
+*::>          VERSION  2.07/00   06/03/95 12.08.12
+*
+*  NC. New find comand. Is actually descibed in 2.06/08.
+
+
++DECK,V2_06.
+*CMZ :  2.06/10 03/03/95  16.31.15  by  N.Cremel
+*-- Author :    N.Cremel           03/03/95
+*
+*::>          VERSION  2.06/10   03/03/95 16.31.15
+*
+*   ICONWIDGET : change || by &&
+*
+*::>          VERSION  2.06/09   03/03/95 16.27.18
+*
+*
+*   Implement the new FIND mechanism (new behavior for command "HELP".
+*   Behavior of "HELP" is kept in new command name "CHELP" (for
+*   "Command Help").
+*   This new HELP is connected to the new directive:
+*   >Keyword
+*   list-of-keywords
+*   in the CDF.
+*   e.g.
+*   >Command PSVIEW
+*   >Parameters
+*   FNAME 'File name' C
+*   >Keyword
+*   PostScript
+*   display viewer
+*   >Guidance
+*   ...
+*   Notes:
+*   1- This implies to install also the new CDF compiler (kuipc) and
+*   the new kxterm.
+*   2- I have (at the same time) implemented in kuipc the new CDF directive:
+*   >Link
+*   list-of-links
+*   similar to >Keyword (same logic), for future development arround the
+*   HTML links.
+*
+*   Bug correction: MAX_opt (for option-menu parameters) was not
+*   tested (MKDCMP). Do other check on "MAX" definition ($MKDIMS).
+*
+*-- Author :    Gunter Folger      05/10/94
+*
+*::>          VERSION  2.06/08   24/02/95 14.42.34
+*
+*   fix trivial = to == in iconwidget in #if
+*
+*::>          VERSION  2.06/07   22/02/95 17.01.33
+*
+*
+* 03/02/95  15.58.06
+*
+*  fsearch modified to correct problem for VMS when current dir is
+*    search list
+*  Iconwidget still; the difference is not Irix4, but Motif1.1 except Hp and
+*     apollo, which have in Motif1.1 the 1.2 prototype
+*
+*::>          VERSION  2.06/06   18/01/95 15.32.31
+*
+* uxxt : add test for "XtSpecificationRelease"
+*
+*::>          VERSION  2.06/05   17/01/95 14.40.04
+*
+* adapt iconwdget for SGI Irix4.
+*
+*::>          VERSION  2.06/04   17/01/95 09.56.35
+*
+* kuxxt : add test for "XtSpecificationRelease"
+*
+*::>          VERSION  2.06/03   16/01/95 11.13.30
+*
+* Do not exit on input of mulitnational characters; they are ignored now.
+*
+* Write error message on attempt to create a vector with more than 3d;
+*  previously quietly a 3d vector was created.
+*
+* Command panels: give possibility to have all parameters input in a
+* scrolled window. Add new resource "scrolledCmdPanel. In .Xdefaults:
+*    *scrolledCmdPanel: auto    (default)
+* or *scrolledCmdPanel: always
+* or *scrolledCmdPanel: never
+* "auto" means that the scrolled window is automatically created if the
+* number of params. > 10 (otherwise fixed size area). "always" and "never"
+* means, respectively, that the scrolled window  is always (or never) created.
+*
+* km_create_sctext (used for "HELP") : calculate height of the window, to
+* avoid too big windows with small amount of text.
+*
+* new routine "CreateIconWidget" to avoid extern reference to "iconWidgetClass"
+* which was causing problems on VMS (for user-defined panels, "view" option
+* "by name and icon").
+*
+* KUXXT, ICONWIDGET : small corrections for DEC-CC.
+*
+* For panel definition: accept labels with blank inside and replace blanks
+* by '0' for valid alias definition (new routine strblk0).
+*
+* Bug correction in panel: when a new button is filled (mouse button 2)
+* or a button is erased (mouse button 3) then do it in all "views"
+* and not only in the current one (km_panel_execute).
+*
+* KMUMEN : small correction for DEC-CC.
+*
+* Panels: "view" option "by name and icon" is implemented (ICONWIDGET)
+* Change the logic in panel management.
+*
+*  Allow for file names up to 256 chars in KUOPEN, including path; was 80
+*
+*::>          VERSION  2.06/02   21/11/94 12.13.54
+*  Correct typo in pop_stack
+*
+*::>          VERSION  2.06/01   17/11/94 16.15.57
+*
+* 2 bugs correction in "panel" :
+*   - "panel 0 d" protect empty panels (KUWHAT)
+*   - "close" panel : give all panels a different title (MKDCMP)
+*
+* carry over previous fixesto kmacro, kuwham, mkdcmp, kmiout, and kxterm
+* add protection for failed execl call in kmisc/shsystem
+*
+*::>          VERSION  2.06/00   05/10/94 12.02.47
+*
+* New commands GLOBAL/CREATE, IMPORT, DELETE, LIST for handling global
+* variables.
+*
+* Support for variable indirection and arrays of variables.
+*
++DECK,V2_05.
+*CMZ :  2.05/22 09/11/94  12.26.44  by  Gunter Folger
+*-- Author :    Alfred Nathaniel   25/03/94
+*
+*::>          VERSION  2.05/22   09/11/94 12.26.44
+*
+*  Undo correction to fexpand, and move the fix into KMACRO; ie. KMACRO checks
+*   if the macro name starts with a -, and then strips this - off, and ignores
+*   the search path.
+*
+*::>          VERSION  2.05/21   19/10/94 15.41.52
+*
+*  Correct fexpand; it now also checks if the ftype needs to appended if the
+*   filename starts with -.
+*
+*::>          VERSION  2.05/20   17/10/94 12.19.43
+*
+*  Take corrections from Fons for problem in kxterm ( after a command
+*    the cursor went to column1 )
+*  routines affected: /cmotif/kuwham,kmiout /kxterm/kxterm
+*
+*::>          VERSION  2.05/19   11/10/94 17.25.32
+*
+* Fix kmacro to compile ok after correcting missing endcase/endif/.. in a macro
+*::>          VERSION  2.05/18   07/10/94 10.33.38
+*
+* Correct mkdcmp (Nicole)
+* Fix reading from file on AIX, OSF, and Ultrix.
+
+*
+*::>          VERSION  2.05/17   19/09/94 14.21.30
+*
+* getline() on VMS didn't realize when the terminal connection was dropped.
+*
+* $UNQUOTE did not work as intended.
+*
+* Fixed problems with edit server on VMS.
+*
+* Bug correction in multi_panel: panel 0 d title ' '.
+* Give possibility to open a panel "closed" (PalB) inside a palette:
+*      panel 0 d title c
+*   or
+*      panel 0 d title c:200x200+0+0 (e.g. when specifying the button size)
+* Add "File" entries: "Close" and "Exit" in palettes.
+* --> MKMPAN, $MKUXPL, KUXPAB, KUXPAL.
+*
+* Add cursors km_help_cursor, km_busy_cursor, km_blck_cursor, km_selc_cursor
+*
+* Possibility to set "echo off" even with no kxterm (Ged)
+* (--> Kuwham, init_motif in KUWHAM).
+*
+* Multi_panels (Motif) : implement possibility to specify the panel size
+* with "panel 0 d name geometry" (or km_panel_display(name,geometry)
+* geometry = wxh+0+0 (position is ignored)
+* (km_panel_add --> $MKUTFM, KUWHAT, MKMPAN)
+*
+*::>          VERSION  2.05/16   17/08/94 13.54.40
+*
+* Solve compilation problem on Apollo (true and false are cpp defines).
+*
+*::>          VERSION  2.05/15   15/08/94 11.18.39
+*
+* Panels (Motif) : implement possibility to give an option
+*      "panel x.y command [label] [pixmap] [opts]"
+* implement option "T" for "Toggle" behavior (button stays pressed
+* until another button is selected).
+* --> C user callable routine: km_panel_key_opt(
+*     int row,int col,char *command,char *alias_label,char *pixmap,char *opt);
+* ($MKUTFM, $KFLAG_H, $KMPANEL, KUWHAT, MKDPAN)
+*
+* Bug correction for panels with icons (KICON)
+*
+* Allow APPLICATION terminator to be indented.
+*
+* In MACRO header allow default values as "[1]=0" in addition to "1=0".
+*
+* New INTEGER FUNCTION KUQKEY() returning 1 if user has hit the return key
+* or 0 otherwise.
+*
+* Provide KUCLOS entry point for KICLOS to make naming more consistent.
+*
+*::>          VERSION  2.05/14   28/07/94 12.17.25
+*
+* SHELL: on VMS write command line into DCL file because LIB$SPAWN
+* does not do symbol substitution like in "LINK main,'LIB$'".
+*
+* Fortran callable entry for browser initialization (km_browser_set) :
+* KMBRSET(BRNAME, PATH)
+*
+* Browser initialization :
+* - user routine km_browser_set (char *br_name, char *path) (KMBROW)
+*   --> to give initial values for opening the browser
+* - KUIP command "BROWSER br_name path" (execution at run time) (KUIPMCDF)
+*
+*::>          VERSION  2.05/13   21/07/94 12.56.33
+*
+* Improve option list in command panels (MKDCMP)
+*
+* Reinstate strdup() for Ultrix.
+*
+*::>          VERSION  2.05/12   15/07/94 16.19.42
+*
+* Fix in KUIPC.
+*
+*::>          VERSION  2.05/11   15/07/94 14.59.04
+*
+* Correct bug when resizing the graphics windoe (MKDGRA)
+*
+*::>          VERSION  2.05/10   15/07/94 09.46.11
+*
+* Fix in KUIPC.
+*
+*::>          VERSION  2.05/09   14/07/94 15.10.11
+*
+* General cleanup of archaic stuff.  From now on non-ANSI C compilers
+* are not supported anymore.
+*
+* Preparations for a "kuip.h" header file.
+*
+* Fix problem with same button label in different panels, for example,
+* "blue" button in two panels p1 and p2.  One has to give a name to
+* the panel at the very beginning, e.g.
+*     panel 0 r p1
+*     panel 3.04 'blue/panel1' 'blue'
+*     etc...
+* and panel 0 r p2
+*     panel 3.04 'blue/panel2' 'blue'
+*     etc...
+*
+* New resource "noKxterm" for suppressing kxterm creation and display.
+* Same can be achived by e.g. CALL KUINIM('Ged(-nokxterm)').
+*
+* New command "Browser browsable_name" to open a browsable (without having
+* to click with the mouse).  Provided also as user callable routine:
+* km_set_browser(browsable_name).
+* E.g. "Browse Commands" opens the browsable class "Commands" defined
+* in the CDF. (N.B. the browsable_name is case sensitive).
+*
+* Restructuring of MKDGRA.
+*
+* Correction for char '~' (to be recognized as the home directory
+* in browser (decks KMBFIL, KMBMAC).
+* Correction for expanding correctly the Path with / when ~ is the first
+* character (deck KMBROW).
+* Correction for correctly execute "delete file" menu item in the
+* browser (cmmand 'KUIP/SHELL rm filename', deck MKDCMP)
+*
+* Implement parameter type KmTYPE_FILE for Motif (FileSelectionBox)
+* Add resources for cursor fonts: XmNmainCursor, XmNgraphCursor,
+* XmNinputCursor, XmNwaitCursor.
+* change disp_prompt_C from km_prompt to km_prompt_answer where the CANCEL
+* button (which was not meaningful) is suppressed.
+*
+* EXEC: on VM search all disks for .kumac files.
+*
+* KUSPY('OFF') now goes back to the argument position marked by KUSPY('ON')
+* instead of simply rewinding to the very first argument.
+*
+* KUGETH deleted.  It was unsafe and could overwrite storage.
+* Hopefully nobody uses it.
+*
+* KUGETQ deleted.
+*
+*::>          VERSION  2.05/08   27/06/94 15.07.11
+*
+* Fixed problem with blanks in CASE label list.
+*
+* Fixed compilation problem for VMS6.1 DECC.
+*
+*::>          VERSION  2.05/07   16/06/94 14.39.41
+*
+* Added $SHELL(cmd,sep).
+*
+* New system function $EXEC.
+*
+*::>          VERSION  2.05/06   06/06/94 12.40.01
+*
+* $SHELL(cmd) and $SHELL(cmd,' ') now return the complete output with
+* newlines replaced by blanks.
+*
+*::>          VERSION  2.05/05   06/06/94 11.55.32
+*
+* MACRO/DEFAULTS -auto did not work because of case mismatch.
+* MACRO/DEFAULTS ~/dir did not work on some systems because default shell
+* does not understand ~ (reported by Maarten Litmaath).
+*
+* Macros: use checksum instead of file modification date to test if
+* .kumac file has changed.  File system stamp have a granularity of
+* one second which could lead to problems.
+*
+* New system function $SHELL(cmd) and $SHELL(cmd,n) to return first or
+* n'th line of command output (for Unix only).
+*
+*::>          VERSION  2.05/04   30/05/94 17.17.10
+*
+* Macros: variable indirection did not work.
+*
+* VAXC: go back to (much slower) standard malloc() routines.
+* The VAXC$MALLOC_OPT routines have a serious flaw:
+*   for( n = 1; n < 100000; n++ ) buf = realloc( buf, n );
+* will exhaust the virtual address space?!?
+*
+* READ statement: show default value also if prompt is user supplied.
+*
+*
+*::>          VERSION  2.05/03   26/05/94 09.41.07
+*
+* Fix for STOPM statement and ";&" logic in macros.
+*
+*
+*::>          VERSION  2.05/02   24/05/94 16.31.33
+*
+* Rewrite of the KUMAC interpreter in C.  The main difference is that
+* EXEC inside a macro is treated like any other command.  This solves
+* a number of outstanding problems:
+*
+* -- "EXE", "M/EXEC", or any other abbreviation of the command path
+*    "/MACRO/EXEC" is now allowed.  Before this would lead to undefined
+*    behaviour due to a recursive Fortran call.
+*
+* -- Defining an alias for an EXEC call or changing the MACRO/DEFAULT
+*    path during macro execution has now the expected effect.  Before
+*    aliases and .kumac search where done at macro compilation time
+*    rather than execution time.
+*
+* -- It is now possible to execute a macro containing EXEC calls to
+*    non-existing .kumac files --- provided, of course, that the EXEC
+*    is never reached, e.g. in a "CASE $OS IN ..." construct.
+*
+* -- It is now possible to create or to modify a .kumac file during
+*    macro execution and call the macros in the new file.
+*
+* -- Mixed-case path names of .kumac files are possible now.
+*
+* The response time should be better than in the previous version:
+*
+* -- The new compiler needs only one pass rather than two passes over
+*    the .kumac file.
+*
+* -- A macro calling other macros will compiler the other .kumac files
+*    when needed rather than compiling everything up-front.
+*
+* -- Macros are cached --- if a .kumac file has been envoked already
+*    beforehand and it hasn't been changed then it is not recompiled
+*    when it is used again.
+*
+* In addition the following bugs are fixed in the new version:
+*
+* -- ON ERROR GOTO works now also for nested EXEC calls.
+*
+* -- Undefined numbered variables are now set to ' ' as documented.
+*
+* -- Depending on the length of the .kumac file name the use of several
+*    variables in an expression could lead to truncation due to the
+*    fixed length of a Fortran character string.
+*
+* The new version provides the following new features:
+*
+* -- The READ statement allows to specify the prompt string.
+*
+* -- The NEXTL statement allows to continue with the next loop iteration,
+*    similar to the "continue" statement in C.
+*
+* -- BREAKL and NEXTL allow to specify how many levels of nested loops
+*    should be skipped.
+*
+* -- The STOPM statement allows to stop macro execution, i.e. unwind
+*    nested EXEC calls and return to the command line prompt immediately.
+*
+* -- The RETURN statement allows to specify the return value.
+*
+* -- The variable "[0]" contains the fully qualified macro name, i.e.
+*    "/path/file.kumac#macro".
+*
+* -- ON ERROR handling allows now the following choices:
+*      ON ERROR CONTINUE
+*      ON ERROR GOTO label
+*      ON ERROR EXITM value
+*      ON ERROR STOPM
+*
+* -- The spelling "OFF ERROR" instead of "OF ERROR" is now allowed.
+*
+* -- Block constructs can now be written on a single line using ";"
+*    as line separator, e.g. "cmd1 ; IF ... THEN ; cmd2 ; ENDIF".
+*
+* -- The macro constructs are now documented in the on-line help ---
+*    try "HELP SYNTAX".  Thanks to Mike Kelsey for editing the text.
+*
+* -- "!" as macro argument will now use the default value given in
+*    the MACRO definition.
+*
+* The new version contains the following known incompatibilities:
+*
+* -- The command /MACRO/RECURSION has been deleted --- all macros are
+*    recursive now.
+*
+* -- ":=" as alternative to the assignment operator "=" is not supported
+*    anymore.  NB: "LET var = expr" is still allowed.
+*
+* Special thanks to Robert Franchisseur, Mike Kelsey, and Andrea Parri
+* for beta-testing the new macro interpreter.
+*
+* --------------------------------------------------------------------
+*
+* Correction for char '~' (to be recognized as the home directory
+* in browser (decks KMBFIL, KMBMAC).
+*
+* Correction for expanding correctly the Path with / when ~ is the first
+* character (deck KMBROW).
+*
+* Correction for correctly execute "delete file" menu item in the
+* browser (KUIP/SHELL rm filename, deck MKDCMP)
+*
+* getline(): ^Z did not work on SunOS and other BSD based systems because
+* there getpgrp() needs pid as argument (in contrast to SysV and Posix)
+* (reported by Maarten Ballintijn).
+*
+* SHELL command: on Unix interpret command line by HOST_SHELL shell.
+* Before the command was passed to whatever shell was spawned by system().
+*
+* KUCMD would still create menus with identical names (reported by Sunanda
+* Banerjee).
+*
+* New system functions $FEXIST(filename).
+*
+* New command SET/DOLLAR to enable/disable the substitution of "$var" as
+* environment variables.
+*
+* New system function $ENV(var) to get environment variable independent of
+* DOLLAR setting.
+*
+*
+*::>          VERSION  2.05/01   07/04/94 08.56.31
+*
+- Correction for compilation on VM
+- Bug correction in the browser on Sun (popup menus)
+- Give access to specific resources in the browser
+  (e.g. fileScWindow.bottomOffset, etc...) for adjusting the browser
+  "inside geometry" when using very big fonts (for the Geant demo
+  at CHEP ...)
+*::>          VERSION  2.05/00   25/03/94 16.34.38
+*
+- Complete redesign of the "Panel" interface :
+  *  menu-bar with "File", "View" and "Help" (instead of buttons "Save",
+     "Close" and "Help" at the bottom).
+  *  possibility to have key with labels (aliases), commands or pixmaps.
+     The general command for key definition is:
+       "panel x.y command [label] [pixmap]"
+  * In "View" menu, possibility to view:
+    -> By Name
+    -> By Icon
+    -> By Name and Icon (not yet implemented).
+    -> By Command (normal)
+    -> By Command (1 col.)
+  * Implement "context help" on all panel buttons (user defined).
+  * Command "Panel 0 c" to close a panel in command mode.
+
+- Implement "Palette" interface silmilar to UIMX (command /MOTIF/MULTI_PANEL).
+
+- Provide a C callable interface for panels & palettes definition and display
+instead of using the macro language (Jamie's request for Ged).
+
+- Implement the possibility (user callable entries in C) to display a list and
+return one selection in a user-defined command (action routine) - User
+request -.
+
+- new routine "interactive_help_motif" to display a Motif selection box
+with all possible choices when typing "HELP" without any argument.
+
+- add fallback for "fileScWindow.width" (default 80) for changing ratio
+in the browser between the dir - and file - lists of objects (requested by
+Sven for Geant demo with big fonts).
+
+- Implement the possibility to have an "All Cycles" view option in the
+browser on VMS (at the moment it is commented). Change  "XmNradioBehavior"
+to FALSE (to make combination of several view options possible).
+
+- Implement the possibility to specify "IconBoxTITLES" as a resource in
+.Xdefaults, e.g. "Paw++*iconType: 4" - User request -.
+
+- add resource "panelInteractive" (True by default, or False to inhibit
+"close" panel, and supress possibility for panel editing) - User request -.
+
+- Prevent the HELP window(s) to disappear under kxterm.
+
+- Store the "Paw++ Locate" window (km_HigzOutput) into the list of possible
+windows to be raised  - User request -.
+
+- bug correction for empty strings inside command argument panels.
++DECK,V2_04.
+*CMZ :  2.04/10 09/03/94  15.50.59  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   27/10/93
+*
+*::>          VERSION  2.04/10   09/03/94 15.50.59
+*
+* More corrections for Convex version.
+*
+* SHELL: do not convert shell command to uppercase on VM --- NQS++ uses
+* lowercase options (reported by Dave Edsall).
+*
+* New interface class String=$fun(Number,String) for application defined
+* functions.
+*
+* KUIPC: protect against TABs in CDF input (reported by Walter F.J. Mueller).
+*
+* Change' Set/LCDIR [path]' to ' -Set/LCDIR [path]' in KUIPMCDF
+*
+*::>          VERSION  2.04/09   01/03/94 11.27.08
+*
+* Changes in command PANELS (to correct a problem reported in HISTO/FIT)
+*
+* Introduction of teh command "panel 0 c title" ("panel close")
+* to close a panel with name title in a KUIP macro.
+* This was previously only possible with the mouse.
+*
+* Changes for CONVEX in $HKUIP_H, HKUIP and KEXEC
+*
+* Bug fix in KMENU when HELP without parameters
+*
+*::>          VERSION  2.04/08   16/02/94 14.16.39
+*
+* Batch mode did not work on VAX/VMS due to wrong VAXC$CRTL_INIT() placement
+* (reported by John Marrafino).
+*
+* "cmd $fun([var])" did not work if [var] contained an operator like ".and."
+* (reported by Mats Cronqvist).
+*
+* CALL KUCMD('..',' ','SW') crashed when creating a menu without any commands
+* (reported by Vincenzo Innocente).
+*
+* Allow comma-separated list of names for ALIAS/DELETE and VECTOR/DELETE
+* (reported by Mike Kelsey).
+*
+* Corrections for Windows/NT port by Valeri Fine.
+*
+*::>          VERSION  2.04/07   25/01/94 16.02.27
+*
+* KUFDEF: allow for functions without arguments given as "$name()".
+*
+*::>          VERSION  2.04/06   25/01/94 13.33.49
+*
+* $FORMAT: fix for format descriptors like I9.5 which did not put leading
+* zeroes on VAX/VMS.
+*
+* Use Fortran READ for command input when stdin is not a terminal.
+* (RS/6000, DECstation, and Alpha-OSF/1 Fortran I/O does not use C-stream
+* functions.)
+*
+* KUCMD: missing check if a menu name already existed.
+*
+* KMFILE: remove version number from VMS file specs in browser.
+*
+* GETLINE: make it less noisy be removing some beeps.
+*
+*::>          VERSION  2.04/05   22/12/93 09.43.07
+*
+* add ressource "centerCommand".
+* add command /MOTIF/ICON (panel with icons)
+* implement panel with icons.
+* suppress "Double Click" in list of browsables (browser).
+* new KUIPCC to suppress a bug for option parameter with integer values.
+*
+*::>          VERSION  2.04/04   14/12/93 15.03.03
+*
+* KXTERM: corrections for transcript saving in VMS.
+*
+* HOST_PRINTER and KUIP/PRINT: new commands to send a file to the printer;
+* Print is now included in the action menus of the file system browser.
+*
+* MACRO/DATA: new command to be used as "APPL DATA file.name" to write text
+* from immediate data in a macro.
+*
+* New system function $IQUEST(I) returning the status vector element.
+* "IF $IQUEST(1)=0 THEN ..." allows to test the success of the last command.
+*
+* KUESVR: create lock file in /tmp if /usr/tmp fails, e.g. because directory
+* is NFS mounted and locking not supported (reported by Dave Edsall).
+*
+*::>          VERSION  2.04/03   29/11/93 17.02.31
+*
+* Bug fix in the command pull-down menus of the main browser.
+*
+* Slight changes in the CDF.
+*
+*::>          VERSION  2.04/02   23/11/93 16.47.06
+*
+* KXTERM: delay flow control to allow FFREAD from stdin.
+*
+* KUGETF: allow KUGETL mechanism to get a list of filenames.
+*
+* Command COLUMNS: add protection in case environment variable "COLUMNS" does
+* not contain a number (reported by Maurizio Loreti).
+*
+* getline: ^Z-suspend did not work if the program was called from a shell
+* script (reported by Maarten Ballintijn).
+*
+* $SUBSTRING(s,k,n) returned one character too much if k+n happened to be the
+* length of the string.
+*
+*::>          VERSION  2.04/01   27/10/93 15.02.14
+*
+* KUIPC produced wrong Fortran code for a 64-character string on continuation
+* lines (reported by David Wagner).
+*
+* KUIPC: compiler-indepenent treatment of backslash in character strings.
+*
+*::>          VERSION  2.04/00   27/10/93 10.29.10
+*
+* Use HOST_EDITOR setting in VMS Motif version.
+*
+* Break interception for Motif version on VMS.
+*
+* "cmd;" resulted in "unknown command cmd;" rather than executing the
+* command "cmd".
+*
+* last.kumac could not be written if application started in a directory with
+* a mixed-case name.
+*
+* Treat alias content in expressions as number if possible.
+*
+* Preserve trailing blanks in variable initialization in MACRO header.
+*
+* Preserve trailing blanks in macro variable assignment
+*
+* KUHOME: do not apply filecase conversion to allow uppercase directory names.
+*
+* Browser: corrections for editing for path window.
+*
+* KUOPEN: new status code 'DONTKNOW' which opens the highest cycle on VMS
+* ('UNKNOWN' creates a new cycle);  on other systems equivalent to 'UNKNOWN'
+*
+* Disable Control-C for Motif version on VMS.
+*
+* Set Motif host editor to /DISPLAY=DECW.
+*
+* Mods for CONVEX version by Victor Balashov (Dubna).
+*
+* KIMATH: fix to recognize numbers .LT.1 without leading zero.
+*
++DECK,V2_03.
+*CMZ :  2.03/15 01/10/93  16.26.50  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   05/07/93
+*
+*::>          VERSION  2.03/15   01/10/93 16.26.50
+*
+* Motif: provide dummy mbstowcs() for VAX/VMS.
+*
+* KXTERM: fix communication problem if output stream contains # character.
+*
+*::>          VERSION  2.03/14   29/09/93 15.50.24
+*
+* KXTERM: add display of current local directory.
+* Line buffering between application process and kxterm
+* because mailboxes use record I/O.
+*
+* MANUAL command: recursive descent to all submenus.
+*
+* EXEC command in Motif mode: allow to pass more than one macro argument.
+*
+* KIMATH: fix problem for "vec(1)<vec(2)".
+* Round to 6 significat digits before testing equality/non-eq. of expressions.
+*
+* Unix and VMS: use unique names for all tempfiles.
+*
+* KUVAR: don't do alias translations etc.
+*
+*::>          VERSION  2.03/13   16/09/93 17.21.03
+*
+* KUIPC: fix for long names as >Action routines
+*
+* KUEDIT: test return code from system() == -1 rather than < 0
+*
+*::>          VERSION  2.03/12   13/09/93 09.34.59
+*
+* KIMINT: don't interpret [] inside application text as variable names.
+*
+* KIMATH: Change in treatment of vector names to allow:
+*   a = '?'
+*   IF [a]='?' THEN
+*
+*::>          VERSION  2.03/11   06/09/93 08.50.52
+*
+* $var now looks for environment variable on VMS as well.  Uppercase names are
+* searched first in the logical names tables and then in the symbol table.
+* Lowercase names are searched for only in the symbol table.  Replacement is
+* suppressed if $var is followed by a colon to avoid DISK$USER: etc.
+*
+* New command SET/LCDIR to change current working directory (only for Unix
+* and VMS).
+*
+* Asynchronous editing for VMS implemented (not yet fully tested).
+* HOST_EDITOR must be TPU/DISPLAY=MOTIF.
+*
+* $VEXIST did not work if the vector has existing.  $QUOTE did not work
+* correctly (reported by by Tim Adye).
+*
+*::>          VERSION  2.03/10   03/09/93 11.13.54
+*
+* Second iteration of KUIP/Motif for VMS.
+*
+*::>          VERSION  2.03/09   02/09/93 11.53.22
+*
+* Bug fix for $VLEN function.
+*
+* First iteration of kxterm for VMS (C.W. Hobbs/DEC).
+*
+*::>          VERSION  2.03/08   01/09/93 09.45.31
+*
+* Allow digits as first character in an alias name.
+*
+*::>          VERSION  2.03/07   31/08/93 18.14.00
+*
+* New routine KUFDEF to define application specific system functions.
+*
+* Buffer flushing for RS/6000 to keep correct sequence of C and Fortran output
+* if stdout is redirected into a file.  This requires compiler version xlf 2.3.
+*
+* First iteration of Windows/NT port (Valeri Fine).
+*
+*
+*::>          VERSION  2.03/06   25/08/93 13.09.50
+*
+* Problems with +KEEP with PATCHY vs. CMZ installation.
+*
+* $OS and $MACHINE were not described in HELP FUNCTIONS
+*
+*::>          VERSION  2.03/05   24/08/93 17.23.28
+*
+*
+* KUIPC: part of the menu tree was forgotten in C output mode (reported by
+* Robert Franchisseur).
+*
+* getline: mysterious hangups of Falco terminals connected to through a
+* DECserver line to Ultrix (reported by Rob Kreuger).
+* Went from POSIX terminal driver back to BSD driver for Ultrix.
+* BSD driver (also used for Apollo and NeXT) now catches typeahead.
+*
+* KIMINT: bug in the handling of nested IFs:
+*     IF 1=1 THEN
+*        IF 1=1 THEN
+*          IF 1=0 THEN
+*             mess Not reached
+*          ELSE
+*             mess first
+*          ENDIF
+*        ENDIF
+*        mess Okay
+*        IF 1=1 THEN
+*          IF 1=1 THEN
+*             mess second
+*          ENDIF
+*        ENDIF
+*     ENDIF
+* did not execute any of the commands!  (Reported by Nige Watson.)
+*
+* KIMATH: Vector indizes can now contain expressions, e.g. VEC([n]+1)
+*
+* KUGETI/KUGETR: Arguments can be expressions which are evaluated.
+*
+* System functions can now be nested and the arguments can be expressions,
+* e.g. "$lower($substring($OS$MACHINE,[k]+1,2*[n]))"
+*
+* New system functions: $INDEX(str1,str2), $WORDS(string,[sep]),
+* $WORD(string,[k,[n,[sep]]]), $QUOTE(string), $UNQUOTE(string),
+* $INLINE(string).
+*
+* ALIAS/CREATE: value is alias expanded; new option "-N" to inhibit expansion.
+*
+* ALIAS/LIST: print alias names sorted alphabetically.
+*
+* KIMINT: case labels were not properly recognized if the command following
+* on the same line contained parenthethes.  (Reported by Mike Kelsey).
+*
+* KIMCAL: FOR statement crashed if the loop index had a name
+* longer than 4 characters.  (Reported by Mike Kelsey).
+*
+* KIMCAL: SHIFT left a quote character at the end of [*].  (Reported by
+* Mike Kelsey).
+*
+* The modifications for ;& and ;! introduced a bug:  single commands always
+* returned status code 0.  As a result HELP went into the editor even if
+* the command name was invalid.  (Reported by David Wagner).
+*
+* Final fix for old-style behaviour for optional parameters without defaults
+* (mainly used by GEANT drawing commands).  (Thanks to Shaheen Tonse and
+* Dean Chacon for pointing it out the actual problem.)
+*
+* KUVCRE actually imposed an upper limit of 10 characters for vector names.
+* STYLE G did not write commands to LAST.KUMAC.
+* TRACE ON WAIT did not allow to skip a command.
+*
+*
+*::>          VERSION  2.03/04   05/08/93 12.29.35
+*
+*
+* new command "NEWPANEL" (defined in KUIPCDF) for building a new and
+* empty panel to be filled interactively at run time.
+* add possibility to raise (popup) the kxterm window.
+* add a "LIST" button to all options parameters which gives access to a
+* full explanation of the options.
+* add "Exit" in the browser window (menu "File").
+* update "helps" in KUIPMCDF.
+*
+*::>          VERSION  2.03/03   12/07/93 10.17.35
+*
+* Yacc grammar did not treat the cases of more than one string concatenation
+* per expression and the comparison of a numeric value to a string.
+*
+*::>          VERSION  2.03/02   07/07/93 18.35.24
+*
+* Fix for KUIPC and YKUIP.
+*
+*::>          VERSION  2.03/01   06/07/93 10.02.10
+*
+* Fix for Alpha/OSF.
+*
+*::>          VERSION  2.03/00   05/07/93 17.35.42
+*
+* KIMATH:  the evaluation of
+*    a = -2.34
+*    b = 40
+*    c = [a] - [b]
+* resulted in c = -0.234E-39.  (Reported by Walter Brueckner).
+* Expression evaluation is now done by a Yacc-generated parser which allows
+* arbitrarily complex expressions like
+*    c = [a]*[x] + [b]
+* The IF statement can now also contain a combination of logical expressions
+* like
+*    if [a]<[b] .and. [c]>[d] then
+*       ...
+*    endif
+*
+*
+* STYLE G:  clicking on the black box to select another option value could
+* hand up the system in case one of the option values was the blank string.
+* (Reported by Robert Franchisseur).
+*
+*
+* KUIPC produced garbage Fortran code if the guidance text contained lots of
+* significant blanks.  (Reported by Lawrence Williams).
+*
+* KUIPC in Fortran output mode did not handle correctly >Menu directives going
+* upwards more than one level.  (Reported by Steve Fisher).
+*
+*
+* KUOPEN:  added CALL DMCSCL... to avoid locking of VM-SFS files.
+* (Request by Wojciech Wojcik).
+*
+* SHELL for Apollo:  memory was overwritten when the shell command exceeded
+* 128 characters.  Also /bin/ksh was started as a restricted shell.
+* (Reported by Nige Watson).
+*
+* GETLINE:  add support for DEC function keys F12/F13/F14.
+* (Request by Jim Conboy).
+*
+* A command list separated by semicolon was not quite equivalent to the same
+* commands on consecutive lines:  In
+*    CMD1 ; CMD2
+* the second command was not executed if the first one returned a non-zero
+* status code.  CMD2 is now executed even if CMD1 fails.  The construct
+*    CMD1 ;& CMD2
+* allows to execute CMD2 only if CMD1 succeeds while
+*    CMD1 ;! CMD2
+* executes CMD2 only if CMD1 fails.  (Request by Burkhard Burow).
+*
+*
+* Motif part: fixed some cases of NULL pointer dereferencing.
++DECK,V2_02.
+*CMZ :  2.02/09 07/06/93  15.43.12  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   29/04/93
+*
+*::>          VERSION  2.02/09   930607 15.43
+*
+* KMDIAL: fix for Piaf password prompt in Motif.
+*
+*::>          VERSION  2.02/08   930604 13.55
+*
+* Deck KUPIAF removed.  Piaf syncronization moved into PAW.
+*
+*::>          VERSION  2.02/07   930527 13.11
+*
+* Linux version introduced.
+*
+* Restructuring of getline(): previous terminal interface recognition failed
+* for NeXT.
+*
+* Motif window for menu guidance text.
+*
+*::>          VERSION  2.02/06   930526 15.19
+*
+* On Apollo the complete C part can and should be compiled under BSD now.
+*
+* SHELL command: fixed problem with VMS batch and Apollo /bin/sh.
+*
+*::>          VERSION  2.02/05   930525 18.24
+*
+* New routine KUPROP(CHPRMT,CHVAL,NCH) to prompt for a password.
+*
+* STYLE GP: panel lines can be redefined with fewer numbers of fields.
+*
+* Piaf synchronization for VMS/Multinet implemented.
+*
+*::>          VERSION  2.02/04   930511 15.22
+*
+* Bug fix in ICONBOX.
+*
+*::>          VERSION  2.02/03   930511 15.10
+*
+* The routine registered by KUCOMV is now called without arguments.  The called
+* routine has to CALL KUVNAM(VNAME) to retrieve the vector name which was
+* deleted.
+*
+*::>          VERSION  2.02/02   930507 10.30
+*
+* KUCOMV routine was only called for '*' (delete all vectors).
+*
+*::>          VERSION  2.02/01   930504 11.49
+*
+* New routine KUCOMV(SUB) to register a subroutine SUB(CHNAME) which is called
+* whenever a vector is deleted.  This is mainly needed for COMIS which keeps a
+* table of defined vectors.
+*
+* New system function $FORMAT(number,format) to format a number according to a
+* Fortran-like FORMAT string, e.g. $FORMAT([x],F9.3). Supports F,E,G,I, and
+* Z (hexadecimal).
+*
+*::>          VERSION  2.02/00   930429 17.48
+*
+* KIDTAB: replace TABs by an equivalent number of blanks (assuming tab
+* positions are every 8th column).  Before TABS were replaced by a single
+* blank only.
+*
+* STYLE G could not be used in PAWLOGON.
+*
+* Add minus sign to list of valid characters for building alias names
+* (request by Per Scharff-Hansen).
+*
+* KUGETE did not work when prompting for missing mandatory argument
+* (reported by Steve Fisher).
+*
+* KIMINT: label calculation caused integer overflow when using more than
+* 26 IF-ENDIF constructs (fatal on VMS).  Changing from MAXIFS=200,MAXIFN=20
+* to MAXIFS=120,MAXIFN=10 should push the limit beyond 100.  Hopefully
+* nobody uses more then 10 levels of nested IFs.
+*
+* KUARGS: mismatch between code and manual.  Option BATCH should NOT imply
+* NOLOG, i.e. LOGON.KUMAC should still be executed.
+*
++DECK,V2_01.
+*CMZ :  2.01/07 06/04/93  11.47.34  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   25/02/93
+*
+*::>          VERSION  2.01/07   930406 11.47
+*
+* Fix for KUGETx returning last value for optional parameters without default
+* in case of positional arguments.
+*
+*::>          VERSION  2.01/06   930406  9.43
+*
+* "$name" will be replaced by value of environment variable if it is defined
+* and "name" is not a KUIP system function.
+*
+* Allow switching to STYLE G from logon kumac.
+*
+* STYLE G: high-light last choice in menus; if panel is defined display it
+* along with menus (reported by Robert Franchisseur).
+*
+* Increased limit for number of macro arguments from 9 to 99.
+*
+* IBM: disabled trapping of floating point underflows (CALL XUFLOW).
+* Remove call to KUALFA from error handler.  This caused recursive Fortran I/O
+* in the GKS version.
+*
+* DECstation c89: make it compile without "-common" option.
+*
+* Fixes for MSDOS version using f2c and gcc (Valery Fine).
+*
+* Set IQUEST(1)=0 before calling action routine to fix problem of VECTOR/READ
+* with good filename being ignored after a VECTOR/READ with an invalid filename
+* (reported by IVERSEN@VSFYS1.FI.UIB.NO)
+*
+* KUGETx returns last value for optional parameters without default value.
+* Interactive Geant relies on this e.g. for the DRAW command.
+*
+* Version 2.01/02 introduced that all floating point numbers were printed with
+* a decimal point.  This broke the usage of $SIGMA for index calculations.  The
+* old behaviour that e.g. $SIGMA(2*3+1) returns "7" is restored.
+* To solve the problem which originally triggered the change a new system
+* function $RSIGMA is available now.  This function has be to used in COMIS
+* calls expecting a REAL argument, e.g.
+*    CALL file.f($RSIGMA(sqrt(x(1)))
+* Otherwise the value may be passed as an INTEGER if the SIGMA result turns out
+* to be a whole number.
+*
+* Filecase conversion for EXEC statements inside KUMACS.
+*
+* The invisible vector ? was not correctly treated for subranges (reported by
+* Nicole Lhermitte).
+*
+* A continuation line start in the first column is concatenated as-is, e.g.
+*    VEC/READ x,y,_
+*    z,t file.dat
+* is equivalent to "VEC/READ x,y,z,t file.dat".  Before there was put in at
+* least one blanks between the concatenated lines.
+*
+* getline(): implemented ^J/LF (delete word), ^R (refresh) and ^X for style DCL
+* and do output buffering.  Prefer Posix over BSD termio to solve problem with
+* type-ahead on Sun.
+*
+* KUIP/SHELL for Apollo: use pgm_$invoke() instead of system().  Otherwise
+* /com/sh is suspected to overwrite memory because of an unassigned I/O stream
+* (reported by Robert Franchisseur).
+*
+*::>          VERSION  2.01/05   930311 12.35
+*
+* Fix problem if too many alias expansions happen during kumac compilation
+* (reported by Hanspeter Beck).
+*
+*::>          VERSION  2.01/04   930308 11.31
+*
+* Fix for help menu in browser.
+*
+*::>          VERSION  2.01/03   930305 15.12
+*
+* Renamed IGXMES to KMXMES.
+*
+* Motif version: enable help menus again.
+*
+*::>          VERSION  2.01/02   930302 18.12
+*
+* Bug fix for $SUBSTRING.
+*
+* VECTOR/INPUT: bug fix for 2-dim vectors
+*
+* VECTOR/PRINT: print proper indizes for 2-dim vectors
+*
+* First iteration for Alpha/OSF.
+*
+* KUIP/EDIT: default .KUMAC extension missing for MVS.
+*
+* Fix recursion if $LAST is used in a command (reported by B. BUROW).
+*
+* Emulate "%G" and "%.<n>d" format which behaves improperly on VAX/VMS.
+*
+*::>          VERSION  2.01/01   930226 17.22
+*
+* Small fix in KXTERM.
+*
+*::>          VERSION  2.01/00   930225 17.52
+*
+* KXUNIT: protection against very long filenames.
+*
+* A few more corrections for NeXT.
+*
+* KUIPC: allow call with input file name only.
+*
+* Ignore quotes around string in $SUBSTRING expression.
+*
+* Allow compilation with non-ANSI compiler.
+*
+* Non-folkloristic functions strdup(), strcasecmp(), etc. are only redefined
+* if they do not exist in the C-library.
+*
+* New routine KUGETQ to protect arguments with multiple tokens by quotes.
+* To be used by MACRO/EXEC that "EXEC macro 'Hello World'" is passed as
+* one argument.
+*
+* More MVS/NEWLIB corrections.
+*
+* LAST command changed:  the new default N=-99 behaves like the old
+* default N=-1.  Values -99<N<0 print out the last -N commands.
+* This scheme originally invented for MVS support is also useful to
+* allow cut-and-paste of blocks of commands on workstation screens.
+*
++DECK,V2_00.
+*CMZ :  2.00/16 15/02/93  17.08.42  by  Alfred Nathaniel
+*-- Author :    Alfred Nathaniel   04/12/92
+*
+*::>          VERSION  2.00/16   930215 17.08
+*
+* The location of the kxterm executable can now be defined as environment
+* variable KXTERM.
+*
+* Access from C to PAWC through a pointer to allow the use of dynamic common
+* blocks on IBM.
+*
+* Corrections for MVS (Harald Butenschoen).
+*
+* Ansi C compiler on Sun provides fixed include files <time.h> and <signal.h>.
+*
+* V/CREATE and V/INPUT allow again vector elements to be used as initializers
+* (reported by L.Pontecorvo)
+*
+* The macro READ statement did not provide the correct default value for
+* already existing variables (reported by Timothy Cox).
+*
+* The number of commands in the history list printed by "!" is now restricted
+* to the value set by SET/RECORDING.
+*
+*::>          VERSION  2.00/15   930201 14.27
+*
+* SET/ROOT was looking at menus at the same level as the root menu.
+* SET/ROOT now changes the prompt to the menu name.
+* (Problems reported by Mogens Dam.)
+*
+* KUIP/EDIT creates new files in the first directory in the MACRO/DEFAULTS
+* search list. Before it has always created in the current directory.
+* (Problem reported by Nige Watson.)
+*
+* Another bug fix for string concatenation: "abc//'def'//ghi" gave the
+* wrong result. (Problem reported by Nicole Lhermitte.)
+*
+* KUGETL: blank values in a variable length argument list were ignored.
+*
+* Remove edit server lock file before exiting.
+*
+* Avoid "writable strings" problem with default values.
+*
+*::>          VERSION  2.00/14   930128 18.32
+*
+* Alpha/VMS CC with /STAN=VAXC is now compiling without warnings.
+*
+* Second iteration for NeXT implementation.
+*
+* Bug fix in getline(): memory was overwritten when prompt exceeded
+* 80 characters (affected PAWGKS on VMS).
+*
+* After 3 consecutive ^C ask whether he wants to exit from application.
+*
+* Put additional calls to KUALFA in strategic places.
+*
+* "READ var" keeps the initial value of macro variable when pressing <CR>.
+* Problem reported by Tim Cox.
+*
+* For implicit LOOP arguments to commands: comma is only recognized as
+* argument separator if it is outside balanced ().
+*
+* For KUGETL: comma is only recognized as argument separator if it is
+* outside balanced () or ''.
+*
+*::>          VERSION  2.00/13   930126 16.50
+*
+* Avoid compiler warnings on Apollo and SGI.
+*
+* Fix for accessing common blocks from C on Cray.
+*
+* Restored old behaviour for KUPROx routines: input value is left unchanged
+* if typing <CR>.
+*
+* Fix for SUN and DECstation: strtod() is declared in <math.h> instead
+* of <stdlib.h>
+*
+* Replace long by int: we assume that int is at least 32 bits.
+*
+* New routine KUGRFL to flush the graphics output after each command.
+* The routine passed should do the same as IGTERM for X11 but be dummy for GKS.
+*
+* KUGETE ignored default value.
+*
+* First iteration for NeXT implementation.
+*
+* KIMULT: '*' was missing from list of characters which inhibit ';' being
+* the line separator --> on VMS "shell del file.type;*" was not working
+* inside a macro.
+*
+*::>          VERSION  2.00/12   930122 21.24
+*
+* Removed KUALFA after each command executed.
+*
+* On VM/CMS: replace sleep() emulation by call to SLEEPF (clash with with
+* entry in COMMTXT.TXTLIB).
+*
+* On VAX/VMS: MACRO/DEFAULT -Auto worked only if a search path was set.
+*
+* Undefined numbered variables, e.g. [1] are now replaced by "!".
+*
+* KUGETI and KUGETR now prompt in case the argument is not a valid number.
+*
+* Wrong logic in string concatenation: "abc//def//'ghi'" became "'abc//defghi'"
+* instead of "'abcdefghi'".
+*
+* "TRACE ON TEST" executed action routines.
+*
+*::>          VERSION  2.00/11   930121 16.27
+*
+* "V/CREATE name" is now treated as "V/CREATE name(1)".
+*
+* Environment variable KUIPEDITOR takes precedence over EDITOR.
+*
+*::>          VERSION  2.00/10   930120 18.43
+*
+* New CDF features are now available as well through Fortran mode of KUIPC.
+*
+* "-option" was only recognized if it was the last argument on the command
+* line.
+*
+* Use G-format instead of F-format to convert result of $SIGMA.
+*
+* Edit server is only used if HOST_EDITOR command contains a '&'.
+* HOST_EDITOR 'vi &' is treated as HOST_EDITOR 'xterm -e vi &'.
+*
+*::>          VERSION  2.00/09   930118 16.45
+*
+* Style GP reimplemented.
+*
+* Motif terminal kxterm introduced.
+*
+*::>          VERSION  2.00/08   930115 14.06
+*
+* FATMEN's "LS file -L" did not work because the second parameter is an
+* Integer which had implictly the MINUS flag set inhibiting the CHOPT trial.
+* ==> KUIPC changed that the MINUS flag for numeric parameters is not set
+* automatically any more. Instead "-value" on a numeric argument position
+* is checked whether it is a number. Otherwise the CHOPT assignment is tried.
+*
+* The filename "last.kumac" was undefined when exiting with having executed
+* a LAST command (message "Cannot open" when leaving application).
+*
+* In order to allow the new HPLOT escape sequences "@[" an undocumented
+* feature had to be removed: The construct "@[name]" forced variable
+* substitution even inside quoted strings. The same functionality is
+* achieved by using "//" for string concatenation, e.g. "vecname='vec@[n]'"
+* has to be replaced by "vecname='vec'//[n]".
+*
+* Bug fix for VMS file paths inside macros, e.g. "shell dir disk$xx:[user]".
+* Note: VMS file paths may NOT appear in EXEC statements inside a macro,
+* i.e. "EXEC DISK$xx:[user]macnam" does not work inside a macro (it does
+* though when entering it on the command line).
+* Workaround: define a logical name for the directory path and use
+* "EXEC LOG_NAME:macnam" or include the directory in the kumac search
+* path "MACRO/DEFAULT [],DISK$xx:[user]" and use "EXEC macnam".
+*
+*::>          VERSION  2.00/07   930113 15.58
+*
+* Typing "Q" after WAIT prompt terminates macro execution.
+*
+* Bug fix in Motif prompt for WAIT command.
+*
+*::>          VERSION  2.00/06   930112 18.45
+*
+* In concatenated system functions, e.g. "$machine$os" only the last one
+* was replaced.
+*
+* Macro variables "[%var]" were not replaced.
+*
+* TRACE ON WAIT implemented.
+*
+* All keyboard input requests are now done through Motif widgets.
+*
+* KGETAR did not work for VMS.
+*
+* New special argument value "!!" replaced by value used for previous
+* command execution, i.e. for mandatory parameters it behaves like
+* pressing <CR> at prompt.
+*
+* "-option" syntax was misbehaving if a shorted range value was a substring
+* of a longer range value.
+*
+*::>          VERSION  2.00/05   930107 17.38
+*
+* The dollar sign can be used in alias names.
+*
+* LaTeX manual formatting improved.
+*
+* Command LAST excluded the last command.
+*
+* Appending the default ".KUMAC" filetype was not done for VMS path names
+* like "[dir.sub]file".
+*
+* Problems with macro variable substitition if macro file name contains a
+* VMS directory path solved. (Special thanks to Rob Kreuger for reporting
+* the VMS related problems.)
+*
+* MACRO/DEFAULT -Auto/AutoReverse reimplemented. The default path can now
+* be a comma separated list of directories.
+*
+*::>          VERSION  2.00/04   921218 17.03
+*
+* Falco terminals lost arrow keys when logging into TAGIBM because the
+* escape sequences changes from "ESC-[-A" to "ESC-O-A".
+*
+* VMS signal handler installed to avoid program aborting for VMS
+* specific exceptions, e.g. invalid filenames.
+*
+* Unix only: KUHOME replaces now again environment variables in
+* filenames, e.g. $HOME/file.type
+*
+* When prompting for missing arguments the last used value is proposed
+* as default.
+*
+*::>          VERSION  2.00/03   921214 19.06
+*
+* KUIPAPPL.TMP files are opened for unformatted access to allow RECFM V
+* on VM/CMS.
+*
+* Bug fix for VM/CMS crash in KUPATH: In a CALL SUB('ABC') to a C function
+* SUB(char *ptr, int*len) the pointer ptr my NOT be considered as a local
+* variable. Doing ptr++ will be disastrous in the end.
+*
+*::>          VERSION  2.00/02   921211 18.13
+*
+* KUIP system functions were not substituted if used in CASE
+* e.g. CASE $OS IN ... did not work
+*
+* Bug fix for VM/CMS crash when calling help for command with
+* >User-Help twice
+*
+* KUARGS for option -n (no logon kumac) fixed
+*
+* Assignments "name = val" evaluated to "name = @macname[val]".
+* Fixed by removing the obsoleted feature of decoding unbracketed
+* variable names on the right hand side, i.e. "i = i+1" must now
+* be written as "i = [i]+1".
+*
+* KUVAR was passing a string constant to routines which could overwrite it.
+*
+* Name clash with FATMEN for routine fmatch(). Renamed to fwmatch()
+*
+* Command repetition now also recognized if ! is not in first column.
+*
+* Recognize alias names as help item, e.g. "A/CRE LS DIR C; HELP LS"
+*
+* Delete KUIPHELP.TMP file after exiting from HELP in -EDIT style
+*
+*::>          VERSION  2.00/01   921209 17.54
+*
+* Delete temp vectors created for non-contiguous subarrays
+*
+* For gcc (Sun) use option -fwritable-strings
+*
+*::>          VERSION  2.00/00   921204 21.36
+*
+* A large fraction of KUIP has been rewritten in C. The new version is
+* intended to be (mostly) backwards compatible to the old one but because
+* of the large amount of new code involved we cannot exclude that some
+* incompatibilities remain. We want to urge all users to test their KUMAC
+* files with the PAW version in the new area before it goes into production.
+*
+* At the moment the following features are not yet fully implemented:
+*
+*    DEFAULTS -AUTO
+*    MANUAL in SGML and plain TeX
+*    STYLE GP
+*    TRACE WAIT
+*    system functions for STYLE GP ($KEYNUM, $KEYVAL)
+*
+*
+* Known incompatibilities:
+*
+*  - Alias names may contain only letters, digits, @-signs and underscores.
+*    (If someone can make a strong case that this is too restrictive,
+*    let us know; we can still consider going back to the old scheme.)
+*
+*  - The commands /KUIP/LISTHELP and /KUIP/SET_SHOW/MODE have been removed.
+*
+*
+* Improvements:
+*
+*  - There is no limit on the number of aliases anymore.
+*    Since KUMAC variables are treated internally as a special kind of
+*    alias complex macros could hit the limit of 200 aliases before.
+*
+*  - The HELP command recognizes now abbreviations for submenu names.
+*    E.g. HELP H/OP works now while before HELP HISTOGRAM/OPERATIONS had
+*    to be spelled out.
+*
+*  - The HELP command does a simple text formatting. The line length is
+*    controlled by /KUIP/SET_SHOW/COLUMNS.
+*
+*  - The HELP -EDIT option is now implemented for all systems.
+*    A new command /KUIP/SET_SHOW/HOST_PAGER defines the pager used to
+*    display the help text.  E.g. on a Unix workstation define
+*    HOST_PAGER 'xterm -e view &' to display the help text in a
+*    separate window.
+*
+*  - A new command /KUIP/SET_SHOW/FILECASE allows now to select the case
+*    sensitivity for filenames on Unix systems. Before this functionality
+*    was hidden as STYLE '-FILECASE ON'.
+*
+*  - A new command /KUIP/SET_SHOW/RECALL_STYLE to define the command recall
+*    and editing style.  There is a choice between ksh/emacs-like binding
+*    and the key definitions used by DCL command line editing on VAX/VMS.
+*
+*******************************************************************************
+*  - A completely new Motif interface with a browser for application          *
+*    specific object types and many more features.                            *
+*******************************************************************************
+*
++PATCH,$KUMACS.
++DECK,CLEAN.
+*CMZ :  1.68/00 02/03/92  13.55.43  by  Fons Rademakers
+*-- Author :
+
+*****************************************************************
+*                                                               *
+                  macro  clean  os=x  ftn=x
+*                                                               *
+*****************************************************************
+
+mess 'Deleting old fortran and binary files....'
+
+if [os] = unix goto unix
+if [os] = vm   goto vm
+if [os] = vms  goto vms
+   goto error
+
+unix:
+   host_shell /bin/sh
+*   shell /bin/rm -fr [ftn]
+   shell /bin/mkdir  [ftn]
+   goto end
+
+vm:
+   shell gime 20 [ftn]
+*   shell erase * fortran [ftn]
+*   shell erase * text [ftn]
+   goto end
+
+vms:
+*   shell delete '[.'//[ftn]//']*.*;*'
+*   shell delete [ftn].dir;*
+   shell create/directory/protection=(o:dwre) '[.'//[ftn]//']'
+   goto end
+
+error:
+mess *** Error in clean: os = [os], ftn = [ftn] ***
+
+end:
+mess 'Deleting old fortran and binary files....done'
+
+return
+
++DECK,HELP.
+*CMZ :  1.68/00 02/03/92  13.55.43  by  Fons Rademakers
+*-- Author :
+
+
+*****************************************************************
+*                                                               *
+                  macro  help  name=x
+*                                                               *
+*****************************************************************
+
+if [name] = apollo goto apollo
+if [name] = sgi    goto generic
+if [name] = hpux   goto generic
+if [name] = sun    goto generic
+if [name] = decs   goto generic
+if [name] = ibmrt  goto generic
+if [name] = aix370 goto generic
+if [name] = cray   goto generic
+if [name] = ibm    goto generic
+if [name] = newlib goto generic
+if [name] = vax    goto generic
+
+   mess ' '
+   mess 'To install KUIP type the following:'
+   mess ' '
+   mess '   EXEC INSTALL <machine> [<opt>] [-dev] [-lib]'
+   mess ' '
+   mess 'Where <machine> may be one of the following:'
+   mess '   apollo, sgi, hpux, sun, decs, ibmrt, aix370,'
+   mess '   cray, ibm, newlib, vax'
+   mess ' '
+   mess 'To see the possible values of <opt> for a specific machine type:'
+   mess '   EXEC <machine> help   or   EXEC <machine> ?'
+   mess ' '
+   mess 'The option -dev should only be specified for compiling and'
+   mess 'linking in debug (development) mode.'
+   mess ' '
+   mess 'If option -lib is specified a stand-alone library will be created,'
+   mess 'otherwise the object file(s) are kept for later usage.'
+   mess ' '
+   goto end
+
+apollo:
+   mess ' '
+   mess 'To install KUIP on the '//[name]//' type:'
+   mess ' '
+   mess     EXEC INSTALL [name] '[<opt>] [-dev] [-lib]'
+   mess ' '
+   mess 'Where <opt> may be one of the following:'
+   mess '   m68k (default)  to install CMZ on a motorola Apollo'
+   mess '   a88k            to install CMZ on a DN10000 Apollo'
+   mess ' '
+   mess 'The option -dev should only be specified for compiling and'
+   mess 'linking in debug (development) mode.'
+   mess ' '
+   mess 'If option -lib is specified a stand-alone library will be created,'
+   mess 'otherwise the object file(s) are kept for later usage.'
+   mess ' '
+   goto end
+
+generic:
+   mess ' '
+   mess 'To install KUIP on the '//[name]//' type:'
+   mess ' '
+   mess     EXEC INSTALL [name] '[-dev] [-lib]'
+   mess ' '
+   mess 'The option -dev should only be specified for compiling and'
+   mess 'linking in debug (development) mode.'
+   mess ' '
+   mess 'If option -lib is specified a stand-alone library will be created,'
+   mess 'otherwise the object file(s) are kept for later usage.'
+   mess ' '
+   goto end
+
+end:
+return
++DECK,INSTALL.
+*CMZ :  1.68/00 02/03/92  13.55.43  by  Fons Rademakers
+*-- Author :
+
+
+*****************************************************************
+*                                                               *
+                  macro  install  1=x  2=x  3=x  4=x
+*                                                               *
+*****************************************************************
+*
+*-- delete any alias that may interfere with the macro
+*
+alias/delete *
+
+*
+*-- some of the variables used in this script
+*
+*    NAME     Kind of machine
+*    CPU      CPU type (for Apollo only: m68k or a88k)
+*    OS       Operating system type: Unix, VMS, VM, NEWLIB
+*    FTN      Name of subdirectory for fortran files
+*    VERS     Version of cernlib to link with
+*    DEV      If -dev then development version, compile with debug flag
+*    LIB      If set a stand-alone library will be created, if not
+*             the object files will be kept for later use
+*
+NAME = $lower([1])
+A2   = $lower([2])
+A3   = $lower([3])
+A4   = $lower([4])
+OPT  = x
+DEV  = x
+LIB  = x
+VERS = new
+
+if [A2] <> -dev goto endif2
+   DEV = [A2]
+   goto arg3
+endif2:
+if [A2] <> -lib goto endif3
+   LIB = [A2]
+   goto arg3
+endif3:
+OPT = [A2]
+arg3:
+if [A3] <> -dev goto endif4
+   DEV = [A3]
+   goto arg4
+endif4:
+if [A3] <> -lib goto endif5
+   LIB = [A3]
+   goto arg4
+endif5:
+if [A3] = x    goto arg4
+goto help
+arg4:
+if [A4] <> -dev goto endif6
+   DEV = [A4]
+   goto arg5
+endif6:
+if [A4] <> -lib goto endif7
+   LIB = [A4]
+   goto arg5
+endif7:
+if [A4] = x    goto arg5
+goto help
+arg5:
+
+*
+*-- the user wants help or needs help
+*
+if [NAME] = ?     goto help
+if [NAME] = help  goto help
+if [NAME] = x     goto help
+
+if [OPT]  = ?     goto help1
+if [OPT]  = help  goto help1
+
+*
+*-- set the variables before the actual installation
+*
+if [NAME] = apollo goto apollo
+if [NAME] = sgi    goto unix
+if [NAME] = hpux   goto unix
+if [NAME] = sun    goto unix
+if [NAME] = decs   goto unix
+if [NAME] = ibmrt  goto unix
+if [NAME] = aix370 goto unix
+if [NAME] = cray   goto unix
+if [NAME] = ibm    goto ibmvm
+if [NAME] = newlib goto newlib
+if [NAME] = vax    goto vms
+   goto help
+
+apollo:
+   CPU = [OPT]
+   if [CPU] = x    goto m68k
+   if [CPU] = m68k goto unix
+   if [CPU] = a88k goto unix
+   goto help1
+   m68k:
+      CPU = m68k
+      goto unix
+
+unix:
+   OS   = unix
+   FTN  = ftn
+   goto endif1
+
+ibmvm:
+   OS   = vm
+   FTN  = M
+   goto endif1
+
+newlib:
+   OS   = newlib
+   FTN  = M
+   goto endif1
+
+vms:
+   OS   = vms
+   FTN  = ftn
+   goto endif1
+
+endif1:
+
+*
+*-- here follows the actual install stuff
+*
+mess ' '
+mess Installation of CMZ on [NAME] starting at $DATE $TIME .....
+mess ' '
+
+exec clean  os=[OS] ftn=[FTN]
+exec load   name=[NAME] os=[OS] ftn=[FTN] cpu=[CPU] dev=[DEV]
+if [LIB] <> x goto library
+   cfor /
+   set c   -lan
+   cfor /
+   set ftn -lan
+   goto endif8
+library:
+   cflib /
+   set c   -lan
+   cflib /
+   set ftn -lan
+endif8:
+
+mess ' '
+mess 'If you also want to build kuipc type:'
+mess exec kuipc  name=[NAME] os=[OS] vers=[VERS] dev=[DEV]
+mess ' '
+
+mess ' '
+mess Installation of CMZ on [NAME] finished at $DATE $TIME .....
+mess ' '
+
+goto end
+
+
+help:
+exec help
+goto end
+
+help1:
+exec help name=[NAME]
+goto end
+
+end:
+return
+
++DECK,LOAD.
+*CMZ :  1.68/00 02/03/92  13.55.43  by  Fons Rademakers
+*-- Author :
+
+*****************************************************************
+*                                                               *
+            macro  load  name=x  os=x  ftn=x  cpu=x  dev=x
+*                                                               *
+*****************************************************************
+
+mess 'Setting compile flags and loading sequences....'
+
+if [name] = apollo goto apollo
+if [os]   = unix   goto unix
+if [os]   = vm     goto vm
+if [os]   = newlib goto newlib
+if [os]   = vms    goto vms
+   goto error
+
+apollo:
+   sel . apollo abbrev double qxno_sc bsd
+
+   set [ftn]/*.ftn -f
+   set kuip.lib    -l
+
+   if [dev] <> x goto devapo
+      if [cpu] <> m68k goto a88k
+         set 'ftn $compfile -b $compfile.bin -zero -save -indexl -frnd _
+              -cpu 3000' -c
+         goto endif
+      a88k:
+         set 'ftn $compfile -b $compfile.bin -zero -save -indexl -natural _
+              -cpu at' -c
+         goto endif
+   devapo:
+      if [cpu] <> m68k goto deva88k
+         set 'ftn $compfile -b $compfile.bin -zero -save -indexl -pic -frnd _
+              -cpu 3000 -dba' -c
+         goto endif
+      deva88k:
+         set 'ftn $compfile -b $compfile.bin -zero -save -indexl -natural _
+              -cpu at -dba' -c
+         goto endif
+
+unix:
+   set [ftn]/*.f  -f
+   set c   -lan
+   set [ftn]/*.c  -f
+   set ftn -lan
+   set kuip.a     -l
+
+   if [name] = sgi    goto sgi
+   if [name] = hpux   goto hpux
+   if [name] = sun    goto sun
+   if [name] = decs   goto decs
+   if [name] = ibmrt  goto ibmrt
+   if [name] = aix370 goto aix370
+   if [name] = cray   goto cray
+      goto error
+
+   sgi:
+      sel . [name] [os] abbrev double bslash csetjmp qx_sc bsd
+      OPTF = -static -O -nocpp
+      goto endif1
+
+   hpux:
+      sel . [name] [os] abbrev double csetjmp qx_sc sys5
+      OPTF = -K +ppu -O
+      goto endif1
+
+   sun:
+      sel . [name] [os] abbrev double bslash csetjmp qx_sc bsd
+      OPTF = -O
+      goto endif1
+
+   decs:
+      sel . [name] [os] abbrev double bslash csetjmp qx_sc sys5
+      OPTF = -static -G 3 -O
+      goto endif1
+
+   ibmrt:
+      sel . [name] [os] abbrev double bslash csetjmp qx_sc sys5
+      set 'xlf -qextname -qrndsngl -qcharlen=32767 -O -c $compfile' -c
+      goto endif
+
+   aix370:
+      sel . [name] [os] abbrev double qx_sc
+      set 'xlf -qextname -qrndsngl -qcharlen=32767 -O -c $compfile' -c
+      goto endif
+
+   cray:
+      sel . [name] abbrev qxcapt
+      set 'cft77 -ed -o off -b $compfile.o $compfile' -c
+      goto endif
+
+   endif1:
+   if [dev] <> x goto devset
+      set 'f77 @[OPTF] -c $compfile' -c
+      set c   -lan
+      set 'cc  @[OPTC] -c $compfile' -c
+      set ftn -lan
+      goto endif
+   devset:
+      * default is debug
+      goto endif
+
+vm:
+   sel . [name] ibmall abbrev double
+
+   set kuip.fortran.[ftn] -f
+   set kuip.txtlib.a      -l
+   set 'vfort $compfile "(" noprint charlen "("15500")"' -c
+   goto endif
+
+newlib:
+   sel . [name] ibmmvs ibmall abbrev double
+
+   mess '*** set compiler directive correctly ***'
+   goto error
+*   set kuip.fortran.[ftn] -f
+*   set kuip.txtlib.a      -l
+*   set 'vfort $compfile "(" noprint charlen "("15500")"' -c
+*   goto endif
+
+vms:
+   sel . [name] abbrev double
+
+   set '[.'//[ftn]//']kuip.for' -f
+   set kuip.olb -l
+   if [dev] <> x goto devvms
+      set '$ for/obj=$compfile.obj $compfile' -c
+      goto endif
+   devvms:
+      * default is debug
+      goto endif
+
+endif:
+
+seq . /kucdes
+
+goto end
+
+error:
+mess *** Error in load: name = [name], os = [os] ***
+
+end:
+mess 'Setting compile flags and loading sequences....done'
+
+return
+
++DECK,KUIPC.
+*CMZ :  1.68/00 02/03/92  13.55.43  by  Fons Rademakers
+*-- Author :
+
+*****************************************************************
+*                                                               *
+            macro  kuipc  name=x  os=x  vers=x  dev=x
+*                                                               *
+*****************************************************************
+
+mess 'Compiling kuipc....'
+
+sel kuipcpat
+
+if [name] = apollo goto apollo
+if [os]   = unix   goto unix
+if [os]   = vm     goto vm
+if [os]   = newlib goto newlib
+if [os]   = vms    goto vms
+   goto error
+
+apollo:
+   set kuipc.ftn -f
+   cfor /kuipc
+   if [dev] <> x goto devapo
+      shell bind -sparse_vm -b kuipc kuipc.bin _
+            /cern/[vers]/lib/libpacklib.a _
+            /cern/[vers]/lib/libkernlib.a
+      goto end
+   devapo:
+      shell bind -sparse_vm -b kuipc kuipc.bin _
+            kuip.lib $HOME/kern/kernlib.lib
+      goto end
+
+unix:
+   set kuipc.f -f
+   cfor /kuipc
+   if [dev] <> x goto devunix
+      shell f77 -o kuipc kuipc.o _
+            /cern/[vers]/lib/libpacklib.a _
+            /cern/[vers]/lib/libkernlib.a
+      goto end
+   devunix:
+      shell f77 -o kuipc kuipc.o _
+            kuip.a $HOME/kern/kernlib.a
+      goto end
+
+vm:
+   set kuipc.fortran.a -f
+   cfor /kuipc
+   * cannot bind from CMZ
+   goto end
+
+newlib:
+   mess '*** set directives for kuipc correctly ***'
+*   set kuipc.fortran.a -f
+*   cfor /kuipc
+   goto error
+
+vms:
+   set kuipc.for -f
+   cfor /kuipc
+   if [dev] <> x goto devvms
+      shell link/exe=kuipc kuipc.obj, _
+            'cern:['//[vers]//'.lib]packlib/lib,kernlib/lib'
+      goto end
+   devvms:
+      shell link/debug/exe=kuipc kuipc.obj,kuip.olb, _
+            'cern:['//[vers]//'.lib]kernlib/lib
+      goto end
+
+error:
+mess *** Error in load: name = [name], os = [os] ***
+
+end:
+mess 'Compiling kuipc....done'
+
+return
+
++PATCH,*KUIP
++DECK,BLANKDEK.
+*CMZ :  2.04/02 23/11/93  11.13.05  by  Alfred Nathaniel
+*-- Author :
++USE,KUCDES,KUIP.
++USE,KUFLAGS.
++USE,HKUIP,CKUIP.
++USE,MKCDES,IF=MOTIF.
++USE,CMOTIF,IF=MOTIF.
++USE,XMCLIB,IF=MOTIF.
++PATCH,*KUESVR.
++DECK,BLANKDEK.
+*CMZ :  2.02/06 26/05/93  10.55.24  by  Alfred Nathaniel
+*-- Author :
++USE,KUFLAGS.
++USE,HKUIP.
++USE,KUESVPAT.
++USE,KUESVR.
++PATCH,*KXTERM.
++DECK,BLANKDEK.
+*CMZ :  2.04/02 23/11/93  15.06.11  by  Alfred Nathaniel
+*-- Author :
++USE,KUFLAGS.
++USE,HKUIP.
++USE,MKCDES.
++USE,KXCDES.
++USE,KXTERMPAT.
++USE,KXTERM.
++USE,P=CKUIP,D=KKERN.
++USE,P=CMOTIF,D=VMSQIO,IF=VMS.
++USE,P=XMCLIB,D=KUXXT.
++PATCH,*KUIPC
++DECK,BLANKDEK.
+*CMZ :  2.00/00 03/12/92  15.47.32  by  Alfred Nathaniel
+*-- Author :
++USE,KUIPCPAT.
++USE,KUIPC.
++USE,HKUIP.
++USE,P=CKUIP,D=KKERN.
++USE,KUFLAGS
+
++PATCH, KUFLAGS.
++DECK,BLANKDEK.
+*CMZ :  2.03/13 14/09/93  13.15.13  by  Alfred Nathaniel
+*-- Author :
++USE, IBMVM,   IF=IBM.       temporary for backwards compatibility
++USE, APOLLO,  IF=APOF77, APOFTN.
++USE, AIX370,  IF=IBMAIX.
++USE, IBMAIX,  IF=AIX370.
++USE, MSDOS,   IF=WINNT.
++USE, ALPHAOSF,IF=QMVAOS.
++USE, UNIX,    IF=ALLIANT,ALPHAOSF,AMIGAUX,APOLLO ,CDCUX  ,CONVEX ,DECS.
++USE, UNIX,    IF=GOULD  ,HPUX    ,IBMAIX ,IBMRT  ,IBMUX  ,IPSC   ,LINUX.
++USE, UNIX,    IF=MACAUX ,MACMPW  ,MIPS   ,MSDOS  ,NECSX  ,NEXT.
++USE, UNIX,    IF=SGI    ,SUN     ,UNISYS ,VAXULX.
++USE, ALPHAVMS,IF=QMALPH.
++USE, ALPHA,   IF=ALPHAVMS, ALPHAOSF.
++USE, VAX,     IF=VAXVMS.
++USE, VMS,     IF=ALPHAVMS, VAXVMS.
++USE, IBMMVS,  IF=NEWLIB.
++USE, IBMALL,  IF=IBMVM, IBMMVS.
++USE, DOUBLE,  IF=IBMALL, VMS.
++USE, DOUBLE,  IF=UNIX, IF=-SINGLE.
++USE, BSLASH,  IF=ALPHA, APOF77, DECS, IBMRT, LINUX, MSDOS, SGI, SUN.
+
++PATCH,KUCDES
++DECK,KUCDES.
+*CMZ :  2.05/02 27/04/94  12.04.46  by  Alfred Nathaniel
+*-- Author :
++KEEP,KCMCMD.
+      PARAMETER (MAXCMD = 512)
+
++KEEP,KCGEN
+      COMMON /PAWC/ NWPAW,IXPAWC,IHBOOK,IXHIGZ,IXKUIP,IFENCE(5),
+     +              LMAIN(1), WS(9989)
+      DIMENSION IQ(2),Q(2),LQ(8000)
+      EQUIVALENCE (LQ(1),LMAIN(1))
+      EQUIVALENCE (IQ(1),LQ(9))
+      EQUIVALENCE ( Q(1),LQ(9))
+
+      COMMON /KCLINK/
+     +  LTOP,LVEC,LCMD,LACT,LMAC,LLIST,LSDUM1,
+     +  LCEL,LNAME,LPAR,LPARV,LTRAV,LVECN,LCELGF,
+     +  LROOT,LTOPW1,LTOPW2,LMACN,LCLIST,LLAST
+
++KEEP,KCGEN1
+      PARAMETER (MAXLEV=10)
+
+      COMMON /KCBANC/ WDNAM(MAXLEV),INPMOD,CPRMPT,CHGLOS,CDFFIL,EDITOR,
+     +                SHELL,TRAPRO,CHMULT,CHMULM,CHMEXE,
+     +                MACBAK,MACEXT,BSLASH
+     +
+      CHARACTER*64  CPRMPT,EDITOR,TRAPRO,SHELL
+      CHARACTER*32  WDNAM,CHGLOS
+      CHARACTER*16  CDFFIL
+      CHARACTER*8   INPMOD,MACBAK
+      CHARACTER*7   MACEXT
+      CHARACTER*1   BSLASH
+      CHARACTER*80  CHMULM
+      CHARACTER*(MAXCMD) CHMULT,CHMEXE
+
+      COMMON /KCLAST/ CELLST,PNALST,PATLST(MAXLEV)
+      CHARACTER*32 CELLST
+      CHARACTER*40 PNALST
+      CHARACTER*32 PATLST
+
+      COMMON /KCUTIL/ NCMD,IWD,LUNFIL,LPRMPT,TIMING,TRACE,CALMOD,
+     +                NVADD,IREPET,IREFAC,IBRAK,TIMALL,LENTER,UNIQUE,
+     +                LENMUL,MULTFL,HISTOK,NOHIST,LENMUM,FILCAS,MEXEFL
+      LOGICAL TIMING,TRACE,TIMALL,UNIQUE,MULTFL,HISTOK,NOHIST,FILCAS,
+     +        MEXEFL
+      INTEGER CALMOD
+
+      COMMON /KCHELP/ HELPAT,UHPATH
+      CHARACTER*80 HELPAT
+      CHARACTER*32 UHPATH
+
++KEEP,KCGEN2
+      PARAMETER (MAXLVA=16)
+      COMMON /KCVADD/
+     +  LVADDR(MAXLVA)
+
+      COMMON /KCFORM/ IOCEL,IONAME,IOPAR,IOPARV,IOVEC,IOVECN
+
+      COMMON /KCSPR/ SPRMPT
+      CHARACTER*64 SPRMPT
+
+      COMMON /KCAPPL/ APPLIC,APEXIT
+      CHARACTER*64 APPLIC
+      CHARACTER*32 APEXIT
+
+      COMMON /KCAPPM/ APPMAC,APPMEX
+      CHARACTER*64 APPMAC
+      CHARACTER*32 APPMEX
+
+      COMMON /KCROOT/ CHROOT
+      CHARACTER*64 CHROOT
+
+      COMMON /KCUSER/ LAPPLI,LUNAPP
+
+      COMMON /KCEXEL/    EXELIN
+      CHARACTER*(MAXCMD) EXELIN
+
+      COMMON /KCEXIT/ IEXADD,IUSADD,NEXADD,IUTADD,IQUADD,IBRADD
+     +       ,LICALL,LICAL2,LICAL3
+      LOGICAL LICALL,LICAL2,LICAL3
+
++KEEP,KCMAC
+      COMMON /KCMAC/ MACTAB,NSTLEV,QUITFL,WAITFL,WAITFF,DEBTAB,SKIPFL,
+     +               HEADFL,IONERF,NOEXEC
+      LOGICAL MACTAB,QUITFL,WAITFL,WAITFF,DEBTAB,SKIPFL,HEADFL,NOEXEC
+
+      PARAMETER (MAXLIN=500)
+      COMMON /KCMACC/ MACBUF(MAXLIN)
+      CHARACTER*80 MACBUF
+
+      PARAMETER (MAXMAC=100,MAXLAB=100,LENSYM=48)
+      COMMON /KCMEC/  NUMMAC,NUMLAB,IIIMAC
+      COMMON /KCMECI/ LABADD(MAXLAB),MACUND(MAXMAC),LABADM(MAXLAB)
+CCCM  COMMON /KCMECC/ MACNAM(MAXMAC),LABNAM(MAXLAB),MACPAT,AUTOEX
+      COMMON /KCMECC/ MACNAM(MAXMAC),LABNAM(MAXLAB),MACPAT,AUTOEX,MACLIS
+      CHARACTER*(LENSYM) MACNAM,LABNAM
+CCCM  CHARACTER*80 MACPAT
+      CHARACTER*80 MACPAT,MACLIS
+      CHARACTER*20 AUTOEX
+
++KEEP,KCPAR
+      PARAMETER (MAXPAR=100)
+      COMMON /KCPARI/ PARPTR(4,MAXPAR),GETPAR,ICLENG,ICLIST,
+     +                IPFLAG(MAXPAR),NONPOL,NOPOS1
+      INTEGER PARPTR,GETPAR
+
+      COMMON /KCPARS/ GETSPY,SPYFLG,PROFLG,SPYING
+      INTEGER GETSPY
+      LOGICAL SPYFLG,PROFLG,SPYING
+
+      COMMON /KCDEFL/ DEFLAG
+      LOGICAL DEFLAG
+
+      COMMON /KCPART/ TOTPAR
+      INTEGER TOTPAR
+
+      COMMON /KCPARC/ PARLST,CLIST,NOALIN,COMAND,CHLAST,NONPOS
+      CHARACTER*80  CLIST,COMAND
+      CHARACTER*(MAXCMD) NONPOS
+      CHARACTER*(MAXCMD) PARLST,NOALIN,CHLAST
++KEEP,KCQUES
+      COMMON /QUEST/ IQUEST(100)
+
++KEEP,KCSIGM
+      COMMON /KCSIGM/ ISIADD,NVSIGM
+
+      COMMON /SIKUIP/ CHSIGM
+      CHARACTER*80 CHSIGM
+
++KEEP,KCUNIT
+CCCM  COMMON /KCUNIT/ ILUIN,ILUOUT,LUOUT,LUNLOG,LUNHIS,LUACT,LUNMAN
+      COMMON /KCUNIT/ ILUIN,ILUOUT,LUOUT,LUNLOG,LUNHIS,LUACT,LUNMAN,
+     +                LUNML
+      COMMON /KCLUI/  LUIBAS,LUIFIL,LUIVR,LUIVW,
+     +                LUIHIS,LUIAPP,LUIHIW,LUIMAN
+
++KEEP,KCVECT
+      COMMON /KCVECT/ NUMVEC,TOTPAV,GETPAV,TVECFL
+      INTEGER TOTPAV,GETPAV
+      LOGICAL TVECFL
+
++KEEP,KCWORK
+      COMMON /KCWORK/ VECTOR(100)
+
++KEEP,KCESVR.
+*-- when changing MAXSVR ajust also the size in /CKUIP/KUGSVR
+      PARAMETER      (MAXSVR =20)
+      INTEGER         NSVFIL, NSVCUR, IESADD
+      LOGICAL         SERVER
+      COMMON /KCESVR/ NSVFIL, NSVCUR, IESADD, SERVER
+
+      CHARACTER*32    EDTFIL(MAXSVR)
+      CHARACTER*32    EDTCMD(MAXSVR)
+      COMMON /KCEFIL/ EDTFIL, EDTCMD
+
++PATCH,PAMEND.
+*

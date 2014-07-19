@@ -1,0 +1,27 @@
+*
+* $Id: ioritn32.F,v 1.1.1.1 1996/03/08 15:21:58 mclareni Exp $
+*
+* $Log: ioritn32.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:58  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_ND50)||defined(CERNLIB_ND500)
+      SUBROUTINE IORITE(LUNIT,IARR,NBYTE,IRET)
+C     ****************************************
+C   WRITE RECORD ONTO FILE
+C   LUNIT  = LOGICAL DEVICE NUMBER
+C   IARR   = BUFFER ARRAY
+C   NBYTE  = NO OF BYTES TO BE WRITTEN
+C   IRET   = RETURN STATUS
+      INTEGER*4 LUNIT,IARR(2),NBYTE,IRET,ZERO
+      INTEGER*4 MFUNC,MAGTPZ,NBYTR,MSTAT,IORCNV
+      DATA ZERO/0/
+      MFUNC=27B
+      IRET=MAGTPZ(MFUNC,IARR,LUNIT,NBYTE,NBYTR,MSTAT)
+      IF(IRET.EQ.ZERO) GOTO 77777
+      IRET=IORCNV(IRET)
+77777 RETURN
+      END
+#endif

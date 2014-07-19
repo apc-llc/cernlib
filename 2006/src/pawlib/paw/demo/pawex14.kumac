@@ -1,0 +1,22 @@
+MACRO PAWEX14
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 14                          *
+* Different representations of 2-dim histograms                          *
+**************************************************************************
+Exec ALLDEF
+histogram/file 1 pawhists.hbook 0
+hrin  0
+hi/li
+close 1
+opt UTIT
+zon 2 2
+set htyp 0
+hi/pl 200 BOX
+hi/2d/con 200 20 0
+igset lwid 1
+hi/2d/lego 200
+hi/2d/sur 200
+hi/del 0
+zon
+RETURN
+

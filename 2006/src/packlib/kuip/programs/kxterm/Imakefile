@@ -1,0 +1,26 @@
+SRCS_C=	 actions.c dialogs.c help.c inputtrdial.c kuipio.c \ @@\
+	kxpan.c kxterm.c menu.c saveastrdial.c searchdialog.c utils.c \ @@\
+	uxpanel.c uxxt.c kkern.c
+
+#if defined(CERNLIB_VAXVMS)
+EXTRA_DEFINES=-DCERNLIB_VMS
+#endif
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) MotifIncludes X11Includes
+
+SubdirLibraryTarget(kxtlib,NullParameter)
+
+DefinePackageLibrary(kxtlib)
+
+#if defined(CERNLIB_UNIX)
+CLIBS= -G Motif kernlib
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+CLIBS= graflib/motif packlib kernlib
+#endif
+
+
+CernlibCcProgramTarget(kxterm,kxterm.o,$(PACKAGE_LIB),$(PACKAGE_LIB),$(CLIBS))
+
+InstallProgram(kxterm,$(CERN_BINDIR))

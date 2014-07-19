@@ -1,0 +1,55 @@
+#if defined(CERNLIB_VAXVMS)
+SRCS_C= csallo.c csvers.c
+#else
+SRCS_C= csallo.c csvers.c jumpcn.c
+#endif
+
+DoIncludePackage(comis)
+#include "pilot.h"
+
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_C= csallo.c csvers.c
+#else
+
+SRCS_C= csallo.c csvers.c jumpcn.c
+#if defined(CERNLIB_QMVAOS)
+SRCS_C := $(SRCS_C) cscalda.c cscalia.c cscalra.c
+#else
+SRCS_C := $(SRCS_C) cscald.c cscali.c cscalr.c cstrcmp.c ccopys.c
+#endif
+
+#if defined(CERNLIB_UNIX)
+SRCS_C := $(SRCS_C) cstmpd.c
+#endif
+
+#if defined(CERNLIB_HPUX) && defined(CERNLIB_SHL)
+SRCS_C := $(SRCS_C) cs_shl_get.c cs_shl_load.c cs_shl_symbols.c \ @@\
+		    cs_shl_unload.c cs_get_func.c
+#endif
+
+#if defined(CERNLIB_SHL) && \
+  (   defined(CERNLIB_SUN) || defined(CERNLIB_SGI) \
+   || defined(CERNLIB_IBMRT) || defined(CERNLIB_QMVAOS)  \
+   || defined(CERNLIB_LINUX) ) 
+SRCS_C := $(SRCS_C) cs_hlshl.c 
+#if defined(CERNLIB_IBMRT)
+SRCS_C := $(SRCS_C) dlfcn.c
+#endif
+#endif
+
+#endif
+
+#if defined(CERNLIB_HPUX) ||  defined(CERNLIB_IBMRT)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Dextname
+#endif
+
+#if defined(CERNLIB_LINUX)
+EXTRA_DEFINES := $(EXTRA_DEFINES) -Df2cFortran
+#endif
+
+#if defined(CERNLIB_SUN) && !defined(CERNLIB_SOLARIS)
+CCOPTIONS=
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

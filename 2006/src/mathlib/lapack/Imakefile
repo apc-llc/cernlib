@@ -1,0 +1,62 @@
+
+/*
+ *  lapack is distributed as object files only.
+ *
+ */
+
+LIBNAME=LibraryTargetName($(LIBRARY))
+
+install.include:
+
+#if defined(CERNLIB_UNIX)
+
+archive/stamp:
+	@[ ! -d archive ] && mkdir archive || true
+	@touch $@
+
+ifneq ($(strip $(LAPACKDIR)),)
+
+libaddobjects:
+	@echo "adding objects from lapack/src"
+	(cd $(LAPACKDIR)/SRC;$(AR) $(LIBPATH)/$(LIBNAME) *.o)
+	@echo "adding objects from lapack/blas/src"
+	(cd $(LAPACKDIR)/BLAS/SRC;$(AR) $(LIBPATH)/$(LIBNAME) *.o)
+
+archive/objects.list debug/objects.list shared/objects.list: Makefile
+	@[ ! -d archive ] && mkdir archive || true
+	RemoveFile($@)
+	(cd $(LAPACKDIR)/SRC;\
+		ls *.o | sed -e "s=^.=$(LAPACKDIR)/SRC/&="  )  > $@
+	(cd $(LAPACKDIR)/BLAS/SRC;\
+		ls *.o | sed -e "s=^.=$(LAPACKDIR)/BLAS/SRC/&="  )  >> $@
+
+else
+
+libaddobjects:
+	@echo "You do not have object files for LAPACK"
+
+archive/objects.list debug/objects.list shared/objects.list: Makefile
+	@[ ! -d archive ] && mkdir archive || true
+	touch $@
+	@echo "You do not have object files for LAPACK"
+
+endif
+
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+
+st.amp:
+        @ TouchFile($@)
+
+
+libaddobjects:
+        @ if f$search("cern\:[lapack]*.obj") .eqs. "" then \	@@\
+        write sys$output "CERNLIB-Warning: There are no object files for lapack"@@\
+        @ if f$search("cern\:[lapack]*.obj") .nes. "" then \	@@\
+                write sys$output "adding archive objects from lapack"	@@\
+        @ if f$search("cern\:[lapack]*.obj") .nes. "" then \	@@\
+                $(AR) $(LIBPATH)$(LIBNAME) cern\:[lapack]*.obj
+                                                 
+#endif
+

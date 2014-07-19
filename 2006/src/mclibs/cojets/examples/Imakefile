@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 bookh.F fillh.F main.F outh.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

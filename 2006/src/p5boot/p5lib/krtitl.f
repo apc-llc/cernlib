@@ -1,0 +1,103 @@
+CDECK  ID>, KRTITL.
+      SUBROUTINE KRTITL
+
+C-    Krack the current title
+C.    started 12-jan-94
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      PARAMETER  (MCCNIL=1,  MCCKIL=2,  MCCINC=3,  MCCCDE=4,  MCCSEQ=5,
+     + MCCXSQ=6,  MCCTRU=7,  MCCFAL=8,  MCCELS=9,  MCCEND=10,
+     +            MCCSEL=11, MCCSES=12, MCCFAU=13, MCCSKI=14,
+     +            MCCKEE=15, MCCDEL=16, MCCREP=17, MCCADB=18, MCCADD=19,
+     + MCCUSE=20, MCCXDI=21, MCCDIV=22, MCCLIS=23, MCCEXE=24, MCCIMI=25,
+     + MCCASM=26, MCCUPD=27, MCCNAM=28, MCCGAP=29, MCCMOR=30, MCCONL=31,
+     + MCCFOR=32, MCCSUS=33, MCCOPT=34, MCCOP2=35, MCCSHO=36, MCCPAM=37,
+     + MCCQUI=38, MCCEOD=39, MCCDEC=40, MCCPAT=41, MCCTIT=42)
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+      CHARACTER      CHEXPD*68
+      COMMON /CHEXC/ IXEXPAM, IXEXPAT,IXEXDEC,IXEXID, NCHEPD, CHEXPD
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+C--------------    End CDE              --------------------------------
+
+
+      JSLT = IQ(LQHOLD+1)
+      JSLE = IQ(LQHOLD+3) + JSLT
+      JTXT = MLIAD(JSLT)
+      NTXT = MLIAD(JSLT+1) - JTXT - NCHNEWL
+
+C--       do  +TITLE:  name version /sub text
+
+      JCCTYP = 0
+      IF (TEXT(JTXT).NE.'+')       GO TO 33
+      JCCTYP = JPTYPE (TEXT(JTXT))
+      IF (JCCTYP.EQ.0)             GO TO 33
+      IF (JCCTYP.NE.MCCTIT)        GO TO 37
+      N  = MIN (12,NTXT)
+      JF = ICFIND (':',TEXT(JTXT),1,N)
+      IF (JF.GT.N)                 GO TO 32
+      IF (JF.EQ.NTXT)              GO TO 32
+      JF = ICNEXT (TEXT(JTXT),JF+1,NTXT)
+      NCHNAM = NDSLAT
+      IF (JF.LT.NTXT)              GO TO 36
+
+C--       take the title from the first non-blank line in the deck
+
+   32 JSLT = JSLT + 1
+      IF (JSLT.GE.JSLE)            GO TO 37
+      JTXT = MLIAD(JSLT)
+      NTXT = MLIAD(JSLT+1) - JTXT - NCHNEWL
+      IF (TEXT(JTXT).NE.'+')       GO TO 33
+      JCCTYP = JPTYPE (TEXT(JTXT))
+      IF (JCCTYP.NE.0)             GO TO 37
+   33 JF = 0
+   34 JF = ICNEXT (TEXT(JTXT),JF+1,NTXT)
+      IF (JF.GT.NTXT)              GO TO 32
+      NCHNAM = NDSLAT
+      IF (NCHNAM.EQ.1)  THEN
+          IF (TEXT(JTXT+JF-1).EQ.'C')  GO TO 34
+          IF (TEXT(JTXT+JF-1).EQ.'*')  GO TO 34
+        ENDIF
+
+C--       got the title
+
+   36 JTXT = JTXT + JF - 1
+      NTXT = NTXT - JF + 1
+      NTXT = MIN (NTXT, 80)
+      CCKARD(1:1) = '@'
+      CALL CCOPYL (TEXT(JTXT),CCKARD(2:NTXT+1),NTXT)
+      CALL CLTOU  (CCKARD(1:NCHNAM+1))
+      GO TO 38
+
+C--       fake title for file starting with +PATCH or +DECK
+
+   37 CCKARD(1:8) = '@unknown'
+      NCHNAM = 7
+      NTXT   = 7
+
+   38 JSLTTL  = LN_TO4 (CCKARD(2:), NTXT)
+      IXEXPAM = NA_NEW (CCKARD,2,NCHNAM+2)
+      IXEXPAT = NA_NEW (CCKARD,1,NCHNAM+2)
+      IXEXID  = IXEXPAT
+
+      IQ(LARRV+10) = JSLTTL
+      IQ(LARRV+11) = IXEXPAM
+      RETURN
+      END

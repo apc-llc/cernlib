@@ -1,0 +1,11 @@
+*
+* $Id: fatpara,v 1.1.1.1 1996/03/07 15:17:35 mclareni Exp $
+*
+* $Log: fatpara,v $
+* Revision 1.1.1.1  1996/03/07 15:17:35  mclareni
+* Fatmen
+*
+*
+* This directory was created from fatmen.car patch fatpara
+* To extract sequence FATPARA
+#include "fatpara.inc"

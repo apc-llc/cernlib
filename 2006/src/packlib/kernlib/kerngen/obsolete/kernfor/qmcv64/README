@@ -1,0 +1,49 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:12 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:12  mclareni
+* Kernlib
+*
+*
+*               for Convex 64 bits
+* This directory was created from kernfor.car patch qmcv64
+#ifndef CERNLIB_QMCVX
+#define CERNLIB_QMCVX
+#endif
+#ifndef CERNLIB_B64
+#define CERNLIB_B64
+#endif
+#ifndef CERNLIB_B60M
+#define CERNLIB_B60M
+#endif
+#ifndef CERNLIB_B48M
+#define CERNLIB_B48M
+#endif
+#ifndef CERNLIB_B36M
+#define CERNLIB_B36M
+#endif
+#ifndef CERNLIB_A8
+#define CERNLIB_A8
+#endif
+#ifndef CERNLIB_A6M
+#define CERNLIB_A6M
+#endif
+#ifndef CERNLIB_A5M
+#define CERNLIB_A5M
+#endif
+#ifndef CERNLIB_HEX
+#define CERNLIB_HEX
+#endif
+*               running Unix
+#ifndef CERNLIB_QS_UNIX
+#define CERNLIB_QS_UNIX
+#endif
+*               Posix call for setjmp/longjmp
+#ifndef CERNLIB_QSIGJMP
+#define CERNLIB_QSIGJMP
+#endif
+*               MIL standard routines, IBITS, MVBITS, etc
+#ifndef CERNLIB_QMILSTD
+#define CERNLIB_QMILSTD
+#endif

@@ -1,0 +1,7 @@
+SRCS_F=	 cstcom.F cstfor.F icmfin.F isbfin.F istrrd.F kskpb.F \ @@\
+	lhxnmb.F mikcha.F mlalnf.F mlbisp.F mlget.F mlgetm.F mlins.F \ @@\
+	mllinm.F mllism.F mllmdl.F mlltot.F mllxsm.F mlnew.F mlput.F \ @@\
+	mlputm.F mlputp.F mlroot.F mpsav.F proced.F putc.F puts.F \ @@\
+	siini.F tistr.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

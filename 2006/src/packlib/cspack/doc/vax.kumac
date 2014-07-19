@@ -1,0 +1,81 @@
+*
+* $Id: vax.kumac,v 1.1.1.1 1996/03/08 15:44:18 mclareni Exp $
+*
+* $Log: vax.kumac,v $
+* Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+* Cspack
+*
+*
+$!
+$! Example command file for installing on VAX.
+$! N.B. CERNLIB MAKEPACK procedure should normally be used!
+$!
+$if p1 .nes. ""
+$  then p1 = f$edit(P1,"UPCASE")
+$  p1 = f$extract(0,1,p1)
+$  goto 'p1'
+$  endif
+$if f$type(LIB$) .eqs. "" then CERNLIB
+$P:
+$     write sys$output ">>> Patchy step..."
+$ypatchy cern:[pro.pam]zebra zftp.for :go
++ASM,24,T=A
+#ifndef CERNLIB_QCDE
+#define CERNLIB_QCDE
+#endif
+#ifndef CERNLIB_DEBUG
+#define CERNLIB_DEBUG
+#endif
+#ifndef CERNLIB__ZFTP
+#define CERNLIB__ZFTP
+#endif
+#ifndef CERNLIB__SZ
+#define CERNLIB__SZ
+#endif
+#ifndef CERNLIB__CZ
+#define CERNLIB__CZ
+#endif
+#ifndef CERNLIB__XZ
+#define CERNLIB__XZ
+#endif
+#ifndef CERNLIB_VAXVMS
+#define CERNLIB_VAXVMS
+#endif
++EXE
++PAM,R=QCDE
++PAM,12,T=C,A
+$F:
+$     write sys$output ">>> Compile step..."
+$for   zftp
+$L:
+$     write sys$output ">>> Link step..."
+$     if f$trnlnm("TWG$TCP") .nes. ""
+$     then write sys$output "Wollongong TCP/IP..."
+$link zftp,'LIB$',-
+  twg$tcp:[netdist.lib]libnet/lib,-
+  twg$tcp:[netdist.lib]libnetacc/lib,-
+  twg$tcp:[netdist.lib]libnet/lib,-
+  sys$input/opt
+  sys$library:vaxcrtl/shareable
+  sys$system:sys.stb
+$       exit
+$     endif
+$     if f$trnlnm("MULTINET") .nes. ""
+$     then write sys$output "Multinet TCP/IP..."
+$link zftp,'LIB$',sys$input/opt
+sys$library:vaxcrtl/shareable
+sys$system:sys.stb
+multinet_socket_library/share
+$       exit
+$     endif
+$     if f$trnlnm("UCX$DEVICE") .nes. ""
+$     then write sys$output "UCX TCP/IP..."
+$!
+$! GETSERVBYNAME is the one from the CSPACK PAM, not that in the
+$! UCX shareable image (which is a dummy)
+$!
+$link zftp,getservbyname,'LIB$',SYS$LIBRARY:UCX$IPC/LIB,sys$input/opt
+sys$library:vaxcrtl/shareable
+sys$system:sys.stb
+$       exit
+$     endif

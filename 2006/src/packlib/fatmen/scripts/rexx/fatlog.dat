@@ -1,0 +1,17 @@
+*
+* $Id: fatlog.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatlog.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATLOG.EXEC */
+/*                      F A T _ L O G                         */
+Parse arg server message
+Userid  = "XNAME"("USERID")
+Account = "XACCOUNT"()
+server  = strip(server)
+"EXECIO 0 CP (STRING Q USER "server
+If rc ^= 0 then exit
+"EXEC TELL "server "*FATLOG* from "Userid Account ": "message

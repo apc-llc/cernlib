@@ -1,0 +1,25 @@
+*
+* $Id: jlbyt.s,v 1.1.1.1 1996/03/08 15:21:56 mclareni Exp $
+*
+* $Log: jlbyt.s,v $
+* Revision 1.1.1.1  1996/03/08 15:21:56  mclareni
+* Epio
+*
+*
+#if defined(CERNLIB_ND100B32)
+% VERSION 770414. SOURCE & BRF OK FOR N-10 2+3W
+% INTEGER FUNCTION JLBYT(XFR,NB)
+% RETURNS (RIGHT JUSTIFIED WITH ZERO FILL) THE 8-BIT BYTE NB,
+% COUNTED FROM LEFT TO RIGHT WITH THE LEFTMOST BYTE OF XFR AS BYTE 0
+)9BEG
+)9LIB JLBYT
+)9ENT JLBYT
+JLBYT, COPY SB DD
+       COPY SA DB
+       LDT   ,B 0
+       LDX I ,B 1
+       LBYT
+       COPY SD DB
+       EXIT
+)9END
+#endif

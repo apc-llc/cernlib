@@ -1,0 +1,11 @@
+INCLUDES=	 cspackc.inc cspackf.inc czbuff.inc czdecnet.inc \ @@\
+	czdir.inc czflush.inc czfold.inc czhome.inc czmess.inc \ @@\
+	czopen.inc czoptd.inc czopts.inc czoptu.inc czsock.inc \ @@\
+	czunit.inc hbook.inc hcbook.inc hcdire.inc hcflag.inc hck.inc \ @@\
+	hcmail.inc hcntpar.inc hos9c.inc lpawc.inc paw.inc pawc.inc \ @@\
+	pawlun.inc pzunit.inc qftitlch.inc quest.inc rzclun.inc \ @@\
+	slate.inc szchopt.inc szmess.inc tcpsock.inc tsosub.inc \ @@\
+	vmsinf.inc vmsprot.inc xzstat.inc zebra.inc zmach.inc \ @@\
+	zmachfix.inc zstate.inc zunit.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),cspack)

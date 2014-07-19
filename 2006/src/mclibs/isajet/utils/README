@@ -1,0 +1,7 @@
+This directory contains utilities which are not used to build the archive
+for CERNLIB.
+
+cern_lib contains some CERN library routines which can be used to build
+isajet without the Cernlib libraries.
+
+For more details refer to the directory doc, or isajet714.lis.

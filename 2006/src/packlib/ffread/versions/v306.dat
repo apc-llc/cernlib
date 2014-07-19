@@ -1,0 +1,13 @@
+*
+* $Id: v306.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v306.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.06   881219
+C
+C- Missing sequence CFREAD added in FFCARD
+C- * added as a comment as well as C
+C

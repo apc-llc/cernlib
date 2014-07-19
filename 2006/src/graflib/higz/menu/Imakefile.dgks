@@ -1,0 +1,8 @@
+SRCS_F=	igcmp.F igdelm.F igdime.F iggch.F iggdef.F ighigh.F \ @@\
+	igmenu.F igsmp.F
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

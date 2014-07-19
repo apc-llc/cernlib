@@ -1,0 +1,194 @@
+*
+* $Id: v100209.dat,v 1.1.1.1 1996/03/08 11:40:54 mclareni Exp $
+*
+* $Log: v100209.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:40:54  mclareni
+* Kapack
+*
+*
+* Previous versions
+*--       FIRST VERSION OF PAM  15-JULY-1983 VERSION 1.00
+*--
+*--       MODIFICATION          19-NOV -1983 VERSION 1.01
+*--        USER-CALLABLE SUBROUTINE KAMSG ADDED.
+*--        SUBROUTINE KAXMSG MODIFIED TO SUPPORT SUBROUTINE
+*--        KAMSG BY DETECTING USER MESSAGES AND PREFIXING THEM
+*--        WITH THE ID CRNKA000 AND A TIME AND DATE STAMP.
+*--        SUBROUTINE KAOPTN MODIFIED TO WRITE A MESSAGE IN THE
+*--        TRANSACTION LOG WHEN CALLED WITH OPTION LUNLOG=0
+*--        (THIS OPTION HAS THE EFFECT OF SWITCHING OFF THE LOG
+*--        AND PRIOR TO THIS MODIFICATION THERE WAS NO INDICATION
+*--        THAT THIS HAD OCCURRED).
+*--        STATEMENT NUMBERS CHANGED IN SUBROUTINES KATST1 AND KATST2.
+*--        REDUNDANT STATEMENT 'NWORDS = -1' REMOVED FROM
+*--        SUBROUTINE KAXLS1.
+*--        SUBROUTINES KASEQ AND KASEQM REPLACED BY HIGH-SPEED
+*--        VERSIONS. OTHER SUBPROGRAMS AFFECTED: KAXINI, KAXINR, KAXLOC
+*--
+*--        CHANGES FROM 1.01 - 13-FEB -1984 VERSION  1.02
+*--
+*--        (1) SUBROUTINE KAMAKE MODIFIED TO WRITE A MINIMUM OF 2 BLOCKS
+*--            (TO AVOID RECORD NUMBER OUT OF RANGE ERRORS).
+*--        (2) C REPLACED BY *IN COLUMN 1 OF COMMENTS.
+*--        (3) & REPLACED BY + IN COLUMN 6 OF CONTINUATION LINES.
+*--        (4) SOME MESSAGES SHORTENED (FOR CRAY).
+*--        (5) REWIND OF SEQUENTIAL FILE ADDED TO SUBROUTINE KACOPY.
+*--        (6) SUBROUTINE KAT MODIFIED TO PRINT THE PAM TITLE IN THE SAME
+*--            FORMAT AS OTHER MESSAGES.  SUBROUTINE KAXMSG HAS BEEN
+*--            MODIFIED TO SUPPORT THIS AND IS NOW AN INTERFACE TO A NEW
+*--            SUBROUTINE KAXED WHICH PERFORMS THE MESSAGE EDITING FORMERLY
+*--            PERFORMED BY KAXMSG.
+*--        (7) INTERNAL CHARACTER REPRESENTATION CHANGED: NULL=0, BLANK=99
+*--            SUBPROGRAMS AFFECTED: KAXCHA, KAXICH, KAXINR & COMMON KAX004.
+*--        (8) FUNCTION KAXXNK SPLIT INTO TWO FUNCTIONS, KAXNAM AND KAXE2I.
+*--        (9) FUNCTION KAXXKN MODIFIED SLIGHTLY AND RENAMED KAXI2E.
+*--
+*--        CHANGES FROM 1.02 - 05-APR -1984 VERSION  1.03
+*--        (1) ARRAYS MAXK AND MAXP ADDED TO COMMON/KAX003/. SUBPROGRAMS
+*--            KAXINI, KAXINR AND KAXOPN MODIFIED ACCORDINGLY.
+*--        (2) ERROR IN KAXINI PREVENTING DETECTION OF LUN CHANGE,
+*--            CORRECTED, (AFFECTED APPLICATIONS USING MULTIPLE UNITS
+*--            WITH DIFFERENT ATTRIBUTES).
+*--        (3) KASEQ AND KASEQM MODIFIED TO DETECT CHANGE OF UNIT.
+*--
+*--          CHANGES FROM 1.03
+*--      (1) PERFORMANCE IMPROVEMENT TO REDUCE THE CPU TIME AND NUMBER
+*--          OF I/O OPERATIONS IN APPLICATIONS WHICH MAKE MULTIPLE CALLS
+*--          TO KAPACK WITH THE SAME UNIT NUMBER AND MAJOR NAME.
+*--      (2) 'RETURN=YES' ENFORCED DURING KALIST PROCESSING.
+*--      (3) FORMAT OF KALIST OUTPUT CHANGED.
+*--      (4) CMS FLAG INTRODUCED TO CREATE KA-FILES WITH A BLOCK SIZE
+*--          OF 4K BYTES UNDER THE IBM VM/CMS OPERATING SYSTEM.
+*--      (5) TEST PROGRAM CHANGED TO RETRIEVE AND VERIFY THE RECORDS
+*--          WHICH ARE WRITTEN.
+*--      (6) COMMON BLOCKS RENAMED.
+*--      (7) CORRECTION TO KASEQ AND KASEQM.
+*--      (8) BUG FIXED IN VAX VERSION IN PRINTING DATE AND TIME.
+*--      (9) TO ENABLE FILE SHARING ON VAX, THE 'SHARED' KEYWORD HAS BEEN
+*--          ADDED TO THE OPEN STATEMENT IN SUBROUTINE KAXOPN.
+*--     (10) STATUS='UNKNOWN' EXPLICITLY SPECIFIED IN OPEN STATEMENTS TO
+*--          ELIMINATE ERROR MESSAGE ON VAX.
+*--     (11) INTERNAL CHARACTER REPRESENTATION CHANGED. SUBPROGRAMS
+*--          AFFECTED: KAXC2I (FORMERLY KAXICH), KAXI2C (FORMERLY KAXCHA).
+*--          KA-FILES WHICH WERE CREATED WITH EARLIER VERSIONS OF KAPACK
+*--          CANNOT BE PROCESSED WITH VERSION 2 OR LATER VERSIONS AND
+*--          ATTEMPTS TO DO SO WILL PROVOKE ERROR CRNKA246. IN ORDER TO
+*--          CONTINUE USING THESE KA-FILES THEY MUST BE CONVERTED BY A
+*--          CALL TO SUBROUTINE KA1TO2 WHICH HAS BEEN ADDED TO THIS PAM
+*--          FILE. IN ORDER TO CONVERT A KA-FILE THE FOLLOWING STEPS
+*--          SHOULD BE TAKEN:
+*--             (1) USE SUBROUTINE KACOPY TO MAKE A BACKUP OR COPY OF
+*--                 THE KA-FILE.
+*--             (2) EXECUTE A PROGRAM WHICH CALLS KA1TO2 IN THE FOLLOWING
+*--                 WAY:
+*--                          CALL KA1TO2(LUN)
+*--                 WHERE LUN IS AN INTEGER WHICH IDENTIFIES THE UNIT TO
+*--                 WHICH THE ORIGINAL KA-FILE IS CONNECTED.
+*--             (3) ENSURE THAT THE PROGRAM TERMINATES NORMALLY AND
+*--                 PRODUCES THE MESSAGE CRNKA500.
+*--             (4) IF SUBSEQUENT PROCESSING OF THE CONVERTED KA-FILE IS
+*--                 SUCCESSFUL THE COPY MAY BE DELETED.
+*--
+*--          CHANGES FROM 2.00
+*--      (1) ASSEMBLY VERSION OF KAXRCL MODIFIED FOR ASSEMBLY UNDER CMS.
+*--      (2) THE PERCENTAGE BLOCK UTILIZATION IS INDICATED IN MESSAGE
+*--          CRNKA240 ISSUED BY KAXOPN.
+*--      (3) EXECUTION TERMINATES IF KAXOPN DETERMINES THAT MODIFY=YES
+*--          HAS BEEN REQUESTED AND THE FREE SPACE IS BELOW A THRESHOLD.
+*--      (4) KAMAKE MODIFIED TO WRITE A MINIMUM OF 3 BLOCKS FOR
+*--          COMPATIBILITY WITH THE KAXOPN THRESHOLD CHECK.
+*--      (5) KACOPY MODIFIED TO PREVENT COPYING TO AN OUTPUT FILE
+*--          WHICH HAS ALREADY BEEN OPENED AS A KA-FILE IN THE SAME JOB.
+*--      (6) KACOPY MODIFIED TO ENABLE A KA-FILE TO BE EXPANDED.
+*--      (7) SUBROUTINE KALEN INTRODUCED TO RETRIEVE THE LENGTH
+*--          ATTRIBUTES OF A RECORD.
+*--      (8) FUNCTION KAXLOC RENAMED KAXGET.
+*--      (9) LOGICAL FUNCTIONS REPLACED BY SUBROUTINES WITH ALTERNATE
+*--          RETURNS.
+*--
+*--           Changes from 2.01
+*--      (1)  Internal restructuring for support of asynchronous concurrent
+*--           access, (ACA).
+*--      (2)  KAXOPN modified to use COMMON/KAX0B0/ in place of /KAX0A0/.
+*--      (3)  Former contents of COMMON/KAX070/ merged with COMMON/KAX020/.
+*--           COMMON/KAX070/ now used as a lock queue for ACA operations.
+*--      (4)  KAXFBK and KAXGBK modified to avoid block contention with
+*--           ACA subroutines.
+*--      (5)  Some adjustable array declarators replaced by assumed-size
+*--           array declarators to avoid an error on VAX for zero-length
+*--           records.
+*--      (6)  Patchy flag 'CERN' removed.
+*--      (7)  New user-callable subroutines: KAFREE, KAHOLD, KARLSE,
+*--           KASTOP
+*--      (8)  New internal subroutines: KAXAGE, KAXJID, KAXOLK, KAXRLK,
+*--           KAXTLK
+*--      (9)  Test job modified to call KAFREE, KAHOLD and KASTOP.
+*--      (10) Additional installation parameters checked by KAXINR.
+*--
+C           Changes from 2.02
+C      (1)  Subroutine KAXFBK modified to eliminate optimization action
+C           on local variables.
+C      (2)  Buffer length increased to 1500 words in CMS version.
+C      (3)  Bug corrected in KAXINI affecting the setting of the error
+C           unit number (LUNERR).
+C      (4)  Patchy flag 'APOLLO' added.
+C      (5)  Code added to KAMAKE and KAXOPN to obtain the file name on
+C           Apollo systems.
+C      (6)  RETURN statements added to KAXE2I and KAXI2E to circumvent
+C           a NORD compiler bug.
+C      (7)  Error in setting the value of NBLKS corrected in KAXINI.
+C      (8)  Messages CRNKA261 and CRNKA271 expanded.
+C
+C           CHANGES FROM 2.03
+C      (1)  Maximum name length changed from 50 to 100 characters.
+C      (2)  New user-callable subprograms:
+C           KAPRE  - retrieve the record preceding the one specified
+C           KAPREM - retrieve the major name preceding the one specified
+C           KAPRIK - print the values of the keys in a locked KA-file
+C      (3)  In the VAX version, the READONLY parameter is used when
+C           opening a KA-FILE with MODIFY=NO in effect. If KAOPTN
+C           is called with the MODIFY option for an open file, the
+C           file is closed and re-opened accordingly.
+C      (4)  Minor changes to messages CRNKA080, CRNKA123, CRNKA124,
+C           CRNKA125, CRNKA132 and CRNKA133.
+C
+C           CHANGES FROM 2.04
+C      (1)  Alternative calling sequence provided for KAMAKE:
+C                     CALL KAMAKE(LUN,SIZE,0,IRC)
+C           where SIZE is a real number which specifies the total
+C           size of the KA-file in megabytes, (no overhead is added).
+C      (2)  References to KAXC2I and KAXI2C replaced by inline code.
+C
+C           CHANGES FROM 2.05
+C      (1)  Major name stack implemented to eliminate a search of
+C           the major tree for the most recently used major names.
+C      (2)  KAXADD modified to ensure that there are sufficient
+C           free blocks before a new entry is added.
+C      (3)  Code added to KACOPY to ensure that the final block of
+C           the output file has been written correctly when mode>1.
+C      (4)  Messages CRNKA181, CRNKA182, CRNKA191, CRNKA192,
+C           CRNKA241, CRNKA242 modified.
+C      (5)  Sample IBM installation job modified to correctly
+C           process assembler source.
+C
+C           CHANGES FROM 2.06
+C           Bug fixed in KAXFBK which caused 'CORRUPT KAFILE' abends in
+C           rare cases (involving repeated updates of the same records).
+C           Bug fixed in KACOPY giving spurious error message at end of copy.
+C           Bug fixed in KAXMAJ when making subsequent calls with different
+C           MAJOR name but the same MINOR name (through KASEQ).
+C           Bug fixed in KASEQM when called from KAPRIK.
+C           All these errors were introduced in version 2.06.
+C
+C           CHANGES FROM 2.07
+C           Bug fixed in KAXDEL when called from KADEL which led to
+C           deletion of wrong index record pointers in rare cases. The
+C           minor records were still in the data but could not be found
+C           other than by sequential reading. This was a very old bug.
+C           Bug fixed in KAXMAJ when called from KADELM which caused
+C           deletion of a previously referenced major name in rare cases.
+C           This bug was introduced at version 2.06.
+C
+C           CHANGES FROM 2.07
+C           CRAY FLAG ADDED
+C

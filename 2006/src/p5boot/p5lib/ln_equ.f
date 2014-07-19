@@ -1,0 +1,12 @@
+CDECK  ID>, LN_EQU.
+      LOGICAL FUNCTION LN_EQU (LINEA,LINEB,NCH)
+
+C-    Compare LINEA(1:NCH) with LINEB(1:NCH),
+C-    return true if LINEA = LINEB
+
+      CHARACTER*512  LINEA, LINEB
+
+
+      LN_EQU = LINEA(1:NCH) .EQ. LINEB(1:NCH)
+      RETURN
+      END

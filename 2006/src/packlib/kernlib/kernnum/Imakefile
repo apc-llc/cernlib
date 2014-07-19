@@ -1,0 +1,21 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= c204fort c205fort \ @@\
+	d106fort d509fort d703fort d704fort \ @@\
+	e100fort e104fort e105fort e106fort e208fort \ @@\
+	f002fort f003fort f004fort f010fort f011fort f012fort f406fort \ @@\
+	g900fort g901fort \ @@\
+	n001fort
+
+SUBDIRS= $(LIBDIRS) kernnum test
+
+TopOfPackage(kernnum)
+
+SubdirLibraryTarget(kernnum,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(kernnum)

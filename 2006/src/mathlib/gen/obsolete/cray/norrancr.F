@@ -1,0 +1,67 @@
+*
+* $Id: norrancr.F,v 1.1.1.1 1996/04/01 15:03:22 mclareni Exp $
+*
+* $Log: norrancr.F,v $
+* Revision 1.1.1.1  1996/04/01 15:03:22  mclareni
+* Mathlib gen
+*
+*
+#include "gen/pilot.h"
+#if defined(CERNLIB_CRAY)
+      SUBROUTINE NORRAN(XRANNR)
+
+      REAL XRANNR,GXXXRF,GXXXGT,GXXXST,SEED1,SEED2,SEED3
+      REAL C(18),S(0:1),HALF,U,U0,Y
+
+      DATA C( 1) /0.91954 44057 06926D0/
+      DATA C( 2) /2.40375 76569 3742 D0/
+      DATA C( 3) /0.82533 92825 36923D0/
+      DATA C( 4) /2.11402 80833 3742 D0/
+      DATA C( 5) /0.96548 71312 13858D0/
+      DATA C( 6) /4.46911 47371 3927 D0/
+      DATA C( 7) /0.94999 07087 33028D0/
+      DATA C( 8) /1.84039 87473 9771 D0/
+      DATA C( 9) /0.27362 93359 39706D0/
+      DATA C(10) /0.11118 61229 00168D0/
+      DATA C(11) /0.52562 50527 88295D0/
+      DATA C(12) /0.10703 94984 15224D0/
+      DATA C(13) /0.92585 23337 07704D0/
+      DATA C(14) /0.28972 95736 00000D0/
+      DATA C(15) /1.55066 91737 9771 D0/
+      DATA C(16) /0.04004 21901 61353D0/
+      DATA C(17) /0.95889 70004 32338D0/
+      DATA C(18) /0.04110 29995 17662D0/
+
+      DATA S /1,-1/
+      PARAMETER(HALF = 0.5D0)
+
+      U=GXXXRF()
+      U0=GXXXRF()
+      IF(U .LT. C(1)) THEN
+       XRANNR=C(2)*(U0+U*C(3))-C(4)
+      ELSE
+       IF(U .GE. C(5)) THEN
+    1   Y=SQRT(C(6)-2*LOG(GXXXRF()))
+        IF(Y*GXXXRF() .GT. C(4)) GO TO 1
+       ELSE IF(U .GE. C(7)) THEN
+    2   Y=C(8)+GXXXRF()*C(9)
+        IF(EXP(-HALF*Y*Y)-C(10)+Y*C(11) .LT. GXXXRF()*C(12)) GO TO 2
+       ELSE IF(U .GE. C(13)) THEN
+    3   Y=C(14)+GXXXRF()*C(15)
+        IF(EXP(-HALF*Y*Y)-C(10)+Y*C(11) .LT. GXXXRF()*C(16)) GO TO 3
+       ELSE
+    4   Y=GXXXRF()*C(14)
+        IF(EXP(-HALF*Y*Y)-C(17) .LT. GXXXRF()*C(18)) GO TO 4
+       END IF
+       XRANNR=S(INT(U0+U0))*Y
+      END IF
+      RETURN
+      ENTRY NORRUT(SEED1,SEED2)
+      SEED1=GXXXGT()
+      SEED2=SEED2
+      RETURN
+      ENTRY NORRIN(SEED1,SEED2)
+      SEED3=GXXXST(SEED1)
+      RETURN
+      END
+#endif

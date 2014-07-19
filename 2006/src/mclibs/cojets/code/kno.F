@@ -1,0 +1,344 @@
+*
+* $Id: kno.F,v 1.1.1.1 1996/01/11 14:14:39 mclareni Exp $
+*
+* $Log: kno.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:39  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE KNO(W,PMB)
+C     *********************
+C--  HELPS GENERATING SPECTATOR JETS
+C--  TOTAL MULTIPLICITY DISTRIBUTION IN SPECTATOR JETS SAMPLED ACCORDING
+C--  TO KNO (DE GROOT)
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/data1.inc"
+#include "cojets/decpar.inc"
+#include "cojets/event.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+#include "cojets/keybre.inc"
+#include "cojets/maxn.inc"
+#include "cojets/mb.inc"
+#include "cojets/par.inc"
+#include "cojets/qcds.inc"
+      DIMENSION TMV(MXPART),YV(MXPART)
+      DIMENSION TBPAIR(9)
+      INTEGER IFTB(2,9)
+      DIMENSION VPM(7)
+      DIMENSION PMB(4),SUM(2),A(4),V(4),V1(4)
+      DATA VPM/8.32,6.65,5.7,5.1,4.84,4.73,4.6/
+      DATA IFTB/51,51,21,22,23,24,25,26,101,102,103,104
+     +         ,109,110,105,106,111,112/
+      DATA ICALL/0/
+C
+      IF(ICALL.GT.0) GO TO 10
+      ICALL=1
+      TBPAIR(1)=RPAIR(1)
+      DO 11 M=2,9
+11    TBPAIR(M)=RPAIR(M)+TBPAIR(M-1)
+      DO 12 M=1,9
+12    TBPAIR(M)=TBPAIR(M)/TBPAIR(9)
+10    CONTINUE
+C
+      IF(W.LT.1.) GO TO 100
+C--  MEAN MULTIPLICITY
+      NH=NPART
+      WN=W*1.6
+      ALB=2.50+.28*LOG(WN)+.53*(LOG(WN))**2
+      AVN=2.2*ALB
+      AVN=AVN*FMULMB
+30    CONTINUE
+      NMUL=AVN*FRAMUL(0)
+      IF(CJRN(0).GT..5) NMUL=NMUL+1
+      IF(NH+NMUL.GT.MXPART) GO TO 500
+      IF(NMUL.LE.1) GO TO 100
+C
+C
+C--  GENERATE MULTIPLICITY AND PARTICLE Q.N.
+      NCHMB=0
+      IT=0
+29    CONTINUE
+      IT=IT+1
+      IF(IT.GT.10) GO TO 30
+      I=NH
+      IODD=1
+      IF((-1)**NMUL.GT.0) IODD=0
+      IF(IODD.EQ.0) GO TO 21
+      I=I+1
+      PARHAD(I,6)=51
+21    NPAIR=NMUL/2
+      DO 20 N2=1,NPAIR
+      RR=CJRN(N2)
+      IF(RR.GE.TBPAIR(1)) GO TO 26
+      IF(IODD.EQ.0) GO TO 27
+      IF(CJRN(N2+3).LT.1./(2.*FLOAT(NMUL))) GO TO 26
+27    IPAIR=1
+      GO TO 23
+26    CONTINUE
+      DO 22 M=2,9
+      IPAIR=M
+      IF(RR.LT.TBPAIR(M)) GO TO 23
+22    CONTINUE
+23    PARHAD(I+1,6)=IFTB(1,IPAIR)
+      PARHAD(I+2,6)=IFTB(2,IPAIR)
+      IF(IPAIR.NE.1) GO TO 24
+      IF(CJRN(N2+1).LT.RETPIZ) PARHAD(I+1,6)=52
+      IF(CJRN(N2+2).LT.RETPIZ) PARHAD(I+2,6)=52
+24    I=I+2
+20    CONTINUE
+      NPART=NH+NMUL
+      NH1=NH+1
+      TMASS=0.
+      DO 25 I=NH1,NPART
+      IPART=PARHAD(I,6)
+      IF(LCHARG(IPART).NE.0) NCHMB=NCHMB+1
+      PARHAD(I,5)=PMAS(IPART)
+25    TMASS=TMASS+PARHAD(I,5)
+      IF(TMASS.GT.W) GO TO 29
+C
+C--  MEAN  PT  RISING WITH MULTIPLICITY
+      AISIG=FLOAT(NCHMB)/6.
+      IF(AISIG.GE.15.) GO TO 31
+      RISIG=AISIG/2.5+1.
+      ISIG=RISIG
+      DELSG=RISIG-FLOAT(ISIG)
+      SIGMAB=(VPM(ISIG)*(1.-DELSG)+VPM(ISIG+1)*DELSG)/FPTMB
+      GO TO 32
+31    SIGMAB=VPM(7)/FPTMB
+32    CONTINUE
+C
+C-- GENERATE PT'S
+      DO 17 I=NH1,NPART
+      K2=PARHAD(I,6)
+      PERPM=X1EXP(SIGMAB*PARHAD(I,5))/SIGMAB
+      TM2=PERPM**2
+      PT2=TM2-PARHAD(I,5)**2
+      PT2=MAX(REAL(PT2),0.)
+      PT=SQRT(PT2)
+      PHI=PI2*CJRN(0)
+      PARHAD(I,1)=PT*COS(PHI)
+      PARHAD(I,2)=PT*SIN(PHI)
+17    CONTINUE
+C
+C--  PT BALANCE WITH PREVIOUS HADRONS
+      DO 81 J=1,2
+      SUM(J)=-PMB(J)
+      DO 82 I=NH1,NPART
+82    SUM(J)=SUM(J)+PARHAD(I,J)
+      SUM(J)=SUM(J)/FLOAT(NPART-NH1+1)
+      DO 83 I=NH1,NPART
+83    PARHAD(I,J)=PARHAD(I,J)-SUM(J)
+81    CONTINUE
+C
+C--  TRANSVERSE MASSES
+      TMTOT=0.
+      DO 85 I=NH1,NPART
+      TMV(I)=SQRT(PARHAD(I,5)**2+PARHAD(I,1)**2+PARHAD(I,2)**2)
+85    TMTOT=TMTOT+TMV(I)
+      EW=SQRT(W**2+PMB(1)**2+PMB(2)**2)
+      IF(TMTOT.GT.EW) GO TO 30
+C
+C--  GENERATE Y'S
+      YMAX=LOG(W/PMAS(21))
+      ETOT=0.
+      DO 86 I=NH1,NPART
+      YV(I)=YMAX*CJRN(0)
+      EY=EXP(YV(I))
+      PARHAD(I,4)=.5*TMV(I)*(EY+1./EY)
+      ETOT=ETOT+PARHAD(I,4)
+86    CONTINUE
+C
+C--  CORRECT  Y'S  ITERATIVELY SO AS TO GET RIGHT TOTAL ENERGY  W
+      IF(ETOT.LT.EW) GO TO 18
+C
+      IMOVE=-1
+      YFACT=.5
+      YFACTX=1.
+      INIT=1
+      GO TO 19
+C
+18    IMOVE=1
+      YFACT=2.
+      YFACTM=1.
+      INIT=2
+19    CONTINUE
+C
+50    CONTINUE
+      ETOT=0.
+      DO 51 I=NH1,NPART
+      Y=YV(I)*YFACT
+      EY=EXP(Y)
+      PARHAD(I,4)=.5*TMV(I)*(EY+1./EY)
+      ETOT=ETOT+PARHAD(I,4)
+51    CONTINUE
+      IF(ABS(ETOT-EW)/EW.LT..01) GO TO 70
+      IMOVE=-1
+      IF(ETOT.LT.EW) IMOVE=1
+C
+      IF(INIT.EQ.3) GO TO 60
+      IF(INIT.EQ.2) GO TO 55
+C
+      IF(IMOVE.LT.0) GO TO 52
+      YFACTM=YFACT
+      YFACT=.5*(YFACTM+YFACTX)
+      INIT=3
+      GO TO 50
+52    YFACT=YFACT*.5
+      GO TO 50
+C
+55    IF(IMOVE.GT.0) GO TO 56
+      YFACTX=YFACT
+      YFACT=.5*(YFACTM+YFACTX)
+      INIT=3
+      GO TO 50
+56    YFACT=YFACT*2.
+      GO TO 50
+C
+60    IF(IMOVE.GT.0) YFACTM=YFACT
+      IF(IMOVE.LT.0) YFACTX=YFACT
+      YFACT=.5*(YFACTM+YFACTX)
+      GO TO 50
+C
+70    CONTINUE
+C
+C--  LONGITUDINAL MOMENTUM BALANCE
+      PLONG=0.
+      DO 72 I=NH1,NPART
+      PARHAD(I,3)=0.
+      PAR3=PARHAD(I,4)**2-TMV(I)**2
+      IF(PAR3.GT.0.) PARHAD(I,3)=SQRT(PAR3)
+72    TMV(I)=1.
+      DO 73 IT=NH1,NPART
+      PLX=0.
+      DO 74 I=NH1,NPART
+      IF(TMV(I).LT.0.) GO TO 74
+      IF(PARHAD(I,3).LT.PLX) GO TO 74
+      IX=I
+      PLX=PARHAD(I,3)
+74    CONTINUE
+      TMV(IX)=-1.
+      IF(IT.GT.NH1) GO TO 75
+      IF(CJRN(IT).GT..5) PARHAD(IX,3)=-PARHAD(IX,3)
+75    CONTINUE
+      IF(PLONG.GT.0.) PARHAD(IX,3)=-PARHAD(IX,3)
+      PLONG=PLONG+PARHAD(IX,3)
+73    CONTINUE
+C--  CALL CORRECTIVE ROUTINE
+      IP=0
+      DO 76 I=NH1,NPART
+      IP=IP+1
+      DO 76 J=1,5
+76    P(IP,J)=PARHAD(I,J)
+      CALL P4CORR(EW,PMB,IP,IFLAG)
+      IF(IFLAG.NE.0) GO TO 30
+      IP=0
+      DO 77 I=NH1,NPART
+      IP=IP+1
+      DO 77 J=1,5
+77    PARHAD(I,J)=P(IP,J)
+      GO TO 200
+C
+C--  VERY SMALL  W ,  EMIT TWO  PI0
+100   CONTINUE
+      SIGMAB=VPM(1)/FPTMB
+      EW=SQRT(W**2+PMB(1)**2+PMB(2)**2)
+      A(1)=PMB(1)
+      A(2)=PMB(2)
+      A(3)=0.
+      A(4)=EW
+      NH1=NH+1
+      NPART=NH+2
+      IF(NPART.GT.MXPART) GO TO 500
+101   PERPM=X1EXP(SIGMAB*PMAS(51))/SIGMAB
+      PL2=W**2*.25-PERPM**2
+      IF(PL2.LT.0.) GO TO 101
+      PL=SQRT(PL2)
+      PT2=PERPM**2-PMAS(51)**2
+      PT=SQRT(PT2)
+      PHI=PI2*CJRN(0)
+      NEW=1
+      DO 78 I=1,2
+      FSIGN=1.
+      IF(I.EQ.1) FSIGN=-1.
+      V(1)=PT*COS(PHI)*FSIGN
+      V(2)=PT*SIN(PHI)*FSIGN
+      V(3)=PL*FSIGN
+      V(4)=SQRT(PMAS(51)**2+PT2+PL2)
+      CALL CJLORN(A,V,V1,NEW)
+      NEW=0
+      DO 79 J=1,4
+79    PARHAD(NH+I,J)=V1(J)
+      PARHAD(NH+I,5)=PMAS(51)
+      PARHAD(NH+I,6)=51
+78    CONTINUE
+C
+C--  PARTICLE DECAYS
+200   CONTINUE
+      ND1=NH1
+      ND2=NPART
+      I=0
+      DO 201 M=ND1,ND2
+      I=I+1
+      DO 202 J=1,5
+202   P(I,J)=PARHAD(M,J)
+      K(I,1)=0
+      K(I,2)=PARHAD(M,6)
+201   CONTINUE
+      IST=I
+      IPD=0
+203   IPD=IPD+1
+      KDEC(IPD,1)=I+1
+      IF(IDB(K(IPD,2)).GT.0) CALL DECAY(IPD,I)
+      IF(WEIGHT.LT.1.E-30) RETURN
+      KDEC(IPD,2)=I
+      IF(IPD.LT.I.AND.I.LT.(MAXJTP-3)) GO TO 203
+      IF(I.GT.(MAXJTP-4)) GO TO 550
+      MNJTP=MAX(MNJTP,I)
+      NPART=NH
+      DO 204 M=1,I
+      IF(NPART+1.GT.MXPART) GO TO 500
+      NPART=NPART+1
+      DO 205 J=1,5
+205   PARHAD(NPART,J)=P(M,J)
+      PARHAD(NPART,6)=K(M,2)
+C--  EXTRA PARTICLE INFO
+      IF(K(M,1).LT.0) THEN
+        IORIG(NPART)=-K(M,1)+NH
+      ELSE
+        IORIG(NPART)=0
+      ENDIF
+      IDENT(NPART)=IDENTF(INT(PARHAD(NPART,6)))
+      IF(KDEC(M,2).GE.KDEC(M,1)) THEN
+        IDCAY(NPART)=IPACK*(KDEC(M,1)+NH)+(KDEC(M,2)+NH)
+      ELSE
+        IDCAY(NPART)=0
+      ENDIF
+204   CONTINUE
+206   CONTINUE
+      RETURN
+C-- ABNORMAL EXIT
+500   WRITE(ITLIS,501) MXPART,NEVENT
+501   FORMAT(5(/),1X,45HNO. OF PARTICLES DURING KNO CALL EXCEEDS     ,
+     1I10//1X,11HEVENT NO. =   ,I10
+     3//1X,'INCREASE MXPART'
+     4//1X,'EXECUTION TERMINATED'
+     4)
+      CALL OVERDM
+      RETURN
+550   WRITE(ITLIS,551) MAXJTP,NEVENT
+551   FORMAT(5(/),1X,'NO. OF PARTICLES IN P( , ) (/JET/) EXCEEDS' ,
+     1I10//1X,24HSUB. DECAY CALLED BY KNO,
+     2//1X,11HEVENT NO. =  ,I10
+     4//' INCREASE MAXJTP'
+     5)
+      CALL OVERDM
+      RETURN
+CIFTB
+      END

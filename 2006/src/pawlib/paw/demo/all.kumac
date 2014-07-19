@@ -1,0 +1,32 @@
+MACRO ALL 1=1 2=0 3=X NBPAWEX=31 NBPAWTEST=8
+*
+OPTION = $UPPER([3])
+*
+If [OPTION] = 'CR' Then
+   Alias/Create Waiting 'Call Igterm ; Wait'
+   Alias/Create BATCH NO
+ElseIf [OPTION] = 'B' Then
+   Alias/Create Waiting ' '
+   Alias/Create BATCH YES
+   Host_Shell /bin/sh
+   System = $LOWER($MACHINE)
+   If $FEXIST([system])=0 then
+      Shell mkdir [system]
+   Endif
+   Output_Lp 65 [system]/output.dat
+Else
+   Alias/Create Waiting 'Call Igterm ; Wait '' '' 3'
+   Alias/Create BATCH NO
+Endif
+*
+Close 0
+V/del *
+*
+Do i=[1],[NBPAWEX]
+   Exec MACNAME [i] PAWEX
+Enddo
+Do i=[2],[NBPAWTEST]
+   Exec MACNAME [i] PAWTEST
+Enddo
+*
+Return

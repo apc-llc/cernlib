@@ -1,0 +1,4 @@
+SRCS_F=	 trprfn.F trprop.F trptsc.F trptsd.F trs1s2.F trscpt.F \ @@\
+	trscsd.F trscsp.F trsdpt.F trsdsc.F trspsc.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

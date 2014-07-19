@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 datime.F datimh.F gshow.F intrac.F iumode.F timed.F timex.F
+
+SRCS_S= \ @@\
+	 qnexte.s tracxq.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,11 @@
+DoIncludePackage(paw)
+#include "pilot.h"
+
+#if defined(CERNLIB_MOTIF)
+SRCS_C=	 strtograv.c tree.c
+#endif
+
+PACKAGE_INCLUDES := $(PACKAGE_INCLUDES) X11Includes
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+

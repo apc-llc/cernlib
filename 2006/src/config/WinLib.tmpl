@@ -1,0 +1,20 @@
+/* $Id: WinLib.tmpl,v 1.1.1.1 1995/12/20 15:26:44 cernlib Exp $
+ *
+ * $Log: WinLib.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:44  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: WinLib.tmpl,v 1.1 94/01/08 18:32:51 rws Exp $
+
+#define SharedOldXReqs $(LDPRELIB) $(XLIBONLY)
+#define SharedXtReqs $(LDPRELIB) $(XLIBONLY)
+#define SharedXawReqs $(LDPRELIB) $(XMULIB) $(XTOOLLIB) $(XLIB)
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLLIB) $(XLIB)
+#define SharedXextReqs $(LDPRELIB) $(XLIBONLY)
+#define SharedXiReqs $(LDPRELIB) $(XLIB)
+#define SharedPexReqs $(LDPRELIB) $(XLIBONLY) MathLibrary
+#define SharedXtstReqs $(LDPRELIB) $(XLIB)
+#define SharedXieReqs $(LDPRELIB) $(XLIBONLY)
+#define SharedSMReqs $(LDPRELIB) $(ICELIB)

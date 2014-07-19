@@ -1,0 +1,13 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+SUBDIRS= code examples minuit
+
+TopOfPackage(minuit)
+
+SubdirLibraryTarget(minuit,code)
+
+TestSubdirs(examples)
+
+InstallIncludeSubdirs(minuit)

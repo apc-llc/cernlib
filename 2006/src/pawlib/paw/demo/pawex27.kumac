@@ -1,0 +1,16 @@
+MACRO PAWEX27
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 27                          *
+* Make a complex graph with PAW using Postscript fonts                   *
+**************************************************************************
+Exec ALLDEF
+If BATCH = 'NO' Then
+   out 55 junk
+Endif
+*
+EXEC COMPTIME
+*
+If BATCH = 'NO' Then
+   out -55
+Endif
+RETURN

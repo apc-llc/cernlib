@@ -1,0 +1,51 @@
+*
+* $Id: wibm.dat,v 1.1.1.1 1996/02/15 17:47:41 mclareni Exp $
+*
+* $Log: wibm.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:41  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, which.exec */
+/**********************************************************************
+ *                                                                    *
+ * WHICH EXEC V1.00                                                   *
+ *                                                                    *
+ * Emulation of the Unix utility                                      *
+ *                                                                    *
+ * Author: M.Marquina 90/11/30                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg file
+
+   If file="" Then Call ERROR 1 0
+
+   If 'WORDS'(file)=1 Then file=file "EXEC"
+   If 'WORDS'(file)=2 Then file=file "*"
+
+   info="File" file "not found on any of the accessed disks"
+   'ESTATE' file
+   If rc=0 Then Do
+     qed0='QUEUED'()
+     'LISTFILE' file '(DATE LIFO'
+     qed ='QUEUED'()-qed0-1
+     Do n=1 to qed ; Pull dummy ; End
+     Pull info
+   End
+
+   Say info
+   Exit
+/* ------------------------------------------------------------------ */
+   ERROR:
+   Arg ne cc vv
+
+   src="CRNWHI"
+   err.1 ="001E Arguments missing"
+
+   'EXECIO 1 EMSG (STRING' src||err.ne
+   Exit cc
+#endif

@@ -1,0 +1,4 @@
+SRCS_F=	cutlne.F deline.F paslid.F shtcmd.F sliact.F slide.F \ @@\
+	slidem.F slihlp.F slinit.F subspc.F tkblnk.F tkecmd.F xtrcmd.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

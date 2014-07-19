@@ -1,0 +1,32 @@
+Checking in cfortran/Examples/minuit-fcn.c;
+/afs/cern.ch/asis/share/cern/CVS/cfortran/Examples/minuit-fcn.c,v  <--  minuit-fcn.c
+new revision: 1.5; previous revision: 1.4
+done
+Checking in cfortran/Examples/minuit-main.c;
+/afs/cern.ch/asis/share/cern/CVS/cfortran/Examples/minuit-main.c,v  <--  minuit-main.c
+new revision: 1.5; previous revision: 1.4
+done
+Checking in config/MacOSX.cf;
+/afs/cern.ch/asis/share/cern/CVS/config/MacOSX.cf,v  <--  MacOSX.cf
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/cspack/tcpaw/tcpaw.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/cspack/tcpaw/tcpaw.c,v  <--  tcpaw.c
+new revision: 1.11; previous revision: 1.10
+done
+Checking in packlib/kuip/code_motif/kmfile.c;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kuip/code_motif/kmfile.c,v  <--  kmfile.c
+new revision: 1.2; previous revision: 1.1
+done
+Checking in packlib/kuip/kuip/ksys.h;
+/afs/cern.ch/asis/share/cern/CVS/packlib/kuip/kuip/ksys.h,v  <--  ksys.h
+new revision: 1.7; previous revision: 1.6
+done
+Checking in pawlib/paw/cpaw/bugrep.c;
+/afs/cern.ch/asis/share/cern/CVS/pawlib/paw/cpaw/bugrep.c,v  <--  bugrep.c
+new revision: 1.5; previous revision: 1.4
+done
+Checking in scripts/cernlib;
+/afs/cern.ch/asis/share/cern/CVS/scripts/cernlib,v  <--  cernlib
+new revision: 1.45; previous revision: 1.44
+done

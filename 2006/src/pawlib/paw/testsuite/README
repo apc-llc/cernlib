@@ -1,0 +1,29 @@
+To run the testsuite do
+
+% runtest --tool paw 
+
+A specific paw-exe can be specified
+
+% runtest --tool paw PAW=$HOME/pawX11.special
+
+The tests can be run without a window on the screen by
+
+% runtest --tool paw PAW_BATCH=1
+
+The tests can be run with a longer timeout
+( e.g for purify use 120 seconds )
+
+% runtest --tool paw PAW_TIMEOUT=120
+
+To look at the graphics on the screen you can switch
+on the PAW pto option by 
+
+% runtest --tool paw PAW_PTO=
+
+You can run a specific test by giving the name
+of the test ( the test still should be in a directory
+starting with "paw." )
+
+% runtest --tool paw my_test.exp
+
+For full info do 'man runtest' or look at the info pages.

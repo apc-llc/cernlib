@@ -1,0 +1,153 @@
+CDECK  ID>, PINIT2.
+      SUBROUTINE PINIT2
+
+C-    Initialization for Nypatchy and Nysynopt
+C.    split off from PINIT 19-july-95
+
+      PARAMETER (KM1=1,KM2=2,KM3=4,KM4=8,KM5=16,KM6=32,KM7=64,KM8=128,
+     +  KM9=256, KM10=512, KM11=1024, KM12=2048, KM13=4096, KM14=8192,
+     +  KM15=16384, KM16=32768, KM17=65536, KM18=131072, KM19=262144)
+      PARAMETER (NBANKS=19,JBKPAT=1, JBKDEC=2, JBKORG=3, JBKINC=4,
+     +           JBKHOL=5, JBKKEE=6, JBKACT=7, JBKMAT=8, JBKXSQ=9,
+     +           JBKPRE=10,JBKGAR=11,JBKSMH=12,JBKSMT=13,JBKSML=14,
+     +           JBKSMX=15,JBKARR=16,JBKASA=17,JBKPAM=18,JBKRPA=19)
+      COMMON /QBANKS/MMBANK(5,NBANKS)
+      PARAMETER  (MCCNIL=1,  MCCKIL=2,  MCCINC=3,  MCCCDE=4,  MCCSEQ=5,
+     + MCCXSQ=6,  MCCTRU=7,  MCCFAL=8,  MCCELS=9,  MCCEND=10,
+     +            MCCSEL=11, MCCSES=12, MCCFAU=13, MCCSKI=14,
+     +            MCCKEE=15, MCCDEL=16, MCCREP=17, MCCADB=18, MCCADD=19,
+     + MCCUSE=20, MCCXDI=21, MCCDIV=22, MCCLIS=23, MCCEXE=24, MCCIMI=25,
+     + MCCASM=26, MCCUPD=27, MCCNAM=28, MCCGAP=29, MCCMOR=30, MCCONL=31,
+     + MCCFOR=32, MCCSUS=33, MCCOPT=34, MCCOP2=35, MCCSHO=36, MCCPAM=37,
+     + MCCQUI=38, MCCEOD=39, MCCDEC=40, MCCPAT=41, MCCTIT=42)
+      CHARACTER      CCKORG*256, CCKARD*256, CCCOMF*256
+      COMMON /CCPARA/NCHCCD,NCHCCT, JCCTYP,JCCLEV,JCCSL,MCCPAR(240)
+     +,              NCCPAR,MXCCIF,JCCIFV,JCCBAD,JCCWAR,ICCSUB,JCCWK(4)
+     +,              JCCPP,JCCPD,JCCPZ,JCCPT,JCCPIF,JCCPC,JCCPN
+     +,              NCCPP,NCCPD,NCCPZ,NCCPT,NCCPIF,NCCPC,NCCPN
+     +,              JCCEND, NCHCCC,IXCCC,  CCKORG, CCKARD, CCCOMF
+      CHARACTER      CHEXPD*68
+      COMMON /CHEXC/ IXEXPAM, IXEXPAT,IXEXDEC,IXEXID, NCHEPD, CHEXPD
+      COMMON /MUSEBC/ MX_FORC, MU_GLOB, MU_PAT, MU_DECK, MU_INH, MU_FORG
+     +,               MX_TRAN, MX_FORG, MX_SINH, MX_SELF, NVEXDK(6)
+      COMMON /MQCM/  NQSYSS,NQLINK, LQCSTA(3),LQCEND(3), NQMAX
+     +,              LQLSTA(5),LQLEND(5), LQADR,LQADR0,NQOFFS
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+C--------------    End CDE              --------------------------------
+      PARAMETER   (IXCRA=2)
+
+      IOR  (IZV,IZW) =  OR (IZV, IZW)
+
+
+      JSLA = IQ(LQHOLD+1)
+      NSLE = IQ(LQHOLD+3)
+      JSLE = JSLA + NSLE
+      IF (NSLE.LE.0)               GO TO 41
+
+C----              +NAMES, length, slots, text
+
+      CALL NEXTXX ('+NAM', JSLA,JSLE,JSLF)
+      IF (JSLF.EQ.0)               GO TO 34
+
+      JCCTYP = MCCNAM
+      CALL CCKRAK (JSLF)
+      IF (JCCBAD.NE.0)  CALL P_KILL ('faulty line +NAMES')
+
+      CALL NA_REIN
+
+C----              +GAP, gap1, ...
+
+   34 CALL NEXTXX ('+GAP', JSLA,JSLE,JSLF)
+      IF (JSLF.EQ.0)               GO TO 36
+
+      JCCTYP = MCCGAP
+      CALL CCKRAK (JSLF)
+      IF (JCCBAD.NE.0)  CALL P_KILL ('faulty line +GAP')
+
+      CALL VZERO  (IQUEST,12)
+      CALL UCOCOP (MCCPAR(JCCPN+1),IQUEST,NCCPN,1,3,1)
+
+      IF (IQUEST(1).GT.0)  IQUEST(1)= MAX (IQUEST(1), 1000)
+      IF (IQUEST(2).GT.0)  IQUEST(2)= MAX (IQUEST(2), 100)
+      IF (IQUEST(3).GT.0)  IQUEST(3)= MAX (IQUEST(3), 2000)
+      IF (IQUEST(4).GT.0)  IQUEST(4)= MAX (IQUEST(4), 20)
+
+      IF (IQUEST(1).GT.0)  NVGAP(1) = MIN (IQUEST(1), LQCEND(3)/10)
+      IF (IQUEST(2).GT.0)  NVGAP(2) = MIN (IQUEST(2), 400)
+      IF (IQUEST(3).GT.0)  NVGAP(3) = MIN (IQUEST(3), LQLSTA(5)/10)
+      IF (IQUEST(4).GT.0)  NVGAP(4) = MIN (IQUEST(4), 80)
+
+C----              +UPDATE
+
+   36 CALL NEXTXX ('+UPD', JSLA,JSLE,JSLF)
+      IF (JSLF.EQ.0)               GO TO 41
+
+      JCCTYP = MCCUPD
+      CALL CCKRAK (JSLF)
+      IF (JCCBAD.NE.0)  CALL P_KILL ('faulty line +UPDATE')
+
+      MOPUPD = 1
+
+C--       USE bits for global and P=CRA* and D=blank
+
+   41 MX_FORC = KM6 + KM7 + KM8 + KM9
+      MU_GLOB = MX_FORC + KM10
+      MU_PAT  = MU_GLOB + KM5
+      MU_DECK = MU_PAT
+
+      CALL MXOPER (0)
+
+C--       lift PAT and DECK banks for P=CRA*,D=blank
+
+      CALL MQLIFT (LPCRA, LEXP,1, JBKPAT,3)
+
+      LQ(LPCRA-4) = LPCRA
+      IQ(LPCRA)   = IOR (IQ(LPCRA),MU_PAT)
+      IQ(LPCRA+1) = KM5
+      IQ(LPCRA+2) = IXCRA
+
+      CALL MQLIFT (LDCRAB, LPCRA,-2, JBKDEC,3)
+      LEXD = LDCRAB
+
+      LQ(LDCRAB-4) = LPCRA
+      IQ(LDCRAB)   = IOR (IQ(LDCRAB),MU_DECK)
+
+      IXEXPAM = 0
+      IXEXPAT = IXCRA
+      IXEXDEC = 0
+      IXEXID  = IXCRA
+
+C--       lift the dummy PAT bank connecting the past to the future
+
+      CALL MQLIFT (LLPAST,LEXP,-1,JBKPAT,3)
+
+C--       lift PAT bank for PY_VS5 used
+
+      CALL MQLIFT (L,LEXP,-1,JBKPAT,3)
+      LQ(L-4) = LPCRA
+      IQ(L)   = IOR (IQ(L), MU_PAT)
+      IQ(L+2) = NA_LONG ('PY_VS5')
+
+C--                 create the service MAT bank at LSERV
+
+      CALL MQLIFT (LSERV, 0,7, JBKMAT,3)
+
+C--       Lift the preset sequence definitions
+
+      CALL CRDECO
+      CALL INISEQ
+      RETURN
+      END

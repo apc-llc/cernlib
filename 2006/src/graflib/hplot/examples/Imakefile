@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 hplex1.F hplex2.F hplex3.F hplex4.F hplex5.F hplex6.F hplex7.F \ @@\
+	 hplexam.F hplmak.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

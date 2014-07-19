@@ -1,0 +1,104 @@
+*
+* $Id: d209ch.F,v 1.1.1.1 1996/02/15 17:48:40 mclareni Exp $
+*
+* $Log: d209ch.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:40  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+#if defined(CERNLIB_NEVER)
+      SUBROUTINE D209CH(NREP,OKPK)
+      LOGICAL OKPK
+      EXTERNAL D209RR,D209RD
+#include "kernnumt/sysdat.inc"
+      DOUBLE PRECISION DEPS,DXBGN,DH,DEMAX,DX,DXREF,DT
+      DIMENSION Y1(4),YREF(4),W(4,3)
+      DOUBLE PRECISION DY(4),DYREF(4),DW(4,3)
+      DOUBLE PRECISION DA,DQ
+      COMMON /D209CM/N,ITRANS,A(4),Q(4,4),DA(4),DQ(4,4)
+      DATA EPS/1E-5/, DEPS/1D-15/
+      DATA H/0.2/, DH/0.002D0/, DXBGN/0.1D0/
+      DATA MSTPS/5/, MDSTPS/5/
+C
+C  TEST-ROUTINE FOR D209 (RKSTP, DRKSTP).
+C  CALLS ... SUBROUTINES RKSTP, DRKSTP.
+C        ... CERN PACKAGES F002 AND F003.
+C        ... TEST-ROUTINES D209SC, D209RR, D209RD, D209TR, D209TD.
+C
+C  INTEGRATES A SYSTEM OF 1, 2, OR 4 DIFFERENTIAL EQUATIONS OVER MSTPS
+C  INTERVALS OF LENGTH H.  THE EQUATIONS MAY BE EITHER UNCOUPLED (ITRANS
+C  =1) OR COUPLED BY THE APPLICATION OF AN ORTHOGONAL MATRIX TRANSFORMA-
+C  TION (ITRANS=2).  THE UNCOUPLED SYSTEM HAS BEEN ADJUSTED SO AS TO
+C  GIVE APPROXIMATE ERROR EPS.
+C
+C  START.
+      OKPK=.FALSE.
+      IF(NREP.LE.0) RETURN
+      ITEST=0
+      IFAIL=0
+      EMAX=0.
+      DEMAX=0D0
+      DO 8 N=1,4
+         IF(N.EQ.3) GO TO 8
+         CALL D209SC
+         DO 7 ITRANS=1,2
+C
+C        (TEST RKSTP FOR ACCURACY).
+            X=DXBGN
+            XREF=DXBGN
+            CALL D209TR(X,Y1)
+            DO 1 M=1,MSTPS
+               CALL RKSTP(N,H,X,Y1,D209RR,W)
+               XREF=XREF+H
+    1       CONTINUE
+            CALL D209TR(XREF,YREF)
+            T=0.
+            DO 2 J=1,N
+               T=AMAX1( T, ABS(Y1(J)-YREF(J)) )
+    2       CONTINUE
+            ITEST=ITEST+1
+            IF( (T.GT.EPS).OR.(X.NE.XREF) ) IFAIL=IFAIL+1
+            EMAX=AMAX1(EMAX,T)
+C
+C        (TEST DRKSTP FOR ACCURACY).
+            DX=DXBGN
+            DXREF=DXBGN
+            CALL D209TD(DX,DY)
+            DO 5 M=1,MDSTPS
+               CALL DRKSTP(N,DH,DX,DY,D209RD,DW)
+               DXREF=DXREF+DH
+    5       CONTINUE
+            CALL D209TD(DXREF,DYREF)
+            DT=0D0
+            DO 6 J=1,N
+               DT=DMAX1( DT, DABS(DY(J)-DYREF(J)) )
+    6       CONTINUE
+            ITEST=ITEST+1
+            IF( (DT.GT.DEPS).OR.(DX.NE.DXREF) ) IFAIL=IFAIL+1
+            DEMAX=DMAX1(DEMAX,DT)
+C
+    7    CONTINUE
+    8 CONTINUE
+      OKPK=IFAIL.EQ.0
+      IF(.NOT.OKPK) WRITE(*,2000) IFAIL,ITEST,EMAX,DEMAX
+#if !defined(CERNLIB_NUMDE)
+      IF(      ERPRNT .AND.       ERSTOP) WRITE(*,1001)
+      IF(      ERPRNT .AND. .NOT. ERSTOP) WRITE(*,1002)
+      IF(.NOT. ERPRNT .AND.       ERSTOP) WRITE(*,1003)
+      N  =  0
+      CALL RKSTP(N,H,X,Y1,D209RR,W)
+      N  =  -1
+      CALL DRKSTP(N,DH,DX,DY,D209RD,DW)
+#endif
+      RETURN
+#if !defined(CERNLIB_NUMDE)
+ 1001 FORMAT(/'  TWO ERROR AND ABEND MESSAGES SHOULD NOW FOLLOW ...')
+ 1002 FORMAT(/'  TWO ERROR MESSAGES SHOULD NOW FOLLOW ...')
+ 1003 FORMAT(/'  TWO ABEND MESSAGES SHOULD NOW FOLLOW ...')
+#endif
+ 2000 FORMAT( // 18H ***** D209CH ... , I4, 13H  FAILURES IN,
+     *        I4, 8H  TESTS., 5X, 6HEMAX =, 1P, E8.1, 5X,
+     *        7HDEMAX =, D8.1 )
+      END
+#endif

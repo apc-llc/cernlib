@@ -1,0 +1,3 @@
+INCLUDES=	pythia.inc
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),pythia6205)

@@ -1,0 +1,20 @@
+*
+* $Id: fstate.inc,v 1.1.1.1 1996/01/11 14:14:50 mclareni Exp $
+*
+* $Log: fstate.inc,v $
+* Revision 1.1.1.1  1996/01/11 14:14:50  mclareni
+* Cojets
+*
+*
+#ifndef CERNLIB_COJETS_FSTATE_INC
+#define CERNLIB_COJETS_FSTATE_INC
+*
+*
+* fstate.inc
+*
+      COMMON/FSTATE/KWMODE,KYWOPT,KYWQED,KYHEAV,KYFLAV,KTPFRM
+     1,KYEVOL,KYTQED,KYTQCD,NODECY,NOFRGM,KFORSL
+     2,LFORSL,NFORSL,NFORCE,KFORCE(6,100),NSTOPD,KSTOPD(352)
+      LOGICAL NODECY,NOFRGM
+
+#endif

@@ -1,0 +1,8 @@
+SRCS_F=	 cqbkin.F cqhids.F cqlods.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(cqhids,cqhids,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(cqlods,cqlods,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

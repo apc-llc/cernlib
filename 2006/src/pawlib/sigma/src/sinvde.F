@@ -1,0 +1,164 @@
+*
+* $Id: sinvde.F,v 1.1.1.1 1995/12/12 14:36:19 mclareni Exp $
+*
+* $Log: sinvde.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:19  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.09/03 28/09/93  09.54.48  by  Carlo E. Vandoni
+*-- Author :
+      SUBROUTINE SINVDE
+C
+C    ..................................................
+C
+C         PURPOSE
+C            TO CALCULATE THE INVERSE OR DETERMINANT OF
+C            REAL OR COMPLEX MATRICES
+C
+C         USAGE
+C            CALL SINVDE
+C
+C         COMM. BLOCKS USED
+C            COM1
+C
+C         REMARKS
+C            WORKS FOR ARRAYS OF ANY DIMENSION IF THE ARRAY
+C            CONTAINS A FAMILY OF SQUARE MATRICES
+C
+C         SUBROUTINES AND FUNCTION SUBPROGRAMS REQUIRED
+C            SINVCO
+C            SIGTT2
+C            SISTR2
+C
+C         METHOD
+C
+C            FOR REAL MATRICES
+C            RINV     CERN SUBROUTINE LIBRARY NUMBER F010
+C
+C            FOR COMPLEX MATRICES
+C            CINV     CERN SUBROUTINE LIBRARY NUMBER F010
+C
+C
+C...  PAW VERSION  ...  MAY 1988
+C
+C
+C    ..................................................
+C
+C
+#include "sigma/sicsig.inc"
+#include "sigma/sigc.inc"
+#include "sigma/pawc.inc"
+#include "sigma/siclin.inc"
+C
+      DIMENSION DIM(10),DIMTE(3)
+      DIMENSION DETERM(2)
+      COMPLEX CDET
+      EQUIVALENCE(CDET,DETERM(1))
+C
+C
+      CALL SITRAC('SINVDE')
+C
+C     MISSING INDEX IS MEANINGLESS IN THIS OPERATOR
+      CALL SISTAK(0,MP,MN)
+      IF(MN.EQ.MISIDX) GOTO 70
+      DIM(1)=1.0
+C   IF NOT A NUMERICAL ITEM
+      CALL SINGET(ISI,0,DIM)
+      IF(IERRNO.NE.0)RETURN
+      IF(ISI.GE.3)GOTO 50
+C   IF MATRICES ARE NOT SQUARE
+      IF(DIM(1).NE.DIM(2)) GOTO 60
+      N=DIM(1)
+      LA1=IADDR
+      ISTRI=0
+C   GET AREA WHERE TO WORK OUT THE MATRIX
+      CALL SIGTT2(IADDR,LENGTH,NDIM,DIM)
+      LA2=IADDR
+C
+C   COPY MATRICES INTO THE WORKAREA
+      CALL SINVCO(LA1)
+C
+      KMODE=MODE
+      MODE=1
+C    GET AREA FOR SCRATCH VECTOR OF LENGTH N
+C
+      NDIT=1
+      DIMTE(1)=N
+      DIMTE(2)=1
+      DIMTE(3)=1
+      CALL SIGTT2(IADDR,N,NDIT,DIMTE)
+C
+      MODE=KMODE
+      INODET=1
+      IF(KLASS.EQ.602) INODET=0
+      NUMMAT=LENGTH/MODE/N/N
+      MATSIZ=LENGTH/NUMMAT
+      DO 10  I=1,NUMMAT
+         IF(MODE.EQ.1)CALL RINV(N,DYNA(LA2+(I-1)*MATSIZ),
+     +   N,IDYNA(IADDR),IFAIL)
+         IF(MODE.EQ.2)CALL CINV(N,DYNA(LA2+(I-1)*MATSIZ),
+     +   N,IDYNA(IADDR),IFAIL)
+C   IF INVERSE
+         IF(KLASS.EQ.601) GOTO 10
+C
+C   DETERMINANT IS NEEDED, SAVE IT IN THE BEGINNING OF WORK AREA
+C        DYNA(LA2+(I-1)*MODE)=DETERM(1)
+C        IF(MODE.EQ.2) DYNA(LA2+(I-1)*MODE+1)=DETERM(2)
+         IF(MODE.EQ.1)CALL RFACT(N,DYNA(LA2+(I-1)*MATSIZ),
+     +   N,IDYNA(IADDR),IFAIL,DETERM,JFAIL)
+
+         IF(MODE.EQ.2)CALL CFACT(N,DYNA(LA2+(I-1)*MATSIZ),
+     +   N,IDYNA(IADDR),IFAIL,DETERM,JFAIL)
+C
+C   DETERMINANT IS NEEDED, SAVE IT IN THE BEGINNING OF WORK AREA
+C
+         DYNA(LA2+(I-1)*MODE)=DETERM(1)
+         IF(MODE.EQ.2) DYNA(LA2+(I-1)*MODE+1)=DETERM(2)
+   10 CONTINUE
+C
+C     IF DETERMINANT
+      IF(KLASS.EQ.602) GOTO 20
+      IF(IFAIL.EQ.-1)PRINT *,' **** Matrix singular'
+C
+C   HERE WE HAVE AN INVERSE
+C   GET AREA FOR RESULT AND COPY IT OVER
+C
+      CALL SIGTT2(IADDR,LENGTH+NDIM,NDIM,DIM)
+      CALL SINVCO(LA2)
+      GOTO 40
+C
+C
+   20 CONTINUE
+C   HERE WE RETURN THE DETERMINANTS
+      IF(JFAIL.EQ.-1)PRINT *,' **** Determinant probably too small'
+      IF(JFAIL.EQ.+1)PRINT *,' **** Determinant probably too large'
+      DIM(2)=1.
+      IF(NDIM.NE.1) NDIM=NDIM-1
+      CALL SIGTT2(IADDR,LENGTH/N/N+NDIM,NDIM,DIM(2))
+C
+      DO 30  I=1,NUMMAT
+         IA=LA2+(I-1)*MODE
+         DYNA(IADDR)=DYNA(IA)
+         IF(MODE.EQ.2) DYNA(IADDR+1)=DYNA(IA+1)
+         IADDR=IADDR+MODE
+   30 CONTINUE
+C
+C
+   40 CONTINUE
+ 1000 FORMAT(40I2)
+      IADDR=IADDR-MODE
+      CALL SISTR2(3)
+      RETURN
+   50 CONTINUE
+      CALL SINERR(65)
+      RETURN
+   60 CONTINUE
+      CALL SINERR(53)
+      RETURN
+C
+   70 CONTINUE
+      CNAME='INVDET  '
+      CALL SINERR(18)
+      END

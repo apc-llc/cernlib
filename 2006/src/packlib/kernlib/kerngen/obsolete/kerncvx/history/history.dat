@@ -1,0 +1,29 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:52:02 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:02  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerncvx.car patch kerncvx
+#if !defined(CERNLIB_KERNCVX)
+
+              KERNLIB routines particular to CONVEX
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+ *KCVX    pilot for Convex Kernlib, 64-bit, native floating point mode
+ *KCVY    pilot for Convex Kernlib, 32-bit, IEEE fp mode
+
+ QMCV64   machine patch for 64-bit
+ QMCV32   machine patch for 32-bit
+
+ CV64GS   Convex variants of Kernlib routines, 64-bit version
+ CV32GS   Convex variants of Kernlib routines, 32-bit version
+ CVXGS    valid both for 32-bit and 64-bit version
+
+=====================================================================
+#endif

@@ -1,0 +1,4 @@
+SRCS_F=	 cqcomp.F cqdata.F cqhead.F cqinit.F cqmust.F cqoct.F \ @@\
+	cqpos.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

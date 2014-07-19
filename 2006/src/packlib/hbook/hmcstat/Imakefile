@@ -1,0 +1,3 @@
+SRCS_F= hadjust.F hfcnmin.F hmcini.F hmclnl.F hmclno.F hmcmll.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

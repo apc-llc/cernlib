@@ -1,0 +1,25 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= cddict cdfzup cdinit cdmdir cdofflin cdpack \ @@\
+	cdpurge cdread cdroot cdstore cdunpack cdutil
+
+#if defined(CERNLIB_UNIX)
+LIBDIRS:= $(LIBDIRS) cdc
+#endif
+
+PROGRAMDIRS= programs
+
+SUBDIRS= $(LIBDIRS) $(PROGRAMDIRS) hepdb
+
+TopOfPackage(cdlib)
+
+SubdirLibraryTarget(cdlib,$(LIBDIRS))
+
+InstallBinSubdirs($(PROGRAMDIRS))
+
+test::
+
+
+InstallIncludeSubdirs(hepdb)

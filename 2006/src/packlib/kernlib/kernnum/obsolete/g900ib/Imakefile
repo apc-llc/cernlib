@@ -1,0 +1,4 @@
+SRCS_S= \ @@\
+	 ranf.s ranget.s ranset.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

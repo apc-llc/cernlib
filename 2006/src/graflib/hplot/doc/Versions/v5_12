@@ -1,0 +1,42 @@
+*
+* $Id: v5_12,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_12,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.12/03 25/06/92  09.29.22  by  O.Couet
+*-- Author :    O.Couet   03/03/92
+*
+*::>          VERSION  5.12/03   920625  9.29
+*
+*       Mods in HPLEXAM for the metafiles names (M.Marquina).
+*       HPLSYM now restore the marker type and size.
+*
+*::>          VERSION  5.12/02   920403 15.06
+*
+*       New version of the option '3' in HPLTAB. It take care
+*          of the number of contour.
+*       Bug corrected in HPLTAB. With the option 'CONT', if more than
+*          15 levels where requested, the level 15 was reset.
+*
+*::>          VERSION  5.12/01   920312 17.31
+*
+*       Mods in HPLIST in order to define the palette automatically.
+*       New option '3' for the contour drawing with HPLTAB. This
+*          option allows to draw contours with colored fill area.
+*
+*::>          VERSION  5.12/00   920303 13.18
+*
+*       Mods in HPLH to allow the option "+" in HPLOT with log
+*          scale on Y axis.
+*       Mods in HPLTAB: the color of the histogram was not correct in
+*          case of the option 'ARR'.
+*       Mod in HPLTAB to care of the options "3" and "4" in IGTABL.
+*       In HPLTAB take care of VFON for the axes of 3D plots.
+*       Some clean up in HPLSYM (HPL9 was not used).
+*       Mods in HPLF to draw only the fitted part of an histogram in
+*          a command like HI/FIT 110(50:) G and also in command like.
+*          H/PLOT 110 if 110 has been previously fitted.
+*

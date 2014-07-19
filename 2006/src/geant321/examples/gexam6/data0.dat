@@ -1,0 +1,36 @@
+*
+* $Id: data0.dat,v 1.1.1.1 1995/10/24 10:22:19 cernlib Exp $
+*
+* $Log: data0.dat,v $
+* Revision 1.1.1.1  1995/10/24 10:22:19  cernlib
+* Geant
+*
+*
+LIST
+MATER   8
+GRID    40  40  40  0.5  0.5  1.0
+ESHO 0.002  0.004  0.008  0.016  0.032  0.064  0.128  0.256  0.512  1.024  2.048
+NSHO 20     20     20     20     20     20     20     20     10     5      5
+KINE    1
+DEBUG   1   1
+SWIT    1   0   0
+PAIR  1
+COMP  1
+PHOT  1
+PFIS  0
+MULS  1
+BREM  1
+LOSS  1
+DRAY  1
+ANNI  1
+MUNU  0
+HADR  2
+CUTS  0.0001    0.001    6=0.00010 (BCUTE)    8=0.00100 (DCUTE)
+PRINT   'MATE' 'VOLU'  'TMED' 'SETS'
+TIME 2= 4.
+END
+ 
+ 
+ 
+ 
+ 

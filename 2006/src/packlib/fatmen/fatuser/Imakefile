@@ -1,0 +1,3 @@
+SRCS_F=	 fmusel.F fuscan.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

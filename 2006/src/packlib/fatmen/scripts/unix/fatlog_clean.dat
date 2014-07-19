@@ -1,0 +1,40 @@
+#!/bin/ksh
+d=`date`
+echo
+echo $0 running at $d
+echo
+#
+#   Fix for CERNSP based fatcat server
+#
+this_host=`hostname`
+
+if [ $this_host = "sp020" ]
+   then export FMHOST=fatcat
+   echo ${0}: setting FATMEN hostname to $FMHOST
+fi
+#
+#   Delete old journal files
+#
+echo
+echo Before cleanup..
+echo
+df /fatlogs0
+find /fatlogs0 -name aa* -mtime +30 -exec rm {} \;
+echo
+echo After cleanup..
+echo
+df /fatlogs0
+echo
+echo Before cleanup..
+echo
+df /fatlogs1
+find /fatlogs1 -name aa* -mtime +30 -exec rm {} \;
+echo
+echo After cleanup..
+echo
+df /fatlogs1
+#
+d=`date`
+echo
+echo $0 cleanup completed at $d
+echo

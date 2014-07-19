@@ -1,0 +1,37 @@
+*
+* $Id: d209td.F,v 1.1.1.1 1996/02/15 17:48:40 mclareni Exp $
+*
+* $Log: d209td.F,v $
+* Revision 1.1.1.1  1996/02/15 17:48:40  mclareni
+* Kernlib
+*
+*
+#include "kernnumt/pilot.h"
+#if defined(CERNLIB_NEVER)
+      SUBROUTINE D209TD(DX,DYR)
+      DOUBLE PRECISION DX,DYR(4),DU(4),DTAN,DAJ
+      DOUBLE PRECISION DA,DQ
+      COMMON /D209CM/N,ITRANS,A(4),Q(4,4),DA(4),DQ(4,4)
+C
+C  FOR J=1(1)N, SETS DYR(J) TO THE SOLUTION OF THE SYSTEM OF FIRST OR-
+C  DER DIFFERENTIAL EQUATIONS WHOSE RIGHT-HAND SIDES ARE COMPUTED BY
+C  SUBROUTINE D209RD.
+C  CALLS ... CERN PACKAGES F002 AND F003.
+C
+C  STATEMENT FUNCTION.
+      DTAN(DX)=DSIN(DX)/DCOS(DX)
+C
+C  START.
+      DO 1 J=1,N
+         DAJ=DA(J)
+         IF(J.EQ.1) DU(J)=DSIN(DEXP(DAJ*DX))
+         IF(J.EQ.2) DU(J)=DTAN(DAJ*DX)
+         IF(J.EQ.3) DU(J)=DLOG(1D0+DAJ*DX)**2
+         IF(J.EQ.4) DU(J)=DEXP(DSIN(DAJ*DX))
+    1 CONTINUE
+      IF(ITRANS.EQ.1) CALL DVCPY(N,DU,DU(2),DYR,DYR(2))
+      IF(ITRANS.EQ.2) CALL DMMPY(N,N,DQ,DQ(1,2),DQ(2,1),DU,DU(2),
+     *                                                    DYR,DYR(2))
+      RETURN
+      END
+#endif

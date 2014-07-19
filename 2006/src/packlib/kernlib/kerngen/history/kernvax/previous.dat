@@ -1,0 +1,520 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:48 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:48  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNVAX)
+
+UPDATE  2.46 :  13-Sept-94
+--------------------------
+
+Replacing file  KERNVAX  2.45  940311 10.07
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+Correct:      SYSTEMF              to return status on failure
+              FFRVAX, FTOVAX       to handle /name as name:
+              select the right QNEXTE for Alpha
+
+New deck:     P=VAXGS, D=GETPIDF   VMS version of Unix routine
+
+---------------------------------------------------------------------
+
+UPDATE  2.45 :  28-Feb-94
+-------------------------
+
+Replacing file  KERNVAX  2.44  931108 18.25
+
+New Decks:    P=VAXSYS, D=GETARG, TMINIT, TMPRO, TMREAD
+
+Correct:      TIMEX, TIMED         are now in Fortran
+              UNLINKF              made much simpler
+              FFRVAX, FTOVAX       to handle ~/
+
+              P=VAXMLAN            add line .TITLE into each deck
+
+              Program CD    to try ./name ../name ~/name for cd name
+
+---------------------------------------------------------------------
+
+UPDATE  2.44 :   8-Nov-93
+-------------------------
+
+Replacing file  KERNVAX  2.43  930623 23.52
+
+New deck:     P=VAXGS, D=IE3FODA    new version for Alpha
+
+---------------------------------------------------------------------
+
+UPDATE  2.43 :  24-June-93
+-------------------------
+
+Replacing file  KERNVAX  2.42  930609 15.42
+
+Correct:      do +USE, CCGEN.  and consequent deletes added
+
+---------------------------------------------------------------------
+
+UPDATE  2.42 :   9-June-93
+-------------------------
+
+Replacing file  KERNVAX  2.41  930210 11.27
+
+Correct:      P=VAXSYS, D=INTRAC    to behave as UNIX isatty
+
+New Decks:    P=VAXSYS, D=IFBATCH   = .NOT.(old INTRAC)
+              P=VAXSYS, D=WHOAMI    file name of the execution module
+
+---------------------------------------------------------------------
+
+UPDATE  2.41 :   1-Mar-93
+-------------------------
+
+Replacing file  KERNVAX  2.40  930205 11.36
+
+Correct:      P=VAXSYS, D=TIMEL        add entry TIMEST
+
+---------------------------------------------------------------------
+
+UPDATE  2.40 :   4-Feb-93
+-------------------------
+
+Replacing file  KERNVAX 2.39  930128 15.57
+
+Merge         P=ALPHGS   into P=VAXGS
+              P=VAXSYSML into P=VAXMLAN
+
+New Decks:    P=VAXGS, D=LOCB
+              P=VAXSYS, D=UNLINKF
+
+---------------------------------------------------------------------
+
+UPDATE  2.39 :  12-Jan-93
+-------------------------
+
+Replacing file  KERNVAX 2.38  921007 20.12
+
+New Patches:  P=*KALPH, ALPHGS       for the ALPHA machine with VMS
+              P=QMVAXCC              new option if C compiler available
+
+New Deck:     P=VAXGS, D=RNDM        Fortran version
+
+Correct:      CHDIRF, GETENVF, GETWDF   remove the TRANSIT option
+
+---------------------------------------------------------------------
+
+UPDATE  2.38 :   7-Oct-92
+-------------------------
+
+Replacing file  KERNVAX 2.37  910719 13.16
+
+New Patch:    P=VAXSYSML     m/language routines extracted from P=VAXSYS
+
+---------------------------------------------------------------------
+
+UPDATE  2.37 :  18-July-91
+-------------------------
+
+Replacing file  KERNVAX 2.36  910306 18.55
+
+Correct :     P=VAXGS, D=ABEND            re-write to be true abend
+
+---------------------------------------------------------------------
+
+UPDATE  2.36 :   6-Mar-91
+-------------------------
+
+Replacing file  KERNVAX 2.35  900831 13.48
+
+New decks :   P=VAXUTIL, D=CD             simulate Unix command cd
+
+              CHDIRF, GETWDF, GETENVF     new standard KERNLIB routines
+              RENAMEF, SLEEPF, SYSTEMF
+
+Deleted :     P=VAXUTIL, D=FPREP          no longer needed
+                         D=XBANNER        now on KERNFOR
+              CHDIR, GETCWD, GETENV       clashed with the C library
+                 option TRANSIT gives the old names as ENTRY points
+              P=VAXSYS, D=UMCOM,UMLOG     moved to a different PAM
+
+---------------------------------------------------------------------
+
+UPDATE  2.35 :  31-Aug-90
+-------------------------
+
+Replacing file  KERNVAX 2.34  900301 12.55
+
+New decks :   CHDIR, GETCWD, GETENV       simulate Unix system calls
+              FFRVAX, FTOVAX              handle UNIX file-name syntax
+
+Correct :     QNEXTD                      message more explicit
+
+Deleted :     P=*KVIX, P=VIXUTIL          never of any use
+
+---------------------------------------------------------------------
+
+UPDATE  2.34 :   1-Mar-90
+-------------------------
+
+Replacing file  KERNVAX 2.33  891121  1.09
+
+Correct :     IE3FOS,IE3TOS of P=VAXMLAN          bug
+
+---------------------------------------------------------------------
+
+UPDATE  2.33 :  20-Nov-89
+-------------------------
+
+Replacing file  KERNVAX 2.32  890926 22.16
+
+New decks :   LOCB           return the byte adr of a variable
+
+---------------------------------------------------------------------
+
+UPDATE  2.32 :  26-Sep-89
+-------------------------
+
+Replacing file  KERNVAX 2.31  890323 16.05
+
+New Decks :   XBANNER in P=VAXUTIL
+
+Correct :     DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+              PKCHAR,UPKCH   correct bug
+
+---------------------------------------------------------------------
+
+UPDATE  2.31 :  23-Mar-89
+-------------------------
+
+Replacing file  KERNVAX 2.30  881021 14.58
+
+New Decks:    P=VAXMLAN, D=IE3FOS, IE3TOS   Mlan for speed
+              P=VAXSYS, D=UMCOM, UMLOG     service routines of UMON
+              KERNGT                    to eventually replace GSHOW
+
+Correct :     D=VXINVB, VXINBC      test on # of words zero / -ve
+
+---------------------------------------------------------------------
+
+UPDATE  2.30 :  21-oct-88
+-------------------------
+
+Replacing file  KERNVAX 2.29  880809 21.00
+
+Correct :     D=VXINVB, VXINBC      speed-up even further
+              D=RNDM                multiplier: 690069 to 69069
+              D=FPREP               fix bug 'C     END'
+              P=*KVAX               remove USE of VAXUTIL
+              D=AKMULT              add /NOLOG/NOCONF
+
+---------------------------------------------------------------------
+
+UPDATE  2.29 :   9-AUG-88
+-------------------------
+
+Replacing file  KERNVAX 2.28  880712 20.05
+
+     Further clean-up preparing for Ultrix
+
+---------------------------------------------------------------------
+
+UPDATE  2.28 :  12-JUL-88
+-------------------------
+
+Replacing file  KERNVAX 2.27  880712 16.52
+
+New Patch:    P=VAXMLAN       to take all machine-language routines
+                              preparing for Ultrix
+
+---------------------------------------------------------------------
+
+UPDATE  2.27 :  12-JUL-88
+-------------------------
+
+Replacing file  KERNVAX 2.26  880425 20.38
+
+New Patch:    P=*KVIX, VIXUTIL          preparing for Ultrix
+
+New Deck:     P=VAXUTIL, D=FPREP.
+
+Correct :     D=QNEXTE                  correct for INLIB
+
+---------------------------------------------------------------------
+
+UPDATE  2.26 :  25-APR-88
+-------------------------
+
+Replacing file  KERNVAX 2.25  880302 22.56
+
+NEW :         D=JUMPAD, JUMPX2
+
+MOVE :        D=XINB, XINBS     from P=XVECTVAX to P=VAXGS
+
+DELETE :      P=XVECTVAX
+
+---------------------------------------------------------------------
+
+UPDATE  2.25 :   3-MAR-88
+-------------------------
+
+Replacing file  KERNVAX 2.24  870710 10.59
+
+MODIFY :      D=QNEXTE   change reference to QNEXT to be weak
+              D=XINB,XINBS   changed to return IOSTAT
+              D=IE3TOS       fix problem of exponent range
+
+NEW :         D=QNEXTD   dummy for QNEXTE called if QNEXT missing
+
+---------------------------------------------------------------------
+
+UPDATE  2.24 :  10-JUL-87
+-------------------------
+
+Replacing file  KERNVAX 2.23  870612 20.35
+
+MODIFY :      P=QMVAX    remove def's Z=Q$JBIT,Q$SBIT,Q$JBYTET
+
+---------------------------------------------------------------------
+
+UPDATE  2.23 :  12-JUN-87
+-------------------------
+
+Replacing file  KERNVAX 2.22  870525 22.01
+
+NEW DECKS :   P=VAXSYS,  D=VXINVB, VXINVC, VXINVBF, VXINVCF
+
+---------------------------------------------------------------------
+
+UPDATE  2.22 :  24-MAY-87
+-------------------------
+
+Replacing file  KERNVAX 2.21  870121 17.51
+
+NEW DECKS :   P=VAXGS,  D=JBYTOR
+
+MODIFY :      P=*KVAX        split in to new *KVAX and new QMVAX
+              P=*GVAX        deleted
+
+---------------------------------------------------------------------
+
+UPDATE  2.21 :  21-JAN-87
+-------------------------
+
+Replacing file  KERNVAX 2.20  861204 21.07
+
+CORRECTIONS : P=VAXGS,  D=UCOPY2,UCTOH,UHTOC     correct mistake
+
+---------------------------------------------------------------------
+
+UPDATE  2.20 :   4-DEC-86
+-------------------------
+
+Replacing file  KERNVAX 2.19  861014 11.12
+
+NEW DECKS :   P=VAXGS,  D=IE3FOD,IQ3FOS,IE3TOD,IE3TOS
+
+CORRECTIONS : P=VAXGS,  D=UCOPY2,UCTOH,UHTOC     to be shareable
+              P=*KVAX                 new versions of the Q$ sequs
+
+---------------------------------------------------------------------
+
+UPDATE  2.19 :  14-OCT-86
+-------------------------
+
+Replacing file  KERNVAX 2.18  860514 12.39
+
+CORRECTIONS : P=VAXSYS,  D=TIMEL      FIX BUG, CALL LIST TERMINATED
+
+---------------------------------------------------------------------
+
+UPDATE  2.18 :  14-MAY-86
+-------------------------
+
+Replacing file  KERNVAX 2.17  860131 12.12
+
+CORRECTIONS : P=VAXGS,  D=UBLANK,UCOPY2,UZERO,VBLANK,VZERO
+                                    BUG FIXED FOR EXACTLY 65536 BYTES
+
+---------------------------------------------------------------------
+
+UPDATE  2.17 :  31-JAN-86
+-------------------------
+
+Replacing file  KERNVAX 2.16  851205 20.12
+
+CORRECTIONS : P=VAXGS,  D=UHTOC     BUG FIXED, REGISTER 3 SAVED NOW
+
+---------------------------------------------------------------------
+
+UPDATE  2.16 :   5-DEC-85
+-------------------------
+
+Replacing file  KERNVAX 2.15  850809 15.35
+
+CORRECTIONS : P=VAXGS,  D=UCOPY2    BUG FIXED FOR EXACTLY 65536 BYTES
+
+---------------------------------------------------------------------
+
+UPDATE  2.15 :   9-AUG-85
+-------------------------
+
+Replacing file  KERNVAX 2.14  850612 14.50
+
+NEW ROUTINES : P=VAXGS,  D=MBYTET,MBYTOR,MCBYT,MSBIT,MSBYT
+
+---------------------------------------------------------------------
+
+UPDATE  2.14 :  12-JUN-85
+-------------------------
+
+Replacing file  KERNVAX 2.13  850603 18.33
+
+CORRECTIONS : P=VAXGS,  D=IUHUNT       BUG FIXED (R3,R4 NOT SAVED)
+
+---------------------------------------------------------------------
+
+UPDATE  2.13 :  3-JUNE-85
+-------------------------
+
+Replacing file  KERNVAX 2.12  850522 15.42
+
+CORRECTIONS : P=VAXSYS, D=INTRAC       CORRECT TYPING MISTAKE
+
+---------------------------------------------------------------------
+
+UPDATE  2.12 :  22-MAY-85
+-------------------------
+
+Replacing file  KERNVAX 2.11  850320 21.08
+
+CORRECTIONS : P=VAXGS,  D=NOARG        HANDLE ZERO PARAMETERS
+              P=VAXSYS, D=TIMEL        INFINTE IS 9999.
+
+---------------------------------------------------------------------
+
+UPDATE  2.11 :  20-MAR-85
+-------------------------
+
+Replacing file  KERNVAX 2.10  840815 22.57
+
+NEW DECK :    P=VAXSYS, D=INTRAC
+
+---------------------------------------------------------------------
+
+UPDATE  2.10 :  16-AUG-84
+-------------------------
+
+Replacing file  KERNVAX 2.09  840215 18.30
+
+NEW DECK :    P=VAXSYS, D=QNEXTE
+
+---------------------------------------------------------------------
+
+UPDATE  2.09 :  15-FEB-84
+-------------------------
+
+Replacing file  KERNVAX 2.08  840210 11.27
+
+PLACE DEFINITIONS OF Z=Q$JBIT, Q$JBYTET  INTO P=*KVAX.
+
+CORRECTIONS : P=VAXGS, D=IUMODE, UFLINT       Q$JBIT CONNECTED
+
+---------------------------------------------------------------------
+
+UPDATE  2.08 :   9-FEB-84
+-------------------------
+
+Replacing file  KERNVAX 2.07  831122 12.14
+
+CORRECTIONS : P=VAXGS, D=PKCHAR, UPKCH        BUGS CORRECTED
+
+---------------------------------------------------------------------
+
+UPDATE  2.07 :  22-NOV-83
+-------------------------
+
+Replacing file  KERNVAX 2.06  830930 12.12
+
+RESTORE D=TIMEL AS IT WAS ON VERSION 2.04
+
+---------------------------------------------------------------------
+
+UPDATE  2.06 :  30-SEP-83
+-------------------------
+
+Replacing file  KERNVAX 2.05  830901 09.00
+
+RENAME P=SYVMS TO P=VAXSYS
+
+MOVE  D=SWBL16, SWBU16, TRACEQ, VAXTIO, WAIT2S TO P=VAXSYS
+
+NEW PATCH : P=VAXOBS     SAVE SOME OBSOLETE ROUTINES
+                         FROM VERSION 2.04 INTO HERE JUST IN CASE
+
+---------------------------------------------------------------------
+
+UPDATE  2.05 :   1-SEP-83
+-------------------------
+
+Replacing file  KERNVAX 2.04  830531 16.49
+
+NEW PATCHES :   P=SYVMS              VAX SPECIAL SYSTEM ROUTINES
+
+                P=VAXUTIL, D=AKMULT  MOVED  FROM PATCH VAXGS
+
+NEW DECKS :     P=VAXGS, D=CBYT, IUCOMP, IUFIND, IUHUNT, IUSAME, JBYTET
+                           JBYTPK, JRSBYT, LVMAX, LVMAXA, LVMIN, LVMINA
+                           PKBYT, PKCHAR, SBYTOR, SBYTPK, UCOPIV, UCOPYN
+                           UFILL, UPKBYT, UPKCH, USWOP, VADD, VASUM, VBIAS
+                           VBLANK, VCOPYN, VDOT, VDOTN, VDOTN2, VEXCUM
+                           VFILL, VFIX, VFLOAT, VLINE, VMATL, VMATR, VMAX
+                           VMAXA, VMIN, VMINA, VMOD, VMUL, VSCALE, VSUB
+                           VSUM, VUNIT
+
+                P=SYVMS, D=JOBNAM, TIMED, TIMEL, TIMEX
+
+---------------------------------------------------------------------
+
+UPDATE  2.04 :  31-MAY-83
+-------------------------
+
+Replacing file  KERNVAX 2.03  830524 18.34
+
+NEW DECK :      P=VAXGS,   D=UHOLLR          TO FILL TRAILING BLANKS
+
+CORRECTIONS:    P=VAXGS,   D=VAXTIO, WAIT2S  CHARACTER 'PER-CENT' LOST
+
+---------------------------------------------------------------------
+
+UPDATE  2.03 :  24-MAY-83
+-------------------------
+
+Replacing file  KERNVAX 2.02  821007 13.16
+
+NEW DECKS:      P=VAXGS,   D=VAXTIO, WAIT2S
+
+---------------------------------------------------------------------
+
+UPDATE  2.02 :   7-OCT-82
+-------------------------
+
+Replacing file  KERNVAX 2.01  820923 12.08
+
+CORRECTIONS :   P=VAXGS,   D=LOCF       ADD +USE,...,T=INH.
+
+---------------------------------------------------------------------
+
+UPDATE  2.01 :  23-SEP-82
+-------------------------
+
+Replacing file  KERNVAX 2.00  820801 12.00
+
+NEW DECKS:      P=VAXGS,   D=UCTOH, UHTOC
+
+---------------------------------------------------------------------
+
+#endif

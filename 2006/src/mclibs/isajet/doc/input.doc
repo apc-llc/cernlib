@@ -1,0 +1,785 @@
+\newpage
+\section{Input\label{INPUT}}
+
+\subsection{Input Format}
+
+      ISAJET is controlled by commands read from the specified input
+file by subroutine READIN. (In the interactive version, this file is
+first created by subroutine DIALOG.) Syntax errors will generate a
+message and stop execution. Based on these commands, subroutine LOGIC
+will setup limits for all variables and check for inconsistencies.
+Several runs with different parameters can be combined into one job.
+The required input format is:
+\begin{verbatim}
+Title
+Ecm,Nevent,Nprint,Njump/
+Reaction
+(Optional parameters)
+END
+(Optional additional runs)
+STOP
+\end{verbatim}
+with all lines starting in column 1 and typed in {\it upper} case. These
+lines are explained below.
+
+      Title line: Up to 80 characters long. If the first four letters
+are STOP, control is returned to main program. If the first four letters
+are SAME, the parameters from previous run are used excepting those
+which are explicitly changed.
+
+      Ecm line: This line must always be given even if the title is
+SAME. It must give the center of mass energy (Ecm) and the number of
+events (Nevent) to be generated. One may also specify the number of
+events to be printed (Nprint) and the increment (Njump) for printing.
+The first event is always printed if Nprint $>$ 0. For example:
+\begin{verbatim}
+800.,1000,10,100/
+\end{verbatim}
+generates 1000 events at $E_{\rm cm} = 800\,\GeV$ and prints 10
+events. The events printed are: 1,100,200,\dots. Note that an event
+typically takes several pages of output. This line is read with a list
+directed format (READ*).
+
+     After Nprint events have been printed, a single line containing the
+run number, the event number, and the random number seed is printed
+every Njump events (if Njump is nonzero). This seed can be used to start
+a new job with the given event if in the new run NSIGMA is set equal to
+zero:
+\begin{verbatim}
+SEED
+value/
+NSIGMA
+0/
+\end{verbatim}
+In general the same events will only be generated on the same type of
+computer.
+
+      Reaction line: This line must be given unless title is SAME, when
+it must be omitted. It selects the type of events to be generated. The
+present version can generate TWOJET, E+E-, DRELLYAN, MINBIAS, WPAIR,
+SUPERSYM, HIGGS, PHOTON, TCOLOR, or WHIGGS events. This line is read
+with an A8 format.
+
+\subsection{Optional Parameters}
+
+      Each optional parameter requires two lines.
+The first line is a keyword specifying the parameter and the second
+line gives the values for the parameter. The parameters can be given in
+any order. Numerical values are read with a list directed format
+(READ*), jet and particle types are read with a character format and
+must be enclosed in quotes, and logical flags with an L1 format. All
+momenta are in GeV and all angles are in radians.
+
+      The parameters can be classified in several groups:
+\begin{center}
+\begin{tabular}{lllll}
+\hline\hline
+Jet Limits: & W/H Limits: & Decays:     & Constants:  & Other: \\
+\hline
+JETTYPE1    & HTYPE       & FORCE       & AMSB        & BEAMS \\
+JETTYPE2    & PHIW        & FORCE1      & CUTJET      & EPOL \\
+JETTYPE3    & QMH         & NOB         & CUTOFF      & EEBEAM \\
+MIJLIM      & QMW         & NODECAY     & EXTRAD      & EEBREM \\
+MTOT        & QTW         & NOETA       & FRAGMENT    & NPOMERON \\
+P           & THW         & NOEVOLVE    & GAUGINO     & NSIGMA \\
+PHI         & WTYPE       & NOFRGMNT    & GMSB        & NTRIES \\
+PT          & XW          & NOGRAV      & GMSB2       & PDFLIB \\
+TH          & YW          & NOPI0       & HMASS       & SEED \\
+X           &             & NOTAU       & HMASSES     & STRUC \\
+Y           &             &             & LAMBDA      & WFUDGE \\
+WMODE1      &             &             & MGVTNO      & WMMODE \\
+WMODE2      &             &             & MSSMA       & WPMODE \\
+            &             &             & MSSMB       & Z0MODE \\
+            &             &             & MSSMC       & \\
+            &             &             & MSSMD       & \\
+            &             &             & MSSME       & \\
+            &             &             & NUSUG1      & \\
+            &             &             & NUSUG2      & \\
+            &             &             & NUSUG3      & \\
+            &             &             & NUSUG4      & \\
+            &             &             & NUSUG5      & \\
+            &             &             & SIGQT       & \\
+            &             &             & SIN2W       & \\
+            &             &             & SLEPTON     & \\
+            &             &             & SQUARK      & \\
+            &             &             & SSBCSC      & \\
+            &             &             & SUGRA       & \\
+            &             &             & SUGRHN      & \\
+            &             &             & TCMASS      & \\
+            &             &             & TMASS       & \\
+            &             &             & WMASS       & \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+      It may be helpful to know that the TWOJET, WPAIR, PHOTON,
+SUPERSYM, and WHIGGS processes use the same controlling routines and
+so share many of the same variables.  In particular, PT limits should
+normally be set for these processes, and JETTYPE1 and JETTYPE2 are
+used to select the reactions. Similarly, the DRELLYAN, HIGGS, and
+TCOLOR processes use the same controlling routines since they all
+generate s-channel resonances. The mass limits for these processes are
+set by QMW.  Normally the QMW limits will surround the $W^\pm$, $Z^0$,
+or Higgs mass, but this is not required.  (QMH acts like QMW for the
+Higgs process.) For historical reasons, JETTYPE1 and JETTYPE2 are used
+to select the W decay modes in DRELLYAN, while WMODE1 and WMODE2 select
+the W decay modes for WPAIR, HIGGS, and WHIGGS. Also, QTW can be used
+to generate DRELLYAN events with non-zero transverse momentum, whereas
+HIGGS automatically fixes QTW to be zero. (Of course, non-zero
+transverse momentum will be generated by gluon radiation.)
+
+      For example the lines
+\begin{verbatim}
+P
+40.,50.,10.,100./
+\end{verbatim}
+would set limits for the momentum of jet 1 between 40 and 50 GeV, and
+for jet 2 between 10 and 100 GeV. As another example the lines
+\begin{verbatim}
+WTYPE
+'W+'/
+\end{verbatim}
+would specify that for DRELLYAN events only W+ events will be generated.
+If for a kinematic variable only the lower limit is specified then that
+parameter is fixed to the given value. Thus the lines
+\begin{verbatim}
+P
+40.,,10./
+\end{verbatim}
+will fix the momentum for jet 1 to be 40 GeV and for jet 2 to be 10
+GeV. If only the upper limit is specified then the default value is used
+for the lower limit. Jet 1 or jet 2 parameters for DRELLYAN events refer
+to the W decay products and cannot be fixed. If QTW is fixed to 0, then
+standard Drell-Yan events are generated.
+
+      A complete list of keywords and their default values follows.
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+Keyword                &                   & Explanation                    \\
+Values                 & Default values    &                                \\
+\hline
+AMSB                   &                   & Anomaly-mediated SUSY breaking \\
+$m_0$,$m_{3/2}$,$\tan\beta$,$\sgn\mu$ & none & scalar mass, gravitino mass, \\
+                       &                   & VEV ratio, sign                \\
+                       &                   &                                \\
+BEAMS                  &                   & Initial beams. Allowed are     \\
+type$_1$,type$_2$      & 'P','P'           & 'P','AP','N','AN'.             \\
+                       &                   &                                \\
+CUTJET                 &                   & Cutoff mass for QCD jet        \\
+$\mu_c$                & 6.                & evolution.                     \\
+                       &                   &                                \\
+CUTOFF                 &                   & Cutoff $qt^2=\mu^2Q^\nu$ for   \\
+$\mu^2$, $\nu$         & .200,1.0          & DRELLYAN events.               \\
+                       &                   &                                \\
+EEBEAM                 &                   & impose brem/beamstrahlung      \\
+$\sqrt{\hat{s}}_{min}$, $\sqrt{\hat{s}}_{max}$, $\Upsilon$, $\sigma_z$ &
+none & min and max subprocess energy, \\
+                       & & beamstrahlung parameter $\Upsilon$ \\
+                       & & longitudinal beam size $\sigma_z$ in mm \\
+                       &                   &                                \\
+EEBREM                 &                 & impose bremsstrahlung for $e^+e^-$ \\
+$\sqrt{\hat{s}}_{min}$, $\sqrt{\hat{s}}_{max}$ & none & min and max subprocess 
+energy \\
+                       &                   &                                \\
+EPOL                   &              & Polarization of $e^-$ ($e^+$) beam, \\
+$P_L(e^-),P_L(e^+)$    & 0,0               & $P_L(e)=(n_L-n_R)/(n_L-n_R)$,  \\
+                       &                   & so that $-1 \le P_L \le 1$     \\
+                       &                   &                                \\
+EXTRAD                 &                   & Parameters for EXTRADIM process\\
+$\delta$,$M_D$,UVCUT   & None              & UVCUT is logical flag          \\
+                       &                   &                                \\
+FORCE                  &                   & Force decay of particles,      \\
+$i,i_1,...,i_5$/       & None              & $\pm i \to \pm(i1+...+i5)$.    \\
+                       &                   & Can call 20 times.             \\
+                       &                   & See note for $i$ = quark.      \\
+                       &                   &                                \\
+FORCE1                 &                   & Force decay $i \to i1+...+i5$. \\
+$i,i_1,...,i_5$/       & None              & Can call 40 times.             \\
+                       &                   & See note for $i$ = quark.      \\
+                       &                   &                                \\
+FRAGMENT               &                   & Fragmentation parameters.      \\
+$P_{ud}$,\dots         & .4,\dots          & See also SIGQT, etc.           \\
+                       &                   &                                \\
+GAUGINO                &                   & Masses for $\tilde g$, 
+$\tilde\gamma$,                                                             \\
+$m_1$,$m_2$,$m_3,m_4$  & 50,0,100,100      & $\tilde W^+$, and $\tilde Z^0$ \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+GMSB                   &                   & GMSB messenger SUSY breaking,  \\
+$\Lambda_m$,$M_m$,$N_5$ & none             & mass, number of $5+\bar5$, VEV \\
+$\tan\beta$,$\sgn\mu$,$C_{\rm gr}$ &       & ratio, sign, gravitino scale   \\
+                       &                   &                                \\
+GMSB2                  &                   & non-minimal GMSB parameters    \\
+$\slashchar{R}$,$\delta M_{H_d}^2$,$\delta M_{H_u}^2$,$D_Y(M)$ & 1,0,0,0 & 
+gaugino mass multiplier \\
+$N_{5_1}$,$N_{5_2}$,$N_{5_3}$ & $N_5$     & Higgs mass shifts, D-term mass$^2$\\
+                       &                   & indep. gauge group messengers  \\
+                       &                   &                                \\
+HMASS                  & 0                 & Mass for standard Higgs.       \\
+$m$                    &                   &                                \\
+                       &                   &                                \\
+HMASSES                &                   & Higgs meson masses for         \\
+$m_1$,\dots,$m_9$      & 0,...,0           & charges 0,0,0,0,0,1,1,2,2.     \\
+                       &                   &                                \\
+HTYPE                  &                   & One MSSM Higgs type ('HL0',    \\
+'HL0'/ or...           & none              & 'HH0', or 'HA0')               \\
+                       &                   &                                \\
+JETTYPE1               &                   & )Select types for jets:        \\
+'GL','UP',...          & 'ALL'             & )'ALL'; 'GL'; 'QUARKS'='UP',   \\
+                       &                   & )'UB','DN','DB','ST','SB',     \\
+JETTYPE2               &                   & )'CH','CB','BT','BB','TP',     \\
+'GL','UP',...          & 'ALL'             & )'TB','X','XB','Y','YB';       \\
+                       &                   & )'LEPTONS'='E-','E+','MU-',    \\
+JETTYPE3               &                   & )'MU+','TAU-','TAU+'; 'NUS';   \\
+'GL','UP',...          & 'ALL'             & )'GM','W+','W-','Z0'           \\
+                       &                   & ) See note for SUSY types.     \\
+                       &                   &                                \\
+LAMBDA                 &                   & QCD scale                      \\
+$\Lambda$              & .2                &                                \\
+                       &                   &                                \\
+MGVTNO                 &                   & Gravitino mass -- ignored for  \\
+$M_{\rm gravitino}$    & $10^{20}$~GeV     & GMSB model                     \\
+                       &                   &                                \\
+MIJLIM                 &                   & Multimet mass limits           \\
+$i$,$j$,$M_{\rm min}$,$M_{\rm max}$ & 0,0,$1\,\GeV$,$1\,\GeV$ &             \\
+                       &                   &                                \\
+MSSMA                  &                   & MSSM parameters --             \\
+$m(\tilde g)$,$\mu$,   & Required          & Gluino mass, $\mu$, $A$ mass,  \\
+$m(A)$,$\tan\beta$     &                   & $\tan\beta$                    \\
+                       &                   &                                \\
+MSSMB                  &                   & MSSM 1st generation --         \\
+$m(q_1)$,$m(d_r)$,$m(u_r)$, & Required     & Left and right soft squark and \\
+$m(l_1)$,$m(e_r)$      &                   & slepton masses                 \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+MSSMC                  &                   & MSSM 3rd generation --         \\
+$m(q_3)$,$m(b_r)$,$m(t_r)$,  & Required    & Soft squark masses, slepton    \\
+$m(l_3)$,$m(\tau_r)$,  &                   & masses, and squark and slepton \\
+$A_t$,$A_b$,$A_\tau$   &                   & mixings                        \\
+                       &                   &                                \\
+MSSMD                  &                   & MSSM 2nd generation --         \\
+$m(q_2)$,$m(s_r)$,$m(c_r)$,  & from MSSMB  & Left and right soft squark and \\
+$m(l_2)$,$m(mu_r)$     &                   & slepton masses                 \\
+                       &                   &                                \\
+MSSME                  &                   & MSSM gaugino masses --         \\
+$M_1$,$M_2$            & MSSMA + GUT       & Default is to scale from gluino\\
+                       &                   &                                \\
+MTOT                   &                   & Mass range for multiparton     \\
+$M_{\rm min}$,$M_{\rm max}$ & None         & processes                      \\
+                       &                   &                                \\
+NOB                    &                   & Suppress B decays to use       \\
+TRUE or FALSE          & FALSE             & external package.              \\
+                       &                   &                                \\
+NODECAY                &                   & Suppress all decays.           \\
+TRUE or FALSE          & FALSE             &                                \\
+                       &                   &                                \\
+NOETA                  &                   & Suppress eta decays.           \\
+TRUE or FALSE          & FALSE             &                                \\
+                       &                   &                                \\
+NOEVOLVE               &                   & Suppress QCD evolution and     \\
+TRUE or FALSE          & FALSE             & hadronization.                 \\
+                       &                   &                                \\
+NOGRAV                 &                   & Suppress gravitino decays in   \\
+TRUE or FALSE          & FALSE             & GMSB model                     \\
+                       &                   &                                \\
+NOHADRON               &                   & Suppress hadronization of      \\
+TRUE or FALSE          & FALSE             & jets and beam jets.            \\
+                       &                   &                                \\
+NONUNU                 &                   & Suppress $Z^0$ neutrino decays.\\
+TRUE or FALSE          & FALSE             &                                \\
+                       &                   &                                \\
+NOPI0                  &                   &Suppress $\pi^0$ decays.        \\
+TRUE or FALSE          & FALSE             &                                \\
+                       &                   &                                \\
+NOTAU                  &                   & Suppress tau decays to use     \\
+TRUE or FALSE          & FALSE             & external package.              \\
+                       &                   &                                \\
+NPOMERON               &                   & Allow $n_1<n<n_2$ cut pomerons.\\
+$n_1$,$n_2$            & 1,20              & Controls beam jet mult.        \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+NSIGMA                 &                   & Generate n unevolved events    \\
+$n$                    & 20                & for SIGF calculation.          \\
+                       &                   &                                \\
+NTRIES                 &                   & Stop if after n tries          \\
+$n$                    & 1000              & cannot find a good event.      \\
+                       &                   &                                \\
+NUSUG1                 &                   & Optional non-universal SUGRA   \\
+$M_1$,$M_2$,$M_3$      & none              & gaugino masses                 \\
+                       &                   &                                \\
+NUSUG2                 &                   & Optional non-universal SUGRA   \\
+$A_t$,$A_b$,$A_\tau$   & none              & $A$ terms                      \\
+                       &                   &                                \\
+NUSUG3                 &                   & Optional non-universal SUGRA   \\
+$M_{H_d}$,$M_{H_u}$    & none              & Higgs masses                   \\
+                       &                   &                                \\
+NUSUG4                 &                   & Optional non-universal SUGRA   \\
+$M_{u_L}$,$M_{d_R}$,$M_{u_R}$, & none      & 1st/2nd generation masses      \\
+$M_{e_L}$,$M_{e_R}$    &                   &                                \\
+                       &                   &                                \\
+NUSUG5                 &                   & Optional non-universal SUGRA   \\
+$M_{t_L}$,$M_{b_R}$,$M_{t_R}$, & none      & 3rd generation masses          \\
+$M_{\tau_L}$,$M_{\tau_R}$ &                &                                \\
+                       &                   &                                \\
+P                      &                   & Momentum limits for jets.      \\
+$p_{\rm min}(1)$,\dots,$p_{\rm max}(3)$ & 
+1.,$0.5E_{\rm cm}$                         &                                \\
+                       &                   &                                \\
+PDFLIB                 &                   & CERN PDFLIB parton distribution\\
+'name$_1$',val$_1$,\dots & None            & parameters. See PDFLIB manual. \\
+                       &                   &                                \\
+PHI                    &                   & Phi limits for jets.           \\
+$\phi_{\rm min}(1)$,\dots,$\phi_{\rm max}(3)$ & 0,$2\pi$ &                  \\
+                       &                   &                                \\
+PHIW                   &                   & Phi limits for W.              \\
+$\phi_{\rm min}$,$\phi_{\rm max}$ & 
+0,$2\pi$                                   &                                \\
+                       &                   &                                \\
+PT or PPERP            &                   & $p_t$ limits for jets.         \\
+$p_{t,{\rm min}}(1)$,\dots,$p_{t,{\rm max}}(3)$  & 
+$.05E_{\rm cm}$,$.2E_{\rm cm}$             & Default for TWOJET only.       \\
+                       &                   &                                \\
+QMH                    &                   & Mass limits for Higgs.         \\
+$q_{\rm min}$,$q_{\rm max}$ & 
+$.05E_{\rm cm}$,$.2E_{\rm cm}$             & Equivalent to QMW.             \\
+                       &                   &                                \\
+QMW                    &                   & Mass limits for $W$.           \\
+$q_{\rm min}$,$q_{\rm max}$ & 
+$.05E_{\rm cm}$,$.2E_{\rm cm}$             &                                \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+QTW                    &                   & $q_t$ limits for $W$. Fix 
+$q_t=0$                                                                     \\
+$q_{t,{\rm min}}$,$q_{t,{\rm max}}$ & 
+.1,$.025E_{\rm cm}$                        & for standard Drell-Yan.        \\
+                       &                   &                                \\
+SEED                   &                   & Seed $<$281474976710656.D0 for \\
+real/integer           & 0                 & RANF or $<$$2^{31}$ for RANLUX.\\
+                       &                   &                                \\
+SIGQT                  &                   & Internal $k_t$ parameter for   \\
+$\sigma$               & .35               & jet fragmentation.             \\
+                       &                   &                                \\
+SIN2W                  &                   & Weinberg angle. See WMASS.     \\
+$\sin^2(\theta_W)$     & .232              &                                \\
+                       &                   &                                \\
+SLEPTON                &                   & Masses for $\tilde \nu_e$,
+$\tilde e$, $\tilde\nu_\mu$, $\tilde\mu$, $\tilde\nu_\tau$, $\tilde\tau$    \\
+$m_1$,\dots,$m_6$      & 100,\dots,101.8   &                                \\
+                       &                   &                                \\
+SQUARK                 &                   & Masses for $\tilde u$,
+$\tilde d$, $\tilde s$, $\tilde c$, $\tilde b$, $\tilde t$                  \\
+$m_1$,\dots,$m_6$      & 100.3,...,240.    &                                \\
+                       &                   &                                \\
+SSBCSC                 &                   & Alternate mass scale for RGE   \\
+$M$                    & $M_{GUT}$         & boundary conditions.           \\
+                       &                   &                                \\
+STRUC                  &                   & Structure functions. CTEQ5L,   \\
+name                   & 'CTEQ5L'          & CTEQ3L, CTEQ2L, EHLQ, OR DO    \\
+                       &                   &                                \\
+SUGRA                  &                   & Minimal supergravity parameters\\
+$m_0$,$m_{1/2}$,$A_0$, & none              & scalar M, gaugino M, trilinear \\
+$\tan\beta$,$\sgn\mu$  &                   & breaking term, vev ratio, +-1  \\
+TH or THETA            &                   & Theta limits for jets. Do not  \\
+$\theta_{\rm min}(1)$,\dots,$\theta_{\rm max}(3)$ & 0,$\pi$ & also set Y.   \\
+                       &                   &                                \\
+SUGRHN                 &                   & SUGRA see-saw $\nu$-effect     \\
+$m_{\nu_\tau}$,$M_N$,$A_n$,$m_{\tilde\nu_R}$ & $0,1E20,0,0$ & nu-mass, 
+int. scale, \\
+                       &                   & GUT scale nu SSB terms         \\
+                       &                   &                                \\
+THW                    &                   & Theta limits for W. Do not     \\
+$\theta_{\rm min}$,$\theta_{\rm max}$ & 0,$\pi$ & also set YW.              \\
+                       &                   &                                \\
+TCMASS                 &                   & Technicolor mass and width.    \\
+$m$,$\Gamma$           & 1000,100          &                                \\
+                       &                   &                                \\
+TMASS                  &                   & t, y, and x quark masses.      \\
+$m_t$,$m_y$,$m_x$      & 180.,-1.,-1.      &                                \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\begin{center}
+\begin{tabular}{lll}
+\hline\hline
+WFUDGE                 &                   & Fudge factor for DRELLYAN      \\
+factor                 & 1.85              & evolution scale.               \\
+                       &                   &                                \\
+WMASS                  &                   & W and Z masses. See SIN2W.     \\
+$M_W$,$M_Z$            & 80.2, 91.19       &                                \\
+                       &                   &                                \\
+WMMODE                 &                   & Decay modes for $W^-$ in parton\\
+'UP',\dots,'TAU+'      & 'ALL'             & cascade. See JETTYPE.          \\
+                       &                   &                                \\
+WMODE1                 &                   & )                              \\
+'UP','UB',\dots        & 'ALL'             & )Decay modes for WPAIR.        \\
+                       &                   & )Same code for quarks and      \\
+WMODE2                 &                   & )leptons as JETTYPE.           \\
+'UP','UB',\dots        & 'ALL'             & )                              \\
+                       &                   &                                \\
+WPMODE                 &                   & Decay modes for $W^+$ in parton\\
+'UP',\dots,'TAU+'      & 'ALL'             & cascade. See JETTYPE.          \\
+                       &                   &                                \\
+WTYPE                  &                   & Select W type: W+,W-,GM,Z0.    \\
+type$_1$,type$_2$      & 'GM','Z0'         & Do not mix W+,W- and GM,Z0.    \\
+                       &                   &                                \\
+X                      &                   & Feynman x limits for jets.     \\
+$x_{\rm min}(1)$,\dots,$x_{\rm max}(3)$ & 
+$-1$,1                                     &                                \\
+                       &                   &                                \\
+XGEN                   &                   & Jet fragmentation, Peterson    \\
+a(1),\dots,a(8)        & .96,3,0,.8,.5,... & with $\epsilon=a(n)/m^2$, 
+$n=4$-8.                                                                    \\
+                       &                   &                                \\
+XGENSS                 &                   & Fragmentation of GLSS, UPSS,   \\
+a(1),\dots,a(7)        & .5,.5,...         & etc. with $\epsilon=a(n)/m**2$ \\
+                       &                   &                                \\
+XW                     &                   & Feynman x limits for W.        \\
+$x_{\rm min}$,$x_{\rm max}$ & 
+$-1$,1                                     &                                \\
+                       &                   &                                \\
+Y                      &                   & Y limits for each jet.         \\
+$y_{\rm min}(1)$,\dots,$y_{\rm max}(3)$ & from PT & Do not also set TH.     \\
+                       &                   &                                \\
+YW                     &                   & Y limits for W.                \\
+$y_{\rm min}$,$y_{\rm max}$ & from QTW,QMW & Do not set both YW and THW.    \\
+                       &                   &                                \\
+Z0MODE                 &                   & Decay modes for $Z^0$ in parton\\
+'UP',\dots,'TAU+'      & 'ALL'             & cascade. See JETTYPE.          \\
+\hline\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\subsection{Kinematic and Parton-type Parameters}
+
+      While the TWOJET PT limits and the DRELLYAN QMW limits are
+formally optional parameters, they are set by default to be fractions of
+$\sqrt{s}$. Thus, for example, the parameter file
+\begin{verbatim}
+DEFAULT TWOJET JOB
+14000,100,1,100/
+TWOJET
+END
+STOP
+\end{verbatim}
+will execute, but it will generate jets between 5\% and 20\% of
+$\sqrt{s}$, which is probably not what is wanted. Similarly, the
+parameter file
+\begin{verbatim}
+DEFAULT DRELLYAN JOB
+14000,100,1,100/
+DRELLYAN
+END
+STOP
+\end{verbatim}
+will generate $\gamma + Z$ events with masses between 5\% and 20\% of
+$\sqrt{s}$, not masses around the $Z$ mass, and transverse momenta
+between $1\,{\rm GeV}$ and 2.5\% of $\sqrt{s}$.
+
+      Normally the user should set PT limits for TWOJET, PHOTON, WPAIR,
+SUPERSYM, and WHIGGS events and QMW and QTW limits for DRELLYAN,
+HIGGS, and TCOLOR events. If these limits are not set, they will be
+selected as fractions of $E_{\rm cm}$. This can give nonsense. For
+TWOJET the $p_t$ range should usually be less than about a factor of
+two except for $b$ and $t$ jets at low $p_t$ to produce uniform
+statistics. For $W^+$, $W^-$, or $Z^0$ events or for Higgs events the
+QMW (QMH) range should usually include the mass. But one can select
+different limits to study, e.g., virtual $W$ production or the effect
+of a lighter or heavier Higgs on WW scattering. If only $t$ decays are
+selected, then the lower QMW limit must be above the $t$ threshold.
+For standard Drell-Yan events QTW should be fixed to zero,
+\begin{verbatim}
+QTW
+0/
+\end{verbatim}
+Transverse momenta will then be generated by initial state gluon
+radiation. A range of QTW can also be given. For SUPERSYM either the
+masses and decay modes should be specified, or the MSSM, SUGRA, GMSB, or
+AMSB parameters should be given. For fourth generation quarks it is
+necessary to specify the quark masses.
+
+      Note that if the limits given cover too large a kinematic range,
+the program can become very inefficient, since it makes a fit to the
+cross section over the specified range. NTRIES has to be increased if
+narrow limits are set for X, XW or for jet 1 and jet 2 parameters in
+DRELLYAN events. For larger ranges several runs can be combined together
+using the integrated cross section per event SIGF/NEVENT as the weight.
+This cross section is calculated for each run by Monte Carlo integration
+over the specified kinematic limits and is printed at the end of the
+run. It is corrected for JETTYPEi, WTYPE, and WMODEi selections; it
+cannot be corrected for branching ratios of forced decays or for WPMODE,
+WMMODE, or Z0MODE selections, since these can affect an arbitrary number
+of particles.
+
+      To generate events over a large range, it is much more efficient
+to combine several runs. This is facilitated by using the special job
+title SAME as described above. Note that SAME cannot be used to combine
+standard DRELLYAN events (QTW fixed equal to 0) and DRELLYAN events with
+nonzero QTW.
+
+      The cross sections for multiparton final states in general have
+infrared and collinear singularities. To obtain sensible results, it
+is in general essential to set limits both on the $p_T$ of each final
+parton using PT and on the mass of each pair of partons using MIJLIM.
+The default lower limits are all $1\,{\rm GeV}$. Using these default
+limits without thought will likely give absurd results.
+
+      For TWOJET, DRELLYAN, and most other processes, the JETTYPEi and
+WTYPEi keywords should be used to select the subprocesses to be
+included. For $e^+ e^- \to W^+ W^-$, $Z^0 Z^0$, use FORCE and FORCE1
+instead of WMODEi to select the $W$ decay modes. Note that these {\it
+do not} change the calculated cross section. (In the E+E- process, the
+$W$ and $Z$ decays are currently treated as particle decays, whereas in
+the WPAIR and HIGGS processes they are treated as $2 \to 4$ parton
+processes.)
+
+      For HIGGS with $W^+W^-$ or $Z^0Z^0$ decays allowed it is
+generally necessary to set PT limits for the W's, e.g.
+\begin{verbatim}
+PT
+50,20000,50,20000/
+\end{verbatim} 
+If this is not done, then the default lower limit of 1 GeV is used,
+and the $t$-channel exchanges will dominate, as they should in the
+effective $W$ approximation. Depending on the other parameters, the
+program may fail to generate an event in NTRIES tries.
+
+\subsection{SUSY Parameters}
+
+      SUPERSYM (SUSY) by default generates just gluinos and squarks in
+pairs. There are no default masses or decay modes. Masses can be set
+using GAUGINO, SQUARK, SLEPTON, and HMASSES. Decay modes can be
+specified with FORCE or by modifying the decay table. Left and right
+squarks are distinguished but assumed to be degenerate, except for
+stops. Since version 7.11, types must be selected with JETTYPEi using
+the supersymmetric names, e.g.
+\begin{verbatim}
+JETTYPE1
+'GLSS','UPSSL','UPSSR'/
+\end{verbatim}
+Use of the corresponding standard model names, e.g.
+\begin{verbatim}
+JETTYPE1
+'GL','UP'/
+\end{verbatim}
+and generation of pure photinos, winos, and zinos are no longer
+supported.
+
+      If MSSMA, MSSMB and MSSMC are given, then the specified parameters
+are used to calculate all the masses and decay modes with the ISASUSY
+package assuming the minimal supersymmetric extension of the standard
+model (MSSM). There are no default values, so you must specify values
+for each MSSMi, i=A-C. MSSMD can optionally be used to set the second
+generation squark and slepton parameters; if it is omitted, then the
+first generation ones are used. MSSME can optionally be used to set the
+U(1) and SU(2) gaugino masses; if it is omitted, then the grand
+unification values are used. The parameters and the use of the MSSM is
+preserved if the title is SAME. FORCE can be used to override the
+calculated branching ratios. 
+
+      The MSSM option also generates charginos and neutralinos with
+cross sections based on the MSSM mixing angles in addition to squarks
+and sleptons. These can be selected with JETTYPEi; the complete list of
+supersymmetric options is:
+\begin{verbatim}
+'GLSS',
+'UPSSL','UBSSL','DNSSL','DBSSL','STSSL','SBSSL','CHSSL','CBSSL',
+'BTSS1','BBSS1','TPSS1','TBSS1',
+'UPSSR','UBSSR','DNSSR','DBSSR','STSSR','SBSSR','CHSSR','CBSSR',
+'BTSS2','BBSS2','TPSS2','TBSS2',
+'W1SS+','W1SS-','W2SS+','W2SS-','Z1SS','Z2SS','Z3SS','Z4SS',
+'NUEL','ANUEL','EL-','EL+','NUML','ANUML',MUL-','MUL+','NUTL',
+'ANUTL','TAU1-','TAU1+','ER-','ER+','MUR-','MUR+','TAU2-','TAU2+',
+'Z0','HL0','HH0','HA0','H+','H-',
+'SQUARKS','GAUGINOS','SLEPTONS','ALL'.
+\end{verbatim}
+Note that mixing between $L$ and $R$ stop states results in 1 (light)
+and 2 (heavy) stop, sbottom and stau eigenstates, which depend on the
+input parameters of left- and right- scalar masses, plus $A$ terms,
+$\mu$ and $\tan\beta$. The last four JETTYPE's generate respectively
+all allowed combinations of squarks and antisquarks, all combinations
+of charginos and neutralinos, all combinations of sleptons and
+sneutrinos, and all SUSY particles. 
+
+      For SUSY Higgs pair production or associated production in E+E-,
+select the appropriate JETTYPE's, e.g.
+\begin{verbatim}
+JETTYPE1
+'Z0'/
+JETTYPE2
+'HL0'/
+\end{verbatim}
+
+As usual, this gives only half the cross section. For single production
+of neutral SUSY Higgs in $pp$ and $\bar pp$ reactions, use the HIGGS
+process together with the MSSMi, SUGRA, GMSB, or AMSB keywords. You must
+specify one and only one Higgs type using
+\begin{verbatim}
+HTYPE
+'HL0' or 'HH0' or 'HA0'/     <<<<< One only!
+\end{verbatim}
+If no QMH range is given, one is calculated using $M \pm 5 \Gamma$ for
+the selected Higgs. Decays into quarks, leptons, gauge bosons, lighter
+Higgs bosons, and SUSY particles are generated using the on-shell
+branching ratios from ISASUSY. You can use JETTYPEi to select the
+allowed Higgs modes and WMODEi to select the allowed decays of W and Z
+bosons. Since heavy SUSY Higgs bosons couple weakly to W pairs, WW
+fusion and WW scattering are not included. 
+
+      SUGRA can be used instead of MSSMi to generate MSSM decays with
+parameters determined from $m_0$, $m_{1/2}$, $A_0$, $\tan\beta$, and
+$\sgn\mu=\pm1$ in the minimal supergravity framework. The NUSUGi
+keywords can optionally be used to specify additional parameters for
+non-universal SUGRA models, while SUGRHN is used to specify the
+parameterf of an optional right-handed neutrino. Similarly, the GMSB
+keyword is used to specify the $\Lambda$, $M_m$, $N_5$, $\tan\beta$,
+$\sgn\mu=\pm1$, and $C_{\rm grav}$ parameters of the minimal Gauge
+Mediated SUSY Breaking model. GMSB2 can optionally be used to specify
+additional parameters of non-minimal GMSB models. The AMSB keyword is
+used to specify $m_0$, $m_{3/2}$, $\tan\beta$, and $\sgn\mu$ for the
+minimal Anomaly Mediated SUSY Breaking model. Note that $m_{3/2}$ is
+much larger than the weak scale, typically 50~TeV.
+
+      WHIGGS is used to generate $W$ plus neutral Higgs events. For the
+Standard Model the JETTYPE is \verb|HIGGS|. If any of the SUSY models
+is specified, then the appropriate SUSY Higgs type should be used,
+most likely \verb|HL0|. In either case WMODEi is used to specify the
+$W$ decay modes. The Higgs is treated as a particle; its decay modes
+can be set using FORCE.
+
+\subsection{Forced Decay Modes}
+
+      The FORCE keyword requires special care. Its list must contain the
+numerical particle IDENT codes, e.g.
+\begin{verbatim}
+FORCE
+140,130,-120/
+\end{verbatim}
+The charge-conjugate mode is also forced for its antiparticle. Thus the
+above example forces both $\bar D^0 \to K^+ \pi^-$ and $D^0 \to K^-
+\pi^+$. If only a specific decay is wanted one should use the FORCE1
+command; e.g.
+\begin{verbatim}
+FORCE1
+140,130,-120/
+\end{verbatim}
+only forces $\bar D^0 \to K^+ \pi^-$.
+
+      To force a heavy quark decay one must generally separately force
+each hadron containing it. If the decay is into three leptons or quarks,
+then the real or virtual W propagator is inserted automatically. Since
+Version 7.30, top and fourth generation quarks are treated as
+particles and decayed directly rather than first being made into
+hadrons. Thus for example
+\begin{verbatim}
+FORCE1
+6,-12,11,5/
+\end{verbatim}
+forces all top quarks to decay into an positron, neutrino and a
+b-quark (which will be hadronized). For the physical top mass, the
+positron and neutrino will come from a real W. Note that forcing $t
+\to W^+ b$ and $W^+ \to e^+ \nu_e$ does {\it not} give the same
+result; the first uses the correct $V-A$ matrix element, while the
+second decays the $W$ according to phase space.
+
+      Forced modes included in the decay table or generated by ISASUSY
+will automatically be put into the correct order and will use the
+correct matrix element. Modes not listed in the decay table are
+allowed, but caution is advised because a wrong decay mode can cause
+an infinite loop or other unexpected effects.
+
+      FORCE (FORCE1) can be called at most 20 (40) times in any run plus
+all subsequent 'SAME' runs. If it is called more than once for a given
+parent, all calls are listed, and the last call is used. Note that FORCE
+applies to particles only, but that for gamma, W+, W-, Z0 and
+supersymmetric particles the same IDENT codes are used both as jet types
+and as particles.
+
+\subsection{Parton Distributions}
+
+      The default parton distributions are fit CTEQ5L from the CTEQ
+Collaboration using lowest order QCD. The CTEQ3L, CTEQ2L, and the old
+EHLQ and Duke-Owens distributions can be selected using the STRUC
+keyword.
+
+      If PDFLIB support is enabled (see Section 4), then any of the
+distributions in the PDFLIB compilation by H. Plothow-Besch can be
+selected using the PDFLIB keyword and giving the proper parameters,
+which are identical to those described in the PDFLIB manual and are
+simply passed to the routine PDFSET. For example, to select fit 29
+(CTEQ3L) by the CTEQ group, leaving all other parameters with their
+default values, use
+\begin{verbatim}
+PDFLIB
+'CTEQ',29D0/
+\end{verbatim}
+Note that the fit-number and the other parameters are of type DOUBLE
+PRECISION (REAL on 64-bit machines). There is no internal passing of
+parameters except for those which control the printing of messages.
+
+\subsection{Multiparton Processes}
+
+      For multiparton final states one should in general set limits
+on the total mass \verb|MTOT| of the final state, on the minimum
+\verb|PT| of each light parton, and on the minimum mass \verb|MIMLIM|
+of each pair of light partons. Limits for \verb|PT| are set in the
+ususal way. Limits for the mass $M_{ij}$ of partons $i,j$ are set using
+\begin{verbatim}
+MIJLIM
+i,j,Mmin,Mmax
+\end{verbatim}
+If $i=j=0$, the limit is applied to all jet pairs. For example the
+following parameter file generates \verb|ZJJ| events at the LHC with a
+mimimum $p_T$ of $20\,\GeV$ and a minimum mass of $20\,\GeV$ for all
+jet pairs:
+\begin{verbatim}
+GENERATE ZJJ with PTMIN = 20 GEV AND MMIN = 20 GEV
+14000,100,1,100/
+ZJJ
+PT
+20,7000,20,7000,20,7000/
+MIJLIM
+0,0,20,7000/
+MTOT
+100,500/
+NSIGMA
+200/
+NTRIES
+10000/
+END
+STOP
+\end{verbatim}
+The default lower limits for \verb|PT| and \verb|MIJLIM| are
+$1\,\GeV$. While these limits are sufficient to make the cross
+sections finite, they will in general not give physically sensible
+results. Thus, {\it the user must think carefully about what limits
+should be set.}

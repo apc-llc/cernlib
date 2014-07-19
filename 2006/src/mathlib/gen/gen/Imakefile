@@ -1,0 +1,4 @@
+INCLUDES=	 def128.inc def64.inc defc64.inc gcmpfun.inc \ @@\
+	imp128.inc imp64.inc impc64.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),gen)

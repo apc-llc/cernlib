@@ -1,0 +1,5 @@
+SRCS_F=	cdbackup.F zabend.F
+
+CernlibFortranProgramTarget(cdbackup,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(cdbackup,$(CERN_BINDIR))

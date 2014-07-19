@@ -1,0 +1,12 @@
+*
+* $Id: v106.dat,v 1.1.1.1 1996/03/04 16:12:53 mclareni Exp $
+*
+* $Log: v106.dat,v $
+* Revision 1.1.1.1  1996/03/04 16:12:53  mclareni
+* Dzdoc/Zebpack
+*
+*
+*  Version 1.06  930928 15.15
+C- Add QMLNX flag IF=BSLASH
+C- Introduction of DZDOC v5.60/02 on 930928 15.15
+C

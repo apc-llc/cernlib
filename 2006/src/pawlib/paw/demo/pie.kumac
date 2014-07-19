@@ -1,0 +1,35 @@
+MACRO PIE
+**************************************************************************
+*             Companion macro to PAW TUTORIAL EXAMPLE 26                 *
+**************************************************************************
+alias/cre colbackg  0
+alias/cre colcompl  1
+alias/cre colred    2
+alias/cre colgreen  3
+alias/cre colblue   4
+alias/cre colyellow 5
+alias/cre colpurple 6
+alias/cre colcyan   7
+igset bord 1
+zon 2 2
+null 0 20 0 20 a
+
+v/cre vws(5) R 28.3 18.6 16.9 13.5 22.7
+label 1 5 'Sun' 'DEC' 'HP' 'Apollo' 'Other'
+
+v/cre offset(5)  R 2*0. 2*20. 0.
+v/cre colour(5)  R colred colgreen colblue colyellow colpurple
+v/cre style(5)   R 111 222 333 444 265
+
+igset fais 1
+pie 10. 10. 7.  5 vws p offset ! colour
+null 0 20 0 20 a
+igset fais 1
+pie 10. 10. 7.  5 vws l offset ! colour
+null 0 20 0 20 a
+pie 10. 10. 7.  5 vws n offset style
+null 0 20 0 20 a
+pie 10. 10. 7.  5 vws l offset style
+*al/de *
+RETURN
+

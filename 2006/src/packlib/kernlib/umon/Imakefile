@@ -1,0 +1,18 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= umonftn
+
+SUBDIRS = $(LIBDIRS)
+
+TopOfPackage(umon)
+
+SubdirLibraryTarget(umon,$(LIBDIRS))
+
+test::
+
+
+install.include::
+

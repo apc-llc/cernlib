@@ -1,0 +1,4 @@
+SRCS_F= hcreatem.F hlimap.F hlnxtm.F hlnxtm1.F hmapm.F hplism.F hplism1.F \ @@\
+	hrdirm.F hresetm.F hresetm1.F hrez0m.F hrzinm.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

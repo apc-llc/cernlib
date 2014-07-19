@@ -1,0 +1,194 @@
+*
+* $Id: v4_21,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_21,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.21/13 17/03/94  10.36.58  by  Rene Brun
+*-- Author :    Rene Brun   26/10/93
+*
+*::>          VERSION  4.21/13   17/03/94 10.36.57
+*
+*    Routine HNTDEL has been rewritten (cannot call HLOOP if HDELET is called)
+*
+*::>          VERSION  4.21/12   16/03/94 17.42.29
+*
+*    Correct bug in HNTDEL (see after HDELET the 2 lines commented)
+*
+*    Mods in HGIVE to return TITLE in case of ntuples
+*
+*    HRESET can reset memory resident ntuples
+*
+*::>          VERSION  4.21/11   12/03/94 15.48.34
+*
+*    New routine HRENDC
+*    C I/O option implemented in HRFILE/HROPEN
+*
+*::>          VERSION  4.21/10   03/03/94 16.00.31
+*
+*    Maximum size of PAWCR4 increased from 5000 to 50000 words
+*
+*::>          VERSION  4.21/09   28/02/94 18.55.39
+*
+*    Option 'W' can be specified with option 'L' (log likelihood)
+*     When option W is given, bins with errors=0 are not used in the fit.
+*
+*    New option 'Z' added in HFITV.
+*    When option 'Z' is given, UFCN is the user fitting model
+*    UFCN is a subroutine with the calling sequence:
+*       Subroutine UFCN(N,X,Y,EY,NPAR,IFLAG,NPFITS)
+*     where X(N),Y(N),EY(N) are the input vectors,
+*           NPAR the number of parameters
+*           NPFITS is an output parameter= Number of points used in the fit
+*     The user must declare the common/HCFITD/FITPAD(24),FITFUN in UFCN
+*
+*    Change name of routine HBIBNIT to HBINIT1 to avoid clash with OPAL.
+*
+*    New routine HKIND returning the type of ID.
+*
+*    Bug corrected in HFITV: variable BINWID not set. (Reported by W.Mueller)
+*
+*    Argument missing in CALL MZPUSH in routine HRZKEY.
+*
+*    bug corrected in HGNTBF:
+*      return as negative error the number of columns that we load from disk
+*
+*::>          VERSION  4.21/08   17/02/94 16.41.07
+*
+*    Change DLOG, DSIGN and DABS to SIGN,LOG and ABS in patch HMCSTAT.
+*
+*    New routines HKFILL, HKF1, HKFF1, HKF2, HKFF2, HKFILPF,HKFI1,HKFFI1.
+*    These routines are fast filling routines called in teh context of PAW	
+*    by the new COMIS translator facility.
+*
+*    Packing of floating points in CWN was not correct.
+*    Fixes are in routines HFNT2, HGNT2, HGNTF, HNTNAM.
+*
+*    Set IQUEST(1) in HRZIN/HRZOUT.
+*
+*    Clear buffers in HREND.
+*
+*    Changes in HCDIR/HLDIR and HLNEXT for PIAF files.
+*
+*    Changes in HROUT and HNTRD:
+*     Status word should be 0 when buffer comes from disk. However, in one
+*     strange case (when coming from Piaf) it was not 0.
+*
+*    New routine HF1E(id,x,w,e) to fill a 1-D histogram
+*        ID contents incremented by W
+*        ID errors incremented by E**2
+*
+*    New routine HBOOKNC. This new routine has a calling sequence
+*    very close to HBOOKN and creates a CWN instead.
+*
+*    Changes in pilot patch for WINNT and MSDOS versions.
+*
+*    Don't reset LBUF and LTMP in HCDIR and HROUT. Only update the
+*    master pointer LBUFM and LTMPM. Other routines involved: HNBUF,
+*    HNBUFD, HNBUFR, HNTMP, HNTMPD. This fixed a bug reported
+*    by M. Dahlinger.
+*
+*    New routine HNTDEL. This routine is called by HREND and deletes
+*    all Ntuple headers of non-memory resident Ntuples related to the
+*    closed unit from //PAWC.
+*
+*    In HRZCD used sequence $CZSOCK.
+*
+*    Compute binomial errors in HOPERA if option B is given.
+*
+*    New routines HBONT,HFONT,HFONTR,HFONTCX to create and fill
+*       an Omnipurpose Column-Wise-ntuple.
+*    NEW sequence /HCBONT/
+*
+*    Optimisation in HRZKEY
+*
+*    In HNTNAM a protection was missing
+*    and in HBSET ierror was not initialized
+*
+*::>          VERSION  4.21/07   20/12/93 13.01.27
+*
+*    Changes in HRDIR for Unix shared memory.
+*    New routine HRDIRM in patch HMMAP called by HRDIR.
+*
+*    Bug corrected in HLATTR for global sections
+*
+*    Bug corrected in HBNT and HROUT for CWN memory-resident ntuples in
+*    the case of subdirectories in RZ file.
+*    Same bug in HNBFWR and HNTRD.
+*
+*    Bug corrected in HPAKAD
+*
+*    Bug fixed in HGNTF in case of packing and multiple ntuples
+*
+*    Protection in HBNAME (HNTNAM)
+*
+*::>          VERSION  4.21/06   09/12/93 08.56.15
+*
+*    Bug found in the hmcstats code and fixed. The bug would have
+*    caused slightly different results for people using VERY low monte carlo
+*    statistics, with lots of empty bins (Christine Beeston).
+*
+*    New routines HLNXTG and HLNXTG1 in HGLOBAL.
+*    New routines HLNXTM and HLNXTM1 in HMMAP.
+*    New routines HRZING and HRZINM called from HLATTR.
+*    These new routines are called by HLNEXT to return the next
+*    object from a global section or shared memory.
+*
+*::>          VERSION  4.21/05   29/11/93 17.23.14
+*
+*    New routine HOPTPF to send /HCOPT/ to PIAF.
+*
+*::>          VERSION  4.21/04   29/11/93 08.15.23
+*
+*    New routine HSTAF(CHOPT).
+*       If CHOPT='YES' ststistics are computed at filling time.
+*    routines modified: HBOOK1, HBOOK2, HBPROF, HMACHI.
+*    new sequence /HCOPT/
+     HSTAF is automatically called by the HPLOT options 'HSTA' and 'HNST'
+*
+*::>          VERSION  4.21/03   25/11/93 15.47.53
+*
+*    New routine HRZKEY called by HRIN. The new routine may speed up
+*    considerably the routines HGN and HGNF. It computes the serial key
+*    number for each ntuple extension and stores it in a bank which
+*    is the next of LCONT.
+*    Routines HGN and HGNF modified accordingly.
+*
+*::>          VERSION  4.21/02   17/11/93 13.06.05
+*
+*    Problem in HCDIR preventing the RLOGIN command in PAW is fixed.
+*
+*    Modify HRENID to process old/new RWNs and CWNs
+*
+*    Changes in HCREATEG to support ALPHA/VMS global sections.
+*
+*::>          VERSION  4.21/01   16/11/93 08.52.59
+*
+*    Add type declarations in HUWFUN
+*
+*    In HINDEX, change format from I6 to I7.
+*
+*    Mods in HCDIR for the old PIAF/PAWSERV.
+*
+*    Mods in HDELET/HIDPOS for PIAF (add new sequence $HCACHE).
+*
+*    Implement possibility to add 1-D histograms with alphanumeric labels
+*    Mods in HOPERA. New routine HOPER1A.
+*
+*    Protection in routine HDBCOP (R.J.Genik). See comments in routine.
+*
+*    Set bit 5 to 0 in HLABEL
+*
+*::>          VERSION  4.21/00   26/10/93 15.39.39
+*
+*    Unused parameters deleted in the following routines:
+*        HRESETM1,HREZ0M,HCOPYN,HCOPYT.
+*
+*    The following obsolete routines from HBOOK version 3 have been deleted:
+*        HCORE,HDISKF,HFNEXT,HISTGO,HLCM,HLCM3,HLOK,HSTORE,HUNLOK,HWRITE.
+*
+*    Change format in HFNT2 error message (mail from Yves Roblin)
+*
+*    Remove unused variables or common blocks

@@ -1,0 +1,38 @@
+*
+* $Id: v166.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v166.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.66  910404  9.10
+C
+C-  P=FEPIO             : add HPUX, MIPS, IBMVM, VAXVMS, VAXULX flags
+C-  everywhere          : Make IBM=IBMVM or IBMMVS
+C-  P=EPIO  ,D=EPUNIT   : set INFINI=999999 for all machines -ND100B16
+C-  P=UTIL  ,D=CFRIBMCR : new version for CRAY (by M.J.Corden)
+C-  P=UTIL  ,D=BLO32WCR :        "
+C-  P=UTIL  ,D=BUN32WCR :        "
+C
+C-  Add STF77, STF77VX flags to EPDEFU. Tidy the associated common
+C    blocks to make the pam cleaner.
+C-  Add STF77, STF77VX flags to EPINIT for epdefu.
+C    Add call UMLOG for monitoring to EPINIT.
+C-  Add STF77, STF77VX flags to CFRASCUN, CTOASCUN.
+C-  Add STF77, -STF77VX flags to SFRASCAP, STOASCAP.
+C-  SFRASCVX, STOASCVX standardised and flags -STF77 and STF77VX added.
+C-  STF77, STF77VX versions of BLO8W
+C-  STF77, STF77VX versions of BUN8W
+C-  Correct calls to ishftc in CONVEX CTOIBM, CFRIBM.
+C
+C-  Tidy parameter statement in EPBLIN.
+C-  Random access feature for Apollo in EPBLIN.
+C-  Add HSPAN flag in EPOUTL to correct compiler warning.
+C
+C-  PTEST1, PTEST2, PTEST3 modified to test STF77 and STF77VX
+C     versions with the restrictions of fixed length blocks,
+C     no change of block size and only for full padding.
+C     T1FAST updated accordingly.
+C-  *EPIO corrected.
+C

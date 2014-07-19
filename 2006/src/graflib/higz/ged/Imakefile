@@ -1,0 +1,14 @@
+SRCS_F=	 iealpt.F iearc.F iearro.F ieaxis.F iebox.F iecpa.F \ @@\
+	iedele.F iefa.F iefbox.F iegrid.F iemaca.F iemaxa.F iemboa.F \ @@\
+	iemfaa.F iemfba.F iemhia.F iemopr.F iempla.F iempma.F iemsta.F \ @@\
+	iemtxa.F iepave.F iepl.F iepm.F iepop.F iestx.F ietx.F iewin.F \ @@\
+	igbord.F igccol.F igcfai.F igclwn.F igex.F igfirs.F iggrid.F \ @@\
+	igicol.F igifai.F iginme.F igline.F igplot.F igreq.F izged.F \ @@\
+	izpick.F izpiwi.F izpkfa.F izpkpl.F izundo.F
+
+#ifdef CERNLIB_SUN
+SpecialFortranLibObjectRule(iecpa,iecpa,NullParameter,NullParameter)
+SpecialFortranLibObjectRule(izged,izged,NullParameter,NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

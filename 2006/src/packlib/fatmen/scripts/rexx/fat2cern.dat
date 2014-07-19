@@ -1,0 +1,31 @@
+*
+* $Id: fat2cern.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fat2cern.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FAT2CERN.EXEC */
+/*---------------------------------------------------------------------*/
+/*                   F A T 2 C E R N  E X E C                          */
+/*                   ------------------------                          */
+/*                                                                     */
+/* EXEC to forward FATMEN updates to central FAT server.               */
+/* The update will not be forwarded if it came from FMxxxx at CERNVM.  */
+/*                                                                     */
+/*---------------------------------------------------------------------*/
+Parse arg server
+/* 'ID(STACK'
+Pull server .
+*/
+'GLOBALV SELECT *EXEC STACK FATADDR'
+Pull fatuser fatnode
+if substr(fatuser,1,2) = 'FM' & fatnode = 'CERNVM' then do
+   Say 'Update originated at CERNVM - will not be sent back'
+   exit
+   end
+   else do
+   'EXEC SENDFILE FATMEN RDRFILE ' server ' AT CERNVM'
+   end
+ 

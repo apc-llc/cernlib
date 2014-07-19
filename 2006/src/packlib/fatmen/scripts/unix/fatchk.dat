@@ -1,0 +1,35 @@
+*
+* $Id: fatchk.dat,v 1.2 1996/04/16 06:43:39 jamie Exp $
+*
+* $Log: fatchk.dat,v $
+* Revision 1.2  1996/04/16 06:43:39  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /fatmen/fm*
+
+   do
+
+      typeset -u fatgrp
+      fatpath=$i
+      fatgrp=`basename $i`
+      eval $fatgrp=$fatpath;export $fatgrp
+#
+# Look for startable servers (fatserv exists)
+#
+      if [ -x ${i}/fatserv ]
+      then
+         if [ -f ${i}/todo/signal.stop ]
+         then
+            subject=`echo Warning: server for ${fatgrp} has been stopped`
+            ls -l ${i}/todo/signal.stop | mail -s " ${subject} " fatcat-mgr@zfatal.cern.ch
+         fi
+      fi
+   done

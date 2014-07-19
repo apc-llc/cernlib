@@ -1,0 +1,379 @@
+*
+* $Id: v2_05,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_05,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :  2.05/24 08/11/94  18.14.44  by  O.Couet
+*-- Author :    Rene Brun   23/03/94
+*
+*::>          VERSION  2.05/24   08/11/94 18.14.44
+*
+* New version of XBAE patch.
+*
+* PAWFCA and PCINFO are now compatible in the .sl management.
+*
+* PSEXEC useless code removed.
+*
+*::>          VERSION  2.05/23   24/10/94 11.47.50
+*
+* Fix in PAVECT to support LOG scales in V/PLOT X%Y
+*
+* Bug fixed in handling in CWN array subranges (analyse).
+*
+*::>          VERSION  2.05/22   21/10/94 09.37.07
+*
+* Fix in the Paw++ cut editor when inverting (.NOT.) a bracketed expression.
+*
+*::>          VERSION  2.05/21   18/10/94 12.15.31
+*
+* Fix in case column-wise ntuple arrays do not fit in the cache
+*
+* Can now again remove //lun's from chain definitions
+*
+*::>          VERSION  2.05/20   14/10/94 11.29.09
+*
+* Protection in PBHIST for HIGZ classes.
+*
+* Routine PAWFCA and PCINFO: also analyse pre-compiled Comis routines for
+* Ntuple columns.
+*
+* Routine PFINDF and PFINDF1: PFINDF recursively analyses the routines in the
+* calling tree to find all used Ntuple columns. Before only the top-level
+* routine was analyzed.
+*
+* Routine PCPVAR: restore correctly character array columns from column cache.
+*
+*::>          VERSION  2.05/19   28/09/94 08.45.00
+*
+* New version of STAGERD by Timo.
+*
+* Minor changes in PIAFC, PSTAGE and PSEXEC.
+*
+* Routine PAMLOC: print unsigned int only in HEX format when sign bit is set.
+*
+*::>          VERSION  2.05/18   19/09/94 11.11.18
+*
+* VMS fixes in 0PAMAINM and TCPIAF (by Jamie).
+*
+* Bug fix in bugrep for VMS : types.h doesn't exist on VMS, and the
+* ARCH_TYPE has been replaced by HW_TYPE.
+*
+* New option A in NT/SCAN to draw the average spider plot.
+*
+*::>          VERSION  2.05/17   05/09/94 13.38.47
+*
+* Add Bessel functions BESJ0,BESJ1,BESY0,BESY1,BESI0,BESI1,BESK0,BESK1
+*                      EBESI0,EBESI1,EBESK0,EBESK1 in PAWCS
+*
+* Change PAW prompt style in PAWPP.
+*
+* Implement MOTIF interface to BUGREPORT
+* New routine MAILDIALOG added in UIMX. Deck ABOUTDIALOG deleted.
+* New deck MAIL in CMOTIF. Changes in INIT.
+*
+* Bug fix in PAWJOJ (called by command LINTRA) when the number of
+* variables was greater than 16(reported by F.Lamarche).
+*
+* Bug fix in PANTUP with option=s if ID=1000000
+*
+* New routine PAVERS with sequence VIDQQ.
+* PAVERS is called by the new routine BUGREPORT (CPAW).
+*
+* New routine BUGREPORT and corresponding command BUGREPORT in /KUIP.
+*
+* HPLFRA in called in PAFITV. Previously a temporary histo 12345
+* was created.
+*
+* Solaris port of PIAF.
+*
+* New patch STAGERD contains PIAF stager daemon process. To build
+* piafserv include sequences from patch STAGERD.
+*
+* Problem causing crash on DN10K corrected in PAWCS (G.Folger)
+*
+* Comment changed in PCHROP
+*
+* New version of PIAFC.
+*
+* #if !defined(__convexc__) statements added in PARSE,TABLE,GENERATI
+*  (report by V.Balashov)
+*
+* PAFORT: There was a bug that in CALL sub.f('a') the character
+* constant would be converted to uppercase.
+*
+*::>          VERSION  2.05/16   04/08/94 15.00.22
+*
+* Introduce protections and cleanup of buffers in case of CRTL/C.
+* Mods in PPROJN,PALLOC and PAWBRK.
+*
+* Fix bug in PALLOC: CDUM declared CHARACTER type.
+*
+* New option parameter CHOPT in command REBIN.
+* In particular, if the option 'N' is given, the result of new bin is
+* the sum of the cumulated bin instead of teh average (default).
+*
+*::>          VERSION  2.05/15   28/07/94 12.26.03
+*
+* Changes in PASCAN and PASPI2 to support ranges (see HELP SCAN)
+*
+* Mods in PAFITV to support 2-D vectors.
+*
+* Mods in HGETNT: In case of SCAN, do not read (by default) column 1
+*
+* Mods in HGETN2: call HBNAME with $CLEAR also in case of Nt/loop
+*
+* Invalidate cache when deleting chain in PCHAIN and PCHCLO.
+*
+* Add Remote Procedure call for PIAF in PCHROP.
+*
+* Changed Ntuple column caching algorithm. Columns of chains and
+* RWN's are also cached now. New routine PALLOC allocates space
+* via HBALLOC. Filling of cache is now done in PPROJ0 or PPROJN
+* (which know how to loop over chains). The routine PABFIL is
+* deleted.
+*
+* Introduced spider plots. Use option -S to the SCAN command to get
+* spider plots.
+*
+* Mods in PFCUTS and PFPUSH. Do not check CUT syntax on PIAF (has
+* already been done on the PAW client side).
+*
+* Mods in generati, analyse and pawsel to handle graphical cuts
+* on CWN arrays inside a complex selection mechanism.
+*
+* Mods in PASCAN and PASCA1 to allow chains scanning.
+* (LABEL done on PASCAN).
+*
+*::>          VERSION  2.05/14   14/07/94 14.15.12
+*
+* New command Ntuple/Hmerge to merge HBOOK files
+* New routine MERGIN called by command Hmerge.
+*
+* New command Ntuple/Duplicate added. PAWDEF/PAWDEC and PNUTIL modified.
+*
+* Graphical cuts implemented for CWN arrays
+*
+* Add HRENAME and HNTDUP in list of callable routines in PAWCS
+*
+* Protection in PANTUP in case IFIRST> number of events.
+*
+* PIAF ported to SGI
+*
+* Bug fixed in PACUTS. CHCUTY was not initialized in case of graphical
+* cuts on 1D histograms.
+*
+*::>          VERSION  2.05/13   05/07/94 18.32.55
+*
+* T=XCC added in PATCH,FITPCDES.
+*
+* Several lines with more than 80 characters in HFPANEL
+*
+* ATITLE has an additional parameter: ZTIT.
+*
+*::>          VERSION  2.05/12   30/06/94 13.45.46
+*
+* bug corrected in PAWUWF (inversion OR/AND)
+*
+*::>          VERSION  2.05/11   28/06/94 15.24.06
+*
+* bug fixed in TCPIAF (ALPHA/VMS only)
+*
+* Mods in PAWUWF to support the generation of an Include file
+* instead of a Real function.
+*
+* Mods in the CDF to reflect the changes in UWFUNC
+*
+*::>          VERSION  2.05/10   28/06/94 08.22.32
+*
+* VMEM changed from 64MB to 54MB in PAWINT3.
+*
+* Delete .f and .sl files in PIAF when sequential mode.
+*
+* Modify PAHOPE to support HRESET for ntuples.
+*
+* The functions $CALL, $ICALL, and $DCALL allow to call REAL, INTEGER, and
+* DOUBLE PRECISION functions, respectively.  The function call must be
+* enclosed in quotes, for example:
+*      $CALL('fun.f(1.5)')
+*
+* Modify PMNCOMD to support new option 'K' in Histo/Fit
+*
+* Several bugs fixed in patch,HFPANEL when porting to ALPHA/OSF
+*
+* Routine PASCAN modified. If LOUT is not stdout, no prompt generated
+* like in Batch mode.
+*
+*::>          VERSION  2.05/09   21/06/94 19.08.00
+*
+* Routine PSEXEC: reset sockets to client/master (after interrupt they
+* could still be set for master/slave communication).
+*
+* Routine PAWROP: always send option -X to piaf to force file opening
+* in exchange mode (solves problem on Alpha/OSF port of piaf).
+*
+* Add new HBOOK routine HBAR2 to PAWCS
+*
+* New options 'FB' and 'BB' in HISTO/PLOT to remove the Front and
+* Back Boxes on surface and lego plots.
+*
+* In HISTO/PLOT the option 'A' (to avoid the axis drawing) works
+* also on 2D histograms representations.
+*
+* Remove PRINT 'A FAIRE' in PASCAN
+*
+* New PATCHES HFPANEL and FITPCDES
+* This introduces the new MINUIT fit panel (invoked with option M)
+* These two new patches require a new version of HBOOK as well.
+*
+* Fix bug in PAWSEL in case of REAL*8
+*
+* Add loadstats for IBMRT/PIAF
+*
+* Fix bug in PASCAN for REAL*8 columns
+*
+* Deck PIAFC: print average load statistics in the PIAF/STATUS command.
+*
+*::>          VERSION  2.05/08   10/06/94 17.32.07
+*
+* Decks PIAFS, PIAFC: if file /usr/piaf/etc/nopiaf exists return its
+* contents to the client and close the piaf connection. Using this file
+* it is easy to tell users why they can not use PIAF.
+*
+* Routine RLOGIN: close gracefully after the nopiaf message. Previous
+* versions of PAW will work but give the user the impression that the
+* connection is still open.
+*
+* Routine PSEXEC: forces the master server to pass via PSLVIO to collect
+* statistics in case of an error exit.
+*
+* Routines PFCUTS, PSPAW: fix RPC problem concerning graphical cuts.
+*
+* Routine PCNEXT: fix for memory resident Ntuples.
+*
+* New optional parameter WKID in the commands LOCATE, VLOCATE and
+* CUTS to allows request locator in any window. This implies to add
+* one input parameter in the routine PAWLOC.
+*
+*::>          VERSION  2.05/07   08/06/94 11.34.49
+*
+* Change in MHLATTR (call HCDIR instead of HPATH)
+*
+* In HGETID, ICX2 and ICY2 were limited to 99999. Now the initial
+* value is the number of bins in the histo.
+*
+* Routine MHLATTR: uses new routine HNTVDEF to display extended column info.
+*
+* Decks NTUPLE and SCAN: small fixes to handle extended info.
+*
+* Deck PIAFC: protect against unknown remote login name.
+*
+* The vectors adresses in the command GRAPH (PAGPRI) are stored in
+* ZEBRA reference links (LQ(LCDIR-40) and LQ(LCDIR-41)).
+*
+* The default editor for VAX/VMS (PAWPP) is edit/tpu/disp=decw.
+* (suggestion made by Michael Dahlinger)
+*
+* Bug corrected in PAFITV (inversion of NDIM and NVAR)
+* (thanks to Stefan Kluth)
+*
+* Change PAWSYS to PAWSYS1 (VM only) in PAWINT4
+*
+* Protection in PAWSEL (missing test for dividing by 0 in arrays)
+* bug fix in PAWSEL (case Nt/plot 1.v v1.ne.v2)
+*
+* New options added in Profile histograms (see HBOOK/HBPROF routine)
+*
+* Changes in PIAFS from ALPHA/OSF in decks PIAFC, PIAFRONT and PSLVIO
+*
+* Change CDF for commands IDOPT (description of PROE) and SMOOTH
+*
+*::>          VERSION  2.05/06   30/05/94 18.50.57
+*
+* Bug fix in PANTUP when option='s' and arrays
+*
+* bug fix in PAWSEL (case Nt/plot 1.v v.ne.0)
+*
+*::>          VERSION  2.05/05   30/05/94 14.08.00
+*
+* Routine PBHLUN modified to support RLOGIN files in the browser
+* This also requires new version of HBOOK (routine HLNEXT modified)
+* and a new version of PAWSERV in CSPACK (many new routines)
+*
+* Added new HBOOK routine HRENAME to PAWCS
+*
+*::>          VERSION  2.05/04   25/05/94 09.18.19
+*
+* $GRAFINFO('TXFP') corrected for negative values.
+*
+* Allow use of "MACRO/DEFAULT -AutoReverse" without running LAST.KUMAC
+* at startup-time.
+*
+* Fix some memory leaks in parser for selection functions.
+*
+* Protections in PAWROP (for PIAF, options U and N)
+*
+* Minor changes in CMOTIF/CUTS and in PIAFs/PIAFC and PSEXEC
+*
+* Bug fixed in PADVAR. A character string comparison was done with
+*    invalid indeces with a ntuple variable equal to ' '.
+*
+*::>          VERSION  2.05/03   19/05/94 11.59.49
+*
+* Add protections (iquest(1) in HGETNT and MHLATTR
+*
+* Add GAMMA function to PAWCS
+*
+* Protection in PAPICT
+*
+*::>          VERSION  2.05/02   07/04/94 08.53.28
+*
+* Change in PPROJ0 (PIAF slave case)
+*
+* New options in CMOTIF/NTUPLE
+*
+* Bug fixed in CMOTIF/STYLE (Option TIC)
+*
+* Add ISFACI and IGHTOR to PAWCS
+*
+* Change declaration for htons in TCPIAF (problem with UCX version only)
+*
+* Fix in PPROJ0 and PPROJN. In the sequence NT/PLOT 10.x 2
+* the weight '2' was ignored.
+*
+* Fix in analyse (CPAW). In a sequence like
+* NT/PLOT 10.x XXX(1).AND.X>2.AND.X<3   all the selection after
+* 'X>2' were ignored.
+*
+* Fix in PEXMSK. The sequence Nt/plot 10.x was wrong following the
+* creation of a mask with a name XXX
+*
+* mods in CDF/PAMCDF: One can remove PIAF files via the browser
+*
+* Use VERSQQ in ABOUT
+*
+*::>          VERSION  2.05/01   28/03/94 08.42.11
+*
+* Temporary fix in PCINFO for filecase of COMIS files
+*
+* Mods in PIAFC for non-HPUX machines
+*
+*::>          VERSION  2.05/00   23/03/94 10.58.43
+*
+* Popup dialogs from the Style Panel became unreachable when the style
+* panel was closed before closing the popup dialogs.
+*
+* The columns to be scanned can now be selected via a column selection
+* dialog which will popup when selecting the "Scan..." button in the
+* Ntuple Viewer.
+*
+* Bug corrected in GENERATI: Character TITLE not initialized (VAX/VMS only)
+*
+* Bug corrected in PAMASK (VAX/VMS only). Mask was written even in readonly mode
+*
+* C I/O option disabled on DECS
+*
+* Mods in PAFITV to support 2-D vectors
+*

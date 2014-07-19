@@ -1,0 +1,23 @@
+MACRO PAWEX6
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 6                           *
+* Example showing a simple macro, with a loop and a VECTOR fit.          *
+**************************************************************************
+Exec ALLDEF
+ve/create VECT(10,3)
+ve/read VECT 'vector.data'
+
+ve/print VECT(1:10,3)
+vbias vect(1:10,1) 0.5 vect(1:10,1)
+zon 1 2
+ip = 2
+set htyp 244
+LOOP:
+  ve/draw VECT(1:10,[ip])
+  order = [ip] - 1
+  ve/fit VECT(1:10,1) VECT(1:10,[IP]) ! P[order] WS
+  ip = [ip] + 1
+  if [ip] < 4        GOTO LOOP
+ve/delete VECT
+RETURN
+

@@ -1,0 +1,168 @@
+*
+* $Id: v1_16,v 1.1.1.1 1996/02/26 17:16:36 mclareni Exp $
+*
+* $Log: v1_16,v $
+* Revision 1.1.1.1  1996/02/26 17:16:36  mclareni
+* Comis
+*
+*
+*CMZ :  1.16/24 26/10/93  12.53.50  by  Vladimir Berezhnoi
+*-- Author :    Vladimir Berezhnoi   25/06/93
+*
+*::>          VERSION  1.16/24   26/10/93 12.53.50
+*
+*      Bug was fixed for expressions like "I.EQ.0."
+*      SHARED option added in VAX case for OPEN statement
+*      in CSINTX routine
+*
+*::>          VERSION  1.16/23   24/10/93 13.48.44
+*
+*      Corrections in CSLCAL routine for call to f77 routine
+*      with argument external
+*      Some unused commons and unused variables was removed
+*
+*::>          VERSION  1.16/22   21/10/93 16.43.42
+*
+*      New flag STDUNIX added
+*      use stdunix if sgi,ibmrt,decs,hpux,sun,msdos,linux.
+*
+*::>          VERSION  1.16/21   21/10/93 16.14.33
+*
+*    Corrections in CSIOCV routine:
+*       one blank added to first char. constant before output
+*       char. constant can be with or without ' '
+*
+*::>          VERSION  1.16/20   18/10/93 15.33.34
+*
+*    Access to shared library routines for HPUX case are provided
+*    New patchy flag SHL added. If the flag SHL selected, a -ldld
+*    option must be specified with the f77 command.
+*      To load shared library one can use
+*       !mapfile shared_library_name  directive
+*   or
+*       call csmap('shared_library_name') from user's routine
+*
+*::>          VERSION  1.16/19   12/10/93 17.56.38
+*
+*    Corrections in CSTRAN for implicit none treatment
+*
+*::>          VERSION  1.16/18   12/10/93 11.34.47
+*
+*     Corrections in CSTRAN,CSDIO,CSDEPA and CSKUVI for long
+*     vectors name
+*
+*::>          VERSION  1.16/17   08/10/93 16.39.36
+*
+*
+*::>          VERSION  1.16/16   08/10/93 16.03.45
+*
+*     Many changes was made to introduce long names:
+*          up to 32 characters.
+*
+*::>          VERSION  1.16/15   931003 13.19
+*
+*     Corrects in CSTRAN, CSSINP, CSTERR for attempt read beyond of a file
+*     in the case APPLication COMIS quit
+*
+*::>          VERSION  1.16/14   930923 15.44
+*
+*    A bug was fixed in CSDEPA routine: wrong assignment to the IDES var
+*
+*
+*::>          VERSION  1.16/13   16/09/93 16.23.01
+*
+*    Do not select CC version of CCOPYS.==> Introduction of
+*    a new deck CCOPYSA (straight copy of CCOPYS) for ALPHA_OSF version
+*    Same for CSTRCMP.
+*    In CSINTX do not call CSTRCMP
+*
+*::>          VERSION  1.16/12   930913 11.32
+*
+*
+*    READONLY option added for OPEN statement in VAX case,
+*    routine CSFILE
+*
+*    Optimization for character operators.
+*    Added "C" version routine CCOPYS.
+*
+*::>          VERSION  1.16/11   930907 17.16
+*
+*
+*   Area of kuvlnk changed from 100 to 500
+*   Flag ALIGN switched on for HPUX in Pilot patch.
+*
+*::>          VERSION  1.16/10   930907 15.39
+*
+*
+*    In routine CSIMPL  DATA statement moved to last position
+*    of declaration statements
+*
+*::>          VERSION  1.16/09   930902 10.48
+*
+*
+*    SHARED option added for OPEN statement in VAX case,
+*    routine CSFILE
+*
+*::>          VERSION  1.16/08   930901 18.44
+*
+*
+*   Bug was fixed in case of unformatted i/o : routine MHLOC
+*   Bug was fixed in CSINTX routine for DOUBLE(COMPLEX) convertion.
+*
+*::>          VERSION  1.16/07   930827 12.17
+*
+*   New routines added: CSIMPL, CSCATH, CSSLAB,CSLAB1
+*   to reduce the size of CSTRAN.
+*
+*::>          VERSION  1.16/06   18/08/93 17.06.23
+*
+*   Bugs corrected in CSINTX and CS2036 in case of IBM
+*
+*::>          VERSION  1.16/05   930817 17.49
+*
+*     optimization for calls to F77-routines when arguments are:
+*   constants;
+*   local or common-block variables;
+*   local or common-block array elements with const. subscript values;
+*   name of local or common-block arrays.
+*
+*     Bug was fixed in CSINTX routine in LAKV command which
+*     calculates a address of KUIP vector.
+*
+*     Bug was fixed in CSKCAL routine for VAX version
+*     any call to f77-routine was cause 'access violation'.
+*
+*     Bug was fixed in parsing expr. like (DPVAR.GT.30.)
+*
+*::>          VERSION  1.16/04   930801 16.35
+*
+*      A bug was fixed in CSTRCMP routine.
+*
+*      Length of character buffer for the FORMAT statement
+*      changed from 256 to 512 characters.
+*
+*::>          VERSION  1.16/03   23/07/93 11.53.39
+*
+*      Optimization for constant array subscripts such as
+*       a(1,2)=b(3)
+*
+*      New "C" routine CSTRCMP added for compare char. string
+*      to speed up operators str1.lt.str2 ... str1.gt.str2
+*
+*::>          VERSION  1.16/02   930709 19.08
+*
+*
+*      bug was fixed in call to CSR(1|2|3)FN in a case
+*      of calling f77-routine
+*
+*      small optimization for CSINTX and CSKCAL.
+*      Opt. during translation for IF(exp(.eq.|.ne.)0)...
+*
+*::>          VERSION  1.16/01   930628 11.38
+*
+*      Removed all codes for works with PageMemory.
+*      Now all source lines puts into SOURCE(MXSLIN)*80
+*      The comis_scratch file not needed more.
+*
+*::>          VERSION  1.16/00   930625 16.48
+*

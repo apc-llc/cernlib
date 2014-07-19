@@ -1,0 +1,13 @@
+SRCS_F=	 dbabrd.F dbabwr.F dbcdes.F dbckey.F dbcrsd.F dbdelt.F \ @@\
+	dbdont.F dbeali.F dbefor.F dbehlp.F dbenam.F dbend.F dbendf.F \ @@\
+	dbentb.F dbentr.F dbfpat.F dbfree.F dbfzop.F dbfzup.F dbget.F \ @@\
+	dbgets.F dbgnam.F dbildf.F dbildu.F dbin.F dbinct.F dbinit.F \ @@\
+	dbkept.F dbkin.F dbktyp.F dbkvin.F dbkxin.F dblast.F dblkey.F \ @@\
+	dblmod.F dblogl.F dbmdip.F dbmdir.F dbntop.F dboptm.F dbopts.F \ @@\
+	dbout.F dbpktm.F dbpkts.F dbplbk.F dbplnt.F dbplob.F dbplov.F \ @@\
+	dbplti.F dbprgd.F dbprin.F dbpurg.F dbpurk.F dbrali.F dbrenk.F \ @@\
+	dbrepl.F dbrhlp.F dbrky1.F dbrnam.F dbropn.F dbrtfz.F dbsave.F \ @@\
+	dbsrtm.F dbtbcr.F dbtbpr.F dbuptm.F dbupts.F dbuse.F dbuvtx.F \ @@\
+	dbvin.F dbvldt.F dbvout.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

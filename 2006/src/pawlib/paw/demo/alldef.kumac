@@ -1,0 +1,33 @@
+MACRO ALLDEF
+****************************************************************
+*                                                              *
+* This MACRO initialises NICE values for producing PAW manual  *
+*                                                              *
+****************************************************************
+Opt *
+Set *
+Hi/del *
+Ve/del *
+Close 0
+zone 1 1
+Clr
+title_global ' '
+title_global ' ' U
+Opt NBOX
+Set HWID 1
+Set FWID 1
+Set BWID 1
+Set PWID 1
+Set LWID 1
+Set CSIZ 0.25
+Set VSIZ 0.25
+Set TSIZ 0.32
+Set XMGL 1.2
+Set XMGR 1.2
+Set YMGU 0.5
+Set YMGL 1.5
+Set GSIZ 0.1
+Set YHTI 0.7
+Set KSIZ 0.15
+Set MTYP 1
+Return

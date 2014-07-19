@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 tcross.F tlor.F trot.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

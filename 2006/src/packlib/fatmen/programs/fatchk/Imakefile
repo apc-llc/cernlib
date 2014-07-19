@@ -1,0 +1,3 @@
+SRCS_F=	 fageta.F fatchk.F zabend.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

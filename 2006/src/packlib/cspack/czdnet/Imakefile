@@ -1,0 +1,4 @@
+SRCS_F=	 czdcls.F czdgta.F czdgtc.F czdgts.F czdnet.F czdopn.F \ @@\
+	czdpta.F czdptc.F czdpts.F czrdtne.F czrdtrm.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

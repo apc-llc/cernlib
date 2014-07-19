@@ -1,0 +1,9 @@
+SRCS_F=	cube.F gettitle.F matlab.F matrow.F mhlattr.F ntwchk.F \ @@\
+	ntwini.F pamloc.F pbhist.F pbhlun.F pbpiaf.F pbplun.F \ @@\
+	plotisto.F pmhist.F pminit.F show_chain.F
+
+#if defined(CERNLIB_LINUX) && !defined(CERNLIB_GFORTRAN)
+FORTRANOPTIONS = -fno-backslash  $(FORTRANSAVEOPTION) -fno-second-underscore
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

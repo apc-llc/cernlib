@@ -1,0 +1,22 @@
+SRCS_F= zagain.F zbform.F zbook.F zbook0.F zbookn.F zbooks.F zbookt.F \ @@\
+	zbug.F zclose.F zdebug.F zdelet.F zdgarb.F zdisk.F zdrop.F \ @@\
+	zecfor.F zepcat.F zepcls.F zepdef.F zepend.F zepin.F zepkey.F \ @@\
+	zeploc.F zepnxt.F zepout.F zerror.F zfconv.F zfetch.F zfribm.F \ @@\
+	zgarb.F zgform.F zgtfor.F zhinit.F zhlim.F zidok.F zinit.F \ @@\
+	ziodo.F zleft.F zloc.F zlocal.F zlook.F zmigra.F \ @@\
+	zmove.F zname.F znamsr.F zopen.F zpbank.F zprint.F zptfor.F \ @@\
+	zptree.F zpush.F zpush0.F zpushs.F zread.F zrecal.F zreset.F \ @@\
+	zscr.F zsearc.F zshifd.F zshifp.F zshift.F zstore.F zswap.F \ @@\
+	ztoibm.F ztrap.F zuploc.F zuser.F zwork.F zwrite.F
+
+#ifdef CERNLIB_UNIX
+
+SRCS_C= zjump.c
+
+#else 
+
+SRCS_F:=$(SRCS_F) zjumpft.F
+
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

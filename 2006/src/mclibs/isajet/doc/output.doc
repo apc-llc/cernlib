@@ -1,0 +1,328 @@
+\newpage
+\section{Output\label{OUTPUT}}
+
+      The output tape or file contains three types of records. A
+beginning record is written by a call to ISAWBG before generating a set
+of events; an event record is written by a call to ISAWEV for each
+event; and an end record is written for each run by a call to ISAWND.
+These subroutines load the common blocks described below into a single
+\begin{verbatim}
+COMMON/ZEVEL/ZEVEL(1024) 
+\end{verbatim}
+and write it out when it is full. A subroutine RDTAPE, described in
+the next section, inverts this process so that the user can analyze
+the event.
+
+      ZEVEL is written out to TAPEj by a call to BUFOUT. For the CDC
+version IF = PAIRPAK is selected; BUFOUT first packs two words from
+ZEVEL into one word in 
+\begin{verbatim}
+COMMON/ZVOUT/ZVOUT(512) 
+\end{verbatim}
+using subroutine PAIRPAK and then does a buffer out of ZVOUT to TAPEj.
+Typically at least two records are written per event. For all other
+computers IF=STDIO is selected, and ZEVEL is written out with a
+standard FORTRAN unformatted write.
+
+\subsection{Beginning Record}
+
+      At the start of each run ISAWBG is called. It writes out the
+following common blocks:
+\begin{verbatim}
+#include "dylim.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+QMIN,QMAX          &=& $W$ mass limits\\
+QTMIN,QTMAX        &=& $W$ $q_t$ limits\\
+YWMIN,YWMAX        &=& $W$ $\eta$ rapidity limits\\
+XWMIN,XWMAX        &=& $W$ $x_F$ limits\\
+THWMIN,THWMAX      &=& $W$ $\theta$ limits\\
+PHWMIN,PHWMAX      &=& $W$ $\phi$ limits\\
+\end{tabular}
+
+\begin{verbatim}
+#include "idrun.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+IDVER              &=& program version\\
+IDG(1)             &=& run date (10000$\times$month+100$\times$day+year)\\
+IDG(2)             &=& run time (10000$\times$hour+100$\times$minute+second)\\
+IEVT               &=& event number\\
+\end{tabular}
+
+\begin{verbatim}
+#include "jetlim.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+PMIN,PMAX          &=& jet momentum limits\\
+PTMIN,PTMAX        &=& jet $p_t$ limits\\
+YJMIN,YJMAX        &=& jet $\eta$ rapidity limits\\
+PHIMIN,PHIMAX      &=& jet $\phi$ limits\\
+THMIN,THMAX        &=& jet $\theta$ limits\\
+\end{tabular}
+
+\begin{verbatim}
+#include "keys.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+KEYON              &=& normally TRUE, FALSE if no good reaction\\
+KEYS               &=& TRUE if reaction I is chosen\\
+                   && 1 for TWOJET\\
+                   && 2 for E+E-\\
+                   && 3 for DRELLYAN\\
+                   && 4 for MINBIAS\\
+                   && 5 for SUPERSYM\\
+                   && 6 for WPAIR\\
+REAC               &=& character reaction code\\
+\end{tabular}
+
+\begin{verbatim}
+#include "primar.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+NJET               &=& number of jets per event\\
+SCM                &=& square of com energy\\
+HALFE              &=& beam energy\\
+ECM                &=& com energy\\
+IDIN               &=& ident code for initial beams\\
+NEVENT             &=& number of events to be generated\\
+NTRIES             &=& maximum number of tries for good jet parameters\\
+NSIGMA             &=& number of extra events to determine SIGF\\
+\end{tabular}
+
+\begin{verbatim}
+#include "q1q2.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+GOQ(I,K)           &=& TRUE if quark type I allowed for jet k\\
+                   && I = 1  2  3  4  5  6  7  8  9 10 11 12 13\\
+                   && \ \ $\Rightarrow$ $g$ $u$ $\bar u$ $d$ $\bar d$ $s$ 
+                      $\bar s$ $c$ $\bar c$ $b$ $\bar b$ $t$ $\bar t$\\
+                   && I = 14   15 16 17  18   19  20  21  22   23   24   25\\
+                   && \ \ $\Rightarrow$ $\nu_e$ $\bar\nu_e$ $e^-$ $e^+$ 
+                      $\nu_\mu$ $\bar\nu_\mu$ $\mu^-$ $\mu^+$ $\nu_\tau$ 
+                      $\bar\nu_\tau$ $\tau^-$ $\tau^+$\\
+GOALL(K)           &=& TRUE if all jet types allowed\\
+GODY(I)            &=& TRUE if $W$ type I is allowed.\\
+                    I= 1  2  3  4\\
+                      GM W+ W- Z0\\
+STDDY              &=& TRUE if standard DRELLYAN\\
+GOWW(I,K)          &=& TRUE if I is allowed in the decay of K for WPAIR.\\
+ALLWW(K)           &=& TRUE if all allowed in the decay of K for WPAIR.\\
+\end{tabular}
+
+\begin{verbatim}
+#include "qcdpar.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+ALAM               &=& QCD scale $\Lambda$\\
+ALAM2              &=& QCD scale $\Lambda^2$\\
+CUTJET             &=& cutoff for generating secondary partons\\
+ISTRUC             &=& 3 for Eichten (EHLQ), \\
+                   &=& 4 for Duke (DO) \\
+                   &=& 5 for CTEQ 2L\\
+                   &=& 6 for CTEQ 3L\\
+                   &=& $-999$ for PDFLIB\\
+\end{tabular}
+
+\begin{verbatim}
+#include "qlmass.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+AMLEP(6:8)         &=& $t$,$y$,$x$ masses, only elements written\\
+\end{tabular}
+
+\subsection{Event Record}
+
+      For each event ISAWEV is called. It writes out the following
+common blocks:
+\begin{verbatim}
+#include "final.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+SIGF              &=& integrated cross section, only element written\\
+\end{tabular}
+
+\begin{verbatim}
+#include "idrun.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+IDVER              &=& program version\\
+IDG                &=& run identification\\
+IEVT               &=& event number\\
+\end{tabular}
+
+\begin{verbatim}
+#include "jetpar.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+P                  &=& jet momentum $\vert\vec p\vert$\\
+PT                 &=& jet $p_t$\\
+YJ                 &=& jet $\eta$ rapidity\\
+PHI                &=& jet $\phi$\\
+XJ                 &=& jet $x_F$\\
+TH                 &=& jet $\theta$\\
+CTH                &=& jet $\cos(\theta)$\\
+STH                &=& jet $\sin(\theta)$\\
+JETTYP             &=& jet type. The code is listed under /Q1Q2/ above\\
+                   &&  {\it continued\dots}\\
+\end{tabular}
+
+\begin{tabular}{lcl}
+SHAT,THAT,UHAT     &=& hard scattering $\hat s$, $\hat t$, $\hat u$\\
+QSQ                &=& effective $Q^2$\\
+X1,X2              &=& initial parton $x_F$\\
+PBEAM              &=& remaining beam momentum\\
+QMW                &=& $W$ mass\\
+QW                 &=& $W$ momentum\\
+QTW                &=& $W$ transverse momentum\\
+YW                 &=& $W$ rapidity\\
+XW                 &=& $W$ $x_F$\\
+THW                &=& $W$ $\theta$\\
+QTMW               &=& $\sqrt{q_{t,W}^2+Q^2}$\\
+PHIW               &=& $W$ $\phi$\\
+SHAT1,THAT1,UHAT1  &=& invariants for $W$ decay\\
+JWTYP              &=& $W$ type. The code is listed under /Q1Q2/ above.\\
+ALFQSQ             &=& QCD coupling $\alpha_s(Q^2)$\\
+CTHW               &=& $W$ $\cos(\theta)$\\
+STHW               &=& $W$ $\sin(\theta)$\\
+Q0W                &=& $W$ energy\\
+\end{tabular}
+
+\begin{verbatim}
+#include "jetset.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+NJSET              &=& number of partons\\
+PJSET(1,I)         &=& $p_x$ of parton I\\
+PJSET(2,I)         &=& $p_y$ of parton I\\
+PJSET(3,I)         &=& $p_z$ of parton I\\
+PJSET(4,I)         &=& $p_0$ of parton I\\
+PJSET(5,I)         &=& mass of parton I\\
+JORIG(I)           &=& JPACK*JET+K if I is a decay product of K.\\
+                   && IF K=0 then I is a primary parton.\\
+                   && (JET = 1,2,3 for final jets.)\\
+                   && (JET = 11,12 for initial jets.)\\
+JTYPE(I)           &=& IDENT code for parton I\\
+JDCAY(I)           &=& JPACK*K1+K2 if K1 and K2 are decay products of I.\\
+                   &&  If JDCAY(I)=0 then I is a final parton\\
+MXJSET             &=& dimension for /JETSET/ arrays.\\
+JPACK              &=& packing integer for /JETSET/ arrays.\\
+\end{tabular}
+
+\begin{verbatim}
+#include "jetsig.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+SIGMA              &=& cross section summed over types\\
+SIGS(I)            &=& cross section for reaction I (not written)\\
+NSIGS              &=& number of nonzero cross sections (not written)\\
+INOUT(I)           &=& packed partons for process I (not written)\\
+MXSIGS             &=& dimension for JETSIG arrays (not written)\\
+SIGEVT             &=& partial cross section for selected channel\\
+\end{tabular}
+
+\begin{verbatim}
+#include "partcl.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+NPTCL              &=& number of particles\\
+PPTCL(1,I)         &=& $p_x$ for particle I\\
+PPTCL(2,I)         &=& $p_y$ for particle I\\
+PPTCL(3,I)         &=& $p_z$ for particle I\\
+PPTCL(4,I)         &=& $p_0$ for particle I\\
+PPTCL(5,I)         &=& mass for particle I\\
+IORIG(I)           &=& IPACK*JET+K if I is a decay product of K.\\
+                   &=& -(IPACK*JET+K) if I is a primary particle from\\
+                   &&  parton K in /JETSET/.\\
+                   &=& 0 if I is a primary beam particle.\\
+                   && (JET = 1,2,3 for final jets.)\\
+                   && (JET = 11,12 for initial jets.)\\
+IDENT(I)           &=& IDENT code for particle I\\
+IDCAY(I)           &=& IPACK*K1+K2 if decay products are K1-K2 inclusive.\\
+                   && If IDCAY(I)=0 then particle I is stable.\\
+MXPTCL             &=& dimension for /PARTCL/ arrays.\\
+IPACK              &=& packing integer for /PARTCL/ arrays.\\
+\end{tabular}
+
+\begin{verbatim}
+#include "pinits.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+PINITS(1,I)        &=& $p_x$ for initial parton I\\
+PINITS(2,I)        &=& $p_y$ for initial parton I\\
+PINITS(3,I)        &=& $p_z$ for initial parton I\\
+PINITS(4,I)        &=& $p_0$ for initial parton I\\
+PINITS(5,I)        &=& mass for initial parton I\\
+IDINIT(I)          &=& IDENT for initial parton I\\
+\end{tabular}
+
+\begin{verbatim}
+#include "pjets.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+PJETS(1,I)         &=& $p_x$ for jet I\\
+PJETS(2,I)         &=& $p_y$ for jet I\\
+PJETS(3,I)         &=& $p_z$ for jet I\\
+PJETS(4,I)         &=& $p_0$ for jet I\\
+PJETS(5,I)         &=& mass for jet I\\
+IDJETS(I)          &=& IDENT code for jet I\\
+QWJET(1)           &=& $p_x$ for $W$\\
+QWJET(2)           &=& $p_y$ for $W$\\
+QWJET(3)           &=& $p_z$ for $W$\\
+QWJET(4)           &=& $p_0$ for $W$\\
+QWJET(5)           &=& mass for $W$\\
+IDENTW             &=& IDENT CODE for $W$\\
+PPAIR(1,I)         &=& $p_x$ for WPAIR decay product I\\
+PPAIR(2,I)         &=& $p_y$ for WPAIR decay product I\\
+PPAIR(3,I)         &=& $p_z$ for WPAIR decay product I\\
+PPAIR(4,I)         &=& $p_0$ for WPAIR decay product I\\
+PPAIR(5,I)         &=& mass for WPAIR decay product I\\
+IDPAIR(I)          &=& IDENT code for WPAIR product I\\
+JPAIR(I)           &=& JETTYPE code for WPAIR product I\\
+NPAIR              &=& 2 for $W^\pm\gamma$ events, 4 for $WW$ events\\
+\end{tabular}
+
+\begin{verbatim}
+#include "totals.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+NKINPT             &=& number of kinematic points generated.\\
+NWGEN              &=& number of W+jet events accepted.\\
+NKEEP              &=& number of events kept.\\
+SUMWT              &=& sum of weighted cross sections.\\
+WT                 &=& current weight. (SIGMA$\times$WT = event weight.)\\
+\end{tabular}
+
+\begin{verbatim}
+#include "wsig.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+SIGLLQ             &=& cross section for $W$ decay.\\
+\end{tabular}
+
+      Of course irrelevant common blocks such as /WSIG/ for TWOJET
+events are not written out.
+
+\subsection{End Record} 
+
+      At the end of a set ISAWND is called. It writes out the
+following common block:
+\begin{verbatim}
+#include "final.inc"
+\end{verbatim}
+\begin{tabular}{lcl}
+NKINF             &=& number of points generated to calculate SIGF\\
+SIGF              &=& integrated cross section for this run\\
+ALUM              &=& equivalent luminosity for this run\\
+ACCEPT            &=& ratio of events kept over events generated\\
+NRECS             &=& number of physical records for this run\\
+\end{tabular}
+
+      Events within a given run have uniform weight. Separate runs can
+be combined together using SIGF/NEVENT as the weight per event. This
+gives a true cross section in mb units.
+
+      The user can replace subroutines ISAWBG, ISAWEV, and ISAWND to
+write out the events in a different format or to update histograms
+using HBOOK or any similar package.

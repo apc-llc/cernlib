@@ -1,0 +1,48 @@
+*
+* $Id: sun,v 1.10 2001/10/08 14:03:13 mclareni Exp $
+*
+* $Log: sun,v $
+* Revision 1.10  2001/10/08 14:03:13  mclareni
+* Version 7.58 from author
+*
+*
+*                       SUN (SPARC)
+* This directory was created from /afs/cern.ch/user/m/mclareni/build_cernlib/isajet/isa758.car patch sun
+*                      DOUBLE PRECISION.
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+*                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+#ifndef CERNLIB_STDIO
+#define CERNLIB_STDIO
+#endif
+*                     FORTRAN REPLACEMENT FOR MOVLEV.
+#ifndef CERNLIB_MOVEFTN
+#define CERNLIB_MOVEFTN
+#endif
+*            FORTRAN RANF.
+#if !defined(CERNLIB_CERN)
+#ifndef CERNLIB_RANFFTN
+#define CERNLIB_RANFFTN
+#endif
+#endif
+*                    STANDARD RANSET AND RANGET CALLS.
+#ifndef CERNLIB_RANFCALL
+#define CERNLIB_RANFCALL
+#endif
+*         NO RANLUX RANDOM NUMBERS.
+#if !defined(CERNLIB_RANLUX)
+#ifndef CERNLIB_NORANLUX
+#define CERNLIB_NORANLUX
+#endif
+#endif
+*             NO CERN LIBRARY.
+#if !defined(CERNLIB_CERN)
+#ifndef CERNLIB_NOCERN
+#define CERNLIB_NOCERN
+#endif
+#endif
+*                     IMPLICIT NONE
+#ifndef CERNLIB_IMPNONE
+#define CERNLIB_IMPNONE
+#endif

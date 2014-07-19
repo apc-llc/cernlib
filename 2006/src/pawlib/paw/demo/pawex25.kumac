@@ -1,0 +1,11 @@
+MACRO PAWEX25
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 25                          *
+* Merge pictures onto one plot                                           *
+**************************************************************************
+Exec ALLDEF
+histogram/file 1 pawhists.hbook
+EXEC PICTMERG hid=110 s1=31 s2=40
+close 1
+RETURN
+

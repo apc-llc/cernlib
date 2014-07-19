@@ -1,0 +1,54 @@
+*
+* $Id: ioisa.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: ioisa.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[11] USAGE WITH THE ISAJET TYPE I/O INTERFACE (IOISA)
+
+      This interface parallels as much as possible the I/O interface of
+ISAJET.
+
+      COJETS is steered by a MAIN program, which contains a call to COJETS
+in which tape units and other options are specified. Input is from data
+cards. Output is on tape.
+
+      To set up a job with the ISAJET type I/O interface, the user must
+make the following steps. Details about them can be found in the quoted
+sections.
+
+  i)  Get the FORTRAN ASM file for COJETS by running YPATCHY with the
+      *COJETS pilot patch.
+
+ ii)  Set up a MAIN program, containing the call to COJETS, [12].
+
+iii)  Link the CERN Program Library, or substitutes for it, [6].
+
+ iv)  Set up the input cards, [13].
+
+  v)  Make the particle-decay table file available to the program for
+      reading, [5,16].
+
+
+      Sample sets of input cards are listed in [13].
+
+      The output tape can be read by using the routines contained in patch
+COJTAPER. A sample program reading the output tape and making some
+histogramming with the package HBOOK of the CERN Program Library is
+contained in patch COJPLT. In order to use it one must make the
+following steps. Details can be found in section [15].
+
+  i)  Get the appropriate FORTRAN ASM file by running YPATCHY with the
+      *COJPLT pilot patch, [5].
+
+ ii)  Set up a MAIN program containing the call:
+      CALL COJPLT(i,j)
+      where i is the unit number of the tape with the events, and j is the
+      output list unit.
+
+iii)  Link the CERN Program Library, in order to use HBOOK.
+
+
+

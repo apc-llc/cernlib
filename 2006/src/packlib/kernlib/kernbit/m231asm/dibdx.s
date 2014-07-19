@@ -1,0 +1,74 @@
+;
+; $Id: dibdx.s,v 1.1.1.1 1996/02/15 17:47:47 mclareni Exp $
+;
+; $Log: dibdx.s,v $
+; Revision 1.1.1.1  1996/02/15 17:47:47  mclareni
+; Kernlib
+;
+;
+ .TITLE  DIBDX
+;
+; CERN PROGLIB# M231    CVTIB
+; ORIG.  HYDRA FQT PACKAGE ROUTINE FQTICD
+; EXTRACTED AND NAME CHANGED BY H.RENSHALL/DD, 1984-05-11
+; AND THEN PARTLY REWRITTEN TO ACCOUNT FOR IBM LARGER FLOAT RANGE
+; AND EXACT ZERO IN DOUBLE PRECISION CONVERTION BY
+; F.CARMINATI/DD, 1985-02-18
+;
+; 29-MAR-1994 AXP compatibility
+;
+;      SUBROUTINE DIBDX (A,NWORDS)
+;
+; CONVERTS THE FIRST NWORDS 64 BITS WORDS OF VECTOR A FROM
+; IBM FLOATING POINT NUMBER FORMAT TO VAX D_FLOATING POINT FORMAT
+;
+        .PSECT  $CODE,PIC,CON,REL,LCL,SHR,EXE,RD,NOWRT,LONG
+;DIBDX::
+        .ENTRY  DIBDX,^M<R7,R8,R9,R10,R11>
+        MOVAL   @4(AP),R11      ;GET ADRESS OF VECTOR
+        MOVL    @8(AP), R9      ;LOAD COUNT
+        TSTL    R9              ;COMPARE 0 WITH THE COUNT
+        BGTR    L$IAMD          ;LOOP COUNT GT 0
+        RET                     ;LOOP COUNT LE 0
+  L$IAMD:
+;---
+        MOVL    (R11)+,R0       ;FIELD SHIFTED ALREADY.
+        MOVL    (R11)+,R1
+        TSTL    R1              ;TEST IF EXACT ZERO
+        BNEQ    CONT            ;CONTINUE CONVERTION
+        BRW     LOOP            ;SKIP CONVERTION
+ CONT:  EXTZV   #24,#7,R1,R8    ;EXTRACT EXPONENT (POWERS OF 64)
+        SUBL2   #64,R8          ;TAKE AWAY EXCESS
+        ASHL    #2,R8,R8        ;NOW POWERS OF TWO
+        CLRL    R7              ;CLEAR THE SIGN MASK
+        BBC     #31,R1,POS      ;BRANCH IF POSITIVE
+        MOVL    #^XF0000000,R7  ;SET THE SIGN MASK
+  POS:  INSV    #^X00,#24,#8,R1 ;CLEAR THE EXP FIELD
+        CLRL    R10             ;LOAD THE SHIFT COUNTER
+        BBS     #23,R1,OUT      ;FIRST BIT OF IBM MANTISSA
+        INCL    R10             ;SHIFT ONE
+        BBS     #22,R1,OUT      ;SECOND BIT OF IBM MANTISSA
+        INCL    R10             ;SHIFT TWO
+        BBS     #21,R1,OUT      ;THIRD BIT OF IBM MANTISSA
+        INCL    R10             ;SHIFT THREE
+  OUT:  ASHQ    R10,R0,R0       ;SHIFT THE QUADWORD
+        SUBL2   R10,R8          ;NEW EXPONENT
+        CMPL    R8,#-128        ;SEE IF TOO LITTLE
+        BGTR    GRTR            ;NOT TOO LITTLE
+        MOVQ    #^X0080000000000000,R0        ;JUST THE SMALLEST FLOAT
+        BRB     INSIG           ;NOW THE SIGN
+ GRTR:  CMPL    R8,#127         ;SEE IF TOO BIG
+        BLEQ    LSTN            ;NOT TOO BIG
+        MOVQ    #^X7FFFFFFFFFFFFFFF,R0          ;JUST THE BIGGEST FLOAT
+        BRB     INSIG           ;NOW THE SIGN
+ LSTN:  ADDL2   #^X80,R8        ;ADD EXCESS 128
+        INSV    R8,#23,#8,R1    ;PACK EXPONENT AND MANTISSA
+INSIG:  BISL2   R7,R1           ;LOAD THE SIGN MASK
+        ROTL    #16,R1,R1       ;SWAP WORDS
+        ROTL    #16,R0,R0       ;SWAP WORDS
+        MOVL    R1,-8(R11)      ;STORE FIRST LONGWORD
+        MOVL    R0,-4(R11)      ;STORE SECOND LONGWORD
+ LOOP:  SOBGTR  R9, LOOP1       ;LOOP
+        RET
+LOOP1:  BRW     L$IAMD          ;BRANCH BACK
+  .END

@@ -1,0 +1,147 @@
+*
+* $Id: v1_21,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_21,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.21/12 25/10/94  13.47.25  by  O.Couet
+*-- Author :    O.Couet   30/03/94
+*
+*::>          VERSION  1.21/12   25/10/94 13.47.24
+*
+*   Bug fixed in IPIOUT: the I7 format was too small. It is now I15.
+*
+*::>          VERSION  1.21/11   21/10/94 12.01.27
+*
+*   Improvement in IGAXIS in case of integer labelling. The optimization
+*      provide by IGAXI0 is better than the one provide by IGAXI4. When
+*      integer labelling is required, IGAXI0 is invoke first and only
+*      if the result is not an integer labelling, IGAXI4 is invoked.
+*
+*::>          VERSION  1.21/10   17/10/94 15.08.15
+*
+*   VIDQQ is now removed from IGINIT because it is now in igvers.
+*   Mods IGAXIS to have a better drawing of label like 10^xxx: Now we
+*      take into account the length of the exponant to avoid
+*      overlapping text. (improvement suggested by Mike Kelsey).
+*   New option HWCO in IGQWK to return the number of hardware colours
+*      available.
+*
+*::>          VERSION  1.21/09   27/09/94 17.41.14
+*
+*   In IGPICK, TA_IND was not declared as an INTEGER. It is now
+*      replaced by ITAIND.
+*   Mods in X11INT: VAX machines was asumed to be X11R3 now
+*      they are consider as X11R4 (at least) machines. APOLLO machines
+*      are still consider as X11R3 machines.
+*   Bug fixed in IACWK (X11 version). The line width set was not the
+*      same as the one set by ISLWSC.
+*   Bug fixed in ICLKS. This routine close all the workstations still
+*      open. It was looping on ILOPWK but this list was changed by
+*      ICLWK, so ICLKS tried to close a non opened workstation. Now
+*      ILOPWK is copied in an intermediate array.
+*   Mods in IRQST/GPR. A small editor is now available.
+*      (Robert Franchisseur robert@ramses.ibp.fr)
+*   New C routine igvers to return the current HIGZ version. It is
+*      used by the PAW command BUGREPORT
+*   Precision problem in LOG scale has been solved (hopefully) in
+*      IGAXIS. (XMNLOG-IH1).GT.EPSIL is now (XMNLOG-IH1).GT.0.. This
+*      problem has been reflected in the pawdemo file.
+*   Protection added in ISTXAL (IKERNEL): ixsetta was called even
+*      with GFLAG=.FALSE.
+*   New option 'X' in IGZSET to turn OFF the 'Z' mode without changing
+*      the 'G' mode (used in HPLOPT).
+*   New set of pattern in the X11 driver.
+*   The Fill Pattern from 1 to 25 are now available also on PS files.
+*      be careful with GhostView because to many filled areas with
+*      such patterns can block this program.
+*   Speed optimization in the PS file writing (a factor 3.6). A fast
+*      writting routine has been introduced (IPPSTF entry point of
+*      IPPSTR). In IPIOUT some code of IPPSTR is now inlined. IPDRAW
+*      call has been replaced by two IPIOUT calls. The speed up gained
+*      is the following (a 100x100 scatter plot):
+*         Real time 00:01:08 (Old version)
+*         Real time 00:00:34 (new IPIOUT)
+*         Real time 00:00:22 (IPPSTF and inline in IPIOUT)
+*         Real time 00:00:19 (suppress IPDRAW in IZPM)
+*
+*::>          VERSION  1.21/08   22/07/94 15.22.13
+*
+*   New routine IXWARP in x11int to move the pointer at a given
+*      position (Adeyemi Adesanya).
+*   New routine IZPAVE to store IGPAVE as a macro primitive. It implies
+*      also mods in IZDNB and IGPICK.
+*   Mods in IGRAP1 (push the LX and LY banks) in order to draw
+*      filled area in one go.
+*   Changes in IGPICK to pick text (Yemi)
+*   A blank was missing in IPFON (DECS only)
+*
+*::>          VERSION  1.21/07   30/06/94 14.56.15
+*
+*   Protection added in IKFILE (ERR=999 in the last READ).
+*   New routine IXQPTR in x11int to query the current pointer
+*      position (Adeyemi Adesanya).
+*   Mods in IGTAB5 to return in QUEST the axis positions (useful
+*      for HPLOT to draw the axis titles).
+*
+*::>          VERSION  1.21/06   27/06/94 18.21.00
+*
+*   Mods in IZFILE to take into account the new option 'N' of RZMAKE.
+*   Mods in IGTABL and IGTAB2 in order to close the surface plots
+*      when the options POL, CYL, SPH or PSD are used.
+*   Bug fixed in ixreqlo (x11int) when a button was pressed, the
+*      cursor was undefined but not set to NULL (now it is).
+*
+*::>          VERSION  1.21/05   17/06/94 17.41.08
+*
+*   Bug fixed in IXCLSDS (X11INT): isdisp was not reset.
+*      (Thierry MOUTHUY, <mouthuy@marpix1.in2p3.fr>).
+*   New options 'E' and 'C' in IGZSET.
+*   New options 'FB' and 'BB' in IGTABL.
+*
+*::>          VERSION  1.21/04   10/06/94 15.05.39
+*
+*   New option 'K' in IGHIST (histogram are pacKed like in HBOOK).
+*   Fix in X11INT/ixreqst: in some cases, the '?' cursor was not
+*      set correctly.
+*   Protection added in IZPM and IGAXIS: when IGTEXT is called with
+*      option 'S', the ANGLE parameter should be initialize to 0.
+*   Optimization in IGAXIS to avoid identical labels on the same
+*      axis (IF1 and IF2 too small), and to avoid x10^0.
+*   In the sequence HIATT, all the variables are now declared.
+*
+*::>          VERSION  1.21/03   06/06/94 13.34.58
+*
+*   New version of IZPM (PS driver) to have shorter files.
+*   Mods in IKFNTX to have a better maping between X11 and PS fonts.
+*   Interface to GKSBx (CMZ flag: GKSBX).
+*   Mods in IGKS and IDI3000 to use the C management of the NTs.
+*   The cursor is reset after a request locator in sample mode (X11).
+*   Mods is IPTEXT: the "stwn" value is now printed in I6.
+*   Bug fixed in IGSA (FALCO version): it was a side effect of the
+*     last mod apply for GPR (bug reported by Andrea Parri).
+*
+*::>          VERSION  1.21/02   19/05/94 10.09.37
+*
+*   Bug fixed in IGAXIS (precision problem on IBM/VM). This was a side
+*      effect of the fix made in the version 1.20/05 for the X00 and
+*      XONE comparison. Now the variable XMNSAV is not used, only XMNLOG
+*      is used.
+*   Bug fixed in IGSA (GPR version). GPR_RELEASE_DISPLAY was not
+*      called if no workstation was opened.
+*   Bug fixed in the PostScript driver: if EPS is selected and if the
+*      BoundingBox is not yet in the file, the clipping cannot be set.
+*
+*::>          VERSION  1.21/01   11/05/94 18.57.56
+*
+*   New option 'W' in IGPXMP (write a pixmap in a bitmap file).
+*   Major changes in the PostScript driver: the clipping is now
+*      managed in the PS file itself.
+*
+*::>          VERSION  1.21/00   30/03/94 18.14.42
+*
+*   IGINIT: If GKSIBM is selected, METDEF = 3
+*   In IGSA (DECGKS), '\' is now BSLASH (AlphaVMS).
+*

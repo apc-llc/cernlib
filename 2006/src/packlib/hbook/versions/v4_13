@@ -1,0 +1,37 @@
+*
+* $Id: v4_13,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_13,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.13/01 06/09/91  13.59.22  by  Rene Brun
+*-- Author :    Rene Brun   02/09/91
+*
+*::>          VERSION  4.13/01   910906 13.59
+*
+*       Routines HPROJ1 and HPROJ2 changed with the correct /PAWIDN/
+*
+*::>          VERSION  4.13/00   910902 17.07
+*
+*
+*       This version of HBOOK requires ZEBRA version 3.66/8
+*       Changes in PILOT,PATCH for IBMMVS and NEWLIB.
+*       Changes in HEXAM for IBMMVS.
+*       Changes in HMAXIM/HMINIM
+*       SET EPS changed to 1.E-14 in HMINUT
+*       New option 'E' in Fitting routines
+*          Option 'E' selects a better error evaluation
+*       New routine HGFIT returning fit parameters
+*       Changes in HPR1H,HPR1V (reset I20,I21 for 2-Dim case)
+*       New PATCH,CHBOOK (in C) for memory mapping)
+*       Routine HLDIR can list a RZ tree in histo format.
+*       Mods in HLDIR to call RZSCAN (new ZEBRA routine) and HLDIRT
+*       Routine HLDIR2 deleted.
+*       Protection in HPDIR when trying to print a RZ directory.
+*       Routine HMDIR modified to allow creation of a directory
+*       in a directory which is not the current directory
+*       Bug corrected in HFUNC
+*       Protection in HPAFF (same as RZPAFF by M.Marquina)
+*

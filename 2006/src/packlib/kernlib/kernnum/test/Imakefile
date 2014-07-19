@@ -1,0 +1,42 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS= numchk0 numchk1 numchk2 numchk3 numchk4
+
+SUBDIRS= $(LIBDIRS)
+
+#ifndef CERNLIB_VAX
+
+EXTRA_INCLUDES=-I$(TOP)$(CURRENT_DIR) -I$(VPATH)
+export EXTRA_INCLUDES
+
+#else
+
+/*export EXTRA_INCLUDES would easier, but VMS gmake does not understand this yet
+  Also += is not understood by gmake 
+  Do not remove any of the \, unless you want to create trouble
+  GF (12-Jan-96)
+ */
+EXTRA_INCLUDES=-I$(TOP)$(CURRENT_DIR)]
+MAKEFLAGS:=EXTRA_INCLUDES\=\-I$(TOP)$(CURRENT_DIR)]
+#endif
+
+SubdirLibraryTarget(kernnumt,$(LIBDIRS))
+
+DefinePackageLibrary(kernnumt)
+
+#ifdef CERNLIB_HPUX
+EXTRA_LOAD_FLAGS += -lhppa
+#endif
+
+#ifdef CERNLIB_LINUX
+/* With optimisation, the limit for relative precision in single precision is
+   wrong, namely ends up to be the one for double precision  */
+SpecialFortranObjectRule(test,test,NullParameter,NullParameter)
+#endif
+
+NormalFortranProgramTarget(kernnum,test.o abend.o,$(PACKAGE_LIB),$(PACKAGE_LIB),NullParameter)
+
+TestTarget(kernnum,NullParameter,NullParameter)
+

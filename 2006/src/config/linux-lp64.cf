@@ -1,0 +1,201 @@
+/* $Id: linux-lp64.cf,v 1.2 2006/12/20 14:21:03 mclareni Exp $
+ *
+ * $Log: linux-lp64.cf,v $
+ * Revision 1.2  2006/12/20 14:21:03  mclareni
+ * Add definition Hasgfortran for gcc4/gfortran
+ *
+ * Revision 1.1  2004/10/05 15:54:40  mclareni
+ * Add configuration file linux-lp64 for Linux 64-bit pointer systems like AMD Opteron and Intel IA64.
+ *
+ */
+
+#define OSName			Linux
+#define OSVendor		/**/
+#define OSMajorVersion		2
+#define OSMinorVersion		4
+#define OSTeenyVersion		21
+
+#undef unix			/* GF. this is not needed anywhere */
+
+#ifndef UseElfFormat
+#define UseElfFormat		NO
+#endif
+#define HasGcc2ForCplusplus	YES
+#define GccUsesGas		YES
+#define UseGas			YES
+#define GnuCpp			YES
+#define HasShadowPasswd		NO
+#ifndef HasLibCrypt
+# define HasLibCrypt		NO
+#endif
+#define HasPutenv		YES
+#define HasShm			YES
+#define HasSockets		YES
+
+#define AvoidNullMakeCommand	YES
+#define StripInstalledPrograms	YES
+#define CompressAllFonts	YES
+#define Malloc0ReturnsNull	YES
+#define NeedConstPrototypes	YES
+#define NeedFunctionPrototypes	YES
+#define NeedNestedPrototypes	YES
+#define NeedVarargsPrototypes	YES
+#define NeedWidePrototypes	NO
+
+#if UseElfFormat
+#define CcCmd			gcc -b i486-linuxelf
+#define AsCmd			/usr/i486-linuxelf/bin/as
+#define LdCmd			ld -m elf_i386
+#define AsmDefines		-D__ELF__
+#define CplusplusCmd		g++ -b i486-linuxelf
+#else
+#define CcCmd			gcc
+#define AsCmd			as
+#define LdCmd			ld
+#define AsmDefines		-DUSE_GAS
+#endif
+#define CppCmd			/lib/cpp
+#define YaccCmd			bison -y
+#define LexCmd			flex -l
+#define LexLib			-lfl
+#define PreProcessCmd		CcCmd -E
+#define PostIncDir		`CcCmd --print-libgcc-file-name | sed 's/libgcc.a/include/'`
+#define LdCombineFlags		-r
+#define OptimizedCDebugFlags	-O2 -m486 -fno-strength-reduce\
+					-fomit-frame-pointer
+#define StandardDefines		-Dlinux -D__i386__ -D_POSIX_SOURCE \
+				-D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE
+#define XawI18nDefines		-DUSE_XWCHAR_STRING -DUSE_XMBTOWC
+#define HasWChar32		YES
+#define StandardCppDefines	-traditional StandardDefines
+#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME
+#define ExtensionOSDefines	-DXTESTEXT1
+#define ServerExtraDefines	-DGCCUSESGAS XFree86ServerDefines
+#define ConnectionFlags		-DUNIXCONN -DTCPCONN
+#define InstUidFlags		-s -m 4755
+
+/* Some of these man page defaults are overriden in the above OS sections */
+#ifndef ManSuffix
+# define ManSuffix	1x
+#endif
+#ifndef ManDir
+# define ManDir		$(MANSOURCEPATH)1
+#endif
+#ifndef LibManSuffix
+# define LibManSuffix	3x
+#endif
+#ifndef LibmanDir
+# define LibmanDir	$(MANSOURCEPATH)3
+#endif
+#ifndef FileManSuffix
+# define FileManSuffix	5x
+#endif
+#ifndef FileManDir
+# define FileManDir	$(MANSOURCEPATH)5
+#endif
+
+#include <lnxLib.rules>
+/* #include <xfree86.cf> */
+
+
+#ifdef HasPgf77
+#define f2cFortran              YES
+#define FortranCmd              pgf77
+/*
+#define FortranDoesCpp          NO
+#define FortranCppCmd           /lib/cpp -traditional -C
+*/
+#define XargsCmd                xargs
+#define FortranSaveFlags	/* */ /* Everything static !? */
+#define OptimisedFortranFlags   -g -pc 64 -tp p6
+#define DefaultFCOptions        -Msave -fpic -Kieee
+#define CernlibSystem           -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QFPGF77 -DCERNLIB_QMLXIA64
+
+#else
+
+# ifdef HasIntelifc
+#  undef CcCmd
+#  undef DefaultCCOptions
+#  undef OptimizedCDebugFlags
+#  undef StandardDefines
+#  undef NeedFunctionPrototypes
+#  undef NeedWidePrototypes
+# define CcCmd			icc
+# define DefaultCCOptions	
+# define OptimizedCDebugFlags	-O
+
+# define FortranDoesCpp         NO
+#define FortranCppCmd           /usr/bin/cpp -traditional -C
+# define FortranCmd             ifort
+# define XargsCmd               xargs
+# define FortranSaveFlags	-save
+# define OptimisedFortranFlags  -O2
+# define NoOpFortranDebugFlags  -O0
+# define DefaultFCOptions       
+# define CernlibSystem          -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64
+
+#else
+
+# ifdef Hasgfortran
+#  undef CcCmd
+#  undef DefaultCCOptions
+#  undef OptimizedCDebugFlags
+#  undef StandardDefines
+#  undef NeedFunctionPrototypes
+#  undef NeedWidePrototypes
+# define CcCmd			gcc4
+# define DefaultCCOptions	
+# define OptimizedCDebugFlags	-O -g -fomit-frame-pointer
+
+# define FortranDoesCpp         YES
+# define f2cFortran             YES
+# define FortranCmd             gfortran
+# define XargsCmd               xargs
+# define FortranSaveFlags       -fno-automatic
+# define OptimisedFortranFlags  -O0 -g -funroll-loops -fomit-frame-pointer
+# define DefaultFCOptions       -fno-second-underscore
+# define NoOpFortranDebugFlags  -O0
+# define CernlibSystem          -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_GFORTRAN -DCERNLIB_QMLXIA64
+
+#define CERNLIB_GFORTRAN
+
+# else    /* g77 */
+
+/* Start CERNLIB changes A.Waananen 15. Apr. 1996 */
+/*  Adapted to CERN style GF. 20-Sep-96 */
+
+#  undef DefaultCCOptions
+#  undef OptimizedCDebugFlags
+#  undef StandardDefines
+# define OptimizedCDebugFlags	-O1 -fomit-frame-pointer
+
+#define f2cFortran	        YES
+#define FortranCmd		g77
+#define XargsCmd		xargs
+#define FortranSaveFlags	/* */ /* Everything static !? */
+#define DefaultFCOptions	-fno-automatic -fno-second-underscore -fugly-complex
+#define CernlibSystem	        -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_QMLXIA64
+
+# endif
+
+#endif
+#endif
+
+#define CERNLIB_LINUX
+#define CERNLIB_UNIX
+#define CERNLIB_LNX
+#define CERNLIB_QMGLIBC
+#define CERNLIB_QMLXIA64
+
+/* #define CERNLIB_SHIFT YES       uncomment this to make the shift packlib */
+
+#define X11Includes		-I/usr/X11R6/include
+/* #define MotifIncludes           -I/usr/local/include  Cern Rh6.1 Lesstif */
+
+/*
+ *  Create a Make Variable to allow building with/out Motif
+ */
+
+
+/* End  CERNLIB changes */
+

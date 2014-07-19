@@ -1,0 +1,15 @@
+*
+* $Id: v225.dat,v 1.1.1.1 1996/03/08 12:01:15 mclareni Exp $
+*
+* $Log: v225.dat,v $
+* Revision 1.1.1.1  1996/03/08 12:01:15  mclareni
+* Zbook
+*
+*
+*  Version 2.25  920720  2.00
+C-  New patches/flags:
+C   > Add IPSC, MSDOS
+C-  Modifications
+C   > P=ZBOOK  ,D=ZINIT.  Initialize HBOOK output unit
+C   > P=ZEXAM  ,D=ZEXAM.  Disable ZEPEX1,2 except for VM and Vax/VMS
+C

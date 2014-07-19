@@ -1,0 +1,23 @@
+INCLUDES=	 bankparq.inc bkfoparq.inc bknmparq.inc cqbkc.inc \ @@\
+	debugvf1.inc debugvf2.inc divparq.inc dzc1.inc eqlqf.inc \ @@\
+	eqlqform.inc eqlqmrf.inc eqlqmst.inc eqlqr.inc eqlqrrf.inc \ @@\
+	eqlqt.inc eqlqzep.inc fzcf.inc fzci.inc fzcocc.inc fzcseg.inc \ @@\
+	fzcx.inc fzstat.inc hzc.inc jzc.inc jztimed.inc jztimin.inc \ @@\
+	jztimout.inc jzuc.inc mqsys.inc mqsysh.inc mzbits.inc mzca.inc \ @@\
+	mzcb.inc mzcc.inc mzcl.inc mzcn.inc mzct.inc mzcwk.inc \ @@\
+	mzioc.inc q.inc q_and.inc q_andor.inc q_jbit.inc q_jbyt.inc \ @@\
+	q_jbytet.inc q_jbytor.inc q_locf.inc q_mbytet.inc q_mbytor.inc \ @@\
+	q_not.inc q_or.inc q_sbit.inc q_sbit0.inc q_sbit1.inc \ @@\
+	q_sbyt.inc q_shift.inc q_shiftl.inc q_shiftr.inc q_xor.inc \ @@\
+	qcardl.inc qequ.inc qstore.inc qstorjz.inc qtoabend.inc \ @@\
+	qtofatal.inc qtrace.inc qtrace99.inc qtraceq.inc quest.inc \ @@\
+	questparq.inc qversion.inc rzbmap.inc rzbuff.inc rzch.inc \ @@\
+	rzckey.inc rzcl.inc rzclun.inc rzclxx.inc rzcount.inc \ @@\
+	rzcout.inc rzcstr.inc rzcycle.inc rzdir.inc rzk.inc rzover.inc \ @@\
+	storparq.inc tzc1.inc tzread1.inc tzread2.inc tzuc.inc \ @@\
+	zbcd.inc zbcdch.inc zbcdk.inc zceta.inc zebq.inc zfatalch.inc \ @@\
+	zfatalre.inc zheadp.inc zkrakc.inc zkrakcc.inc zkrakqu.inc \ @@\
+	zlimit.inc zmach.inc zmachfix.inc znatur.inc zstate.inc \ @@\
+	zunit.inc zvfaut.inc zvfwkc.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),zebra)

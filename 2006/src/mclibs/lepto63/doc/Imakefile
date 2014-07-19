@@ -1,0 +1,3 @@
+
+InstallNonExecFile(lepto63.lis,$(DOCDIR))
+

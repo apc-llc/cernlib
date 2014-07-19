@@ -1,0 +1,12 @@
+*
+* $Id: v160.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v160.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.60
+C   Correction in EPOPEN_VAX to treat correctly network files
+C   Correction for BUN16W and BUN32W, Cray version for CFT77 3.0
+C

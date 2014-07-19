@@ -1,0 +1,30 @@
+DoIncludePackage(fatmen)
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+LIBDIRS=fatbody fatuous fatuser fatutil fmint fmtms fmutil l3util
+
+#if defined(CERNLIB_UNIX)
+LIBDIRS:= $(LIBDIRS) fmc
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+LIBDIRS:= $(LIBDIRS) fmvax
+#endif
+
+PROGRAMDIRS= programs
+
+SUBDIRS= $(LIBDIRS) $(PROGRAMDIRS) fatmen
+
+TopOfPackage(fatmen)
+
+SubdirLibraryTarget(fatlib,$(LIBDIRS))
+
+InstallBinSubdirs($(PROGRAMDIRS))
+
+test::
+
+DoIncludePackage(fatmen)
+
+InstallIncludeSubdirs(fatmen)

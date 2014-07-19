@@ -1,0 +1,24 @@
+*
+* $Id: jbyt.dat,v 1.1.1.1 1996/02/15 17:52:56 mclareni Exp $
+*
+* $Log: jbyt.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:56  mclareni
+* Kernlib
+*
+*
+jbyt   : proc (a, la, nbits) returns (bin fixed (35));
+ 
+/* *****************************************************************
+   *                                                               *
+   * JBYT(a,la,nbits)  prendre bits la a la-1+nbits de a           *
+   *                                                               *
+   ***************************************************************** */
+dcl (temp, a, la, nbits) bin fixed (35);
+          temp = 0;
+          substr (unspec (temp), 37-nbits, nbits) =
+substr (unspec (a), 38-la-nbits, nbits);
+          return (temp);
+     END jbyt;
+#ifdef CERNLIB_TCGEN_JBYT
+#undef CERNLIB_TCGEN_JBYT
+#endif

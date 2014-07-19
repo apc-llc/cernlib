@@ -1,0 +1,120 @@
+*
+* $Id: sinumb.F,v 1.1.1.1 1995/12/12 14:36:19 mclareni Exp $
+*
+* $Log: sinumb.F,v $
+* Revision 1.1.1.1  1995/12/12 14:36:19  mclareni
+* Imported sources
+*
+*
+#include "sigma/pilot.h"
+*CMZ :  1.09/04 26/10/93  09.49.19  by  Carlo E. Vandoni
+*-- Author :
+      SUBROUTINE SINUMB
+C
+C
+C    ..................................................
+C
+C
+C         PURPOSE
+C            TO DECODE ANY CHARACTER SEQUENCE REPRESENTING A LEGITIMATE
+C            REAL OR COMPLEX NUMBER IN SIGMA
+C
+C         USAGE
+C            CALL NUMBER   BEWARE OF ASSORTED COMM. BLOCKS
+C
+C         DESCRIPTION OF PARAMETERS
+C            PASSED THROUGH COMM. BLOCKS, N ONE DIRECTLY GIVEN
+C
+C
+C         REMARKS
+C            NEEDS SERVICE ROUTINE CALLED NUMCOD
+C
+C         SUBROUTINES AND FUNCTION SUBPROGRAMS REQUIRED
+C            INSTR
+C            NUMCOD
+C
+C         METHOD
+C            ASSEMBLES A COMPLEX NUMBER HERE (I-TYPE OR A-TYPE)
+C             CALLS NUMCOD TO DECODE ONE NUMBER
+C            RETURNS ERROR CONDITION IN LOGICAL VARIABLE IND=.FALSE.
+C
+C         AUTHOR.   JURIS REINFELDS      DATE 03/12/74
+C
+C---   TESTING VERSION  MAY 1988
+C
+C---   PAW VERSION    MAY 1988
+C
+C    ..................................................
+C
+C
+#include "sigma/sigkq.inc"
+#include "sigma/sigc.inc"
+#include "sigma/pawc.inc"
+#include "sigma/sicph1.inc"
+C
+C
+C
+      CHARACTER KHAR*1,NUMSTR*10,SINSTR*1
+      LOGICAL IND
+      EQUIVALENCE(KHAR,ISGN)
+C
+      CALL SITRAC(' SINUMB  ')
+C
+      IND=.TRUE.
+      MODE=1
+      KOMPLX=1
+C
+ 2    CONTINUE
+      CALL SINMCD
+      IF(.NOT.IND)RETURN
+      KHAR=SINSTR(IC)
+      GOTO (10,20,30),KOMPLX
+C
+ 10   CONTINUE
+C     FIRST NUMBER CORRECTLY OBTAINED
+      IF(KHAR.NE.'I') GOTO 12
+C     NEXT CHARACTER IS  I
+      KOMPLX=2
+      GOTO 13
+C
+ 12   CONTINUE
+C     IF A COMPLETED REAL NUMBER
+      IF(KHAR.NE.'A') RETURN
+C     CHARACTER IS THE LETTER  A  FOR (R,PHI) FORMAT IN COMPLEX
+      KOMPLX=3
+C
+ 13   CONTINUE
+      REALX=XNUM
+      IC=IC+1
+      NUMSTR='1234567890'
+      KHAR=SINSTR(IC)
+      IF((INDEX(NUMSTR,KHAR).NE.0).OR.
+     ,    KHAR.EQ.KQDOT.OR.KHAR.EQ.KQPLUS.OR.KHAR.EQ.KQMIN) GOTO 2
+C
+C     COMPLEX NUMBER ENDS IN  I  OR  A  WITHOUT AN IMAG. PART
+      IND=.FALSE.
+      RETURN
+C
+ 30   CONTINUE
+C     SECOND NUMBER IS  A-TYPE
+C
+C     CHECK SIZE OF ARGUMENT
+C
+      MODE=2
+*      PRINT 34
+  34  FORMAT(' -NUMBER IS COMPLEX-')
+*       PRINT *,REALX,XNUM
+24    CMPCOM(ICMPI)=REALX*COS(XNUM)
+      CMPCOM(ICMPI+1)=REALX*SIN(XNUM)
+      GOTO 25
+C
+ 20   CONTINUE
+C     SECOND NUMBER IS  I-TYPE
+*      PRINT 34
+      MODE=2
+      CMPCOM(ICMPI)=REALX
+      CMPCOM(ICMPI+1)=XNUM
+ 25   CONTINUE
+      ICMPI=ICMPI+2
+      IF(ICMPI.GE.32) IND=.FALSE.
+ 999  END

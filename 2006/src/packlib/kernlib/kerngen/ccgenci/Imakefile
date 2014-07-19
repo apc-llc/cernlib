@@ -1,0 +1,11 @@
+SRCS_F= ciopen.F
+
+SRCS_C= ciclos.c ciget.c cigetw.c ciopei.c ciperm.c ciput.c ciputw.c \ @@\
+	cirew.c ciseek.c cisize.c citell.c
+
+#ifdef CERNLIB_SHIFT
+CERNDEFINES:= $(CERNDEFINES) -DCERNLIB_SHIFT
+EXTRA_INCLUDES:= $(EXTRA_INCLUDES) -I/usr/local/include
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

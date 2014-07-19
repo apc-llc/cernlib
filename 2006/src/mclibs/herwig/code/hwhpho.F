@@ -1,0 +1,109 @@
+CDECK  ID>, HWHPHO.
+*CMZ :-        -26/04/91  14.55.45  by  Federico Carminati
+*-- Author :    Bryan Webber
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHPHO
+C-----------------------------------------------------------------------
+C     QCD DIRECT PHOTON + JET PRODUCTION: MEAN EVWGT = SIGMA IN NB
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG59.INC'
+      DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,HWHPPB,EPS,RCS,ET,EJ,KK,KK2,
+     & YJ1INF,YJ1SUP,Z1,YJ2INF,YJ2SUP,Z2,FACT,FACTR,FACTF,RS,S,T,U,CF,
+     & AF,CSTU,CTSU,CUST,DSTU,HCS,TQCH
+      INTEGER ID,ID1,ID2
+      EXTERNAL HWRGEN,HWRUNI,HWUALF,HWHPPB
+      SAVE HCS
+      PARAMETER (EPS=1.D-9)
+      IF (GENEV) THEN
+        RCS=HCS*HWRGEN(0)
+      ELSE
+        EVWGT=0.
+        CALL HWRPOW(ET,EJ)
+        KK=ET/PHEP(5,3)
+        KK2=KK**2
+        IF (KK.GE.1.) RETURN
+        YJ1INF=MAX( YJMIN , LOG((1.-SQRT(1.-KK2))/KK) )
+        YJ1SUP=MIN( YJMAX , LOG((1.+SQRT(1.-KK2))/KK) )
+        IF (YJ1INF.GE.YJ1SUP) RETURN
+        Z1=EXP(HWRUNI(1,YJ1INF,YJ1SUP))
+        YJ2INF=MAX( YJMIN , -LOG(2./KK-1./Z1) )
+        YJ2SUP=MIN( YJMAX ,  LOG(2./KK-Z1) )
+        IF (YJ2INF.GE.YJ2SUP) RETURN
+        Z2=EXP(HWRUNI(2,YJ2INF,YJ2SUP))
+        XX(1)=0.5*(Z1+Z2)*KK
+        IF (XX(1).GE.1.) RETURN
+        XX(2)=XX(1)/(Z1*Z2)
+        IF (XX(2).GE.1.) RETURN
+        COSTH=(Z1-Z2)/(Z1+Z2)
+        S=XX(1)*XX(2)*PHEP(5,3)**2
+        RS=0.5*SQRT(S)
+        T=-0.5*S*(1.-COSTH)
+        U=-S-T
+C---SET EMSCA TO HARD PROCESS SCALE (APPROX ET-JET)
+        EMSCA=SQRT(2.*S*T*U/(S*S+T*T+U*U))
+        FACT=GEV2NB*PIFAC*0.5*ET*EJ*ALPHEM
+     &      *HWUALF(1,EMSCA)*(YJ1SUP-YJ1INF)*(YJ2SUP-YJ2INF)/S**2
+        CALL HWSGEN(.FALSE.)
+C
+        CF=2.*CFFAC/CAFAC
+        AF=-1./CAFAC
+        CSTU=CF*(U/T+T/U)
+        CTSU=AF*(U/S+S/U)
+        CUST=AF*(T/S+S/T)
+        IF (DISF(13,1).GT.EPS.AND.DISF(13,2).GT.EPS) THEN
+           TQCH=0.
+           DO 10 ID=1,6
+  10       IF (RMASS(ID).LT.RS) TQCH=TQCH+QFCH(ID)
+           DSTU=DISF(13,1)*DISF(13,2)*FACT*HWHPPB(S,T,U)
+     &         *5./768.*(HWUALF(1,EMSCA)*TQCH/PIFAC)**2
+        ENDIF
+      ENDIF
+C
+      HCS=0.
+      DO 30 ID=1,6
+      FACTR=FACT*QFCH(ID)**2
+C---QUARK FIRST
+      ID1=ID
+      IF (DISF(ID1,1).LT.EPS) GOTO 20
+      ID2=ID1+6
+      HCS=HCS+CSTU*FACTR*DISF(ID1,1)*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP( 13, 59,2314,41,*9)
+      ID2=13
+      HCS=HCS+CTSU*FACTR*DISF(ID1,1)*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(ID1, 59,3124,42,*9)
+C---QBAR FIRST
+  20  ID1=ID+6
+      IF (DISF(ID1,1).LT.EPS) GOTO 30
+      ID2=ID
+      HCS=HCS+CSTU*FACTR*DISF(ID1,1)*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP( 13, 59,3124,43,*9)
+      ID2=13
+      HCS=HCS+CTSU*FACTR*DISF(ID1,1)*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(ID1, 59,2314,44,*9)
+  30  CONTINUE
+C---GLUON FIRST
+      ID1=13
+      FACTF=FACT*CUST*DISF(ID1,1)
+      DO 50 ID=1,6
+      FACTR=FACTF*QFCH(ID)**2
+      ID2=ID
+      IF (DISF(ID2,2).LT.EPS) GOTO 40
+      HCS=HCS+FACTR*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(ID2, 59,2314,45,*9)
+  40  ID2=ID+6
+      IF (DISF(ID2,2).LT.EPS) GOTO 50
+      HCS=HCS+FACTR*DISF(ID2,2)
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(ID2, 59,3124,46,*9)
+  50  CONTINUE
+C g+g ---> g+gamma
+      ID2=13
+      HCS=HCS+DSTU
+      IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP( 13, 59,2314,47,*9)
+      EVWGT=HCS
+      RETURN
+C---GENERATE EVENT
+    9 IDN(1)=ID1
+      IDN(2)=ID2
+      IDCMF=15
+      CALL HWETWO
+  999 END

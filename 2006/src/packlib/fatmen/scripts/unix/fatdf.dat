@@ -1,0 +1,52 @@
+*
+* $Id: fatdf.dat,v 1.2 1996/04/16 06:43:40 jamie Exp $
+*
+* $Log: fatdf.dat,v $
+* Revision 1.2  1996/04/16 06:43:40  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+
+#------------------------------------------------------------------
+#
+# Modified for AIX version 4.1 27/03/96
+#
+# (output of df command is slightly different)
+#
+#------------------------------------------------------------------
+
+filesystem="/fatmen"
+warn="90"
+alert="95"
+
+a=`df ${filesystem}`
+
+aix_version=`echo $a | cut -f2 -d\ `
+
+if [ ${aix_version} = "512-blocks" ]
+then
+   b=`echo $a | cut -f12 -d\ `
+else
+   b=`echo $a | cut -f13 -d\ `
+fi
+
+c=`echo $b | tr -d %`
+
+if [ ${c} -gt ${alert} ]
+then
+   echo ALARM!! - filesystem ${filesystem} ${c}% full | \
+        mail -s " ALARM!! ${filesystem} ${c}% full " fatcat-mgr@zfatal.cern.ch
+   exit
+fi
+
+if [ ${c} -gt ${warn} ]
+then
+   echo Warning - filesystem ${filesystem} ${c}% full | \
+        mail -s " Warning - ${filesystem} ${c}% full " fatcat-mgr@zfatal.cern.ch
+   exit
+fi
+

@@ -1,0 +1,31 @@
+*
+* $Id: v172.dat,v 1.1.1.1 1996/03/08 15:21:46 mclareni Exp $
+*
+* $Log: v172.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:46  mclareni
+* Epio
+*
+*
+*  Version 1.72  931022  9.00
+C- A PAM cleanup for the VAX/VMS version
+C  Move decks VAXIBM and MTFORMAT from patch SVAXS to UTIL.
+C  Add deck card for EPIOVAX2, correct pilot patch
+C
+C  Correct EPBOUT, Unix version, for writing odd length blocks.
+C    Now they will be padded to an integral number of machine words.
+C    But the correct blocksize will have to be given when reading back
+C    these files. To avoid complications do not write blocks with an
+C    odd number of 16-bit words.
+C
+C  Detect EOF when reading with Fortran with status word 33 set to 1
+C    in EPBLIN for Unix version.
+C
+C  Replace calls to JSHFTC with ISHFTC for Ultrix and Alpha/OSF1 as it
+C    now looks like ISHFTC is fixed. DECS routines BTSWAP, JSHFTC and
+C    CFRIBM.
+C
+C  Correct VMS/DEC version of STOASC
+C    Modifications for Alpha/VMS in macro decks MTFORMAT and EPIOVAX2
+C
+C  Major tidy for CONVEX.
+C

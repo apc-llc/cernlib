@@ -1,0 +1,21 @@
+*
+* $Id: fatlib.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatlib.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+rm fmint.f
+ypatchy /cern/src/car/zebra.car fmint.f :go <<!
+&use,qcde.
+&use,ibmrt,*fatlib.
+&use,fmc,t=inhibit.
+&use,fmh,t=inhibit.
+&use,tms,t=inhibit.
+&exe.
+&pam,11,r=qcde,t=c.
+&pam,12,t=c,a. fatmen.cards
+&quit
+!
+xlf -c -q extname fmint.f

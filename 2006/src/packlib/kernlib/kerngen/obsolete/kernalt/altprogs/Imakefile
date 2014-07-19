@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 fcasplit.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

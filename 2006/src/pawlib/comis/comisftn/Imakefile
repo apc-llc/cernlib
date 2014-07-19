@@ -1,0 +1,72 @@
+SRCS_F=	casetw.F ccopya.F copyaj.F crword.F cschar.F cscom.F cscomc.F \ @@\
+	csext.F csicha.F mcsges.F mdext.F miword.F mjscha.F \ @@\
+	mkchar.F mlcmp8.F mlempt.F mlette.F
+
+DoIncludePackage(comis)
+#include "pilot.h"
+
+#if defined(CERNLIB_APOLLO)
+SRCS_F := $(SRCS_F) csd01f.F csd02f.F csd03f.F csd04f.F csd05f.F \ @@\
+		csd06f.F csd07f.F csd08f.F csd09f.F csd10f.F \ @@\
+		csd11f.F csd12f.F csd13f.F csd14f.F csd15f.F \ @@\
+		csi01f.F csi02f.F csi03f.F csi04f.F csi05f.F \ @@\
+		csi06f.F csi07f.F csi08f.F csi09f.F csi10f.F \ @@\
+		csi11f.F csi12f.F csi13f.F csi14f.F csi15f.F \ @@\
+		csr01f.F csr02f.F csr03f.F csr04f.F csr05f.F \ @@\
+		csr06f.F csr07f.F csr08f.F csr09f.F csr10f.F \ @@\
+		csr11f.F csr12f.F csr13f.F csr14f.F csr15f.F \ @@\
+		mjchara.F mjsubra.F mjworda.F 
+#endif
+
+#if defined(CERNLIB_APOLLO) || defined(CERNLIB_VAX)
+SRCS_F := $(SRCS_F) cscald.F cscali.F cscalr.F
+#endif
+
+#if defined(CERNLIB_UNIX) && !defined(CERNLIB_WINNT)
+SRCS_F := $(SRCS_F) mjchard.F mjsubrd.F 
+#endif
+
+#if defined(CERNLIB_UNIX) || defined(CERNLIB_WINNT)
+SRCS_F := $(SRCS_F) mjworda.F 
+#endif
+
+
+#if defined(CERNLIB_VAX)
+SRCS_F := $(SRCS_F) mjcharv.F mjsubrv.F mjwordv.F 
+#endif
+
+#if defined(CERNLIB_IBM)
+SRCS_F := $(SRCS_F) mjchard.F mjsubri.F mjworda.F 
+#endif
+
+#if defined(CERNLIB_OLDVSUN)
+SRCS_F := $(SRCS_F) mjchars.F mjsubrs.F 
+#endif
+
+#if defined(CERNLIB_WINNT)
+SRCS_F := $(SRCS_F) mjchars.F 
+#endif
+
+#if !defined(CERNLIB_PAW)
+SRCS_F := $(SRCS_F) lenocc.F uctoh.F uhtoc.F
+#endif
+
+#if defined(CERNLIB_LIB)
+SRCS_F := $(SRCS_F) cvsetr.F csword.F
+#endif
+
+#if !defined(CERNLIB_ASSEMB) && defined(CERNLIB_OLD)
+SRCS_F := $(SRCS_F) csbcll.F cifncl.F clfcll.F 
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+#if defined(CERNLIB_QMVAOS)
+FORTRANOPTIONS += -assume dummy_aliases
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+FORTRANOPTIONS := $(FORTRANOPTIONS) /assume=dummy
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

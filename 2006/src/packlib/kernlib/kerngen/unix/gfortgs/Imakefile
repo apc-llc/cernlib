@@ -1,0 +1,6 @@
+
+SRCS_F= irndm.F qnext.F rdmin.F
+
+SRCS_C= lshift.c ishftr.c getarg.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

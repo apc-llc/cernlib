@@ -1,0 +1,6 @@
+SRCS_F=	 lzfid.F lzfidh.F lzhead.F lzscan.F mzchln.F mzchls.F \ @@\
+	mzchnb.F mzdvac.F mzfdiv.F mzform.F mziobk.F mziocf.F mzioch.F \ @@\
+	mziocr.F mziotc.F mzixco.F mzneig.F mzresv.F mzsdiv.F mzxref.F \ @@\
+	mzxrpr.F mzxrup.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

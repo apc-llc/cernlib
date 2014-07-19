@@ -1,0 +1,5 @@
+INCLUDES=	 kax000.inc kax010.inc kax020.inc kax02c.inc \ @@\
+	kax030.inc kax040.inc kax050.inc kax060.inc kax070.inc \ @@\
+	kax080.inc kax090.inc kax0a0.inc kax0b0.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),kapack)

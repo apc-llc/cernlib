@@ -1,0 +1,100 @@
+*
+* $Id: unix.man,v 1.3 2000/10/24 07:29:51 couet Exp $
+*
+* $Log: unix.man,v $
+* Revision 1.3  2000/10/24 07:29:51  couet
+* - PAW web pages URL updated
+*
+* Revision 1.2  1999/09/29 14:57:20  couet
+* - WWW adress was incorect
+*
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+#if defined(CERNLIB_UNIX)
+*CMZ :          07/11/95  18.53.50  by  Timo Hakulinen
+*-- Author :    O.Couet   11/04/95
+.TH PAW 1 "Physics Analysis Workstation"
+.SH NAME
+paw \- invoke the "Physics Analysis Workstation" package
+.SH SYNOPSIS
+paw [-b \fImacro_name\fR] [-w \fIworkstation_type\fR] [-n]
+
+paw++ [-b \fImacro_name\fR] [-n]
+
+.SH DESCRIPTION
+
+PAW
+is an interactive utility for visualizing experimental data on a
+computer graphics display. It may be run in batch mode if desired
+for very large and time consuming data analyses; typically, however,
+the user will decide on an analysis procedure interactively before
+running a batch job.
+
+PAW
+combines a handful of CERN High Energy Physics Library systems
+that may also be used individually in software that
+processes and displays data.  The purpose of PAW is
+to provide many common analysis and display
+procedures that would be duplicated needlessly
+by individual programmers, to supply a flexible way to invoke these
+common procedures, and yet also to allow user customization where
+necessary.
+
+PAW++ is a Motif-based version of PAW.
+
+.SS OPTIONS
+
+When
+.B paw
+starts, the macro
+.B
+pawlogon.kumac
+in the current directory is executed. If this macro doesn't exist
+the system tries to execute the macro
+.B .pawlogon.kumac
+in the home directory.
+.TP 8
+.RI \-n
+The macro \fIpawlogon\fR is not executed.
+.TP 8
+.RI \-b \ macro_name
+The macro specified is executed in batch mode and
+.B paw
+exits when the macro ends.
+.TP 8
+.RI \-w \ workstation_type
+PAW starts immediately without prompting for the workstation type.
+If workstation_type = 0, paw starts without graphics.
+
+When the X11 version of paw is used, a list of 10 valid
+workstation types is provided in the file
+.B higz_windows.dat.
+By default this file is in the current directory. If it is not,
+the one in the home directory is used. If it is not in the home
+directory, one is automatically created in the current directory.
+Each line in this file describes the position and the size of the
+window. To access one of the described windows it is enough to
+give the line number in reply to the prompt "Workstation type"
+
+.SH ENVIRONMENT VARIABLES
+.TP 20
+HIGZPRINTER
+Specifies the command line executed when the command PICTURE/PRINT
+is invoked.
+.TP 20
+$ENV()
+Any environment variable can be accessed in paw with the function
+.B $ENV().
+
+.SH SEE ALSO
+
+The PAW reference manual, the online help (PAW command HELP), the
+WWW pages: http://cern.ch/paw/
+
+.SH COPYRIGHT
+(C) Copyright CERN, Geneva 1995.
+
+
+#endif

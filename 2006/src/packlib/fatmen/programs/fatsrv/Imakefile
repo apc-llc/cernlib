@@ -1,0 +1,15 @@
+SRCS_F=	abend.F facopy.F fatlog.F fatsrv.F fmallk.F fmfzi.F fmssnd.F
+
+#ifdef CERNLIB_IBMMVS
+SRCS_F:= $(SRCS_F) falcat.F famove.F
+#endif
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+NeedSysexe
+#endif
+
+
+CernlibFortranProgramTarget(fatsrv,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(fatsrv,$(CERN_BINDIR))

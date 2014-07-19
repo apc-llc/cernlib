@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 ddilog.F eisrs1.F ranf.F rkstp.F sorttf.F tql2.F tred2.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,17 @@
+*
+* $Id: v147.dat,v 1.1.1.1 1996/04/01 15:01:32 mclareni Exp $
+*
+* $Log: v147.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:32  mclareni
+* Mathlib gen
+*
+*
+* 1.47/00   950504 
+C
+C  Routine changes:  
+C  ---------------
+C  
+C  RNPSSN.  S. Kolbig - Reduce the exp limit to work on all platforms
+C                         and allow user to decrease it.
+C  V107, G.Folger/F.Streit(Zeuthen), add Convex flags
+C

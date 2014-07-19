@@ -1,0 +1,54 @@
+CDECK  ID>, DILOOK.
+      SUBROUTINE DILOOK (LDX,LDN,NBIAS,LPX,LPN,LOW,NPCENT)
+
+C-    Check that the 2 objects at LDX and LDN are the same to NPCENT
+C.    started 6-june-94
+
+      COMMON /DIFFC/ NFAID, JFAIDA, JFAIDE
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+     +,   INMEM(2),NSLTOT(2),NSLMAX(2),NTXMAX(2),JSLTTF(2), IFSTRUC
+     +,   NOBJTT(3,2),NOBJMAT, MDELADD(2,2), LUNCRA,NLSENT,   LASTDI
+C--------------    End CDE              --------------------------------
+
+
+      NSLX = IQ(LDX+2) - NBIAS
+      NSLN = IQ(LDN+2) - NBIAS
+
+      NSL1 = MIN (NSLX,NSLN)
+      NSL2 = MAX (NSLX,NSLN)
+      IF (2*NSL1.LT.NSL2)          GO TO 29
+
+      NSLM = NPCENT*NSL1 /100
+      IF (NSLM.LT.2)               GO TO 29
+      IF (NSL1.NE.NSL2)  THEN
+          IF (NSLM.LT.LOW)         GO TO 29
+        ENDIF
+
+      IF (IQ(LPX+1).EQ.0)  CALL DINEED (1,LPX)
+      IF (IQ(LPN+1).EQ.0)  CALL DINEED (2,LPN)
+
+      JSLX = IQ(LDX+1) + NBIAS
+      JSLN = IQ(LDN+1) + NBIAS
+
+      CALL DIF_XQT (JSLX,NSLX, JSLN,NSLN, NSLM)
+
+      IF (NSLM.EQ.0)               GO TO 29
+      IF (NFAID.EQ.0)        RETURN
+      IF (NSLM.GE.LOW)       RETURN
+
+   29 NFAID = -1
+      RETURN
+      END

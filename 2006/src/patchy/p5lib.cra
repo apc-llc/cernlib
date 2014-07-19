@@ -1,0 +1,9 @@
++USE, ${PLINAME}.
++ASM, 21.
++EXE.
++USE, *PATCHY.
++USE, PATCHY_LIB.
++USE, QDEBUG.
++USE, BUGLRSHFT,IF=SUN.  Sun's F77 Version 3.0 has bad lrshft.
++DIVERT, NOOPT.
++PAM, 11, T=C,ATT   .patchy

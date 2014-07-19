@@ -1,0 +1,4 @@
+SRCS_F=	 dsbeqn.F dsbfinv.F ertest.F geafit.F gfitkf.F gfitmi.F \ @@\
+	gukine.F guout.F gustep.F main.F ugeom.F uginit.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

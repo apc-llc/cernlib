@@ -1,0 +1,3349 @@
++TITLE.
+PAW      2.07/18  20/11/95  11.15.38  PROGRAM LIBRARY PAW  = Q121
++PATCH,$VERSION.
++DECK,V2_07.
+*CMZ :          20/11/95  15.38.13  by  O.Couet
+*-- Author :    O.Couet   05/05/95
+*
+* 20/11/95  15.37.36  by  O.Couet
+*
+*::>          VERSION  2.07/18   20/11/95 11.15.38
+*
+* Bug fixed in PAWDEC: the QP routines was called.
+*
+*::>          VERSION  2.07/17   17/11/95 16.02.17
+*
+* Mods in PAFUNC. The old QP is not used at all in FUN1, FUN2 and FUN/PLOT.
+* COMIS is used instead. The HELP of FUN1 and FUN2 has been improved.
+*
+* 16/11/95  14.02.46  by  O.Couet
+* TCPIAF: mods for WINSOCK on Windows
+*
+* 10/11/95  17.29.56  by  O.Couet
+* Mods in the calls to hplfr3, taking care into account the fact that
+* it now compute the log.
+*
+* 02/11/95  16.07.04  by  O.Couet
+* If /cern/pro/bin/pawsys.kumac doesn't exist, the macro defined in the
+* environment variable called PAWSYS is executed.
+*
+*::>          VERSION  2.07/16   01/11/95 13.10.37
+*
+* Used the option 'Z' for HPLAER in PAGHPL
+*
+* 31/10/95  11.36.06  by  O.Couet
+* With the help of the new HPLOT routine HPLQSE, the '?' in now not
+* mandatory in $GRAFINFO.
+*
+* 30/10/95  11.28.57  by  O.Couet
+* Update in the help of CONTOUR
+*
+*::>          VERSION  2.07/15   27/10/95 11.51.12
+*
+* New system function $OPTION.
+*
+* 25/10/95  10.17.25  by  O.Couet
+* Double quotes are changed in single quotes in the CDF.
+*
+* 17/10/95  18.33.54  by  O.Couet
+* New command ELLIPSE
+*
+*::>          VERSION  2.07/14   16/10/95 15.43.12
+*
+* FLAG TKTCL added in PAWINT1, PAWINT2 and 0PAMAIN.
+*
+* 16/10/95  14.05.41  by  O.Couet
+* New MASK menu
+*
+* 11/10/95  11.44.15  by  O.Couet
+* Improve the HELP of CONTOUR
+*
+* 02/10/95  18.41.26  by  O.Couet
+* The default value for UWFUNC in all the Ntuple commands is '1.'
+*
+* 25/09/95  17.30.14
+* In HMERGE, FILECASE KEEP was not taken into account.
+* Implies mods in MERGIN.
+*
+* 20/09/95  16.49.08
+* A call to kualfa was missing in paobs.
+*
+*::>          VERSION  2.07/13   19/09/95 09.38.54
+*
+* Fix in PAWSEL (division by 0) wbr@axher1.desy.de (Walter Brueckner)
+*
+*::>          VERSION  2.07/12   14/09/95 14.19.45
+*
+* Mods in PIAFRONT
+*
+* 13/09/95  16.37.34
+* HRDIR is now callable from COMIS.
+*
+*::>          VERSION  2.07/11   13/09/95 15.40.45
+*
+* PAPLOT is now called with CHCASE='HIST' in PANTUP.
+*
+* 01/09/95  13.40.27
+* The OVERFLOW was not correct in $HINFO.
+*
+* 24/08/95  13.43.43
+* New version of PIAFDEC
+*
+* 23/08/95  18.27.31
+* Mods in bugrep. PAWSUPPORT is added
+*
+*::>          VERSION  2.07/10   23/08/95 09.44.41
+*
+* Bug fixed in HGETID: repeating H/PL -1 produced an error.
+*
+* 23/08/95  09.16.55
+* Help of META and WORKSTATION improved.
+*
+* 22/08/95  17.47.01
+* New piafdec
+*
+* 18/08/95  15.44.00
+* In $LOCAL and LOCAL "panic" is changed into "local_panic".
+*
+*::>          VERSION  2.07/09   18/08/95 15.18.36
+*
+* New command OP/FUN.
+*
+* 17/08/95  15.04.52
+* Bug fixed in pawsel. It is now possible to do:
+* nt/plot 30.x nt.f(1,2,3,4,5,6,7,8,9,10)
+*
+* 16/08/95  16.33.55
+* Long deck names like FPGETOPTD are now reduced.
+*
+*::>          VERSION  2.07/08   16/08/95 16.13.00
+*
+* Bug fixed in PAFTH and PAFITV: these routine required the Motif
+* library even in pawX11.
+*
+* 15/08/95  17.25.11
+* Bug fixed in HVTOB: 20(4:18,0.:0.5) was not working on the y-axis
+*
+* 15/08/95  12.01.56
+* Timo mods in PIAFRONT and TCPIAF.
+*
+*::>          VERSION  2.07/07   11/08/95 12.14.57
+*
+* Bug fixed in PAFITH the varibale VERRORNAM was used instead of
+* VERRORNUM.
+*
+* 11/08/95  11.48.52
+* P(1) is initialized to 0. in PAWCS to avoid warnings with purify.
+*
+* Correction in PANDRA so that call to PPROJN has correct number of
+* arguments.
+*
+*::>          VERSION  2.07/06   14/07/95 14.22.36
+*
+* Small mod in parlineform to change a #include to a +SEQ.
+*
+* Timo mods for PIAF.
+*
+* 05/07/95  09.08.40
+* in pafitv LODRAW was set to 0 instead of .FALSE.
+*
+* 03/07/95  17.58.46
+* PAUTIT has now one parameter.
+*
+* 03/07/95  16.00.20
+* The routine getatt in now in the PAW patch.
+*
+*::>          VERSION  2.07/05   29/06/95 15.28.26
+*
+* in pafith LODRAW was set to 0 instead of .FALSE.
+*
+* 28/06/95  14.46.58
+* Fixes in Fit panel. Bug in the allocation of space for parameters.
+* (Yana Gaponenko).
+*
+*::>          VERSION  2.07/04   28/06/95 10.37.34
+*
+* New routine PAHPR which allows to print histograms with ranges.
+* It is called in PAHIO and PAPLOT.
+*
+* 26/06/95  13.47.47
+* Mod in PASCAN: In case of vectors, the first entry is scanned
+* only once.
+*
+*::>          VERSION  2.07/03   22/06/95 10.14.42
+*
+* The Fit panel is re-activated (*PAW).
+*
+* 21/06/95  16.04.48
+* Mods in Fit panel for VMS version (Yana Gaponenko).
+*
+* 20/06/95  14.37.18
+* FPHSETRNG was wrong (Yana Gaponenko).
+*
+*::>          VERSION  2.07/02   16/06/95 10.51.13
+*
+* about.c is now dummy
+*
+* 14/06/95  11.23.05
+* MULTINET_SHUTDOWN added in 0PAMAINM
+*
+* 07/06/95  10.30.34
+* Improvements in the HELPs of ZONE, SWN, SVP and SELNT.
+*
+* 06/06/95  15.32.11
+* SELF DEV in palogo
+*
+* 01/06/95  17.36.08
+* New options in $HINFO:
+* $HINFO(id,'1DHISTO') ... 1 if ID is a 1D histogram or 0 otherwise
+* $HINFO(id,'2DHISTO') ... 1 if ID is a 2D histogram or 0 otherwise
+* $HINFO(id,'TABLE') ..... 1 if ID is a table or 0 otherwise
+* $HINFO(id,'PROFILE') ... 1 if ID is a profile histogram or 0 otherwise
+* $HINFO(id,'NTUPLE') .... 1 if ID is a Ntuple or 0 otherwise
+* $HINFO(id,'LOG') ....... 1 if ID has LOG Y scale or 0 otherwise
+*
+* 30/05/95  09.40.26
+* Complete the HELP of the command TIC.
+*
+* 29/05/95  13.23.45
+* in $PCHTAG CHBIG has now 512 characters (maximu size on AIX).
+* (problem found by Michael Dahlinger).
+*
+* 19/05/95  11.34.54
+* New version of the KEY command
+*
+* Fix in PCINFO: local functions are no longer sent to PIAF
+* for processing when the user uses FUN/FUN1 commands ....
+*
+* 17/05/95  08.58.57
+* Fix in bugrep: "automatically" was spelled "automaticaly"
+*
+* 11/05/95  11.59.10
+* Bug fixed in HGETID. ICRANG was always set to 1 even in case
+* of invalid range.
+*
+*::>          VERSION  2.07/01   10/05/95 10.36.03
+*
+* It is now possible to copy histograms with ranges. This implies
+* mod in HGETID, HGETIR (use a new routine HVTOB). The command
+* H/COPY use the NEW routine HCOPYR of HBOOK.
+*
+* 08/05/95  14.37.16
+* Protection added in PAFITH agains: h/fit 100.sliy.1 g
+*
+* 05/05/95  16.27.32
+* EXTERNAL flaged with FPANELS in PAFITH and PAFITV
+*
+*::>          VERSION  2.07/00   05/05/95 15.22.00
+*
+* MAXFCU=2000. Protection in pproj0,pprojn,pascan
+*
+* 04/05/95  18.08.37
+* FPANELS flag in utils
+*
+* 04/05/95  16.00.57
+* Fitting panels temporarly disabled.
+*
+* 04/05/95  10.25.12
+* New option in PASPI2 to draw the spider plots as segments.
+*
+* 02/05/95  10.19.42
+* Mods in PASCAN and PASPI2 to allows to animate the spider plots.
+*
+* 28/04/95  12.18.17
+* New MATCH parameter in the command NT/READ.
+*
+* 28/04/95  12.17.14
+* The last line of the table was not print in PASCAN when only one
+* event was scan.
+*
+* 28/04/95  09.06.30
+* Changes in PASPI2. The formats F12.2 have been replaced by E12.4. The
+* problem appears on VMS.
+*
+* 26/04/95  17.31.48
+* String was initialized with '' in PAFITH and PAFITV which is invalid
+* on VMS.
+*
+* 26/04/95  17.07.56
+* The common KCGUID is now suppressed (old kuip common). It is replaced
+* by PCHTAG which is smaller and more widely used (gain of space).
+*
+* 26/04/95  10.53.22
+* Bug fixed in PASCAN and PASCA1: even with the ouput redirected on
+* a file, some lines were output on the screen in NT/SCAN.
+*
+* 25/04/95  16.17.38
+* HELP of H/PLOT, H/ERR and AERR changed according to the new
+* behaviour of option "1" in HPLAER.
+*
+* 24/04/95  16.10.45
+* New version of the fitting panel (Gregory Kozlovsky).
+*
+* 24/04/95  16.10.32
+* New paw.com (VAX)
+*
+* 21/04/95  11.55.49
+* Bug fixed in PAVECT. in V/PLOT X%Y, IGRAPH was not called with
+* option 'Z'.
+*
+* 18/04/95  16.31.52
+* The slide package is now obsolete (move into SLIDE_OBS). In *PAW
+* the SLIDE flag is not selected.
+*
+* 18/04/95  12.10.26
+* New version of the fitting panel (Gregory Kozlovsky).
+*
+* 13/04/95  11.29.00
+* Mod in PCHROP: RZOPEN is call with option C (for UNIX machines) like
+* in PAWROP.
+*
+* 12/04/95  17.41.30
+* New version of ATITLE using the new HPLOT routine HPLLGD.
+*
+* 11/04/95  13.53.29
+* HBUG an IGERR are now disable for VAX. These routines are already
+* defined in HBOOK and HIGZ. Having these routines double defined,
+* causes problems to create sharable images on VAX/VMS.
+*
+* 11/04/95  13.45.53
+* New patch MANPAGES
+*
+* 11/04/95  10.53.58
+* Mods in PAWFCA and PCINFO. The CUTOL to convert COMIS file names
+* to lowercase is now commented because COMIS takes care of the case
+* conversion set by the FILECASE command.
+*
+* 07/04/95  17.42.07
+* Dummy entry MULTINET_SHUTDOWN added in 0pamain.
+*
+* 07/04/95  16.47.13
+* Option "overlay" added in the pull down menu of 1d histos (Paw++)
+*
++DECK,V2_06.
+*CMZ :  2.06/20 03/03/95  18.36.01  by  O.Couet
+*-- Author :    O.Couet   09/11/94
+*
+*::>          VERSION  2.06/20   03/03/95 18.36.01
+*
+* Mod in the CDF. The xample given in the NT/DUPLICATE command are now
+* correct. The "include ?" facility is exaplin in the command UWFUNC.
+*
+*::>          VERSION  2.06/19   01/03/95 18.29.58
+*
+* New command VERSION, bugfix and extension of BUGREPORT.
+*
+*::>          VERSION  2.06/18   01/03/95 14.04.16
+*
+* Bug fixed in PAQCUT. It now check if the cut exist.
+*
+* 01/03/95  11.21.53
+* Bug fixed in HGETID. The mod made in 2.06/14 was incorrect. The
+* seach of free histo ID was wrong. This bug has been shown in stacked
+* lego plots.
+*
+* 28/02/95  13.34.23
+* The old option E in the call to FZENDO in PAZFZ has been removed.
+*
+* 28/02/95  13.33.43
+* FZENDI and FZENDO are now called with option X in PAWFOP.
+*
+*::>          VERSION  2.06/17   27/02/95 10.01.40
+*
+* HPLONT and IGONT removed from PAWCS
+*
+* 23/02/95  11.00.49
+* HFITHN added in PAWCS
+*
+*::>          VERSION  2.06/16   22/02/95 16.01.29
+*
+* Bug fixed (F.Rademakers) in PFINDF1: The EQUIVALENCE was not
+* correctly manged in the UWFUNC generated functions.
+*
+*::>          VERSION  2.06/15   20/02/95 14.36.12
+*
+* 20/02/95  13.53.35
+* #define __TIME_T 1
+* added in tcpiaf
+*
+* 20/02/95  13.35.49
+* Flag QCDEC added in tcpiaf.
+*
+*::>          VERSION  2.06/14   14/02/95 15.09.35
+*
+* Mods in HGETID: If a histogram didn't exist in the current dir, then
+* the histogram with the same id in the PAWC directory gets erased.
+*
+* 13/02/95  09.47.48
+* #define stat_2 stat added in TCPIAF
+*
+*::>          VERSION  2.06/13   06/02/95 11.05.44
+*
+* Bug fixing in the staging part of PIAF (Timo Hakulinen):
+*
+* Patch CPAW: TCPIAF. File name normalisation for files to be staged.
+* Patch PIAFS: PIAFC PSEXEC PSTAGE: Routine to call special utility
+*              for spreaded files (ls, cp etc ..)
+* Patch STAGERD (All the decks are modified): Cosmetics changes
+*
+* 01/02/95  09.39.55
+* The control on expiration is removed (VERTIM routine).
+*
+*::>          VERSION  2.06/12   31/01/95 14.06.33
+*
+* PNUTIL has been modified to improve the infos given by the command
+* NT/READ (error messages, number of events read etc ...)
+*
+*::>          VERSION  2.06/11   31/01/95 09.47.34
+*
+* New HELP for the command in the menu /GRAPHICS/PRIMITIVES: each
+* command has now an example.
+*
+* The commands SMK, SMPCI etc ... are now obsolete.
+*
+* Mod in PBHIST to take care of the new histogram title format.
+*
+*::>          VERSION  2.06/10   19/01/95 10.39.30
+*
+* Bug fixed in pawsel: the arrays of characters were not managed
+* correctly in the command NT/PLOT.
+*
+* The help(s) of PROX, PROY, BANX etc ... has been completed.
+*
+*::>          VERSION  2.06/09   16/01/95 14.58.16
+*
+* Bug fixed in file.c. The character array lun was dimensionned to 5.
+* But it may have up to 6 characters: LUN20\0  . Now the dimension is 6.
+*
+* Protections added in PAFEYN (commands ARCHELIX and HELIX).
+*
+* Version Number changed in PALOGS
+*
+* HFPANEL and FITPCDES are now selected in *PAW.
+*
+*::>          VERSION  2.06/08   12/01/95 15.56.51
+*
+* New PATCH: SCRIPTS. It contains 3 decks (IBM, UNIX and VAX). Each
+* deck is the script file used to start paw on IBM/VM, UNIX and VAXes
+* machines.
+*
+*::>          VERSION  2.06/07   09/01/95 18.25.49
+*
+* Bug fixed ine PACUTS in order to be able to read one single
+* cut into a cut file.
+*
+*::>          VERSION  2.06/06   16/12/94 16.23.11
+*
+* Mods in CMOTIF (cuts file init style) to support ~/filename
+*
+*::>          VERSION  2.06/05   16/12/94 10.13.51
+*
+* Improvments in the help of SWN and SVP.
+*
+* The fix in $matrix (VERSION 2.06/02) has been removed by the XBAE
+* changes in 2.06/04. It is now fixed again.
+*
+*::>          VERSION  2.06/04   08/12/94 11.44.12
+*
+* Reverts to the previous version of the XBAE widgets for VMS. Maybe one
+* day they will work on VMS too.
+*
+*::>          VERSION  2.06/03   24/11/94 17.11.57
+*
+* Mods in histo for the Scale widget.
+*
+* Development version of PIAF for VMS.
+*
+*::>          VERSION  2.06/02   21/11/94 15.23.54
+*
+* Mods in matrix (XBAE). An input parameter "offset" has been renamed
+* because of a clash with a #define (the problem appears only on
+* VAX/VMS)
+*
+* Modif in $MATRIX: there was an extra "," in an enum statement. This
+* produced an compilation error on Ultrix.
+*
+*::>          VERSION  2.06/01   21/11/94 10.30.25
+*
+* The menu OBSOLETE in now removed. (command GAUSS EXP etc ..)
+*
+*::>          VERSION  2.06/00   09/11/94 17.10.20
+*
+* Bug fixed in PPROJ0 and PPROJN: In expression like:
+*              NT/PLOT 10.func.f 2
+* the weight was not correct.
+*
++DECK,V2_05.
+*CMZ :  2.05/24 08/11/94  18.14.44  by  O.Couet
+*-- Author :    Rene Brun   23/03/94
+*
+*::>          VERSION  2.05/24   08/11/94 18.14.44
+*
+* New version of XBAE patch.
+*
+* PAWFCA and PCINFO are now compatible in the .sl management.
+*
+* PSEXEC useless code removed.
+*
+*::>          VERSION  2.05/23   24/10/94 11.47.50
+*
+* Fix in PAVECT to support LOG scales in V/PLOT X%Y
+*
+* Bug fixed in handling in CWN array subranges (analyse).
+*
+*::>          VERSION  2.05/22   21/10/94 09.37.07
+*
+* Fix in the Paw++ cut editor when inverting (.NOT.) a bracketed expression.
+*
+*::>          VERSION  2.05/21   18/10/94 12.15.31
+*
+* Fix in case column-wise ntuple arrays do not fit in the cache
+*
+* Can now again remove //lun's from chain definitions
+*
+*::>          VERSION  2.05/20   14/10/94 11.29.09
+*
+* Protection in PBHIST for HIGZ classes.
+*
+* Routine PAWFCA and PCINFO: also analyse pre-compiled Comis routines for
+* Ntuple columns.
+*
+* Routine PFINDF and PFINDF1: PFINDF recursively analyses the routines in the
+* calling tree to find all used Ntuple columns. Before only the top-level
+* routine was analyzed.
+*
+* Routine PCPVAR: restore correctly character array columns from column cache.
+*
+*::>          VERSION  2.05/19   28/09/94 08.45.00
+*
+* New version of STAGERD by Timo.
+*
+* Minor changes in PIAFC, PSTAGE and PSEXEC.
+*
+* Routine PAMLOC: print unsigned int only in HEX format when sign bit is set.
+*
+*::>          VERSION  2.05/18   19/09/94 11.11.18
+*
+* VMS fixes in 0PAMAINM and TCPIAF (by Jamie).
+*
+* Bug fix in bugrep for VMS : types.h doesn't exist on VMS, and the
+* ARCH_TYPE has been replaced by HW_TYPE.
+*
+* New option A in NT/SCAN to draw the average spider plot.
+*
+*::>          VERSION  2.05/17   05/09/94 13.38.47
+*
+* Add Bessel functions BESJ0,BESJ1,BESY0,BESY1,BESI0,BESI1,BESK0,BESK1
+*                      EBESI0,EBESI1,EBESK0,EBESK1 in PAWCS
+*
+* Change PAW prompt style in PAWPP.
+*
+* Implement MOTIF interface to BUGREPORT
+* New routine MAILDIALOG added in UIMX. Deck ABOUTDIALOG deleted.
+* New deck MAIL in CMOTIF. Changes in INIT.
+*
+* Bug fix in PAWJOJ (called by command LINTRA) when the number of
+* variables was greater than 16(reported by F.Lamarche).
+*
+* Bug fix in PANTUP with option=s if ID=1000000
+*
+* New routine PAVERS with sequence VIDQQ.
+* PAVERS is called by the new routine BUGREPORT (CPAW).
+*
+* New routine BUGREPORT and corresponding command BUGREPORT in /KUIP.
+*
+* HPLFRA in called in PAFITV. Previously a temporary histo 12345
+* was created.
+*
+* Solaris port of PIAF.
+*
+* New patch STAGERD contains PIAF stager daemon process. To build
+* piafserv include sequences from patch STAGERD.
+*
+* Problem causing crash on DN10K corrected in PAWCS (G.Folger)
+*
+* Comment changed in PCHROP
+*
+* New version of PIAFC.
+*
+* #if !defined(__convexc__) statements added in PARSE,TABLE,GENERATI
+*  (report by V.Balashov)
+*
+* PAFORT: There was a bug that in CALL sub.f('a') the character
+* constant would be converted to uppercase.
+*
+*::>          VERSION  2.05/16   04/08/94 15.00.22
+*
+* Introduce protections and cleanup of buffers in case of CRTL/C.
+* Mods in PPROJN,PALLOC and PAWBRK.
+*
+* Fix bug in PALLOC: CDUM declared CHARACTER type.
+*
+* New option parameter CHOPT in command REBIN.
+* In particular, if the option 'N' is given, the result of new bin is
+* the sum of the cumulated bin instead of teh average (default).
+*
+*::>          VERSION  2.05/15   28/07/94 12.26.03
+*
+* Changes in PASCAN and PASPI2 to support ranges (see HELP SCAN)
+*
+* Mods in PAFITV to support 2-D vectors.
+*
+* Mods in HGETNT: In case of SCAN, do not read (by default) column 1
+*
+* Mods in HGETN2: call HBNAME with $CLEAR also in case of Nt/loop
+*
+* Invalidate cache when deleting chain in PCHAIN and PCHCLO.
+*
+* Add Remote Procedure call for PIAF in PCHROP.
+*
+* Changed Ntuple column caching algorithm. Columns of chains and
+* RWN's are also cached now. New routine PALLOC allocates space
+* via HBALLOC. Filling of cache is now done in PPROJ0 or PPROJN
+* (which know how to loop over chains). The routine PABFIL is
+* deleted.
+*
+* Introduced spider plots. Use option -S to the SCAN command to get
+* spider plots.
+*
+* Mods in PFCUTS and PFPUSH. Do not check CUT syntax on PIAF (has
+* already been done on the PAW client side).
+*
+* Mods in generati, analyse and pawsel to handle graphical cuts
+* on CWN arrays inside a complex selection mechanism.
+*
+* Mods in PASCAN and PASCA1 to allow chains scanning.
+* (LABEL done on PASCAN).
+*
+*::>          VERSION  2.05/14   14/07/94 14.15.12
+*
+* New command Ntuple/Hmerge to merge HBOOK files
+* New routine MERGIN called by command Hmerge.
+*
+* New command Ntuple/Duplicate added. PAWDEF/PAWDEC and PNUTIL modified.
+*
+* Graphical cuts implemented for CWN arrays
+*
+* Add HRENAME and HNTDUP in list of callable routines in PAWCS
+*
+* Protection in PANTUP in case IFIRST> number of events.
+*
+* PIAF ported to SGI
+*
+* Bug fixed in PACUTS. CHCUTY was not initialized in case of graphical
+* cuts on 1D histograms.
+*
+*::>          VERSION  2.05/13   05/07/94 18.32.55
+*
+* T=XCC added in PATCH,FITPCDES.
+*
+* Several lines with more than 80 characters in HFPANEL
+*
+* ATITLE has an additional parameter: ZTIT.
+*
+*::>          VERSION  2.05/12   30/06/94 13.45.46
+*
+* bug corrected in PAWUWF (inversion OR/AND)
+*
+*::>          VERSION  2.05/11   28/06/94 15.24.06
+*
+* bug fixed in TCPIAF (ALPHA/VMS only)
+*
+* Mods in PAWUWF to support the generation of an Include file
+* instead of a Real function.
+*
+* Mods in the CDF to reflect the changes in UWFUNC
+*
+*::>          VERSION  2.05/10   28/06/94 08.22.32
+*
+* VMEM changed from 64MB to 54MB in PAWINT3.
+*
+* Delete .f and .sl files in PIAF when sequential mode.
+*
+* Modify PAHOPE to support HRESET for ntuples.
+*
+* The functions $CALL, $ICALL, and $DCALL allow to call REAL, INTEGER, and
+* DOUBLE PRECISION functions, respectively.  The function call must be
+* enclosed in quotes, for example:
+*      $CALL('fun.f(1.5)')
+*
+* Modify PMNCOMD to support new option 'K' in Histo/Fit
+*
+* Several bugs fixed in patch,HFPANEL when porting to ALPHA/OSF
+*
+* Routine PASCAN modified. If LOUT is not stdout, no prompt generated
+* like in Batch mode.
+*
+*::>          VERSION  2.05/09   21/06/94 19.08.00
+*
+* Routine PSEXEC: reset sockets to client/master (after interrupt they
+* could still be set for master/slave communication).
+*
+* Routine PAWROP: always send option -X to piaf to force file opening
+* in exchange mode (solves problem on Alpha/OSF port of piaf).
+*
+* Add new HBOOK routine HBAR2 to PAWCS
+*
+* New options 'FB' and 'BB' in HISTO/PLOT to remove the Front and
+* Back Boxes on surface and lego plots.
+*
+* In HISTO/PLOT the option 'A' (to avoid the axis drawing) works
+* also on 2D histograms representations.
+*
+* Remove PRINT 'A FAIRE' in PASCAN
+*
+* New PATCHES HFPANEL and FITPCDES
+* This introduces the new MINUIT fit panel (invoked with option M)
+* These two new patches require a new version of HBOOK as well.
+*
+* Fix bug in PAWSEL in case of REAL*8
+*
+* Add loadstats for IBMRT/PIAF
+*
+* Fix bug in PASCAN for REAL*8 columns
+*
+* Deck PIAFC: print average load statistics in the PIAF/STATUS command.
+*
+*::>          VERSION  2.05/08   10/06/94 17.32.07
+*
+* Decks PIAFS, PIAFC: if file /usr/piaf/etc/nopiaf exists return its
+* contents to the client and close the piaf connection. Using this file
+* it is easy to tell users why they can not use PIAF.
+*
+* Routine RLOGIN: close gracefully after the nopiaf message. Previous
+* versions of PAW will work but give the user the impression that the
+* connection is still open.
+*
+* Routine PSEXEC: forces the master server to pass via PSLVIO to collect
+* statistics in case of an error exit.
+*
+* Routines PFCUTS, PSPAW: fix RPC problem concerning graphical cuts.
+*
+* Routine PCNEXT: fix for memory resident Ntuples.
+*
+* New optional parameter WKID in the commands LOCATE, VLOCATE and
+* CUTS to allows request locator in any window. This implies to add
+* one input parameter in the routine PAWLOC.
+*
+*::>          VERSION  2.05/07   08/06/94 11.34.49
+*
+* Change in MHLATTR (call HCDIR instead of HPATH)
+*
+* In HGETID, ICX2 and ICY2 were limited to 99999. Now the initial
+* value is the number of bins in the histo.
+*
+* Routine MHLATTR: uses new routine HNTVDEF to display extended column info.
+*
+* Decks NTUPLE and SCAN: small fixes to handle extended info.
+*
+* Deck PIAFC: protect against unknown remote login name.
+*
+* The vectors adresses in the command GRAPH (PAGPRI) are stored in
+* ZEBRA reference links (LQ(LCDIR-40) and LQ(LCDIR-41)).
+*
+* The default editor for VAX/VMS (PAWPP) is edit/tpu/disp=decw.
+* (suggestion made by Michael Dahlinger)
+*
+* Bug corrected in PAFITV (inversion of NDIM and NVAR)
+* (thanks to Stefan Kluth)
+*
+* Change PAWSYS to PAWSYS1 (VM only) in PAWINT4
+*
+* Protection in PAWSEL (missing test for dividing by 0 in arrays)
+* bug fix in PAWSEL (case Nt/plot 1.v v1.ne.v2)
+*
+* New options added in Profile histograms (see HBOOK/HBPROF routine)
+*
+* Changes in PIAFS from ALPHA/OSF in decks PIAFC, PIAFRONT and PSLVIO
+*
+* Change CDF for commands IDOPT (description of PROE) and SMOOTH
+*
+*::>          VERSION  2.05/06   30/05/94 18.50.57
+*
+* Bug fix in PANTUP when option='s' and arrays
+*
+* bug fix in PAWSEL (case Nt/plot 1.v v.ne.0)
+*
+*::>          VERSION  2.05/05   30/05/94 14.08.00
+*
+* Routine PBHLUN modified to support RLOGIN files in the browser
+* This also requires new version of HBOOK (routine HLNEXT modified)
+* and a new version of PAWSERV in CSPACK (many new routines)
+*
+* Added new HBOOK routine HRENAME to PAWCS
+*
+*::>          VERSION  2.05/04   25/05/94 09.18.19
+*
+* $GRAFINFO('TXFP') corrected for negative values.
+*
+* Allow use of "MACRO/DEFAULT -AutoReverse" without running LAST.KUMAC
+* at startup-time.
+*
+* Fix some memory leaks in parser for selection functions.
+*
+* Protections in PAWROP (for PIAF, options U and N)
+*
+* Minor changes in CMOTIF/CUTS and in PIAFs/PIAFC and PSEXEC
+*
+* Bug fixed in PADVAR. A character string comparison was done with
+*    invalid indeces with a ntuple variable equal to ' '.
+*
+*::>          VERSION  2.05/03   19/05/94 11.59.49
+*
+* Add protections (iquest(1) in HGETNT and MHLATTR
+*
+* Add GAMMA function to PAWCS
+*
+* Protection in PAPICT
+*
+*::>          VERSION  2.05/02   07/04/94 08.53.28
+*
+* Change in PPROJ0 (PIAF slave case)
+*
+* New options in CMOTIF/NTUPLE
+*
+* Bug fixed in CMOTIF/STYLE (Option TIC)
+*
+* Add ISFACI and IGHTOR to PAWCS
+*
+* Change declaration for htons in TCPIAF (problem with UCX version only)
+*
+* Fix in PPROJ0 and PPROJN. In the sequence NT/PLOT 10.x 2
+* the weight '2' was ignored.
+*
+* Fix in analyse (CPAW). In a sequence like
+* NT/PLOT 10.x XXX(1).AND.X>2.AND.X<3   all the selection after
+* 'X>2' were ignored.
+*
+* Fix in PEXMSK. The sequence Nt/plot 10.x was wrong following the
+* creation of a mask with a name XXX
+*
+* mods in CDF/PAMCDF: One can remove PIAF files via the browser
+*
+* Use VERSQQ in ABOUT
+*
+*::>          VERSION  2.05/01   28/03/94 08.42.11
+*
+* Temporary fix in PCINFO for filecase of COMIS files
+*
+* Mods in PIAFC for non-HPUX machines
+*
+*::>          VERSION  2.05/00   23/03/94 10.58.43
+*
+* Popup dialogs from the Style Panel became unreachable when the style
+* panel was closed before closing the popup dialogs.
+*
+* The columns to be scanned can now be selected via a column selection
+* dialog which will popup when selecting the "Scan..." button in the
+* Ntuple Viewer.
+*
+* Bug corrected in GENERATI: Character TITLE not initialized (VAX/VMS only)
+*
+* Bug corrected in PAMASK (VAX/VMS only). Mask was written even in readonly mode
+*
+* C I/O option disabled on DECS
+*
+* Mods in PAFITV to support 2-D vectors
+*
++DECK,V2_04.
+*CMZ :  2.04/15 14/03/94  12.47.29  by  Rene Brun
+*-- Author :    Rene Brun   28/10/93
+*
+*::>          VERSION  2.04/15   14/03/94 12.47.29
+*
+* Change $PAWSIZ for VAX to BIG
+*
+* Change format in PASCA1
+*
+* Plot commands typed in kxterm now also cause the histo style panel
+* to be set accordingly. Change in $PCADDR and new $PCHIST. Decks
+* PAHIST, PANTUP, PAWFCI, PAWINT2, PMINIT, HISTO changed, new deck PMHIST.
+*
+* Cut editor now also accepts weights (select 'W' from operator menu).
+* Decks CUTEXPR, CUTS, $CUTEXPR changed.
+*
+* Major re-naming and re-ordering of PATCHES and DECKS. In view of CMZ's
+* new include file generating capabilities. CMDES became HMOTIF. HPAW
+* is now of type XCC (was DATA) and contains now also the $CHAIN sequences.
+* All KEEP names were stripped of their _H (this would generate include
+* files with names like analyse_h.h which is not nice). PILOT patches
+* updated accordingly. Still PATCHY compatible.
+*
+* Fixes in layout of HistoStyle panel.
+*
+* New options in Ntuple viewer (profile, boxes and extended info)
+* and introduction of a column selector for the scan command.
+*
+* Unix systems now use C I/O. Changes in PAWROP and PAZRZ.
+*
+* Changed the names of ANUMCH and ALPHCH to PNUMCH and PLPHCH (names were
+* also used in COMIS).
+*
+* In PANTUP: for 2D plot 'D' option also produces scatter plot.
+*
+* Fix in PPROJ0 in case less events than slaves (PIAF).
+*
+* Bug fixed in HGETN2: for CWN ntuples, NTVARM and TTVARM was
+* reset together MLOWNT and MUPNT. So the colors was not visible
+* in expression like NT/PLOT 10.x%y%z%t.
+*
+* In PANT3D the histogram title is drawn.
+*
+*::>          VERSION  2.04/14   03/03/94 15.56.52
+*
+* Modify comment lines in PAWSEL.
+*
+* Delete TYPEDEF statement in TCPIAF for VAX/VMS
+*
+* Additions to PIAF LOG file.
+*
+* ZEBRA routines added to PAWCS.
+*     MZSTOR,MZDIV,MZLINK,MZWORK,MZBOOK,MZDROP,MZPUSH
+*     MZWIPE,MZGARB,MZFORM,LZFIND,LZFID,DZSHOW,DZVERI
+* HBOOK routine HDIFFB added to PAWCS
+*
+*::>          VERSION  2.04/13   28/02/94 18.50.06
+*
+* Changes in CDF to reflect the new options in fitting routines.
+*
+* Changes in RLOGIN and TCPIAF to handle the PIAFRC new behaviour.
+*
+* Mods in PAFITV to introduce new option 'Z' of HFITV
+* New routine PAWFITZ
+*
+* Routine SIGINI from SIGMA renamed to SIGINI1
+* Routine HBINIT from HBOOK renamed to HBINIT1
+*
+* New HBOOK routine HKIND callable from PAWCS
+*
+* Mods in PAWFCA to allow VMS filenames satrting with SYMBOL:FILE
+*
+* Added an extensive logging facility for PIAF. The logging system uses
+* the BSD syslog facilty to spool the log info to a single file in the
+* cluster. The syslogd needs to be configured to relay messages to the
+* logging facilities LOCAL6 (piafserv) and LOCAL7 (piafslave).
+*
+* New deck PIAFL in patch PIAFS with the logging routines.
+* New deck $PIAF contains C include.
+* New deck PNTLOG to collect the single command statistics.
+* Other decks changed: PIAFC, PIAFS, PSEXEC, PSKUIP, PSLOG, PSLOOP,
+* PABFIL, PANTUP, PPROJ0, PPROJN.
+*
+*::>          VERSION  2.04/12   17/02/94 16.39.33
+*
+* Dummy routines for TGV (VAX and ALPHA only) in 0PAMAIN/0PAMAINM
+*
+* Mods in PAWCS to call the "HFILL fast replacement" via CSHEXT.
+*
+* The file .piafrc is not created automatically anymore. Changes in
+* TCPIAF and PIAFRONT. Depending on the protocol level flag IPROTO
+* PIAFRONT and PIAFSERV know how to treat the passwd information.
+*
+* Added inactivety timeout of 10 hours in PIAF.
+*
+* Changed name of piaf_*.log files to incorporate the slave sequence number.
+*
+*  New option '0' added in commands ERRORS and AERRORS.
+*
+*  Changes in $PAWFIL4, PAWINT1 and PAWINT4 for MSDOS, WINNT.
+*
+* The command LOCATE has been modified. One can now invoke a user
+*  COMIS routine when in locator mode. When a mouse button is pressed,
+*  the user routine is called and the user has access to the current mouse
+*  coordinates. See HELP LOCATE.
+*
+* HBUG called with only 2 arguments in PECRIT.
+*
+* Implemented .f77 (using the Fortran compiler) for PIAF.
+* Routines changed: PAWFCA, PCINFO, PFCSEX, PSEXEC, and a few others.
+*
+* Routine PSLAVE sends PID of master server to slaves. Slaves use this
+* PID when loading the .sl (see previous item).
+*
+* When doing NT/LOOP 10 zz.f don't load by default column 1.
+* Routines changed: HGETNT and PANTUP.
+*
+* Routine PSMPUT: increased multicast time out to 60 seconds and don't
+* trigger on slaves that already replied.
+*
+* WINNT flag introduced in pilot patch.
+*
+* Moved the call HBFREE (to free the Ntuple columns from cache) from
+* PACLOS to HREND.
+*
+* Mods in PFINDV and PFINDF for the new COMIS interface (f77) and CSLISTX.
+*
+* Changes in TCPIAF for ALPHA/VMS and TGV version
+*
+* Several changes in PIAFS to support Disk Pool Manager in all the /PIAF
+* commands.
+*
+* SIGINT renamed to SIGINI in PAWINT3 (clash with ISAJET)
+*
+* $GRAFINFO('?TXFP') and '?TXAL' corrected to return value compatible
+* with IGSET.
+*
+* New $GRAFINFO('TXFONT'), TXPREC, TXALIH, and TXALIV to return text
+* font, precision, and horizontal and vertical alignment as separate
+* values.
+*
+* New function $RGBINFO(icol,'R'|'B'|'G') to return values from color
+* tables.
+*
+* New function $HCDIR() to return current Hbook directory.
+*
+*    Replace logic to analyze CWN variables in COMIS routines by the
+*    built-in logic in COMIS routine CSLISTX.
+*
+*    Mods in PHINFO
+*
+*    Mods in PAWDEF (GRAFINFO/RGBINFO)
+*
+*    Bug corrected in ANALYSE (recursive cut definition problem)
+*
+*    Add option ".W' in CSCOM/PAWCS to prepare for CSLISTX
+*
+*::>          VERSION  2.04/11   17/01/94 17.50.39
+*
+*    Add /HCBONT/ and /HCBONTC/ in list of PAWCS commons.
+*    Add new HPLOT routine HPLONT in PAWCS
+*    Add new HIGZ routine IGONT in PAWCS
+*
+*    Disable option L (CFOPEN) in PAWFOP for IBM.
+*
+*    Increase size of COMIS stack from 20000 to 30000 words
+*
+*    Reset LFIX=0 in HSETCD
+*
+*    New command DLINE X1 X2 Y1 Y2. It draws a line taking care of
+*       log scales. Also the syntax is conform to BOX, ARROW etc ...
+*
+*::>          VERSION  2.04/10   09/01/94 14.49.17
+*
+*    Changes in PPROJN, PANTUP and PIAFS to use new HIGZ/HPLOT 3-D
+*
+*::>          VERSION  2.04/09   22/12/93 09.37.01
+*
+*    Mods in PIAFS to support the new accounting scheme
+*
+*::>          VERSION  2.04/08   08/12/93 13.55.48
+*
+*    Global sections and shared memory are now visible with the browser.
+*
+*    Introduce +SELF,IF=CZ in PANTUP.
+*
+*    Introduce new option '?' in PAWINT2.
+*
+*    Update list of dummies in 0PAMAIN and 0PAMAINM if NO CZ option.
+*
+*    Problem with +SELF,IF=CZ fixed in routine PBPLUN.
+*
+*::>          VERSION  2.04/07   29/11/93 17.15.20
+*
+*    Changes in /CMOTIF/INIT to make PAW++ and GEANT++ happy
+*
+*    Implement code to send /HCOPT/ from HBOOK to the PIAF server.
+*
+*    Protect HFIXID for cases like Hi/plot id.prox where ID is 1-D
+*
+*::>          VERSION  2.04/06   29/11/93 08.13.22
+*
+*    Add GAUSS and DGAUSS in PAWCS
+*
+*    Move SET PROMPT before calling PAWINT4 in PAW and PAWPP.
+*
+*::>          VERSION  2.04/05   26/11/93 16.21.24
+*
+*    Restructure of 0PAMAIN,PAW,PAWPP,PAWINT2.
+*    With this new structure it is now possible to pass the workstation
+*     type to PAW without being prompted.
+*     ex:  PAW           default: you get the prompt Give workstation type
+*          PAW  -w       no prompt. Use default workstation type
+*          PAW  -w 3     no prompt. Use workstation type 3.
+*
+*    Sequences PCARGS and PCMODE modified.
+*    The sequence PCARGS contains a character*80 variable CHARGS
+*      which is the string passed to the invoquation of the PAW program.
+*
+*::>          VERSION  2.04/04   25/11/93 15.45.35
+*
+*    Bug fixed in HGETN2 (CHARACTER*8 BLOCK) missing.
+*
+*    Mods in PAWROP to open PIAF connection automatically.
+*
+*    Mods in PAMER2 to take advantage of the new HBOOK routine HRZKEY
+*
+*    Undo the mods in HGETN2 to avoid problem with Ntuple/plot id.1
+*
+*    changes in PIAFC for SIGHUP received by master and slave.
+*
+*::>          VERSION  2.04/03   22/11/93 15.59.44
+*
+*    Restructure initialisation routines PAW,PAWPP,PAWINTx
+*
+*    Mods in PASCAN,PASCA1 for the MOTIF version
+*
+*    Increase dimensions in $PAWCFU.
+*
+*    Overflow problem (1.E10) corrected in GENERATI
+*
+*::>          VERSION  2.04/02   17/11/93 14.50.53
+*
+*    Introduce HBOOK routine HRENID in PAWCS:
+*    To rename an HBOOK ID (histogram or ntuple), do:
+*        Histo/file lun fname ! U
+*        call hrenid(idold,idnew)
+*
+*    Several changes in the patch,PIAFS.
+*
+*    New version of CFCU.
+*
+*::>          VERSION  2.04/01   16/11/93 08.50.20
+*
+*    Minor change in PAGPRI (loop index changed from 6 to 7)
+*
+*    NT/PLOT with four variables display also the color scale used.
+*
+*    New option "X" in PACUTS in order to define graphical cuts using
+*       a tracking cross cursor.
+*
+*    Changes in PAWINT3 to print version/date automatically.
+*
+*    Changes in PALOG to compute warning dates automatically.
+*
+*    Modifications in PANTUP to allow more than 3 expressions in NT/LOOP
+*
+*    Many changes PASCAN,PASCA1. Routine PASCA2 deleted.
+*       New PASCAN is able to process new ntuples with PX(Ntrack).
+*
+*    Changes in CFCU and PAWFCU: Calling PAWFCU with a simple NTUPLE column
+*         name returns the column number of the variable instead of a pointer
+*         in the ICODE stack.
+*
+*    Sequences $PAWCFU $PCSCAN modified.
+*
+*    WARNING!!!!!  Important restructuting of the Main programs
+*                  and Initialisation routines.
+*          0PAMAIN and 0PAMAINM call new routines PAW and PAWPP.
+*          PAWINT replaced by PAWINT1,PAWINT2,PAWINT3 and PAWINT4.
+*       The new structure  has been introduced to facilitate the calls
+*          to PAW and PAWPP from user's programs, eg GEANT.
+*
+*    Changes in LEX/SCANNER and CPAW/LEX_YY to:
+*       correct syntax for COMIS files on VMS
+*          DISK$SCRATCH:user is allowed as a filename
+*       same thing for MASKs.
+*
+*    Correction in CTOF77 macro in HPAW for VMS.
+*
+*::>          VERSION  2.04/00   28/10/93 12.13.49
+*
+*    $pawcfu extend CFUINFO to 6 to store 2 pawevt and pawsel
+*          descriptor at the same time
+*
+*    pawfcu pproj0 and pprojn look now for cfuinfo(5) and cfuinfo(6)
+*          instead of ISEL and ISEVT
+*
+*    MasterGeneration now generates two stack if ISEL = 1
+*
+*    analyse_isel => case 1 OK ( mask and expr )
+*
+*    analyse add a missing CopyTree
+*
+*    parser add a missing CopyTree
+*
+*    pcinfo correct the length of comis function's name
+*
+*    Change in PALUNF. Output parameter redefined if LUN=0
+*
+*    Variable PI now known from the parser.
+*
+*    Documentation for parser updated.
+*
+*    clean-up of unused variables and common blocks
+*
+*    Function PNTVAL changed to Subroutine.
+*
+*    Unused parameters CTITL and CAX removed from PANT3D.
+*
+*    Clean-up routine CUBE and DRAWCU
++DECK,V2_03.
+*CMZ :  2.03/22 22/10/93  09.43.08  by  Rene Brun
+*-- Author :    Rene Brun   21/06/93
+*
+*::>          VERSION  2.03/22   22/10/93 09.43.08
+*
+*    Bug in parser corrected for IBM only (problem with pipe character |)
+*
+*::>          VERSION  2.03/21   21/10/93 15.22.20
+*
+*    PIAF starts in PARalell mode by default
+*
+*    Protections in PRINT statements (not to exceed 128 characters on VMS)
+*
+*    Changes in PACUTS to allow for Log scales
+*
+*::>          VERSION  2.03/20   19/10/93 15.35.29
+*
+*
+*    Mods in PAWLOC for LOG scale axis
+*
+*    Mods in PALOGS for PIAF (switch between SEQ and PAR mode)
+*
+*    Several minor bugs in selection algorithms
+*
+*    change colour defaults in cmotif/init
+*
+*::>          VERSION  2.03/19   18/10/93 18.15.34
+*
+*    Handling of the PIAF/STAGE command implemented on client side.
+*
+*    New PIAF commands message mkdir and rmdir
+*
+*    Fix in PPROJN for variable length arrays(2-D graphics case).
+*
+*    Dummy code removed from PAWSEL
+*
+*    Bug corrected in PAHOPE (wrong setting of JOFSET).
+*
+*    Handling of x**y modified (case when y is integer).
+*
+*::>          VERSION  2.03/18   15/10/93 16.54.01
+*
+*    Fix in PPROJN for variable length arrays.
+*
+*    Graphical cuts are correctly transmitted to Piaf.
+*
+*    Removed some dead code from HGET2.
+*
+*    In PACUTS, reset CUTS arrays before redefining a cut.
+*
+*::>          VERSION  2.03/17   13/10/93 17.41.06
+*
+*    Changes in PAWSEL to support chains
+*
+*    Mods in PAHIST and PAPLOT in order to be able to draw LEGO
+*       and SURFACES with more than 1000 channels
+*
+*    Mod in the command GRAPH: the limits of the frame were not
+*       computed correctly in case of constant negative functions.
+*
+*::>          VERSION  2.03/16   08/10/93 18.07.34
+*
+*    Corrections in Yacc/Lex parsers for the priority to evaluate
+*    operations.
+*
+*    .and..not. is now OK.
+*
+*    Note important restriction on VM. COMIS files must be .fxxx
+*
+*    Changes in ntuple expression selection mechanism:
+*        a<1e4 not recognised,   a<1.e4 was OK
+*
+*    Comment calls to the new HMCSTAT package in PAWCS because of
+*    space problems on VM.
+*
+*    Limitation to 999 bins in PAHIST and PAPLOT removed.
+*
+*    New Piafserver protocol (931013). Added graphical cut RPC.
+*
+*    Routine PACUTS: fixed bug when saving and printing 1D graphical
+*    cuts.
+*    Introduced some Convex specific changes from Balashov.
+*
+*    The command FOR/CLOSE now supports LUN=0 to close all open units.
+*
+*    The above change is used in the PSTATE routine used in the Piaf
+*    Master server to send the state information to the slave servers.
+*
+*    Bug fixed in PCHNCD: did not return to correct sub-directory.
+*
+*    Bug fixed in PPROJN: incorrect histogram filling when only event
+*    numbers were stored in the dynamic memory buffer.
+*
+*    Bug fixed in PECRIT: mistake in the LICODE scanning.
+*
+*::>          VERSION  2.03/15   30/09/93 18.14.08
+*
+*    Underscore allowed in ntuple variable names.
+*
+*    New logic in ntuple selections and expressions to support
+*    variable length arrays.
+*
+*    Maximum cut expression-length increased to 128 characters
+*
+*::>          VERSION  2.03/14   29/09/93 13.36.56
+*
+*    Code removed in PAHIST and PAPLOT for Date, Stats etc.. drawing.
+*
+*    Add routines HMCINI and HMCMLL to the list of PAWCS.
+*    These two routines are part of the new package HMCSTAT in HBOOK
+*      developped by C.Beeston, R.Barlow from OPAL.
+*
+*     Mods in PPROJN to draw NT/PLOT id.x%y%z%t
+*
+*::>          VERSION  2.03/13   27/09/93 11.50.35
+*
+*     The HPLOT sequences HPL2, HPL9 and HPL12 are now suppressed.
+*        This implies mods in PAGRAF, PAGHPL and PAHIST.
+*
+*::>          VERSION  2.03/12   17/09/93 16.44.09
+*
+*
+*     Mods in CMOTIF/CUTS to allow COMIS functions in Ntuple_viewer cuts
+*
+*     Bug corrected in CPAW/GENERATI for graphical cuts and ANDs in cuts.
+*
+*::>          VERSION  2.03/11   16/09/93 19.10.35
+*
+*     Sequence $PCFUNC modified.
+*
+*     Dummy routine CZTCP added in 0PAMAINM.
+*
+*     HPUX option in LEX_YY and FLEX_SKEL
+*
+*     Mods in PAWCS: Add HXI in list of COMIS callable routines
+*
+*::>          VERSION  2.03/10   15/09/93 14.29.40
+*
+*     Corrections in PPROJ0 to compute the VIDNs in Nt/Loop
+*
+*     Changes in PAFUNC,PANDRA,PANT3D
+*
+*::>          VERSION  2.03/09   13/09/93 16.43.34
+*
+*     Problem with Character alignement fixed in PAWFCU.
+*     Unitialized variable found in PPROJN
+*     New version of PAWFCU.
+*
+*::>          VERSION  2.03/08   07/09/93 12.05.29
+*
+*     Modules deleted: PAWEVT,PAWDFF,PAWFCL,PAWFCM,PAWSLO,PAWTRN
+*                      PAWTYT,PAWTES,PAWTAL.
+*
+*     Mods in PANTUP (upper/lower case in calls to PIAF routines)
+*
+*     Changes to compile on RS6000.
+*
+*::>          VERSION  2.03/07   06/09/93 12.42.13
+*
+*     PATCH,PAWDEC removed.
+*     Deck PAWDEC moved to patch,CPAW.
+*     Deck PAMDEC moved to CMOTIF
+*
+*     New patches YACC, LEX and HPAW.
+*     Replacement of the old PAWFCU by the new set of routines PAWFCU,etc
+*     generated by YACC and LEX.
+*     Many changes in PPROJ0, PPROJN, PASCAN,etc to reflect the changes
+*     due to the new PAWFCU.
+*     Note that during the implementation phase, the include files in HPAW
+*     must be generated before processing CPAW.
+*
+*     The new PAWFCU includes many new facilities, in particular a better
+*     syntax checking, the logic for arrays in ntuples.
+*
+*             *** Parallel Piaf server code introduced ***
+*
+*     Many changes and new routines in the PIAFS patch and a number
+*     of new PF.... routines in the PAW patch.
+*
+*     Changes in PADRFA, PANDRA and PPROJN to call the new routine IHISO.
+*
+*     Bug fixed in HISTO (PATCH CMOTIF). The option used to draw ntuples with
+*     Gouraud shading was not correct.
+*
+*     MINUIT routine MNERRS callable from PAWCS
+*
+*::>          VERSION  2.03/06   05/08/93 12.39.53
+*
+*     New routines DENLAN,DSTLAN,DIFLAN,XM1LAN,XM2LAN,RANLAN in PAWCS.
+*
+*::>          VERSION  2.03/05   03/08/93 15.39.17
+*
+*
+*     New routine PMNCOMD called by HMINUT to read MINUIT data cards
+*        Minuit command MNC is intercepted if it has 3 arguments
+*          In this case a graphical contour is drawn
+*          and the points in the contour are saved in vectors XFIT,YFIT
+*        Normal PAW commands can be executed from MINUIT if they
+*        are prefixed with a +
+*
+*     Mods in the MOTIF interface to implement browser for PIAF files.
+*
+*     Bug fix in PPROJ0 when XLOW(I)=XUP(I)
+*
+*     Mods in PAHIO to call new routine HRESETM for shared memory
+*
+*     Add routines HGNTB and RZQUOT in PAWCS.
+*
+*     Routine HBUG activated for APOLLO
+*
+*::>          VERSION  2.03/04   23/07/93 10.47.00
+*
+*     Increased dynamic Ntuple buffer size in piafserv to 64MB (was 10MB).
+*
+*     Command NT/CSELECT propagates setting to piafserv.
+*     Routine PACSEL makes RPC back to client.
+*
+*     Command NT/VMEM returns also memory statistics for piafserv.
+*     Routine PVMEM: part of code moved to HBPRNT in HBOOK.
+*
+*     Message of the day (motd) is now echoed immidiately after connecting
+*     to piafserv.
+*
+*     The commands H/ERR and H/AERR have now a CHOPT parameter (see HELP).
+*
+*     New options to draw the errors in the command HISTO/PLOT (see HELP).
+*
+*::>          VERSION  2.03/03   08/07/93 10.33.46
+*
+*      Bug fix in PAWTYT for LOGICAL variables
+*
+*::>          VERSION  2.03/02   930705 16.25
+*
+*      The HPLOT routine HPLFRA is now callable in a COMIS program
+*      (see PAWCS).
+*
+*      New Command:
+*      * GRAPHICS/HPLOT/AERRORS X Y EXL EXU EYL EYU N [ ISYMB SSIZE ]
+*      to draw asymetric error bars.
+*
+*      The "IAUTO" mechanism is now suppressed from PANTUP in order to
+*      have the same plot with:
+*         NT/PLOT 30.x    and    NT/PLOT 30.1
+*      The variable IAUTO is suppressed from the sequence PAWNTU.
+*
+*::>          VERSION  2.03/01   28/06/93 11.49.39
+*
+*      Sequence PAWCFU modified
+*
+*      Correction in PPROJ0 for log scale Y axis
+*
+*      New version of the PIAFS patch.
+*      command PIAF/CLOSE renamed to PIAF/DISCONNECT
+*
+*      Bug fixed in PFINDV for VAGE(I)=AGE problem
+*
+*      New version of TCPIAF
+*
+*      New command HMINUIT (for Application HMINUIT)
+*      Interactive MINUIT commands can be given in a APPLICATION HMINUIT
+*      before invoking one the fit commands
+*
+*      PAWFCU now handles correctly character substrings in a selection.
+*
+*::>          VERSION  2.03/00   21/06/93 18.25.27
+*
+*      UWFUNC now also adds the chain COMMONs to selection functions for
+*      the RWNs.
+*
+*      Fix for "NT/CHAIN chn -P path" command for VMS
+*
+*      Added X (exchange mode option) to CHOPT for HI/FILE commands
+*      (necessary for automatic record length detection) issued via the
+*      Motif interface and via the chain mechanism
+*
+*      Fixed bug in Ntuple scanner (matrix was not saved in context struct)
+*
+*      Some code cleanup: Remove commons that are not referenced.
+*
++DECK,V2_02.
+*CMZ :  2.02/07 08/06/93  12.16.22  by  Rene Brun
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  2.02/07   08/06/93 12.16.22
+*
+*      Add LRECL to PAWROP/PIAF message
+*
+*      Mods in TCPIAF for VMS and Apollos
+*
+*      Add initialisation of COMMON/CZCBUF/IZCBUF in PAWINT
+*
+*::>          VERSION  2.02/06   07/06/93 15.14.04
+*
+*      Changes in Histostyle (overlapping buttons for Alpha/OSF)
+*
+*      Count I/O for commands PUT/GET in PZOPEN/TCPIAF
+*
+*      Cleanup of some C code (inconsistencies found by Alpha OSF compiler).
+*
+*::>          VERSION  2.02/05   04/06/93 14.30.04
+*
+*      New commands PUT/GET in menu PIAF and associated routines
+*
+*      Changes in PFINDV (in cases of TABs)
+*
+*      PADVAR now adds automatically index variables referenced by other
+*      variables to the list of variables to be read.
+*
+*      Remove call to HSETC2 in PNUTIL/RECOVER
+*
+*      Routine PSEXEC of the Piafserver now understands HGETNT and
+*      HLNEXT RPC's (used by Hbook/Object browser).
+*
+*      Routine HGETNT now makes an RPC to get the number of entries in
+*      a chain. Before it was reading over the network the headers of
+*      all Ntuples in the chain.
+*
+*      Variable CERN removed from sequence PCARGS
+*      Variable NTOLD initialized in PAWINT
+*
+*      Changes in PAWFCU/PAWILD/PAWSEL
+*
+*::>          VERSION  2.02/04   28/05/93 17.07.38
+*
+*
+*      Change in PANTUP and PBIN when plotting ntuples with INTEGERS
+*      in a column.
+*
+*      Routine IGERR modified for the case CHROUT=' '
+*
+*      Bug fixed in PASCA1 in case a mask is used in the selection.
+*
+*      Nt/scan can be used for chains
+*
+*::>          VERSION  2.02/03   27/05/93 15.20.53
+*
+*      Default number of events to be processed by the Ntuple commands
+*      has been changed from 999999 to 99999999.
+*
+*      Changes in HGETNT for chains (compute total number of events)
+*      Changes in PANTUP,PCNEXT,PPROJ0 and PPROJN for chains.
+*
+*      Remove compiler warning from CPAW/CHAIN
+*
+*      LINUX version introduced (V.Balashov, A.Lomov)
+*
+*::>          VERSION  2.02/02   26/05/93 15.44.39
+*
+*
+*      Sequence PAWBIG extended from 1000000 to 2000000 words
+*
+*      Changes in PAWCS (Logical units) for NEWLIB version
+*
+*      Several changes for the CHAIN mechanism.
+*
+*      Many changes for the PIAF server.
+*      First PIAF client-server implementation
+*      New PATCH, HBPIAF. This contains HBOOK routines modified for
+*      the PIAF server.
+*
+*      New command NTUPLE/RECOVER to recover ntuple files with missing headers
+*
+*      Mods in PAWROP. An already open file in U mode cannot be attached
+*      if another process is also attaching the file in U mode. RZEND now
+*      called to delete the ZEBRA structure.
+*
+*      Changes in PCHNCD
+*
+*      New HIGZ routine IGTCCH called in PACSEL
+*
+*      Many changes in MOTIF version to support new coordinate systems
+*      (Polar, cylindrical,spherical,pseudo-rapidity)
+*
+*::>          VERSION  2.02/01   11/05/93 15.30.32
+*
+*      Routines PAWINTM and PAWINT merged into PAWINT. This implies changes
+*      in 0PAMAIN and 0PAMAINM.
+*
+*      Changes calls to CSRPAW and CSRJCL to new COMIS routines
+*        CSR1FN,CSR2FN and CSR3FN.
+*
+*      Sequences CZSOCK and CZBUFF transfered to HBOOK.
+*      Implemented RPC for HRDIR.
+*      Fortran/Close closes now also correctly file connected to piafserv.
+*      Routine PSRZIN does not look in PAWC anymore (see comments in routine).
+*
+*      Bug fixed in PFINDV (IBM case) KLINE not cleared
+*
+*      Bug fixed in PBIN for integers
+*
+*      New sequence PACOMIS introduced. Space for COMIS increased from 10000
+*      to 20000 words. PACOMIS referenced in PAWINT/PAWINTM
+*
+*      New menu PIAF introduced. See corresponding HELP.
+*
+*      Routines HGETID and HGETIR modified for the implementation of
+*      the new sub-range facility.
+*      Histogram subranges can be specified in 2 different ways:
+*        1- h/pl id(ic1:ic2) with ic1 and ic2 integers means plot
+*                            from channel ic1 to channel ic2
+*        2- h/pl id(x1:x2) with x1 and x2 reals (with a .) means plot
+*                            from channel corresponding to x1
+*        Note that the mix mode h/pl id(x1:ic2) is also accepted
+*        This subrange works also for 2-DIM cases.
+*
+*      Interface to new version of COMIS introduced.
+*      Many bugs (COMIS) corrected (the complete list from W.Mueller)
+*      KUIP vectors can be used in COMIS main programs.
+*      Garbage collections do not destroy the KUIP vectors in COMIS routines.
+*
+*      In Histo/fit and Vector/Fit commands, one can now reference
+*      an already compiled COMIS routine. The previous version accepted
+*      only COMIS files.
+*
+*      Sequences HPL3 and HIMETA suppressed.
+*      New option -P for CHAIN command.
+*      Work dialog for NTUPLE commands looping over chains (PAW++ only)
+*
+*::>          VERSION  2.02/00   930429  8.26
+*
+*      Chain logic implemented. See HELP Ntuple/Chain.
+*
+*      Many changes due to the introduction of the PIAF server
+*
+*      bug fixed in PAWFCA. Local variable I1 changed to J1 to avoid
+*      a possible overwrite of I1 in /HCBITS/
+*
+*      bug fixed in PAWFCU. Element 29 of array LNEXT set to 1.
+*      This solves the problem :N/PLOT xxxx.XMNEN(VAR1,VAR2)
+*
+*      Changes to Graphical cuts.
+*      Graphical cuts on tranformations of the original variables
+*      are accepted. This new facility requires a new version of SIGMA.
+*
+*      In PAWCS INTRINSIC ERF,ERFC instead of EXTERNAL for IBM.
+*
+*      Mods in PAFORT for calls to COMIS on VAX
+*
++DECK,V2_01.
+*CMZ :          29/04/93  08.23.38  by  Rene Brun
+*-- Author :    Rene Brun   26/02/93
+*
+*::>          VERSION  2.01/01   930305 14.57
+*
+*      Bug fixes in PAFITH, PAFITV and PAMASK (CALL CLTOU).
+*      Fixed the 25+ bugs reported by Rick Jones concerning Paw++.
+*      Added extensive help on Paw++ user definable resources.
+*      Added Paw++ About box (accessable via Kxterm).
+*
+*::>          VERSION  2.01/00   930226  8.53
+*
+*      Implement calls to KUGETF instead of KUGETC to take into account
+*      the new KUIP command FILECASE.
+*      Implement option 'D' in Histo/File
+*      Change Histo/Scratch to Histo/Hscratch in CDF.
+*      Bug fixed in PAWSEL for Graphical cuts
+*      NeXT version available (Bernardino Ferreira).
++DECK,V2_00.
+*CMZ :          26/02/93  08.53.39  by  Rene Brun
+*-- Author :    Rene Brun   07/12/92
+*
+*::>          VERSION  2.00/07   930216  9.17
+*.
+*      Changes in PAWFOP to open FZ files with the L option (CFOPEN)
+*      Bugs corrected in PAWTYT,PPROJ0.
+*
+*::>          VERSION  2.00/06   930201 14.03
+*
+*      Protections against negative values for LOG10.
+*         New function PLOG10.
+*      Bug fixes in PAWFCU.
+*      Changes in ntuple routines for ntuple with structures.
+*      In PAHOPE: reset variable JOFSET.
+*
+*::>          VERSION  2.00/05   930126 18.12
+*
+*      Changes in PNTVAL for ntuples with arrays not correctly filled.
+*      Call to IGTERM in PAMAINM to update the buffer for MOTIF version
+*
+*::>          VERSION  2.00/04   930125 10.21
+*
+*      Version for official distribution: Release CERNLIB v93a
+*
+*      Bug fix in PAHOPE (test on CHOPT instead of CHOPT1) RESET works
+*      Bug fixes in PAMERG when mixing old/new HBOOK files
+*      Protection in PAWROP to prevent opening a file already connected
+*      Bug fix in PAWTYT for long expressions in SQRT
+*      Bug fixes in PAWFCU
+*
+*::>          VERSION  2.00/03   930120  8.19
+*
+*      Bugs fixed in routines to merge ntuples (old/new format)
+*      Bug fixed in PAWFCU,PAWTYT (addition of COMIS functions)
+*
+*::>          VERSION  2.00/02   930118 16.51
+*
+*      Interface to new MOTIF/KXTERM panel
+*
+*      Routine PAWSIM changed to DOUBLE PRECISION and use of HCFITD
+*
+*      Option 'E' introduced in Histo/Operations commands
+*      This option computes correctly the error bars for the resulting
+*      histogram. Requires equivalent mods in HBOOK/HOPERA.
+*
+*      Change HELP of Ntuple/Create command.
+*      Add new callable routines in PAWCS
+*
+*::>          VERSION  2.00/01   921221 17.55
+*
+*
+*::>          VERSION  2.00/00   921207 10.28
+*
+*
+*      new user callable routine HFINAM callable from COMIS.
+*      HFINAM can be used to store the names of the parameters of a fit
+*
+*      Protection added in LOCATE (PAGRAF)
+*
+*      New command PICTURE/PRINT to print the current picture.
+*
++DECK,V1_14.
+*CMZ :          20/10/92  10.03.08  by  O.Couet
+*-- Author :    Rene Brun   14/07/92
+*
+*::>          VERSION  1.14/01   920715  9.31
+*
+*       Change in PAWLOC, ISTAT is now tested just after the call
+*          to IRQLC (koellner@lbl.Bitnet).
+*
+*::>          VERSION  1.14/00   920714 13.29
+*
+*       Routine PMLOCA removed from FPMOTIF (it was not used).
+*       Bug corrected in PANT3D LOGX was tested instead of LOGZ.
+*       The polymarker color index in now reset in PANTPM.
+*       Bug corrected in PAHIST: angles not used in H/PLOT
+*       Routines ERF,ERFC,FREQ,PROB added to list of callable routines
+*          from COMIS in PAWCS.
+*       Commons /HCFITS/ and /HCFITD/ added to PAWCS.
+*       bug corrected in PAMASK for option CLOSE (L option in <MZDROP)
+*       bug corrected in PAHIST: ANGLEs not used for 2D histos
+*          without subranges.
+*       Bug corrected in PAHIST (side effect of the previous correction)
+*          slices were ignored in HISTO/PLOT ID.SLIX.
+*
++DECK,V1_13.
+*CMZ :          14/07/92  13.29.42  by  Rene Brun
+*-- Author :    O.Couet   03/03/92
+*
+*::>          VERSION  1.13/01   920306  9.49
+*
+*       Bugs corrected in PAWUWF (changes in PAWIDN)
+*       LINTRA command revisited. Sequence EQULIN replaced by PCLINT
+*
+*::>          VERSION  1.13/00   920303 14.00
+*
+*       First version of the $KUMACS PATCH.
+*       Bug corrected in PAWFCU (A.Nathaniel)
+*       Default values for X and Y in command TICKS are changed
+*          to 1.E30.
+*
+*       Bug corrected in PAWFCU (bug submitted by W.Mueller GSI)
+*       Description : If one wants to fill with NTUPLE/PROJECT a
+*                     histogram with both  a cut C and a weight W
+*                     one can use a command like
+*                        NTU/PROJ 10 100.exp W*(C)
+*                 e.g.   NTU/PROJ 10 100.x   a*(y>0)
+*              which will increment at x with weight a if y>0.
+*              This works fine, but the very similar case with two
+*              conditions
+*                        NTU/PROJ 10 100.exp W*(C1)*(C2)
+*              never increments the histogram no matter what the
+*              conditions are. (bug corrected by Andy Cox)
+*
+*       Many new routines added in PAWCS
+*         (Most of the HBOOK user callable routines)
+*
+*       IGTERM is called in the PAWEX macros.
+*
+*       Mod in PAHIST to take care of the option "3" and "4" in the
+*          command SURFACE
+*
+*       New routines PANT3D, PANTAX and PANTPM to plot Ntuple in 3D
+*       (G.Richards)
+*       In the comand CUTS, the parameter CHOPT is now called OPTION
+*
+*  More details on PAW version 1.13/00 are given in PAW.NEWS113
+*
++DECK,V1_12.
+*CMZ :          03/03/92  14.15.24  by  O.Couet
+*-- Author :    Rene Brun   02/09/91
+*
+*::>          VERSION  1.12/00   910902 11.17
+*
+*       Changes in PAFITH to add option E in fit commands
+*
++DECK,V1_11.
+*CMZ :          24/07/91  17.55.48  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.11/03   910708 14.44
+*
+*       New routine HCOPYP to copy a projection into a 1-dim hist.
+*       Ex: If ID=20 contains a PROX and 20 SLIX, then
+*           H/copy 20.prox 1 copy PROX from 20 inti ID=1
+*           H/copy 20.slix.12 12 copy SLIX.12 into ID=12
+*
+*       Bug corrected in GET/Abscisa (C.Erd)
+*       New versions of LOCATE and VLOCATE using the sample mode
+*          facility of the X11 version of HIGZ.
+*       Protection in PAFITV to avoid to draw a bar chart if 'B'
+*          (Bounds) is selected in V/FIT.
+*
+*       Corrections for NEWLIB version (Harald Butenschoen,DESY)
+*       in routines PAMAIN,PAHIO,PAOPEN,PAWFOP
+*
+*       New routines HMAXIM,HMINIM,HMAX,HMIN,HNORMA,HREND in PAWCS
+*       New routine HGFIT in PAWCS
+*       Buffer size for COMIS increased from 5000 to 10000 words
+*
+*       Bug corrected in PASCA1 whem masks are used
+*
+*       Change in PANTUP for Ntuple/Read on VM
+*
+*       First version of PAW_MOTIF: Flag MOTIF introduced and
+*       new patches FPMOTIF and CPMOTIF.
+*
+*::>          VERSION  1.11/02   910307 11.55
+*
+*       Bug corrected in command Ntuple/Lintra
+*       Rename parameter CHOPT to OPTION in command Ntuple/Plot
+*       Memory mapping implemented in command GLOBAL
+*       (requires mapping routines from HBOOK and KUIP)
+*
+*::>          VERSION  1.11/01   910225  8.40
+*
+*       Changes in PILOT,PATCH *PAW
+*       Changes in RLOGIN to allow hostnames up to 16 characters
+*
+*::>          VERSION  1.11/00   910214 18.30
+*
+*       New COMMON HIGRAF introduced in PAWCS. This allows to
+*          access the points used by the command GRAPH with
+*          option 'C' in a COMIS program.
+*       New option 'F' in the command GRAPH. The command GRAPH
+*          with option 'C' or 'CF' allows now to draw closed
+*          contours.
+*
+*       Correction in PAGKSA: LIST change in PALETTE
+*       Upgrade of command SCAN. It is now possible to scan
+*          expressions of the original variables.
+*       In the command CONTOUR, IFLAG is now replaced by CHOPT.
+*          This allow to superimpose contour plots. This mod is
+*          compatible with the previous version.
+*
++DECK,V1_10.
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.10/00   901107 14.12
+*
+*       Option LOGX and LOGY available for 2D histos and Ntuples
+*       The command MAX works now on 2D histograms
+*       Bug corrected in PAGPRI (command HIST in case of non
+*           equidistants bins)
+*       New application : SLIDE
+*       Mods in installation craddle
+*       Bug corrected in FUN/PLOT in case of option same
+*       New commands:
+*          /FUNCTION/DRAW  UFUNC [ CHOPT ]
+*          /FUNCTION/ANGLE  [ THETA PHI ]
+*          /FUNCTION/RANGE  [ XLOW XUP YLOW YUP ZLOW ZUP ]
+*          /GRAPHICS/ATTRIBUTES/PALETTE  PALNB [ NEL LIST ]
+*          /GRAPHICS/WORKSTATION  IWKID [ CHOPT IWTYP ]
+*          /NTUPLE/LINTRA  IDN [ CHOPT NEVENT IFIRST NVARS VARLIS ]
+*       Commands modified, in order to take care of the new 3D
+*          plots facilities of HIGZ:
+*          /HISTOGRAM/2D_PLOT/LEGO  [ ID THETA PHI CHOPT ]
+*          /HISTOGRAM/2D_PLOT/SURFACE  [ ID THETA PHI CHOPT ]
+*          /HISTOGRAM/PLOT  [ ID CHOPT ]
+*
++DECK,V1_08.
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.09/00   900124 10.42
+*
+*        Fix bug in PAMERG
+*        Command Ntuple/Plot can now book/fill a Profile histogram
+*           if option 'P' is given.
+*
+*::>          VERSION  1.08/00   891220 18.47
+*
+*        New parameter in command CONTOUR to plot user contours
+*        When option 'E' is selected in Ntuple/Plot, HBARX is
+*           automatically called for the output histogram
+*        New routines HCDIR and HGIVEN in PAWCS
+*        Command NULL now based on HPLFRA from HPLOT
+*         This allow the redefinition of LOG/LIN scales
+*         on a LIN/LOG scale frame.
+*        Special connection ID for GKS metafiles 4011-->4230
+*
+
++DECK,V1_07.
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.07/00   891010 18.23
+*
+*
+*       Correction in PAFUNC (option 'S')
+*       Number of Ntuple variables extended to 512
+*       Bug fixed in PAHFIT
+*       PAHFIT modified for the new HFITGA,EX,PO
+*       New commands Histo/Fit and Vector/Fit
+*       Correction in PAFUNC for LOGY scales
+*       Changes in HGETID fir status word bit 5 of HBOOK
+*       New routine PALOGS for PAW monitoring
+*       Changes in PAMAIN (PAW$LOGON on VAX,etc)
+*       RSHELL writes on LOUT
+*       Command Picture/SCR activated.
+*       Added Interactive Minuit to HFITH/HFITV.
+*       PAHIST modified to call HPLTAB for sub-ranges.
+*       Mods in PAFORT and PASIGM to permit calling
+*        COMIS or SIGMA in KUIP macros.
+*       CDF modified
+*       PAWROP. Automatic LRECL on VAX.
+*       Ranges in CONTOUR,LEGO,SURFACE.
+
++DECK,V1_06.
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.06/00   890629 12.25
+*
+*       Bug corrected in PAWROP (VAX)
+*       Bug corrected in HPROJ0 (double counting in MASKs)
+*       Bug corrected in HPROJA (remove CALL PAWFCI)
+*       Routine KUTIME added in PAWCS
+*       Routine HPLOC  added in PAWCS
+*       Routine HDERIV added in PAWCS
+*       Bug corrected in PAWUWF (comma missing in case of V_..)
+*       Common blocks /QUEST/ and /KCWORK/ added to PAWCS
+*       Changes for log/log scales in PAFUNC
+*       CALL KUTERM(IGTERM) added in PAWINT (to empty graphics buffers)
+*       Changes in PACSEL and PANTUP (when typing CSEL CB)
+*       test .LE. changed to.EQ. after KUGETV (for ? vector)
+*       BATCH version introduced
+*       New routine PAWARG (NOLOG,BATCH,BATCHF)
+*
++DECK,V1_05.
+*CMZ :          10/07/91  19.40.26  by  Rene Brun
+*-- Author :
+*
+*
+            Routine PAWWID deleted. Replaced by HIGZ routine IGWKTY
+*
+*::>          VERSION  1.05/04   890403  8.30
+*
+*           New menu /NETWORK with 2 new commands RLOGIN and RSHELL
+*           New routines RLOGIN and RSHELL
+*           Interface for the ZEBRA server ZS rewritten
+*           Call to PACSEL added in PANTUP (for lego and contour)
+*           Changes in PANTUP (avoid 2 passes when ID exists)
+*           ==>Important change in HGETID and HGETNT
+*              If current directory is not //PAWC, then ID in /PAWC/
+*              is always deleted and HRIN called
+*              H/plot ID always gets a copy from Current Directory
+*              IDOLD not used anymore
+*           More information given in the HELP of Ntuple/Plot.
+*           New command PAVE
+*           LOCATE command returns CONTENT of channel/cell
+*           Hbook functions HX and HXY callable from COMIS
+*
+*::>          VERSION  1.05/03   890301 18.57
+*
+*           Changes for IWK in PAWWID,PANTUP
+*           Changes in PAGPRI (Dim for XLOG changed to 800 from 200)
+*           Changes in Command Fit/Function (additional parameters)
+*           Sequence NTSCAN renamed PCSCAN
+*              (Version never released)
+*
+*
+*::>          VERSION  1.05/02   890124 16.07
+*
+*
+*           New sequences PCPATL,PCCHAR and PCFUNC
+*           Use above sequences instead of local variables
+*           KUGETI(ID) changed to PAGETI(ID). New routine PAGETI
+*           ID='*' means ID='0'
+*           All local variables SAVEd
+*           List of COMIS routines printed by ENTRY PAWCSH
+*           Protections in PAHFIT and PAWSEL
+*           New command DDIR to delete a directory
+*           Command ARROW can draw a double arrow
+*           CDF modified
+*           Modified HBOOK sequence HCDIRE introduced.
+*           HFNAME filled with file name
+*           Sequence HPL1 deleted. Use HPLOPT(opt,-1) instead
+*           Protections in HGETID,HGETNT and PAWROP
+*           Automatic setting of workstation type on Apollos
+*           Changes in PANTUP for automatic binning
+*           New command Ntuple/Merge
+*              New routines PAMERG,PAMER1 and PAMER2
+*           NUPD changed from 30000 to 1000000
+*
+*::>          VERSION  1.05/01   881221 14.05
+*
+*           Unused variables or commons deleted.
+*           Routine PAWUSR called with an argument in PAWINT and PAEXIT
+*           Changes in PAWFOP for IBM (IOFILE01 instead of IOFILE1)
+*           Routine VECDEF called from PAWDEF and not from KUINIT
+*           New routine PAHELP
+*           Mods in CDF for new HELP facility (PAHELP)
+*           New routine PACLOS (FILEDEF CLEAR on VM)
+*           New routines PAOPEN,PAREAD,PAWRIT (callable from COMIS)
+*           New PATCH,CDF introduced
+*           ZLOWNT,ZUPNT introduced in /PAWNTU/
+*           Changes in PANTUP (LOSTAT) and 40 bins for 2-Dim
+*
++PATCH,$KUMACS.
++DECK,INSTALL.
+*CMZ :  2.07/06 11/07/95  17.46.47  by  O.Couet
+*-- Author :    O.Couet   04/10/91
+   Macro INSTALL 1=X 2=ftn 3=X 4=X
+*
+   If [1]='?' Then
+      Exec help
+      Goto END
+   Endif
+   File hbook
+   Pilot *hbook
+   Rel hbook
+*
+*  Set the FORTRAN extension
+*
+   Case $MACHINE In
+      (APOLLO) Alias/Create ext ftn
+      (IBM)    Alias/Create ext fortran
+      (VAX)    Alias/Create ext for
+      (*)      Alias/Create ext f
+   Endcase
+*
+*  LIBRARY    Library name
+*  CODEDIR    Source code directory
+*
+   LIBRARY  = $Lower([1])
+   CODEDIR  = $Lower([2])
+*
+*  Install the examples
+*
+   If [CODEDIR]='example' Then
+      Select  $MACHINE
+      Set [LIBRARY]/*.kumac -D
+      Ctot -Y //paw/paxmac/*
+      Set [LIBRARY]/*.ext -D
+      Ctot //paw/paxfor/*
+      Set [LIBRARY]/*.dat   -D
+      Ctot //paw/paxdat/*
+      Goto END
+   Endif
+*
+   D = FALSE
+   M = FALSE
+   Do I = 3,[#]
+      Case $Upper([%I]) In
+         (DEBUG) D = TRUE
+         (MOTIF) M = TRUE
+      Endcase
+   Enddo
+*
+   Mess ' '
+   Mess Installation of PAWLIB on $MACHINE _
+        starting at $DATE $TIME .
+   Mess ' '
+*
+   Set [CODEDIR]/paw.sh -XADCL
+*
+*  Set up the library name
+*
+   If [LIBRARY] = 'x' Then
+      Set [CODEDIR]/$cmzfile.a -L
+   Else
+      Set [LIBRARY] -L
+   Endif
+*
+   If [D] = TRUE Then
+      Case $MACHINE In
+         (APOLLO) D=' -dba'
+         (HPUX,SGI,SUN,DECS,IBMRT) D=' -g'
+         (VAX) D='/NOOP/DEB'
+      Endcase
+   Else
+      D=' '
+   Endif
+*
+   If [M] = TRUE Then
+      Sel MOTIF
+   Endif
+*
+*  Set up the FORTRAN compiling options
+*
+   Set FORTRAN -LAN
+   Set [CODEDIR]/*.ext -F
+   Case $MACHINE In
+      (APOLLO) Set '/com/ftn $compfile//[D]//' -indexl -save' -C
+      (HPUX) Set 'f77 -c'//[D]//' +ppu $compfile' -C
+      (SUN) Set 'f77 -c'//[D]//' -O $compfile' -C
+      (IBMRT) Set 'xlf -c'//[D]//' -qextname $compfile' -C
+      (SGI,DECS) Set 'f77 -c'//[D]//' $compfile G 3' -C
+      (VAX) Set 'FOR'//[D]//' $compfile' -C
+   Endcase
+*
+*  Select the options
+*
+   Select  $MACHINE
+*
+   Pilot *PAW
+*
+*  CMZ, FORTRAN, Library ...
+*
+   Set
+   seq
+   Cfl -P
+*
+*  Motif Part
+*
+   If [M] = FALSE Goto END
+   Set C -LAN
+   Set [CODEDIR]/*.c -F
+*
+   if $MACHINE = HPUX Then
+      OPTC = ' -z -DSYSV -Aa -D_HPUX_SOURCE'
+      X11H = ' -I/usr/include/X11R4'
+      XMH  = ' -I/usr/include/Motif1.1'
+      Set 'cc -c'//[D]//[OPTC]//[X11H]//[XMH]//' $compfile' -C
+   Endif
+   if $MACHINE = IBMRT Then
+      Set 'cc -c'//[D]//' $compfile' -C
+   Endif
+*
+   Pilot *PAW
+   Set
+   Cfl -P
+*
+END:
+   Return
++DECK,HELP.
+*CMZ :  1.13/00 06/02/92  15.14.55  by  O.Couet
+*-- Author :    O.Couet   04/10/91
+   Macro HELP
+*
+   Mess ' '
+   Mess ' The installation procedure of the PAW library is:'
+   Mess ' '
+   Mess '     CMZ -INSTALL PAW LIB_NAM SRC_DIR OPTIONS'
+   Mess ' '
+   Mess ' Where :'
+   Mess ' '
+   Mess ' LIB_NAM is the library name'
+   Mess ' '
+   Mess ' SRC_DIR is the source directory name'
+   Mess ' '
+   Mess ' OPTIONS :'
+   Mess '        - DEBUG compile with debug option'
+   Mess ' '
+   Mess ' The installation procedure of the PAW examples is:'
+   Mess ' '
+   Mess '     CMZ -INSTALL PAW DIR example'
+   Mess ' '
+   Mess ' Where :'
+   Mess ' '
+   Mess ' DIR is the directory where the example will be installed'
+   Mess ' '
+*
+   Return
++PATCH,*PAW
++DECK,BLANKDEK.
+*CMZ :          21/11/95  14.12.43  by  O.Couet
+*-- Author :
++USE,HCDES.   This PATCH is in the HBOOK PAM file
++USE,HPAW, IF=-MAIN.   Contains include files for patch CPAW
++USE,PAW,CPAW, IF=-MAIN.
++USE,FPANELS,IF=MOTIF,IF=-MAIN.
++USE,HMOTIF,FMOTIF,CMOTIF,UIMX,TREE,IF=MOTIF,IF=-MAIN.
++USE,FPANELSH,FPANELSC,FPANELSF,IF=MOTIF,IF=-MAIN.
++USE,XBAE,    IF=MOTIF,IF=-VAX,IF=-QMALPH,IF=-MAIN.
++USE,XBAEVMS, IF=MOTIF,IF=VAX,QMALPH,IF=-MAIN.
++USE,P=PAW,D=0PAMAIN,  IF=MAIN,IF=-MOTIF.
++USE,P=PAW,D=0PAMAINM, IF=MAIN,IF=MOTIF.
++USE,PAWCDES,COMIS.
++USE,QP,             IF=DEV.
++USE,NTUPLE,         IF=QP.
++USE,CZ,             IF=-IPSC,IF=-MSDOS.
++USE,UNIX,           IF=ALLIANT,CONVEX,AIX370,UNISYS,MSDOS,LINUX,WINNT.
++USE,UNIX,           IF=DECS,GOULD,IBMRT,MACMPW,SGI,SUN,HPUX,IPSC.
++USE,IBM,            IF=IBMMVS,NEWLIB.
++USE,BSLASH,         IF=IBMRT,SGI,DECS,SUN,IPSC,APOF77,LINUX,QMALPH.
++USE,BSLASH,         IF=MSDOS,WINNT.
++USE,DOUBLE,         IF=IBM,VAX,NORD,APOLLO.
++USE,DOUBLE,         IF=UNIX,IF=-SINGLE.
++USE,MMAP,           IF=UNIX,APOLLO,IF=-IPSC,IF=-MSDOS,IF=-NEXT,IF=-CONVEX.
++USE,QXNO_SC,        IF=CRAY,VAX,IBM.
++USE,QXNO_SC,        IF=APOLLO,IF=-APOF77.
++USE,QX_SC,          IF=SGI,IBMRT,SUN,CONVEX,DECS,AIX370,HPUX,APOF77.
++USE,QX_SC,          IF=NEXT,LINUX,MSDOS,WINNT.
++USE,BUGREPORT,      IF=UNIX,VAX,IBM,IF=-IBMMVS,IF=-NEWLIB.
++PATCH,*PIAFS.
++DECK,blankdek.
+*CMZ :  2.06/01 08/12/94  16.57.25  by  Fons Rademakers
+*-- Author :    Fons Rademakers   15/04/93
++USE,PIAFSPAT.
++USE,CORE.
++USE,PIAFS.
++USE,HBPIAF. modified routines until we dare to move them into HBOOK itself
++USE,TGV,IF=VAX.
++PATCH,SCRIPTS.
++DECK,IBM,IF=IBM.
+*CMZ :  2.06/08 12/01/95  15.52.59  by  O.Couet
+*-- Author :    M.Marquina   08/24/89
+/*DEFAULTS_SUPPORTED*/
+/**********************************************************************
+ *                                                                    *
+ * PAW EXEC v1.21                                                     *
+ *                                                                    *
+ * Exec to drive PAW supporting versions                              *
+ *                                                                    *
+ * Author: M.Marquina 89/08/24                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ * MARQUINA 90/05/25 Preserve user filedefs before running PAW        *
+ * MARQUINA 90/05/28 Enable transmission of options                   *
+ *          90/07/13 Introduce GDDM option                            *
+ *          90/08/24 Use new XCPUSH/XCPOP, monitor with UMLOG         *
+ *          90/10/10 Support shared version of PAW with option SHARED *
+ *          90/11/13 Add GKS option                                   *
+ *          91/02/17 Support PF-keys and defaults (TERM,DRIVER)       *
+ *          91/03/04 Introduce X11 via X11 and HOST options           *
+ *          91/03/21 Preserve user TXTLIBs via CPUSH/CPOP             *
+ *          91/04/04 Issue a message when the module is missing       *
+ *          91/04/19 Stop exec monitoring of PAW                      *
+ *          91/04/19 Give meaningful messages for rc=-2,-4            *
+ *          91/07/29 Set C-libs to run X11 module in XA mode          *
+ *          91/11/22 Add option TCPIP                                 *
+ *          92/02/28 Remove protection on GDDM segment. Now at 9M     *
+ *          92/03/10 Move up the lower limit to run PAW               *
+ *          92/12/09 Use NEW as replacement for missing DEV modules   *
+ *                   Replace XCPUSH/XCPOP by new RXLOCFN functionality*
+ *                   Enable TCPIP version as default,set min-stor 9M  *
+ *          93/03/18 Add DISPLAY as synonym to HOST                   *
+ *          93/06/01 Check XC mode to run GDDM version                *
+ *          93/09/17 Increase minimum required storage                *
+ * N.Watson 93/10/21 Remove eventual trailing parenthesis             *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg parms "(" options ")"
+   Parse Source . . xfn .
+
+   f.list  ='FIND'(options,"LIST" )>0
+   f.set   ='FIND'(options,"SET"  )
+   f.reset ='FIND'(options,"RESET")>0
+
+   If f.reset Then Do
+      'GLOBALV SELECT *EXEC SETLP' xfn
+      Call ERROR 3 4
+   End
+
+   'GLOBALV SELECT *EXEC GET' xfn
+   optd='VALUE'(xfn) ; If optd="" Then optd="DRIVER GKS TERM ?"
+
+   If f.list Then Do
+     'CLRSCRN'
+     vs='SOURCELINE'(4) ; Parse Var vs . . . vs .
+     Say '               ____________________________________________'
+     Say '                     ' xfn vs ': Default options'
+     Say '               ____________________________________________'
+     Say '                     ' optd
+     Exit
+   End
+
+   Parse Var optd . "DRIVER" drvd . ; drv=drvd
+   Parse Var optd . "TERM "  trmd . ; trm=trmd
+
+   f.term  ='FIND'(options,"TERM " )
+   f.driv  ='FIND'(options,"DRIVER")
+   f.gks   ='FIND'(options,"GKS"   )
+   f.gddm  ='FIND'(options,"GDDM"  )
+   f.x11   ='FIND'(options,"X11"   )
+
+   f.local ='FIND'(options,"LOCAL" )
+   f.shared='FIND'(options,"SHARED")
+
+   If f.term>0 Then Do
+    trm='WORD'(options,f.term+1) ; options='DELWORD'(options,f.term,2)
+   End
+   If f.driv>0 Then Do
+    drv='WORD'(options,f.driv+1) ; options='DELWORD'(options,f.driv,2)
+   End
+   If f.gks>0 Then Do
+    drv='GKS'                     ;options='DELWORD'(options,f.gks,1)
+   End
+   If f.gddm>0 Then Do
+    drv='GDDM'                    ;options='DELWORD'(options,f.gddm,1)
+   End
+   If f.x11>0 Then Do
+    drv='X11'                     ;options='DELWORD'(options,f.x11,1)
+   End
+
+   If f.set>0 Then Do
+      'GLOBALV SELECT *EXEC SETLP' xfn "DRIVER" drv "TERM" trm
+      'EXEC DEFAULTS LIST' xfn
+      Exit
+   End
+
+   If ^'QSTOR'("11M") Then Call ERROR 1 8 "11M"
+   If ^'XFLAG'("CMSXA") & drv="GDDM" Then Call ERROR 2 8
+
+      vn='GETVER'(options,"LINK")
+      vv=""
+   If vn^="PRO" Then Do
+      vv='LEFT'(vn,1)"_"
+                        vtext="TCPIP"
+      If f.local>0 Then vtext="Local"
+      Say
+      Say "Calling" vn "version of" xfn"-"drv"/"vtext"..."
+      Say
+   End
+   If f.shared>0 Then Do
+      vv=vv"S"   ; options='DELWORD'(options,f.shared,1)
+   End
+      pgm=vv||xfn
+   If f.local >0 Then Do
+      pgm=pgm"L" ; options='DELWORD'(options,f.local,1)
+   End
+      pgm='LEFT'(pgm||drv,8)
+
+   'ESTATE' pgm 'MODULE'
+   If rc^=0 Then Call ERROR 5 rc pgm vn
+
+   prc='CPUSH'("FILEDEF","CLEAR","PFK","SET","TXTLIB","LOADLIB")
+
+   nw='FIND'(options,vn)
+   If nw>0 Then options='DELWORD'(options,nw,1)
+
+   If f.shared>0 Then 'EXEC CERNLIB PAWLIB GRAFLIB ( SHARED'
+
+   nw='FIND'(options,"HOST")+'FIND'(options,"DISPLAY") ; host=""
+   If nw>0 Then Do
+     host='WORD'(options,nw+1)
+     options='DELWORD'(options,nw,2)
+   End
+   If drv="GDDM" Then 'GLOBAL TXTLIB ADMNLIB ADMGLIB ADMRLIB'
+
+/* With the new KUIP all PAW modules need the IBMLIB library */
+
+   'EXEC CERNLIB ( TCPIP USER QUIET'
+
+   If drv="X11" & host^="" Then ,
+      'GLOBALV SELECT CENV SETPL DISPLAY' host':0'
+
+   If options^="" Then parms=parms "("options
+   'FILEDEF 6 TERM (LRECL 133'
+
+   'IDENTIFY ( LIFO' ; Pull . . site .
+   If site="CERNVM" Then 'EXEC UMLOGDEV * 0' vn pgm parms
+
+   'EXECIO 1 CP ( LIFO STRING QUERY CONSOLE'  /* Run in batch? */
+   Pull . . console . ; _b= console^="ON"
+
+   If ^_b Then Do
+    'EXEC USERPF PAW'          /* Set PAW PF-keys */
+    If trm^="?" Then Do        /* Get Workstation type */
+        tlist="" ; wlist=""
+     Select
+      When drv="GKS" Then Do
+        tlist="ALPHA  PSP    PSL    T4010  T4012  T4014  T4014E" ,
+              "T4107  T4109  T4111  T4113  T4115  T4207  PG    " ,
+              "MX2000 MX8000 MG200  MG600  FALCO  VT240  VT340 "
+        wlist="0      -111   -112   101    102    101    103   " ,
+              "121    122    123    125    127    121    7878  " ,
+              "121    127    7800   7800   7878   1020   1030  "
+      End
+      When drv="X11" Then Do
+        tlist="ALPHA  PSP    PSL    EPS    PSCP   PSCL   LATEX " ,
+              "LATEX"
+        wlist="0      -111   -112   -113   -114   -115   -777  " ,
+              "-778"
+      End
+      Otherwise Nop
+     End
+      nw='FIND'(tlist,trm) ; If nw>0 Then trm='WORD'(wlist,nw)
+      Push trm
+    End
+   End
+   If vn="DEV" Then Do
+      'ESTATE' pgm 'MODULE' ; If rc^=0 Then pgm="N_"'SUBSTR'(pgm,3)
+   End
+   pgm parms
+   cc=rc
+   If site="CERNVM" Then 'EXEC UMLOGDEV * 1' vn pgm parms
+
+   If prc=0 Then rc='CPOP'("FILEDEF","PFK","SET","TXTLIB","LOADLIB")
+   If cc=-2 Then Call ERROR 4 cc pgm vn
+   If cc=-4 Then Call ERROR 6 cc pgm vn
+   Exit cc
+/* ------------------------------------------------------------------ */
+   ERROR:
+   Procedure Expose xfn
+   Arg ne cc vv v2 .
+
+   src="CRN"xfn
+   err.1 ="001E Insufficient storage. Get at least" vv ,
+               "with the command: CP DEFINE STORAGE" vv
+   err.2 ="002E PAW/GDDM may only run in XC mode;" ,
+               "use the command: IPL CMSXC"
+   err.3 ="003W Defaults reset for" xfn "command"
+   err.4 ="004W Module" vv "cannot run in SUBSET mode"
+   err.5 ="005W Module" vv "not available in the" v2 "area"
+   err.6 ="006W Module" vv "cannot load. IPL or LOGOFF to clear" ,
+               "the memory"
+   err.99="900E Uninitialised variable encountered on line" vv
+
+   'EXECIO 1 EMSG (STRING' src||err.ne
+   Exit cc
++DECK,UNIX,IF=UNIX.
+*CMZ :  2.06/08 12/01/95  15.56.15  by  O.Couet
+*-- Author :    M.Marquina   06/10/90
+#!/bin/sh
+# **********************************************************************
+# * PAW SHELL 1.05                                                     *
+# *                                                                    *
+# * Shell driver to the different versions of PAW                      *
+# *                                                                    *
+# * Author: M.Marquina 90/10/06                                        *
+# * Mods       Date   Commments                                        *
+# * MARQUINA 90/11/30 Add host option, pass on non-filtered options    *
+# *          91/08/15 Access pawGKS directly from GKS_ROOT             *
+# *          91/12/12 Correct local SUN host                           *
+# *          93/03/26 Add -display option, do not override DISPLAY     *
+# *                   clean up empty paw.metafile                      *
+# * G.Folger 93/11/02 pawGKS is now in CERN_ROOT/$ver/gksbin           *
+# *                                                                    *
+# **********************************************************************
+
+  SHOPT="d:h:v:"
+#SEQ,GETOPTD.
+  [ "`uname -s`" = "DomainOS" ] && drv="GKS" || drv="X11"
+  [ -z "$CERN"       ] && CERN="/cern"
+  [ -z "$CERN_LEVEL" ] && ver="pro" || ver="$CERN_LEVEL"
+
+  while [ $# -gt 0 ]
+  do case $1 in
+       -d) drv=$2 ; shift      ;;
+       -h) hst=$2 ; shift      ;;
+       -display) hst=$2 ; shift      ;;
+       -v) ver=$2 ; shift      ;;
+       --) shift ; break       ;;
+        *)         break       ;;
+     esac
+     shift
+  done
+
+     GDIR=$CERN/$ver/bin
+  if [ "$drv" = "GKS" ] ; then
+     [ -z "$GKS_ROOT" ] && GKS_ROOT="$CERN/gks/$ver"
+     [ -z "$GKS"      ] && . $CERN/gks/$ver/mgr/gksstart.sh
+#    inlib $GKS_INLIB
+     GDIR=$CERN/$ver/gksbin
+  fi
+  if [ "$drv" = "X11" -a -n "$hst" ] ; then
+     nw=`echo $hst | awk -F: '{ print NF }'`
+     [ $nw -eq 1 ] && hst="$hst:0"
+     DISPLAY="$hst" ; export DISPLAY
+  fi
+  if [ "$ver" != "pro" ] ; then
+     echo
+     echo " Calling $ver version of paw-$drv"
+     echo
+  fi
+  $GDIR/paw$drv $*
+  [ ! -s paw.metafile ] && rm paw.metafile
++DECK,VAX,IF=VAX.
+*CMZ :  2.07/00 24/04/95  16.10.29  by  O.Couet
+*-- Author :    J.Bunn    12/01/95
+$!========================================================================
+$!
+$! Name      : PAW
+$!
+$! Purpose   : Invokes the required version of the PAW executable
+$!
+$! Arguments : See PAW /HELP
+$!
+$! Created  25-NOV-1994   Julian J. Bunn
+$! Mods      7-MAR-1995   Roger Ruber (for UCX)
+$!          24-APR-1995   Julian J. Bunn (corrections for batch mode)
+$!
+$!========================================================================
+$   ON ERROR     THEN $ GOTO EXIT
+$   ON CONTROL_Y THEN $ GOTO EXIT
+$   all_opts = "''p1' ''p2' ''p3' ''p4' ''p5' ''p6' ''p7' ''p8'"
+$!
+$! If a site paw_options.com exists, then take override symbols from that ...
+$!
+$   if f$search("cern_root:[exe]paw_options.com") .nes. "" then
+@cern_root:[exe]paw_options
+$!
+$! Otherwise, set them here ...
+$!
+$   if f$type(root_dir) .eqs. "" then root_dir = f$trnlnm("CERN")-"]"  ! The
+root of the CERN Program Library Tree, minus it's appendage
+$   if f$type(driver_override) .eqs. "" then driver_override = ""      ! "X11"
+for X, "DGKS" for DEC GKS, "GKS" for GTS-GRAL
+$   if f$type(TCP_override) .eqs. "" then TCP_override = ""            ! "_U"
+for UCX, "_M" for Multinet, "" for not linked with IP
+$!                                                                     ! (no
+IP means no NETWORK menu in PAW, and, e.g. no PIAF access)
+$   if f$type(level_override) .eqs. "" then level_override = ""        ! NEW
+or OLD or PRO or blank
+$   if f$type(plusplus_override) .eqs. "" then plusplus_override = ""  ! ++ or
+blank
+$   if f$type(transport_override) .eqs. "" then transport_override = ""! blank
+or TCPIP or DECNET or WINTCP (to create remote displays)
+$   set symbol/scope=local
+$!
+$! Other symbols used in the procedure
+$   paw_choice = ""      ! will be the selected PAW exe
+$   paw_available = ""   ! will be list of PAW exe locally available
+$   paw_options = ""     ! the options to be passed to the PAW exe
+$   node = ""            ! will be the remote node name for remote display
+$   transport_type = ""  ! will be transport to remote node
+$   display_was_created = "no"
+$   display_exists = "no"
+$   create_display = "no"
+$   help = "no"
+$!
+$! First extract any overrides set by the user on the command line
+$   lopts = f$length(all_opts)
+$   lpp   = f$locate("++",all_opts)
+$   lip   = f$locate("=TCPIP",all_opts)
+$   lde   = f$locate("=DECNET",all_opts)
+$   lwi   = f$locate("=WINTCP",all_opts)
+$   lnode = f$locate("/NOD",all_opts)
+$   lx11  = f$locate("/X",all_opts)
+$   ldgks = f$locate("/D",all_opts)
+$   lgks  = f$locate("/G",all_opts)
+$   lpro  = f$locate("/P",all_opts)
+$   lold  = f$locate("/O",all_opts)
+$   lnew  = f$locate("/NE",all_opts)
+$   lquer = f$locate("/Q",all_opts)
+$   lhelp = f$locate("HELP",all_opts)
+$   lmult = f$locate("/M",all_opts)
+$   lucx  = f$locate("/U",all_opts)
+$   lbare = f$locate("/NOT",all_opts)
+$   llist = f$locate("/L",all_opts)
+$   if lx11  .ne. lopts then driver_override = "X11"
+$   if ldgks .ne. lopts then driver_override = "DGKS"
+$   if lgks  .ne. lopts then driver_override = "GKS"
+$   if lnew  .ne. lopts then level_override = "NEW"
+$   if lold  .ne. lopts then level_override = "OLD"
+$   if lpro  .ne. lopts then level_override = "PRO"
+$   if lpp   .ne. lopts then plusplus_override = "PP"
+$   if lpp   .ne. lopts then driver_override = ""                           !
+driver IS Motif
+$   if lpp   .ne. lopts .and. lbare .ne. lopts then plusplus_override = "P" !
+temporary fix for PAWP.EXE !
+$   if lip   .ne. lopts then transport_override = "TCPIP"
+$   if lde   .ne. lopts then transport_override = "DECNET"
+$   if lwi   .ne. lopts then transport_override = "WINTCP"
+$   if lquer .ne. lopts then help = "yes"
+$   if lhelp .ne. lopts then help = "yes"
+$   if lmult .ne. lopts then TCP_override = "_M"
+$   if lucx  .ne. lopts then TCP_override = "_U"
+$   if lbare .ne. lopts then TCP_override = ""
+$   if lnode .ne. lopts then create_display = "yes"
+$   if lip   .ne. lopts then create_display = "yes"
+$   if lde   .ne. lopts then create_display = "yes"
+$   if lwi   .ne. lopts then create_display = "yes"
+$   if lnode .ne. lopts
+$   then
+$       topts = f$extract(lnode,999,all_opts)
+$       node = f$element(1,"=",topts)
+$       node = f$element(0,"/",node)
+$   endif
+$   cernlib_version = "pro"
+$   if f$type(cern_level) .nes. "" then cernlib_version = cern_level
+$   if level_override .nes. "" then cernlib_version = level_override
+$!
+$   if help .eqs. "yes"
+$   then
+$      gosub help_text
+$      goto EXIT
+$   endif
+$!
+$   if llist .ne. lopts then gosub select_paw
+$!
+$get_connection_type:
+$   if transport_override .nes. "" then transport_type = transport_override
+$   if f$trnlnm("DECW$DISPLAY") .nes. "" then display_exists = "yes"
+$   if display_exists .eqs. "yes" .and. create_display .eqs. "no" then goto
+get_paw_type
+$!
+$!If the user has not specified /NODE or decnet,tcpip,wintcp transport, then
+use port settings
+$   if create_display .eqs. "yes" then goto set_display
+$   create_display = "yes"
+$   port = f$getdvi("TT","TT_ACCPORNAM")
+$   lport = f$length(port)
+$   if f$locate("/",port) .ne. lport
+$   then
+$!Terminal cannot be used to get remote machine on user's behalf
+$      goto get_paw_type
+$   endif
+$   if f$locate("::",port) .ne. lport
+$   then
+$!A DECnet connection
+$      node = f$extract(0,f$locate("::",port),port)
+$      transport_type = "DECNET"
+$      goto set_display
+$   endif
+$   If F$LOCATE("Port:",port).ne.lport    !   UCX connection
+$   Then
+$!A UCX connection
+$     port=F$EXTRACT(0,F$LOCATE("Port:",port),port)
+$     If F$LOCATE("Host:",port).ne.lport
+$     Then
+$         port=F$EDIT(F$EXTRACT(F$LOCATE(":",port)+1,lport,port),"TRIM,\
+COMPRESS")
+$         node=port
+$     Endif
+$     transport_type = "TCPIP"
+$     goto set_display
+$   Endif
+$   If F$TRNLNM("TWG$ETC").nes."".and.F$LOCATE(".",port).nes.lport ! Wollongong
+$   Then
+$!A Wollongong connection
+$     tmp =F$EXTRACT(0,F$LOCATE(".",port)+1,port)
+$     tmp2=F$EXTRACT(F$LOCATE(".",port)+1,lport,port)
+$     tmp =tmp + F$EXTRACT(0,F$LOCATE(".",tmp2)+1,tmp2)
+$     tmp2=F$EXTRACT(F$LOCATE(".",tmp2)+1,F$LENGTH(tmp2),tmp2)
+$     tmp =tmp + F$EXTRACT(0,F$LOCATE(".",tmp2)+1,tmp2)
+$     tmp2=F$EXTRACT(F$LOCATE(".",tmp2)+1,F$LENGTH(tmp2),tmp2)
+$     tmp =tmp + F$EXTRACT(0,F$LOCATE(".",tmp2),tmp2)
+$     node=tmp
+$     transport_type = "WINTCP"
+$     goto set_display
+$   Endif
+$   if f$locate(".",port) .ne. lport
+$   then
+$      node = port
+$      transport_type = "TCPIP"
+$      goto set_display
+$   endif
+$!
+$set_display:
+$!In this section we set a display if required, prompting for missing
+information
+$   if create_display .eqs. "yes"
+$   then
+$      if transport_type .eqs. ""
+$      then
+$          write sys$output " "
+$          write sys$output "You can display PAW output locally (LOCAL), on a
+remote VMS workstation
+$          write sys$output "via DECNET (DECNET) or to a remote workstation \
+via TCP/IP."
+$          write sys$output " "
+$loop2:
+$          if f$mode() .eqs. "BATCH" then goto batch
+$          inquire/nopun transport_type "Select one of DECNET TCPIP WINTCP \
+LOCAL : "
+$          if f$locate(transport_type,"DECNET TCPIP WINTCP LOCAL") .eq.
+f$length("DECNET TCPIP WINTCP LOCAL") then goto loop2
+$          if transport_type .eqs. "LOCAL"
+$          then
+$             create_display = "no"
+$             goto get_paw_type
+$          endif
+$      endif
+$loop3:
+$      if node .eqs. ""
+$      then
+$          if f$mode() .eqs. "BATCH" then goto batch
+$          write sys$output " "
+$          if transport_type .eqs. "DECNET" then inquire/nopun node "Enter the \
+DECnet node name : "
+$          if transport_type .eqs. "TCPIP" then inquire/nopun node "Enter the \
+IP name or number of the remote node : "
+$          if transport_type .eqs. "WINTCP" then inquire/nopun node "Enter the \
+IP name or number of the remote node : "
+$          write sys$output " "
+$          goto loop3
+$      endif
+$      comm = "set display/create/transport=''transport_type'/node=''node'"
+$      write sys$output "Creating DISPLAY with : ""''comm'"""
+$      'comm
+$      if .not. $severity then goto exit
+$      display_was_created = "yes"
+$      display_exists = "yes"
+$   endif
+$get_paw_type:
+$   pp = plusplus_override
+$   if driver_override .nes. "" then driver = driver_override
+$   tcp = TCP_override
+$   write sys$output "The ''cernlib_version' version of the PAW''pp' ''driver' \
+driver for PAW is selected."
+$   paw_choice = "PAW''pp'''driver'''tcp'"
+$got_paw_choice:
+$   pawfile = f$search(root_dir+cernlib_version+".*...]"+paw_choice+".EXE")
+$   if pawfile .eqs. ""
+$   then
+$      write sys$output "The PAW exe called ''paw_choice' is not available."
+$      paw_choice = ""
+$      paw_available = ""
+$      gosub select_paw
+$      goto got_paw_choice
+$   endif
+$   pawcomm = "$''pawfile'''all_opts'"
+$   set symbol/scope=global
+$   kxterm:=="CERN:[''cernlib_version'.exe]kxterm"
+$   write sys$output "Executing ''pawfile'"
+$   deassign sys$input
+$   pawcomm 'paw_options'
+$EXIT:
+$   if display_was_created .eqs. "yes" then set display/delete/node='node'
+$   EXIT
+$HELP_TEXT:
+$   type sys$input
+$   DECK
+
+  The PAW command is invoked as follows:
+
+      $ PAW[++] [/option...]
+
+  where "++" invokes the PAW version with the Motif user interface.
+  The allowed qualifiers are as follows:
+
+  /OLD         Selects an executable from the OLD CERN Library
+  /PRO         Selects an executable from the PRO CERN Library
+  /NEW         Selects an executable from the NEW CERN Library
+
+  /X11         Selects the X11 driver for X Window displays
+  /DGKS        Selects the DEC GKS driver
+  /GKS         Selects the GTS-GRAL GKS driver
+
+  /MULTINET    Selects an executable linked with Multinet TCP/IP
+  /UCX         Selects an executable linked with DEC TCP/IP (UCX)
+  /NOTCPIP     Selects an executable without IP (no NETWORK commands)
+
+  /TRANSPORT=  These qualifiers are used to set the display to a
+  /NODE=       remote DECNET or IP connected workstation.
+
+  /LIST        Lists the available PAW EXE files on the system
+  /HELP        Displays this help
+
+  There are some defaults that have already been set for you. They are:
+
+$   EOD
+$   if level_override .nes. "" then -
+    write sys$output "   The ''level_override' versions of PAW"
+$   if plusplus_override .eqs. "PP" then -
+    write sys$output "   the PAW++ Motif user interface"
+$   if driver_override .nes. "" then -
+    write sys$output "   The driver for ''driver_override'"
+$   if TCP_override .eqs. "_M" then -
+    write sys$output "   Linked with Multinet"
+$   if TCP_override .eqs. "_U" then -
+    write sys$output "   Linked with UCX"
+$   if TCP_override .eqs. "" then -
+    write sys$output "   Linked without a TCP/IP package"
+$   if transport_override .nes. "" then -
+    write sys$output "   Displays to be created over ''transport_override'"
+$   write sys$output " "
+$   return
+$GET_PAW_LIST:
+$   if paw_available .nes. "" then goto end_get_paw_list
+$   write sys$output " "
+$   write sys$output "Listing available versions of PAW in ''cernlib_version' \
+..."
+$   write sys$output " "
+$loop1:
+$   pawfile = f$search(root_dir+cernlib_version+".*...]PAW*.exe")
+$   if pawfile .eqs. "" then goto end_get_paw_list
+$   if f$locate("PAWSERV",pawfile) .ne. f$length(pawfile) then goto loop1
+$   is = f$locate("]PAW",pawfile) + 1
+$   pawfile = f$extract(is,999,pawfile)
+$   pawfile = f$extract(0,f$locate(".EXE",pawfile),pawfile)
+$   paw_type = "Unknown"
+$   if pawfile .eqs. "PAWPP" then paw_type = "PAW++ with no TCP/IP"
+$   if pawfile .eqs. "PAWPP_M" then paw_type = "PAW++ linked with Multinet"
+$   if pawfile .eqs. "PAWPP_U" then paw_type = "PAW++ linked with UCX"
+$   if pawfile .eqs. "PAWPP_W" then paw_type = "PAW++ linked with Wollongong"
+$   if pawfile .eqs. "PAWX11" then paw_type = "PAW for X11 with no TCP/IP"
+$   if pawfile .eqs. "PAWX11_M" then paw_type = "PAW for X11 linked with \
+Multinet"
+$   if pawfile .eqs. "PAWX11_U" then paw_type = "PAW for X11 linked with UCX"
+$   if pawfile .eqs. "PAWX11_W" then paw_type = "PAW for X11 linked with \
+Wollongong"
+$   if pawfile .eqs. "PAWDGKS" then paw_type = "PAW with DEC GKS and no TCP/IP"
+$   if pawfile .eqs. "PAWDGKS_M" then paw_type = "PAW with DEC GKS and linked \
+with Multinet"
+$   if pawfile .eqs. "PAWDGKS_U" then paw_type = "PAW with DEC GKS and linked \
+with UCX"
+$   if pawfile .eqs. "PAWDGKS_W" then paw_type = "PAW with DEC GKS and linked \
+with Wollongong"
+$   write sys$output "*** File ''pawfile' which is ''paw_type'"
+$   paw_available = paw_available + " " + pawfile
+$   goto loop1
+$end_get_paw_list:
+$   return
+$SELECT_PAW:
+$start_select_paw:
+$   gosub get_paw_list
+$   write sys$output " "
+$   if f$mode() .eqs. "BATCH" then goto batch
+$   inquire/nopun paw_choice "Select the PAW version you require from the \
+above list (or QUIT) : "
+$   if f$extract(0,1,paw_choice) .eqs. "Q" then goto EXIT
+$   if f$locate(paw_choice,paw_available) .eq. f$length(paw_available)
+$   then
+$      write sys$output "''paw_choice' is not in the above list !"
+$      goto start_select_paw
+$   endif
+$end_select_paw:
+$   driver_override = ""
+$   tcp_override = ""
+$   plusplus_override = ""
+$   lpawc = f$length(paw_choice)
+$   if f$locate("X11",paw_choice) .ne. lpawc then driver_override = "X11"
+$   if f$locate("GKS",paw_choice) .ne. lpawc then driver_override = "GKS"
+$   if f$locate("DGKS",paw_choice) .ne. lpawc then driver_override = "DGKS"
+$   if f$locate("_U",paw_choice) .ne. lpawc then tcp_override = "_U"
+$   if f$locate("_M",paw_choice) .ne. lpawc then tcp_override = "_M"
+$   if f$locate("_W",paw_choice) .ne. lpawc then tcp_override = "_W"
+$   if f$locate("_",paw_choice) .eq. lpawc then tcp_override = ""
+$   if f$locate("PP",paw_choice) .ne. lpawc then plusplus_override = "PP"
+$   if f$locate("PP",paw_choice) .ne. lpawc then driver_override = ""
+$   if paw_choice .eqs. "PAWP" ! temporary fix for bad naming convention
+$   then
+$      plusplus_override = "P"
+$      driver_override = ""
+$      tcp_override = ""
+$   endif
+$   return
+$
+$BATCH:
+$ copy sys$input sys$output
+  PAW requires additional information on the command line before it can be
+  run in batch. For example, you may need to specify the remote display
+  device with /NODE and /TRANSPORT (or use SET DISPLAY/CREATE prior to calling
+  PAW in the batch job).
+$ exit
++PATCH,MANPAGES.
++DECK,UNIX,IF=UNIX.
+*CMZ :  2.07/00 11/04/95  13.45.37  by  O.Couet
+*-- Author :    O.Couet   11/04/95
+.TH PAW 1 "Physics Analysis Workstation"
+.SH NAME
+paw \- invoke the "Physics Analysis Workstation" package
+.SH SYNOPSIS
+paw [-b \fImacro_name\fR] [-w \fIworkstation_type\fR] [-n]
+
+paw++ [-b \fImacro_name\fR] [-n]
+
+.SH DESCRIPTION
+
+PAW
+is an interactive utility for visualizing experimental data on a
+computer graphics display. It may be run in batch mode if desired
+for very large and time consuming data analyses; typically, however,
+the user will decide on an analysis procedure interactively before
+running a batch job.
+
+PAW
+combines a handful of CERN High Energy Physics Library systems
+that may also be used individually in software that
+processes and displays data.  The purpose of PAW is
+to provide many common analysis and display
+procedures that would be duplicated needlessly
+by individual programmers, to supply a flexible way to invoke these
+common procedures, and yet also to allow user customization where
+necessary.
+
+PAW++ is a Motif based version of PAW.
+
+.SS OPTIONS
+
+When
+.B paw
+starts, the macro
+.B
+pawlogon.kumac
+in the current directory is executed. If this macro doesn't exist
+the system tries to execute the macro
+.B .pawlogon.kumac
+in the home directory.
+.TP 8
+.RI \-n
+The macro \fIpawlogon\fR is not executed.
+.TP 8
+.RI \-b \ macro_name
+The macro specified is executed in batch mode and
+.B paw
+exits when the macro ends.
+.TP 8
+.RI \-w \ worstation_type
+PAW starts immediatly without prompting for the workstation type.
+If worstation_type = 0, paw starts without graphics.
+
+When the X11 version of paw is used, a list of 10 valid
+workstations type is provided in the file
+.B higz_windows.dat.
+By default this file is in the current directory. If it is not,
+the one in the home directory is used. If it is not in the home
+directory, one is automatically created in the current directory.
+Each line in this file describes the position and the size of the
+window. To access one of the described windows it is enough to
+give the line number in reply to the prompt "Workstation type"
+
+.SH ENVIRONMENT VARIABLES
+.TP 20
+HIGZPRINTER
+Specifies the command line executed when the command PICTURE/PRINT
+is invoked.
+.TP 20
+$ENV()
+Any environment variable can be accessed in paw with the function
+.B $ENV().
+
+.SH SEE ALSO
+
+The PAW reference manual, the online help (PAW command HELP), the
+WWW pages: http://asdwww.cern.ch/pl/paw/index.html
+
+.SH COPYRIGHT
+(C) Copyright CERN, Geneva 1995.
+
+
++PATCH,PAWCDES.
++KEEP,FPADR.
+*CMZ :  2.07/08 16/08/95  15.34.10  by  O.Couet
+*-- Author :    O.Couet   16/08/95
+* To store the adresses of FPHSTART and FPVSTART
+      COMMON /FPADR/ JMFPH, JMFPV
++KEEP,PCHTAG.
+*CMZ :  2.07/02 29/05/95  13.23.39  by  O.Couet
+*-- Author :    O.Couet   26/04/95
+      PARAMETER (NTAG=100,NCHTAG=32,NCHBIG=512)
+      CHARACTER*(NCHTAG) CHTAG
+      CHARACTER*(NCHBIG) CHBIG
+      COMMON /PCHTAG/ CHTAG(NTAG)
+      EQUIVALENCE (CHTAG(1),CHBIG)
++KEEP,FPCOMS.
+*CMZ :  2.07/00 24/04/95  17.58.46  by  O.Couet
+*-- Author :    Gregory Kozlovsky   09/04/95
+*
+* tranfer data from pafith and pafitv to the fit panel
+* and store data needed to draw graphics in HFGRUPDATE and VFGRUPDATE
+* CHFOPTN - fit options, CHPOPTN - plot options
+* HFXMIN,HFXMAX - the scale in x which does not change
+*
+      CHARACTER*32 CHFOPTN,CHPOPTN
+      CHARACTER*80 XVECNAM,YVECNAM,EYVECNAM,
+     +             VPARNAM,VLOWNAM,VUPPNAM,VSTEPNAM,VERRORNUM
+      COMMON/FPCOM/  JAD,FPXMIN,FPXMAX,FPYMIN,FPYMAX
+      COMMON/FPCOMC/ CHFOPTN,CHPOPTN,XVECNAM,YVECNAM,EYVECNAM,
+     +               VPARNAM,VLOWNAM,VUPPNAM,VSTEPNAM,VERRORNUM
++KEEP,PCHIST.
+*CMZ :  2.04/15 13/03/94  13.15.29  by  Fons Rademakers
+*-- Author :    Fons Rademakers   13/03/94
+      CHARACTER*64    HPATH
+      COMMON /PCHIST/ HPATH
+*
++KEEP,PCCMD.
+*CMZ :  2.04/13 18/02/94  17.38.08  by  Fons Rademakers
+*-- Author :    Fons Rademakers   18/02/94
+      LOGICAL        NTCMD
+      COMMON /PCCMD/ NTCMD
+*
++KEEP,PAWFIL5,IF=MSDOS.
+*CMZ :  2.04/12 15/02/94  08.50.12  by  Rene Brun
+*-- Author :    Rene Brun   15/02/94
+      CHARACTER*255 PAWSYS,PAWLOG
+       DATA PAWSYS/'\\cern\\pro\\bin\\pawsys.kumac'/
+       DATA PAWLOG/'pawlogon.kum'/
+*
++KEEP,PAWFIL6,IF=WINNT.
+*CMZ :  2.04/12 15/02/94  08.50.12  by  Rene Brun
+*-- Author :    Rene Brun   15/02/94
+      CHARACTER*255 PAWSYS,PAWLOG
+       DATA PAWSYS/'\\cern\\pro\\bin\\pawsys.kumac'/
+       DATA PAWLOG/'pawlogon.kumac'/
++KEEP,PALOC.
+*CMZ :  2.04/12 01/02/94  14.02.30  by  O.Couet
+*-- Author :    O.Couet   01/02/94
+      COMMON /PALOC/ JADLOC
++KEEP,PCMODE.
+*CMZ :  2.04/05 26/11/93  11.40.00  by  Rene Brun
+*-- Author :    Rene Brun   18/11/93
+*     IPIAF =1 for the PIAF server
+*     IPAWPP=1 if PAW++
+      COMMON/PCMODE/IPIAF,IPAWPP,NOLOG,BATCH
+      LOGICAL NOLOG,BATCH
+*
++KEEP,PCOLV.
+*CMZ :  2.03/14 27/09/93  14.12.45  by  O.Couet
+*-- Author :
+      COMMON /PCOLV/ NCOLOR,FMIN,FMAX,IC1,IC2,IC3
+*
++KEEP,PCWK.
+*CMZ :  2.03/13 27/09/93  08.58.42  by  Rene Brun
+*-- Author :    Rene Brun   27/09/93
+      COMMON/PCWK/IWK
+*
++KEEP,PCHOST.
+*CMZ :  2.04/12 11/02/94  17.41.30  by  Fons Rademakers
+*-- Author :    Fons Rademakers   10/08/93
+      COMMON/CIPIAF/ISPROTO
+      COMMON/CCPIAF/CHHOST, CHUSER, CHVERS, CONDIR
+      CHARACTER*16  CHHOST, CHUSER, CHVERS
+      CHARACTER*32  CONDIR
+*
++KEEP,PACOMIS.
+*CMZ :  2.04/11 11/01/94  09.14.16  by  Rene Brun
+*-- Author :    Rene Brun   06/05/93
+      PARAMETER (NCOMIS=30000)
+      COMMON/COMIS/CS(NCOMIS)
++KEEP,PCNTWK.
+*CMZ :  2.03/07 24/08/93  17.20.45  by  Fons Rademakers
+*-- Author :    Fons Rademakers   03/05/93
+      CHARACTER*16    CRHOST
+      COMMON /PCNTWK/ NPASS, IPASS, IMINEV, IMAXEV, MISBYT, NCHAIN,
+     +                NTCONT, IEDONE
+      COMMON /PCNTW1/ CRHOST
+*
++KEEP,PCPIAF.
+*CMZ :  2.04/12 11/02/94  18.09.44  by  Fons Rademakers
+*-- Author :    Alfred Nathaniel   01/05/93
+*
+*-- Update for every major incompatible change in Piaf client-server protocol.
+*-- A change in VERSPF requires the building of a Piaf server with a new
+*-- file extension.
+*
+      CHARACTER   VERSPF*8
+      PARAMETER  (VERSPF = '931013')
+*
+*-- Update for every minor incompatible change in Piaf client-server protocol.
+*
+      INTEGER     IPROTO
+      PARAMETER  (IPROTO = 1)
++KEEP,PAWCHN.
+*CMZ :  2.02/01 10/05/93  00.52.38  by  Fons Rademakers
+*-- Author :    Fons Rademakers   13/04/93
+      LOGICAL         CHAIN
+      CHARACTER*128   CFILE
+      COMMON /PAWCHN/ CHAIN, NCHEVT, ICHEVT
+      COMMON /PAWCHC/ CFILE
+*
+      CHARACTER*80    CURCHN
+      COMMON /PAWCH2/ CURCHN
+*
+      LOGICAL         CHNXMT
+      COMMON /PAWCH3/ CHNXMT
+*
++KEEP,PAWBIG.
+*CMZ :  2.02/02 25/05/93  19.17.20  by  Rene Brun
+*-- Author :
+      PARAMETER (NWPAW=2000000)
+*
++KEEP,PAWSMALL.
+*CMZ :  2.02/00 13/04/93  18.00.47  by  Rene Brun
+*-- Author :
+      PARAMETER (NWPAW=500000)
+*
++KEEP,PAWSIZ.
+*CMZ :  2.02/00 13/04/93  18.00.47  by  Rene Brun
+*-- Author :
++SEQ,PAWBIG,IF=UNIX,APOLLO,VAX.
++SEQ,PAWBIG,IF=IBM,IF=NEWLIB.
++SEQ,PAWSMALL,IF=IBM,IF=-NEWLIB.
+
++KEEP,PAWCOM
+*CMZ :  2.03/07 03/09/93  14.10.38  by  Fons Rademakers
+*-- Author :
+      COMMON/PAWCOM/ID,NUM,JOFSET,IDOLD,KHRIN
+      COMMON/PAWCID/CHID,CHCASE
+      CHARACTER*128 CHID
+      CHARACTER*4 CHCASE
+*
++KEEP,PAWFIL1. IF=IBM,IF=-IBMMVS.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      CHARACTER*255 PAWSYS,PAWLOG
+      DATA PAWSYS/'/PAWSYS KUMAC *'/
+      DATA PAWLOG/'/PAWLOGON KUMAC *'/
+*
+* THE FOLLOWING IS NEEDED WHILE KUIP DOES NOT UNDERSTAND VS-FORTRAN
+* FILES
+*
+      CHARACTER*255 PAWSY1,PAWLO1,PAWSY2,PAWLO2
+       DATA PAWSY1/'/PAWSYS KUMAC *'/
+       DATA PAWLO1/'/PAWLOGON KUMAC *'/
+       DATA PAWSY2/'PAWSYS.KUMAC.*'/
+       DATA PAWLO2/'PAWLOGON.KUMAC.*'/
+*
++KEEP,PAWFIL2. IF=IBMMVS.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      CHARACTER*255 PAWSYS,PAWLOG
+       DATA PAWSYS/'.R01UTL.PAWSYS.KUMAC'/
+       DATA PAWLOG/'PAWLOGON'/
+*
++KEEP,PAWFIL3. IF=VAX.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      CHARACTER*255 PAWSYS,PAWLOG
+       DATA PAWSYS/'CERN_ROOT:[EXE]PAWSYS.KUMAC'/
+       DATA PAWLOG/'pawlogon.kumac'/
+*
++KEEP,PAWFIL4. IF=UNIX,CRAY,APOLLO.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      CHARACTER*255 PAWSYS,PAWLOG
+       DATA PAWSYS/'/cern/pro/bin/pawsys.kumac'/
+       DATA PAWLOG/'pawlogon.kumac'/
+*
++KEEP,PAWFIL.
+*CMZ :  2.04/12 15/02/94  08.50.12  by  Rene Brun
+*-- Author :
++SEQ,PAWFIL1,IF=IBM,IF=-IBMMVS.
++SEQ,PAWFIL2,IF=IBMMVS.
++SEQ,PAWFIL3,IF=VAX.
++SEQ,PAWFIL4,IF=UNIX,CRAY,APOLLO,IF=-MSDOS,IF=-WINNT.
++SEQ,PAWFIL5,IF=MSDOS.
++SEQ,PAWFIL6,IF=WINNT.
+
++KEEP,PCRANG
+*CMZ :  2.07/01 09/05/95  11.07.00  by  O.Couet
+*-- Author :
+* IC[X,Y][1,2] is the range limited by 1 and the number of bins
+* IB[X,Y][1,2] is the non limited range
+      COMMON/PCRANG/ICRANG,ICX1,ICX2,ICY1,ICY2,IBX1,IBX2,IBY1,IBY2
+*
++KEEP,PAWBGN
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PAWBGN/ICOMIS,ISIGMA
+*
++KEEP,PAWLUN
+*CMZ :  2.02/00 13/04/93  19.47.18  by  Fons Rademakers
+*-- Author :
+      COMMON/PAWLUN/LUNIT(128), LUNCHN
+*
++KEEP,PNTOLD.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      LOGICAL          NTOLD
+      COMMON  /PNTOLD/ NTOLD
+*
++KEEP,PAWNPU
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PAWNPU/NPFUNC,NPFUNX,NPFUNY,NPFUNZ,ANGLE1,ANGLE2
+     +,             RANGX1,RANGX2,RANGY1,RANGY2,RANGZ1,RANGZ2
+     +,             VALHQF
+*
++KEEP,PAWCFU.
+*CMZ :  2.07/00 04/05/95  17.01.51  by  Julian Bunn
+*-- Author :
+      PARAMETER (MAXCLL=512,MAXLAB=1000,MAXFCU=2000,MAXSTK=13)
+      PARAMETER (MXVAR=100, MAXFCC=44)
+*
+      INTEGER JADF
+      COMMON/PAWCF2/JADF, IDCHAR(3), NVART, NVART2, NVART3, IDFNEW,
+     $     LABELX, LABELY, LABELZ, ICTYPE,
+     $     INDX(MAXCLL), INDX2(MAXCLL), ITYPE(MAXCLL), ISIZE(MAXCLL),
+     $     IELEM(MAXCLL), IOFFST(MAXCLL), IOFFST2(MAXCLL)
+*
+      CHARACTER*32
+     $     CSTACK(100)   , CHLABX(MAXLAB), CHLABY(MAXLAB),
+     $     CHLABZ(MAXLAB), CHFCU         , VAR(MAXCLL),
+     $     HFCU(100)
+      COMMON/PAWCF3/VAR,CSTACK,CHLABX,CHLABY,CHLABZ,CHFCU,HFCU
+*
+* we allow up to 4 array expressions in a selection (bbbwaaaaa..)
+      REAL          RFCU(MAXFCU*4)
+      REAL*8        DFCU
+      INTEGER       IFCU
+      LOGICAL       LFCU
+      COMMON/PAWCF4/DFCU,IFCU,LFCU,RFCU
+*
+      INTEGER      CFUINFO(0:MXVAR,6),CFUPOS
+* we allow MAXSTK arrays of maximum length MAXFCU
+      REAL         RSTACK(0:MAXSTK,0:MAXFCU)
+* and MAXSTK character arrays of maximum length MAXFCC
+      CHARACTER*32 CHPILE(0:MAXSTK,0:MAXFCC)
+      LOGICAL      NOSEL
+      COMMON/PAWCF5/RSTACK,CFUINFO,CFUPOS,NOSEL
+      COMMON/PAWCF6/CHPILE
+*
++KEEP,PAWIDN
+*CMZ :  2.03/18 14/10/93  19.51.31  by  Fons Rademakers
+*-- Author :
+      COMMON/PAWIDN/IDNEVT,VIDN1,VIDN2,VIDN3,VIDN(10),X(512)
+      COMMON/PAWOFF/NEVTID,IVIOFF(13),IWIOFF,IEIOFF
+      COMMON/PCHIDN/CHNAMS(512)
+      CHARACTER*8 CHNAMS
+*
++KEEP,PAWNTU
+*CMZ :  2.03/18 14/10/93  19.51.04  by  Fons Rademakers
+*-- Author :
+      INTEGER TTVARX,TTVARY,TTVARZ,TTVARM(10)
+      COMMON/PAWNTU/NTVARX,NTVARY,NTVARZ
+     $     ,ICODES,XLOWNT,XUPNT,YLOWNT,YUPNT,ZLOWNT,ZUPNT
+     $     ,NTVARM,MLOWNT,MUPNT,TTVARX,TTVARY,TTVARZ,TTVARM
+      COMMON/PAWNT1/KTYPE,KCUTS
+      COMMON/PAWNT2/CHVARX,CHVARY,CHVARZ,CHNTUP,CHVARM
+      REAL MLOWNT(10),MUPNT(10)
+      INTEGER NTVARM(10)
+      CHARACTER*128 CHVARX,CHVARY,CHVARZ,CHVARM(10)
+      CHARACTER*128 CHNTUP
++KEEP,PAWCFW
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      PARAMETER (ICDIM=200)
+      COMMON/PAWCFW/ICFREE,ICODE(ICDIM)
+      DIMENSION XCODE(ICDIM)
+      EQUIVALENCE (ICODE(1),XCODE(1))
+*
++KEEP,PAWVET
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      PARAMETER (ICMAXK=30)
+      COMMON/PAWVET/ICMASK(ICMAXK)
+*
++KEEP,PCARGS
+*CMZ :  2.04/05 26/11/93  11.40.00  by  Rene Brun
+*-- Author :
+      CHARACTER*80  CHARGS
+      COMMON/PCARGS/CHARGS
+*
++KEEP,PCSCAN.
+*CMZ :  2.04/14 02/03/94  18.49.29  by  Fons Rademakers
+*-- Author :
+      COMMON/PCSCAN/IVARS(MXVAR),IVART(MXVAR),INTFLG
+*
+*-- Re-use the RSTACK and CHPILE arrays from common's PAWFC5 and PAWFC6
+*-- make sure that SSTACk and SCPILE are smaller
+*
+      PARAMETER    (MXVARR=137,MXCARR=5)
+      REAL          SSTACK(0:MXVAR,0:MXVARR)
+      CHARACTER*32  SCPILE(0:MXVAR,0:MXCARR)
+      EQUIVALENCE  (SSTACK, RSTACK)
+      EQUIVALENCE  (SCPILE, CHPILE)
++KEEP,PCMASK
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      PARAMETER (MASDIM=9)
+      COMMON/PCMASK/LMASK,LMBUF,LM,IMSK(MASDIM),IMRD,MBIT(MASDIM),MBITD,
+     +              NUMD,NBUFFD,NBUFFR,NBUFF(MASDIM),IDEC,LREC,NBMASK
+      COMMON/PCMAS2/CHMASK
+      CHARACTER*32 CHMASK(20)
+*
++KEEP,PCCSEL
+*CMZ :  2.03/04 21/07/93  18.40.35  by  Fons Rademakers
+*-- Author :
+      COMMON/PCCSEL/IOPTCS(5),CSIZE
+      EQUIVALENCE (IOPTCS(1),IOPTCR),(IOPTCS(2),IOPTCB)
+      EQUIVALENCE (IOPTCS(3),IOPTCM),(IOPTCS(4),IOPTCC)
+      EQUIVALENCE (IOPTCS(5),IOPTCN)
+      COMMON/PCCSE2/CHCSEL,CSOPT
+      CHARACTER*80 CHCSEL
+      CHARACTER*8  CSOPT
+*
++KEEP,PCPATL
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PCPATL/CHPATL
+      CHARACTER*32 CHPATL
+*
++KEEP,PCCHAR
+*CMZ :  2.07/17 17/11/95  12.01.12  by  O.Couet
+*-- Author :
+      PARAMETER (NCHAR=128)
+      CHARACTER*(NCHAR) CHTITL,CHUTIT,CHFILE,CHTEMP
+      COMMON/PCCHAR/CHTITL,CHUTIT,CHFILE,CHTEMP
++KEEP,PACHAR.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PACHAR/JZERO,JNEUF,JAMAX,JZMAX,JAMIN,JZMIN,JDOLL,JSCOR
+*
++KEEP,PCFUNC
+*CMZ :  2.03/12 16/09/93  19.14.32  by  Rene Brun
+*-- Author :
+      COMMON/PCFUNC/CHFUNC
+      CHARACTER*128 CHFUNC
++KEEP,PCFITF
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      PARAMETER(MAXOP=10)
+      COMMON/PCFITF/NOPER,LOPER(MAXOP),IFTYPE(MAXOP),NPF(MAXOP)
+*
++KEEP,PCSLAS
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PCSLAS/BSLASH,BSDUM
+      CHARACTER*1 BSLASH
+      CHARACTER*3 BSDUM
+*
++KEEP,PCBUFF.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON/PCBUFF/PAWBUF(2004)
+*
++KEEP,PCADDR.
+*CMZ :  2.04/15 13/03/94  12.11.10  by  Fons Rademakers
+*-- Author :
+      COMMON /PCADDR/ JMPANT, JMLAB, JMROW, JMCHAIN, JNTWINI, JNTWCHK,
+     +                JMHIST
+*
++KEEP,PCMATW.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      CHARACTER*32    OUTSTR(512)
+      COMMON /PCMATW/ OUTSTR
+*
++KEEP,PAWCUT
+*CMZ :  2.03/15 30/09/93  12.14.09  by  Pierre AUBERT
+*-- Author :
+      COMMON/PAWCUT/ICUTYP(100),XPCUT(20,100),YPCUT(20,100),
+     +              IVCUTX(100),CUTXL(100),CUTXU(100),
+     +              IVCUTY(100),CUTYL(100),CUTYU(100)
+      COMMON/PAWCUE/CHCUTS,CHCUTX,CHCUTY
+      CHARACTER*128 CHCUTS(100),CHCUTX(100),CHCUTY(100)
+*
+
++KEEP,QUEST
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      COMMON /QUEST/IQUEST(100)
+      DIMENSION RQUEST(100)
+      EQUIVALENCE(IQUEST(1),RQUEST(1))
+*
++KEEP,PCLIN1.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      PARAMETER (KNTMAX=20,KNTMA1=KNTMAX+1,KNTMA2=KNTMAX*KNTMAX)
+      COMMON/PCLINT/AR(KNTMA2),DEIGVA(KNTMAX),DWORK(KNTMAX)
+     + ,SS(KNTMAX),S(KNTMAX),XX(KNTMAX),XA(KNTMAX),AM(KNTMA2)
+     + ,EIGVEC(KNTMA2),EIGVAL(KNTMA1),XSI(KNTMAX),R(KNTMAX)
++KEEP,PCLIN2.
+*CMZ :  2.02/00 13/04/93  18.00.48  by  Rene Brun
+*-- Author :
+      DOUBLE PRECISION AR,DEIGVA,DWORK,SS
++KEEP,PCLINT.
+*CMZ :  2.02/00 13/04/93  18.00.49  by  Rene Brun
+*-- Author :
++SEQ,PCLIN1.
++SEQ,PCLIN2,IF=DOUBLE.
+*
++KEEP,GPLOTST.
+*CMZ :  2.02/00 13/04/93  18.00.49  by  Rene Brun
+*-- Author :
+      COMMON /GPLOTST/ RMAXP(4),RMINP(4),ISTCNT,NEW
+      LOGICAL       NEW
+*
++KEEP,HPLCSC.
+*CMZ :  2.03/14 28/09/93  15.40.57  by  O.Couet
+*-- Author :
+      PARAMETER (IPMSIZ=1000)
+      COMMON/HPLCSC/U(IPMSIZ),V(IPMSIZ),W(IPMSIZ),T(IPMSIZ),
+     +              IDEVT(IPMSIZ)
+*
++KEEP,RZCXIO
+*CMZ :  2.02/00 13/04/93  18.00.49  by  Rene Brun
+*-- Author :
+      COMMON/RZCOUNT/RZXIN,RZXOUT
+*
++PATCH,PAMEND.
+*

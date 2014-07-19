@@ -1,0 +1,17 @@
+SRCS_F= gevkev.F gfcoul.F gfmate.F gfpart.F gftmat.F gftmed.F \ @@\
+	ghmix.F gmate.F gpart.F gpions.F gplmat.F gpmate.F gpmatx.F \ @@\
+	gppart.F gpparx.F gprmat.F gptmed.F gptmex.F gsckov.F gsdk.F \ @@\
+	gsmate.F gsmixt.F gspart.F gstmed.F gstpar.F gxsi.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

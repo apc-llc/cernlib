@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 wuix.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

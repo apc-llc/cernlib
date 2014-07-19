@@ -1,0 +1,39 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+C          This pam file contains Fortran 77, CDC Compass,
+C          IBM Assembler H, and NORD 500 assembler versions of Kernlib
+C          numerical routines. Use one of these steering patches:
+C
+C             APOLLO  for    APOLLO
+C             CDC            CDC 875 NOS/BE WITH FTN5 AND COMPASS
+C             CDC,FORTRAN    CDC 875 NOS/BE WITH FTN5
+C             CONVEX         CONVEX
+C             CRAY           CRAY 1 OR XMP COS WITH CFT
+C             DECS           DECSTATION 3100 WITH F77
+C             HPUX           HP/UX 9000 Series
+C             IBMAIX         IBM AIX/370 with fortvs
+C             IBMMVS         IBM MVS WITH SIEMENS FORT.77 + ASSEMBLER H
+C             IBMMVS,FORTRAN IBM MVS WITH SIEMENS FORTRAN 77
+C             IBMVM          IBM VM/CMS WITH VS FORTRAN AND ASSEMBLER H
+C             IBMVM,FORTRAN  IBM VM/CMS WITH VS FORTRAN
+C             IBMRT          IBM RISC 6000 with AIX and XLF
+C             LINUX          LINUX system
+C             MSDOS          MS-DOS system
+C             MIPS           MIPS Machine
+C             NORD           NORSK DATA NORD 500
+C             OS9            Microware OS-9
+C             SGI            SILICON GRAPHICS IRIS WITH F77
+C             SUN            SUN SPARC WITH F77
+C             UNIVAC         UNIVAC 1100
+C             VAX            DIGITAL EQUIPMENT VAX
+C
+C          Installation of KERNNUM has been validated for patches
+C                 APOLLO, CRAY, IBM, IBMRT and VAX,
+C          but for none of the other patches mentioned above.
+C

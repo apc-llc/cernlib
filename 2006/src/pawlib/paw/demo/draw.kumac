@@ -1,0 +1,14 @@
+MACRO DRAW
+igset TXAL 30
+igset TANG -35.
+igset TXFP -140
+igset CHHE  0.50
+itx $SIGMA([X]-0.9) [Y] +
+igset TXAL 30
+igset TANG  0.
+igset TXFP -30
+igset CHHE  0.22
+y = [y] * 1.70
+itx [X] [Y] [TEXT]
+RETURN
+

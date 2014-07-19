@@ -1,0 +1,90 @@
+*
+* $Id: v5_14,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_14,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.14/09 22/02/93  13.40.41  by  O.Couet
+*-- Author :    O.Couet   23/07/92
+*
+*::>          VERSION  5.14/09   930222 13.40
+*
+*      Bug fixed in HPLWIR: The clipping was not reset.
+*      The routine HPLAXI plot now only the axis for 2Dim plots
+*         (the parameter ITYP is removed). It is also able
+*         to use the alphanumeric labels of an histogram.
+*      With OPTION ZFL1, the same picture name ('PICT00') is
+*         used for every new picture.
+*      It is now possible to specify with one SET command both
+*         the border and the inside color for the Histogram, Box
+*         Page, and Function (HCOL, BCOL, PCOL, FCOL).
+*         Ex:
+*                            +---- The Histogram is filled
+*                            |+--- The border color is 2
+*                            ||++- The inside color is 3
+*                            ||||
+*                            VVVV
+*             PAW > SET HCOL 1203
+*
+*      Protection added in HPLF to prevent undefined value
+*         returned by HQF.
+*      FLOARG is now not used in HPLBOX.
+*      Mods in HPLF. Case of predefine fits the "Too many channels"
+*         error doesn't append.
+*      Bug fixed in HPLSET: The variables I*BCOL was not initialized
+*         correctly.
+*      Improvment in HPLC. In case of LOGY with option SAME, the
+*         mininum of the previously defined window is used if the
+*         content of the histogram is less or equal to 0.
+*
+*::>          VERSION  5.14/08   921012 11.58
+*
+*      Change link 4 to link 8 of LHBOOK/LCDIR
+*
+*      HPLSET is now able to mannage all the IGSET options.
+*      Bug fixed in HPLH. In the case of option '+' in HPLOT
+*         with a LOGY scale, some contribution was sometimes
+*         added even if the bin content was null.
+*
+*::>          VERSION  5.14/07   920930 11.00
+*
+*      Mods in HPLH, HPLIVE and HPLRDW in order to allow the
+*         use of the HPLOT option '+' on subranges of histograms.
+*
+*::>          VERSION  5.14/06   920902 10.08
+*
+*      Bug fixed in HPLOPT: LINY was not correctly reset with
+*         the option '*'.
+*
+*::>          VERSION  5.14/05   920826 17.19
+*
+*      Changes in HPLTAB, HPLFIT and HPLF to plot the new
+*         Multiquadric fits (J.Allison).
+*
+*::>          VERSION  5.14/04   920821 16.20
+*
+*      Bug fixed in HPLAXI if alphanumeric label are requested
+*         and if no alphanumeric have been defined
+*
+*::>          VERSION  5.14/03   920819 14.40
+*
+*      Changes in *HPLOT and $KUMACS/INSTALL: the flag DOUBLE
+*         need to be selected if APOLLO is selected.
+*
+*::>          VERSION  5.14/02   920817 15.49
+*
+*      Bug fixed in the request mechanism of HPLSET
+*
+*::>          VERSION  5.14/01   920812 11.56
+*
+*      Fix a problem in routine HPLF (HCFITD introduced)
+*         Requires a change in PILOT PATCH and in the INSTALL macro:
+*         Add option DOUBLE.
+*
+*::>          VERSION  5.14/00   920723 13.52
+*
+*      Bug fixed in HPLAXI: in case of alphanumeric labels on both X
+*         and Y axis, the Y axis labels overwritten the X labels.
+*

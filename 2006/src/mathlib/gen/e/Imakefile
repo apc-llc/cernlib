@@ -1,0 +1,29 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F=	cheb.F checf64.F chsum64.F dchpws.F decomp.F dlsqp1.F dlsqp2.F \ @@\
+	dlsqpm.F dspap1.F dspap2.F dspcd1.F dspcd2.F dspin1.F dspin2.F \ @@\
+	dspkn1.F dspkn2.F dspnb1.F dspnb2.F dspps1.F dspps2.F dspvd1.F \ @@\
+	dspvd2.F dtrgsm.F dummy.F lfit.F lfitw.F lkkspl.F lsqqr.F \ @@\
+	maxdze.F maxize.F ndigit.F parlsq.F proc1.F prod1.F prod2.F \ @@\
+	rchpws.F rcspln64.F rlsqp1.F rlsqp2.F \ @@\
+	rlsqpm.F rtrgsm.F slv.F splan0.F splan1.F splan2.F splan3.F \ @@\
+	splas1.F splas2.F trisum.F
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) chsum.F dchebn.F rchecf.F rcspln.F
+#else
+SRCS_F:= $(SRCS_F) chsum128.F rchebn.F rcspln128.F
+#endif
+
+#if defined(CERNLIB_QUAD)
+SRCS_F:= $(SRCS_F) checf128.F 
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

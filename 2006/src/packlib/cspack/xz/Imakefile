@@ -1,0 +1,22 @@
+SRCS_F=	 xzcd.F xzclos.F xzconv.F xzctof.F xzftoc.F \ @@\
+	xzfzcp.F xzgeta.F xzgetb.F xzgetd.F xzgetf.F xzgetl.F xzgetp.F \ @@\
+	xzgetr.F xzgetx.F xzhrop.F xzinit.F xzinqr.F xzitoc.F \ @@\
+	xzlcd.F xzlls.F xzlmv.F xzlogl.F xzlrm.F xzls.F xzlsys.F \ @@\
+	xzmv.F xzopen.F xzputa.F xzputb.F \ @@\
+	xzputd.F xzputf.F xzputl.F xzputp.F xzputr.F xzputx.F xzpwd.F \ @@\
+	xzread.F xzrewd.F xzrfrf.F xzrite.F xzrm.F xzrsys.F xzrtof.F \ @@\
+	xzrzcp.F xzrzop.F xzsver.F xzvers.F xzwrtm.F
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) xzfinf.F xzprot.F
+#endif
+
+#if defined(CERNLIB_IBMMVS)
+SRCS_F := $(SRCS_F) xzlcat.F xzmvsd.F xzpref.F
+#endif
+
+#if defined(CERNLIB_IBM)
+SRCS_S=	 xzatoe.s xzetoa.s
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

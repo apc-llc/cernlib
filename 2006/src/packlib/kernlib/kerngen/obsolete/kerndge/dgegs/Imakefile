@@ -1,0 +1,8 @@
+SRCS_F= \ @@\
+	 cbyt.F gshow.F iuforw.F iumode.F kerngt.F locb.F locf.F xinb.F \ @@\
+	 xinbs.F
+
+SRCS_S= \ @@\
+	 ublow.s ubunch.s ucopy2.s uctoh.s uctoh1.s uh1toc.s uhtoc.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

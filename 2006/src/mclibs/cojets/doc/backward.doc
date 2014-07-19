@@ -1,0 +1,71 @@
+*
+* $Id: backward.doc,v 1.1.1.1 1996/01/11 14:15:01 mclareni Exp $
+*
+* $Log: backward.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:01  mclareni
+* Cojets
+*
+*
+[4] BACKWARD COMPATIBILITY
+
+      The IOCON interface is largely backward compatible with usage of
+previous versions of COJETS, although some modifications are necessary. This
+is especially true for the Drell-Yan production of Z/W/GAMMA, which was
+previously dealt with in the separate program WIZJET. Here are given details
+about the necessary modifications.
+
+      MAIN PROGRAM.
+      i) GEVENT must now be called at the beginning of event generation, and
+gives control back to the main program at the end of it. Therefore it must be
+called only once, and must not appear in a loop. It also handles Drell-Yan
+production.
+      ii) Calls to PREGEN, PRHEAD, BHEAD, BOOKH and OUTH should be eliminated.
+They are now made by GEVENT.
+
+      USER ROUTINES. Subroutines BOOKH and OUTH must always be supplied now,
+even if containing a RETURN statement only.
+
+      INPUT.
+      i) All input parameters are now in GeV.
+      ii) For Drell-Yan production, the calls to WEAKIN and DREYIN must be
+replaced by setting the input parameters IEVTYP, IDECBO, LWIDTH and, for e.m.
+Drell-Yan, the mass range parameters BOMSMN and BOMSMX. The masses of Z and W
+can be changed from their default values by setting them in the
+particle-decay table.
+      iii) QZMASS is now set equal to QMAS, except for its first 3 components
+which are set to 0.
+      iv) QMAS can no longer be used in input, and quark masses should be
+changed by the user in the particle-decay table.
+      v) The arguments of FUSION and FLAVEX must be character*2 variables,
+complying with the new quark label codes, defined in the particle table.
+      vi) FREEZE is no longer supported, although it is still available (its
+argument must be a character*5 variable with left adjustement, the new quark
+label codes must be used). Absence of parton hadronization should be
+requested by setting the input parameter KHADRO to 0.
+      vii) Parameters SIGMA and CX2, defining jet fragmentation, have been
+doubled for quark and gluon jets.
+
+      OUTPUT.
+      i) The output common blocks have been internally rearranged. That is
+         irrelevant if PATCHY +CDE cards are employed to copy them into the
+         user subroutines.
+      i) PARQUA(I,7), giving the jet origin, has changed its coding.
+      ii) PARHAD(I,7), giving the particle origin, has changed its coding.
+      iii) Common block /HADQN/ no longer exists. Its information is now
+         available from the function CHARGE, and by unpacking the external
+         IDENT code for particles, which yields their quark contents.
+      iv) Internal particle codes for baryons have been changed. They
+         are listed in the particle data table printed by the program.
+
+      The routines LOOSEQ, SPECTJ, STABKP and SHOCAS are no longer
+supported, although they are still available. The routines FORSLE and
+LOOSEH are no longer available.
+
+      Forcing of semileptonic decays of heavy flavor particles should be
+implemented using FORCSL. Full information about the parton shower
+development is available through /JETSET/. Full information about the
+particle decay cascades is available in PARHAD by setting the input
+parameter NOUNST to .FALSE..
+
+
+

@@ -1,0 +1,9 @@
+SRCS_F=	 fatnew.F
+
+#ifdef CERNLIB_VAXVMS
+NeedTcpipLib
+#endif
+
+CernlibFortranProgramTarget(fatnew,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(fatnew,$(CERN_BINDIR))

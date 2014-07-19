@@ -1,0 +1,107 @@
+*
+* $Id: v1_20,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_20,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.20/11 28/02/94  11.26.52  by  O.Couet
+*-- Author :    O.Couet   02/11/93
+*
+*::>          VERSION  1.20/11   28/02/94 11.26.52
+*
+*   Bugs fixed in IGTABL (default parameter values initialization).
+*   IGERR was called in IGWKTY without LUNERR and LUNOUT initialized.
+*   Update in IZHIST to take into account the new 'Z' option of IGHIST.
+*
+*::>          VERSION  1.20/10   21/02/94 11.15.35
+*
+*   Mods in IGTEXT, IKFNTX *HIGZ and *HIGZEXAM for Windows-NT (Valery Fine)
+*   New option 'Z' in IGHIST. Like in IGRAPH, if it is selected, the vectors
+*      X and Y are taken into PAWC at the adresses IQUEST(81) and IQUEST(82).
+*      This protect agains the ZEBRA garbage collections.
+*
+*::>          VERSION  1.20/09   26/01/94 09.21.23
+*
+*   IGPICK is now able to pick IGARC.
+*   Mod in IXOPNDS (x11int): The display was reopen for each window.
+*   The READ in IGWKTY is in FORTRAN (IXGETL under the flag CCREAD) because
+*      KUIP do the READ in FORTRAN (cf FFREAD).
+*   Mod in ISTXFP for the FALCO driver.
+*
+*::>          VERSION  1.20/08   20/01/94 11.30.15
+*
+*   The 3D is available (ISWN3, ISVP3) for the X11 only. ntmgt should be
+*      used also with the GKS version.
+*   New routine IXDOGIF to produce gif files. It is available only if
+*      if the FLAG GIF is selected.
+*   Correction in IKERNEL/IPM: The marker size was not linear
+*
+*::>          VERSION  1.20/07   17/01/94 18.06.42
+*
+*   Mods in the FALCO driver: John Clement
+*   Protection added in IZDIPI. (LN)
+*   IXCLSDS perform immediatly a return if display=NULL
+*   Bug fixed in IHPVIE (a RETURN was missing).
+*   Mods in IOPWK, IGWKTY, IGINIT and IKFILE to be able to call
+*      IGWKTY before or after IGINIT.
+*
+*::>          VERSION  1.20/06   07/01/94 18.38.19
+*
+*   Mod in IGXMES for IBM/VM.
+*   New 3D routines: ISWN3 and ISVP3. See the HIGZ manual for more details
+*   Protection added in IHSDRL (if NT > NTMAX).
+*   Mods in IGTABL to use the new 3D routines
+*   Mods for FALCO driver: John Clement, Rice University
+*      <CLEMENT@physics.rice.edu>. I some places, test like IWTYPE.EQ.7878
+*      should be IGIWTY(IWKID).EQ.7878
+*
+*::>          VERSION  1.20/05   08/12/93 09.33.04
+*
+*   Bug fixed in IGAXIS. In some cases (it seems very rarely because
+*      the code has not change in this part since at least 3 years)
+*      in the test:
+*          IF((X00-XONE).GT.EPSIL) GOTO 150
+*      EPSIL was to big. Now the test is:
+*          IF(X00.GT.XONE) GOTO 150
+*      and in fact that is what is needed in this case.
+*   Changes in rotated to avoid warnings with /com/cc on APOLLO.
+*
+*::>          VERSION  1.20/04   26/11/93 13.42.06
+*
+*   Fix in higzcc/rotated for IBM/VM: The text width returned for
+*      lowercase is 0. Now it is protected.
+*   New routine IGDWK to Get the Default WorKstation type. This
+*      routine is called by IGWKTY.
+*
+*::>          VERSION  1.20/03   23/11/93 11.44.01
+*
+*   Mods in IGCOLM in order to support default position and color map.
+*   The xvertext package to rotate and scale X11 fonts is now available
+*      in higzcc/rotated (Alan Richardson(mppa3@uk.ac.sussex.syma))
+*      Now the X11 fonts are managed as follows:
+*            font=xx precision=0 : X11 font a rotated
+*            font=xx precision=1 : IGTEXT is used on the screen
+*            font=xx precision=2 : X11 font a rotated and scaled.
+*   Fix in higzcc/rotated for IBM/VM.
+*   Protection added in ixgetge: sometimes (for instance after a CTRL-C),
+*      XGetGeometry returns wrong values. In this case the previous "good
+*      values" are used.
+*
+*::>          VERSION  1.20/02   08/11/93 09.53.03
+*
+*   IXSELWI is now called in IACWK (X11) to be sure the window
+*      in active even if IGTERM is not called.
+*
+*::>          VERSION  1.20/01   03/11/93 11.12.27
+*
+*   The unused routine IGPHSL is now removed.
+*   The PATCH IGKS3D is removed (not used and not documented). The
+*      related routines in IG and the corresding KEEP in HICDES are
+*      also removed.
+*
+*::>          VERSION  1.20/00   02/11/93 17.44.57
+*
+*   Some unused sequences are removed.
+*

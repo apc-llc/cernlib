@@ -1,0 +1,14 @@
+SRCS_F= \ @@\
+	 btest.F cbyt.F iandetc.F ibclr.F ibset.F incbyt.F ishft.F iuforw.F \ @@\
+	 jbit.F jbyt.F jbytet.F jbytor.F jrsbyt.F kerngt.F locb.F locbyt.F \ @@\
+	 locf.F lvmaxa.F mbytet.F mbytor.F mcbyt.F msbit.F msbit0.F msbit1.F \ @@\
+	 msbyt.F pkbyt.F rndm.F sbit.F sbit0.F sbit1.F sbyt.F sbytor.F \ @@\
+	 ublow.F ubunch.F ucopiv.F ucopy.F ucopy2.F uctoh.F uctoh1.F \ @@\
+	 ufill.F uh1toc.F uhtoc.F upkbyt.F uswop.F uzero.F vadd.F vbias.F \ @@\
+	 vblank.F vcopyn.F vdot.F vdotn.F vdotn2.F vfill.F vlinco.F vmatl.F \ @@\
+	 vmatr.F vmaxa.F vmod.F vscale.F vsub.F vsum.F vzero.F
+
+SRCS_C= \ @@\
+	 lenocc.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

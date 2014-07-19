@@ -1,0 +1,19 @@
+SRCS_F= muller.F
+
+#if defined(CERNLIB_IBMRT)
+SRCS_F+= cabs.F
+#endif
+
+#if defined(CERNLIB_DECS) && ! defined(CERNLIB_QMVAOS)
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+#ifdef CERNLIB_HPUX
+/* Otherwise compiler error :
+Compiler error line 207 of /afs/.cern.ch/asis/share/cern/97a/src/packlib/kernlib/kernnum/c204fort/muller.F: Malloc: overflow detected in free(). (7816)
+ GF, 10-Jun 96 */
+FDEBUGFLAGS=+O1
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

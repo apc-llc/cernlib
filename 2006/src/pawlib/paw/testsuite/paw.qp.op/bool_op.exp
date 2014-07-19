@@ -1,0 +1,106 @@
+#
+#  bool_op.exp  --
+#
+#  Original: 30-Jan-1996 16:47
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# Scalar .not.
+#
+
+expr_test	bool	1	.not.b2	true
+expr_test	bool	2	.not.b2	false
+
+expr_test	bool	1	!b2	true
+expr_test	bool	2	!b2	false
+
+
+#
+# Vector .not.
+#
+
+expr_test	bool	1	.not.bvec	true,false,true,false,true
+expr_test	bool	1	.not..not.bvec	false,true,false,true,false
+
+expr_test	bool	1	.not.bmat	true,false,true,false,true,false,true,false,true,false,true,false
+
+
+#
+# Scalar .or.
+#
+
+expr_test	bool	1	b2.or.true	true
+expr_test	bool	2	b2.or.true	true
+expr_test	bool	1	b2.or.false	false
+expr_test	bool	2	b2.or.false	true
+
+expr_test	bool	1	b2||false	false
+expr_test	bool	2	b2||false	true
+
+
+#
+# Vector .or.
+#
+
+expr_test	bool	1	b2.or.bvec	false,true,false,true,false
+expr_test	bool	2	b2.or.bvec	true
+
+expr_test	bool	1	bvec.or.b2	false,true,false,true,false
+expr_test	bool	2	bvec.or.b2	true
+
+expr_test	bool	1	bvec.or.bvec	false,true,false,true,false
+expr_test	bool	2	bvec.or..not.bvec	true,true,true,true,true
+
+expr_test	bool	1	bmat.or.bmat	false,true,false,true,false,true,false,true,false,true,false,true
+expr_test	bool	1	bmat.or..not.bmat	true,true,true,true,true,true,true,true,true,true,true,true
+
+#
+# Scalar .and.
+#
+
+expr_test	bool	1	b2.and.true	false
+expr_test	bool	2	b2.and.true	true
+expr_test	bool	1	b2.and.false	false
+expr_test	bool	2	b2.and.false	false
+
+expr_test	bool	1	b2&&true	false
+expr_test	bool	2	b2&&true	true
+
+
+#
+# Vector .and.
+#
+
+expr_test	bool	1	b2.and.bvec	false
+expr_test	bool	2	b2.and.bvec	false,true,false,true,false
+
+expr_test	bool	1	bvec.and.b2	false
+expr_test	bool	2	bvec.and.b2	false,true,false,true,false
+
+expr_test	bool	1	bvec.and.bvec	false,true,false,true,false
+expr_test	bool	2	bvec.and..not.bvec	false,false,false,false,false
+
+expr_test	bool	1	bmat.and.bmat	false,true,false,true,false,true,false,true,false,true,false,true
+expr_test	bool	1	bmat.and..not.bmat	false,false,false,false,false,false,false,false,false,false,false,false
+
+
+#
+# Cleanup after tests
+#
+
+paw_cmd { close 4 }

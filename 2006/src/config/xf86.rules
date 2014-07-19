@@ -1,0 +1,131 @@
+/* $Id: xf86.rules,v 1.1.1.1 1995/12/20 15:26:45 cernlib Exp $
+ *
+ * $Log: xf86.rules,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:45  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: xf86.rules,v 1.7 95/01/25 16:34:39 kaleb Exp $
+
+/*
+ * These rules are needed to build the Xfree86 X Servers
+ */
+
+#ifndef CPPOnlyAsm
+#define CPPOnlyAsm(basename,options) RemoveFile(basename.i)		@@\
+	$(CPP) AsmDefines $(DEFINES) $(INCLUDES) options basename.s | \	@@\
+		grep -v '^\#' > basename.i
+#endif
+
+#ifndef AssembleObject
+#define AssembleObject(flags) CPPOnlyAsm($*,flags)			@@\
+	$(AS) -o $*.o $*.i						@@\
+	RemoveFile($*.i)
+#endif
+
+#ifndef NormalAsmObjectRule
+#define NormalAsmObjectRule()						@@\
+.s.o:									@@\
+	AssembleObject($(_NOOP_))					@@\
+									@@\
+.s.i:									@@\
+	CPPOnlyAsm($*,$(_NOOP_))
+#endif
+
+#ifndef ObjectFromSpecialAsmSource
+#define ObjectFromSpecialAsmSource(dst,src,flags)			@@\
+dst.s:  src.s								@@\
+	RemoveFile($@)							@@\
+	$(LN) $? $@							@@\
+									@@\
+dst.o:  dst.s								@@\
+	AssembleObject(flags)						@@\
+									@@\
+dst.i:  dst.s								@@\
+	CPPOnlyAsm(dst,flags)						@@\
+									@@\
+depend:: dst.s								@@\
+									@@\
+clean::									@@\
+	RemoveFile(dst.s)
+#endif
+
+
+/*
+ * Rules for building config files from scripts
+ */
+
+#ifndef Depend
+# define Depend depend
+#endif
+ 
+#ifndef ConfigTargetLong
+#define ConfigTargetLong(target,dep,script,args,extra)			@@\
+all:: Configure								@@\
+									@@\
+Configure:: target.o							@@\
+									@@\
+target.c: script dep							@@\
+	$(MAKE) $(MFLAGS) Makefile					@@\
+	$(MAKE) $(MFLAGS) extra Concat(Build,target)			@@\
+									@@\
+Concat(Build,target):							@@\
+	$(RM) target.c							@@\
+	$(SHELL) script args						@@\
+									@@\
+clean::									@@\
+	$(RM) target.c
+#endif
+
+#define ConfigTarget(target,dep,script,args) ConfigTargetLong(target,dep,script,args,Depend)
+
+#define ConfigTargetNoDepend(target,dep,script,args) ConfigTargetLong(target,dep,script,args,)
+
+/*
+ * Rules for installing LinkKit parts (target is install.linkkit)
+ */
+
+#ifndef InstallLinkKitNonExecFile
+#define InstallLinkKitNonExecFile(file,dest)				@@\
+install.linkkit:: file							@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) -c $(INSTDATFLAGS) file $(DESTDIR)dest
+#endif
+
+#ifndef InstallLinkKitLibrary
+#define InstallLinkKitLibrary(libname,dest)				@@\
+install.linkkit:: Concat(lib,libname.a)					@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) -c $(INSTLIBFLAGS) Concat(lib,libname.a) $(DESTDIR)dest @@\
+	RanLibrary($(RANLIBINSTFLAGS) Concat($(DESTDIR)dest/lib,libname.a))
+#endif
+
+#ifndef InstallLinkKitNamedLibrary
+#define InstallLinkKitNamedLibrary(libname,dlibname,dest)		@@\
+install.linkkit:: Concat(lib,libname.a)					@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) -c $(INSTLIBFLAGS) Concat(lib,libname.a) \		@@\
+	  Concat($(DESTDIR)dest/lib,dlibname.a)				@@\
+	RanLibrary($(RANLIBINSTFLAGS) Concat($(DESTDIR)dest/lib,dlibname.a))
+#endif
+
+#ifndef InstallLinkKitNamedNonExec
+#define InstallLinkKitNamedNonExec(srcname,dstname,dest)		@@\
+install.linkkit:: srcname						@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) -c $(INSTDATFLAGS) srcname $(DESTDIR)dest/dstname
+#endif
+
+#ifndef InstallLinkKitNamedProg
+#define InstallLinkKitNamedProg(srcname,dstname,dest)			@@\
+install.linkkit:: srcname						@@\
+	MakeDir($(DESTDIR)dest)						@@\
+	$(INSTALL) -c $(INSTBINFLAGS) srcname $(DESTDIR)dest/dstname
+#endif
+
+#ifndef InstallLinkKitSubdirs
+#define InstallLinkKitSubdirs(dirs) \
+NamedTargetSubdirs(install.linkkit,dirs,"installing link kit",DESTDIR='$(DESTDIR)',install.linkkit)
+#endif
+

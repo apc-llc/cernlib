@@ -1,0 +1,365 @@
+*
+* $Id: v2_07,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_07,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :          13/02/96  16.03.32  by  O.Couet
+*-- Author :    O.Couet   05/05/95
+*
+* 13/02/96  16.02.55  by  O.Couet
+* VIDNx are replced by OBS in PAWUWF.
+*
+* 09/02/96  16.01.16  by  O.Couet
+* HIJE added in PAWCS
+*
+*::>          VERSION  2.07/21   09/01/96 15.52.09
+*
+* New version of the Query Processor
+*
+* 08/01/96  16.51.41  by  O.Couet
+* The default NODE value in the connect command is now piaf1.cern.ch
+*
+*::>          VERSION  2.07/20   19/12/95 11.58.29
+*
+* New command DBOX.
+*
+* 11/12/95  09.45.50  by  O.Couet
+* Mod in tcpiaf and in PAWCDF.
+*
+* 07/12/95  16.15.29  by  O.Couet
+* PI/PRINT can generate GIF files
+*
+* 07/12/95  13.21.18  by  O.Couet
+* IGCOLM in PAWCS
+*
+*::>          VERSION  2.07/19   06/12/95 17.58.06
+*
+* New version of QP (problem with cuts on OSF1)
+*
+* 04/12/95  18.10.17  by  O.Couet
+* In PAHFIT the OP/FUNC command use now COMIS instead of the old qp
+* routines.
+*
+* 28/11/95  12.02.17  by  O.Couet
+* In PAFUNC, HDCOFL is called in the command FUN1 and FUN2.
+*
+* 28/11/95  11.03.00  by  O.Couet
+* Now the option C S L are not valid in FUN2. They are replaced by the
+* H/PLOT options describe in the help (CONT, SURF etc ...).
+*
+*::>          VERSION  2.07/18   20/11/95 11.15.38
+*
+* Bug fixed in PAWDEC: the QP routines was called.
+*
+*::>          VERSION  2.07/17   17/11/95 16.02.17
+*
+* Mods in PAFUNC. The old QP is not used at all in FUN1, FUN2 and FUN/PLOT.
+* COMIS is used instead. The HELP of FUN1 and FUN2 has been improved.
+*
+* 16/11/95  14.02.46  by  O.Couet
+* TCPIAF: mods for WINSOCK on Windows
+*
+* 10/11/95  17.29.56  by  O.Couet
+* Mods in the calls to hplfr3, taking care into account the fact that
+* it now compute the log.
+*
+* 02/11/95  16.07.04  by  O.Couet
+* If /cern/pro/bin/pawsys.kumac doesn't exist, the macro defined in the
+* environment variable called PAWSYS is executed.
+*
+*::>          VERSION  2.07/16   01/11/95 13.10.37
+*
+* Used the option 'Z' for HPLAER in PAGHPL
+*
+* 31/10/95  11.36.06  by  O.Couet
+* With the help of the new HPLOT routine HPLQSE, the '?' in now not
+* mandatory in $GRAFINFO.
+*
+* 30/10/95  11.28.57  by  O.Couet
+* Update in the help of CONTOUR
+*
+*::>          VERSION  2.07/15   27/10/95 11.51.12
+*
+* New system function $OPTION.
+*
+* 25/10/95  10.17.25  by  O.Couet
+* Double quotes are changed in single quotes in the CDF.
+*
+* 17/10/95  18.33.54  by  O.Couet
+* New command ELLIPSE
+*
+*::>          VERSION  2.07/14   16/10/95 15.43.12
+*
+* FLAG TKTCL added in PAWINT1, PAWINT2 and 0PAMAIN.
+*
+* 16/10/95  14.05.41  by  O.Couet
+* New MASK menu
+*
+* 11/10/95  11.44.15  by  O.Couet
+* Improve the HELP of CONTOUR
+*
+* 02/10/95  18.41.26  by  O.Couet
+* The default value for UWFUNC in all the Ntuple commands is '1.'
+*
+* 25/09/95  17.30.14
+* In HMERGE, FILECASE KEEP was not taken into account.
+* Implies mods in MERGIN.
+*
+* 20/09/95  16.49.08
+* A call to kualfa was missing in paobs.
+*
+*::>          VERSION  2.07/13   19/09/95 09.38.54
+*
+* Fix in PAWSEL (division by 0) wbr@axher1.desy.de (Walter Brueckner)
+*
+*::>          VERSION  2.07/12   14/09/95 14.19.45
+*
+* Mods in PIAFRONT
+*
+* 13/09/95  16.37.34
+* HRDIR is now callable from COMIS.
+*
+*::>          VERSION  2.07/11   13/09/95 15.40.45
+*
+* PAPLOT is now called with CHCASE='HIST' in PANTUP.
+*
+* 01/09/95  13.40.27
+* The OVERFLOW was not correct in $HINFO.
+*
+* 24/08/95  13.43.43
+* New version of PIAFDEC
+*
+* 23/08/95  18.27.31
+* Mods in bugrep. PAWSUPPORT is added
+*
+*::>          VERSION  2.07/10   23/08/95 09.44.41
+*
+* Bug fixed in HGETID: repeating H/PL -1 produced an error.
+*
+* 23/08/95  09.16.55
+* Help of META and WORKSTATION improved.
+*
+* 22/08/95  17.47.01
+* New piafdec
+*
+* 18/08/95  15.44.00
+* In $LOCAL and LOCAL "panic" is changed into "local_panic".
+*
+*::>          VERSION  2.07/09   18/08/95 15.18.36
+*
+* New command OP/FUN.
+*
+* 17/08/95  15.04.52
+* Bug fixed in pawsel. It is now possible to do:
+* nt/plot 30.x nt.f(1,2,3,4,5,6,7,8,9,10)
+*
+* 16/08/95  16.33.55
+* Long deck names like FPGETOPTD are now reduced.
+*
+*::>          VERSION  2.07/08   16/08/95 16.13.00
+*
+* Bug fixed in PAFTH and PAFITV: these routine required the Motif
+* library even in pawX11.
+*
+* 15/08/95  17.25.11
+* Bug fixed in HVTOB: 20(4:18,0.:0.5) was not working on the y-axis
+*
+* 15/08/95  12.01.56
+* Timo mods in PIAFRONT and TCPIAF.
+*
+*::>          VERSION  2.07/07   11/08/95 12.14.57
+*
+* Bug fixed in PAFITH the varibale VERRORNAM was used instead of
+* VERRORNUM.
+*
+* 11/08/95  11.48.52
+* P(1) is initialized to 0. in PAWCS to avoid warnings with purify.
+*
+* Correction in PANDRA so that call to PPROJN has correct number of
+* arguments.
+*
+*::>          VERSION  2.07/06   14/07/95 14.22.36
+*
+* Small mod in parlineform to change a #include to a +SEQ.
+*
+* Timo mods for PIAF.
+*
+* 05/07/95  09.08.40
+* in pafitv LODRAW was set to 0 instead of .FALSE.
+*
+* 03/07/95  17.58.46
+* PAUTIT has now one parameter.
+*
+* 03/07/95  16.00.20
+* The routine getatt in now in the PAW patch.
+*
+*::>          VERSION  2.07/05   29/06/95 15.28.26
+*
+* in pafith LODRAW was set to 0 instead of .FALSE.
+*
+* 28/06/95  14.46.58
+* Fixes in Fit panel. Bug in the allocation of space for parameters.
+* (Yana Gaponenko).
+*
+*::>          VERSION  2.07/04   28/06/95 10.37.34
+*
+* New routine PAHPR which allows to print histograms with ranges.
+* It is called in PAHIO and PAPLOT.
+*
+* 26/06/95  13.47.47
+* Mod in PASCAN: In case of vectors, the first entry is scanned
+* only once.
+*
+*::>          VERSION  2.07/03   22/06/95 10.14.42
+*
+* The Fit panel is re-activated (*PAW).
+*
+* 21/06/95  16.04.48
+* Mods in Fit panel for VMS version (Yana Gaponenko).
+*
+* 20/06/95  14.37.18
+* FPHSETRNG was wrong (Yana Gaponenko).
+*
+*::>          VERSION  2.07/02   16/06/95 10.51.13
+*
+* about.c is now dummy
+*
+* 14/06/95  11.23.05
+* MULTINET_SHUTDOWN added in 0PAMAINM
+*
+* 07/06/95  10.30.34
+* Improvements in the HELPs of ZONE, SWN, SVP and SELNT.
+*
+* 06/06/95  15.32.11
+* SELF DEV in palogo
+*
+* 01/06/95  17.36.08
+* New options in $HINFO:
+* $HINFO(id,'1DHISTO') ... 1 if ID is a 1D histogram or 0 otherwise
+* $HINFO(id,'2DHISTO') ... 1 if ID is a 2D histogram or 0 otherwise
+* $HINFO(id,'TABLE') ..... 1 if ID is a table or 0 otherwise
+* $HINFO(id,'PROFILE') ... 1 if ID is a profile histogram or 0 otherwise
+* $HINFO(id,'NTUPLE') .... 1 if ID is a Ntuple or 0 otherwise
+* $HINFO(id,'LOG') ....... 1 if ID has LOG Y scale or 0 otherwise
+*
+* 30/05/95  09.40.26
+* Complete the HELP of the command TIC.
+*
+* 29/05/95  13.23.45
+* in $PCHTAG CHBIG has now 512 characters (maximu size on AIX).
+* (problem found by Michael Dahlinger).
+*
+* 19/05/95  11.34.54
+* New version of the KEY command
+*
+* Fix in PCINFO: local functions are no longer sent to PIAF
+* for processing when the user uses FUN/FUN1 commands ....
+*
+* 17/05/95  08.58.57
+* Fix in bugrep: "automatically" was spelled "automaticaly"
+*
+* 11/05/95  11.59.10
+* Bug fixed in HGETID. ICRANG was always set to 1 even in case
+* of invalid range.
+*
+*::>          VERSION  2.07/01   10/05/95 10.36.03
+*
+* It is now possible to copy histograms with ranges. This implies
+* mod in HGETID, HGETIR (use a new routine HVTOB). The command
+* H/COPY use the NEW routine HCOPYR of HBOOK.
+*
+* 08/05/95  14.37.16
+* Protection added in PAFITH agains: h/fit 100.sliy.1 g
+*
+* 05/05/95  16.27.32
+* EXTERNAL flaged with FPANELS in PAFITH and PAFITV
+*
+*::>          VERSION  2.07/00   05/05/95 15.22.00
+*
+* MAXFCU=2000. Protection in pproj0,pprojn,pascan
+*
+* 04/05/95  18.08.37
+* FPANELS flag in utils
+*
+* 04/05/95  16.00.57
+* Fitting panels temporarly disabled.
+*
+* 04/05/95  10.25.12
+* New option in PASPI2 to draw the spider plots as segments.
+*
+* 02/05/95  10.19.42
+* Mods in PASCAN and PASPI2 to allows to animate the spider plots.
+*
+* 28/04/95  12.18.17
+* New MATCH parameter in the command NT/READ.
+*
+* 28/04/95  12.17.14
+* The last line of the table was not print in PASCAN when only one
+* event was scan.
+*
+* 28/04/95  09.06.30
+* Changes in PASPI2. The formats F12.2 have been replaced by E12.4. The
+* problem appears on VMS.
+*
+* 26/04/95  17.31.48
+* String was initialized with '' in PAFITH and PAFITV which is invalid
+* on VMS.
+*
+* 26/04/95  17.07.56
+* The common KCGUID is now suppressed (old kuip common). It is replaced
+* by PCHTAG which is smaller and more widely used (gain of space).
+*
+* 26/04/95  10.53.22
+* Bug fixed in PASCAN and PASCA1: even with the ouput redirected on
+* a file, some lines were output on the screen in NT/SCAN.
+*
+* 25/04/95  16.17.38
+* HELP of H/PLOT, H/ERR and AERR changed according to the new
+* behaviour of option "1" in HPLAER.
+*
+* 24/04/95  16.10.45
+* New version of the fitting panel (Gregory Kozlovsky).
+*
+* 24/04/95  16.10.32
+* New paw.com (VAX)
+*
+* 21/04/95  11.55.49
+* Bug fixed in PAVECT. in V/PLOT X%Y, IGRAPH was not called with
+* option 'Z'.
+*
+* 18/04/95  16.31.52
+* The slide package is now obsolete (move into SLIDE_OBS). In *PAW
+* the SLIDE flag is not selected.
+*
+* 18/04/95  12.10.26
+* New version of the fitting panel (Gregory Kozlovsky).
+*
+* 13/04/95  11.29.00
+* Mod in PCHROP: RZOPEN is call with option C (for UNIX machines) like
+* in PAWROP.
+*
+* 12/04/95  17.41.30
+* New version of ATITLE using the new HPLOT routine HPLLGD.
+*
+* 11/04/95  13.53.29
+* HBUG an IGERR are now disable for VAX. These routines are already
+* defined in HBOOK and HIGZ. Having these routines double defined,
+* causes problems to create sharable images on VAX/VMS.
+*
+* 11/04/95  13.45.53
+* New patch MANPAGES
+*
+* 11/04/95  10.53.58
+* Mods in PAWFCA and PCINFO. The CUTOL to convert COMIS file names
+* to lowercase is now commented because COMIS takes care of the case
+* conversion set by the FILECASE command.
+*
+* 07/04/95  17.42.07
+* Dummy entry MULTINET_SHUTDOWN added in 0pamain.
+*
+* 07/04/95  16.47.13
+* Option "overlay" added in the pull down menu of 1d histos (Paw++)
+*

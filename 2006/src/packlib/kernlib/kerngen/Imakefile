@@ -1,0 +1,32 @@
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= ccgen ccgenci ccgencf ccgenu tcgen xvect
+
+#ifdef unix
+#undef unix
+#endif
+
+#if defined(CERNLIB_UNIX)
+LIBDIRS+=unix tcgens
+#else
+#if defined(CERNLIB_VAXVMS)
+LIBDIRS :=$(LIBDIRS) tcgenc vmscode
+#ifdef CERNLIB_QMALPH
+LIBDIRS :=$(LIBDIRS) tcgens
+#endif
+#else
+LIBDIRS+=other tcgens
+#endif
+#endif
+
+SUBDIRS= $(LIBDIRS) kerngen test
+
+TopOfPackage(kerngen)
+
+SubdirLibraryTarget(kerngen,$(LIBDIRS))
+
+TestSubdirs(test)
+
+InstallIncludeSubdirs(kerngen)

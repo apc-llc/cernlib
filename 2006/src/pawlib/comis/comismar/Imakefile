@@ -1,0 +1,3 @@
+SRCS_S=	 comismar.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

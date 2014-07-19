@@ -1,0 +1,11 @@
+*
+* $Id: v217.dat,v 1.1.1.1 1996/03/08 11:40:54 mclareni Exp $
+*
+* $Log: v217.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:40:54  mclareni
+* Kapack
+*
+*
+* This directory was created from kapack.car patch history
+C KAPACK   2.17      950217 11.50 CERN Program Library     Z303 KAPACK
+* 17-FEB-95 add SAVE statement to KASEQM, KAPREM (Lynn Garren)

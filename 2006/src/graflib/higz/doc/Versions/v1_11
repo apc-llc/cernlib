@@ -1,0 +1,66 @@
+*
+* $Id: v1_11,v 1.1.1.1 1996/02/14 13:10:20 mclareni Exp $
+*
+* $Log: v1_11,v $
+* Revision 1.1.1.1  1996/02/14 13:10:20  mclareni
+* Higz
+*
+*
+*CMZ :          24/07/91  17.55.48  by  Rene Brun
+*-- Author :
+*
+*::>          VERSION  1.11/03   910708 14.44
+*
+*       New routine HCOPYP to copy a projection into a 1-dim hist.
+*       Ex: If ID=20 contains a PROX and 20 SLIX, then
+*           H/copy 20.prox 1 copy PROX from 20 inti ID=1
+*           H/copy 20.slix.12 12 copy SLIX.12 into ID=12
+*
+*       Bug corrected in GET/Abscisa (C.Erd)
+*       New versions of LOCATE and VLOCATE using the sample mode
+*          facility of the X11 version of HIGZ.
+*       Protection in PAFITV to avoid to draw a bar chart if 'B'
+*          (Bounds) is selected in V/FIT.
+*
+*       Corrections for NEWLIB version (Harald Butenschoen,DESY)
+*       in routines PAMAIN,PAHIO,PAOPEN,PAWFOP
+*
+*       New routines HMAXIM,HMINIM,HMAX,HMIN,HNORMA,HREND in PAWCS
+*       New routine HGFIT in PAWCS
+*       Buffer size for COMIS increased from 5000 to 10000 words
+*
+*       Bug corrected in PASCA1 whem masks are used
+*
+*       Change in PANTUP for Ntuple/Read on VM
+*
+*       First version of PAW_MOTIF: Flag MOTIF introduced and
+*       new patches FPMOTIF and CPMOTIF.
+*
+*::>          VERSION  1.11/02   910307 11.55
+*
+*       Bug corrected in command Ntuple/Lintra
+*       Rename parameter CHOPT to OPTION in command Ntuple/Plot
+*       Memory mapping implemented in command GLOBAL
+*       (requires mapping routines from HBOOK and KUIP)
+*
+*::>          VERSION  1.11/01   910225  8.40
+*
+*       Changes in PILOT,PATCH *PAW
+*       Changes in RLOGIN to allow hostnames up to 16 characters
+*
+*::>          VERSION  1.11/00   910214 18.30
+*
+*       New COMMON HIGRAF introduced in PAWCS. This allows to
+*          access the points used by the command GRAPH with
+*          option 'C' in a COMIS program.
+*       New option 'F' in the command GRAPH. The command GRAPH
+*          with option 'C' or 'CF' allows now to draw closed
+*          contours.
+*
+*       Correction in PAGKSA: LIST change in PALETTE
+*       Upgrade of command SCAN. It is now possible to scan
+*          expressions of the original variables.
+*       In the command CONTOUR, IFLAG is now replaced by CHOPT.
+*          This allow to superimpose contour plots. This mod is
+*          compatible with the previous version.
+*

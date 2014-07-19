@@ -1,0 +1,7 @@
+SRCS_F=	 test.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(ariadne,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),jetset74)
+
+TestTarget(ariadne,NullParameter,NullParameter)

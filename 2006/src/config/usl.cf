@@ -1,0 +1,30 @@
+/* $Id: usl.cf,v 1.1.1.1 1995/12/20 15:26:44 cernlib Exp $
+ *
+ * $Log: usl.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:44  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: usl.cf,v 1.37 95/06/30 18:11:39 kaleb Exp $
+
+#define OSName			UNIX System V/386 Release 4.2 Version 1.1.1
+XCOMM operating system:  OSName
+#define OSMajorVersion		4
+#define OSMinorVersion		2
+#define OSTeenyVersion		1
+
+#define BootstrapCFlags		-DUSL
+#define StandardDefines		-DUSL -DSVR4 -Di386
+#define NeedWidePrototypes	NO	/* experimental */
+#define ServerExtraDefines	-D__USLC__ XFree86ServerDefines
+#define ServerOSDefines		-DDDXTIME XFree86ServerOSDefines
+#define ToolkitStringsABIOptions -intelabi
+#define XawI18nDefines		-DHAS_WCTYPE_H -DHAS_ISW_FUNCS
+#if OSTeenyVersion > 1
+#define ExtraLibraries		-lsocket -lnsl -lgen
+#define ThreadedX		YES
+#define SystemMTDefines		-D_REENTRANT
+#define ThreadsLibraries	-lthread
+#endif
+#include <svr4.cf>

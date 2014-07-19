@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 fcasplit.F xbanner.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

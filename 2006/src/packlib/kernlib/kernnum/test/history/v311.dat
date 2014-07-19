@@ -1,0 +1,13 @@
+*
+* $Id: v311.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v311.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.11  950530  14.45
+C
+C   Remove test for:
+C     C300, C305, D209   GF.
+C

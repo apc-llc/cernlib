@@ -1,0 +1,59 @@
+*
+* $Id: namefd.input,v 1.1.1.1 1996/02/15 17:47:55 mclareni Exp $
+*
+* $Log: namefd.input,v $
+* Revision 1.1.1.1  1996/02/15 17:47:55  mclareni
+* Kernlib
+*
+*
+*DECK  ID>, fatmen.names
+:nick.FMSACLAY
+               :userid.fmsmc
+               :node.frsac12
+               :DIR1.//cern/smc
+
+:nick.FATCAT
+               :userid.fmfatcat
+               :node.cernvm
+               :DIR1.//cern/smc
+
+:nick.FMIN2P3
+               :userid.fmsmc
+               :node.frcpn11
+               :DIR1.//cern/smc
+
+:nick.FMRAL
+               :userid.fmsmc
+               :node.ukacrl
+               :DIR1.//cern/smc
+
+:nick.FATSERVERS :plink.splodge
+               :list.fatop1 fatop2
+
+:nick.FATOPERATORS
+               :list.fatop1 fatop2
+
+:nick.FATOP1
+               :userid.console
+               :node.cernvm
+
+:nick.FATOP2
+               :userid.opsutil
+               :node.cernvm
+
+:nick.FATOWN1
+               :userid.fatone
+               :node.cernvm
+
+:nick.FATOWN2
+               :userid.hrrcr
+               :node.cernvm
+
+:nick.FATOWNERS
+               :list.fatown1 fatown2 jamie igb
+
+:nick.FATCAT
+               :userid.fmfatcat
+               :node.cernvm
+               :DIR1.//cern/smc
+

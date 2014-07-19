@@ -1,0 +1,93 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:45 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:45  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIRT)
+
+Up-date  1.07 :   3-Mar-1994
+----------------------------
+
+Replacing File   KERNIRT  1.06  930812 10.34
+
+Delete :      INTRAC               use INTRAC in p=CCGEN
+
+---------------------------------------------------------------------
+
+Up-date  1.06 :  11-Aug-1993
+----------------------------
+
+Replacing File   KERNIRT 1.05  920521 16.27
+
+New patches:  *KIRTD, QMIRTD, IRTDGS          for Autodouble
+
+---------------------------------------------------------------------
+
+Up-date  1.05 :  11-May-1992
+----------------------------
+
+Replacing File   KERNIRT 1.04  910719 12.59
+
+New decks :   LENOCC, LNBLNK                      for speed
+
+---------------------------------------------------------------------
+
+Up-date  1.04 :  18-July-1991
+----------------------------
+
+Replacing File   KERNIRT 1.03  910315 17.05
+
+Correct :     P=QMIRT              complete options
+              KERNGT               to use Z=QFTITLCH
+
+Delete :      SIGNAL               obsolete, use SIGNALF
+
+---------------------------------------------------------------------
+
+Up-date  1.03 :  14-Mar-1991
+----------------------------
+
+Replacing File   KERNIRT 1.02  900925 18.30
+
+New decks :   SIGNALF
+
+Correct :     Connect P=CCGEN, CCGENCF of KERNFOR
+
+Delete :      CHDIR, GETCWD, PERROR, RENAME
+
+---------------------------------------------------------------------
+
+Up-date  1.02 :  25-Sep-1990
+----------------------------
+
+Replacing File   KERNIRT 1.01  900319 22.28
+
+New decks :   CHDIR, GETCWD, PERROR, RENAME, SIGNAL
+
+Correct :     connect CCGEN by individual routines
+
+---------------------------------------------------------------------
+
+Up-date  1.01 :  19-Mar-1990
+----------------------------
+
+Replacing File   KERNIRT 1.00  891208 11.00
+
+New :         XINB, XINBF, XINBS    as on IBM
+              INTRAC
+
+Correct :     the pilot patch is *KIRT   (and not *KMIRT)
+              FCASPLIT to be used from KERNFOR
+
+Delete :      FSPLIT, IARGC
+
+---------------------------------------------------------------------
+
+          FIRST RELEASE OF THE KERNIRT  PAM :  8-Dec-1989
+
+---------------------------------------------------------------------
+
+#endif

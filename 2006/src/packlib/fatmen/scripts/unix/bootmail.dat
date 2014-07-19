@@ -1,0 +1,3 @@
+#!/bin/ksh
+subject="`hostname` rebooting at `date`"
+mail -s "${subject}" fatcat-mgr@zfatal.cern.ch < /dev/null > /dev/null

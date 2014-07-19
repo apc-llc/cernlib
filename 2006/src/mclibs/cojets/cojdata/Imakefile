@@ -1,0 +1,10 @@
+SRCS_F= \ @@\
+	 cojver.F data.F
+
+#if !defined(CERNLIB_GFORTRAN)
+FORTRANSAVEOPTION = FortranSaveFlags
+#else
+FORTRANSAVEOPTION = -fno-automatic
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

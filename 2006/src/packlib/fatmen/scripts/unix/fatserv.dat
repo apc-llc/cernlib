@@ -1,0 +1,39 @@
+*
+* $Id: fatserv.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: fatserv.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+# Example FATSERV script.
+#
+typeset -l fatpath
+typeset -u FATGRP
+ 
+FATGRP=${1};export FATGRP
+fatpath=/fatmen/${1}
+eval ${FATGRP}=${fatpath};export ${FATGRP}
+ 
+FMWAKEUP=120;   export FMWAKEUP
+FMLOGL=0;export FMLOGL
+PWD=fatmen;export PWD
+ 
+t=`date`
+h=`hostname`
+echo
+echo FATSERV starting at $t on $h
+echo
+echo FATMEN group set to $FATGRP , wakeup interval is $FMWAKEUP seconds
+echo
+echo $FATGRP starting at $t on $h PID = $$ > /fatmen/${FATGRP}.log
+typeset -l fatpath
+fatpath=/fatmen/${FATGRP}
+${fatpath}/fatsrv
+if [ -f  /fatmen/${FATGRP}.log ]
+then
+   rm -f  /fatmen/${FATGRP}.log
+fi
+ 

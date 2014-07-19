@@ -1,0 +1,15 @@
+DoIncludePackage(higz)
+#include "pilot.h"
+
+#if defined(CERNLIB_FALCO)
+SRCS_F=	 ifclip.F ifclr.F ifdraw.F ifdrw9.F ifinit.F ifmov6.F \ @@\
+	ifmov9.F ifmove.F ifpl.F ifput.F ifscur.F ifswin.F \ @@\
+	ifvwin.F
+
+#if defined(CERNLIB_VAX) || defined(CERNLIB_IBM)
+SRCS_F:= $(SRCS_F) ifput1.F
+#endif
+
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

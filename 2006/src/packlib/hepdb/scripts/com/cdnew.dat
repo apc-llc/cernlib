@@ -1,0 +1,86 @@
+*
+* $Id: cdnew.dat,v 1.1.1.1 1996/02/28 16:23:57 mclareni Exp $
+*
+* $Log: cdnew.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:57  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDNEW.COM
+$ !
+$ ! Setup the directory and file structure for a new
+$ ! server
+$ !
+$   set noon
+$   procedure = f$parse(f$environment("PROCEDURE"),,,"NAME")
+$   say       = "write sys$output"
+$   if p1 .eqs. ""
+$      then
+$         write sys$output "''procedure': usage ''procedure' group"
+$         exit
+$   endif
+$ !
+$ ! Does the directory already exist?
+$ !
+$   home = f$search("DISK$MF:[000000]''p1'.dir")
+$   if home .eqs. ""
+$      then
+$         say "''procedure': home directory for ''p1' does not exist."
+$         say "''procedure': please create an account using USERREG"
+$         exit
+$   endif
+$ !
+$ ! Create subdirectories
+$ !
+$   create/directory DISK$MF:['p1'.BAD]
+$   create/directory DISK$MF:['p1'.LOG]
+$   create/directory DISK$MF:['p1'.QUEUE]
+$   create/directory DISK$MF:['p1'.TODO]
+$   create/directory DISK$MF:['p1'.SAVE]
+$   directory DISK$MF:['p1'] /security
+$ !
+$ ! Set protections
+$ !
+$   set file/protection=w:re DISK$MF:[000000]'p1'.DIR
+$   set file/protection=w:re DISK$MF:['p1']BAD.DIR
+$   set file/protection=w:re DISK$MF:['p1']LOG.DIR
+$   set file/protection=w:re DISK$MF:['p1']SAVE.DIR
+$   set file/protection=w:re DISK$MF:['p1']TODO.DIR
+$ !
+$ ! and the ACL
+$ !
+$   group = P1 - "CD"
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER='P1',ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER=ID$_'GROUP',ACCESS=READ+WRITE+EXECUTE)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER='P1',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE+DELETE+CONTROL)
+$   set acl /object_type=file DISK$MF:['p1']QUEUE.DIR -
+/acl=(IDENTIFIER=ID$_'GROUP',OPTIONS=DEFAULT,ACCESS=READ+WRITE+EXECUTE)
+$ !
+$ ! If identifier does not exist, set world write protection
+$ !
+$   if $severity .ne. 1
+$      then
+$         say "''procedure': identifier ''id$_group' does not exist"
+$         say "''procedure': granting W:RWE access"
+$         set file/prot=w:rwe DISK$MF:['p1']QUEUE.DIR
+$   endif
+$ !
+$ ! Create names file
+$ !
+$   open/write out DISK$MF:['p1']HEPDB.NAMES
+$   write out ":nick.config"
+$   write out ":list.aa"
+$   write out ":bad.DISK$MF:[''p1'.BAD]"
+$   write out ":log.DISK$MF:[''p1'.LOG]"
+$   write out ":queue.DISK$MF:[''p1'.QUEUE]"
+$   write out ":todo.DISK$MF:[''p1'.TODO]"
+$   write out ":save.DISK$MF:[''p1'.SAVE]"
+$   write out ":wakeup.120"
+$   write out ":loglevel.3"
+$   close out
+$   type DISK$MF:['p1']HEPDB.NAMES
+#endif

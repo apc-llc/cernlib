@@ -1,0 +1,22 @@
+SRCS_F= \ @@\
+	 cgaffi.F cgbfit.F cgbint.F cgbmmt.F cgbool.F cgbox.F cgbrik.F \ @@\
+	 cgbsea.F cgbsec.F cgbsor.F cgbsub.F cgbtef.F cgbtfp.F cgbttt.F \ @@\
+	 cgcev.F cgcopy.F cgelli.F cgfac2.F cgfaco.F cgfare.F cgfvis.F \ @@\
+	 cghcre.F cghdfa.F cghend.F cgheva.F cghins.F cghmov.F cghpla.F \ @@\
+	 cghren.F cghshi.F cghsiz.F cghtre.F cginve.F cgmnmx.F cgpers.F \ @@\
+	 cgrifl.F cgsaan.F cgscop.F cgshel.F cgshif.F cgsize.F cgslic.F \ @@\
+	 cgsnor.F cgsphe.F cgsub.F cgtset.F cgtstr.F cgvedg.F cgvhed.F \ @@\
+	 cgvtef.F cgvtin.F cgwire.F cgwsor.F cgzre.F cgzrev.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)

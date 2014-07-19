@@ -1,0 +1,130 @@
+#
+#  nt_plot.exp  --
+#	Test plotting commands
+#
+#  Original: 13-Nov-1995 11:46
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for this test
+#
+
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+paw_cmd {set ncol 24}
+paw_cmd {pal 1}
+
+catch {exec mkdir -p tmp} err
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+#
+# 1 dim case
+#
+
+graphics_output_test	nt_pl_1d_1 {nt/pl 10.3*x}
+
+paw_cmd {opt logx}
+graphics_output_test    nt_pl_1d_2	{nt/pl 10.3*x}
+paw_cmd {opt linx}
+
+paw_cmd {opt logx}
+paw_cmd {opt logy}
+graphics_output_test    nt_pl_1d_3	{nt/pl 10.3*x}
+paw_cmd {opt linx}
+paw_cmd {opt liny}
+
+
+graphics_output_test	nt_pl_1d_4 {nt/pl 10.brnd}
+
+graphics_output_test	nt_pl_1d_5 {nt/pl 10.urnd}
+
+graphics_output_test	nt_pl_1d_6 {nt/pl 10.irnd}
+
+graphics_output_test	nt_pl_1d_7 {nt/pl 10.3*frnd}
+
+graphics_output_test	nt_pl_1d_8 {nt/pl 10.3*drnd}
+
+graphics_output_test	nt_pl_1d_9 {nt/pl 10.crnd}
+
+
+#
+# 2 dim case
+#
+
+graphics_output_test    nt_pl_2d_1	{nt/pl 10.y%x}
+
+paw_cmd {opt logx}
+paw_cmd {opt logy}
+graphics_output_test    nt_pl_2d_2	{nt/pl 10.y%x}
+paw_cmd {opt linx}
+paw_cmd {opt liny}
+
+graphics_output_test    nt_pl_2d_lego	{nt/pl 10.y%x option=lego}
+
+graphics_output_test    nt_pl_2d_lego1	{nt/pl 10.y%x option=lego1}
+
+graphics_output_test    nt_pl_2d_lego2	{nt/pl 10.y%x option=lego2}
+
+graphics_output_test    nt_pl_2d_surf	{nt/pl 10.y%x option=surf}
+
+graphics_output_test    nt_pl_2d_surf1	{nt/pl 10.y%x option=surf1}
+
+graphics_output_test    nt_pl_2d_surf2	{nt/pl 10.y%x option=surf2}
+
+graphics_output_test    nt_pl_2d_surf3	{nt/pl 10.y%x option=surf3}
+
+graphics_output_test    nt_pl_2d_surf4	{nt/pl 10.y%x option=surf4}
+# surf4 destroys the colormap :-(
+paw_cmd	{pal 1}
+
+graphics_output_test    nt_pl_2d_box	{nt/pl 10.y%x option=box}
+
+graphics_output_test    nt_pl_2d_line	{nt/pl 10.y%x ! 100 option=l}
+
+
+#
+# 3 dim case
+#
+
+graphics_output_test    nt_pl_3d_1	{nt/pl 10.z%y%x}
+
+
+paw_cmd {opt logx}
+paw_cmd {opt logy}
+paw_cmd {opt logz}
+graphics_output_test    nt_pl_3d_2	{nt/pl 10.z%y%x}
+paw_cmd {opt linx}
+paw_cmd {opt liny}
+paw_cmd {opt linz}
+
+graphics_output_test    nt_pl_3d_3	{nt/pl 10.z%y%x ! 100 option=l }
+
+#
+# 4 dim case
+#
+
+graphics_output_test    nt_pl_4d_1	{nt/pl 10.z%y%x%c  }
+
+paw_cmd {opt logx}
+paw_cmd {opt logy}
+paw_cmd {opt logz}
+graphics_output_test    nt_pl_4d_2	{nt/pl 10.z%y%x%c  }
+paw_cmd {opt linx}
+paw_cmd {opt liny}
+paw_cmd {opt linz}
+
+graphics_output_test    nt_pl_4d_3	{nt/pl 10.z%y%x%c ! 100 option=l }
+
+
+#
+# Cleanup after tests
+#
+
+paw_cmd { close 4 }

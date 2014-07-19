@@ -1,0 +1,15 @@
+*
+* $Id: v309.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v309.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.09  921017  0.20
+C-  Updates to current version:
+C   > P=MACHINETYPE          New patch replacing FKERNNUM
+C
+C-  Modifications:
+C   > P=E105FORT,D=DIVDIF    Set DIVDIF=0 when error E105.1 occurs
+C

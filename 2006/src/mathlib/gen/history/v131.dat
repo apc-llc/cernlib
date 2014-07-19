@@ -1,0 +1,29 @@
+*
+* $Id: v131.dat,v 1.1.1.1 1996/04/01 15:01:41 mclareni Exp $
+*
+* $Log: v131.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:41  mclareni
+* Mathlib gen
+*
+*
+* Version 1.31
+C          GLOBAL CHANGES FROM 1.30 :
+C          - invert history records in P=INFORM. The most recent at the
+C            top
+C
+C          ROUTINE CHANGES FROM 1.30 :
+C
+C          C309 CCLBES   Minor correction to FORMAT statements
+C          C327 BSIR4    Fix bug about unreachable code at label=23
+C          C345 BZEJY    New
+C          D207 BULSTO   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          D208 MERSON   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          D300 EPDE1    Minor correction to FORMAT statements
+C          D400 NUMDI1   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          D506 MINNEW   STOP removed
+C          F101 MATIN2   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          F103 MATRIX   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          M108 SORTMQ   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          U500 DSMALL   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C          V200 KBINOM   OBSOLETE ROUTINE DELETED FROM SOURCE AND BINARY
+C

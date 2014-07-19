@@ -1,0 +1,166 @@
+*
+* $Id: v2_02,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_02,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :  2.02/07 08/06/93  12.16.22  by  Rene Brun
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  2.02/07   08/06/93 12.16.22
+*
+*      Add LRECL to PAWROP/PIAF message
+*
+*      Mods in TCPIAF for VMS and Apollos
+*
+*      Add initialisation of COMMON/CZCBUF/IZCBUF in PAWINT
+*
+*::>          VERSION  2.02/06   07/06/93 15.14.04
+*
+*      Changes in Histostyle (overlapping buttons for Alpha/OSF)
+*
+*      Count I/O for commands PUT/GET in PZOPEN/TCPIAF
+*
+*      Cleanup of some C code (inconsistencies found by Alpha OSF compiler).
+*
+*::>          VERSION  2.02/05   04/06/93 14.30.04
+*
+*      New commands PUT/GET in menu PIAF and associated routines
+*
+*      Changes in PFINDV (in cases of TABs)
+*
+*      PADVAR now adds automatically index variables referenced by other
+*      variables to the list of variables to be read.
+*
+*      Remove call to HSETC2 in PNUTIL/RECOVER
+*
+*      Routine PSEXEC of the Piafserver now understands HGETNT and
+*      HLNEXT RPC's (used by Hbook/Object browser).
+*
+*      Routine HGETNT now makes an RPC to get the number of entries in
+*      a chain. Before it was reading over the network the headers of
+*      all Ntuples in the chain.
+*
+*      Variable CERN removed from sequence PCARGS
+*      Variable NTOLD initialized in PAWINT
+*
+*      Changes in PAWFCU/PAWILD/PAWSEL
+*
+*::>          VERSION  2.02/04   28/05/93 17.07.38
+*
+*
+*      Change in PANTUP and PBIN when plotting ntuples with INTEGERS
+*      in a column.
+*
+*      Routine IGERR modified for the case CHROUT=' '
+*
+*      Bug fixed in PASCA1 in case a mask is used in the selection.
+*
+*      Nt/scan can be used for chains
+*
+*::>          VERSION  2.02/03   27/05/93 15.20.53
+*
+*      Default number of events to be processed by the Ntuple commands
+*      has been changed from 999999 to 99999999.
+*
+*      Changes in HGETNT for chains (compute total number of events)
+*      Changes in PANTUP,PCNEXT,PPROJ0 and PPROJN for chains.
+*
+*      Remove compiler warning from CPAW/CHAIN
+*
+*      LINUX version introduced (V.Balashov, A.Lomov)
+*
+*::>          VERSION  2.02/02   26/05/93 15.44.39
+*
+*
+*      Sequence PAWBIG extended from 1000000 to 2000000 words
+*
+*      Changes in PAWCS (Logical units) for NEWLIB version
+*
+*      Several changes for the CHAIN mechanism.
+*
+*      Many changes for the PIAF server.
+*      First PIAF client-server implementation
+*      New PATCH, HBPIAF. This contains HBOOK routines modified for
+*      the PIAF server.
+*
+*      New command NTUPLE/RECOVER to recover ntuple files with missing headers
+*
+*      Mods in PAWROP. An already open file in U mode cannot be attached
+*      if another process is also attaching the file in U mode. RZEND now
+*      called to delete the ZEBRA structure.
+*
+*      Changes in PCHNCD
+*
+*      New HIGZ routine IGTCCH called in PACSEL
+*
+*      Many changes in MOTIF version to support new coordinate systems
+*      (Polar, cylindrical,spherical,pseudo-rapidity)
+*
+*::>          VERSION  2.02/01   11/05/93 15.30.32
+*
+*      Routines PAWINTM and PAWINT merged into PAWINT. This implies changes
+*      in 0PAMAIN and 0PAMAINM.
+*
+*      Changes calls to CSRPAW and CSRJCL to new COMIS routines
+*        CSR1FN,CSR2FN and CSR3FN.
+*
+*      Sequences CZSOCK and CZBUFF transfered to HBOOK.
+*      Implemented RPC for HRDIR.
+*      Fortran/Close closes now also correctly file connected to piafserv.
+*      Routine PSRZIN does not look in PAWC anymore (see comments in routine).
+*
+*      Bug fixed in PFINDV (IBM case) KLINE not cleared
+*
+*      Bug fixed in PBIN for integers
+*
+*      New sequence PACOMIS introduced. Space for COMIS increased from 10000
+*      to 20000 words. PACOMIS referenced in PAWINT/PAWINTM
+*
+*      New menu PIAF introduced. See corresponding HELP.
+*
+*      Routines HGETID and HGETIR modified for the implementation of
+*      the new sub-range facility.
+*      Histogram subranges can be specified in 2 different ways:
+*        1- h/pl id(ic1:ic2) with ic1 and ic2 integers means plot
+*                            from channel ic1 to channel ic2
+*        2- h/pl id(x1:x2) with x1 and x2 reals (with a .) means plot
+*                            from channel corresponding to x1
+*        Note that the mix mode h/pl id(x1:ic2) is also accepted
+*        This subrange works also for 2-DIM cases.
+*
+*      Interface to new version of COMIS introduced.
+*      Many bugs (COMIS) corrected (the complete list from W.Mueller)
+*      KUIP vectors can be used in COMIS main programs.
+*      Garbage collections do not destroy the KUIP vectors in COMIS routines.
+*
+*      In Histo/fit and Vector/Fit commands, one can now reference
+*      an already compiled COMIS routine. The previous version accepted
+*      only COMIS files.
+*
+*      Sequences HPL3 and HIMETA suppressed.
+*      New option -P for CHAIN command.
+*      Work dialog for NTUPLE commands looping over chains (PAW++ only)
+*
+*::>          VERSION  2.02/00   930429  8.26
+*
+*      Chain logic implemented. See HELP Ntuple/Chain.
+*
+*      Many changes due to the introduction of the PIAF server
+*
+*      bug fixed in PAWFCA. Local variable I1 changed to J1 to avoid
+*      a possible overwrite of I1 in /HCBITS/
+*
+*      bug fixed in PAWFCU. Element 29 of array LNEXT set to 1.
+*      This solves the problem :N/PLOT xxxx.XMNEN(VAR1,VAR2)
+*
+*      Changes to Graphical cuts.
+*      Graphical cuts on tranformations of the original variables
+*      are accepted. This new facility requires a new version of SIGMA.
+*
+*      In PAWCS INTRINSIC ERF,ERFC instead of EXTERNAL for IBM.
+*
+*      Mods in PAFORT for calls to COMIS on VAX
+*

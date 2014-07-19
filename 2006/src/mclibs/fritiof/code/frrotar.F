@@ -1,0 +1,95 @@
+*
+* $Id: frrotar.F,v 1.1.1.1 1996/01/11 14:05:22 mclareni Exp $
+*
+* $Log: frrotar.F,v $
+* Revision 1.1.1.1  1996/01/11 14:05:22  mclareni
+* Fritiof
+*
+*
+C********************************* END FRPOLAR ************************
+ 
+C********************************* FRROTAR ****************************
+ 
+       SUBROUTINE FRROTAR(DTHE,DPHI,IQ,DP)
+ 
+C...ROTATIONS
+C:  THE ROTATION MEANS:
+C:  IF IQ >0, THE COORDINATES ARE FIRST ROTATED DTHE ANGLE ABOUT
+C:  Y-AXES AND THEN AN ANGLE DPHI AROUND Z-ZXES. THE EFFECT IS THAT
+C:  A VECTOR ORIGINALLY AT (DTHE,DPHI) POLAR ANGLE WILL BE MOVED TO
+C:  THE NEW Z-AXE.
+C:  IF IQ <0, THE COORDINATES ARE FIRST ROTATED -DPHI ANGLE ABOUT
+C:  Z-AXES AND THEN AN ANGLE -DTHE AROUND Y-ZXES.
+C:  THIS IS TO COUNTER THE EFFECT OF A PREVIOUS "IQ>0" ROTATION.
+C:  THE MORAL IS, IF CALLED TWICE LIKE THIS,
+C: ...  CALL FRROTAR(DTHE,DPHI,1,DP)
+C: ...  CALL FRROTAR(DTHE,DPHI,-1,DP)
+C:  WE ARE BACK TO THE ORIGINAL FRAME AND NOTHING IS CHANGED.
+C:
+C: ...SPECIALLY FOR |IQ|=2, PJ,PJI IN FRJETS BLOCK AND PR(NR0-NR)
+C: ...IN FRCNUT BLOCK ARE ALSO ROTATED.
+ 
+      IMPLICIT DOUBLE PRECISION (D)
+      COMMON/FRCNUT/NR,KR(10,5),PR(10,5),NR0
+      COMMON/FRJETS/NJ,KJ(100,5),PJ(100,5)
+ 
+      COMMON/DUMYFROTA/ DPV(4)
+      DIMENSION DP(2,5)
+      SAVE /FRCNUT/,/FRJETS/,/DUMYFROTA/
+ 
+      IF(DTHE**2+DPHI**2.LT.1D-20) RETURN
+ 
+      K=0
+9     K=K+1
+      IF(K.EQ.1) THEN
+      IUP=2
+      ELSEIF(K.EQ.2.OR.K.EQ.4) THEN
+      IUP=NJ
+      ELSEIF(K.EQ.3) THEN
+      IUP=NR-NR0+1
+      ENDIF
+ 
+        DO 120 I=1,IUP
+        IF(K.EQ.1) THEN
+          DO 100 J=1,2
+100     DPV(J) = DP(I,J)
+          DPV(3)=.5D0*(DP(I,4)-DP(I,3))
+          DPV(4) =.5D0*(DP(I,4)+ DP(I,3))
+        ELSEIF(K.EQ.2) THEN
+          DO 101 J=1,4
+101     DPV(J) = PJ(I,J)
+        ELSEIF(K.EQ.3) THEN
+         IF(NR-NR0.GE.2) CALL FRMGOUT(0,1,'CHECK here NR,NR0:',
+     >           FLOAT(NR),FLOAT(NR0),0.,0.,0.)
+          DO 103 J=1,4
+103     DPV(J) = PR(NR0+I-1,J)
+       ENDIF
+ 
+       IF(IQ.GT.0) THEN
+       CALL FRROTAZ(DPHI,DPV)
+       CALL FRROTAY(DTHE,DPV)
+       ELSEIF(IQ.LT.0) THEN
+       CALL FRROTAY(-DTHE,DPV)
+       CALL FRROTAZ(-DPHI,DPV)
+       ENDIF
+ 
+        IF(K.EQ.1) THEN
+        DP(I,1) = DPV(1)
+        DP(I,2) = DPV(2)
+          DP(I,3)=DPV(4) - DPV(3)
+          DP(I,4)=DPV(4) + DPV(3)
+        ELSEIF(K.EQ.2) THEN
+          DO 111 J=1,4
+111     PJ(I,J) = DPV(J)
+        ELSEIF(K.EQ.3) THEN
+          DO 113 J=1,4
+113     PR(NR0+I-1,J) = DPV(J)
+      ENDIF
+ 
+120     CONTINUE
+ 
+      IF(ABS(IQ).EQ.2.AND.NJ.GT.0.AND.K.LE.1) GO TO 9
+      IF(ABS(IQ).EQ.2.and.NR-NR0.GE.0.AND.K.LE.2) GO TO 9
+ 
+      RETURN
+      END

@@ -1,0 +1,41 @@
+*
+* $Id: addfat.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: addfat.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+typeset -l group
+typeset -l throng
+ 
+if test $1
+then
+   temp=${1#'fm'}
+   if test $temp = $1
+   then
+      group='fm'${1}
+   else
+      group=$1
+   fi
+   echo Adding FATMEN group $group ...
+ 
+   if test -d /fatmen/${group}
+   then
+      echo /fatmen/${group} already exists
+   else
+      mkdir /fatmen/${group}
+      mkdir /fatmen/${group}/todo
+      mkdir /fatmen/${group}/done
+      mkdir /fatmen/${group}/tovm
+      chmod -f 777 /fatmen/${group}/todo
+      touch /fatmen/${group}/fatmen.loccodes
+      touch /fatmen/${group}/${group}.names
+#if defined(CERNLIB_SQL)
+      throng=`echo ${group} | cut -c3-`
+      addsql $throng
+#endif
+   fi
+else
+   echo Usage: $0 group
+fi

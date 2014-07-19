@@ -1,0 +1,134 @@
+*
+* $Id: inform.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: inform.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+C--
+C--     CERN PROGRAM LIBRARY EPIO (I101) EP STANDARD FORMAT INPUT/OUTPUT PACKAGE
+C--     FORTRAN/ASSEMBLER PACKAGE FOR IBM,CDC,NORD,VAX,UNIVAC,APOLLO,
+C--      CRAY AND CONVEX COMPUTERS.
+C--
+C--
+C--       AUTHORS               H.GROTE,I.MCLAREN DD CERN GENEVA
+C--
+C-- PAM CONTENTS
+C-- ------------
+C--
+C--     P=DEPIO  , DOCUMENTATION + VERSION UPDATES ON EPIO SOFTWARE
+C--
+C--     P=TEST,    CERN TEST JOBS OF EPIO PACKAGE.
+C--     T=DATA.    +USE,P=TEST,CDC. WILL EXTRACT CERN CDC 7600 JOBS.
+C--                +USE,P=TEST,CDC,NOSBE. WILL EXTRACT CERN CDC NOSBE JOB.
+C--                +USE,P=TEST,IBM. WILL EXTRACT CERN IBM JOBS.
+C--                +USE,P=TEST,VAX. WILL EXTRACT CERN VAX JOBS.
+C--                                 THE FLAGS VAXLONG AND VAXMAG ALLOW
+C--                                 FURTHER TESTS.
+C--                +USE,P=TEST,UNIVAC. WILL EXTRACT UNIVAC JOB.
+C--                +USE,P=TEST,APOLLO. WILL EXTRACT APOLLO SCRIPT.
+C--                AFTER EXTRACTION CHANGE '&' TO '+' IN THE PATCHY INPUT.
+C--
+C-- TEST JOBS
+C-- ---------
+C--     P=PTEST1,PTEST2,PTEST3. FORTRAN SOURCE USED BY THE TEST JOBS.
+C--
+C--     P=T1FAST CONTAINS PATCHY MODS TO PTEST1 PATCH TO GENERATE
+C--                AN EXTRA TEST JOB FOR EPFHDR AND EPFRD
+C--
+C--       FLAGS HLESS, ULENG MODIFY THE EPIO PATCH TO GENERATE
+C--             SOME EXTRA TEST JOBS WITH PTEST2 ONLY.
+C--
+C--       FLAG PH32BIT RUNS THE BASIC TESTS WITH 32 BIT PHYSICAL HEADERS
+C--       FLAG HSPAN RUNS THE BASIC TESTS WITH SPANNED LOGICAL HEADERS
+C--       FLAGS MAKEXT11 AND READXT11 CAN BE USED TO CREATE AND THEN
+C--             READ BACK A FILE AFTER A NETWORK TRANSFER, MAINLY TO
+C--             TEST THE BYTE SWAPPING EFFECTIVENESS. IN PTEST3 ONLY.
+C--
+C--     P=PTEST4.  FORTRAN SOURCE FOR THE RANDOM ACCESS FEATURE ON
+C--                 IBM, VAX AND CRAY ONLY.
+C--                 WARNING: THIS FEATURE IS HIGHLY SYSTEM DEPENDENT
+C--                          AND MAY NOT BE PORTABLE TO ALL SYSTEMS.
+C--
+C--     P=EPIO.    SOURCE OF BASIC EPIO ROUTINES.
+C--
+C--     P=IBMASSL. SOURCE OF IBM ASSEMBLER ROUTINES, NEEDS T=DIVERT.
+C--
+C--     P=UTIL.    SOURCE OF THE UTILITY ROUTINES USED BY EPIO.
+C--
+C--    P=TAPECOPY, UNIVAC PROGRAM FOR DISK TO TAPE EP FILE COPIES
+C--    IF=UNIVAC.
+C--
+C--    P=UNIASM,   UNIVAC ASSEMBLER ROUTINES
+C--    IF=UNIVAC.
+C--
+C--    VAXMACR     VAX ASSEMBLER ROUTINES
+C--
+C--    VAXMTFORM   VAX ASSEMBLER AND FORTRAN ROUTINES TO GIVE CONTROL
+C--                OF THE HARDWARE BYTE SWAPPING MECHANISM.
+C--                D=TAPEHELP IS PART OF A HELP FILE USED AT CERN
+C--                THE SYSTEM MANAGER INSTALLING THEM SHOULD BE CONCIOUS
+C--                OF THE IMPLICATIONS OF USING THIS FACILITY
+C--
+C--
+C--    In addition to the general machine flags (see P=FEPIO), this pam
+C--    contains the following flags:
+C--      ND50,ND500,ND100B16,ND100B32
+C--      VAXS,VAXMAG,VAXLONG
+C--      APOMAG
+C--    FOR DIFFERENT MACHINE VERSIONS AND FLAG F4 FOR (CDC) FORTRAN 77.
+C--    THERE ARE FOUR DIFFERENT NORD VERSIONS IN THIS PAM, SELECTED BY:
+C--      ND100B16          NORD10/100 16 BIT VERSION
+C--      ND100B32          NORD10/100 32 BIT VERSION
+C--      ND50              NORD50 VERSION
+C--      ND500             NORD500 VERSION (WAITING FOR MAGTPZ ROUTINE)
+C--
+C-- EXTERNAL REFERENCES
+C-- -------------------
+C--
+C-- V300   UZERO(A,I,J) . ZEROS FULL WORDS A(I) TO A(J)
+C--
+C-- M219   CVT360(A(J1),A(J2),MODE) (CDC VERSION ONLY). CONVERT A(J1) TILL
+C--        A(J2) FROM IBM TO CDC NUMBER FORMAT, MODE=0 FOR REAL, 1 FOR INTEGER
+C--
+C-- M430   FTO360(A,N,MODE) (CDC VERSION ONLY). CONVERT N WORDS IN A FROM CDC
+C--        TO IBM NUMBER FORMAT, MODE=0 FOR REAL, 1 FOR INTEGER
+C--
+C-- V301   UCOPY(A,X,N) . COPY N FULL WORDS FROM ARRAY A INTO ARRAY X
+C--
+C-- Z300   IOPACK (IBM VERSION ONLY). THE CERN IBM DEPENDENT INPUT/OUTPUT
+C--        PACKAGE FOR IBM OS.
+C--
+C-- Installation on Vax/VMS
+C--
+C-- The following are the two installation cradles to extract the code
+C-- on the Vax via the MAKEPACK utility (see INSTALL.PAM):
+C--
+C   +EXE.
+C   +OPT,MAPASM.
+C   +ASM,22.
+C   +ASM,31,T=A.epio12.for
+C   +USE,*EPIO,VAX.
+C   +DIV,P=UTIL,D=BUN16WIB.
+C   +DIV,P=UTIL,D=BUN8WIB.
+C   +PAM,11,T=A.CERN_ROOT:[pam]epio
+C   +QUIT.
+C
+C   +EXE.
+C   +OPT,MAPASM.
+C   +ASM,21.                  trnlog,cleard routines
+C   +ASM,22.                  vaxibm  : IBM-VAX Floating point conversion routin
+C   .ASM,31,T=A.epio22.for    tapeform: to allow changing the status of tape uni
+C   +ASM,32,T=A.epio22a.mar   mtformat: routine to set the byte swap switch
+C   +USE,*EPIO,VAXS.
+C   +DIV,P=SVAXS,D=MTFORMAT.
+C   . --------------------------------------------------------------------------
+C   . the tapeform program may then also have to be made to allow changing
+C   . the status of tape units. the symbol tapeformat ought to be defined by
+C   . the system  manager  and  the  help  tapeformat  message   should  be
+C   . installed (located in P=DEPIO,D=TAPEHELP)
+C   . --------------------------------------------------------------------------
+C   .USE,P=SVAXS,D=TAPEFORM,T=EXE,DIV.  Activate to get the tapeform program
+C   +PAM,11,T=A.CERN_ROOT:[pam]epio
+C   +QUIT.

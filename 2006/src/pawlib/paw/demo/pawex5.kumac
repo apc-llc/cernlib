@@ -1,0 +1,25 @@
+MACRO PAWEX5
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 5                           *
+* Example showing vector operations. The resulting vectors are created   *
+* automatically.                                                         *
+**************************************************************************
+Exec ALLDEF
+zone 1 2
+ve/create V1(10) R 1 2 3 4 5 5 4 3 2 1
+vector/operations/vscale V1 0.5   V12
+ve/op/vscale             V1 0.25  V14
+set htyp 0
+ve/dr V1
+ve/dr V12 ! S
+ve/dr V14 ! S
+vsub                      V1 V14 V14M
+ve/dr V1
+set htyp 344
+ve/dr V14M ! S
+set htyp 144
+ve/dr V12  ! S
+ve/de *
+zone
+RETURN
+

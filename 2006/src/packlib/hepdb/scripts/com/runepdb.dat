@@ -1,0 +1,29 @@
+*
+* $Id: runepdb.dat,v 1.1.1.1 1996/02/28 16:23:57 mclareni Exp $
+*
+* $Log: runepdb.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:57  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, run_hepdb.COM
+$       set noon
+$ !
+$ !     Multinet NFS
+$ !
+$       if f$trnlnm("MULTINET") .nes. ""
+$          then
+$             if f$trnlnm("HEPDB").eqs."" then -
+$                NFSMOUNT/soft HEPDB::"/hepdb" HEPDB
+$       endif
+$ !
+$ !     UCX NFS
+$ !
+$       if f$trnlnm("UCX$HOST") .nes. ""
+$          then
+$             if f$trnlnm("HEPDB").eqs."" then -
+$                ! << do the bizzo >>
+$       endif
+$       @cern:[pro.exe]cdmast
+#endif

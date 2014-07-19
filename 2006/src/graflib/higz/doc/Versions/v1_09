@@ -1,0 +1,26 @@
+*
+* $Id: v1_09,v 1.1.1.1 1996/02/14 13:10:20 mclareni Exp $
+*
+* $Log: v1_09,v $
+* Revision 1.1.1.1  1996/02/14 13:10:20  mclareni
+* Higz
+*
+*
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.09/00   891219 15.24
+*
+*    Bugs corrected in IZHIST in case of not equidistant bins
+*    Correction for CRAY in IGSET (NINT used in TXAL)
+*    Correction in IUWK (PATCH IGKS) to call IPUWK even if GFLAG=.FALSE.
+*    New version of clear for PostScript (see IZCLRD)
+*    Accents are available in PostScript
+*    New PostScript metafile type -2xx with 132 characters per lines
+*    Telnetg : Protections added in IMFIN and IMFOUT (if XMIN=XMAX)
+*    Bug corrected in IPINIT (CALL IZSELN is added)
+*    In IGTABL, the contour plot can now drawn a given set of altitudes
+*    Changes in IGTABL to allow scaling change on Lego plots
+*    New routine IPTEXT (called by IZTX) in PATCH IPOST to draw the
+*        PostScript text like IGTEXT if 0 < Font < -25 and Precision = 1
+*

@@ -1,0 +1,20 @@
+*
+* $Id: services.dat,v 1.1.1.1 1996/03/08 15:44:18 mclareni Exp $
+*
+* $Log: services.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+* Cspack
+*
+*
+#
+#   This file should go into CERN:[PRO.EXE]ETC.SERVICES for
+#   VAX/VMS systems running UCX
+#
+#
+# CERN services
+#
+zserv           346/tcp
+#
+# UNIX specific services
+#
+exec     512/tcp

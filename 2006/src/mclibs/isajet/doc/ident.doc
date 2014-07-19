@@ -1,0 +1,447 @@
+\newpage
+\section{IDENT Codes\label{IDENT}}
+
+      ISAJET uses a numerical ident code for particle types. Quarks
+and leptons are numbered in order of mass:
+\begin{verbatim}
+         UP     = 1             NUE    = 11
+         DN     = 2             E-     = 12
+         ST     = 3             NUM    = 13
+         CH     = 4             MU-    = 14
+         BT     = 5             NUT    = 15
+         TP     = 6             TAU-   = 16
+\end{verbatim}
+with a negative sign for antiparticles. Arbitrary conventions are:
+\begin{verbatim}
+         GL     = 9
+         GM     = 10
+         KS     = 20
+         KL     =-20
+         W+     = 80
+         Z0     = 90
+\end{verbatim}
+The supersymmetric particle IDENT codes distinguish between the
+partners of left and right handed fermions and include the Higgs
+sector of the minimal supersymmetric model:
+\begin{verbatim}
+         UPSSL ... TPSS1 = 21 ... 26
+         NUEL ... TAU1-  = 31 ... 36
+         UPSSR ... TPSS2 = 41 ... 46
+         NUER ... TAU2-  = 51 ... 56
+         GLSS  = 29
+         Z1SS  = 30            Z2SS  = 40
+         Z3SS  = 50            Z4SS  = 60
+         W1SS+ = 39            W2SS+ = 49
+
+         HL0   = 82            HH0   = 83
+         HA0   = 84            H+    = 86
+\end{verbatim}
+Finally, the gravitino and graviton are
+\begin{verbatim}
+         GVSS  = 91            GRAV  = 92
+\end{verbatim}
+The same symbol is used for the graviton and its (possible) Kaluza-Klein
+excitations.
+
+      The code for a meson is a compound integer +-JKL, where J.LE.K are
+the quarks and L is the spin. The sign is for the J quark. Glueball
+IDENT codes have not been selected, but the choice GL=9 clearly allows
+990, 9990, etc. Flavor singlet mesons are ordered by mass,
+\begin{verbatim}
+         PI0    = 110
+         ETA    = 220
+         ETAP   = 330
+         ETAC   = 440
+\end{verbatim}
+which is natural for the heavy quarks. Similarly, the code for a
+baryon is a compound integer +-IJKL formed from the three quarks I,J,K
+and a spin label L=0,1. The code for a diquark is +-IJ00. Additional
+states are distinguished by a fifth integer, e.g., 
+\begin{verbatim}
+         A1+    = 10121
+\end{verbatim}
+These and a few J=2 mesons are used in some of the B decays.
+
+      A routine PRTLST is provided to print out a complete list of valid
+IDENT codes and associated information. The usage is
+      CALL PRTLST(LUN, AMY, AMX)
+where LUN is the unit number and AMY and AMX are the masses of the Y and
+X quarks respectively. This routine should be linked with the ISAJET
+library and with ALDATA.
+
+      The complete list of ident codes follows. (Hadrons containing $t$
+quarks are defined but are no longer listed since the $t$ quark is
+treated as a particle.)
+\begin{verbatim}
+      IDENT     LABEL           MASS    CHARGE
+          1     UP        .30000E+00       .67
+         -1     UB        .30000E+00      -.67
+          2     DN        .30000E+00      -.33
+         -2     DB        .30000E+00       .33
+          3     ST        .50000E+00      -.33
+         -3     SB        .50000E+00       .33
+          4     CH        .16000E+01       .67
+         -4     CB        .16000E+01      -.67
+          5     BT        .49000E+01      -.33
+         -5     BB        .49000E+01       .33
+          6     TP        .17500E+03       .67
+         -6     TB        .17500E+03      -.67
+
+          9     GL       0.               0.00
+
+         10     GM       0.               0.00
+
+         11     NUE      0.               0.00
+        -11     ANUE     0.               0.00
+         12     E-        .51100E-03     -1.00
+        -12     E+        .51100E-03      1.00
+         13     NUM      0.               0.00
+        -13     ANUM     0.               0.00
+         14     MU-       .10566E+00     -1.00
+        -14     MU+       .10566E+00      1.00
+         15     NUT      0.               0.00
+        -15     ANUT     0.               0.00
+         16     TAU-      .18070E+01     -1.00
+        -16     TAU+      .18070E+01      1.00
+
+         20     KS        .49767E+00      0.00
+        -20     KL        .49767E+00      0.00
+
+         21     UPSSL     none            0.67
+        -21     UBSSL     none           -0.67
+         22     DNSSL     none           -0.33
+        -22     DBSSL     none            0.33
+         23     STSSL     none           -0.33
+         23     SBSSL     none            0.33
+         24     CHSSL     none            0.67
+        -24     CBSSL     none           -0.67
+         25     BTSS1     none           -0.33
+        -25     BBSS1     none            0.33
+         26     TPSS1     none            0.67
+        -26     TBSS1     none           -0.67
+
+         29     GLSS      none            0.00
+         30     Z1SS      none            0.00
+
+         31     NUEL      none            0.00
+        -31     ANUEL     none            0.00
+         32     EL-       none           -1.00
+        -32     EL+       none           +1.00
+         33     NUML      none            0.00
+        -33     ANUML     none            0.00
+         34     MUL-      none           -1.00
+        -34     MUL+      none           +1.00
+         35     NUTL      none            0.00
+        -35     ANUTL     none            0.00
+         36     TAU1-     none           -1.00
+        -36     TAU1+     none           -1.00
+
+         39     W1SS+     none            1.00
+        -39     W1SS-     none           -1.00
+         40     Z2SS      none            0.00
+
+         41     UPSSR     none            0.67
+        -41     UBSSR     none           -0.67
+         42     DNSSR     none           -0.33
+        -42     DBSSR     none            0.33
+         43     STSSR     none           -0.33
+         43     SBSSR     none            0.33
+         44     CHSSR     none            0.67
+        -44     CBSSR     none           -0.67
+         45     BTSS2     none           -0.33
+        -45     BBSS2     none            0.33
+         46     TPSS2     none            0.67
+        -46     TBSS2     none           -0.67
+
+         49     W2SS+     none            1.00
+        -49     W2SS-     none           -1.00
+         50     Z3SS      none            0.00
+
+         51     NUER      none            0.00
+        -51     ANUER     none            0.00
+         52     ER-       none           -1.00
+        -52     ER+       none           +1.00
+         53     NUMR      none            0.00
+        -53     ANUMR     none            0.00
+         54     MUR-      none           -1.00
+        -54     MUR+      none           +1.00
+         55     NUTR      none            0.00
+        -55     ANUTR     none            0.00
+         56     TAU2-     none           -1.00
+        -56     TAU2+     none           -1.00
+         60     Z4SS      none            0.00
+
+         80     W+        .80200E+02      1.00
+         81     HIGGS     .80200E+02      0.00
+         82     HL0       none            0.00
+         83     HH0       none            0.00
+         84     HA0       none            0.00
+         86     H+        none            1.00
+         90     Z0        .91190E+02      0.00
+         91     GVSS      0               0.00
+         92     GRAV      0               0.00
+
+
+        110     PI0       .13496E+00      0.00
+        120     PI+       .13957E+00      1.00
+       -120     PI-       .13957E+00     -1.00
+        220     ETA       .54745E+00      0.00
+        130     K+        .49367E+00      1.00
+       -130     K-        .49367E+00     -1.00
+        230     K0        .49767E+00      0.00
+       -230     AK0       .49767E+00      0.00
+        330     ETAP      .95760E+00      0.00
+        140     AD0       .18645E+01      0.00
+       -140     D0        .18645E+01      0.00
+        240     D-        .18693E+01     -1.00
+       -240     D+        .18693E+01      1.00
+        340     F-        .19688E+01     -1.00
+       -340     F+        .19688E+01      1.00
+        440     ETAC      .29788E+01      0.00
+        150     UB.       .51700E+01      1.00
+       -150     BU.       .51700E+01     -1.00
+        250     DB.       .51700E+01      0.00
+       -250     BD.       .51700E+01      0.00
+        350     SB.       .53700E+01      0.00
+       -350     BS.       .53700E+01      0.00
+        450     CB.       .64700E+01      1.00
+       -450     BC.       .64700E+01     -1.00
+        550     BB.       .97700E+01      0.00
+
+        111     RHO0      .76810E+00      0.00
+        121     RHO+      .76810E+00      1.00
+       -121     RHO-      .76810E+00     -1.00
+        221     OMEG      .78195E+00      0.00
+        131     K*+       .89159E+00      1.00
+       -131     K*-       .89159E+00     -1.00
+        231     K*0       .89610E+00      0.00
+       -231     AK*0      .89610E+00      0.00
+        331     PHI       .10194E+01      0.00
+        141     AD*0      .20071E+01      0.00
+       -141     D*0       .20071E+01      0.00
+        241     D*-       .20101E+01     -1.00
+       -241     D*+       .20101E+01      1.00
+        341     F*-       .21103E+01     -1.00
+       -341     F*+       .21103E+01      1.00
+        441     JPSI      .30969E+01      0.00
+        151     UB*       .52100E+01      1.00
+       -151     BU*       .52100E+01     -1.00
+        251     DB*       .52100E+01      0.00
+       -251     BD*       .52100E+01      0.00
+        351     SB*       .54100E+01      0.00
+       -351     BS*       .54100E+01      0.00
+        451     CB*       .65100E+01      1.00
+       -451     BC*       .65100E+01     -1.00
+        551     UPSL      .98100E+01      0.00
+
+        112     F2        .12750E+01      0.00
+        132     K2*+      .14254E+01      1.00
+       -132     K2*-      .14254E+01     -1.00
+        232     K2*0      .14324E+01      0.00
+       -232     AK2*0     .14324E+01      0.00
+
+      10110     F0        .98000E+00      0.00
+
+      10111     A10       .12300E+01      0.00
+      10121     A1+       .12300E+01      1.00
+     -10121     A1-       .12300E+01     -1.00
+      10131     K1+       .12730E+01      1.00
+     -10131     K1-       .12730E+01     -1.00
+      10231     K10       .12730E+01      0.00
+     -10231     AK10      .12730E+01      0.00
+      30131     K1*+      .14120E+01      1.00
+     -30131     K1*-      .14120E+01     -1.00
+      30231     K1*0      .14120E+01      0.00
+     -30231     AK1*0     .14120E+01      0.00
+
+      10441     PSI(2S)   .36860E+01      0.00
+
+      20440     CHI0      .34151E+01      0.00
+      20441     CHI1      .35105E+01      0.00
+      20442     CHI2      .35662E+01      0.00
+
+
+       1120     P         .93828E+00      1.00
+      -1120     AP        .93828E+00     -1.00
+       1220     N         .93957E+00      0.00
+      -1220     AN        .93957E+00      0.00
+       1130     S+        .11894E+01      1.00
+      -1130     AS-       .11894E+01     -1.00
+       1230     S0        .11925E+01      0.00
+      -1230     AS0       .11925E+01      0.00
+       2130     L         .11156E+01      0.00
+      -2130     AL        .11156E+01      0.00
+       2230     S-        .11974E+01     -1.00
+      -2230     AS+       .11974E+01      1.00
+       1330     XI0       .13149E+01      0.00
+      -1330     AXI0      .13149E+01      0.00
+       2330     XI-       .13213E+01     -1.00
+      -2330     AXI+      .13213E+01      1.00
+       1140     SC++      .24527E+01      2.00
+      -1140     ASC--     .24527E+01     -2.00
+       1240     SC+       .24529E+01      1.00
+      -1240     ASC-      .24529E+01     -1.00
+       2140     LC+       .22849E+01      1.00
+      -2140     ALC-      .22849E+01     -1.00
+       2240     SC0       .24525E+01      0.00
+      -2240     ASC0      .24525E+01      0.00
+       1340     USC.      .25000E+01      1.00
+      -1340     AUSC.     .25000E+01     -1.00
+       3140     SUC.      .24000E+01      1.00
+      -3140     ASUC.     .24000E+01     -1.00
+       2340     DSC.      .25000E+01      0.00
+      -2340     ADSC.     .25000E+01      0.00
+       3240     SDC.      .24000E+01      0.00
+      -3240     ASDC.     .24000E+01      0.00
+       3340     SSC.      .26000E+01      0.00
+      -3340     ASSC.     .26000E+01      0.00
+       1440     UCC.      .35500E+01      2.00
+      -1440     AUCC.     .35500E+01     -2.00
+       2440     DCC.      .35500E+01      1.00
+      -2440     ADCC.     .35500E+01     -1.00
+       3440     SCC.      .37000E+01      1.00
+      -3440     ASCC.     .37000E+01     -1.00
+       1150     UUB.      .54700E+01      1.00
+      -1150     AUUB.     .54700E+01     -1.00
+       1250     UDB.      .54700E+01      0.00
+      -1250     AUDB.     .54700E+01      0.00
+       2150     DUB.      .54700E+01      0.00
+      -2150     ADUB.     .54700E+01      0.00
+       2250     DDB.      .54700E+01     -1.00
+      -2250     ADDB.     .54700E+01      1.00
+       1350     USB.      .56700E+01      0.00
+      -1350     AUSB.     .56700E+01      0.00
+       3150     SUB.      .56700E+01      0.00
+      -3150     ASUB.     .56700E+01      0.00
+       2350     DSB.      .56700E+01     -1.00
+      -2350     ADSB.     .56700E+01      1.00
+       3250     SDB.      .56700E+01     -1.00
+      -3250     ASDB.     .56700E+01      1.00
+       3350     SSB.      .58700E+01     -1.00
+      -3350     ASSB.     .58700E+01      1.00
+       1450     UCB.      .67700E+01      1.00
+      -1450     AUCB.     .67700E+01     -1.00
+       4150     CUB.      .67700E+01      1.00
+      -4150     ACUB.     .67700E+01     -1.00
+       2450     DCB.      .67700E+01      0.00
+      -2450     ADCB.     .67700E+01      0.00
+       4250     CDB.      .67700E+01      0.00
+      -4250     ACDB.     .67700E+01      0.00
+       3450     SCB.      .69700E+01      0.00
+      -3450     ASCB.     .69700E+01      0.00
+       4350     CSB.      .69700E+01      0.00
+      -4350     ACSB.     .69700E+01      0.00
+       4450     CCB.      .80700E+01      1.00
+      -4450     ACCB.     .80700E+01     -1.00
+       1550     UBB.      .10070E+02      0.00
+      -1550     AUBB.     .10070E+02      0.00
+       2550     DBB.      .10070E+02     -1.00
+      -2550     ADBB.     .10070E+02      1.00
+       3550     SBB.      .10270E+02     -1.00
+      -3550     ASBB.     .10270E+02      1.00
+       4550     CBB.      .11370E+02      0.00
+      -4550     ACBB.     .11370E+02      0.00
+
+       1111     DL++      .12320E+01      2.00
+      -1111     ADL--     .12320E+01     -2.00
+       1121     DL+       .12320E+01      1.00
+      -1121     ADL-      .12320E+01     -1.00
+       1221     DL0       .12320E+01      0.00
+      -1221     ADL0      .12320E+01      0.00
+       2221     DL-       .12320E+01     -1.00
+      -2221     ADL+      .12320E+01      1.00
+       1131     S*+       .13823E+01      1.00
+      -1131     AS*-      .13823E+01     -1.00
+       1231     S*0       .13820E+01      0.00
+      -1231     AS*0      .13820E+01      0.00
+       2231     S*-       .13875E+01     -1.00
+      -2231     AS*+      .13875E+01      1.00
+       1331     XI*0      .15318E+01      0.00
+      -1331     AXI*0     .15318E+01      0.00
+       2331     XI*-      .15350E+01     -1.00
+      -2331     AXI*+     .15350E+01      1.00
+       3331     OM-       .16722E+01     -1.00
+      -3331     AOM+      .16722E+01      1.00
+       1141     UUC*      .26300E+01      2.00
+      -1141     AUUC*     .26300E+01     -2.00
+       1241     UDC*      .26300E+01      1.00
+      -1241     AUDC*     .26300E+01     -1.00
+       2241     DDC*      .26300E+01      0.00
+      -2241     ADDC*     .26300E+01      0.00
+       1341     USC*      .27000E+01      1.00
+      -1341     AUSC*     .27000E+01     -1.00
+       2341     DSC*      .27000E+01      0.00
+      -2341     ADSC*     .27000E+01      0.00
+       3341     SSC*      .28000E+01      0.00
+      -3341     ASSC*     .28000E+01      0.00
+       1441     UCC*      .37500E+01      2.00
+      -1441     AUCC*     .37500E+01     -2.00
+       2441     DCC*      .37500E+01      1.00
+      -2441     ADCC*     .37500E+01     -1.00
+       3441     SCC*      .39000E+01      1.00
+      -3441     ASCC*     .39000E+01     -1.00
+       4441     CCC*      .48000E+01      2.00
+      -4441     ACCC*     .48000E+01     -2.00
+       1151     UUB*      .55100E+01      1.00
+      -1151     AUUB*     .55100E+01     -1.00
+       1251     UDB*      .55100E+01      0.00
+      -1251     AUDB*     .55100E+01      0.00
+       2251     DDB*      .55100E+01     -1.00
+      -2251     ADDB*     .55100E+01      1.00
+       1351     USB*      .57100E+01      0.00
+      -1351     AUSB*     .57100E+01      0.00
+       2351     DSB*      .57100E+01     -1.00
+      -2351     ADSB*     .57100E+01      1.00
+       3351     SSB*      .59100E+01     -1.00
+      -3351     ASSB*     .59100E+01      1.00
+       1451     UCB*      .68100E+01      1.00
+      -1451     AUCB*     .68100E+01     -1.00
+       2451     DCB*      .68100E+01      0.00
+      -2451     ADCB*     .68100E+01      0.00
+       3451     SCB*      .70100E+01      0.00
+      -3451     ASCB*     .70100E+01      0.00
+       4451     CCB*      .81100E+01      1.00
+      -4451     ACCB*     .81100E+01     -1.00
+       1551     UBB*      .10110E+02      0.00
+      -1551     AUBB*     .10110E+02      0.00
+       2551     DBB*      .10110E+02     -1.00
+      -2551     ADBB*     .10110E+02      1.00
+       3551     SBB*      .10310E+02     -1.00
+      -3551     ASBB*     .10310E+02      1.00
+       4551     CBB*      .11410E+02      0.00
+      -4551     ACBB*     .11410E+02      0.00
+       5551     BBB*      .14710E+02     -1.00
+      -5551     ABBB*     .14710E+02      1.00
+            
+                     
+       1100     UU0.      .60000E+00      0.67
+      -1100     AUU0.     .60000E+00     -0.67
+       1200     UD0.      .60000E+00      0.33
+      -1200     AUD0.     .60000E+00     -0.33
+       2200     DD0.      .60000E+00     -0.67
+      -2200     ADD0.     .60000E+00      0.67
+       1300     US0.      .80000E+00      0.33
+      -1300     AUS0.     .80000E+00     -0.33
+       2300     DS0.      .80000E+00     -0.67
+      -2300     ADS0.     .80000E+00      0.67
+       3300     SS0.      .10000E+01     -0.67
+      -3300     ASS0.     .10000E+01      0.67
+       1400     UC0.      .19000E+01      1.33
+      -1400     AUC0.     .19000E+01     -1.33
+       2400     DC0.      .19000E+01      0.33
+      -2400     ADC0.     .19000E+01     -0.33
+       3400     SC0.      .21000E+01      0.33
+      -3400     ASC0.     .21000E+01     -0.33
+       4400     CC0.      .32000E+01      1.33
+      -4400     ACC0.     .32000E+01     -1.33
+       1500     UB0.      .49000E+01      0.33
+      -1500     AUB0.     .49000E+01     -0.33
+       2500     DB0.      .49000E+01     -0.67
+      -2500     ADB0.     .49000E+01      0.67
+       3500     SB0.      .51000E+01     -0.67
+      -3500     ASB0.     .51000E+01      0.67
+       4500     CB0.      .65000E+01      0.33
+      -4500     ACB0.     .65000E+01     -0.33
+       5500     BB0.      .98000E+01     -0.67
+      -5500     ABB0.     .98000E+01      0.67
+\end{verbatim}

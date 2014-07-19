@@ -1,0 +1,4 @@
+SRCS_F= hcreateg.F hfreeg.F hlnxtg.F hlnxtg1.F hmapg.F hopengbl.F hplisg.F \ @@\
+	hplisg1.F hresetg.F hresetg1.F hrez0g.F hrzing.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

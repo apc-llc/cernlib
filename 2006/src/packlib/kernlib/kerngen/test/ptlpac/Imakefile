@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 ttlpac.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

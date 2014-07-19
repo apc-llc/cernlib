@@ -1,0 +1,92 @@
+*
+* $Id: kaxed.F,v 1.1.1.1 1996/03/08 11:40:52 mclareni Exp $
+*
+* $Log: kaxed.F,v $
+* Revision 1.1.1.1  1996/03/08 11:40:52  mclareni
+* Kapack
+*
+*
+#include "kapack/pilot.h"
+      SUBROUTINE KAXED(LUN,TEXT)
+*
+*.....EDIT AND PRINT MESSAGES
+*
+#include "kapack/kax000.inc"
+*
+      CHARACTER BUFFER*(LLINE), DATE*8, TEXT*(*), TIME*8
+#if defined(CERNLIB_NORD)||defined(CERNLIB_VAX)
+*
+*.....SPACE FOR COMMON SLATE IS NEEDED BY THE ASSEMBLER ROUTINE UHTOC
+      COMMON /SLATE/ DUMMY(40)
+      DIMENSION DATEN(2), TIMEN(2)
+#endif
+*
+      LOGICAL SPLIT
+*
+*-----------------------------------------------------------------------
+*
+      IF ( LUN .EQ. 0 )  RETURN
+*
+*.....PUT ID, DATE AND TIME INTO BUFFER AND CALCULATE THE INDENTATION
+      BUFFER = ' '
+      IF ( TEXT(1:3) .EQ. 'CRN' )  THEN
+         BUFFER(1:8) = TEXT(1:8)
+         ITEXT  = 10
+         INDENT = INDEX(TEXT,':') + 20
+      ELSE
+         BUFFER(1:8) = 'CRNKA000'
+         ITEXT  = 1
+         INDENT = 28
+      ENDIF
+#if (!defined(CERNLIB_NORD))&&(!defined(CERNLIB_VAX))
+      CALL DATIMH(DATE,TIME)
+#endif
+#if defined(CERNLIB_NORD)||defined(CERNLIB_VAX)
+      CALL DATIMH(DATEN,TIMEN)
+      CALL UHTOC(DATEN,4,DATE,8)
+      CALL UHTOC(TIMEN,4,TIME,8)
+#endif
+      BUFFER(10:17) = DATE
+      BUFFER(19:26) = TIME
+*
+*.....SCAN THE MESSAGE FOR WORDS AND TRANSFER THEM TO THE BUFFER
+      IBUF   = 28
+      MAXWRD = LLINE - INDENT + 1
+      SPLIT  = .FALSE.
+*
+*.....FIND THE LOCATION AND LENGTH OF A WORD
+ 1    CALL KAXWRD(TEXT(ITEXT:),LOCWRD,LENWRD,*2)
+      ITEXT = ITEXT + LOCWRD - 1
+*
+*.....IF THE WORD IS TOO LONG IT MUST BE SPLIT AND A HYPHEN INSERTED
+      IF ( LENWRD .GT. MAXWRD )  THEN
+         LENWRD = LLINE - IBUF
+         IF ( LENWRD .LT. 2 )  LENWRD = MAXWRD - 1
+         SPLIT = .TRUE.
+      ENDIF
+*
+*.....FLUSH THE BUFFER IF THERE IS NOT ENOUGH SPACE FOR THE WORD
+      IF ( LENWRD .GT. LLINE-IBUF+1 )  THEN
+         WRITE(LUN,100) BUFFER
+         BUFFER = ' '
+         IBUF   = INDENT
+      ENDIF
+*
+*.....INSERT THE WORD IN THE BUFFER AND ADD A HYPHEN IF NECESSARY
+      BUFFER(IBUF:IBUF+LENWRD-1) = TEXT(ITEXT:ITEXT+LENWRD-1)
+      IF ( SPLIT )  THEN
+         BUFFER(LLINE:) = '-'
+         SPLIT = .FALSE.
+      ENDIF
+*
+*.....INCREMENT THE MESSAGE AND BUFFER POINTERS
+      IBUF  = IBUF + LENWRD + 1
+      ITEXT = ITEXT + LENWRD
+      GO TO 1
+*
+*.....FLUSH OUT ANYTHING REMAINING IN THE BUFFER
+ 2    IF ( BUFFER .NE. ' ' )  WRITE(LUN,100) BUFFER
+*
+ 100  FORMAT(' ',A)
+*
+      END

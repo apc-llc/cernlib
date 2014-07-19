@@ -1,0 +1,26 @@
+*
+* $Id: cdserv.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdserv.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDSERV.COM
+$ !
+$ ! Command file to launch HEPDB server
+$ !
+$   set noon
+$   node = f$trnlnm("SYS$NODE")
+$   time = f$time()
+$   pid  = f$getjpi("","PID")
+$   user = f$getjpi("","USERNAME")
+$   user = user - "CD"
+$   write sys$output "CDSERV starting on ''node' at ''time'"
+$   write sys$output "Process id: ''pid'"
+$   procname = "HEPdb_''user'"
+$   set process/name='procname'
+$ !
+$   RUN CERN:[PRO.EXE]CDSERV
+#endif

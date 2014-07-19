@@ -1,0 +1,78 @@
+*
+* $Id: cdcheck.dat,v 1.1.1.1 1996/02/28 16:23:58 mclareni Exp $
+*
+* $Log: cdcheck.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:23:58  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_VAXVMS)
+$!DECK ID>, CDCHECK.COM
+$SET NOON
+$ !
+$ ! Check that HEPDB servers are started
+$ !
+$ if p1 .eqs. "" then exit
+$ servers = p1
+$ count   = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$ bqname = f$trnlnm("SYS$FATMEN")
+$ if bqname .eqs. "" then bqname = "SYS$FATMEN"
+$ !
+$ ! Check that the queue is started
+$ !
+$ if f$getqui("DISPLAY_QUEUE","QUEUE_STOPPED",bqname) .eqs. "FALSE" then -
+     start/queue 'bqname'
+$loop:
+$ server = f$element(count,",",servers)
+$ if server .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''server'..."
+$ show user/nooutput 'server'
+$ if $severity .ne. 1
+$    then
+$ !
+$ !  Check that server has not been stopped
+$ !
+$    ON WARNING THEN GOTO UNDEFINED
+$    cddir = &server
+$    ON WARNING THEN CONTINUE
+$    cddir = f$extract(0,f$length(cddir)-1,cddir) + ".TODO]SIGNAL.STOP"
+$    if f$search(cddir) .nes. ""
+$       then write sys$output "Signal.Stop file found - will not restart"
+$       goto loop
+$    endif
+$ !
+$ !  Check that server is not pending (or otherwise)
+$ !
+$    TEMP = F$GETQUI("")
+$ QLOOP:
+$    QNAME = F$GETQUI("DISPLAY_QUEUE","QUEUE_NAME","*")
+$    IF QNAME .EQS. "" THEN goto submit
+$    IF QNAME .NES. bqname then goto qloop
+$    WRITE SYS$OUTPUT ""
+$    WRITE SYS$OUTPUT "QUEUE: ", QNAME
+$ JLOOP:
+$    NOACCESS = F$GETQUI("DISPLAY_JOB","JOB_INACCESSIBLE",,"ALL_JOBS")
+$    IF NOACCESS .EQS. "TRUE" THEN GOTO JLOOP
+$    IF NOACCESS .EQS. "" THEN GOTO QLOOP
+$    JNAME = F$GETQUI("DISPLAY_JOB","JOB_NAME",,"FREEZE_CONTEXT,ALL_JOBS")
+$    UNAME = F$GETQUI("DISPLAY_JOB","USERNAME",,"FREEZE_CONTEXT,ALL_JOBS")
+$    JID   = F$GETQUI("DISPLAY_JOB","ENTRY_NUMBER",,"FREEZE_CONTEXT,ALL_JOBS")
+$    WRITE SYS$OUTPUT "JOB:  ", JNAME," ENTRY: ",JID," USER: ",UNAME
+$    if uname .eqs. server then goto loop
+$    goto jloop
+$ submit:
+$    set message'save_mess'
+$    write sys$output "Restarting server ..."
+$    cdserv = &server + "CDSERV.COM"
+$    submit/queue='bqname'/user='server' /id 'cdserv'
+$    endif
+$ goto loop
+$ undefined:$ write sys$output "Warning: symbol ''server' is not defined"
+$ goto loop
+$ end:
+$ set message'save_mess'
+$ exit
+#endif

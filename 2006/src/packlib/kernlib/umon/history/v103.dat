@@ -1,0 +1,12 @@
+*
+* $Id: v103.dat,v 1.1.1.1 1996/02/15 17:47:33 mclareni Exp $
+*
+* $Log: v103.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:33  mclareni
+* Kernlib
+*
+*
+*  Version 1.03  930303 20.30
+C- Additions/changes
+C  > P=UMONFTN ,D=UMLOGUX UNIX version, make dummy for NeXT
+C

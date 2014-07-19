@@ -1,0 +1,28 @@
+*
+* $Id: cdsend.dat,v 1.1.1.1 1996/02/28 16:24:00 mclareni Exp $
+*
+* $Log: cdsend.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:00  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB_UNIX)
+#
+# Move files between two hosts
+#
+ 
+for file in /hepdb/cd*/tovm
+ 
+do
+#
+# Get prefix
+#
+ 
+prefix=`echo $file | awk '{ print substr($file,1,2) "'`
+ 
+if [ prefix == "qq" ]
+   then
+      continue
+fi
+done
+#endif

@@ -1,0 +1,46 @@
+*
+* $Id: jbytpk.s,v 1.1.1.1 1996/02/15 17:54:48 mclareni Exp $
+*
+* $Log: jbytpk.s,v $
+* Revision 1.1.1.1  1996/02/15 17:54:48  mclareni
+* Kernlib
+*
+*
+       MODULE M_JBYTPK
+%
+% CERN PROGLIB# M422    JBYTPK          .VERSION KERNNOR  1.01  800718
+% ORIG.  H.OVERAS, CERN, 791213
+%
+% IX = JBYTPK(AVM,J,MPAK)        MPAK=NBIT,INWORD   GET PACKED BYTE
+%
+       EXPORT JBYTPK
+       ROUTINE JBYTPK
+       LIB JBYTPK
+VBAS:  STACK FIXED
+PAR:   W BLOCK 3
+INWORD:W BLOCK 1
+NBIT:  BY BLOCK 1
+       ENDSTACK
+JBYTPK:  ENTF VBAS
+       W BYCONV IND(B.PAR+8),B.NBIT
+       IF>GO L11
+       BY SET1 B.NBIT
+       W MOVE 32,B.INWORD
+       GO L12
+L11:   W4:=1
+       W MOVE IND(B.PAR+8)(R4),B.INWORD
+L12:   W4:=IND(B.PAR+4)
+       W4-1
+       IF<=GO L17
+       W3 DIV4 R4,B.INWORD,R1
+       BY3*B.NBIT
+       GO L24
+L17:   W1 CLR
+       W3 CLR
+L24:   W1 GETBF IND(B.PAR)(R1),BY3,B.NBIT
+       RET
+       ENDROUTINE
+       ENDMODULE
+#ifdef CERNLIB_TCGEN_JBYTPK
+#undef CERNLIB_TCGEN_JBYTPK
+#endif

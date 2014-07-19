@@ -1,0 +1,15 @@
+*
+* $Id: v108.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v108.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.08  930227  1.40
+Correct:      P=Z264   , D=GETARG        Treat quote-delimited strings
+                                         as single arguments
+              P=Z264   , D=IARGC         Ditto
+ 
+Add:          P=FCASPLIT                 New, until placed in KERNFOR
+ 

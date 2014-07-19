@@ -1,0 +1,3 @@
+SRCS_F=	 tzmain.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

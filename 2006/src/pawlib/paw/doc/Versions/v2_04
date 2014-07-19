@@ -1,0 +1,329 @@
+*
+* $Id: v2_04,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_04,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :  2.04/15 14/03/94  12.47.29  by  Rene Brun
+*-- Author :    Rene Brun   28/10/93
+*
+*::>          VERSION  2.04/15   14/03/94 12.47.29
+*
+* Change $PAWSIZ for VAX to BIG
+*
+* Change format in PASCA1
+*
+* Plot commands typed in kxterm now also cause the histo style panel
+* to be set accordingly. Change in $PCADDR and new $PCHIST. Decks
+* PAHIST, PANTUP, PAWFCI, PAWINT2, PMINIT, HISTO changed, new deck PMHIST.
+*
+* Cut editor now also accepts weights (select 'W' from operator menu).
+* Decks CUTEXPR, CUTS, $CUTEXPR changed.
+*
+* Major re-naming and re-ordering of PATCHES and DECKS. In view of CMZ's
+* new include file generating capabilities. CMDES became HMOTIF. HPAW
+* is now of type XCC (was DATA) and contains now also the $CHAIN sequences.
+* All KEEP names were stripped of their _H (this would generate include
+* files with names like analyse_h.h which is not nice). PILOT patches
+* updated accordingly. Still PATCHY compatible.
+*
+* Fixes in layout of HistoStyle panel.
+*
+* New options in Ntuple viewer (profile, boxes and extended info)
+* and introduction of a column selector for the scan command.
+*
+* Unix systems now use C I/O. Changes in PAWROP and PAZRZ.
+*
+* Changed the names of ANUMCH and ALPHCH to PNUMCH and PLPHCH (names were
+* also used in COMIS).
+*
+* In PANTUP: for 2D plot 'D' option also produces scatter plot.
+*
+* Fix in PPROJ0 in case less events than slaves (PIAF).
+*
+* Bug fixed in HGETN2: for CWN ntuples, NTVARM and TTVARM was
+* reset together MLOWNT and MUPNT. So the colors was not visible
+* in expression like NT/PLOT 10.x%y%z%t.
+*
+* In PANT3D the histogram title is drawn.
+*
+*::>          VERSION  2.04/14   03/03/94 15.56.52
+*
+* Modify comment lines in PAWSEL.
+*
+* Delete TYPEDEF statement in TCPIAF for VAX/VMS
+*
+* Additions to PIAF LOG file.
+*
+* ZEBRA routines added to PAWCS.
+*     MZSTOR,MZDIV,MZLINK,MZWORK,MZBOOK,MZDROP,MZPUSH
+*     MZWIPE,MZGARB,MZFORM,LZFIND,LZFID,DZSHOW,DZVERI
+* HBOOK routine HDIFFB added to PAWCS
+*
+*::>          VERSION  2.04/13   28/02/94 18.50.06
+*
+* Changes in CDF to reflect the new options in fitting routines.
+*
+* Changes in RLOGIN and TCPIAF to handle the PIAFRC new behaviour.
+*
+* Mods in PAFITV to introduce new option 'Z' of HFITV
+* New routine PAWFITZ
+*
+* Routine SIGINI from SIGMA renamed to SIGINI1
+* Routine HBINIT from HBOOK renamed to HBINIT1
+*
+* New HBOOK routine HKIND callable from PAWCS
+*
+* Mods in PAWFCA to allow VMS filenames satrting with SYMBOL:FILE
+*
+* Added an extensive logging facility for PIAF. The logging system uses
+* the BSD syslog facilty to spool the log info to a single file in the
+* cluster. The syslogd needs to be configured to relay messages to the
+* logging facilities LOCAL6 (piafserv) and LOCAL7 (piafslave).
+*
+* New deck PIAFL in patch PIAFS with the logging routines.
+* New deck $PIAF contains C include.
+* New deck PNTLOG to collect the single command statistics.
+* Other decks changed: PIAFC, PIAFS, PSEXEC, PSKUIP, PSLOG, PSLOOP,
+* PABFIL, PANTUP, PPROJ0, PPROJN.
+*
+*::>          VERSION  2.04/12   17/02/94 16.39.33
+*
+* Dummy routines for TGV (VAX and ALPHA only) in 0PAMAIN/0PAMAINM
+*
+* Mods in PAWCS to call the "HFILL fast replacement" via CSHEXT.
+*
+* The file .piafrc is not created automatically anymore. Changes in
+* TCPIAF and PIAFRONT. Depending on the protocol level flag IPROTO
+* PIAFRONT and PIAFSERV know how to treat the passwd information.
+*
+* Added inactivety timeout of 10 hours in PIAF.
+*
+* Changed name of piaf_*.log files to incorporate the slave sequence number.
+*
+*  New option '0' added in commands ERRORS and AERRORS.
+*
+*  Changes in $PAWFIL4, PAWINT1 and PAWINT4 for MSDOS, WINNT.
+*
+* The command LOCATE has been modified. One can now invoke a user
+*  COMIS routine when in locator mode. When a mouse button is pressed,
+*  the user routine is called and the user has access to the current mouse
+*  coordinates. See HELP LOCATE.
+*
+* HBUG called with only 2 arguments in PECRIT.
+*
+* Implemented .f77 (using the Fortran compiler) for PIAF.
+* Routines changed: PAWFCA, PCINFO, PFCSEX, PSEXEC, and a few others.
+*
+* Routine PSLAVE sends PID of master server to slaves. Slaves use this
+* PID when loading the .sl (see previous item).
+*
+* When doing NT/LOOP 10 zz.f don't load by default column 1.
+* Routines changed: HGETNT and PANTUP.
+*
+* Routine PSMPUT: increased multicast time out to 60 seconds and don't
+* trigger on slaves that already replied.
+*
+* WINNT flag introduced in pilot patch.
+*
+* Moved the call HBFREE (to free the Ntuple columns from cache) from
+* PACLOS to HREND.
+*
+* Mods in PFINDV and PFINDF for the new COMIS interface (f77) and CSLISTX.
+*
+* Changes in TCPIAF for ALPHA/VMS and TGV version
+*
+* Several changes in PIAFS to support Disk Pool Manager in all the /PIAF
+* commands.
+*
+* SIGINT renamed to SIGINI in PAWINT3 (clash with ISAJET)
+*
+* $GRAFINFO('?TXFP') and '?TXAL' corrected to return value compatible
+* with IGSET.
+*
+* New $GRAFINFO('TXFONT'), TXPREC, TXALIH, and TXALIV to return text
+* font, precision, and horizontal and vertical alignment as separate
+* values.
+*
+* New function $RGBINFO(icol,'R'|'B'|'G') to return values from color
+* tables.
+*
+* New function $HCDIR() to return current Hbook directory.
+*
+*    Replace logic to analyze CWN variables in COMIS routines by the
+*    built-in logic in COMIS routine CSLISTX.
+*
+*    Mods in PHINFO
+*
+*    Mods in PAWDEF (GRAFINFO/RGBINFO)
+*
+*    Bug corrected in ANALYSE (recursive cut definition problem)
+*
+*    Add option ".W' in CSCOM/PAWCS to prepare for CSLISTX
+*
+*::>          VERSION  2.04/11   17/01/94 17.50.39
+*
+*    Add /HCBONT/ and /HCBONTC/ in list of PAWCS commons.
+*    Add new HPLOT routine HPLONT in PAWCS
+*    Add new HIGZ routine IGONT in PAWCS
+*
+*    Disable option L (CFOPEN) in PAWFOP for IBM.
+*
+*    Increase size of COMIS stack from 20000 to 30000 words
+*
+*    Reset LFIX=0 in HSETCD
+*
+*    New command DLINE X1 X2 Y1 Y2. It draws a line taking care of
+*       log scales. Also the syntax is conform to BOX, ARROW etc ...
+*
+*::>          VERSION  2.04/10   09/01/94 14.49.17
+*
+*    Changes in PPROJN, PANTUP and PIAFS to use new HIGZ/HPLOT 3-D
+*
+*::>          VERSION  2.04/09   22/12/93 09.37.01
+*
+*    Mods in PIAFS to support the new accounting scheme
+*
+*::>          VERSION  2.04/08   08/12/93 13.55.48
+*
+*    Global sections and shared memory are now visible with the browser.
+*
+*    Introduce +SELF,IF=CZ in PANTUP.
+*
+*    Introduce new option '?' in PAWINT2.
+*
+*    Update list of dummies in 0PAMAIN and 0PAMAINM if NO CZ option.
+*
+*    Problem with +SELF,IF=CZ fixed in routine PBPLUN.
+*
+*::>          VERSION  2.04/07   29/11/93 17.15.20
+*
+*    Changes in /CMOTIF/INIT to make PAW++ and GEANT++ happy
+*
+*    Implement code to send /HCOPT/ from HBOOK to the PIAF server.
+*
+*    Protect HFIXID for cases like Hi/plot id.prox where ID is 1-D
+*
+*::>          VERSION  2.04/06   29/11/93 08.13.22
+*
+*    Add GAUSS and DGAUSS in PAWCS
+*
+*    Move SET PROMPT before calling PAWINT4 in PAW and PAWPP.
+*
+*::>          VERSION  2.04/05   26/11/93 16.21.24
+*
+*    Restructure of 0PAMAIN,PAW,PAWPP,PAWINT2.
+*    With this new structure it is now possible to pass the workstation
+*     type to PAW without being prompted.
+*     ex:  PAW           default: you get the prompt Give workstation type
+*          PAW  -w       no prompt. Use default workstation type
+*          PAW  -w 3     no prompt. Use workstation type 3.
+*
+*    Sequences PCARGS and PCMODE modified.
+*    The sequence PCARGS contains a character*80 variable CHARGS
+*      which is the string passed to the invoquation of the PAW program.
+*
+*::>          VERSION  2.04/04   25/11/93 15.45.35
+*
+*    Bug fixed in HGETN2 (CHARACTER*8 BLOCK) missing.
+*
+*    Mods in PAWROP to open PIAF connection automatically.
+*
+*    Mods in PAMER2 to take advantage of the new HBOOK routine HRZKEY
+*
+*    Undo the mods in HGETN2 to avoid problem with Ntuple/plot id.1
+*
+*    changes in PIAFC for SIGHUP received by master and slave.
+*
+*::>          VERSION  2.04/03   22/11/93 15.59.44
+*
+*    Restructure initialisation routines PAW,PAWPP,PAWINTx
+*
+*    Mods in PASCAN,PASCA1 for the MOTIF version
+*
+*    Increase dimensions in $PAWCFU.
+*
+*    Overflow problem (1.E10) corrected in GENERATI
+*
+*::>          VERSION  2.04/02   17/11/93 14.50.53
+*
+*    Introduce HBOOK routine HRENID in PAWCS:
+*    To rename an HBOOK ID (histogram or ntuple), do:
+*        Histo/file lun fname ! U
+*        call hrenid(idold,idnew)
+*
+*    Several changes in the patch,PIAFS.
+*
+*    New version of CFCU.
+*
+*::>          VERSION  2.04/01   16/11/93 08.50.20
+*
+*    Minor change in PAGPRI (loop index changed from 6 to 7)
+*
+*    NT/PLOT with four variables display also the color scale used.
+*
+*    New option "X" in PACUTS in order to define graphical cuts using
+*       a tracking cross cursor.
+*
+*    Changes in PAWINT3 to print version/date automatically.
+*
+*    Changes in PALOG to compute warning dates automatically.
+*
+*    Modifications in PANTUP to allow more than 3 expressions in NT/LOOP
+*
+*    Many changes PASCAN,PASCA1. Routine PASCA2 deleted.
+*       New PASCAN is able to process new ntuples with PX(Ntrack).
+*
+*    Changes in CFCU and PAWFCU: Calling PAWFCU with a simple NTUPLE column
+*         name returns the column number of the variable instead of a pointer
+*         in the ICODE stack.
+*
+*    Sequences $PAWCFU $PCSCAN modified.
+*
+*    WARNING!!!!!  Important restructuting of the Main programs
+*                  and Initialisation routines.
+*          0PAMAIN and 0PAMAINM call new routines PAW and PAWPP.
+*          PAWINT replaced by PAWINT1,PAWINT2,PAWINT3 and PAWINT4.
+*       The new structure  has been introduced to facilitate the calls
+*          to PAW and PAWPP from user's programs, eg GEANT.
+*
+*    Changes in LEX/SCANNER and CPAW/LEX_YY to:
+*       correct syntax for COMIS files on VMS
+*          DISK$SCRATCH:user is allowed as a filename
+*       same thing for MASKs.
+*
+*    Correction in CTOF77 macro in HPAW for VMS.
+*
+*::>          VERSION  2.04/00   28/10/93 12.13.49
+*
+*    $pawcfu extend CFUINFO to 6 to store 2 pawevt and pawsel
+*          descriptor at the same time
+*
+*    pawfcu pproj0 and pprojn look now for cfuinfo(5) and cfuinfo(6)
+*          instead of ISEL and ISEVT
+*
+*    MasterGeneration now generates two stack if ISEL = 1
+*
+*    analyse_isel => case 1 OK ( mask and expr )
+*
+*    analyse add a missing CopyTree
+*
+*    parser add a missing CopyTree
+*
+*    pcinfo correct the length of comis function's name
+*
+*    Change in PALUNF. Output parameter redefined if LUN=0
+*
+*    Variable PI now known from the parser.
+*
+*    Documentation for parser updated.
+*
+*    clean-up of unused variables and common blocks
+*
+*    Function PNTVAL changed to Subroutine.
+*
+*    Unused parameters CTITL and CAX removed from PANT3D.
+*
+*    Clean-up routine CUBE and DRAWCU

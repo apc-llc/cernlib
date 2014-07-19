@@ -1,0 +1,15 @@
+SRCS_F=	ihaxiv.F ihbbox.F ihclev.F ihcspe.F ihdf01.F ihdf02.F \ @@\
+	ihdf03.F ihdfl1.F ihdfl2.F ihdfr1.F ihdfr2.F iheran.F ihfbox.F \ @@\
+	ihimpf.F ihiso.F ihlegc.F ihlegp.F ihlegr.F ihlegs.F ihligh.F \ @@\
+	ihlumi.F ihmc00.F ihmc03.F ihmc04.F ihmc06.F ihmc07.F ihmc10.F \ @@\
+	ihmc12.F ihmc13.F ihmcmp.F ihmcpp.F ihmctt.F ihmcub.F ihmcx.F \ @@\
+	ihpff.F ihprop.F ihpvie.F ihrcle.F ihrfil.F ihrini.F ihrlin.F \ @@\
+	ihroff.F ihsdrl.F ihsini.F ihsmdf.F ihsurc.F ihsurp.F ihsurr.F \ @@\
+	ihsurs.F ihsvie.F ihwlin.F ihwphi.F ihwth.F ihwton.F ihwv01.F \ @@\
+	ihwv02.F ihwvr1.F ihwvr2.F ihwwnn.F ihwzn.F ihzdep.F ihztst.F
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

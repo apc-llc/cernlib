@@ -1,0 +1,132 @@
+
+
+
+/*
+ *  Special Imakefile building patchy modules
+ *
+ */
+all:: ProgramTargetName(nypatchy) 
+all:: ProgramTargetName(nycheck) 
+all:: ProgramTargetName(nydiff) 
+all:: ProgramTargetName(nyindex) 
+all:: ProgramTargetName(nylist) 
+all:: ProgramTargetName(nymerge) 
+all:: ProgramTargetName(nyshell) 
+all:: ProgramTargetName(nysynopt) 
+all:: ProgramTargetName(nytidy) 
+
+#ifdef CERNLIB_UNIX
+.PHONY: P4LINKS
+install.bin:: P4LINKS
+InstallProgram(fcasplit,$(CERN_BINDIR))
+#endif
+
+InstallScript(yexpand,$(CERN_BINDIR))
+InstallProgram(nypatchy,$(CERN_BINDIR))
+InstallProgram(nycheck,$(CERN_BINDIR))
+InstallProgram(nydiff,$(CERN_BINDIR))
+InstallProgram(nyindex,$(CERN_BINDIR))
+InstallProgram(nylist,$(CERN_BINDIR))
+InstallProgram(nymerge,$(CERN_BINDIR))
+InstallProgram(nyshell,$(CERN_BINDIR))
+InstallProgram(nysynopt,$(CERN_BINDIR))
+InstallProgram(nytidy,$(CERN_BINDIR))
+
+P5LIB=LibraryTargetName(p5lib)
+
+CernlibFortranProgramTarget(nypatchy,nypatchy.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nycheck,nycheck.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nydiff,nydiff.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nyindex,nyindex.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nylist,nylist.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nymerge,nymerge.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nyshell,nyshell.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nysynopt,nysynopt.o,$(P5LIB),$(P5LIB),kernlib)
+CernlibFortranProgramTarget(nytidy,nytidy.o,$(P5LIB),$(P5LIB),kernlib)
+
+#ifdef CERNLIB_UNIX
+
+comma:= ,
+empty:= 
+space:= $(empty) $(empty)
+PLINAME=$(subst $(space),$(comma),$(strip $(subst -DCERNLIB_,,CernlibSystem)))
+LDIR=$(TOP)$(CURRENT_DIR)/
+
+$(P5LIB): $(LDIR)patchy.car $(LDIR)p5lib.cra p5lib.libmake fcasplit Makefile
+	ypatchy - p5lib p5lib TTY .go
+	fcasplit p5lib.f
+	RemoveFile(p5lib.f)
+	cat p5lib.libmake >> p5lib.mkfca
+#if defined(CERNLIB_GFORTRAN)	
+	sed -e 's;f77;gfortran;' -e 's;g77;gfortran;' -e 's;-Nx800;;' \
+	    -e 's;-Nc200;;' -e 's;+ppu;;' p5lib.mkfca > p5lib.mkfca.mod
+	sed -e 's;f77;gfortran;' -e 's;g77;gfortran;' -e 's;-Nx800;;' \
+	    -e 's;-Nc200;;' -e 's;+ppu;;' p5lib.shfca > p5lib.shfca.mod
+	mv p5lib.mkfca.mod p5lib.mkfca
+	mv p5lib.shfca.mod p5lib.shfca
+#endif	
+	$(MAKE) -f p5lib.mkfca $@
+	RemoveFile(p5lib.mkfca)
+	RemoveFile(p5lib.shfca)
+
+p5lib.libmake: Makefile
+	RemoveFile($@)
+	echo "libp5lib.a: \$$(ROUTINES)" > $@
+	echo "	ar cr \$$(@) \$$(ROUTINES)" >> $@
+	echo "	[ -x /usr/bin/ranlib ] && /usr/bin/ranlib \$$(@) || true" >>$@
+	echo "	rm -f \$$(ROUTINES)" 	>> $@
+	echo "	rm -f \$$(subst .o,.f,\$$(ROUTINES))" >> $@ 
+
+fcasplit: fcasplit.o
+	$(F77) $< -o $@
+
+$(LDIR)%.cra: %.cra $(LDIR)yexpand
+	PLINAME=$(PLINAME);export PLINAME;$(LDIR)yexpand $< $@
+
+$(LDIR)patchy.car: patchy.car
+	@ ln -s $< $@
+
+%.f:  $(LDIR)%.cra $(LDIR)patchy.car
+	ypatchy - $@ $< TTY .go
+	
+.f.o:
+	$(FC) -c $(FORTRANOPTIONS) $(FDEBUGFLAGS) $<
+
+$(LDIR)yexpand:	yexpand.script
+	@cp $< $@
+	@chmod +x $@
+
+/*  Links to patchy 4.15 */
+YMODULES=ycompar yedit yfrceta yindex yindexb ylist ypatchy \
+	 ysearch yshift ytobcd ytobin ytoceta
+
+P4LINKS: $(foreach yp,$(YMODULES),$(CERN_BINDIR)$(yp))
+
+$(foreach yp,$(YMODULES),$(CERN_BINDIR)$(yp)):
+	cd $(dir $@);	\ @@\
+	if [ -f ../../patchy/4.15/bin/$(notdir $@) ] ; then \ @@\
+		ln -s ../../patchy/4.15/bin/$(notdir $@) $(notdir $@); \ @@\
+	else  \	@@\
+		echo "$(notdir $@) not linked, not existing";\	@@\
+	fi		
+
+#endif
+
+#ifdef CERNLIB_VAXVMS
+
+PLINAME=$(subst $(space),$(comma),$(strip $(subst -DCERNLIB_,,CernlibSystem)))
+LDIR=$(TOP)$(CURRENT_DIR)]
+
+%.for: %.cra patchy.car yyexpand.com
+	\@yyexpand "$(PLINAME)" $< tmp.cra
+	ypatchy - $@ tmp TTY .go
+	del /nolog/noconf tmp.cra;*
+
+/*.for.obj:
+ *	for $<
+ */
+
+$(P5LIB): p5lib.obj
+	del/noconf/nolog $@;*
+	Library/create $@ $<
+#endif

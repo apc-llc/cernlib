@@ -1,0 +1,20 @@
+SRCS_F= ccmmpy.F ccumpy.F cmadd.F cmbil.F cmcpy.F cmmna.F cmmns.F cmmpa.F \ @@\
+	cmmps.F cmmpy.F cmmpyc.F cmran.F cmscl.F cmset.F cmsub.F cmutl.F \ @@\
+	crscl.F cumna.F cumns.F cumpa.F cumps.F cumpy.F cumpyc.F dmadd.F \ @@\
+	dmbil.F dmcpy.F dmmna.F dmmns.F dmmpa.F dmmps.F dmmpy.F dmran.F \ @@\
+	dmscl.F dmset.F dmsub.F dmutl.F drscl.F dumna.F dumns.F dumpa.F \ @@\
+	dumps.F dumpy.F rmadd.F rmbil.F rmcpy.F rmmna.F rmmns.F rmmpa.F \ @@\
+	rmmps.F rmmpy.F rmran.F rmscl.F rmset.F rmsub.F rmutl.F rrscl.F \ @@\
+	rumna.F rumns.F rumpa.F rumps.F rumpy.F
+
+#if defined(CERNLIB_DECS) && ! defined(CERNLIB_QMVAOS)
+FDEBUGFLAGS=NoOpFortranDebugFlags
+#endif
+
+#if defined(CERNLIB_MACOSX)
+FDEBUGFLAGS := -O0 $(FDEBUGFLAGS) -O0
+#endif
+
+FORTRANSAVEOPTION=FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

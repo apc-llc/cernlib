@@ -1,0 +1,67 @@
+XCOMM $XConsortium: MOSXS.tmpl,v 1.2 97/12/12 19:07:12 sl Exp $
+
+/*
+ * Xnext shared library template
+ */
+
+
+
+#ifndef SharedXtReqs
+#define SharedXtReqs /**/
+#endif
+#ifndef SharedXawReqs
+#define SharedXawReqs /**/
+#endif
+#ifndef SharedXmuReqs
+#define SharedXmuReqs $(LDPRELIB) $(XTOOLONLYLIB) $(XONLYLIB)
+#endif
+
+#define SharedLibX11 YES
+#define SharedX11Rev F
+SharedLibReferences(XONLY,X11,$(XLIBSRC),SOXLIBREV,SharedX11Rev)
+
+#define SharedLibXau NO		/* don't need shared form */
+#define SharedLibXdmcp NO	/* don't need shared form */
+
+#define SharedLibXmu YES
+#define SharedXmuRev F
+
+#define SharedOldXRev F
+
+#define SharedLibXext YES
+#define SharedXextRev F
+
+#define SharedLibXt YES
+#define SharedXtRev F
+SharedDSLibReferences(XTOOLONLY,Xt,$(TOOLKITSRC),SOXTREV,SharedXtRev)
+
+#define SharedXawRev F
+
+#define SharedXtfRev A
+
+#define SharedLibXi YES
+#define SharedXiRev F
+SharedLibReferences(XI,Xi,$(XILIBSRC),SOXINPUTREV,SharedXiRev)
+
+#define SharedLibXtst YES
+#define SharedXtstRev F
+SharedLibReferences(XTEST,Xtst,$(XTESTLIBSRC),SOXTESTREV,SharedXtstRev)
+
+
+#define SharedPexRev F
+SharedLibReferences(PEX,PEX5,$(PEXLIBSRC),SOPEXREV,SharedPexRev)
+
+#define SharedLibXie YES
+#define SharedXieRev F
+
+#define SharedLibICE YES
+#define SharedICERev F
+SharedLibReferences(ICE,ICE,$(ICESRC),SOICEREV,SharedICERev)
+
+#define SharedLibSM YES
+#define SharedSMRev F
+SharedLibReferences(SM,SM,$(SMSRC),SOSMREV,SharedSMRev)
+
+#define SharedFSRev F
+SharedLibReferences(FS,FS,$(FSLIBSRC),SOFSREV,SharedFSRev)
+

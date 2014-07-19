@@ -1,0 +1,12 @@
+*
+* $Id: run_fat.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: run_fat.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+$! modified JJB 2/2/1993 Added /soft option to avoid stale bread buns
+$       set noon
+$       if f$trnlm("FATMEN").eqs."" then NFSMOUNT/soft FATCAT::"/fatmen" FATMEN
+$       @cern:[pro.exe]fatmast

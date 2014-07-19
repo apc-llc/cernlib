@@ -1,0 +1,112 @@
+*
+* $Id: v139.dat,v 1.1.1.1 1996/04/01 15:01:40 mclareni Exp $
+*
+* $Log: v139.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:40  mclareni
+* Mathlib gen
+*
+*
+*  Version 1.39  930220  14.30
+C
+C  Global changes:
+C
+C  Introduce NOQUAD and QUAD flags
+C
+C  Assign 128 bits Functions value 0 when 'not available', to avoid warn.
+C
+C  Introduce IMP128 sequence and GAUSS128 into D103
+C
+C  Correct IMP64R sequence definition for the CRAY.
+C
+C  Replace FGEN patch by the new MACHINETYPE.
+C
+C  Define error code CODE.0 for non-available entries
+C  Introduce F90 flag to mark f90-specific code
+C  Change all instances of REAL*8 to DOUBLE PRECISION or REAL(2)
+C  Introduce GCMPFUN sequence to represent generic functions of COMPLEX
+C     argument in FORTRAN 77
+C  Introduce DEF128 sequence to represent quadruple precision for the
+C     systems where it is accepted.
+C  Include GCMPLX definition to represent generic function for CMPLX or
+C     DCPLX in GCMPFUN.
+C  Make SAVE statements valid to all machines (V106, V108, V151)
+C  Substitute definitions of GIMAG and GCMPLX in DECK,CELFUN64 (C320)
+C     by a call to GCMPFUN and remove correspondingly GCMPLX and Z from
+C     SEQ,DEFC64 inside the deck.
+C
+C
+C  Routine changes:
+C  ----------------
+C  B100 BINOM    Reissued
+C  B101 ATG      New. Must be removed from KERNLIB
+C  B102 ASINH    Use DEF64  sequence
+C  B300 RSRTNT   New.
+C  C200 ZEROX    Reissued
+C  C201 SNLEQ    Reissued
+C  C202 RMULLZ   Use GCMPFUN sequence, change to new 32/64/128 style
+C  C207 RTEQ3    Reissued
+C  C208 RTEQ4    Reissued
+C  C302 GAMMA    Introduce GAMMA128
+C  C304 DILOG    Reissued
+C  C306 CGAMMA   Reissued
+C  C307 CDIGAM   Reissued
+C  C309 WCLBES   Move declaration of KAS(2) before use in EQUIVALENCE
+                 Disable REAL*16 for ALPHA
+C  C310 ALGAMA   Introduce ALGAMA128
+C  C312 BESJ0    New. Must be removed from KERNLIB
+C  C313 BESI0    New. Must be removed from KERNLIB
+C  C321 CGPLG    Reissued
+C  C322 FRSIN    Reissued
+C  C323 FERDR    Reissued
+C  C324 ATANI    Reissued
+C  C327 BSIR4    Reissued
+C  C328 CWHITM   Reissued
+C  C330 ASLGF    Reissued
+C  C331 FCONC    Reissued
+C  C333 CLOGAM   Reissued
+C  C334 GAPNC    Reissued
+C  C335 CWERF    Reissued
+C  C336 SININT   New. Must be removed from KERNLIB
+C  C337 EXPINT   New. Must be removed from KERNLIB
+C  C338 CEXPIN   Reissued
+C  C339 DAWSON   Reissued
+C  C340 BSIR3    Reissued
+C  C342 STRH0    Reissued
+C  C343 BSJA     Reissued. Add QUAD flag for BSJA128
+C  C344 CBSJA    Reissued
+C  C345 BZEJY    Reissued
+C  C349 RTHETA   Add RTHETA128, correct 3rd error message
+C  D101 SIMPS    Reissued
+C  D103 GAUSS    New. Must be removed from KERNLIB
+C  D104 CAUCHY   Reissued
+C  D105 TRIINT   Reissued
+C  D110 RGMLT    Reissued
+C  D113 CGAUSS   Reissued
+C  D114 RIWIAD   Supress superfluous variables FNAME,WWAS,NNOT
+C  D151 DIVON4   Change REAL*8 to DOUBLE PRECISION or REAL(2)
+C                Make IDATE a CHARACTER variable
+C                GENPNT - uniform argument types in RANUMS calls
+C  D200 RKSTP    New. To replace D209, which must be removed from KERNLIB
+C  D201 DEQBS    Reissued
+C  D202 DEQMR    Reissued
+C  D401 DERIV    Reissued
+C  E211 RCSPLN   Reissued
+C  E406 CHECF    Reissued / Introduce CHECF128 code.
+C  E407 CHSUM    Reissued
+C  F500 LIHOIN   Reissued
+C  G100 PROB     New. Must be removed from KERNLIB
+C  G101 CHISIN   Reissued
+C  G102 PROBKL   Reissued
+C  G105 GAUSIN   Reissued
+C  G106 GAMDIS   Reissued
+C  G110 LANDAU   Reissued No F66 version available / DISLAN->ENTRY DSTLAN
+C  J509          J509BD - remove superfluous vector NAMEXY
+C  M504 GETSST   GETSST - uniform argument types in CHMOVE calls
+C  N002 MTLSET   Reissued (to add DATA)
+C  N002 MTLSET   MTLPRT - remove trailing blanks from error message
+C  U501 DJMNB    Reissued
+C  V107 RNDM2    Add Hex data for Macintosh/MPW
+                 Correct misplacement of DATA stat. in VAX/FORTRAN version
+C  V109 RANGAM   Uniform argument types in RNDM calls (INTEGER)
+C  V401 GRAPH    Simplify definition of IFILWD for all machines
+C

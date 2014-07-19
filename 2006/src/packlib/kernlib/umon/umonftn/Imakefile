@@ -1,0 +1,3 @@
+	SRCS_F= umcom.F umlog.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

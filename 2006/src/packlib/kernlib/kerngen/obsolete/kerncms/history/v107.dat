@@ -1,0 +1,16 @@
+*
+* $Id: v107.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v107.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.07  920307 15.30
+Change:       P=Z007   , D=TIMEL         Add QMNOGVAR flag which removes
+                                         obsolete call to GVARIABLE to
+                                         check for forced job timeout.
+Change:       P=Z036   , D=ABUSER        Avoid operation exception caused
+                                         by VS FORTRAN 2.5 test for
+                                         hardware SQRT instruction.
+Change:       P=Z265   , D=SETENV        Remove leading+trailing quotes

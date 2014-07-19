@@ -1,0 +1,367 @@
+*
+* $Id: cdinau.dat,v 1.1.1.1 1996/02/28 16:24:50 mclareni Exp $
+*
+* $Log: cdinau.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:50  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB__CDF)
+>Name CDINAU
+ 
+>Menu /HEPDB
+ 
+>Menu AUXILIARY
+>Guidance
+Auxiliary HEPDB Utility menu
+ 
+>Command CDASCI
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Key-file name'                          C D='KFNAME.FILEXT'
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Insert objects from a pre-edited file.
+The file contains only the values of the keys in the standard
+horizontal or vertical mode of display. There should be the
+letter N for every new key to be inserted in the appropriate
+column; column 1 in the line with the keys of a given object for
+Horizontal mode and column 20 in the first line describing the
+keys for Vertical mode. Data part can be optionally added when
+the program separately asks for the data.
+ CHOPT = 'X' : Assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDDISP
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Display file name (.FILEXT)'            C D='KFNAME.FILEXT'
++
+CHOPT  'Character option'                       C D='H'
+>Guidance
+Displays all objects (keys only) in a given directory, in Horizontal
+or in Vertical mode.
+ CHOPT = 'H' : Displays data in horizontal mode
+       = 'V' : Displays data in vertical mode
+       = 'X' : Assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDEALI
+>Parameters
+PATHN  'Pathname'                               C
+ALIAS  'Alias name'                             C
++
+IFLAG  'Flag (0 if temporary; 1 if permanent)'  I D=0
+>Guidance
+Give an alias name (limited to 8 characters) to a directory path name
+>Action CDAUXI
+ 
+>Command CDEDIT
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Key-file name'                          C D='KFNAME.FILEXT'
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Creates Directories, inserts or updates keys and data for a given
+path name. There are two possible modes of operation for inserting
+the key elements of the new object. In the horizontal mode, where
+all the key elements are displayed in a single line, one should
+insert 'N' in column 1 for every new object. To replace an existing
+object (option R in CDSTOM), one has to put 'R' in front of the existing
+object, followed by a new line with the keys of the new object with
+'N' in front. In the vertical mode, all the keys are displayed in
+seperate lines with one header line for every object. As in the
+horizontal mode, one should insert character 'N' or 'R' in the header
+line in column 20 (where the letter 'D' appears in the display).
+Data can be optionally added to the object as requested by the
+interactive program. Only vertical mode (one line for each data
+element) is so far envisaged in this program.
+Note : No compression of data is done.
+ CHOPT = 'X' : Assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDEHLP
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'File name'                              C D='KFNAME.FILEXT'
+>Guidance
+Enter help information of a given directory into data base
+>Action CDAUXI
+ 
+>Command CDENAM
+>Parameters
+PATHN  'Pathname'                               C
+NWDS   'Number of data words'                   I
+>Guidance
+Enter names of data elements of a given directory into data base
+>Action CDAUXI
+ 
+>Command CDEXTR
+>Parameters
+PATHN  'Pathname'                               C
+LUNFZ  'Logical unit number of the FZ file'     I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Copies a part of the directory tree from the current level, as specified
+by the path name, downwards into a sequential file already opened in
+output mode. The objects to be copied could be specified by a range of
+serial number (default option) or by a minimum insertion time (option I
+for HEPDB insertion time or option R for RZ insertion time). The output
+is written in the format of the journal file, which can then be
+subsequently used for updating a copy of the data base. With character
+option 'F', the update mode of the compactification (when the journal
+file will later be used) will make use data objects with matching user
+keys. CHOPT will be followed by the range of serail numbers for default
+option or the date and time (in YYMMDD and HHMM) corresponding to the
+minimum insertion time.
+>Action CDAUXI
+ 
+>Command CDKEEP
+>Parameters
+NPATH  'Number of paths to be kept'             I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Deletes all directories from the data base except the ones specified
+by the user. The program will prompt for the path names. The user
+should type complete path names including top directory name. If the
+updates of this session are saved in journal files, the user can
+divert the updates in the special backup file using the character
+option 'B'.
+>Action CDAUXI
+ 
+>Command CDNTPL
+>Parameters
+NPATH  'Number of directories to be scanned'    I
+NMASK  'Number of keys used for selection'      I D=0
+CHOPT  'Character option for selecting object'  C D=' '
+IDN    'Numeric identifier of the N-tuple'      I
+CTITL  'Ntuple title'                           C
++
+CRZPA  'RZ path for the N-tuple'                C D=' '
+NPRIM  'Primary allocation for the Ntuple'      I D=1000
+LUNI   'Logical unit number of auxiliary file'  I D=0
+CFNAM  'Name of the auxiliary file'             C D=' '
+>Guidance
+Prepares an N-tuple from the data element(s) belonging to one or more
+directories. The selection of the data objects is steered by CHOPT as
+applied to the first directory. For subsequent directories, it tries
+to match the time slot and selection on user keys is transmitted only
+when the TAG of the appropriate user key in the first path matches
+with the TAG of some user key in the current directory. The following
+assignments of CHOPT have been used.
+ CHOPT = 'T'  transforms the Keys 3,4,7 to seconds/minutes passed since
+              midnight January 1, 1980
+       = 'X'  assumes validity range packed ala CDPKTS
+Creation of the Ntuple is guided by the parameters IDN, CTITL, CRZPA
+and NPRIM. The user should first set the current directory to the
+desired directory in memory by CDIR //pawc/mydir. One should also
+have a histgram RZ file opened and should give appropriate CRZPA
+to allow automatic overflow to that RZ file. The user is advised to
+read HBOOK manual for more information on Ntuples.
+Detail on data and key elements to be stored in the ntuples is by
+default obtained from interactive enquiry. Optionally the user can
+supply a file with contents of all these enquiries which are read
+in free format from the program.
+>Action CDAUXI
+ 
+>Command CDPEEK
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Display file name (.FILEXT)'            C D='KFNAME.FILEXT'
++
+CHOPT  'Character option'                       C D='H'
+>Guidance
+Displays the User Keys in the directory specified, in Horizontal
+or in Vertical mode. Displays data when the first column in mode
+'H' or 'D' in mode 'V' is overwritten by '*'.
+ CHOPT = 'H' : Displays data in horizontal mode
+       = 'V' : Displays data in vertical mode
+       = 'X' : Assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDPTIM
+>Parameters
+IDATE  'Date in YYMMDD'                         I D=810101
+ITIME  'Time in HHMMSS or HHMM'                 I D=0
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Packs date and time into one integer word. For default option,
+   CALL CDPKTS (IDATE, ITIME, IDATIM, IRC)
+For option M
+   CALL CDPKTM (IDATE, ITIME, IDATIM, IRC)
+>Action CDAUXI
+ 
+>Command CDPURG
+>Parameters
+PATHN  'Pathname'                               C
+KYDAT  'Key element number'                     I D=7
+KYTIM  'Maximum value of the key'               I D=9999999
+CHOPT  'Character option'                       C D='K'
+>Guidance
+Purges objects in the given directory according to user specification.
+ CHOPT = 'A' : Purges all data objects
+       = 'K' : Purges data objects with KEY(kydat) < kytim
+       = 'L' : Purges all but the last one (one with highest KEY1 value)
+       = 'P' : Purges all data objects with the same validity period
+               but the one with the highest KEY5 value
+       = 'S' : Purges all data objects with KEY1 value in the range
+               kydat-kytim
+>Action CDAUXI
+ 
+>Command CDPURK
+>Parameters
+PATHN  'Pathname'                               C
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Deletes objects in a directory path name steered by a selection on a
+number of key elements.
+ CHOPT = 'B' : Save in the special backup file; not in standard Journal
+       = 'F' : Select data objects with all the user keys
+       = 'K' : Select data objects with the serial number
+       = 'S' : Expect multiple Key banks satisfying selection on a
+               number of keys
+       = 'X' : Assumes validity range packed ala CDPKTS
+       = 'n' : Consider key element n (where 3 < n < 29 )
+>Action CDAUXI
+ 
+>Command CDPURP
+>Parameters
+PATHN  'Pathname'                               C
++
+IKEEP  'Number of partitions to be kept'        I D=1
+>Guidance
+Deletes all but the last IKEEP partitions in a partitioned directory.
+If IKEEP is negative, it deletes the last -IKEEP partitions.
+>Action CDAUXI
+ 
+>Command CDRALI
+>Parameters
+ALIAS  'Alias name'                             C
+>Guidance
+Retrieve the directory path name from the alias name
+>Action CDAUXI
+ 
+>Command CDRDIC
+>Parameters
+PATHN  'Top directory name'                     C
+>Guidance
+Recreate the basic dictionary record and save into the database
+>Action CDAUXI
+ 
+>Command CDRENK
+>Parameters
+PATHN  'Pathname'                               C
+KYI    'Object number (Serial number)'          I
+KYEL   'Key element to be changed'              I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Rename a given key element of a given object in the specified path
+ CHOPT = 'X'  assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDRHLP
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'File name'                              C D='KFNAME.FILEXT'
+>Guidance
+Display help information of a given directory from data base
+>Action CDAUXI
+ 
+>Command CBRNAM
+>Parameters
+PATHN  'Pathname'                               C
+>Guidance
+Read names of data elements of a given directory from data base
+>Action CDAUXI
+ 
+>Command CDRTFZ
+>Parameters
+PATHN  'Pathname'                               C
+LUNFZ  'Logical unit number of the FZ file'     I
++
+K1MIN  'Serial number of the first object'      I D=1
+K1MAX  'Serial number of the last  object'      I D=100
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Copies a part of the directory specified by the path name with serial
+number in the range K1MIN to K1MAX into a sequential file already
+opened in output mode. The output is written in the format of the
+journal file, which can then be subsequently used for updating a copy
+of the data base. With character option 'F', the update mode of the
+compactification (when the journal file will later be used) will make
+use data objects with matching user keys.
+>Action CDAUXI
+ 
+>Command CDSHOW
+>Parameters
+PATHN  'Pathname'                               C
++
+CHOPT  'Character option'                       C D='K'
+>Guidance
+Lists keys for all objects in the specified directory (CHOPT='K')
+      keys and data for all objects (CHOPT='D')
+>Action CDAUXI
+ 
+>Command CDSUMY
+>Parameters
+PATHN  'Pathname'                               C
++
+NLEVL  'Number of levels'                       I D=999
+>Guidance
+Print statistics of a directory tree specified by a pathname upto
+a certain number of levels.
+>Action CDAUXI
+ 
+>Command CDUTIM
+>Parameters
+IDATM  'Date and time in one packed integer'    I
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Unpacks date and time from one integer word. For default option,
+   CALL CDUPTS (IDATE, ITIME, IDATIM, IRC)
+For option M
+   CALL CDUPTM (IDATE, ITIME, IDATIM, IRC)
+>Action CDAUXI
+ 
+>Command CDVIEW
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Display Filename (.FILEXT)'             C D='DPNAME.FILEXT'
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Creates and displays a view a la ORACLE for valid data at a given time.
+Different tables (pathnames) can also be joined.
+ CHOPT = 'X'  assumes validity range packed ala CDPKTS
+>Action CDAUXI
+ 
+>Command CDWRITE
+>Parameters
+PATHN  'Pathname'                               C
+CFNAM  'Key-file name'                          C D='KFNAME.FILEXT'
++
+CHOPT  'Character option'                       C D=' '
+>Guidance
+Creates Directories, inserts or updates ASCII data files.
+There are two possible modes of operation for inserting
+the key elements of the new object. In the horizontal mode, where
+all the key elements are displayed in a single line, one should
+insert 'N' in column 1 for every new object. To replace an existing
+object (option R in CDSTOM), one has to put 'R' in front of the existing
+object, followed by a new line with the keys of the new object with
+'N' in front. In the vertical mode, all the keys are displayed in
+seperate lines with one header line for every object. As in the
+horizontal mode, one should insert character 'N' or 'R' in the header
+line in column 20 (where the letter 'D' appears in the display).
+The data part is an ASCII file with a maximum of 80 characters per
+line.
+ CHOPT = 'X'  assumes validity range packed ala CDPKTS
+>Action CDAUXI
+#endif

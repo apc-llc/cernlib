@@ -1,0 +1,239 @@
+*
+* $Id: v100159.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v100159.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+C.    VERSION 1.00  : FIRST SEMI-OFFICIAL, RUN UNDER DL.HGR.EPIOPAC
+C.    VERSION 1.10  : CORRECTED UNIVAC MODS, VAX NOT QUITE COMPLETE,
+C.                    NEW ROUTINES CFRASC, CTOASC ON IBM AND CDC,
+C.                    NEW RT.S BLO8W AND BUN8W ON IBM, CDC, VAX, UNIVAC.
+C.                    DATE : 31.8.1981
+C.                    IMPLEMENTED UNDER DL.PUB.EPIO.LIB, RESP.
+C.                                      EPIOLIB, ID=DE100
+C.    VERSION 1.20  : ADOPTION BY CERN PROGRAM LIBRARY AS EPIO (I101)
+C.
+C.    VERSION 1.30  : COMPLETION OF VAX SECTION
+C.
+C.    VERSION 1.31  : ADD STATUS WORD 26 FOR USER HEADER BUFFER LENGTH
+C.
+C.    VERSION 1.32  : CORRECT BUG IN EPREAD FOR SPANNED HEADERS
+C.
+C.    VERSION 1.33  : UNIVAC MODS IN EPUNIT, DUMMY ROUTINES CFRASC, CTOASC
+C.
+C.    VERSION 1.34  : ADDITION OF NORD SECTION
+C.                    USE UZERO EVERYWHERE
+C.                    ADDITION OF UNIVAC INSTALLATION AND TEST PROCEDURE
+C.                    REMOVE REF.S TO OUTOCT FROM BLOBYT, BUNBYT (CDC)
+C.
+C.    VERSION 1.36  : MINOR VAX CORRECTIONS
+C.                    SPEED-UP OF UNIT REFERENCE INSIDE EPIO
+C.                    MINOR (COMPATIBLE) CHANGE IN EPBLIN
+C.                    ADDITION OF NEW ROUTINES EPFHDR, EPFRD
+C.                    FAST CDC VERSIONS (COMPASS) OF BLO16W, BLO32W
+C.                    ADDITION OF NEW TEST PATCH T1FAST
+C.                    END-OF-RUN CHECK IN EPFHDR
+C.                    IMPROVED ERROR MESSAGE PRINT-OUT
+C.
+C.    VERSION 1.37  : FLAG F4 ADDED AROUND SOME CDC-ONLY CODE TO MAKE
+C.                    A FORTRAN 77 (FTN5) COMPATIBLE VERSION FOR CDC.
+C.
+C.    VERSION 1.38  : BUG FIXED IN VAX VERSION (MISTYPE)
+C.                    VAX DIAGNOSTICS FOR DISK SPACE OVERFLOW ADDED
+C.
+C.    VERSION 1.39  : BUGS FIXED IN VAX VERSION:
+C.                    INSERT CORRECT COMMON BLOCK LENGTH IN EPIOVAX
+C.                    ( RE- )CORRECT ROUTINES CFRIBM AND CTOIBM
+C.                    CORRECT A PATCHY CONTROL CARD IN VAX INSTAL.
+C.
+C.    VERSION 1.40  : IMPROVEMENTS TO UNIVAC VERSION:
+C.                    REPLACE "LOC" BY "LOCF" IN EPBLIN, EPBOUT
+C.                    REPLACE DECKS EPFRTAPE, ERBLOBYN,TAPEIO
+C.                    ADD NEW DECK FITEM
+C.
+C.    VERSION 1.41  : INTRODUCE CFRIBM AND CTOIBM MODE 6 FOR UNSIGNED
+C.                    32 BIT INTEGERS ( DUMMY EXCEPT ON VAX )
+C.                    INSERT  TWO MISSING NORD FLAGS
+C.
+C.    VERSION 1.42  : FIX TWO VAX BUGS ( CONCERNING READ/WRITE TAPES)
+C.                    IN ROUTINES EPBLIN AND EPBOUT
+C.
+C.    VERSION 1.43 :  INTRODUCE THE NORD100 16 BIT VERSION
+C.                    ADD ROUTINES FOR THE NORD50 VERSION
+C.                    REPLACE THE UNIVAC INSTALLATION DECK
+C.                    INTRODUCE SPECIFIC CDC FORMATS (" INSTEAD OF ')
+C.
+C.    VERSION 1.44 :  FIX A BUG IN THE VAX ROUTINE MT_FORMAT
+C.
+C.    VERSION 1.45 :  ADD ERROR 20 FOR WRITING NEG. LENGTH RECORDS
+C.                    CORRECT BUG IN IBM ASCII CONVERSION ROUTINE
+C.                    PROVIDE NEW ROUTINES FOR ASCII/EBCDIC STRING CONVERSION.
+C.                    NEW ROUTINE -EPIOT- TO PRINT PAM FILE TITLE.
+C.                    ROUTINES MODIFIED: EPOUTL, CFRASC AND CTOASC (IBM,CDC).
+C.                    ROUTINES ADDED: SFRASC, STOASC (IBM,CDC,VAX),EPIOT.
+C.
+C.    VERSION 1.46 :  CORRECT ERROR CHECK IN TEST1 (PTEST1,PTEST3)
+C.                    CORRECT BUG IN TEST JOB MODIFICATION PATCHES (V. 1.45)
+C.                    INTRODUCE OUTPUT UNIT TO BE SET BY USER
+C.                    INTRODUCE IBM ASSEMBLER VERSION OF W16MOV
+C.                    DECKS AFFECTED: EPBOUT,EPEOF,EPERRH,EPINIT,EPRWND,
+C.                    EPSTAT,W16MOV (IBM ONLY), CERNIBM (IBM INSTAL EXAMPLE)
+C.
+C.    VERSION 1.47 :  CORRECT BUGS IN VAX AND CDC.VERSIONS OF EPBLIN
+C.                    CHANGE NAMES: BTMOVE TO BTMVEP, SHLONG TO SHLGEP
+C.                    DECKS AFFECTED : EPBLIN
+C.                                     BTMOVE + SHLONG (CDC,UNIVAC ONLY)
+C.
+C.    VERSION 1.48 :  VAX ONLY MODS : INTRODUCE ROUTINE EPDEFU ALLOWING
+C.                    TO OPEN A UNIT WITH A USER SPECIFIED NAME VIA CALL.
+C.                    CORRECT POSSIBLE ARGUMENT CHANGE IN EPREAD
+C.                    ROUTINES AFFECTED : EPINIT, EPOPEN, EPDEFU, EPREAD
+C.                    NEW COMMON BLOCK EPVAXN
+C.
+C.    VERSION 1.49 :  IBM ONLY MODS : MAKE CHANGES NECESSARY FOR CORRECT
+C.                    COMPILATION UNDER RELEASE 3 OF THE IBM VS-FORTRAN
+C.                    COMPILER.
+C.                    ROUTINES AFFECTED : BLO8WIB, BUN8WIB, CFRASCIB, CTOASCIB
+C.                                        SFRASCIB, STOASCIB
+C.
+C.    VERSION 1.50 :  CORRECT BUG IN EPREAD AND EPFRD READING RECORDS WITH
+C.                       AN ODD NUMBER OF 16-BIT WORDS IN 32-BIT MODE (3)
+C.                    VAX ONLY MODS -
+C.                       EPOPEN_VAX ROUTINE REPLACED
+C.                       W16MOV MACRO VERSION ADDED
+C.                       BTSWAP ROUTINE ADDED (MACRO)
+C.                       EPBLIN TO TREATE HEADERLESS BLOCKS ON DISK
+C.                         BY USING THE PREVIOUS BLOCK LENGTH
+C.
+C.    VERSION 1.51 :  ADDITION OF BTSWAP (BYTE SWAPPING ROUTINE) FOR CDC,
+C.                    IBM, AND NORD 100/500.
+C.                    ADDITION OF TWO UNIT CONTROL WORDS, NO. 27 AND 28, TO
+C.                    ALLOW AUTOMATIC BYTE SWAPPING BY SETTING WORD 27 TO 1
+C.                    (DEFAULT 0). IF THEN THE EP IDENTIFIER WORDS 7 AND 8
+C.                    ARE WRONG ON READING, THE PHYSICAL RECORD WILL BE BYTE
+C.                    SWAPPED ON CDC, IBM, NORD, AND VAX.
+C.                    TO SET UNIT CONTROL WORD 27, CALL EPSETW.
+C.
+C.    VERSION 1.52  : CORRECT MESSAGES FOR ERRORS 4 AND 5 IN EPBLIN
+C.                    VAX ONLY MODS -
+C.                    IN EPOPEN_VAX, ASSIGN CORRECT UNIT "FOR00N" IF N IS LT 10.
+C.                    IN EPOPEN_VAX, EPBLIN - CORRECT BUG TO READ MAG TAPES
+C.                    CORRECTLY. BUG INTRODUCED AT VERSION 1.50
+C.                    VARIABLE LENGTH BLOCKS (INCLUDING HEADERLESS) NOW
+C.                    READABLE FROM DISK.
+C.                    MACRO ROUTINE EPOPENV_VAX ADDED FOR VARIABLE DISK RECS.
+C.
+C.    VERSION 1.53  : APOLLO VERSION ADDED.
+C                     PATCHY FLAG APOLLO AND RELATED INSTALLATION DECKS
+C                       INTRODUCED. (FEDERICO CARMINATI, CERN/DD)
+C                     CRAY VERSION ADDED.
+C                       PATCHY FLAG CRAY AND RELATED INSTALLATION DECKS
+C                       INTRODUCED. CHANGES TO EPBLIN, EPINIT
+C                     VAX INSTALLATION DECK REWRITTEN USING AKMULT
+C                        EPPAC REMOVED EVERYWHERE AND SUBSTITUTED WITH EPIO
+C                     EPREAD GIVES NEW ERROR (IERR=21) WHEN TRYING TO
+C                        READ OLD FORMAT DATA WITH MODE.GT.3
+C                     EPGETW, EPGETA NO LONGER RETURN ERROR 14. INSTEAD
+C                        A NEW UNIT IS CREATED AND THE DEFAULTS RETURNED.
+C
+C.    VERSION 1.54  : CRAY PATCHY FLAGS CORRECTED AND BTSWAP INTRODUCED.
+C
+C                     DIMENSION IARR(NW) CHANGED TO IARR(1) IN CFRASC,
+C                       CTOASC, CFRIBM, CTOIBM MAINLY FOR VS FORTRAN.
+C
+C                     CHANGES MADE IN THE VAX MACRO ROUTINES TO MAKE THE
+C                     RESULTING CODE POSITION INDEPENDENT
+C                            (FEDERICO CARMINATI, CERN/DD).
+C                     VAX VERSIONS OF BLO8W AND BUN8W CORRECTED.
+C
+C                     EPBLIN CHANGED TO ALLOW USERS TO FORCE TREATMENT
+C                      OF THEIR DATA AS NEW 16-BIT FORMAT BY SETTING
+C                      STATUS WORD 27 TO 2. SOME TYPES OF INVALID DATA
+C                      MAY THEN RESULT IN ERROR 7 MEANING THAT THE
+C                      PHYSICAL HEADER WORDS ARE INCORRECT.
+C                      THE VAX VERSION CORRECTED TO BYTE SWAP CORRECTLY
+C                      ON DISK FILES
+C
+C.    VERSION 1.55  : CFRASC DUMMY ROUTINE ADDED FOR APOLLO, NORD.
+C                     CTOASC DUMMY ROUTINE ADDED FOR APOLLO, NORD.
+C
+C                     CFRIBM CDC AND UNIVAC VERSIONS PROTECTED FOR NW=0
+C                     CTOIBM CDC AND UNIVAC VERSIONS PROTECTED FOR NW=0
+C
+C                     UTILITY PATCHES EPCOPY AND EPDUMP ADDED.
+C
+C                     CHANGES IN EPOPEN_VAX TO BE ABLE TO RETRIEVE
+C                     THE LENGTH OF THE RECORD OF A DISK FILE
+C
+C.    VERSION 1.56  : 32 bit words for physical header introduced as
+C                     second possibilty.
+C
+C                     Default for simultaneously open units increased
+C                     to 10.
+C
+C    *************    Default of flag 27 set to 1 (byte swapping). Users of
+C    *************    the old EP format should set this flag to 0.
+C
+C                     New control word 29:
+C                     If = 0 (default), ph. header written in 16 bit words
+C                     If = 1 , ph. header written in 32 bit words.
+C                     Reading is automatic.
+C
+C                     The test jobs have been modified accordingly. A new flag
+C                     PH32BIT has been introduced. This flag can be switched
+C                     on with ANY test job, and forces the usage of 32 bit
+C                     physical headers.
+C
+C                     VAX EPIO_MACRO changed to allow status word 1 to be
+C                     set > 62535.
+C                     EPOPENS_VAX allows Decnet access for fixed block
+C                     files, and common EPVAXCOM allows filenames up to
+C                     255 (from 63).
+C
+C                     CRAY flag in EPFHDR corrected.
+C                     CRAY versions of BLO16W, BUN16W, BLO32W, BUN32W
+C                     corrected and faster.
+C
+C                     Apollo versions of CFRIBM and CTOIBM corrected.
+C
+C.    VERSION 1.57  : The physical header tests have been reordered
+C                     to recognize definite 16-bit headers first in
+C                     subroutine EPBLIN. This also required a correction
+C                     to PTEST3 with 32-bit headers.
+C
+C                     Attempting to write a logical record greater than
+C                     65535 words with a 16-bit logical record header
+C                     gives error 24 in subroutine EPOUTL and no data
+C                     is written.
+C
+C                     EPREAD gives error 23 if the logical record
+C                     unit is neither 16 nor 32 and is positioned
+C                     to read the next physical record.
+C
+C                     The patch INSTAL has been removed. Please see
+C                     the INSTALL PAM.
+C
+C.    VERSION 1.58  : The CRAY versions of EPBLIN, EPBOUT now use the
+C                     CRAY reading and writing routines.
+C                     Bug fix in the CRAY version of BUN32W.
+C                     APPEND option allowed in VAX open for
+C                     output files via status word 30 set to 1
+C                     TEST PATCH removed. See the INSTALL PAM file.
+C
+C.    VERSION 1.59  : The CRAY version of EPBLIN has been
+C                     corrected for a misplaced modification.
+C                     The CRAY and CDC versions of EPBOUT have been
+C                     corrected for a misplaced modification.
+C
+C                     The test for trying to write too large a logical
+C                     record with a 16-bit header has been improved in
+C                     EPOUTL.
+C
+C                     The tests for invalid data in physical records
+C                     with 32-bit headers have been improved in EPBLIN.
+C
+C                     Keyword SHARED added in the VAX OPEN for reading
+C                     disk files
+C

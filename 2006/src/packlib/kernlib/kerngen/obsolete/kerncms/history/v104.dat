@@ -1,0 +1,19 @@
+*
+* $Id: v104.dat,v 1.1.1.1 1996/02/15 17:51:40 mclareni Exp $
+*
+* $Log: v104.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:40  mclareni
+* Kernlib
+*
+*
+*  Version 1.04  900924 16.02
+Add:          P=SYVM   , D=VMSTAK        Push information into the stack
+              P=SYVM   , D=VMQFIL        emulation of QUERY FILE
+              P=SYVM   , D=VMRTNE        Read Terminal (Non-Echoed)
+                                         for CMS 5 onwards
+Replace:      P=SYVM   , D=TIMEX         New check for BATCH JOBSTOP
+                                         forced timeout
+Correct:      P=SYVM   , D=DATIME        Fix storing of seconds
+              P=SYVM   , D=IOSPAK2       Fix hex 02 in header
+              P=SYCERNV, D=JOB$VM        Skip EXTRACT code via QEXTRACT
+ 

@@ -1,0 +1,27 @@
+DoIncludePackage(higz)
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= iz ig ig3 ih ipost ifalco menu ged ikernel higzcc
+
+SUBDIRS= $(LIBDIRS) examples igks higz
+
+TopOfPackage(higzX11)
+
+SubdirLibraryTarget(grafX11,$(LIBDIRS))
+
+InstallLibrary(grafX11,$(CERN_LIBDIR))
+
+TestSubdirs(examples)
+
+#ifdef CERNLIB_VAXVMS
+tree grafdgks install.lib:: Makefile.dgks
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)
+NamedTargetSubdirs(tree,./,checking,-f Makefile.dgks,tree)
+NamedTargetSubdirs(grafdgks,./,building grafdgks,-f Makefile.dgks,grafdgks)
+NamedTargetSubdirs(install.lib,./,installing grafdgks,-f Makefile.dgks,install.lib)
+#endif
+
+InstallIncludeSubdirs(higz)

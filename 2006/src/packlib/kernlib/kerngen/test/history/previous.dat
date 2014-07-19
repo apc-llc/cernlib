@@ -1,0 +1,133 @@
+
+Update  2.70 :   5-Sep-1994
+----------------------------
+
+Replacing File   MICKY    2.69  940310 12.32
+
+Correct:      bring back tests of MX... routines except MXEQU
+              move D=TSORTX and TMXEQU to obsolete
+
+---------------------------------------------------------------------
+
+Update  2.69 :  28-Feb-1994
+----------------------------
+
+Replacing File   MICKY    2.68  940120 10.37
+
+Correct:      pilot selection for Convex
+              remove test and usage of SORTX
+              remove test of all MX... routines
+              remove test of UTRANS for Ai <-> Aj
+
+---------------------------------------------------------------------
+
+Update  2.68 :  20-Jan-1994
+----------------------------
+
+Replacing File   MICKY    2.67  931215 16.05
+
+New Patches:  *MDOS, *MWIN         pilots for MSDOS and Windows/NT
+
+Correct:      P=PM432, D=TLENOC    Correct bug in timing
+
+---------------------------------------------------------------------
+
+Update  2.67 :  16-Dec-1993
+----------------------------
+
+Replacing File   MICKY    2.66  930617 11.34
+
+New Patch:    *MLNX                pilot for LINUX
+
+---------------------------------------------------------------------
+
+Update  2.66 :  16-June-1993
+----------------------------
+
+Replacing File   MICKY    2.65  930602 16.05
+
+New Patch:    *MVAO                pilot for VAX Alpha OSF
+
+Correct:      P=PM432, D=TICNTH    add test of ICINQ, ICINQL, ICINQU
+              P=PM432, D=TLENOC    add timing for LNBLNK & LENOCC
+
+---------------------------------------------------------------------
+
+Update  2.65 :   2-June-1993
+----------------------------
+
+Replacing File   MICKY 2.64  930517 23.08
+
+Rename:       rename old D=MAIN  to new D=MIMAIN
+
+Correct:      P=MICKY, D=.  gets the little material from P=CDE
+              P=*MVAX       output unit for VAX is now also 6
+
+Delete:       P=CDE
+
+---------------------------------------------------------------------
+
+Update  2.64 :   7-May-1993
+----------------------------
+
+Replacing File   MICKY 2.63  920610 17.43
+
+Rename:       rename old P=MICKY    to new P=*MICKY
+              rename old P=SYSMICKY to new P=MICKY
+              rename old P=CHF77    to new P=PM432
+              rename old D=MICKY    to new D=MAIN
+
+New Patches:  *MNXT                for the Next
+              GENMUST              option to generate the MUST data
+
+New Decks:    P=PM432, D=TICNTH    to test ICNTH, ICNTHL, ICNTHU
+              P=MICKY, D=TCHDIR    to test some UNIX system calls
+              P=MICKY, D=CHKVER    to test the verify routines
+
+Correct:      D=MVERII, MVERIF     for new option GENMUST
+              Common /SLATE/ now of the correct length 40, not 42
+              relax limits slightly in TSCALE and TTLPAC
+              print number of tests failed at end of execution
+
+Delete:       P=*MCDC, *MNORD3
+
+---------------------------------------------------------------------
+
+Update  2.63 :  10-June-1992
+----------------------------
+
+Replacing File   MICKY 2.62  920521 16.23
+
+Delete :      D=TPROB        remove the test on PROB
+
+---------------------------------------------------------------------
+
+Update  2.62 :  21-May-1992
+---------------------------
+
+Replacing File   MICKY 2.61  920512 17.05
+
+Correct :     enhance test of LENOCC / LNBLNK
+
+---------------------------------------------------------------------
+
+Update  2.61 :  12-May-1992
+---------------------------
+
+Replacing File   MICKY 2.60  920512  9.59
+
+New Patch :   *KERNGENT            for Miguel
+
+Reorganize the pilots
+
+---------------------------------------------------------------------
+
+Update  2.60 :  11-May-1992
+---------------------------
+
+Replacing File   MICKY 2.59  910226 18.59
+
+New Deck :    TLENOC               to test LENOCC and LNBLNK
+
+---------------------------------------------------------------------
+

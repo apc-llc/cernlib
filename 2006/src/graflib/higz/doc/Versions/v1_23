@@ -1,0 +1,130 @@
+*
+* $Id: v1_23,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_23,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :          11/01/96  17.24.46  by  O.Couet
+*-- Author :    O.Couet   05/05/95
+*
+* 11/01/96  17.23.40  by  O.Couet
+* Mods in IGTABL: the box plot is now proportional to the surface
+* of the bin.
+*
+*::>          VERSION  1.23/06   07/12/95 16.10.56
+*
+* New routine IGGIF which call ixdogif to generate gif files
+*
+* 06/12/95  15.21.14  by  O.Couet
+* It is now possible to load a GIF file in the HIGZ window.
+*
+* 04/12/95  16.08.02  by  O.Couet
+* ZBUFFER is now available in X11 and PS modes
+*
+* 30/11/95  15.27.00  by  O.Couet
+* The patch OBSOLETE is now removed (ONT).
+*
+* 22/11/95  10.38.53  by  O.Couet
+* __stdcall added in the fortran callable C routines under the flags
+* TKTCL and WINNT.
+*
+* 22/11/95  10.14.20  by  O.Couet
+* TkHIGZ added in HIGZCC (flaged with TKTCL,WINNT).
+*
+* 15/11/95  09.28.50  by  O.Couet
+* The GIFencode routine is suppressed. It is recommended to use
+* xwpick instead.
+*
+* 10/11/95  10.51.30  by  O.Couet
+* Mods in IGCOLM
+*
+* 01/11/95  14.05.51  by  O.Couet
+* Mods in IMAC (Cees Th. de Laat)
+*
+*::>          VERSION  1.23/05   18/10/95 10.14.00
+*
+* In x11int, size_hints and wm_hints are memset to 0.
+*
+* 17/10/95  18.22.29  by  O.Couet
+* New routine IGELLI to draw an ellipse.
+*
+* 11/10/95  17.26.20  by  O.Couet
+* The default value of CHHE in igset is now 0.28 (like in HPLOT).
+*
+* 04/10/95  17.40.07  by  O.Couet
+* IRAST was not initialized in IGTABL
+*
+* 02/10/95  17.14.30  by  O.Couet
+* TK_WINDOWS flag in x11int
+*
+*::>          VERSION  1.23/04   28/09/95 09.54.20
+*
+* Mods in x11int: free the colors before defining a new one.
+*
+*::>          VERSION  1.23/03   20/09/95 14.08.27
+*
+* Bug fixed in IZPM. The marker types different from 1 to 5 produced
+* some PS output in the LaTex files.
+*
+* 05/09/95  15.03.33
+* A +SELF was missing in ISTXAL in IKERNEL
+*
+* 04/09/95  12.17.57
+* Fixes in IGOBJ and IGPICK for the picking in PAW++
+*
+* 01/09/95  09.45.00
+* IKFILE crashed if the file higz_windows.dat was r/w protected.
+*
+*::>          VERSION  1.23/02   30/08/95 18.20.27
+*
+* Bug fixed in IZDNB: the alpha numeric labels was not stored
+* in the picture in case of IZMERG.
+*
+* 30/08/95  13.44.39
+* The test of validity on window size in IGSSE is now a
+* .LT.0 test instead of .LE.0 test
+*
+* 29/08/95  11.43.13
+* The PASS attribute is now use as line width for the PS
+* hollow fonts.
+*
+* 15/08/95  17.39.19
+* IKFNTX called IXSETTF as a subroutine, rather than an
+* integer function in the MSDOS part.
+*
+* 07/06/95  17.36.31
+* %%BeginProlog and %%EndProlog was misplaced in PS files.
+*
+* 01/06/95  16.16.50
+* Xflush is now called at the end of ixreqlo (x11int) to be
+* sure that rubberdanding line has been erased.
+*
+* 30/05/95  09.45.20
+* Bug fixed in igaxis: The alignment of the exponent was
+* not correct on the axis drawn on the right of the plots.
+*
+*::>          VERSION  1.23/01   24/05/95 11.13.21
+*
+* The "gsave" an "grestore" are now managed via the routine
+* IPSVRT which count the number of gsave in the variable NBSAVE.
+* This allows to write the correct number of grestore at the
+* end of the PS file.
+*
+* 08/05/95  11.51.44
+* New MSDOS version (Valery Fine)
+*
+*::>          VERSION  1.23/00   05/05/95 15.25.21
+*
+* In IZGRAP and IZHIST, BORD was not consider as a possible
+* attribute for graphs and histograms.
+*
+* 10/04/95  17.50.26
+* Bug fixed in IGPICK for the picking of IGTABL.
+*
+* 10/04/95  10.39.58
+* New version of IGOBJ which looks in all the NTs if nothing is found
+* in the one the user picked in. A new routine to scan the NTs in a
+* picture has been created for that (IZGNNT).
+*

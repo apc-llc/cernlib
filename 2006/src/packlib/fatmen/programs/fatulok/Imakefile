@@ -1,0 +1,3 @@
+SRCS_F=	 fatulok.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

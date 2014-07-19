@@ -1,0 +1,325 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:58 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:58  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNFOR)
+
+UP-DATE  1.25 :  21-Nov-1992
+----------------------------
+
+Replacing File   KERNAPO 1.24  920703 12.06
+
+Correct :     LENOCC                         for Apollo 10000
+
+---------------------------------------------------------------------
+
+UP-DATE  1.24 :  11-May-1992
+----------------------------
+
+Replacing File   KERNAPO 1.23  910719 13.00
+
+New Patch :   *KAPOF77    pilot for /bin/f77
+
+New Option :  QMAPOF77    to compile with /bin/f77
+              QMAPOFTN    to compile with /com/ftn
+
+New Deck :    LENOCC                              written in C
+
+Correct :     UCOPY, VBLANK, VFILL, VZERO         missing DIMENSION
+
+Delete :      TIMED, TIMEX         use the routines from KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.23 :  18-July-1991
+----------------------------
+
+Replacing File   KERNAPO 1.22  910313 10.14
+
+Delete :      GSHOW, QNEXTE        use the routines from KERNFOR
+
+Correct :     activate the statement function definitions
+              in P=QMAPO; apparently for Fortran 10.8 this is
+              now efficient.
+
+---------------------------------------------------------------------
+
+UP-DATE  1.22 :  13-Mar-1991
+----------------------------
+
+Replacing File   KERNAPO 1.21  900731 14.54
+
+New Patches : P=*KAPO        to be used
+                             *KAPOL only for Patchy
+              P=APOCCR       to hold routines clashing with
+                             the C library
+
+New Deck :    P=APOSYS, D=SIGNALF
+
+Correct :     connect P=CCGEN of KERNFOR
+
+              P=APOSYS, D=CHDIR,GETCWD,GETENV,RENAME     UNIX functions
+                        moved into the new P=APOCCR
+
+Delete :      P=APOPROGS, D=FPREP.
+
+---------------------------------------------------------------------
+
+UP-DATE  1.21 :  31-July-1990
+----------------------------
+
+Replacing File   KERNAPO 1.20  900328 17.31
+
+New Decks :   CHDIR, GETCWD, GETENV, RENAME     UNIX functions
+
+Correct :     XBANNER              use new version now on KERNFOR
+              FLOPER               change of calling sequence
+              FCASPLIT             for change in FLOPER
+
+---------------------------------------------------------------------
+
+UP-DATE  1.20 :  28-Mar-1990
+----------------------------
+
+Replacing File   KERNAPO 1.19  891207 22.34
+
+New Decks :   GETARG, IARGC             UNIX functions
+              CVFIXTO in P=APOPROGS     moved to here from Patchy
+              FLOPER  in P=APOSYS       moved to here from Patchy
+
+Correct :     FCASPLIT             use new version now on KERNFOR
+
+---------------------------------------------------------------------
+
+UP-DATE  1.19 :   7-DEC-1989
+----------------------------
+
+Replacing File   KERNAPO 1.18  891018 14.57
+
+New Decks :   LOCB           return the byte adr of a variable
+
+Correct :     RNDM           correct result from IRNDM
+
+Delete :      Use new routines from KERNFOR :
+              ABEND, FLOARG, INTARG, IUMODE, JOBNAM, UFLINT
+
+---------------------------------------------------------------------
+
+UP-DATE  1.18 :  29-Sept-1989
+----------------------------
+
+Replacing File   KERNAPO 1.17  890628 12.05
+
+New Decks :   XBANNER in P=APOPROGS
+
+Correct :     DATIME         to return seconds in /SLATE/
+              JUMPX2         add entries JUMPX1 and JUMPX0
+
+---------------------------------------------------------------------
+
+UP-DATE  1.17 :  26-june-1989
+----------------------------
+
+Replacing File   KERNAPO 1.16  890321 21.33
+
+New Decks :   LVMAXA                              for speed
+              VCOPYN, VDOT, VDOTN, VDOTN2, VLINCO
+              VMATL, VMATR, VMAXA, VMOD, VSCALE, VSUB
+              UCOPIV, UFILL, UZERO
+
+              FCASPLIT in P=APOPROGS
+
+Correct :     TRACEQ         replace dummy by true routine
+
+Deleted :     XINB, XINBS    the new defaults on KERNFOR are good
+
+---------------------------------------------------------------------
+
+UP-DATE  1.16 :  21-mar-1989
+----------------------------
+
+Replacing File   KERNAPO 1.15  881020 21.18
+
+New option :  QMAPO10        for the DN 1000
+
+New Decks :   USWOP          for speed
+              KERNGT         to eventually replace GSHOW
+
+Correct :     LOCF           for DN 10000
+              UCOPY2         bring back the fast version, Apollo
+                             have corrected the bug in VEC_COPY
+
+---------------------------------------------------------------------
+
+UP-DATE  1.15 :  20-oct-1988
+----------------------------
+
+Replacing File   KERNAPO 1.14  880715 15.37
+
+Correct :     CBYT          formal change to match statement function
+              RNDM          correct multiplier 69069
+              FPREP         fix bug in utility program
+              QNEXTE, TIMED     SAVE variables to be saved
+
+---------------------------------------------------------------------
+
+UP-DATE  1.14 :  13-jul-1988
+----------------------------
+
+Replacing File   KERNAPO 1.13  880425 20.47
+
+Correct :     RNDM           avoid exact zero result
+Delete :      NOARG          dummy is now on KERNFOR
+New patch :   APOPROGS       utility programs for Apollo
+
+---------------------------------------------------------------------
+
+UP-DATE  1.13 :  25-apr-1988
+----------------------------
+
+Replacing File   KERNAPO 1.12  880323 11.29
+
+New Decks :   P=APOSYS, D=JUMPAD, JUMPX2
+
+---------------------------------------------------------------------
+
+UP-DATE  1.12 :  23-MAR-1988
+----------------------------
+
+Replacing File   KERNAPO 1.11  880222 17.42
+
+Modifs :      P=APOSYS, D=INTRAC
+New Decks :   P=APOGS,  D=RNDM       containing entries IRNDM etc
+Deleted :     P=APOSYS, D=IRNDM, RNDM
+
+---------------------------------------------------------------------
+
+UP-DATE  1.11 :  22-FEB-1988
+----------------------------
+
+Replacing File   KERNAPO 1.10  870525 19.24
+
+Modifs :      P=APOGS, D=UBLOW, UBUNCH
+                       D=UCTOH1, UCTOH
+                       D=UH1TOC, UHTOC      re-written for speed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.10 :  24-MAY-1987
+----------------------------
+
+Replacing File   KERNAPO 1.09  861204 21.03
+
+New Decks :   P=APOGS, D=IANDETC, JBYTOR
+                       D=MBYTET, MBYTOR, MCBYT
+                       D=MSBIT, MSBIT0, MSBIT1, MSBYT
+                       D=BTEST, IBCLR, IBSET, ISHFT
+
+Modifs :      P=QMAPO          new Q$ sequences added
+
+---------------------------------------------------------------------
+
+UP-DATE  1.09 :   4-DEC-1986
+----------------------------
+
+Replacing File   KERNAPO 1.08  860514 20.17
+
+New Decks :   P=APOSYS, D=INTRAC, NOARG               (Dummies)
+
+---------------------------------------------------------------------
+
+UP-DATE  1.08 :  14-MAY-1986
+----------------------------
+
+Replacing File   KERNAPO 1.07  860212 20.07
+
+New Decks :   P=APOSYS, D=IRNDM
+
+Modifs :      P=APOGS, D=JBYT, JBYTET    Re-written
+              P=QMAPO                    Add Z=Q$ANDOR, Q$SHIFT
+
+---------------------------------------------------------------------
+
+UP-DATE  1.07 :  12-FEB-1986
+----------------------------
+
+Replacing File   KERNAPO 1.06  851211 12.47
+
+New Decks :   P=APOGS, D=UCTOH1, UCTOH
+
+Modifs :      P=APOGS, D=UBLOW        entry UCTOH1 removed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.06 :  11-DEC-1985
+----------------------------
+
+Replacing File   KERNAPO 1.05  850327 17.48
+
+New Decks :   P=APOGS, D=UH1TOC, UHTOC
+
+---------------------------------------------------------------------
+
+UP-DATE  1.05 :  27-MAR-1985
+----------------------------
+
+Replacing File   KERNAPO 1.04  850321 16.35
+
+New Decks :   P=APOSYS, D=QNEXTE, TRACEQ
+
+---------------------------------------------------------------------
+
+UP-DATE  1.04 :  21-MAR-1985
+----------------------------
+
+Replacing File   KERNAPO 1.03  840216 11.21
+
+New Patch :   P=APOSYS            SPLIT OFF WITH
+                  D= ABEND,DATIME,DATIMH,JOBNAM,RNDM
+
+New Decks :   P=APOGS, D=UCOPY,UCOPY2,
+                       D=VADD,VBIAS,VBLANK,VFILL,VSUM,VZERO
+
+              P=APOSYS, D=TIMED, TIMEX
+
+Modifs :      P=APOSYS, D=RNDM
+
+---------------------------------------------------------------------
+
+UP-DATE  1.03 :  15-FEB-1984
+----------------------------
+
+Replacing File   KERNAPO 1.02  831219 21.50
+
+Modifs :      P=*KAPOL           new version of Z=Q$JBIT, Q$JBYTET
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  19-DEC-1983
+----------------------------
+
+Replacing File   KERNAPO 1.01  831216 19.17
+
+New Decks :   D=RNDM
+Modifs :      D=XINB, XINBS
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01 :  16-DEC-1983
+----------------------------
+
+Replacing File   KERNAPO 1.00  831213 22.00
+
+More routines added
+
+---------------------------------------------------------------------
+
+          FIRST RELEASE OF THE KERNAPO  PAM :  13-DEC-1983
+
+---------------------------------------------------------------------
+
+#endif

@@ -1,0 +1,3 @@
+SRCS_F=	 fmotoz.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

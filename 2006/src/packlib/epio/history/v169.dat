@@ -1,0 +1,31 @@
+*
+* $Id: v169.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v169.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.69  930524  9.00
+C- Introduce CFIO for the Unix versions controlled by status word 33,
+C    which is set by the user as follows;
+C     Value       Type of I/O          Default filename (lun=nn)
+C       0      Fortran sequential                for0nn
+C       1      Fortran direct access             epionn
+C       2      C using CFIO                      epionn
+C
+C  Although it is the old default, Value 0 is not portable and seems
+C  to give more problems.
+C  Values 1 and 2 give identical formats on most systems and are
+C  portable.
+C  With this version Status Word 33 will be set to 2 by default, but
+C  it is user settable.
+C
+C    Routines modified;
+C  P=EPIO  ,D=EPBLIN
+C          ,D=EPBOUT
+C          ,D=EPEOF
+C          ,D=EPOPESTF
+C          ,D=EPRWND
+C          ,D=EPUNIT
+C

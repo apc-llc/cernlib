@@ -1,0 +1,31 @@
+#
+#  Makefile  --
+#	for tuple
+#
+#  Original: 21-Oct-1994 18:23
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+CFLAGS = -g +z -Ae -Dextname -I../../ntuple -I../../paw -I/cern/pro/include
+
+F77 = fort77
+FFLAGS = +T +ppu +z -Wl,-E -g 
+
+C_SRC = \
+	tuple.c
+
+C_OBJ = $(C_SRC:.c=.o)
+
+OBJ = $(C_OBJ)
+
+all: tuple
+
+tuple: tuple.o
+	$(F77) $(FFLAGS) $(LDFLAGS) tuple.o -o tuple \
+		../../../hbook/libhbook.sl \
+		../../../zebra/libzebra.sl \
+		-L/cern/pro/lib \
+		-lkernlib \
+		-lm

@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 dvxdx.F dvxsx.F dxdvx.F dxsvx.F svxdx.F svxsx.F sxdvx.F sxsvx.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,3 @@
+INCLUDES=	 wlength.inc pilot.h pilot_c.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),zbook)

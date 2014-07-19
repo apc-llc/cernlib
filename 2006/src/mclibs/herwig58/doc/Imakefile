@@ -1,0 +1,3 @@
+
+InstallNonExecFile(herwig58.lis,$(DOCDIR))
+

@@ -1,0 +1,15 @@
+SRCS_F= btstor.F ftubes.F gukine.F guout.F gustep.F gutrev.F hboots.F \ @@\
+	hcatst.F main.F sumang.F ufiles.F ugeom.F uginit.F uglast.F \ @@\
+	uhinit.F
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(exam9,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib)
+
+TestTarget(exam9,gexam9.dat,gexam9.input)
+
+gexam9.input: g321x9.inp
+	$(CP) $< $@
+
+gexam9.dat: exam9.dat
+	$(CP) $< $@

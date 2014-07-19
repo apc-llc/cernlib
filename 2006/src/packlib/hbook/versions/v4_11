@@ -1,0 +1,27 @@
+*
+* $Id: v4_11,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_11,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.11/01 15/02/91  18.07.12  by  Rene Brun
+*-- Author :    Rene Brun   10/02/91
+*
+*::>          VERSION  4.11/01   910215 18.07
+*
+*      Flag NEWLIB introduced in HMACHI
+*
+*::>          VERSION  4.11/00   910210 16.55
+*
+*
+*         Remove the test in HFCNV on TEST (same as HFCNH)
+*         Bugs corrected in HFETCH and HREAD
+*         Bug corrected in HLDIR2 (IOFSET not initialized: W.Brueckner)
+*         Bug corrected in HX/HPR1H for non-equidistant bins (G.Maringer)
+*         SAVE statement added in HFF2 (W.Brueckner)
+*         Correction in HAUTO (LW not computed)
+*         Introduce HPUX version
+*
+ 

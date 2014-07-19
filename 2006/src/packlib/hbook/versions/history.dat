@@ -1,0 +1,284 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+* This directory was created from hbook.car patch history
+*CMZ :  4.10/05 16/08/90  10.35.58  by  Rene Brun
+*-- Author :
+*
+*                VERSION 4.10 (16/08/90)
+*
+*         COMMON/HCDIRE/ modified. Number of possible directories
+*          has been changed from 20 to 100.
+*          This changes implies recompilation of HPLOT,PAW.
+*          Note that a similar change has been made in RZEBRA.
+*          Argument to user functions copied before calling
+*            the function in HBFUN1/HBFUN2 to prevent cases
+*            where a bad user is changing the argument.
+*          Bug corrected in HFIND for HBOOKB case
+*          Correction in HFITH in case of HFITGA (Sigma>0)
+*          Added IQUEST(1)=1 in HCDIR if directory not found (M.Guan..)
+*          Slight changes for OS9/RTF compiler (Equivalence order)
+*          Bug corrected in HSPLI2 (A.Nathaniel)
+*          Mods in HCOPYN calling a new routine HCOPYT (copy Ntuples)
+*          Mods in HSCALE and HMAXIM. HMAXIM may be called for a 2-Dim
+*              HMAXIM uses KSCAL2 word
+*
+*
+*                VERSION 4.09 (11/04/90)
+*
+*         Mods in HDIFF (for HPAK case)
+*         New routine HPAKAD
+*         Changes in machine PATCHY flags
+*         Routine HROPEN based on new ZEBRA routine RZOPEN
+*         New routine HFNOV to fill a "cyclic Ntuple"
+*         Double precision variables in HSTATI and HPRST
+*         Bug corrected in HOPER1 for Number of equivalent events
+*         Changes in HFN (HCDIR+RZCDIR) when RZ is used together
+*           with HBOOK.
+*         Changes in HCREATEG
+*         New DECK H0MPW introduced for MACMPW to force a new segment
+*         Bug fixed in HLDIR (M.Guanziroli)
+*
+*                VERSION 4.08 (18/12/89)
+*
+*         SET EPS=0.0000002 in HMINUT
+*         New routine HFITHN introduced
+*          + internal routines HICTOI,HFITF,HFITHC
+*          + new Patchy sequence HCFITF
+*         Bug corrected in HINDEX for slices
+*         Changes in HFITH1 and HSUPIS to take care of histograms
+*           with non-equidistant bins
+*         In HCOPY set bit 5 =0
+*         In HRIN look at bit 5 before deleting histogram in memory
+*         In HIDOPT, option SHOW implemented
+*
+*                VERSION 4.07 (29/09/89)
+*
+*         Mods in HHIPAR. Do not force IWEIGH=1 if HPAKE.
+*         Mods in HMINUI. (if PARAM=0.)
+*         Mods in HFCN
+*         Protection in HMDIR against CHDIR with more than 16 characters
+*         Sequences HCFIT4,HCFIT5 deleted.
+*         Bug corrected in HRNDM2
+*         MAXLEN changed to 110 in HPAFF
+*         HGN returns IERROR=-1 if event nr > number of events
+*         Mods in HCREATEG (Jim Loken)
+*         Protection in HDIPKL
+*         Minor change in HMINUI
+*         Minor change in HEXAM5
+*         Maximum number of variables in a Ntuple changed to 512
+*         Change in HFITGA. Parameter COEFF in phase with documentation
+*         HDIFF writes on LOUT instead of 6.
+*         Text of message changed in HUNPAK/HUNPKE
+*         Bug corrected in HFINOP for BANY
+*         SAVE statement added in HRNDM1/HRNDM2
+*         Array FITDER added in sequence /HCFITS/.
+*         Variable EPSIH renamed EPSIF in /HCFIT6/.
+*         Format changed in HPTIT (I4 instead of I3)
+*         DEFT changed to SETD in HIDOPT.
+*         Epsil shift (1.e-6) in booking routines removed.
+*         Change in HDELET (clear link for HCOPYM)
+*         Change in HSIFLA (status word bit 5 set for PAW)
+*         Changes in all routines modifying histogram structure
+*           (call sbit0(iq(lcid),5) for PAW
+*         Set IQUEST(1)=0 in HSPACE (problems with the ZEBRA server)
+*         Correct HCOPYN for profile histograms with option S
+*         New version of HCREATEG from J.Loken
+*         Changes in HINDEX for printing limits of slices and bands*
+*         New fitting routines HFITH and HFITV introduced
+*         Routines HFITPO,HFITEX,HFITGA interfaced to HFITH
+*         Added calls to interactive Minuit if option 'M'
+*         Examples modified
+*         Fit parameters now stored with histogram data structure.
+*         Variable IOFIT in /HCFORM/
+*
+*                VERSION 4.06 (30/06/89)
+*
+*         INOT replaced by INNOT in printing routines
+*         Current Directory set to //PAWC at the end of HREND
+*         Bug corrected in HNORMA (C.ERD)
+*         Bug corrected in HSTATI
+*         HRDIR implemented for subdirs of a global section
+*         Change to standard intrinsic functions of Fortran 77
+*         CONVEX version introduced
+*         Version of HROPEN for IBMMVS introduced.
+*         New routine HDERIV (user callable)
+*            HDERIV is a replacement for the dummy routines
+*            HDERI1,HDERI2,HDERIN
+*         HEXAM modified
+*         Report bug in HBOOKN for ID>9999
+*         Bug corrected in HRZIN for Ntuples (CZ mode)
+*
+*         New interface to MINUIT introduced (with E.Lessner FNAL)
+*         Changes in fitting routines for IWEIGH.NE.0
+*
+*         Changes in HBARX/HBARY
+*         When HBARX/Y is called, the routine fills the sum of
+*         the square of the weights from the actual contents
+*         This is introduced to make easier the computation
+*         of error bars by HOPERA.
+*
+*                VERSION 4.05 (29/03/89)
+*
+*         Sequence JBIT replaced for Apollo
+*         Unused sequences removed
+*         Bugs corrected in HPROJ1(2) ISEL not used
+*         Routines HRZIN/HRZOUT changed (New CZ and ZS)
+*         New routine HRDIR
+*         Bug corrected in HPR1H
+*         Remove limitation for CHRZPA<3 in HBOOKN
+*         Protection added in HFILPF (overflows)
+*         DOUBLE PRECISION kept on CRAY in HF1,HPRST and HSTATI
+*         Bug corrected in HPR1V for INTE and many parts
+*         Bug corrected in HARRAY
+*         Bug corrected in HF1AUT
+*         Bug corrected in HMONIT
+*         sequence HCDIRE modified. New array HFNAME containing
+*         the file name
+*         Mods in HBOOKN. 80 characters always allocated to CHRZPA.
+*         Mods in HRIN to change CHRZPA to current directory.
+*         Bug corrected in HBCDI (RETURN missing)
+*         Patchy flag SAVE removed (default)
+*
+*         Mods in HBOOKN (Limit to 120)
+*         Protection in HTERM
+*         Mods in HCOPYN (add profiles)
+*         Mods in HRZIN
+*         Mods in HRGET and HRPUT when CHFILE=' '
+*         Add option 'A' in HRGET (JOFSET=99999 in HRIN)
+*         Bug corrected in HLDIR2
+*         Bug corrected in HEXAM5 (array EY not defined)
+*         Unused variables removed (FTN on DN10000)
+*         Calls to UCTOH1 replaced by UCTOH
+*         Bug corrected in HSPFUN (Annette Frenkel)
+*         HSPLI1 always return CHISQ
+*         New options 'F1 and F2' in HDIFF
+*         Routine HISTDO now calls HPDIR('//PAWC','TI')
+*         Option 'I' added in HPDIR
+*         Routines HRZFIL and HRZEND removed
+*         Changes in HRFILE,HRZCD for communication mode
+*         Change IQUEST(1)=0 in HCDIR
+*         Bug corrected in HSTATI (LCONT set to IFW removed)
+*         IDLAST always set to 0 in HLOOP
+*         Bug corrected in HPHIST/HPROT for slices in X
+*         Routines for Vax Global sections rewritten by J.Loken
+*
+*                VERSION 4.04 (10/11/88)
+*
+*         Changes in all booking routines (31-->16)
+*         Mods in HROUT
+*         Mods in HFF1,HIPAK1,HF1,HF2
+*         Patchy flag SAVE introduced
+*         New routines HGNPAR and HGNF
+*         Routines HPROJ1 and HPROJ2 modified
+*
+*                VERSION 4.03 (05/09/88)
+*
+*         Routine HCX modified to solve a CRAY compiler problem
+*         Routines HFETCH,HFETC1 corrected for same problem as HCX
+*         Routine HF1 corrected for non-equidistant bins histograms
+*         Argument IDD added in HSPACE
+*         Argument KCASE in HUNPAK declared type CHARACTER
+*         Argument KNAME in HPHIST and HPROT declared type CHARACTER
+*         NOARG removed from HPHIST and HPROT
+*         Bug corrected in HPHIST affecting HPR1V
+*         Routines HPROJ1,HPROJ2 modified to handle MASK logic in PAW
+*             and HGN
+*         Routine HFILPF changed to take W into account
+*         COMMON/PAWIDN/IDNEVT,X(127) added.
+*         UNIX version introduced.
+*         Changes in HMACHI,HPCHAN,HPATH.
+*         Bugs corrected in HFILPR and HPR1V.
+*         Bank LHBOOK changed to 50 links (10 struct.)
+*         Automatic binning algorithm modified (HF1AUT)
+*         Routine HROUT accepts option 'T'
+*         New routines HROPEN,HRGET and HRPUT
+*         Routine HRIN modified to simulate option 'T'
+*           If ICYCLE>1000 and ID=0 implies option 'T'
+*         Routines HBOOK1 and HF1 changed. Accumulate the 100 first
+*           entries instead of just 50.
+*         Mods in all routines using NBIT
+*         Check for space left in HLDIR
+*         Changes in HMAPG (J.Loken)
+*
+*                VERSION 4.02 (28/04/88)
+*
+*         Bugs  corrected in routine HFF1,HFF2,HIPAK1,HIPAK2 (Kevin Einsweiler)
+*         Bugs corrected in HIDOPT (Helmut Burkhardt)
+*         Bugs corrected in HPROJ1,HPROJ2 (V.Journe)
+*         Option I implemented in HLDIR (HINDEX format)
+*         New routine HUNPKE to unpack errors (same calling as HUNPAK)
+*         Bug corrected in HSTATI(C.Onions)
+*         Bug corrected in HOPER1 (calculation of errors)(V.Gibson,A.Parker)
+*         Bugs corrected in HSPFUN,HSPLI1,HSPLI2
+*         Bug corrected in HFETCH (D.Schlatter)
+*         ALLIANT version introduced
+*         New facility to access remote files across a network
+*           An implementation with TCP/IP is available
+*           (Works together with the new option FZCHANNEL of ZEBRA)
+*         Correction in HFETCH (problem on NORD) (A.Read)
+*         Changes in HRFILE for global sections (IQUEST)
+*         LOUT changed to 6 for Apollo and Alliant
+*         Y scale factor better computed when HMAXIM is called (V.Palladino)
+*         Operations between profile histograms implemented (suggested by H.Chan
+*         Modification of algorithm to print integrated contents (P.O.Hulth)
+*         Routine HGN optimized
+*         New routine HGIVEN (same as HGIVE for N-tuples) (R.Namjoshi)
+*         Routine HSCR implemented as described in the documentation
+*         Mods in HBANDX and HBANDY (reverse booking order)
+*         Set a limitation for NVAR<129 in HBOOKN
+*         Changes in HFN and HCDIR for N-tuples in memory
+*         Protection in booking routines in case HDELET is called
+*         IDLAST reset in all printing routines
+*         Bugs corrected in HLDIR and HPDIR
+*
+*                VERSION 4.01 (18/02/88)
+*
+*         Bugs corrected in routine HGN (Rohit + Iversen)
+*         Bug  corrected in HFINOP (affected HSTATI and HUNPAK)
+*         Bugs corrected in HPROJ1,HPROJ2
+*         Protection in HROUT
+*
+*                VERSION 4.00 (08/02/88)
+*
+*         New version based on ZEBRA. (version 3.54 needed)
+*         Storage area is the COMMON/PAWC/H(ispace)
+*         The user has to dimension this common block and
+*         initialize the HBOOK package by CALL HLIMIT(ispace)
+*
+*         Only character strings or variables are accepted for titles
+*
+*         With the new version one must always specified
+*         the correct number of arguments in subroutine calls. The
+*         facility to miss some arguments will be withdrawn from HBOOK
+*         in a few monthes.
+*         HFILL must have 4 arguments
+*         HSTORE and HFETCH are dummy. Use HRFILE,HRIN,HROUT,HREND instead
+*
+*         A set of new routines is available for
+*           - Structuring IDs in memory.
+*           - Statistical comparison of histograms (HDIFF)
+*           - Give options
+*           - Sequential I/O
+*           - Random access I/O (PATCH,HRZ)
+*           - N-tuples
+*           - New routine HFILPR to fill existing projections
+*           - New routine HGSTAT to get statistics
+*           - New routines HBPROF and HFILPF to book and fill
+*             profile histograms
+*           - New functionality for HLIMIT
+*             without initialization of ZEBRA
+*           - New routine HBUG to print error messages
+*           - Using shared areas (Online) HCOPYM
+*           - New routine HBOOKB (histos with non-equidistant bins)
+*           - New routine HREP1 to replace contents of one channel
+*           - New routine HGN to return one event from a N-tuple
+*           - New routine HPSTAT to print statistics about ID
+*           - PATCH,HGLOBAL for shared global sections on VAX
+*          (See new documentation)
+*

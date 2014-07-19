@@ -1,0 +1,19 @@
+SRCS_F=	 geta.F getb.F getd.F getfz.F getp.F getrz.F getx.F \ @@\
+	mget.F mput.F puta.F putb.F putd.F putfz.F putp.F putrz.F \ @@\
+	putx.F rclose.F rlogin.F rshell.F zabend.F zexit.F zfctof.F \ @@\
+	zfftoc.F zffzcp.F zflogc.F zfrfrf.F zfrtof.F zfrzcp.F zftlcd.F \ @@\
+	zftlls.F zftlmv.F zftlrm.F zftpcd.F zftpls.F zftpmv.F \ @@\
+	zftprm.F zftpwd.F zfvers.F
+
+#define IHaveCDF
+SRCS_CDF= zftpcdf.cdf
+
+SubdirLibraryTarget(zftplib,NullParameter)
+
+DefinePackageLibrary(zftplib)
+
+NeedTcpipLib
+
+CernlibFortranProgramTarget(zftp,zftp.o,$(PACKAGE_LIB),$(PACKAGE_LIB),packlib)
+
+InstallProgram(zftp,$(CERN_BINDIR))

@@ -1,0 +1,21 @@
+SRCS_F=	 fqback.F fqbkco.F fqbkfa.F fqbkfi.F fqbkra.F fqcget.F \ @@\
+	fqcput.F fqmake.F fqmget.F fqmput.F fqread.F fqrset.F fqtest.F \ @@\
+	fqtinf.F fqunus.F qcomds.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(fqback,fqback,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqbkco,fqbkco,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqbkfa,fqbkfa,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqbkfi,fqbkfi,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqbkra,fqbkra,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqmake,fqmake,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqtest,fqtest,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(fqtinf,fqtinf,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(qcomds,qcomds,'-WF,-P',NullParameter)
+#endif
+
+#if defined(CERNLIB_QMIRIX64)
+EXTRA_INCLUDES=-I$(CVSCOSRC)/packlib/zebra/test/fqtest
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

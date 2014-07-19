@@ -1,0 +1,13 @@
+*
+* $Id: v308.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v308.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.08   891110
+C
+C- Bug corrected in the handling of the '*' as a comment
+C- Introduce pilot patch *FFREAD, flags UNIX, ULTRIX
+C

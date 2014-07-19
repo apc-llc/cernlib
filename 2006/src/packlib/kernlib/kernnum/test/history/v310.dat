@@ -1,0 +1,25 @@
+*
+* $Id: v310.dat,v 1.1.1.1 1996/02/15 17:48:37 mclareni Exp $
+*
+* $Log: v310.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:37  mclareni
+* Kernlib
+*
+*
+*  Version 3.10  940304  15.00
+C
+C   select UNIX for WINNT.
+C
+C   Remove test for:
+C     C312, C313, C336, C337, D103, G100
+C       the routines have been moved to gen/gent/mathlib
+C     C204, C308, C341, D106
+C       these were deleted from kernlib 
+C    ( actually only calls to test removed, test code still there)
+C
+C    940819: 
+C      remove activation of actual test decks.
+C    940831:
+C      On DATA NREPPK lines change last value to 0
+C
+C

@@ -1,0 +1,15 @@
+*
+* $Id: v145.dat,v 1.1.1.1 1996/04/01 15:01:32 mclareni Exp $
+*
+* $Log: v145.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:32  mclareni
+* Mathlib gen
+*
+*
+C
+C  Routine changes: 
+C  ---------------
+C  
+C  D501. Correct IF statements to protect against compiler 
+C        evaluating expressions out of order (from Igor Mandrichenko/FNAL)
+C

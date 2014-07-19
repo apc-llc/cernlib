@@ -1,0 +1,28 @@
+/* $Id: sv4Lib.tmpl,v 1.1.1.1 1995/12/20 15:26:43 cernlib Exp $
+ *
+ * $Log: sv4Lib.tmpl,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: sv4Lib.tmpl,v 1.20 95/07/06 14:06:11 kaleb Exp $
+
+/*
+ * SVR4 shared library template
+ */
+
+/* SVR4 shared libraries are deficient in link semantics */
+XMULIBONLY = -lXmu
+#ifndef FixupLibReferences
+#define FixupLibReferences()						@@\
+XMULIB = $(XMULIBONLY) -z nodefs
+#endif
+#ifndef XawClientLibs
+#define XawClientLibs $(XAWLIB) $(XMULIBONLY) $(XTOOLLIB) $(XLIB)
+#endif
+#if ThreadedX
+#ifndef SharedX11Reqs
+#define SharedX11Reqs -lthread
+#endif
+#endif

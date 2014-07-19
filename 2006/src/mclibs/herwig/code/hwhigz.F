@@ -1,0 +1,193 @@
+CDECK  ID>, HWHIGZ.
+*CMZ :-        -02/05/91  11.18.44  by  Federico Carminati
+*-- Author :    Mike Seymour
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHIGZ
+C-----------------------------------------------------------------------
+C     HIGGS PRODUCTION VIA THE BJORKEN PROCESS: E+E- --> Z(*) --> Z(*)H
+C     WHERE ONE OR BOTH OF THE Zs IS OFF-SHELL
+C     USES ALGORITHM OF BERENDS AND KLEISS: NUCL.PHYS. B260(1985)32
+C
+C     MEAN EVWGT = CROSS-SECTION (IN NB) * HIGGS BRANCHING FRACTION
+C-----------------------------------------------------------------------
+      INCLUDE 'HERWIG59.INC'
+      DOUBLE PRECISION HWUAEM,HWHIGY,HWRUNI,HWRGEN,HWULDO,EMZ,CVE,CAE,
+     & POL1,POL2,CE1,CE2,CE3,PMAX,EMZ2,S,B,FACTR,EMH,EMFAC,EMH2,A,XP,
+     & CV,CA,BRHIGQ,BR,X1,X2,FAC1,FAC2,XPP,XPPSQ,COEF,X,XSQ,PROB,C1,C2,
+     & CHIGG,PTHETA,SHIGG,C3,PHIMAX,CPHI,SPHI,C2PHI,S2PHI,PCM,ELST
+      INTEGER IDEC,I,NLOOP,ICMF,IHIG,IZED,IFER,IANT,ID1,ID2,IN1,IN2
+      EXTERNAL HWUAEM,HWHIGY,HWRUNI,HWRGEN,HWULDO
+      SAVE CVE,CAE,CE1,CE2,CE3,PMAX,EMZ2,S,EMH,B,FACTR,A,EMH2
+      EQUIVALENCE (EMZ,RMASS(200))
+      DATA ELST/0/
+C---SET UP CONSTANTS
+      IN1=1
+      IF (JDAHEP(1,IN1).NE.0) IN1=JDAHEP(1,IN1)
+      IN2=2
+      IF (JDAHEP(1,IN2).NE.0) IN2=JDAHEP(1,IN2)
+      IF (FSTWGT.OR.ELST.NE.PHEP(5,3)) THEN
+        ELST=PHEP(5,3)
+        CVE=VFCH(11,1)
+        CAE=AFCH(11,1)
+        POL1=1.-EPOLN(3)*PPOLN(3)
+        POL2=EPOLN(3)-PPOLN(3)
+        CE1=(POL1*(CVE**2+CAE**2)+POL2*2.*CVE*CAE)
+        CE2=(POL1*2.*CVE*CAE+POL2*(CVE**2+CAE**2))
+        IF ((IDHW(IN1).GT.IDHW(IN2).AND.PHEP(3,IN1).LT.0.).OR.
+     &      (IDHW(IN2).GT.IDHW(IN1).AND.PHEP(3,IN2).LT.0.)    ) CE2=-CE2
+        IF (TPOL) CE3=(CVE**2-CAE**2)
+        PMAX=4
+        EMZ2=EMZ**2
+        S=PHEP(5,3)**2
+        B=EMZ*GAMZ/S
+        FACTR=GEV2NB*CE1*(HWUAEM(RMASS(201)**2)*ENHANC(11))**2
+     &       /(12.*S*SWEIN*(1.-SWEIN))*B/((1-EMZ2/S)**2+B**2)
+      ENDIF
+      IF (.NOT.GENEV) THEN
+C---CHOOSE HIGGS MASS, AND CALCULATE EVENT WEIGHT
+        EVWGT=0D0
+        CALL HWHIGM(EMH,EMFAC)
+        IF (EMH.LE.0 .OR. EMH.GT.PHEP(5,3)) RETURN
+        EMSCA=EMH
+        EMH2=EMH**2
+        A=4*EMH2/S
+        XP=1+(EMH2-EMZ2)/S
+        EVWGT=FACTR*HWHIGY(A,B,XP)*EMFAC
+C---INCLUDE BRANCHING RATIO OF HIGGS
+        IDEC=MOD(IPROC,100)
+        IF (IDEC.GT.0.AND.IDEC.LE.12) EVWGT=EVWGT*BRHIG(IDEC)
+        IF (IDEC.EQ.0) THEN
+          BRHIGQ=0
+          DO 10 I=1,6
+ 10         BRHIGQ=BRHIGQ+BRHIG(I)
+          EVWGT=EVWGT*BRHIGQ
+        ENDIF
+C Add Z branching fractions
+        CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,0)
+        EVWGT=EVWGT*BR
+        IF (IDEC.EQ.10) THEN
+          CALL HWDBOZ(198,ID1,ID2,CV,CA,BR,1)
+          CALL HWDBOZ(199,ID1,ID2,CV,CA,BR,1)
+          EVWGT=EVWGT*BR
+        ELSEIF (IDEC.EQ.11) THEN
+          CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
+          CALL HWDBOZ(200,ID1,ID2,CV,CA,BR,1)
+          EVWGT=EVWGT*BR
+        ENDIF
+      ELSE
+C---GENERATE EVENT
+        ICMF=NHEP+1
+        IHIG=NHEP+2
+        IZED=NHEP+3
+        IFER=NHEP+4
+        IANT=NHEP+5
+        CALL HWVEQU(5,PHEP(1,3),PHEP(1,ICMF))
+        NHEP=NHEP+5
+C---CHOOSE ENERGY FRACTION OF HIGGS
+        X1=SQRT(A)
+        X2=1+0.25*A
+        XP=1+(EMH2-EMZ2)/S
+        FAC1=ATAN((X1-XP)/B)
+        FAC2=ATAN((X2-XP)/B)
+        XPP=MIN(X2,MAX(X1+B,XP))
+        XPPSQ=XPP**2
+        NLOOP=0
+        COEF=1./((12+2*A-12*XPP+XPPSQ)*SQRT(XPPSQ-A))
+ 20       NLOOP=NLOOP+1
+          IF (NLOOP.GT.NBTRY) CALL HWWARN('HWHIGZ',101,*999)
+          X=XP+B*TAN(HWRUNI(1,FAC1,FAC2))
+          XSQ=X**2
+          PROB=COEF*((12+2*A-12*X+XSQ)*SQRT(XSQ-A))
+          IF (PROB.GT.PMAX) THEN
+            PMAX=1.1*PROB
+            CALL HWWARN('HWHIGZ',1,*999)
+            WRITE (6,21) PMAX
+ 21         FORMAT(7X,'NEW HWHIGZ MAX WEIGHT =',F8.4)
+          ENDIF
+        IF (PROB.LT.PMAX*HWRGEN(0)) GOTO 20
+C Choose Z decay mode
+        CALL HWDBOZ(200,IDHW(IFER),IDHW(IANT),CV,CA,BR,0)
+        C1=CE1*(CV**2+CA**2)
+        C2=CE2*2.*CV*CA
+C---CHOOSE HIGGS DIRECTION
+C First polar angle
+        NLOOP=0
+        COEF=(XSQ-A)/(8.*(1.-X)+XSQ+A)
+ 30       NLOOP=NLOOP+1
+          IF (NLOOP.GT.NBTRY) CALL HWWARN('HWHIGZ',102,*999)
+          CHIGG=HWRUNI(2,-ONE, ONE)
+          PTHETA=1-COEF*CHIGG**2
+        IF (PTHETA.LT.HWRGEN(1)) GOTO 30
+        SHIGG=SQRT(1-CHIGG**2)
+C Now azimuthal angle
+        IF (TPOL) THEN
+           C3=CE3*(CV*2+CA**2)
+           COEF=COEF*SHIGG**2*C3/C1
+           PHIMAX=PTHETA+ABS(COEF)
+  40       CALL HWRAZM(ONE,CPHI,SPHI)
+           C2PHI=2.*CPHI**2-1.
+           S2PHI=2.*CPHI*SPHI
+           PROB=PTHETA-COEF*(C2PHI*COSS+S2PHI*SINS)
+           IF (PROB.LT.HWRGEN(1)*PHIMAX) GOTO 40
+        ELSE
+           CALL HWRAZM(ONE,CPHI,SPHI)
+        ENDIF
+C Construct Higgs and Z momenta
+        PHEP(5,IHIG)=EMH
+        PHEP(4,IHIG)=X*PHEP(5,ICMF)/2
+        PCM=SQRT(PHEP(4,IHIG)**2-EMH2)
+        PHEP(3,IHIG)=CHIGG*PCM
+        PHEP(1,IHIG)=SHIGG*PCM*CPHI
+        PHEP(2,IHIG)=SHIGG*PCM*SPHI
+        CALL HWVDIF(4,PHEP(1,ICMF),PHEP(1,IHIG),PHEP(1,IZED))
+        CALL HWUMAS(PHEP(1,IZED))
+C Choose orientation of Z decay
+        NLOOP=0
+        COEF=2.*(C1+ABS(C2))*HWULDO(PHEP(1,IN1),PHEP(1,IZED))
+     &                      *HWULDO(PHEP(1,IN2),PHEP(1,IZED))/S
+        IF (TPOL) COEF=COEF*(C1+ABS(C2)+ABS(C3))/(C1+ABS(C2))
+        PCM=PHEP(5,IZED)/2
+        PHEP(5,IFER)=0
+        PHEP(5,IANT)=0
+ 50     NLOOP=NLOOP+1
+        IF (NLOOP.GT.NBTRY) CALL HWWARN('HWHIGZ',103,*999)
+        CALL HWDTWO(PHEP(1,IZED),PHEP(1,IFER),PHEP(1,IANT),
+     &              PCM,TWO,.TRUE.)
+        PROB=C1*(PHEP(4,IFER)*PHEP(4,IANT)-PHEP(3,IFER)*PHEP(3,IANT))
+     &      +C2*(PHEP(4,IFER)*PHEP(3,IANT)-PHEP(3,IFER)*PHEP(4,IANT))
+        IF (TPOL) PROB=PROB+C3*
+     &   (COSS*(PHEP(1,IFER)*PHEP(1,IANT)-PHEP(2,IFER)*PHEP(2,IANT))
+     &   +SINS*(PHEP(1,IFER)*PHEP(2,IANT)+PHEP(2,IFER)*PHEP(1,IANT)))
+        IF (PROB.LT.HWRGEN(2)*COEF) GOTO 50
+C---SET UP STATUS CODES,
+        ISTHEP(ICMF)=120
+        ISTHEP(IHIG)=190
+        ISTHEP(IZED)=195
+        ISTHEP(IFER)=113
+        ISTHEP(IANT)=114
+C---COLOR CONNECTIONS,
+        JMOHEP(1,ICMF)=1
+        JMOHEP(2,ICMF)=2
+        JDAHEP(1,ICMF)=IHIG
+        JDAHEP(2,ICMF)=IZED
+        JMOHEP(1,IHIG)=ICMF
+        JMOHEP(1,IZED)=ICMF
+        JMOHEP(1,IFER)=IZED
+        JMOHEP(1,IANT)=IZED
+        JMOHEP(2,IFER)=IANT
+        JMOHEP(2,IANT)=IFER
+        JDAHEP(1,IZED)=IFER
+        JDAHEP(2,IZED)=IANT
+        JDAHEP(2,IFER)=IANT
+        JDAHEP(2,IANT)=IFER
+C---IDENTITY CODES
+        IDHW(ICMF)=200
+        IDHW(IHIG)=201
+        IDHW(IZED)=200
+        IDHEP(ICMF)=IDPDG(IDHW(ICMF))
+        IDHEP(IHIG)=IDPDG(IDHW(IHIG))
+        IDHEP(IZED)=IDPDG(IDHW(IZED))
+        IDHEP(IFER)=IDPDG(IDHW(IFER))
+        IDHEP(IANT)=IDPDG(IDHW(IANT))
+      ENDIF
+ 999  END

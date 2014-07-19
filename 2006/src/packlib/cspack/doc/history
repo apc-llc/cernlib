@@ -1,0 +1,313 @@
+*
+* $Id: history,v 1.1.1.1 1996/03/08 15:44:18 mclareni Exp $
+*
+* $Log: history,v $
+* Revision 1.1.1.1  1996/03/08 15:44:18  mclareni
+* Cspack
+*
+*
+* This directory was created from cspack.car patch history
+Version 1.36=For import into CVS
+Version 1.35=(XZ)RFRF: quota of output RZ file can be set (option Q)
+             XZLLS: limit NFOUND to NMAX
+             P=VMSC,D=SGTTY: change QMALPH to QCDEC
+             CZCDES: separate sequences into C and Fortran decks
+             XZLLS: protect against output file not found.
+             SERROR: new version for DEC C V4.0
+             CZOPEN: select C RTL init based upon QCDEC flag
+             TCPAW: add code to perform AFS authentication
+Version 1.34=netreq 1.18 from Frederic Hemmer
+             94B
+             TCPAW: mods for Alpha/OSF (Gunter Folger)
+             XZGETR, SPUTRZ: don't use option N for RZMAKE
+Version 1.33=tcpaw: use sock_reply for VMS to write to socket, not stdout
+             log.c: Linux support
+             XZRZCP: return with message
+             PCBDEF mods
+             SYSREQ/LOG: split long #if again
+             Effing CMZ has put wrong tags on DECKS again!!!!!!
+             TELNETG: changes from Victor Balashov for Linux & Convex
+             PCBDEF: new version for VMS 6.1, IF=-PREVMS61
+                     copy version for AXP SYS$LIBRARY:SYS$LIB_C.TLB
+             CZPUTC: correct no TCPSOCK version, better error messages
+                     protect against 0 length buffer
+             New SYSREQ which fixes VMS link/library problems
+             Hack SYSREQ for 80 column limit (LOG.C) and MULTINET/TGV flags
+             Try new SYSREQ again....
+             Revert to old SYSREQ
+             Hack SYSREQ for 80 column limit
+             New version of SYSREQ
+             RLOGIN: increase nodename string to 255 characters
+Version 1.32=MESSAGE: change IPAWC to IQ
+             Bug fix in ZSRZIN (IQUEST(1) was not preset to 0)
+             Implement possibility to map shared memory on Unix
+             Implement Histo/List for shared memory more efficiently
+             New routines ZSLISTM, ZSLISM and ZSLISM1.
+             CZCDES: reorganise into package specific decks.
+             CZCDES: HCDIRE copied from HBOOK! (cannot read HBOOK file
+             due to inconsistant definitions of CZ sequences.)
+             SYSREQF: define UNIXF77 for OSF
+             XZLLS, SZLS, call lib$find_file_end
+             MESSAGE,ZSRZIN: add support for Unix shared memory
+             XZLLS: correct handling of ICONT!=0
+             ZFVERS: use CLEFT instead of CCOPYL
+             TCPAW: change #ifdef linux to #ifdef linux_softland
+             Enable SYSREQC,IF=SUN
+             XZRFRF: fix call to RZOPEN and RZMAKE to set X flag if IOPTX
+             Changes for CONVEX (tcpaw, netreq, telnetg)
+             Add dummies to ZFTP to avoid linking against system (VMS)
+             User program should call CZDUMM (which is not in PACKLIB).
+             Go back to V93D version of SYSREQ.
+Version 1.31=VIDQQ identification
+             New SYSREQ: define MULTINET #ifdef TGV
+             Add QMVAOS flag for Alpha OSF
+             XZRTOF: option X also on RZFILE
+             XZRTOF: add option X to specify input exchange mode file
+             SYSREQ: add #defines for QMALPH/makepack
+             TCPAW: fix warnings in islose/close
+             VMSC: add #defines for QMALPH/makepack
+             TCPAW: change ifndef for PWD.H to exclude NeXT
+             ZFTPCDF: add options C,R to Rto/frF
+             SZREAD: QMALPH flag for IOSEOF
+             XZPUTA: protect call to CZPUTA
+             srecvstr: don't call CMXLATE in case of errors
+             Better handling of CTRL in TELNETG (Gunter Folger)
+             Add option E for XZGET/PUTR. Force exchange mode for
+             input file.
+             Fix XZRFRF for DEC Fortran 6
+             Modify CDF to reenable CD/LCD -C
+             SZREAD: IOSTAT>0 = EOF (d/a read)
+             TCPAW: add #defines for QMALPH
+             CZOPEN: QMALPH C initialisation
+             SZLS: add random number to temporary file name
+             Use sequence LPAWC in PAWC
+             CZTCP: set hand shake string to CZOK (rdm)
+             TELNETG: changes for CONVEX
+             CZGETA: only UHTOC NCH characters, not 80
+             IRC=0 at start of XZGET/PUTA
+             GETACCT: stick in a $ between uuu & gg on VAX, IF=CERN.
+             Mods to TELNETG for Linux (from Victor Balashov)
+             Correction to SGETP
+             XZRFRF: get record length from file on VAXVMS
+             TCPAW: new ruserpass for Unix from Alfred
+             TCPAW: CMXLATE call should use *m rather than strlen (Alfred N.)
+             PIAF stuff IF=UNIX.
+             Fixes from Fons Rademakers for TCPAW
+             Use KUGETP to prompt for password (noecho)
+             define index as strchr for all systems
+             'File transfer completed message only if logl >= 0
+             XZSERV: add REDM/RITM commands to read/write multiple sequential
+             records. Intended for file transfer
+             SZOPEN: open d/a files READONLY on VAX if IOPTO=0
+             Add PAWSERV RSHELL commands 'CLOSE, FL and LOGOUT'
+             Z=CZUNIT: add LUNFZI/O. Remove all occurances of 998/999 apart
+             from definitions in CZOPEN and ZS.
+             SZRM, XZLRM: only add FORM if non-blank
+             XZ: change JSKIN(2) etc. to JSKIN(LUNXZO)
+             SZRM, XZLRM: INQUIRE for FORM before OPEN
+             IRC=1 from SZCD when cannot set remote directory
+             Remove extra argument in socket/connect calls in telnetg.
+             PZNTRC. add option R to remote 'piaf' line if password is bad
+             XZRZCP: pass quota for output file in IS(1) (ugh)
+             Take LRECL from file only if LRECL<=0 specified.
+             XZGETL: clear line before reading from server
+             Undefine ctrl also on Sun in telnetg
+             Bug fix in XZGETR - issue RZEND in case of X mode files
+             Modify CDF file for new KUIP.
+Version 1.30=Fix bugs in XZPUTA, SGETA - check on buffer length must be
+             made before filling (overwriting) buffer.
+             Delete deck FTPDEF. CDF must be extracted and passed
+             through KUIPC.
+             Bug fix in SGETFZ, SPUTFZ in FILEDEF statements
+             Copy sequences HCK, HCBOOK, HCFLAG and HCNTPAR from
+             HBOOK for new PAWSERV mods. Fix two following routines
+             Take modified P=ZS,D=ZSLDIR, ZSRZIN from
+             Claudio Condini (new HBOOK files use 2 keys)
+             V93A 15/01/93 13:30
+Version 1.28=TCPSOCK is now a sequence (IBMMVS/VM)
+             Remove hard-coded unit numbers from SZFTP.
+             Bug fix in SZOPEN for new direct access files
+             Bug fix in XZCLOS. Add node argument to XZINQR call
+             define irix4 for SGI running irix version 4 or higher.
+             Add XZRZOP - issue remote RZOPEN and return IRC, LRECL
+             Add XZGET/PUTL to read/write line from formatted file
+             File names up to 80 characters in XZ/SZ OPEN
+             Bug fix in XZMVSD. Macros inline in FORTIDC.
+             Add patches PATTE (main program for Piaf Automatic Tuple
+             Transfer Executive), PZ (subroutines of above) and PZCDF
+Version 1.27=Add dummy SZPIAF routine.
+             SZLS, XZLLS: increase COMM to 255 characters
+             Increase Zebra store from 500K-900K
+             Minor mods to telnetg for Apollo
+             Fix bug in XZPUTX for sending to non-Unix machines
+             Remove SHARED option for sequential files in SZOPEN (VAX)
+             Fix bug in XZPUTR - transmit option L (reLative org.) correctly
+             Fix bug in SGETA, SPUTA for handling of CHOPT
+Version 1.26=V92B
+             SYS$MANAGER:SYSREQ.CONF change: sysreq_host is now cerntms
+Version 1.25=sysreqf also for hpux
+             Add mv and lmv commands
+             Check on SS$_ACCIO and SS$_WASSET in setid().
+             Add routine setid to set rights identifiers of created
+             server process on VMS systems.
+             Protection against being unable to server log file.
+             Add pilot for BZFTP.
+             SZOPEN: issue INQUIRE on VAXes to determine recordtype
+             Issue FILEINF for mode 4 files - assume recfm f
+             Return codes from csetup(TCPAW) in case of failure
+             Option to stop in case of error (e.g. IF=BATCH)
+Version 1.24=v92a March 4th 1992
+Version 1.23=Add command RZCOPY
+             Add commands FTOC, CTOF to convert files written with
+             FORTRAN sequential I/O to C format and back.
+             Add RTOF/RFRF and FZcopy commands
+             Re-add lines in TCPAW that check for (vm & (mvs
+             Add case sensitive file name support for all zftp commands
+             (via option -C) (but not RM, as this would mean
+             changing the calling sequence) (not yet RZ/FZ either)
+             define irix4 to get version of TCPAW for Irix V4.0
+             New TSOSUBD/TCPAW from Thomas Schwab/GSI
+             Fixes for SZCD, XZLCAT, XZPUTA, XZMVSD, SZLS for MVS
+Version 1.22=Bug in SGETFZ, XZPUTF - IOCR not set for final header.
+             Fix bugs in VMS version of XZLLS
+             Take new version of netreq for VMS privileged commands.
+             Add missing headers in gethostn.
+             Check logical name CZPROXY in CZDOPN. If set to TRUE, do
+             not prompt for username & password (should perhaps also
+             check .netrc/ftplogin./DOT NETRC file)
+             Fix problems with [] characters
+             Move TSOSUB to separate patch, activate IF=IBMAIX,IBMAIX.
+             Tidy printout in TCPAW.
+             New TCPAW from GSI. Move old TCPAW to TCPOLD
+             Use sequence QFTITLCH rather than QFTITLE
+             Add MVS mods from Thomas Schwab, GSI
+             TCPAW,CZCDES modified, P=TCPAW,D=TSOSUB & P=TSOSERV added
+Version 1.21=Copy telnet.h into patch CSH (for telnetg with Multinet)
+             Only issue ioctl with TIOCFLUSH if TIOCFLUSH is defined (TGV)
+             Add option R to (most) get/put commands - don't replace
+             existing file unless R option given.
+             Default record length for FZ native files = 3600 bytes
+             Assume that VM files, mode 4, are VBS (PUTFZ)
+             undefine CTRL in telnetg if=decs, to remove existing local
+             definition (from Lee Roberts, SSC).
+             Permit mixed case directories on Unix systems (CD -C)
+             Bug fix in IUCREQ - FREEMAIN
+             Fix bugs in TCPAW VM code. Add SLEEP function for VM
+             Add possibility of write access to other users'
+             mini-disks on VM. Syntax is: CD user.address password mode
+             Fix bug in VM server for use with C TCPAW
+Version 1.20=CNL 204 12/09/91 09:00
+Version 1.19=New version of TCPAW with Cray SECUREID support
+             Work-around in XDR for VMS link problem.
+             Bug fix in IUCREQ
+             Incorporate MVS mods from GSI & DESY
+             Support option L in LS for VMS systems
+             Rename patch TCPASM to TCPSOCK.
+             Save modification date for top directories
+             Add GET/PUTX - to transfer true exchange format files.
+Version 1.18=Enable RSH command. Add XZLCD, XZLRM and corresponding
+             ZFTP commands. (LCD, LLS and LRM)
+             Fixes for TCPAW: add reply2 routine
+Version 1.17=Add new sysreq with TGV & TWG support
+             Bug fix in SYSREQ(IBM), new IUCV version
+             Fix bug in XZLS for zero length CHOPT
+             Call SETGID/SETUID on RS6000 before SETEGID/SETEUID.
+             HPUX version
+Version 1.16=Add INSTALL patch (just VAX for now) with example command file
+             for ZFTP (Multinet, Wollongong or UCX TCP/IP)
+             Server compatible with both DECnet and TCP/IP (VAX/VMS)
+             Modify GETA/PUTA to support LRECL up to 255
+             Always write zftp.tmp into home directory (Unix)
+             Add READONLY in SZOPEN unless for output
+             Add getservbyname from Bob Ball, U.Mich for VMS systems
+             with UCX
+Version 1.15=Enable options -d (DECnet) and -v (VM/CMS) on OPEN command
+             N.B. the client may handle both DECnet and TCP/IP connections
+                  but a separate server is required.
+             Add patch CRON - VMS cron without VMS dependancies
+             IOPTA in XZGETx/XZPUTx. Local file already opened on
+             corresponding FORTRAN logical unit (e.g. by FMOPEN)
+Version 1.14=Call FILEINF in SZOPEN for direct access files on VM
+             Put #ifdef DEBUGs in +SELF,IF=DEBUG in getconfent (VAX problem
+Version 1.13=Define location of SYSREQ configuration file using
+             +SELFs (GETCONFENT.C)
+             Do not use SHARED for NEW files on VAX.
+             Fix CZPUTC for TCPAW.pascal (8192 byte limit on send)
+             Use SZ routines from XZ routines. Set return code
+             to be IOSTAT.
+Version 1.12=sun4 should no longer be defined for TCPAW.
+             Fixes for TCPAW (Cray,VMS)
+             New calling sequences for CHDIRF, GETWDF
+             Fix bug in MGET when retrieving files from VM system.
+             Change TCPAW for IBM C (Ignaccio Reguero)
+Version 1.11=Add calls to CZDNET routines, if IPROT ^= 0 (IF=VAXVMS)
+Version 1.10=For CNL 201
+Version 1.09=Fix bug in SZOPEN for PAM files (VM)
+             Bug fixes from SSC, FCA. Add pilot patch for SYSREQ command.
+             New: Cray CFT77 will only accept CHARACTER up to 16383(?)
+             Fill IQUEST(11-17) in XZ routines:
+                  IQUEST(11) = NR
+                  IQUEST(12) = NKILO
+                  IQUEST(13) = RATE
+                  IQUEST(14) = IHOUR
+                  IQUEST(15) = IMIN
+                  IQUEST(16) = ISEC
+                  IQUEST(17) = T
+             Set return code in all XZGET/PUT routines
+             Fix bug in MGET/MPUT for VAX files
+             Fix bug introduced in XZGETB to use LUNXZI/O Rework help.
+             Add MGET/MPUT routines, XZLLS (local LS)
+Version 1.08=Add GETP/PUTP - transfer of binary PAMs
+             Copy GENLIB routines TRA0E0, TRE0A0 to PATCH XZTRANS
+             (IBM only)
+Version 1.07=MIPS version, thanks to Bob Ball, U.MICH
+             Add GETFZ/PUTFZ - transfer an FZ file with optional data
+             and format conversion.
+             Refresh SYSREQ Patch
+             Warning: getconfent should be compiled with
+             cc -c -DPATH_CONFIG=|"/etc/sysreq.conf\"
+             CZSWAP now also supports swap by node name (as well as LUN)
+             Use RZOPEN in ZSFILE (old version remains in ZSFOLD)
+             Add routines XZCD, XZPWD, XZLS
+Version 1.06=Fix bug in sending long records from IBM
+             Convert to new PATCHY flags: VAXVMS, IBMVM.
+             With TCP/IP V2.0 on IBM: must add IBMLIB to GLOBAL TXTLIBs...
+             Fix compiler warning in SGETRZ
+             For Yellow pages on SGI: link with packlib,sun,bsd (courtesy
+             FNAL). -lsun
+             Change Userpassad/Replyad/Buffadd% to Address24Type (courtesy
+             IN2P3).
+             Copy Zebra sequences ZMACH, ZSTATE and QUEST.
+             TCP/IP socket interface on IBM/VM using C version of TCPAW,
+             SAA C-compiler and TCP/IP V2.
+             TCPAW for Cray servers with ACE.
+             Fix bug in SZLS for Apollos. LS command string must
+             be null terminated.
+             Add routines (XZ)GET/PUTD to transfer a direct access file.
+             Use these routines from XZGET/PUTR to transfer exchange mode
+             RZ files.
+Version 1.05=Fix bug in SZOPEN. Tidy ZFTPLS.
+Version 1.04=SYSREQ for VMS systems added.
+             Add code for VMS 5.4, change UAIDEF to include latest
+             UAI definitions.
+Version 1.03=Bug fixes from SCC.
+Version 1.02=Add option S on call to FZFILE - S no longer default for
+             channel mode
+Version 1.01=Fix for GET/PUTA on Cray - can only read 154 bytes/rec!
+             Add command SVERSION to print version of server
+             Add routines XZGETx/PUTx for FATMEN integration
+             Change calling sequence of XZ/SZOPEN routines (LUN,,,)
+             Return status information in IQUEST (NKILO etc.)
+Version 1.00=CNL 200
+Version 0.05=Use RZOPEN for GET/PUTRZ in client & server
+Version 0.04=Do not send trailing blanks in PUTA/GETA,
+             buffer records up to 20480 bytes
+             Support RECFM=V files in GET/PUTA (via CHOPT in
+             GETA, SPUTA, VMQFIL in PUTA, SGETA).
+Version 0.03=Add variable length read support (for PAM files)
+Version 0.02=Add XZ routines for remote I/O. Add XZ,SZ routines
+             for remote I/O. Add GET/PUTB, LS commands in ZFTP.
+             Turn echo off for PASSWORD prompting on IBM.
+             Support command line argument on ZFTP, e.g. ZFTP CERNVM
+To be implemented:
+Outstanding problems:

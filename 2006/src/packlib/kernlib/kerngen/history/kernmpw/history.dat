@@ -1,0 +1,53 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:46 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:46  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernmpw.car patch kernmpw
+#if !defined(CERNLIB_KERNMPW)
+ 
+              KERNLIB ROUTINES PARTICULAR TO THE MAC II
+ 
+---------------------------------------------------------------------
+ 
+             This file contains the following patches :
+ 
+*KMMPW    Pilot-patch selecting the standard KERNLIB for MAC II
+ 
+QMMPW     MAC II machine patch
+ 
+MPWGS     MAC II versions of KERNLIB routines
+ 
+=====================================================================
+ 
+ 
+              UP-DATE RECORD FOR THE PAM-FILE  KERNMPW
+              ----------------------------------------
+ 
+ 
+UP-DATE  1.02 :  21-Nov-1992
+----------------------------
+ 
+Replacing File   KERNMPW 1.01  900215 17.34
+ 
+Correct :     P=MPWGS, D=TIME             correct bug in TIMED
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.01 :  15-Feb-1990
+----------------------------
+ 
+Replacing File   KERNMPW 1.00  891208 12.00
+ 
+Correct :     the pilot patch is *KMPW   (and not *KMMPW)
+ 
+---------------------------------------------------------------------
+ 
+          FIRST RELEASE OF THE KERNMPW  PAM :   8-DEC-1989
+ 
+---------------------------------------------------------------------
+ 
+#endif

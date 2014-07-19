@@ -1,0 +1,4 @@
+SRCS_F= hbnsum.F hdbaop.F hdbcop.F hdbini.F hdbprf.F hdbsop.F hdiff.F \ @@\
+	hdiffb.F hgcont.F hlbino.F hlnfct.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

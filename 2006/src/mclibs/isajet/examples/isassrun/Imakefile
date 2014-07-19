@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 ssid.F ssprt.F ssrun.F sugprt.F sugrun.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

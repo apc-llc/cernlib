@@ -1,0 +1,25 @@
+*
+* $Id: locf.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: locf.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+locf   : proc (a) returns (bin fixed (35));
+ 
+/* *****************************************************************
+   *                                                               *
+   * locf(a)        rend adresse de a                              *
+   *                                                               *
+   ***************************************************************** */
+ 
+dcl  p pointer;
+dcl (a, temp) bin fixed (35);
+          p = addr (a);
+          temp = convert (temp, rel (p));
+          return (temp);
+     END locf;
+#ifdef CERNLIB_TCGEN_LOCF
+#undef CERNLIB_TCGEN_LOCF
+#endif

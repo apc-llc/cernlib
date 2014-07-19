@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 makelib.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

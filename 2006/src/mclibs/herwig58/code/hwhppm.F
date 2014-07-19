@@ -1,0 +1,205 @@
+*
+* $Id: hwhppm.F,v 1.1.1.1 1996/03/08 17:02:15 mclareni Exp $
+*
+* $Log: hwhppm.F,v $
+* Revision 1.1.1.1  1996/03/08 17:02:15  mclareni
+* Herwig58
+*
+*
+*CMZ :          29/08/94  11.51.47  by  Unknown
+*-- Author :
+CDECK  ID>, HWHPPM.
+*CMZ :-        -09/12/93  15.50.26  by  Mike Seymour
+*-- Author :    Ian Knowles & Mike Seymour
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHPPM
+C     Point-like photon/QCD direct meson production
+C     See M. Benayoun, et al., Nucl. Phys. B282 (1987) 653 for details.
+C     mean EVWGT = sigma in nb
+C-----------------------------------------------------------------------
+#include "herwig58/herwig58.inc"
+      INTEGER MNAME(3,3,2),N4(3),I,J,ID2,ID4,I2,I4,M1,M2,IHAD1,IHAD2
+      DOUBLE PRECISION HWRGEN,HWRUNI,HWUALF,EPS,PP1,PP2,ET,EJ,EXY,EXY2,
+     & FACT,FACTR,S,T,U,REDS,DELT(3,3),C1STU,C3STU,HCS,RCS,PHIMIX,
+     & CMIX,SMIX,C1WVFN,FPI,FETA8,FETA1,FRHO,FPHI8,FPHI1,FPI2,FETA2(3),
+     & FETAP2(3),FRHO2,FPHI2(3),FOMEG2(3)
+      LOGICAL SPIN0,SPIN1
+      PARAMETER (EPS=1.E-20)
+      SAVE FPI2,FETA2,FETAP2,FRHO2,FPHI2,FOMEG2,HCS,REDS,FACT,DELT,
+     & C1STU,C3STU
+      DATA MNAME/21,38,42,30,21,34,50,46,0,23,39,43,31,23,35,51,47,0/
+      DATA N4,SPIN0,SPIN1/3,3,2,.TRUE.,.TRUE./
+      DATA C1WVFN,FPI,FETA8,FETA1,FRHO,FPHI8,FPHI1/1.,3*0.093,3*0.107/
+      IF (FSTWGT) THEN
+         FPI2=FPI**2
+         CMIX=COS(ETAMIX*PIFAC/180.D0)
+         SMIX=SIN(ETAMIX*PIFAC/180.D0)
+         FETA2(1) =(+CMIX*FETA8/SQRT(TWO)-SMIX*FETA1)**2/THREE
+         FETA2(2) =FETA2(1)
+         FETA2(3) =(-CMIX*FETA8*SQRT(TWO)-SMIX*FETA1)**2/THREE
+         FETAP2(1)=(+SMIX*FETA8/SQRT(TWO)+CMIX*FETA1)**2/THREE
+         FETAP2(2)=FETAP2(1)
+         FETAP2(3)=(-SMIX*FETA8*SQRT(TWO)+CMIX*FETA1)**2/THREE
+         FRHO2=FRHO**2
+         PHIMIX=ATAN(ONE/SQRT(TWO))*180.D0/PIFAC
+         CMIX=COS(PHIMIX*PIFAC/180.D0)
+         SMIX=SIN(PHIMIX*PIFAC/180.D0)
+         FPHI2(1) =(+CMIX*FPHI8/SQRT(TWO)-SMIX*FPHI1)**2/THREE
+         FPHI2(2) =FPHI2(1)
+         FPHI2(3) =(-CMIX*FPHI8*SQRT(TWO)-SMIX*FPHI1)**2/THREE
+         FOMEG2(1)=(+SMIX*FPHI8/SQRT(TWO)+CMIX*FPHI1)**2/THREE
+         FOMEG2(2)=FOMEG2(1)
+         FOMEG2(3)=(-SMIX*FPHI8*SQRT(TWO)+CMIX*FPHI1)**2/THREE
+      ENDIF
+      SPIN0=.NOT.(MOD(IPROC/10,10).EQ.2)
+      SPIN1=.NOT.(MOD(IPROC/10,10).EQ.1)
+      IF (GENEV) THEN
+         RCS=HCS*HWRGEN(0)
+      ELSE
+         EVWGT=ZERO
+         IHAD1=1
+         IF (JDAHEP(1,IHAD1).NE.0) IHAD1=JDAHEP(1,IHAD1)
+         IHAD2=2
+         IF (JDAHEP(1,IHAD2).NE.0) IHAD2=JDAHEP(1,IHAD2)
+         PP1=PHEP(4,IHAD1)+ABS(PHEP(3,IHAD1))
+         PP2=PHEP(4,IHAD2)+ABS(PHEP(3,IHAD2))
+         XX(1)=ONE
+         CALL HWRPOW(ET,EJ)
+         EXY=EXP(HWRUNI(1,YJMIN,YJMAX))
+         EXY2=TWO*PP1/ET-EXY
+         IF (EXY2.LE.EXP(YJMIN).OR.EXY2.GE.EXP(YJMAX)) RETURN
+         XX(2)=PP1/(PP2*EXY*EXY2)
+         IF (XX(2).LE.ZERO.OR.XX(2).GE.ONE) RETURN
+         S=XX(2)*PP1*PP2
+         REDS=SQRT(S-ET*SQRT(S))
+         T=-HALF*PP1*ET/EXY
+         U=-S-T
+         COSTH=(T-U)/S
+C Set EMSCA to hard process scale (Approx ET-jet)
+         EMSCA=SQRT(TWO*S*T*U/(S*S+T*T+U*U))
+         FACT=-GEV2NB*ET*EJ*(YJMAX-YJMIN)*ALPHEM*CFFAC
+     &       *(HWUALF(1,EMSCA)*PIFAC*C1WVFN)**2*32.D0/(THREE*S*T)
+         CALL HWSFUN(XX(2),EMSCA,IDHW(IHAD2),NSTRU,DISF(1,2),2)
+         DO 10 I=1,3
+         DO 10 J=1,3
+ 10      DELT(I,J)=(QFCH(I)*U+QFCH(J)*S)**2
+         C1STU=-(S**2+U**2)/(T*S**2*U**2)
+         C3STU=-8.D0*T/(S**2*U**2)
+      ENDIF
+      HCS=ZERO
+      DO 50 I2=1,3
+C Quark initiated processes
+      ID2=I2
+      IF (DISF(ID2,2).LT.EPS) GOTO 30
+      DO 20 ID4=1,N4(I2)
+      M1=MNAME(ID2,ID4,1)
+      FACTR=FACT*DELT(ID2,ID4)*DISF(ID2,2)
+      IF (ID2.EQ.ID4) FACTR=HALF*FACTR
+      IF (SPIN0.AND.REDS.GT.RMASS(M1)) THEN
+C  photon+q --> meson_0+q'
+         HCS=HCS+HALF*FACTR*C1STU*FPI2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M1,ID4,1432,71,*99)
+      ENDIF
+      M2=MNAME(ID2,ID4,2)
+      IF (SPIN1.AND.REDS.GT.RMASS(M2)) THEN
+C  photon+q --> meson_L+q'
+         HCS=HCS+FACTR*C1STU*FRHO2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M2,ID4,1432,72,*99)
+C  photon+q --> meson_T+q'
+         HCS=HCS+FACTR*C3STU*FRHO2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M2,ID4,1432,73,*99)
+      ENDIF
+  20  CONTINUE
+      FACTR=FACT*DELT(I2,I2)*DISF(ID2,2)
+      IF (SPIN0.AND.REDS.GT.RMASS(22)) THEN
+C  photon+q -->eta+q
+         HCS=HCS+HALF*FACTR*C1STU*FETA2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(22,ID2,1432,71,*99)
+      ENDIF
+      IF (SPIN0.AND.REDS.GT.RMASS(25)) THEN
+C  photon+q -->eta'+q
+         HCS=HCS+HALF*FACTR*C1STU*FETAP2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(25,ID2,1432,71,*99)
+      ENDIF
+      IF (SPIN1.AND.REDS.GT.RMASS(56)) THEN
+C  photon+q -->phi_L+q
+         HCS=HCS+FACTR*C1STU*FPHI2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(56,ID2,1432,72,*99)
+C  photon+q -->phi_T+q
+         HCS=HCS+FACTR*C3STU*FPHI2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(56,ID2,1432,73,*99)
+      ENDIF
+      IF (SPIN1.AND.REDS.GT.RMASS(24)) THEN
+C  photon+q -->omega_L+q
+         HCS=HCS+FACTR*C1STU*FOMEG2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(24,ID2,1432,72,*99)
+C  photon+q -->omega_T+q
+         HCS=HCS+FACTR*C3STU*FOMEG2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(24,ID2,1432,73,*99)
+      ENDIF
+C Anti-quark initiated processes
+  30  ID2=I2+6
+      IF (DISF(ID2,2).LT.EPS) GOTO 50
+      DO 40 I4=1,N4(I2)
+      ID4=I4+6
+      FACTR=FACT*DELT(I2,I4)*DISF(ID2,2)
+      IF (ID2.EQ.ID4) FACTR=HALF*FACTR
+      M1=MNAME(I4,I2,1)
+      IF (SPIN0.AND.REDS.GT.RMASS(M1)) THEN
+C  photon+qbar --> meson_0+qbar'
+         HCS=HCS+HALF*FACTR*C1STU*FPI2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M1,ID4,1432,74,*99)
+      ENDIF
+      M2=MNAME(I4,I2,2)
+      IF (SPIN1.AND.REDS.GT.RMASS(M2)) THEN
+C  photon+qbar --> meson_L+qbar'
+         HCS=HCS+FACTR*C1STU*FRHO2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M2,ID4,1432,75,*99)
+C  photon+qbar --> meson_T+qbar'
+         HCS=HCS+FACTR*C3STU*FRHO2
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(M2,ID4,1432,76,*99)
+      ENDIF
+  40  CONTINUE
+      FACTR=FACT*DELT(I2,I2)*DISF(ID2,2)
+      IF (SPIN0.AND.REDS.GT.RMASS(22)) THEN
+C  photon+qbar -->eta+qbar
+         HCS=HCS+HALF*FACTR*C1STU*FETA2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(22,ID2,1432,74,*99)
+      ENDIF
+      IF (SPIN0.AND.REDS.GT.RMASS(25)) THEN
+C  photon+qbar -->eta'+qbar
+         HCS=HCS+HALF*FACTR*C1STU*FETAP2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(25,ID2,1432,74,*99)
+      ENDIF
+      IF (SPIN1.AND.REDS.GT.RMASS(56)) THEN
+C  photon+qbar -->phi_L+qbar
+         HCS=HCS+FACTR*C1STU*FPHI2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(56,ID2,1432,75,*99)
+C  photon+qbar -->phi_T+qbar
+         HCS=HCS+FACTR*C3STU*FPHI2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(56,ID2,1432,76,*99)
+      ENDIF
+      IF (SPIN1.AND.REDS.GT.RMASS(24)) THEN
+C  photon+qbar -->omega_L+qbar
+         HCS=HCS+FACTR*C1STU*FOMEG2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(24,ID2,1432,75,*99)
+C  photon+qbar -->omega_T+qbar
+         HCS=HCS+FACTR*C3STU*FOMEG2(I2)
+         IF (GENEV.AND.HCS.GT.RCS) CALL HWHQCP(24,ID2,1432,76,*99)
+      ENDIF
+  50  CONTINUE
+      EVWGT=HCS
+      RETURN
+C Generate event
+  99  IDN(1)=59
+      IDN(2)=ID2
+      IDCMF=15
+      CALL HWETWO
+C Set polarization vector
+      IF (IHPRO.EQ.72.OR.IHPRO.EQ.75) THEN
+        RHOHEP(2,NHEP-1)=ONE
+      ELSEIF (IHPRO.EQ.73.OR.IHPRO.EQ.76) THEN
+        RHOHEP(1,NHEP-1)=HALF
+        RHOHEP(3,NHEP-1)=HALF
+      ENDIF
+  999 END

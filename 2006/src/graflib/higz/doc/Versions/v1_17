@@ -1,0 +1,44 @@
+*
+* $Id: v1_17,v 1.1.1.1 1996/02/14 13:10:19 mclareni Exp $
+*
+* $Log: v1_17,v $
+* Revision 1.1.1.1  1996/02/14 13:10:19  mclareni
+* Higz
+*
+*
+*CMZ :  1.17/03 22/03/93  10.04.38  by  O.Couet
+*-- Author :    O.Couet   24/02/93
+*
+*::>          VERSION  1.17/03   930322 10.04
+*
+*   The maximal number of NTs is now 100.
+*   The routine XGetCGValues is not used for VAX machines (x11int).
+*   A cross cursor is displayed together with the cross-air (x11int).
+*   The line type of the contour plots is controled with IGSET LTYP
+*      when all the contours are drawn with the same line type (IGTABL)
+*   Bug fixed in IFA3: NGRAF was not initialized.
+*
+*::>          VERSION  1.17/02   930309 11.58
+*
+*   Improvements in the GDDM driver. This version may be used on
+*      IBM 3192G terminals, IBM 5080 stations and corresponding
+*      emulators (notable the Macintosh version of tn3270).
+*      The modifications have been contributed by J.Salicio/CIEMAT.
+*
+*::>          VERSION  1.17/01   930302 12.20
+*
+*    Bug fixed in IKERNEL/IOPWK: in case of "Invalid Workstation type"
+*       INOPWK wasn't decremented.
+*    Mods in IGWKTY: when '?' is typed by the user, the metafile
+*       types are not displayed.
+*
+*::>          VERSION  1.17/00   930224 15.51
+*
+*    Improvments in IGAXIS: If the intermediate labels in LOG scale
+*       overlap each other, they are not drawn. The position of the
+*       exponants is now better in case of LOG scale.
+*    New routine IZGRAP to store the IGRAPH primitive.
+*    New option Z in IGRAPH.
+*    Improvments in IGAXIS: If the intermediate labels in LOG scale
+*       are drawn if YMAX < 10000.
+*

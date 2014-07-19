@@ -1,0 +1,20 @@
+*
+* $Id: fatps.dat,v 1.2 1996/04/16 09:35:15 jamie Exp $
+*
+* $Log: fatps.dat,v $
+* Revision 1.2  1996/04/16 09:35:15  jamie
+* mods for aix 4
+*
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+#echo 'FATMEN server                                       Elapsed     CPU time   %CPU'
+#echo '==============================================================================='
+#ps -aef -F "args,etime,time,pcpu" | grep "/fatsrv" | sort +2 -r
+#
+# For AIX 4
+#
+echo '    Elapsed    CPU time  %CPU ** FATMEN server ** '
+echo '========================================================'
+ps -aef -F "etime,time,pcpu,args" | cut -c 1-80 | grep "/fatsrv" | sort +1 -r

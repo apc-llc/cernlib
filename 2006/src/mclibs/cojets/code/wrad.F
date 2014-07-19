@@ -1,0 +1,179 @@
+*
+* $Id: wrad.F,v 1.1.1.1 1996/01/11 14:14:44 mclareni Exp $
+*
+* $Log: wrad.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:44  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE WRAD(W,WL,N)
+C     ***********************
+C------------------------------------------------------------------
+C-- CALCULATES RADIATIVE DECAYS OF W (--+ LEPTON+NEUTRINO+PHOTONS)
+C-- MULTIPLE PHOTON EMISSION IS INCLUDED
+C-- CONVERSION OF PHOTONS INTO CHARGED LEPTON PAIRS IS NEGLECTED
+C-- W = W BOSON  MASS IN GEV
+C-- WL = CHARGED LEPTON MASS IN GEV
+C-- N = TOTAL NUMBER OF LEPTONS + PHOTONS IN DECAY
+C--
+C-- FINAL STATE PARTICLE MOMENTA STORED IN ARRAY P(I,J) BELONGING
+C-- TO COMMON BLOCK /JET/ (K( ,2) ARRAY IN /JET/ LEFT UNUSED).
+C-- P(I,J) CONTAINS PARAMETERS OF PARTICLE I (I=1,N) -- I = 1
+C-- CORRESPONDS TO THE NEUTRINO, I = N TO THE CHARGED LEPTON. (ALL
+C-- PARAMETERS ARE IN GEV UNITS).
+C-- THE Z AXIS CORRESPONDS TO THE DIRECTION OPPOSITE TO THE
+C-- MOMENTUM OF PARTICLE WITH I = 1.
+C--     P(I,1) = X MOMENTUM COMPONENT
+C--     P(I,2) = Y    "         "
+C--     P(I,3) = Z    "         "
+C--     P(I,4) = ENERGY
+C--     P(I,5) = MASS
+C--
+C-- A FINITE ENERGY RESOLUTION CUTOFF IS USED -- ITS VALUE IS
+C-- CONTAINED IN THE VARIABLE EPSI, AND IS EXPRESSED IN UNITS OF
+C-- THE W BOSON MASS -- IT CAN BE ARBITRARILY CHANGED BY THE USER
+C-- (COMPATIBLY WITH MACHINE PRECISION AND STORAGE SPACE)
+C------------------------------------------------------------------
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#if defined(CERNLIB_SINGLE)
+      REAL CJRN,P,PJTOT,W,WL
+#endif
+#if defined(CERNLIB_DOUBLE)
+      DOUBLE PRECISION CJRN,P,PJTOT,W,WL
+#endif
+#include "cojets/itapes.inc"
+#include "cojets/jet.inc"
+#include "cojets/wcom.inc"
+C
+      DATA ICALL/0/
+C
+      IF(ICALL.GT.0) GO TO 10
+      PIG=4.*ATAN(1.)
+      ALPHA=1./137.03604
+      EPSI=5.E-8
+      TAU=1./(ALPHA/PIG*(-LOG(EPSI)-3./4.+EPSI-EPSI**2/4.))
+10    CONTINUE
+C
+      ICALL=ICALL+1
+      AL=WL
+      ALSQ=AL**2
+      QSQX=W**2
+      S=W**2
+      QSQMN=ALSQ
+11    CONTINUE
+C-- DEVELOP 1ST LEG -- INITIAL KINEMATICS
+      BP1SQ=-10.*S
+      CALL WPSQZ(QSQX,BP1SQ,EL,PSQ,Z)
+C-- (CORRECT TO REPRODUCE O(ALPHA) RESULTS FOR SINGLE EMISSIONS)
+      IF(PSQ.LE.QSQMN) GO TO 12
+      XN=1.-PSQ/S
+      XL=Z*(2.-XN)
+      RATIO=(XL**2+XN**2)*(1.-XL)/((2.-XL-XN)*(1.+Z**2))
+      IF(CJRN(0.).GT.RATIO) GO TO 11
+12    CONTINUE
+      PCM=(S-PSQ)/(2.*W)
+      EL=SQRT(PSQ+PCM**2)
+      EN=PCM
+C-- BOOK NEUTRINO
+      N=1
+      P(N,1)=0.
+      P(N,2)=0.
+      P(N,3)=-PCM
+      P(N,4)=PCM
+      P(N,5)=0.
+      IF(PSQ.GT.QSQMN) GO TO 100
+C-- NO RADIATION -- BOOK CHARGED LEPTON
+      N=N+1
+      P(N,1)=0.
+      P(N,2)=0.
+      P(N,3)=PCM
+      P(N,4)=EL
+      P(N,5)=AL
+      RETURN
+100   CONTINUE
+C-- INITIAL SETTING FOR EMISSION LOOP
+      PX=0.
+      PY=0.
+      PMSQ=EL**2-PSQ
+      PM=SQRT(PMSQ)
+      PZ=PM
+200   CONTINUE
+C-- BRANCHING LOOP
+      XP1SQ=PSQ-2.*(1.-Z)*EL*(EL-PM)
+      BP1SQ=PSQ-2.*(1.-Z)*EL*(EL+PM)
+      CALL WPSQZ(XP1SQ,BP1SQ,EL,P1SQ,Z1)
+      EL1=Z*EL
+      PM1SQ=EL1**2-P1SQ
+      PM1=SQRT(PM1SQ)
+      EG=EL-EL1
+      PZ1=(PM**2+PM1SQ-EG**2)/(2.*PM)
+      PTRSQ=PM1SQ-PZ1**2
+      IF(PTRSQ.LT.0.) PTRSQ=0.
+      PTR=SQRT(PTRSQ)
+      PHI=2.*PIG*CJRN(0.)
+      PTRX=PTR*COS(PHI)
+      PTRY=PTR*SIN(PHI)
+C-- ROTATION PARAMETERS FOR SECONDARIES
+      PT=SQRT(PX**2+PY**2)
+      IF(PT.LT.1.E-10) GO TO 210
+      CT=PZ/PM
+      ST=PT/PM
+      CP=PX/PT
+      SP=PY/PT
+210   CONTINUE
+C-- BOOK PHOTON
+      PGX=-PTRX
+      PGY=-PTRY
+      PGZ=PM-PZ1
+C-- ROTATE PHOTON BEFORE BOOKING
+      IF(PT.LT.1.E-10) GO TO 220
+      UX=CT*PGX+ST*PGZ
+      UY=PGY
+      UZ=-ST*PGX+CT*PGZ
+      PGX=CP*UX-SP*UY
+      PGY=SP*UX+CP*UY
+      PGZ=UZ
+220   CONTINUE
+      N=N+1
+      IF(N.GT.MAXJTP) GO TO 500
+      P(N,1)=PGX
+      P(N,2)=PGY
+      P(N,3)=PGZ
+      P(N,4)=EG
+      P(N,5)=0.
+C-- GO TO NEXT STEP OR EXIT
+      PSQ=P1SQ
+      EL=EL1
+      PX=PTRX
+      PY=PTRY
+      PZ=PZ1
+      PM=PM1
+      Z=Z1
+C-- ROTATE SECONDARY LEPTON BEFORE BOOKING OR GOING ON
+      IF(PT.LT.1.E-10) GO TO 230
+      UX=CT*PX+ST*PZ
+      UY=PY
+      UZ=-ST*PX+CT*PZ
+      PX=CP*UX-SP*UY
+      PY=SP*UX+CP*UY
+      PZ=UZ
+230   CONTINUE
+      IF(PSQ.GT.QSQMN) GO TO 200
+C-- STOP CASCADE -- BOOK CHARGED LEPTON
+      N=N+1
+      IF(N.GT.MAXJTP) GO TO 500
+      P(N,1)=PX
+      P(N,2)=PY
+      P(N,3)=PZ
+      P(N,4)=EL
+      P(N,5)=AL
+      RETURN
+C-- ABNORMAL ENDING
+500   WRITE(ITLIS,501) MAXJTP,ICALL
+501   FORMAT(1H1,35HNUMBER OF PARTICLES IN WRAD EXCEEDS  , I5
+     1//1X,10HCALL NO. =  ,I10
+     3//1X,'INCREASE MAXJTP'
+     5)
+      STOP
+      END

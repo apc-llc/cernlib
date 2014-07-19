@@ -1,0 +1,43 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:45 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:45  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNLNX)
+
+UP-DATE  1.02:   11-May-1994
+----------------------------
+
+Replacing File   KERNLNX  1.01  940309 15.15
+
+Selection on  P=P5BOOT  for the patchy boot-strap
+
+Correct:      D=ISHFTR             to be a simple right-shift
+              D=UBLOW, UBUNCH      to use LSHIFT and ISHFTR
+
+Delete:       D=LRSHFT       no longer needed
+              P=LNXPROGS
+
+              d=UCOPY,UCOPY2,USWOP the routines on kernfor are
+                                   now good for LINUX
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01:    9-Mar-1994
+----------------------------
+
+Replacing File   KERNLNX  1.00  930505 18.20
+
+New decks:    RNDM, IRNDM, RDMIN
+
+---------------------------------------------------------------------
+
+          First release of the KERNLNX  Pam :   07 MAY 1993
+
+---------------------------------------------------------------------
+
+C====================================================================
+#endif

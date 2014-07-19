@@ -1,0 +1,107 @@
+CDECK  ID>, INIAUX.
+      SUBROUTINE INIAUX (LASTWSP)
+
+C-    Initialize for the Auxiliaries
+C.    started 12-jan-94
+
+      PARAMETER (KM1=1,KM2=2,KM3=4,KM4=8,KM5=16,KM6=32,KM7=64,KM8=128,
+     +  KM9=256, KM10=512, KM11=1024, KM12=2048, KM13=4096, KM14=8192,
+     +  KM15=16384, KM16=32768, KM17=65536, KM18=131072, KM19=262144)
+      PARAMETER (NBANKS=19,JBKPAT=1, JBKDEC=2, JBKORG=3, JBKINC=4,
+     +           JBKHOL=5, JBKKEE=6, JBKACT=7, JBKMAT=8, JBKXSQ=9,
+     +           JBKPRE=10,JBKGAR=11,JBKSMH=12,JBKSMT=13,JBKSML=14,
+     +           JBKSMX=15,JBKARR=16,JBKASA=17,JBKPAM=18,JBKRPA=19)
+      COMMON /QBANKS/MMBANK(5,NBANKS)
+      PARAMETER      (JFO_TYP=1, JCC_TYP=2, JAS_TYP=3, JDA_TYP=4,
+     +                JSH_TYP=5, JCR_TYP=6, JIN_TYP=7, MAX_TYP=100)
+      CHARACTER*16    CH_TYP(MAX_TYP), ACT_TYP
+      COMMON /CM_TYP/ LUN_TYP, N_TYP, NAL_TYP, NDV_TYP, JBK_TYP
+     +,               JU_TYP(MAX_TYP), CH_TYP, ACT_TYP
+      CHARACTER      CHTAG*80, CHWYL*16
+      COMMON /TAGC/  LLORG,LNORG,LLACT,LNACT, LALTN,LMODE,NCHTAG
+     +,              CHTAG,CHWYL
+      PARAMETER      (NFIMAX=100)
+      COMMON /TITLEC/ NFILET, JTIPAM(NFIMAX)
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+      COMMON /M_ANAC/LOWAN,KDOAN,LDOAN,LUPAN,MODEAN,MEXAN,LEVAN,KKM5AN
+     +,              NEWDEC,NEWCTL,NEWFOR,NEWNIL,NEWINC
+C--------------    End CDE              --------------------------------
+      DIMENSION    LASTWSP(9)
+
+
+      CALL MQWORK (LACRAD,INCRAD,LASTWSP)
+      NFILET = 0
+
+      NVGAP(1) = 4000
+      NVGAP(2) =  200
+      NVGAP(3) = 5000
+      NVGAP(4) =   40
+
+      NCHTAG = 0
+      CALL VZERO (LOWAN,12)
+
+C--       Pre-lift the banks for I/O handling
+
+      CALL MQLIFT (LACRAD, 0,7, JBKARR,3)
+      CALL MQLIFT (LPAM,   0,7, JBKPAM,3)
+      CALL MQLIFT (LQARRV, 0,7, JBKARR,3)
+      CALL MQLIFT (LQHOLD, 0,7, JBKHOL,1)
+      LARRV  = LQARRV
+
+C----     Lift the ASM banks
+
+      N_TYP   = 0
+      NAL_TYP = 2
+
+      JAL = MAX_TYP - NAL_TYP
+
+      CH_TYP(JAL+1) = 'R*EPEAT'
+      CH_TYP(JAL+2) = 'J*OIN'
+      JU_TYP(JAL+1) = -1
+      JU_TYP(JAL+2) = -2
+
+C--       lift the support bank ASMH
+
+      CALL MQLIFT (LHASM, 0,7, JBKSMH,3)
+
+C--       lift the ASMT banks
+
+      CALL ASMCREA ('FORT', JASM, 0)
+      CALL ASMCREA ('CC', JASM, 0)
+      CALL ASMCREA ('AS', JASM, 0)
+      CALL ASMCREA ('DATA', JASM, 0)
+      CALL ASMCREA ('SHELL', JASM, 0)
+      CALL ASMCREA ('CRAD', JASM, 0)
+      CALL ASMCREA ('INCL', JASM, 0)
+
+C----         Create standard aliases
+
+      JAL = JAL - 4
+      CH_TYP(JAL+1) = 'CO*MPILE'
+      CH_TYP(JAL+2) = 'X*CC'
+      CH_TYP(JAL+3) = 'A*S*'
+      CH_TYP(JAL+4) = 'D*ATA'
+
+      JU_TYP(JAL+1) = JFO_TYP
+      JU_TYP(JAL+2) = JCC_TYP
+      JU_TYP(JAL+3) = JAS_TYP
+      JU_TYP(JAL+4) = JDA_TYP
+
+      NAL_TYP = MAX_TYP - JAL
+
+
+      RETURN
+      END

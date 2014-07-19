@@ -1,0 +1,229 @@
+*
+* $Id: history,v 1.1.1.1 1996/02/28 16:23:25 mclareni Exp $
+*
+* $Log: history,v $
+* Revision 1.1.1.1  1996/02/28 16:23:25  mclareni
+* Hepdb, cdlib, etc
+*
+*
+* This directory was created from hepdb.car patch history
+ 
+Pam history in inverse chronological order:
+-------------------------------------------
+ 
+*** WARNING  CDMOVF must be compiled /NOOPT with old (e.g. V6.1)
+             versions of DEC Fortran on OpenVMS
+ 
+Outstanding:
+============
+ 
+- CDPURG problems (WA97,NOMAD)
+ 
+- WA98 wishlist
+ 
+Version 1.20=CDPREF: use LDBFL rather than LFILE In FTOVAX call
+             CDINIT/CDNEW: correct handling of new RZ format
+             CDCHAR: lun should be LPRTCD
+             CDFSND: use CDUNIQ to generate target filename
+             CDMOVE: stop file can be tailored by env. CDSTOP
+             RUN_HEPDB: vscrna no longer has vxcern cluster alias
+             CDKPAK,CDKUPK: pack/unpack (time) commands
+             CDLLS: limit NFOUND to NMAX (Rob Komar)
+             CDHSTC,CDSOPN: mods from Doug Cowen - UPENN
+             CDNEW: option 7 - new RZ format
+             CDCTOI,CDATOI,CDVECT: correct UHTOC calls (missing KOFUCD)
+             Mods to support
+               (1) Hierarchy among the validity range keys (Default)
+               (2) No hierarchy (option A) to be specified at the time
+                   of creation of the database
+               Changes to:
+               CDINIT and routines calling it : CDOPEN, CDNEW, CDUPDT, CDSHAR
+               CDFRST, CDSTAT, CDFZUP, CDLDUP to access the flag
+               CDVALID, CDPVAL, CDBKKS, CDCHCK, CDKSEL, CDPSEL for using it.
+             (Sunanda Banerjee)
+Version 1.19=CDFSND,CDPREF: fix compile errors on VMS
+             P=CDFZUP, CDPURG, mods from Boris Khomenko
+             CDFSND, CDPREF: mods to handle Unix path/file names on VMS.
+             CDMOVF. mods for UCX NFS. (This and above from Joseph Unger)
+             CDDELF: use rm -f rather than rm.
+             CDEX: add patches CDEX, CX77 for Boris Khomenko's "expert"
+             interface.
+             CDPKTM/S: minor bug fixes
+             CDEXIT: call CDEND to close QQ files
+             94B
+Version 1.18=CDOPEN: increase CDOPTS string
+             HDBSERV: process failed journal files
+             P=CDINIT: mods from Boris Khomenko
+             CDMOVF: add CHOPT: IOPTK - keep input file (else delete)
+             CDSEND: use CDMOVF on VMS.
+             CDSERV: skip 'last.kumac' files
+             CDMOVE: include CZDUMM for VMS
+             CDSNAM: call cdstsv also on VAX if=$server,if=-$online
+             CDOPEN/CDINIT: option T: suppress check on maximum insertion time
+             CDFZUP: previous change (1.17) resulted in IO descriptor
+             for IACT=1 becoming undefined.
+             CDSERV: skip also QQ files
+             CDSERV: add z=slate
+             CDEND: add option S for server - don't send journal file
+             CDSERV: more printout, better protection
+             CDGETP: get PID of server - only if nodename matches!
+             CDMOVE: increase hostname from 20 to 80 characters
+             CDSERV: add CDTRAP, CDWAKE to handle Unix signals.
+             CDMAKE: correct handling for CDFILE & CDPAIR env. variables
+             CDSERV: stop if < cdtmin secs left IF=VAX,IF=BATCH
+             Fix bug in CDSEND for VMS (prefix was corrupted).
+             19/03/94 13:00
+Version 1.17=CDBACKUP: new program and script to backup all database
+             files.
+             CDACL: define CDMODE
+             CDSERV: split print statement for unrecognised prefix
+             CDHEPDB: correct bug in handling # RDR files
+             CDMOVE: correct handling of remote queue directory
+             CDLLS: call lib$find_file_end
+             CDFZUP: handle insertion of multiple objects in same
+             non-partitioned directory correctly (Boris Khomenko)
+             CDMOVE: protect against no list of servers defined.
+             CDFOPN: print suggestions in case of open errors
+             Add CDACL(C) to process :read & :write tags on databases
+             Convert calls to CDSAVE to CDSTSV so that name can be
+             reused for user-callable routine. Add CDSAVE(CHTOP,CHOPT,IRC)
+             to permit purging of pending updates.
+             Mods from Sundanda to recreate DICTIONAIRY in case of
+             corruption and to permit merging of two databases.
+             CDLOGF: protect against problem with ACCESS='APPEND' in
+             DEC Fortran 6.1
+             CDAFRI: protection against corrupted data (Boris KHOMENKO)
+             CDLINC: change flags for DECS and other little endian machines
+             Add option C to CDEND - close permanently journal file
+             regardless of option A.
+Version 1.16=Add header line to CDCHECK.COM
+             Bug fixes to CDEXTR, CDRTFZ, CDCONF
+             Delete CDCTOI from CDXINT
+             New routines from Sunanda; updates to CDPURK
+             Use CLEFT instead of CCOPYL for VIDQQ
+             CDLKEY: set LCDRCD and IKDRCD in case of partitioned directories
+             CDSERV: increase size of PAWC
+             Add CDMOVE.COM and .sh
+             CDSOPN: fix bug in OPEN for Unix
+             CDMOVE: call CZDUMM (VMS) to avoid linking against system
+             Generic Unix version (Sunanda Banerjee)
+             Windows, MSDOS & Linux flags (Valery Fine)
+Version 1.15=CDEXAM1: correct call to CDNEW
+             CDPAW: change IXDIV to IDIV in arg. list (Boris KHOMENKO)
+             CDCONF: better diagnostics in case of bad HEPDB.NAMES
+             VIDQQ identification
+             CDOPNC: set IDIV to 0 on first entry. Set LTOP correctly
+             Add QMVAOS flag for Alpha OSF
+             CDHEPDB: extra protection against network problems
+             CDLS,CDLIST,CDOPEN: correct placement of DATA statements
+             Move LTOPCD to before KULOGN
+             V93D (07/09/93)
+             Reduce wait time in CDSEND.COM to 10 minutes (from 30)
+Version 1.14=CDMOVE: protect against NFOUND>MAXFIL
+             Correct call to CDPWD in CDZOOM (add CHOPT)
+             Save and restore current directory in CDLMOD.
+             CDFSND. handle VAX correctly (cannot rename across devices)
+             Add CDMOVF to 'mv' a file on VAX. Add CDGTLG (logname translation)
+             CDSHOW: change LOUTCD to LPRTCD
+             CDTEXT: write text to LPRTCD if IOPTP
+             -A option on PWD (show alias). Extra options on TREE
+             command. Alias support in CD.
+             CDOUTP: reset also IQPRNT.
+             CDDELF: correct flag for VM
+             CDKOUT: correct +SELF for VAX server version, If=-$ONLINE
+             CDSERV: mods to print statements in CDSEND/BACK/BAD
+             Both above from Vitoria Bonaiti/NOMAD
+             Mods from Sunanda Banerjee for alias support in Fortran interface
+             Mods to following patches:
+             CDCDES, CDUTIL, CDMDIR, CDDICT, CDSTORE, CDFZUP, CDREAD.
+             CDPURGE, CDPACK, CDUNPACK, CDROOT, CDP3, CDPLOT.
+             CDONLINE, CDXINT, DBCDIF.
+             Checkpoint before including Sundanda's mods
+Version 1.13=CDSERV: protection against errors in CDUPDT.
+             CDCONF: make local queue directories if they do not exist
+             Bug fix in CDEXAM6 (length of PAWC).
+             Add command CDHELP. Modify CDRHLP, CDAFRI and all calling
+             routines to add CHOPT: 'C' = print carriage control in col1
+             Save and restore current directory in CDALIA
+             Bug fix in CDLDC for zero length options string
+             Add patch CDMOVE - move journal files between servers
+             a la FATSEND.
+             Fix uninitialiased variables from HP installation
+             Add CDJOUR exec to check for disk space on journal disk
+             and cleanup if required. Modify CDBACK to call it.
+             CDSERV, CDSTSV: send journal file only if file has been used
+             HDBSERV.EXEC: exit 99 if timer expires
+             CDSERV: skip active (ZZ) files
+             23/02/93 10:00
+Version 1.12=Change Z=CDUSER to Z=CDUSCM. CDUNIQ for VM.
+             Add patch CDDUMP, to dump journal files (headers only)
+             CDPREF: prefix ZZ is reserved - do not allow it
+             CDSERV: print only fn.ft in CDSERV on VAX to avoid record overflow
+             P=COM: fixes to CDCHECK, CDSEND
+             CDSEND: copy file then rename with correct database prefix.
+             CDHEPDB: protection against zero length files
+             CDSERV: add CDDELF to delete original journal file (new file
+             is always written by server)
+             Sundry bug fixes in CDHEPDB, debug in CDSERV.
+             CDOPEN: use C I/O if file is STREAM_LF
+             CDINIT: permit also options X and C for RZFILE call in
+             public mode
+             CDLOGF: correct OPEN for VAX/VMS (avoid integer underflow!)
+             CDPRNT: protect against 0 length array
+             Add CDSEND.COM to move updates between 'master' and 'slave'
+             across NFS (assumes correct UID/GID mapping)
+             CDLLS: write temporary files in current directory
+Version 1.11=Add patch CDMAKE to build a new, empty database. Database
+             parameters are taken from CDxxxx environmental variables.
+             Add patch CDHEPDB: code to transfer updates cernvm<->hepdb
+             CDKSEL: selection also on experiment keys (was just KOFUSI)
+             Add CDLIST, CDLDIR routines (a la ls,ld HEPDB commands)
+             Rework CDF for new KUIP.
+             Master/slave concept for VM servers. :queue points directly
+             to service machine who is master server or gateway machine
+             e.g. for transfer to node HEPDB.
+             Bad files are moved to directory pointed to by :bad.
+             Server stops on bad files.
+             CDSERV: master server is one where :todo and :queue
+             directories are the same. Generally, :queue is client
+             queue and :todo is server queue.
+             Extend command string in CDLLS to 255
+             Introduce master/slave server concept.
+             The master server processes all updates allocating a
+             unique KEY(1) per directory and setting the insertion
+             date and time.
+Version 1.10=V93A 15/01/93 13:30
+Version 1.02=Increase size of Zebra store to 1M words in CDSERV
+             Print user keys according to I/O char in CDLS
+             Delete CDLAST from P=CDSERV
+             Add selection in CDLS. Close LUNFZ in CDLOAD
+             Modify CDLOGL to permit //CHTOP as well as CHTOP.
+             Add patch CPLEAR containing example CPLEAR conversion programs.
+             Change HEPDB close command to RZCLOSE.
+             Corrections to CDEND - drop top bank if IOPTA,
+             otherwise drop specified bank
+             VAX version IF=$ONLINE uses CLUSCOM, otherwise standard
+             updating mechanism (via files)
+             Reset top directory in CDINIT
+             15/10/92. Reorganise PAM
+Version 1.01=Add P=REXX,D=HDBSERV (exec for VM server). Fix bugs
+             in names file handling, case sensitivity in CDSERV.
+Version 1.00=V92B July 20 1992. First release...
+Version 0.05=July 07 1992.
+             Conversion of flags to CERNLIB standard (partially)
+             Install and test on VM. Add NPRE argument and F option to CDNEW
+             (preformat NPRE records for VM only)
+Version 0.04=June 19 1992.
+             Basic server functions checked out (except forwarding of
+             updates to remote servers)
+Version 0.03=June 16 1992.
+             CDSERV now uses NAMEFD etc.
+Version 0.02=May 27 1992.
+             All patches converted. Interactive i/f still requires some
+             work, as does server patch (CDSERV).
+Version 0.01=May 1992.
+             Convert DB routines to new calling sequence. Reorganise pam.
+             DBL3 compatibility mode interface routines in DBCDIF.
+             All patches converted except DBXINT
+Version 0.00=April 1992
+             First copy of DBL3 V3.11, Sunanda Banerjee

@@ -1,0 +1,10 @@
+*
+* $Id: v209.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v209.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.09
+C     MNEXCM   fix to protect against bad input of LLIST

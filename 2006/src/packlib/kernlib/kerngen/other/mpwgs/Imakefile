@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 jumpad.F time.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

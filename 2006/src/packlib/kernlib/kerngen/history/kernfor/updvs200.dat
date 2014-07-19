@@ -1,0 +1,348 @@
+*
+* $Id: updvs200.dat,v 1.1.1.1 1996/02/15 17:50:43 mclareni Exp $
+*
+* $Log: updvs200.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:43  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNFOR)
+C-
+---------------------------------------------------------------------
+HISTORY OF GENERAL SECTION VERSIONS  2.00 - 2.14
+---------------------------------------------------------------------
+C-
+C-        CHANGES 07/07/72 FOR VERSION 2.00
+C-
+C-
+C-  1.    NEW PATCH PDP10
+C-  2.    PATCH TCGEN  REPLACES PATCH TCGEN1
+C-  3.    PATCH TCGENR REPLACES PATCH TCGEN2
+C-  4.    FOLLOWING DECKS PREVIOUSLY IN TCGEN1 NOW IN TCGENR
+C-        BCDWD - DIGITIN - DIRCOS - DIST - DOT - DOTNOR - ERPRIP -
+C-        IFORMT - IPACK - JTH - JTH10 - JTHN - MOVE - PRIPAR - STORE -
+C-        STOREN
+C-  5.    FOLLOWING DECKS PREVIOUSLY IN TCGE2 NOW IN TCGEN
+C-        STRAG - VOMAS - VOTAUF
+C-  6.    MINOR CHANGES TO FOLLOWING DECKS
+C-        PATCH TCGEN
+C-        JBYTET - MXMLRT - SBYTOR - SETFMT - TCDUMP - UBLANK - VDOTN
+C-        PATCH TCGENR
+C-        ICRD
+C-  7.    NEW DECK  (TCGEN)  -  VDOTN2 - PKCHAR - UPKCH
+C-  8.    FOLLOWING DECKS DELETED FROM PATCH CDCFTN
+C-        JTH - JTH1 - JTHB - MOVE - STOREB - STORE1 - STORE6 - UBLOW1 -
+C-        UBNCH1
+C-  9.    FOLLOWING DECKS DELETED FROM PATCH CDC60
+C-        JTH - JTH10 - MOVE - STORE6 - STORETC - UBLOW1 - UBNCH1
+C-  10.   FOLLOWING DECKS DELETED FROM PATCH CDC38
+C-        JTH - JTH1 - JTH10 - MOVE - STORE6
+C-  11.   FOLLOWING DECKS DELETED FROM PATCH IBM360
+C-        ICRD - JTH - MOVE - STORE - UBLOW1 - UBNCH1 - JTH1 - JTHB -
+C-        STORE1 - STOREB
+C-  12.   FOLLOWING DECKS DELETED FROM PATCH IBM7000
+C-        DIGITIN - DIST - DOT - DOTNOR - ICRD - IUNME - REMARK - STORE
+C-        - JTH6 - FXEM
+C-
+C--------------------------------------------------------------------
+C-
+C-
+C-        CHANGES 10/10/72 FOR VERSION 2.01
+C-
+C-
+C-  0.    DECKS TOUCHED IN TCGEN
+C-        ACOS - AFROMI - ERF - IUBIN - IUCHAN - IUHIST - PAROFI -
+C-        VOMAS
+C-        DECKS TOUCHED IN TCGENR
+C-        DIGITN - DOTNOR - IBAD - ICRD - JTH - PTOR - ZFIELD
+C-        DECKS TOUCHED IN IBM360
+C-        IUCOMP - UBLANK (DELETED) - UBLOW - UBLUBU
+C-
+C-  1.    FUNCTIONS WITH MULTIPLE ENTRY POINTS CORRECTED FOR IBM360
+C-
+C-  2.    OVERFLOW TROUBLE IN IUBIN - IUCHAN - IUHIST CORRECTED
+C-
+C-  3.    PATCH IBM360. BUGS IN IUCOMP - UBLOW - UBLUBU CORRECTED.
+C-        UBLANK DELETED.
+C-
+C-  4.    PROBLEMS
+C-        UCOPYN IN FORTRAN MUST BE CALLED WITH REAL ARGUMENTS ONLY.
+C-        IOFMAS MUST BE IN ASSEMBLER FOR IBM 360 SERIES MACHINES
+C-        IBM 360 ASSEMBLER ROUTINES IUBIN - IUCHAN - MXMPY2 WORK BADLY.
+C-        NEW IBM 360 ASSEMBLER ROUTINES FOR  VOMAS - IUBIN - IUCHAN -
+C-        MXMPY2 - (PAROFI) - UCOPYN IN PREPARATION.
+C-
+C--------------------------------------------------------------------
+C-
+C-
+C-        CHANGES 25/01/73 FOR VERSION 2.02
+C-
+C-
+C-  1.    DECKS TOUCHED IN TCGEN
+C-        ACOS - AFROMI - CBYT - CROSS - JBYTET - SBYTOR - TCDUMP
+C-        SMALL BUGS CORRECTED
+C-
+C-  2.    NEW PATCH PDP10F (PDP10 FORTRAN)
+C-
+C-  3.    P=PDP10. DECK TRCBQ REPLACED. DECK TRACBQ MOOVED TO PDP10F.
+C-
+C-  4.    P=CDC60.  NEW DECKS LOCBYT - PKCHAR - UPKCH.
+C-
+C-  5.    P=CDCFTN. NEW DECKS LOCBYT - PKCHAR - UPKCH.
+C-
+C--------------------------------------------------------------------
+C-
+C-
+C-        CHANGES 01/04/73 FOR VERSION 2.03
+C-
+C-
+C-  1.    P=TCGEN.
+C-        -- ACOS - AFROMI PAROFI - VOMAS    CHANGED FOR COMPATIBILITY
+C-        -- NEW ROUTINE VCOPYN TO SUPPLY UCOPYN.
+C-           UCOPYN FOR INTEGERS ONLY, VCOPYN FOR FLOATING POINT VALUES.
+C-        -- FORTRAN VERSIONS OF JBYTET AND SBYTOR SHOULD NOT BE USED
+C-           WHENEVER THE CORRESPONDING ROUTINE EXISTS IN ASSEMBLER CODE
+C-
+C-  2.    P=TCGENR.
+C-        -- DIGITN - ICRD     CHANGED FOR COMPATIBILITY.
+C-
+C-  3.    P=X6000.
+C-        -- XTPCH NOW CONTAINS    REWIND(IT)
+C-
+C-  4.    P=PDP10F.
+C-        -- SEQUENCE PDP10F FOR COMMENTS.
+C-        -- FREQ REPLACED.
+C-
+C-  5.    P=PDP10.
+C-        -- SEQUENCE PDP10 FOR COMMENTS.
+C-        -- 'END' REPLACED BY 'PRGEND'
+C-        -- BLANK CARDS SUPPRESSED.
+C-        -- NEW DECKS = PKCHAR - UPKCH - ZLATE
+C-        -- DECKS IN ALPHABETIC ORDER
+C-
+C-  6.    P=UNI1100.
+C-        -- BUG IN IUCOMP CORRECTED.
+C-
+C-  7.    P=IBM360.
+C-        -- BUGS IN IUBIN - IUCOMP - MXEQU  - MXMPY2  CORRECTED
+C-
+---------------------------------------------------------------------
+C-
+C-
+C-        CHANGES 25/07/73 FOR VERSION 2.04
+C-
+C-
+C-  1.    P=TCGEN.
+C-        -- UCOPYN    MISS PUNCH CORRECTED.
+C-
+C-  2.    PILOT PATCHES FOR CDC - IBM - PDP - UNIVAC.
+C-
+---------------------------------------------------------------------
+C-
+C-
+C-        CHANGES 25/08/73 FOR VERSION 2.05
+C-
+C-
+C- 1) NEW ROUTINES
+C----------------
+C-
+C-    P=TCGEN,   D=TRACEQ.
+C-    P=CDCFTN,  D=ABEND, CBYT, INCBYT, IUFIND, JBYTET, JBYTPK, JRSBYT,
+C-                 SBYTOR, SBYTPK, TRAC1Q.
+C-    P=UNIV1100,D=TRAC1Q.
+C-    P=IBM360,  D=DATE, REENT.
+C-    P=IBM360F, D=SORTZV, UBUNCH, UBLOW.
+C-
+C- 2) DELETED ROUTINES
+C----------------------
+C-
+C-    P=CDC60,    D=GSDEBUG
+C-    P=IBM360,   D=SORTZV, UBLOW, UBUNCH
+C--------------------------------------------------------------------
+C-
+C-
+C-        CHANGES OF 11/05/74 FOR VERSION 2.06
+C-
+C-
+C-  1.    P=TCGEN,  D=TL...   TL-PACK NEW ROUTINES.
+C-                  D=TX...   TX-PACK NEW ROUTINES.
+C-
+C-  2.    P=CDCFTN, D=ABEND   SMALL CORRECTIONS
+C-                  D=CBYT    SERIOUS BUG CORRECTION
+C-                  D=TRACEQ  SPECIAL 7600 VERSION,NEW.
+C-
+C-  3.    P=CERN7600.         NEW PATCH WITH SPECIAL 7600 ML ROUTINES
+C-
+C-  4.    P=CDC60,  D=ABEND, CBYT, IUFIND, JBYTET, JBYTPK, JRSBYT,
+C-                    SBYTOR, SBYTPK.   NEW ML VERSIONS
+C-
+C-  5.    P=CDC38,  D=CLOKZB36.         NEW ROUTINE
+C-
+C-  6.    P=UNI1100,D=TRAC1Q. CORRECTED
+C-                  D=TRACBQ, D=TRCBQQ. DELETED
+C-
+C-  7.    P=SIGMA7.           NEW PATCH OF ML ROUTINES FOR CII SIGMA7
+C-
+C--------------------------------------------------------------------
+C-
+C-
+C-        CHANGES OF  9/10/74 FOR VERSION 2.07
+C-
+C-
+C-        P=TCGEN,    D=TR...  TR-PACK NEW ROUTINES.
+C-
+C-        P=CERN7600, D=TRAC0Q, C=63.  SMALL BUG CORRECTED.
+C-
+C-        P=UNI1100.  NEW ML ROUTINES (FROM KOBENHAVN)
+C-                           ASORTZ, ERF, INTSOR, ISORTZ, IUBIN, IUCHAN,
+C-                           IUFIND, IUHUNT, OMSORT, PROB, SORTZV,
+C-                           UCOCOP, UZERO.
+C-                    RE-WRITTEN,HOPEFULLY FASTER, ML VERSIONS
+C-                    (FROM KOBENHAVN) INCBYT, IUCOMP, JBYTPK, PKBYT,
+C-                                     SBYTPK, UCOPY, UPKBYT.
+C-
+C-        P=IBM360.   NEW ML ROUTINES (FROM LIVERPOOL)
+C-                           INCBYT, UCOPY, VFILL.
+C-                    RE-WRITTEN,HOPEFULLY FASTER, ML VERSIONS
+C-                    (FROM LIVERPOOL) IUBIN, IUCHAN, IUCOMP, IUFIND,
+C-                                     JBIT, JBYT, SBIT, SBYT, UCOPY2,
+C-                                     UFILL.
+---------------------------------------------------------------------
+C-
+C-
+C-        CHANGES OF 18/12/74 FOR VERSION 2.08
+C-
+C-
+C-        P=TCGEN,    D=TX...  TX-PACK SUPPRESSED.
+C-                    D=TR...  RE-WRITTEN AND NEW ROUTINES.
+C-
+---------------------------------------------------------------------
+
+
+          CHANGES OF 01/11/75 FOR VERSION 2.09
+
+ P=TCGEN.  NEW DECKS:          FLTSOR,INTSOR,LORENB,LORENF,POWEZE,SORTZV
+           MODIFIED DECKS:     ERF,IUHUNT,TLRES,TRACEQ,VDOTN
+           MOVED TO P=TCGENR:  PAROFI,VOMAS,VOTAUF
+
+ P=X6000,X3800,X3000S.  REMOVED TO ARCHIVE (PRESUMABLY NO LONGER USED)
+
+ P=XSCOPE,XSCOPE2,XSCOPE3.   NEW X-PACKAGE FOR CDC6000/7000
+
+ P=XUNIV.     MODIFICATIONS FOR PATCHY4
+
+ P=X7090.     ARCHIVED
+
+ P=CDCFTN.    LOTS OF NEW ROUTINES
+
+ P=CERN7600.  NEW DECK:           INCMEM
+              MODIFIED DECK NAME: KFILEFTN TO KFILE
+
+ P=CDC60,CDC38.    ARCHIVED
+
+ P=PDP10F,PDP10.   NEW VERSION ON SPECIAL MINI-PAM
+
+ P=UNI1100.   MODIFIED DECKS:     IUBIN,IUCHAN,PROB,UCOPY
+
+ P=IBM360F.   SUPPRESSED DECKS:   UBLOW,UBUNCH
+              MODIFIED DECK:      SORTZV
+
+ P=IBM7000.   ARCHIVED
+
+---------------------------------------------------------------------
+
+
+ CHANGES OF 25/11/75 FOR VERSION 2.10
+
+ ALL PILOT-PATCHES HAVE BEEN RE-NAMED AND RE-ORGANISED
+
+ P=TCGEN,          D=TRACEQ : NEW VERSION
+
+ P=TCGENR,         D=PAROFI,VOMAS : MODIFIED
+
+ P=CDCFTN,         D=ABEND,IUWEED,TRAC1Q : MOVED TO P=CDCSYS
+                   D=TRACEQ : DELETED
+
+ P=CDC76SYS, CDC60SYS, CDCSYS : NEW PATCHES FOR CDC 7600/6000
+
+ P=CERN7600,    ALL REGULAR ROUTINES MOVED TO P=CDCSYS,CDC76SYS,CDC60SYS
+
+---------------------------------------------------------------------
+
+
+CHANGES OF  14/03/76  FOR  VERSION 2.11
+
+
+P=*GUNI,           D=DELETES.  CORRECTIONS
+
+P=*GIBM,           D=DELETES.  CORRECTIONS
+
+P=TCGEN,           D=JBYTET,SBYTOR   AVOID MIXED-MODE MASK STATEMENTS
+
+P=CDCFTN,          D=MXADD, C=58. SERIOUS BUF FOR 7600 TIMING
+
+P=CDCSYS           D=IDATZA.   NEW ML-VERSION
+
+P=UNI1100,  D=LOCF,TRAC1Q,UBLOW,UBUNCH, C=1. RUBBISH REMOVED
+            D=JBYTET,SBYTOR   AVOID MIXED-MODE MASK STATEMENTS
+
+P=IBM360,          D=DATE.     TROUBLESOME COMMENT CHANGED
+                   D=UBUNCH.   DECK-NAME CHANGED FROM UBLUBU
+
+---------------------------------------------------------------------
+
+
+CHANGES OF  30/04/76  FOR  VERSION 2.12
+
+
+P=TCGEN,        D=SORTX, STRAG, VMODUL  MOVED TO P=TCGENR
+
+P=CDCFTN,       D=IUHUNT, MXMLRT        BUGS CORRECTED
+                D=IUSAME                RE-WRITE FOR INDEF. STRINGS
+
+P=CDC60SYS,     D=.            INCMEM SEQUENCES CHANGED FOR SCOPE 3.4.3
+
+P=CDCFTN,CDC76SYS-CDCSYS     ALL CDC COMPASS ROUTINES HAVE BEEN CLEANED
+                             BY PROGRAM TO STANDARD ALIGNMENT TO IMPROVE
+                             READABILITY. THE OBJECT DECKS BEFORE & AFT
+                             HAVE BEEN CHECKED FOR IDENTITY BIT-FOR-BIT
+
+---------------------------------------------------------------------
+
+
+CHANGES OF  1/07/76   FOR VERSION 2.13
+
+
+P=*GCDC,     D=DELETES, C=2.       TAKE ACOS ETC. FROM SYSTEM LIBRARY
+
+P=CDC76SYS,  D=NAMJOB                             NEW ROUTINE
+
+P=CDCSYS,    D=DATEZB,NAMJOB,NAMEZB,NAMEZBP       NEW ROUTINES
+
+P=CDCSYS,    D=ABEND, C=6      CORRECTIONS FOR NEW SYSTEM
+             D=EQUBUF, C=3, 73
+             D=RETRNF, C=3, 43
+
+P=IBM360,    D=UCOPYN, C=22-23                    BUG CORRECTED
+
+---------------------------------------------------------------------
+
+
+CHANGES OF  4/12/76   FOR VERSION 2.14
+
+
+P=TCGEN   D=ERF, PROB          CORRECTIONS OF ENTRY STATEMENTS
+P=TCGEN   D=VDIST, VDIST2      NEW ROUTINES
+P=TCGEN   D=TRACEQ             DEFINE DEFAULT LUN FOR OTHER MACHINES
+P=TCGEN   D=SORTX              BROUGHT BACK FROM P=TCGENR
+
+
+ALL PATCHES FOR SPECIFIC MACHINES HAVE BEEN MOVED FROM THE GENSEC PAM
+TO INDIVIDUAL PAM-FILES, 1 FOR EACH MACHINE, AS DESCRIBED ON THE FIRST PAGE
+
+---------------------------------------------------------------------
+
+            ====   VERSION   3.01 = 2.14   ====
+
+=====================================================================
+#endif

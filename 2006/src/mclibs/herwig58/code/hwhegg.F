@@ -1,0 +1,268 @@
+*
+* $Id: hwhegg.F,v 1.1.1.1 1996/03/08 17:02:14 mclareni Exp $
+*
+* $Log: hwhegg.F,v $
+* Revision 1.1.1.1  1996/03/08 17:02:14  mclareni
+* Herwig58
+*
+*
+*CMZ :          29/08/94  11.51.47  by  Unknown
+*-- Author :
+CDECK  ID>, HWHEGG.
+*CMZ :-        -19/03/92  10.13.56  by  Mike Seymour
+*-- Author :    Mike Seymour
+C-----------------------------------------------------------------------
+      SUBROUTINE HWHEGG
+C     HARD PROCESS: EE --> EEGAMGAM --> EEFFBAR/WW
+C     MEAN EVENT WEIGHT = CROSS-SECTION IN NB
+C     AFTER CUTS ON PT AND MASS OF CENTRE-OF-MASS SYSTEM
+C     AND COS(THETA) IN CENTRE-OF-MASS SYSTEM
+C     AND TIMES BRANCHING FRACTION IF WW
+C-----------------------------------------------------------------------
+#include "herwig58/herwig58.inc"
+      DOUBLE PRECISION GAMWT,EMSQ,BETA,S,T,U,TMIN,TMAX,TRAT,DSDT,PROB,X,
+     &  Z(2),ZMIN,ZMAX,PCMIN,PCMAX,PCFAC,PLOGMI,PLOGMA,PTCMF,Q,PC,BLOG,
+     &  EMCMIN,EMCMAX,EMLMIN,EMLMAX,WGT(6),RWGT,CV,CA,BR,QT(2),QX(2),
+     &  QY(2),PX,PY,ROOTS,DOT,A,B,C,SHAT,HWRGEN,HWULDO,PCF(2),PCM(2),
+     &  PCMAC,ZZ(2),COLFAC
+      INTEGER I,IGAM,ID,IDL,ID1,ID2,IHEP,JHEP,NADD,NTRY,NQ,JGAM
+      LOGICAL HWRLOG
+      SAVE S,BETA,X,ID,NQ,WGT,EMLMIN,EMLMAX,PCFAC,PLOGMA,PLOGMI,SHAT,
+     &  PCF,PCM,Z,PCMAC,NADD
+      IF (IERROR.NE.0) RETURN
+C---INITIALIZE LOCAL COPIES OF EMMIN,EMMAX
+      IF (FSTWGT) THEN
+        EMLMIN=EMMIN
+        EMLMAX=EMMAX
+      ENDIF
+      IF (.NOT.GENEV) THEN
+C---CHOOSE Z1,Z2 AND CALCULATE SUB-PROCESS CROSS-SECTION
+        EVWGT=0
+C-----FIND FINAL STATE PARTICLES
+        IHPRO=MOD(IPROC,100)
+        IF (IHPRO.EQ.0) THEN
+          ID=1
+          NQ=6
+          COLFAC=FLOAT(NCOLO)
+          NADD=6
+        ELSEIF (IHPRO.LE.6) THEN
+          ID=IHPRO
+          NQ=1
+          COLFAC=FLOAT(NCOLO)
+          NADD=6
+          Q=QFCH(ID)
+        ELSEIF (IHPRO.LE.9) THEN
+          ID=119+2*(IHPRO-6)
+          NQ=1
+          COLFAC=1.
+          NADD=6
+          Q=QFCH(ID-110)
+        ELSEIF (IHPRO.LE.10) THEN
+          ID=198
+          NQ=1
+          NADD=1
+        ELSE
+          CALL HWWARN('HWHEGG',200,*999)
+        ENDIF
+C-----SPLIT ELECTRONS TO PHOTONS
+        NHEP=3
+        GAMWT=1
+        S=2*HWULDO(PHEP(1,1),PHEP(1,2))
+        ROOTS=SQRT(S)
+        EMCMIN=MAX(EMLMIN,MAX(2*RMASS(ID),PTMIN))
+        EMCMAX=MIN(EMLMAX,ROOTS)
+        IF (EMCMIN.GT.EMCMAX) RETURN
+        ZMIN=EMCMIN**2/S
+        ZMAX=1
+        CALL HWEGAM(1,GAMWT,ZMIN,ZMAX,.TRUE.)
+        Z(1)=PHEP(4,NHEP-1)/PHEP(4,1)
+        ZMIN=EMCMIN**2/(Z(1)*S)
+        ZMAX=MIN(EMCMAX**2/(Z(1)*S), ONE)
+        CALL HWEGAM(2,GAMWT,ZMIN,ZMAX,.TRUE.)
+        Z(2)=PHEP(4,NHEP-1)/PHEP(4,2)
+        EMSCA=PHEP(5,3)
+        SHAT=EMSCA**2
+C-----REMOVE LOG TERMS FROM WEIGHT, CALCULATE NEW ONES FROM PT LIMITS
+        GAMWT=GAMWT/(0.5*LOG((1-Z(1))*S/(Z(1)*PHEP(5,1)**2))
+     &              *0.5*LOG((1-Z(2))*S/(Z(2)*PHEP(5,2)**2)))
+        PCF(1)=Z(1)*PHEP(5,1)
+        PCF(2)=Z(2)*PHEP(5,2)
+        PCFAC=SQRT(PCF(1)*PCF(2))
+        PCM(1)=(1-Z(1))*PHEP(4,1)
+        PCM(2)=(1-Z(2))*PHEP(4,2)
+        PCMAC=SQRT(PCM(1)*PCM(2))
+        PCMIN=MAX(PTMIN,MAX(PCF(1),PCF(2)))
+        PCMAX=MIN( MIN(PTMAX,PHEP(5,3)) , MIN(PCM(1),PCM(2)) )
+        IF (PCMIN.GT.PCMAX) RETURN
+        PLOGMI=(LOG(PCMIN/PCFAC))**2
+        PLOGMA=(LOG(PCMAX/PCFAC))**2
+        GAMWT=GAMWT*(PLOGMA-PLOGMI)
+C-----CALCULATE CROSS-SECTION
+        DO 10 IDL=1,NQ
+          WGT(IDL)=EVWGT
+          IF (IHPRO.EQ.0) THEN
+            ID=IDL
+            Q=QFCH(ID)
+          ENDIF
+          EMSQ=RMASS(ID)**2
+          X=4*EMSQ/SHAT
+          IF (X.GT.1) GOTO 10
+          BETA=SQRT(1-X)
+          BLOG=LOG((1+BETA*CTMAX)/(1-BETA*CTMAX))/BETA
+          IF (IHPRO.LE.9) THEN
+            EVWGT=EVWGT+GEV2NB*4*PIFAC*COLFAC*Q**4*ALPHEM**2*BETA
+     &           /SHAT * GAMWT * ( (1+X-0.5*X**2)*BLOG
+     &                     - CTMAX*(1+X**2/(CTMAX**2*(X-1)+1)) )
+            WGT(IDL)=EVWGT
+          ELSE
+            CALL HWDBOZ(198,ID1,ID2,CV,CA,BR,1)
+            CALL HWDBOZ(199,ID1,ID2,CV,CA,BR,1)
+            EVWGT=EVWGT + GEV2NB*6*PIFAC*ALPHEM**2*BETA/SHAT*BR
+     &        * GAMWT * (-(  X-0.5*X**2)*BLOG
+     &                     + CTMAX*(1+(X**2+16/3.)/(CTMAX**2*(X-1)+1)) )
+          ENDIF
+ 10     CONTINUE
+      ELSE
+C---GENERATE EVENT
+C-----CHOOSE PT OF THE CMF
+        PTCMF=PCFAC*EXP(SQRT(HWRGEN(0)*(PLOGMA-PLOGMI)+PLOGMI))
+C-----CHOOSE WHICH PHOTON USUALLY HAS SMALLER PT
+        NTRY=0
+ 20     IGAM=1
+        IF (LOG(PCM(1)/PCF(1)).LT.HWRGEN(1)*2*LOG(PCMAC/PCFAC)) IGAM=2
+        JGAM=3-IGAM
+C-----CHOOSE ITS PT
+ 30     NTRY=NTRY+1
+        IF (NTRY.GT.NBTRY) CALL HWWARN('HWHEGG',100,*999)
+        QT(IGAM)=(PCM(IGAM)/PCF(IGAM))**HWRGEN(2)
+        PROB=(QT(IGAM)**2/(QT(IGAM)**2+1))**2
+        QT(IGAM)=QT(IGAM)*PCF(IGAM)
+        IF (HWRLOG(1-PROB)) GOTO 30
+C-----CHOOSE ITS DIRECTION
+        CALL HWRAZM(QT(IGAM),QX(IGAM),QY(IGAM))
+C-----CALCULATE THE OTHER PHOTON'S PT
+        QX(JGAM)=PTCMF-QX(IGAM)
+        QY(JGAM)=     -QY(IGAM)
+        QT(JGAM)=SQRT(QX(JGAM)**2+QY(JGAM)**2)
+        IF (QT(JGAM).LT.PCF(JGAM).OR.QT(JGAM).GT.PCM(JGAM)) GOTO 20
+C-----APPLY A RANDOM ROTATION AROUND THE BEAM AXIS
+        CALL HWRAZM(ONE,PX,PY)
+        IF (PX.EQ.0) PX=1D-20
+        QX(1)=(QX(1)*PX   -QY(1)*PY)
+        QY(1)=(QY(1)      +QX(1)*PY)/PX
+        QX(2)=(QX(2)*PX   -QY(2)*PY)
+        QY(2)=(QY(2)      +QX(2)*PY)/PX
+C-----RECONSTRUCT MOMENTA
+        IF (QT(IGAM).GT.QT(JGAM)) THEN
+          IGAM=3-IGAM
+          JGAM=3-JGAM
+        ENDIF
+        DOT=-Z(JGAM)*S+SHAT+2*(QX(1)*QX(2)+QY(1)*QY(2))
+C-------SOLVE QUADRATIC IN Z(IGAM) TO FIND ELECTRON ENERGIES
+        A=S*(S*Z(JGAM)+QT(JGAM)**2)
+        B=S*DOT*(1+Z(JGAM))
+        C=DOT**2+S*QT(IGAM)**2*(1-Z(JGAM))**2-4*QT(IGAM)**2*QT(JGAM)**2
+        IF (B**2.LT.4*A*C) GOTO 20
+        ZZ(IGAM)=(-B+SQRT(B**2-4*A*C))/(2*A)
+        IF (ZZ(IGAM).LT.0 .OR. ZZ(IGAM).GT.1-Z(IGAM)) GOTO 20
+        ZZ(JGAM)=1-Z(JGAM)
+C-------REJECT AGAINST PHOTON DISTRIBUTION FUNCTION
+        PROB=((1+ZZ(IGAM)**2)/(1-ZZ(IGAM)))/((1+(1-Z(IGAM))**2)/Z(IGAM))
+     &      *((1+ZZ(JGAM)**2)/(1-ZZ(JGAM)))/((1+(1-Z(JGAM))**2)/Z(JGAM))
+        IF (HWRLOG(1-PROB)) GOTO 20
+C-------RECONSTRUCT ALL OTHER VARIABLES
+        DO 40 I=1,2
+          IGAM=2*I+3
+          PHEP(1,IGAM)=QX(I)
+          PHEP(2,IGAM)=QY(I)
+          PHEP(4,IGAM)=ZZ(I)*PHEP(4,I)
+          PHEP(5,IGAM)=RMASS(IDHW(IGAM))
+C---------IF MOMENTUM CANNOT BE CONSERVED TRY AGAIN
+          IF (PHEP(4,IGAM)**2-PHEP(5,IGAM)**2-QT(I)**2 .LT. 0) GOTO 20
+          PHEP(3,IGAM)=SIGN(SQRT(PHEP(4,IGAM)**2-PHEP(5,IGAM)**2-
+     &      QT(I)**2),PHEP(3,IGAM))
+          CALL HWVDIF(4,PHEP(1,I),PHEP(1,IGAM),PHEP(1,IGAM-1))
+          CALL HWUMAS(PHEP(1,IGAM-1))
+ 40     CONTINUE
+C-----TIDY UP EVENT RECORD
+        NHEP=NHEP+1
+        IDHW(NHEP)=IDHW(3)
+        IDHEP(NHEP)=IDHEP(3)
+        ISTHEP(NHEP)=110
+        CALL HWVSUM(4,PHEP(1,4),PHEP(1,6),PHEP(1,NHEP))
+        CALL HWVSUM(4,PHEP(1,1),PHEP(1,2),PHEP(1,3))
+        CALL HWUMAS(PHEP(1,NHEP))
+        CALL HWUMAS(PHEP(1,3))
+        JMOHEP(1,NHEP)=4
+        JMOHEP(2,NHEP)=6
+        JMOHEP(1,3)=0
+        JMOHEP(2,3)=0
+C-----CHOOSE FINAL STATE QUARK
+        IF (IHPRO.EQ.0) THEN
+          RWGT=HWRGEN(2)*EVWGT
+          ID=1
+          DO 50 IDL=1,NQ
+            IF (RWGT.GT.WGT(IDL)) ID=IDL+1
+ 50       CONTINUE
+          EMSQ=RMASS(ID)**2
+          X=4*EMSQ/SHAT
+          BETA=SQRT(1-X)
+        ENDIF
+C-----CHOOSE T (WHERE T = MANDELSTAM_T - EMSQ)
+        TMIN=-SHAT/2
+        TMAX=-SHAT/2*(1-BETA*CTMAX)
+        TRAT=TMAX/TMIN
+        NTRY=0
+        IF (IHPRO.LE.9) THEN
+C-------FOR FFBAR, CHOOSE T ACCORDING TO -SHAT/T
+ 60       NTRY=NTRY+1
+          IF (NTRY.GT.NBTRY) CALL HWWARN('HWHEGG',101,*999)
+          T=TRAT**HWRGEN(3)*TMIN
+          U=-T-SHAT
+C-------REWEIGHT TO CORRECT DISTRIBUTION
+          DSDT=(T*U-2*EMSQ*(T+2*EMSQ))/T**2
+     &        +( 2*EMSQ*(SHAT-4*EMSQ))/(T*U)
+     &        +(T*U-2*EMSQ*(U+2*EMSQ))/U**2
+          PROB=-DSDT*T/SHAT / (1 + 2*X - 2*X**2)
+          IF (HWRLOG(1-PROB)) GOTO 60
+        ELSE
+C-------FOR WW, CHOOSE T ACCORDING TO (SHAT/T)**2
+ 70       NTRY=NTRY+1
+          IF (NTRY.GT.NBTRY) CALL HWWARN('HWHEGG',102,*999)
+          T=TMAX/(1-(1-TRAT)*HWRGEN(4))
+          U=-T-SHAT
+C-------REWEIGHT TO CORRECT DISTRIBUTION
+          DSDT=( 3*(T*U)**2 - SHAT*T*U*(4*SHAT+6*EMSQ)
+     &      + SHAT**2*(2*SHAT**2+6*EMSQ**2) ) / (T*U)**2
+          PROB=DSDT*(T/SHAT)**2 / (4.75 - 1.5*X + 1.5*X**2)
+          IF (HWRLOG(1-PROB)) GOTO 70
+        ENDIF
+C-----SYMMETRIZE IN T,U
+        IF (HWRLOG(HALF)) T=U
+C-----FILL EVENT RECORD
+        COSTH=(1+2*T/SHAT)/BETA
+        PC=0.5*BETA*PHEP(5,NHEP)
+        PHEP(5,NHEP+1)=RMASS(ID)
+        PHEP(5,NHEP+2)=RMASS(ID)
+        CALL HWDTWO(PHEP(1,NHEP),PHEP(1,NHEP+1),PHEP(1,NHEP+2),
+     &              PC,COSTH,.TRUE.)
+        DO 80 I=1,2
+          IHEP=NHEP+I
+          JHEP=NHEP+3-I
+          ISTHEP(IHEP)=190
+          IF (IHPRO.LE.6) ISTHEP(IHEP)=112+I
+          IDHW(IHEP)=ID+NADD*(I-1)
+          IDHEP(IHEP)=IDPDG(IDHW(IHEP))
+          JDAHEP(I,NHEP)=IHEP
+          JMOHEP(1,IHEP)=NHEP
+          JMOHEP(2,IHEP)=JHEP
+          JDAHEP(2,IHEP)=JHEP
+          IF (IHPRO.EQ.10) THEN
+            RHOHEP(1,IHEP)=0.3333
+            RHOHEP(2,IHEP)=0.3333
+            RHOHEP(3,IHEP)=0.3333
+          ENDIF
+ 80     CONTINUE
+        NHEP=NHEP+2
+      ENDIF
+ 999  END

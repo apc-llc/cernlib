@@ -1,0 +1,7 @@
+SRCS_F= \ @@\
+	 getarg.F iargc.F
+
+SRCS_C= \ @@\
+	 getcom.c
+
+SubdirLibraryTarget(NullParameter,NullParameter)

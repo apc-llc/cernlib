@@ -1,0 +1,15 @@
+SRCS_F=	addbnd.F bfgs.F bndopt.F bndtst.F bounds.F bucmve.F \ @@\
+	bufopt.F delbnd.F delete.F delslv.F divon.F dvcopy.F dvdot.F \ @@\
+	dvnbkd.F dvnopt.F exmbuc.F feasmv.F feqn.F fun.F genpnt.F \ @@\
+	grdcmp.F intgrl.F ldlsol.F locsch.F modchl.F mulchk.F mxstep.F \ @@\
+	newptq.F nmdchl.F nocut.F nodaud.F orthvc.F partn.F quad.F \ @@\
+	quasi.F ranums.F recpar.F rlen.F settol.F shrnk.F split.F \ @@\
+	treaud.F tredmp.F tstext.F usrint.F usrtrm.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

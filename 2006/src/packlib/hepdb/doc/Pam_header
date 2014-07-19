@@ -1,0 +1,611 @@
+*
+* $Id: Pam_header,v 1.2 1996/04/12 07:40:03 jamie Exp $
+*
+* $Log: Pam_header,v $
+* Revision 1.2  1996/04/12 07:40:03  jamie
+* check write acl in cdfsnd
+*
+* Revision 1.1.1.1  1996/02/28 16:23:26  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB__DOC)
+#include "sys/CERNLIB_machine.h"
+#include "_hepdb/pilot.h"
+ 
+Current version number : 0.00  (see below)
+ 
+Coordinator for this PAM : J.Shiers
+ 
+This is a 'Utility' Pam file for the storage and retrieval of data
+in the HEPDB Data Base system.
+ 
+ 
+List of Patches :
+---------------
+ 
+  CDBHEAD      Pam header and short history of successive versions
+  *CDLIB       Steering patch for creating HEPDB library
+  *CDSERV      Steering patch for creating the serverinteractive
+  CDCDES       Commons used in the package
+  CDEXAMn      Example how to create Database (n=1)
+  CDEXAMn      Example how to use HEPDB (n=2)
+  CDEXAMn      Example for testing HEPDB (n=9)
+  CDINIT       Routines to initialize database
+  CDMDIR       Routines to manipuate directories
+  CDDICT       Routines to manipulate the dictionary directory
+  CDSTORE      Routines to store data in the database
+  CDFZUP       Routines to update the database
+  CDREAD       Routines to read data from the database
+  CDPURGE      Routines to purge data in the database
+  CDPACK       Routines to pack data in the database
+  CDUNPACK     Routines to unpack data in the database
+  CDROOT       Basic routines for HEPDB
+  CDP3         Routines related to the Host/A.P. environment
+  CDONLINE     Routines related to the online  server
+  CDOFFLIN     Routines related to the offline server
+  CDPLOT       Routines related to the plotting fcailities of database
+               package
+  CDMAIN       Main program for interactive usage and example of Logon
+               macros
+  CDXINT       Routines related to interactive database accesses
+ 
+ 
+PATCHY Options :
+--------------
+ 
+  APOLLO, CRAY, HPUX,
+  IBM, IBMRT, MIP,
+  UNIX, VAX       - To select machine dependent codes
+  $P3CHILD        - To select the child task dependent code
+  $HIGZ           - To select the plotting facilities in the interactive
+                    version.
+  $DOC            - To flag the (non-executable) documentation Patches
+  $DEBUG          - To switch on the debug print outs
+  $SERVER         - To activate the codes for servers
+  $INIMODE        - To switch on the initialisation mode in CDEXAM2
+  $PARTDIR        - To test partitioned directories in CDEXAM9
+ 
+ 
+Extra material required :
+ 
+  CERN libraries KERNLIB, PACKLIB + GRAFLIB for the interactive package
+ 
+B.  Error codes :
+    -----------
+ 
+   The following table summarizes the meanings of the error codes
+returned in IRC.
+ 
+ 
+ +-----+------------------------------------------------+--------------+
+ |Error|             Meaning                            | Routine Name |
+ |Code |                                                |              |
+ +-----+------------------------------------------------+--------------+
+ |  -1 |Invalid top directory name                      |   CDINIT     |
+ |     |                                                |              |
+ |  -2 |The file is already open with correct LUNRZ and |   CDINIT     |
+ |     |TOPNM                                           |              |
+ |     |                                                |              |
+ |  -3 |The file is already open with wrong LUNRZ or    |   CDINIT     |
+ |     |TOPNM                                           |              |
+ |     |                                                |              |
+ |  -5 |Invalid process name in Online context          |   CDINIT     |
+ |     |                                                |              |
+ |  -6 |Error in IC_BOOK for booking the CACHE          |   CDINIT     |
+ |     |                                                |              |
+ |  -7 |Error in CC_SETUP for reserving the CLUSCOM     |   CDINIT     |
+ |     |                                                |              |
+ |  -8 |Error in opening journal file in server mode    |   CDFOPN     |
+ |     |                                                |              |
+ |  -9 |Unable to open FZ communication channel         |   CDINIT     |
+ |     |                                                |              |
+ | -10 |Host unable to open RZ file                     |   CDINIT     |
+ |     |                                                |              |
+ | -11 |Access to database file denied                  |   CDOPEN     |
+ |     |                                                |              |
+ | -12 |Error mapping Unix path to VMS format           |CDFSND/CDPREF |
+ |     |                                                |              |
+ | -13 |Write access to DB denied - journal file not    |   CDFSND     |
+ |     |sent to server                                  |              |
+ +-----+------------------------------------------------+--------------+
+ |   1 |Illegal character option                        |CDUSEDB/CDUSEM|
+ |     |                                                |              |
+ |   2 |Illegal path name                               |CDGETDB/CDUSE/|
+ |     |                                                |CDUSEM        |
+ |     |                                                |              |
+ |   3 |Data base structure in memory clobbered         |CDUSE/CDUSEDB/|
+ |     |                                                |CDUSEM        |
+ |     |                                                |              |
+ |   4 |Illegal key option                              |CDUSE/CDUSEDB/|
+ |     |                                                |CDUSEM        |
+ |     |                                                |              |
+ |   5 |Error in CDCHLD in P3 communication             |   CDUSP3     |
+ +-----+------------------------------------------------+--------------+
+ |  12 |Illegal pathname                                |   CDNODE     |
+ |     |                                                |              |
+ |  13 |Not enough structural link to support a new Node|   CDNODE     |
+ |     |                                                |              |
+ |  15 |Cannot define IO descriptor for Key bank        |   CDNODE     |
+ +-----+------------------------------------------------+--------------+
+ |  21 |Too many keys with option M                     |   CDKMUL     |
+ |     |                                                |              |
+ |  22 |Illegal key option                              |   CDKMUL     |
+ |     |                                                |              |
+ |  24 |No Key bank created satisfying key options for  |   CDBKKS     |
+ |     |option S                                        |              |
+ |     |                                                |              |
+ |  25 |Illegal Path Name                               |   CDBKKS     |
+ +-----+------------------------------------------------+--------------+
+ |  31 |Illegal path name or path name in node bank     |CDCHCK/CDKXIN/|
+ |     |is wrong                                        |CDPRIN        |
+ |     |                                                |              |
+ |  32 |No keys/data in this directory                  |CDCHCK/CDGETDB|
+ |     |                                                |CDPRIN        |
+ |     |                                                |              |
+ |  33 |No valid data for the given range of insertion  |   CDKXIN     |
+ |     |time or for the given set of keys and program   |              |
+ |     |version number                                  |              |
+ |     |                                                |              |
+ |  34 |RZIN fails to read the data                     |   CDRZIN     |
+ |     |                                                |              |
+ |  35 |Wrong reference to data objects in update mode  |   CDKXIN     |
+ |     |                                                |              |
+ |  36 |Data bank address zero on return from CDKXIN    |   CDCHCK     |
+ |     |                                                |              |
+ |  37 |Insufficient space in USER store array          |   CDCHCK     |
+ |     |                                                |              |
+ |  38 |Read error in getting the RZ date and time      |   CDPRDT     |
+ |     |                                                |              |
+ |  39 |Illegal data type in the key descriptor         |   CDPRKY     |
+ +-----+------------------------------------------------+--------------+
+ |  43 |Too many key elements                           |   CDMDIR     |
+ |     |                                                |              |
+ |  44 |Cannot find the top directory name              |   CDMDIR     |
+ |     |(wrong initialization)                          |              |
+ |     |                                                |              |
+ |  45 |Illegal Path name                               |   CDMDIR     |
+ |     |                                                |              |
+ |  47 |The Directory already exists                    |   CDMKDI     |
+ |     |                                                |              |
+ |  48 |Error in directory search sequence              |   CDMKDI     |
+ |     |                                                |              |
+ |  49 |FZOUT fails to write on the sequential file     |   CDSDIR     |
+ +-----+------------------------------------------------+--------------+
+ |  51 |Illegal character option                        |   CDFREE     |
+ |     |                                                |              |
+ |  52 |No access to the Key banks                      |   CDFREE     |
+ |     |                                                |              |
+ |  54 |Pathname not matched to that found in bank NODB |   CDFREE     |
+ |     |                                                |              |
+ |  57 |Illegal pathname                                |   CDFREE     |
+ |     |                                                |              |
+ |  58 |Database structure in memory clobbered          |   CDFREE     |
+ |     |                                                |              |
+ |  59 |Some of the expected key banks not found        |   CDFREE     |
+ +-----+------------------------------------------------+--------------+
+ |  61 |Too many keys                                   |CDENTB/CDREPL |
+ |     |                                                |              |
+ |  62 |Illegal character option                        |CDREPL/CDSTOM |
+ |     |                                                |              |
+ |  63 |Data base structure in memory clobbered         |CDREPL/CDSTOR |
+ |     |                                                |              |
+ |  64 |Error in MZCOPY while copying Data bank         |CDREPL/CDSTOR |
+ |     |                                                |              |
+ |  65 |Illegal number of data objects                  |   CDSTOM     |
+ |     |                                                |              |
+ |  66 |Illegal logical unit number                     |CDATOI/CDRHLP |
+ |     |                                                |              |
+ |  67 |File too long; no space in buffer               |   CDATOI     |
+ |     |                                                |              |
+ |  68 |Input directory is partitioned                  |   CDPART     |
+ |     |                                                |              |
+ |  69 |Input directory is not partitioned              |   CDPURP     |
+ |     |                                                |              |
+ |  70 |Error in deleting a partition through RZDELT    |   CDPURP     |
+ +-----+------------------------------------------------+--------------+
+ |  71 |Illegal path name                               |CDDONT/CDENFZ/
+ |     |                                                |CDENTB/CDFZUP/|
+ |     |                                                |CDKOUT/CDPART/|
+ |     |                                                |CDPURP/CDRTFZ |
+ |     |                                                |              |
+ |  72 |Read error on the FZ file (journal file)        |CDENFZ/CDFZUP |
+ |     |                                                |              |
+ |  73 |RZOUT fails to write on disk                    |CDDONT/CDENFZ/|
+ |     |                                                |CDENTB/CDKOUT/|
+ |     |                                                |CDPART/CDPURP |
+ |     |                                                |              |
+ |  74 |Error in RZRENK in updating key values for      |CDENFZ/CDENTB/|
+ |     |partitioned data set                            |CDKOUT/CDPART/|
+ |     |                                                |CDPURP        |
+ |     |                                                |              |
+ |  76 |Cannot form the IO descriptor for the FZ header |CDDONT/CDENTB/|
+ |     |                                                |CDFZUP/CDFZWR/|
+ |     |                                                |CDKOUT/CDPART |
+ |     |                                                |              |
+ |  77 |FZOUT fails to write on the sequential journal  |CDDONT/CDENFZ/|
+ |     |file                                            |CDENTB/CDFZWR/|
+ |     |                                                |CDKOUT/CDPART/|
+ |     |                                                |CDPURP        |
+ |     |                                                |              |
+ |  78 |Illegal number of keys on data base/journal file|CDFZUP/CDKOUT |
+ |     |                                                |              |
+ |  79 |Top directory name illegal in the FZ file       |   CDFZUP     |
+ +-----+------------------------------------------------+--------------+
+ |  81 |Precision is not correctly given                |   CDUCMP     |
+ |     |                                                |              |
+ |  82 |Illegal Data Type                               |   CDUCMZ     |
+ |     |                                                |              |
+ |  83 |Data update but uncompreseed                    |   CDUNCP     |
+ |     |                                                |              |
+ |  84 |The update structure has different number of    |   CDUNCP     |
+ |     |data words                                      |              |
+ |     |                                                |              |
+ |  85 |No data in the structure                        |   CDUNCP     |
+ |     |                                                |              |
+ |  86 |The update structure has different data type    |   CDUNCP     |
+ +-----+------------------------------------------------+--------------+
+ |  91 |Illegal Character Option                        |   CDOPTS     |
+ |     |                                                |              |
+ |  92 |Nonstandard IO descriptor                       |   CDFRUS     |
+ |     |                                                |              |
+ |  93 |Illegal time                                    |CDPKTM/CDUPTM |
+ |     |                                                |              |
+ |  94 |Nonmatching NPAR's in different UPCD banks      |   CDVALID    |
+ |     |                                                |              |
+ |  95 |Description not found in the dictionary         |   CDLDIC     |
+ |     |                                                |              |
+ |  96 |RZCDIR fails to set to the current directory    |   CDLDUP     |
+ |     |                                                |              |
+ |  97 |No matching UPCD bank found                     |CDLDUP/CDVALID|
+ |     |                                                |              |
+ |  98 |Invalid path name in Node bank                  |   CDSTAT     |
+ |     |                                                |              |
+ |  99 |No space in memory for creating the bank        |CDBANK/CDRZIN |
+ +-----+------------------------------------------------+--------------+
+ | 111 |Illegal path name                               |CDPURG/CDPURK |
+ |     |                                                |              |
+ | 112 |No key or data for the path name                |CDPURG/CDPURK |
+ |     |                                                |              |
+ | 113 |Illegal character option                        |   CDPURK     |
+ |     |                                                |              |
+ | 114 |Valid data object(s) in the Node/Key structure  |   CDPURK     |
+ |     |                                                |              |
+ | 115 |Cannot form the IO descriptor for the FZ header |   CDSPUR     |
+ |     |                                                |              |
+ | 116 |FZOUT fails to write on the sequential file     |   CDSPUR     |
+ +-----+------------------------------------------------+--------------+
+ | 131 |Illegal pathname (in key bank for CDLAST)       |CDLAST/CDLKEY/|
+ |     |                                                |CDLMOD        |
+ |     |                                                |              |
+ | 132 |Illegal number of keys in the directory         |CDLAST/CDLKEY |
+ |     |                                                |CDLMOD        |
+ |     |                                                |              |
+ | 135 |Illgeal Top directory name                      |CDFZOP/CDILDU |
+ |     |                                                |              |
+ | 136 |Illegal logical unit number                     |CDILDF/CDILDU/|
+ |     |                                                |CDJOUR        |
+ +-----+------------------------------------------------+--------------+
+ | 140 |Illegal top directory name                      |CDMDIC/CDUDIC |
+ |     |                                                |              |
+ | 141 |Error in creating the DICTIONARY/HELP directory |CDRDIC/CDUDIC |
+ |     |                                                |              |
+ | 142 |Error in RZ in writing the dictionary object    |CDCDIC/CDRDIC/|
+ |     |                                                |CDUDIC        |
+ |     |                                                |              |
+ | 143 |Error in RZ in purging the dictionary directory |CDCDIC/CDRDIC/|
+ |     |                                                |CDUDIC        |
+ |     |                                                |              |
+ | 144 |Dictionary directory cannot be loaded           |   CDCDIC     |
+ |     |                                                |              |
+ | 145 |Pathname already exists in the dictionary       |   CDCDIC     |
+ |     |                                                |              |
+ | 146 |Illegal path name                               |CDDINF/CDEALI |
+ |     |                                                |CDEHLP/CDENAM/|
+ |     |                                                |CDGNAM/CDRHLP/|
+ |     |                                                |CDRNAM        |
+ |     |                                                |              |
+ | 147 |Dictionary directory not found in memory        |CDEALI/CDGNAM/|
+ |     |                                                |CDRNAM        |
+ |     |                                                |              |
+ | 148 |FZOUT fails to write on the sequential file     |CDEALI/CDRDIC/|
+ |     |                                                |CDSNAM        |
+ |     |                                                |              |
+ | 149 |Error in RZ for writing to the R.A. file        |CDEALI/CDSNAM |
+ |     |                                                |              |
+ | 150 |Illegal number of data words                    |   CDENAM     |
+ |     |                                                |              |
+ | 151 |No description of data elements for the given   |CDGNAM/CDRNAM |
+ |     |path name exists in the data base               |              |
+ |     |                                                |              |
+ | 152 |Illegal flag (IFLAG)                            |   CDSNAM     |
+ |     |                                                |              |
+ | 153 |FZIN error for reading the data structure       |   CDSNAM     |
+ |     |                                                |              |
+ | 154 |Illegal alias name for a directory              |   CDRALI     |
+ |     |                                                |              |
+ | 155 |No HELP directory inside the data base          |   CDRHLP     |
+ |     |                                                |              |
+ | 156 |No help information for this path stored yet    |   CDRHLP     |
+ +-----+------------------------------------------------+--------------+
+ | 171 |Illegal Path name                               |   CDDDIR     |
+ |     |                                                |              |
+ | 172 |Cannot find the top directory for the path name |   CDDDIR     |
+ |     |                                                |              |
+ | 173 |Error in RZ for reading the dictionary object   |   CDDDIR     |
+ |     |                                                |              |
+ | 174 |Error in FZOUT for saving the journal file      |   CDDDIR     |
+ |     |                                                |              |
+ | 175 |Error in RZ in writing the dictionary object    |   CDDDIR     |
+ |     |                                                |              |
+ | 176 |Error in RZ in purging the dictionary directory |   CDDDIR     |
+ |     |                                                |              |
+ | 177 |Error in RZ in deleting the tree                |   CDDDIR     |
+ |     |                                                |              |
+ | 178 |Error in RZ in deleting Name/Help information   |   CDDDIR     |
+ +-----+------------------------------------------------+--------------+
+ | 191 |Illegal path name                               |   CDRENK     |
+ |     |                                                |              |
+ | 192 |Specified key elements do not match with any of |   CDRENK     |
+ |     |the existing set of keys                        |              |
+ |     |                                                |              |
+ | 194 |Cannot form the IO descriptor for the FZ header |   CDRENK     |
+ |     |                                                |              |
+ | 195 |FZOUT fails to write on the sequential journal  |   CDRENK     |
+ |     |file                                            |              |
+ |     |                                                |              |
+ | 196 |Error in RZRENK in updating key values          |   CDRENK     |
+ |     |partitioned data set                            |              |
+ |     |                                                |              |
+ | 199 |Corrupted data                                  |   CDAFRI     |
+ +-----+------------------------------------------------+--------------+
+ | 211 |Illegal number of paths                         |   CDKEEP     |
+ |     |                                                |              |
+ | 212 |Illegal path name                               |CDFPAT/CDKEEP |
+ |     |                                                |              |
+ | 213 |Conflicting top directory names                 |   CDKEEP     |
+ +-----+------------------------------------------------+--------------+
+ | 221 |Error in CC_WRITELOCK for locking CLUSCOM (VAX);|   CDWLOK     |
+ |     |                                                |              |
+ | 222 |Error in CC_RELEASE for releasing CLUSCOM (VAX) |   CDCWSV     |
+ |     |                                                |              |
+ | 223 |Error in IC_SIGNAL for signalling the VAX Server|   CDCWSV     |
+ |     |                                                |              |
+ | 225 |Error in sending spool file to the server (IBM  |   CDSTSV     |
+ |     |or APOLLO)                                      |              |
+ +-----+------------------------------------------------+--------------+
+ | 301 |Illegal database prefix                         |   CDPREF     |
+ |     |                                                |              |
+ | 302 |Reserved database prefix                        |   CDPREF     |
+ |     |                                                |              |
+ | 311 |CDSERV variable not defined                     | CDPREF/CDACL |
+ |     |                                                |              |
+ +-----+------------------------------------------------+--------------+
+ 
+ 
+ 
+C.  Format for FZ output :
+    --------------------
+ 
+   HEPDB can create a journal file and can also update a data base from
+the corresponding journal file. The journal file format is defined as an
+FZ record consisting of a header and the data part. The format is
+general enough and can also be used for the communication betwen the
+server and a process which wants to update the data base.
+ 
+   The data part of the FZ record is relevant for storage of data, help/
+name information and also for creation of the directory. For storage of
+data, the data part of the FZ record is exactly the same data structure
+as input to CDSTOR. For efficiency reason, HEPDB for its own journal
+file stores the data structure as input to the RZOUT call. This
+difference can be easily recognised from the value of KEY(1), which is
+zero for outside source and nonzero for HEPDB's own journal file.
+ 
+   For creation of the directory, the data part consists of one bank
+containing IPREC for the directory in the numeric user identifier and
+the data word containing DELTA. For help/name information, the encoded
+information packed into one ZEBRA bank is stored in the journal file
+along with the header part with the directory/key information.
+ 
+   The header part has very similar structure for the eight actions
+foreseen so far, e.g., entering data, creating new directories, deleting
+data objects, deleting a directory tree, renaming the keys, entering
+names of data elements or help information for a directory, entering
+alias name to a directory, deleting a few partitions in a partitioned
+directory. However, they differ in details and the eight different types
+of FZ headers are listed below.
+ 
+   Header for entering data :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=1)                       |
+ |        2 |  NWKEY   |   I  | Number of key elements                 |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |  IPREC   |   I  | Precision chosen for packing           |
+ |          |          |      | (see DBENTR)                           |
+ |        6 |  KEY(1)  |   I  | Key element 1                          |
+ |       .. |   ...    |  ..  |   ........                             |
+ |  NWKEY+5 |KEY(NWKEY)|  ..  | Key element NWKEY                      |
+ |  NWKEY+6 |  CHOPT   |   H  | Character option                       |
+ |       .. |     ..   |   H  |                                        |
+ |  NWKEY+6 |  PATHN   |   H  | Path name                              |
+ |   +NWDOP |          |      |                                        |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for creating directories :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=2)                       |
+ |        2 |  NWKEY   |   I  | Number of key elements                 |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |   MXKP   |   I  | Maximum number of objects inside one   |
+ |          |          |      | partition (see DBMDIP)                 |
+ |        6 |  INSTM   |   I  | Insertion time packed up to minutes    |
+ |          |          |      | (see DBPKTM)                           |
+ |        7 |  NRECD   |   I  | Unused at this moment                  |
+ |        8 |  CHOPT   |   H  | Character option (e.g., 'P' for a      |
+ |       .. |   ...    |  ..  | partitioned directory)                 |
+ |   NDOP+8 |  CHFOR   |   H  | Description of key element type. This  |
+ |       .. |     ..   |  ..  | information is stored in NCFO = (NWKEY |
+ |       .. |     ..   |  ..  | +3)/4 words                            |
+ |   NDOP+8 |  CHTAG   |   H  | Tags for each key element. This info.  |
+ |    +NCFO |     ..   |  ..  | is stored in NTAG = 2*NWKEY words.     |
+ |NDOP+NCFO |  PATHN   |   H  | Path name                              |
+ |  +NTAG+8 |          |      |                                        |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for deleting objects :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=3)                       |
+ |        2 |  NWKEY   |   I  | Number of key elements                 |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |  NPARS   |   I  | Number of pairs of validity range (set |
+ |          |          |      | for CDPURK) or -1 for CDPURG           |
+ |        6 |  INSTM   |   I  | Deletion time packed up to minutes     |
+ |          |          |      | (see DBPKTM)                           |
+ |        7 |  ISEL(1) |   I  | The objects to be selected using the   |
+ |       .. |    ...   |      | validity criteria in CDPURK            |
+ |  NPARS+6 |  ISEL(n) |   I  |                                        |
+ |  NPARS+7 |  KEY(1)  |   I  | Key element 1 for CDURK                |
+ |          |   ...    |  ..  |      .........                         |
+ |    NENDK |  KEY(n)  |  ..  | Key element NWKEY for CDPURK           |
+ |        7 |  KYDAT   |   I  | To be used for CDPURG                  |
+ |        8 |  KYTIM   |   I  | To be used for CDPURG                  |
+ |       .. |   ...    |  ..  |                                        |
+ |    NENDK |          |      | NWKEYth word following KYDAT for CDPURG|
+ |  NENDK+1 |  CHOPT   |   H  | Character option                       |
+ |       .. |   ...    |  ..  |                                        |
+ |  NENDK+1 |  PATHN   |   H  | Path name                              |
+ |   +NWDOP |          |      |                                        |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for deleting directories :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=4)                       |
+ |        2 |    ---   |   I  | Unused (set to 0)                      |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |    ---   |   I  | Unused (set to 0)                      |
+ |        6 |  INSTM   |   I  | Deletion time packed up to minutes     |
+ |          |          |      | (see DBPKTM)                           |
+ |        7 |  CHOPT   |   H  | Character option                       |
+ |  NWDOP+7 |  PATHN   |   H  | Path name                              |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for renaming keys :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=5)                       |
+ |        2 |  NWKEY   |   I  | Number of key elements                 |
+ |        3 |  NWDOP   |   I  | Number of words for CHOPT (= 0)        |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |  Unused  |   I  | Set to zero                            |
+ |        6 |  KYO(1)  |   I  | Old key element 1                      |
+ |       .. |   ...    |  ..  |   ........                             |
+ |  NWKEY+5 |KYO(NWKEY)|  ..  | Old key element NWKEY                  |
+ |  NWKEY+6 |  KYN(1)  |   I  | New key element 1                      |
+ |       .. |     ..   |  ..  |   ........                             |
+ |2*NWKEY+5 |KYO(NWKEY)|  ..  | New key element NWKEY                  |
+ |2*NWKEY+6 |  PATHN   |   H  | Path name                              |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for entering/deleting names or help information :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=6)                       |
+ |        2 |  NWKEY   |   I  | Number of key elements                 |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name (DICTIONARY or HELP)         |
+ |        5 |  IFLAG   |   I  | Flag (1 for help information; 2 for    |
+ |          |          |      | names of the data elements)            |
+ |        6 |  KEY(1)  |   I  | Key element 1 ( = Identifier of path)  |
+ |       .. |   ...    |  ..  |   ........                             |
+ |  NWKEY+5 |KEY(NWKEY)|  ..  | Key element NWKEY                      |
+ |  NWKEY+6 |  CHOPT   |   H  | Character option                       |
+ |       .. |   ...    |  ..  |   ........                             |
+ |   NWKEY+ |          |      |                                        |
+ |  NWDOP+6 |  PATHN   |   H  | Path name (DICTIONARY or HELP)         |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for entering the alias name :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=7)                       |
+ |        2 |    ---   |   I  | Unused (set to 0)                      |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT(=0)|
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name of the dictitionary          |
+ |        5 |  IFLAG   |   I  | Flag (0 means temporary; 1 permanent)  |
+ |        6 |   NWDP   |   I  | Number of words used to store the      |
+ |          |          |      | path name                              |
+ |        7 |  PATHD   |   H  | Path name of the dictionary            |
+ |       .. |     ..   |   H  |                                        |
+ |   NDOP+7 |  ALIAS   |   H  | Alias name                             |
+ |       .. |     ..   |   H  |                                        |
+ |   NDOP+9 |  PATHN   |   H  | Path name of the directory             |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for deleting a few partitions in a partitioned directory :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=8)                       |
+ |        2 |    ---   |   I  | Unused (set to 0)                      |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT    |
+ |        4 |   NDOP   |   I  | Number of words used to to store the   |
+ |          |          |      | path name                              |
+ |        5 |  INSTM   |   I  | Deletion time packed up to minutes     |
+ |          |          |      | (see CDPKTM)                           |
+ |        6 |  NKEEP   |   I  | Number of partitions to be kept        |
+ |        7 |  CHOPT   |   H  | Character option                       |
+ |  NWDOP+7 |  PATHN   |   H  | Path name of the directory             |
+ |       .. |     ..   |   H  |                                        |
+ +----------+----------+------+----------------------------------------+
+ 
+   Header for recreation of dictionary record :
+ 
+ +----------+----------+------+----------------------------------------+
+ |Word Count| Mnemonic | Type |         Content                        |
+ +----------+----------+------+----------------------------------------+
+ |        1 |   IACT   |   I  | Action code (=10)                      |
+ |        2 |  NWKEY   |   I  | Number of key elements (=0)            |
+ |        3 |  NWDOP   |   I  | Number of words used to store CHOPT (0)|
+ |        4 |  NDOPI   |   I  | Number of words used to store the      |
+ |          |          |      | path name                              |
+ |        5 |  PATHN   |   H  | Path name                              |
+ +----------+----------+------+----------------------------------------+
+ 
+#endif

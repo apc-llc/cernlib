@@ -1,0 +1,77 @@
+/Imakefile/1.10/Thu Sep 19 16:44:52 2002//
+/abend.c/1.2/Tue Feb  4 17:34:12 1997//
+/accesi.c/1.3/Thu Oct 23 16:25:08 1997//
+/accessf.F/1.1.1.1/Thu Feb 15 17:49:21 1996//
+/apofsz.c/1.2/Tue Feb  4 17:34:13 1997//
+/chdirf.F/1.1.1.1/Thu Feb 15 17:49:21 1996//
+/chdiri.c/1.3/Tue Sep  2 14:26:34 1997//
+/ctimef.c/1.2/Tue Feb  4 17:34:14 1997//
+/datime.c/1.5/Fri Dec 19 16:36:06 1997//
+/datimh.c/1.6/Fri Dec 19 16:36:09 1997//
+/exitf.c/1.2/Tue Feb  4 17:34:16 1997//
+/geteni.c/1.3/Tue Sep  2 14:26:36 1997//
+/getenvf.F/1.1.1.1/Thu Feb 15 17:49:22 1996//
+/getgidf.c/1.2/Tue Feb  4 17:34:18 1997//
+/getpidf.c/1.2/Tue Feb  4 17:34:19 1997//
+/getuidf.c/1.2/Tue Feb  4 17:34:20 1997//
+/getwdf.F/1.1.1.1/Thu Feb 15 17:49:23 1996//
+/getwdi.c/1.3/Tue Sep  2 14:26:36 1997//
+/gmtimef.c/1.2/Tue Feb  4 17:34:21 1997//
+/intrac.c/1.2/Tue Feb  4 17:34:21 1997//
+/jmplong.c/1.3/Thu Oct 23 16:25:09 1997//
+/jmpset.c/1.3/Thu Oct 23 16:25:10 1997//
+/jumptn.c/1.4/Thu Jul 29 14:07:43 2004//
+/jumpxn.c/1.4/Thu Jul 29 14:07:43 2004//
+/kervers.c/1.1/Thu Sep 19 16:44:54 2002//
+/killf.c/1.3/Tue Sep  2 14:26:37 1997//
+/lenocc.c/1.3/Thu Oct 23 16:25:11 1997//
+/lnblnk.c/1.4/Tue Sep  2 14:26:37 1997//
+/locb.c/1.3/Tue Sep  2 14:26:37 1997//
+/locbdummy.c/1.1/Tue Feb  4 17:34:32 1997//
+/locf.c/1.4/Thu Jul 29 14:06:07 2004//
+/locfdummy.c/1.1/Tue Feb  4 17:34:35 1997//
+/lstatf.F/1.1.1.1/Thu Feb 15 17:49:24 1996//
+/lstati.c/1.2/Tue Feb  4 17:34:35 1997//
+/perroi.c/1.3/Tue Sep  2 14:26:38 1997//
+/perrorf.F/1.1.1.1/Thu Feb 15 17:49:25 1996//
+/qnexte.c/1.2/Tue Feb  4 17:34:37 1997//
+/readlnf.F/1.1.1.1/Thu Feb 15 17:49:25 1996//
+/readlni.c/1.2/Tue Feb  4 17:34:37 1997//
+/renamef.F/1.1.1.1/Thu Feb 15 17:49:25 1996//
+/renami.c/1.2/Tue Feb  4 17:34:38 1997//
+/seteni.c/1.2/Tue Feb  4 17:34:38 1997//
+/setenvbsd.c/1.2/Tue Feb  4 17:34:39 1997//
+/setenvf.F/1.1.1.1/Thu Feb 15 17:49:26 1996//
+/setenvsy5.c/1.2/Tue Feb  4 17:34:39 1997//
+/setjmpf.c/1.2/Tue Feb  4 17:34:40 1997//
+/sigbsd.c/1.2/Tue Feb  4 17:34:40 1997//
+/signalf.c/1.3/Wed Oct  6 14:17:01 1999//
+/sigposix.c/1.2/Tue Feb  4 17:34:42 1997//
+/sigprnt.c/1.2/Tue Feb  4 17:34:42 1997//
+/sigunbl.c/1.2/Tue Feb  4 17:34:43 1997//
+/sleepf.c/1.2/Tue Feb  4 17:34:43 1997//
+/statf.F/1.3/Tue Sep  2 14:26:39 1997//
+/stati.c/1.4/Tue Sep  2 14:26:39 1997//
+/systei.c/1.3/Tue Sep  2 14:26:40 1997//
+/systemf.F/1.2/Tue Feb  4 17:34:46 1997//
+/timel.c/1.2/Tue Feb  4 17:34:47 1997//
+/tminit.c/1.2/Tue Feb  4 17:34:48 1997//
+/tmpro.F/1.1.1.1/Thu Feb 15 17:49:28 1996//
+/tmproi.c/1.3/Thu Oct 23 16:25:12 1997//
+/tmread.c/1.2/Tue Feb  4 17:34:49 1997//
+/toslat.F/1.1.1.1/Thu Feb 15 17:49:28 1996//
+/unlini.c/1.3/Tue Sep  2 14:26:40 1997//
+/unlinkf.F/1.1.1.1/Thu Feb 15 17:49:28 1996//
+/vxinvb.c/1.2/Tue Feb  4 17:34:50 1997//
+/vxinvc.c/1.2/Tue Feb  4 17:34:51 1997//
+D/allgs////
+D/dosgs////
+D/hpxgs////
+D/irtdgs////
+D/irtgs////
+D/os9gs////
+D/sgigs////
+D/sungs////
+D/vaogs////
+D/vaxsys////
+D/wntgs////

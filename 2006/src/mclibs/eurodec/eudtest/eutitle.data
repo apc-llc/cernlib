@@ -1,0 +1,133 @@
+!!!!!                        EURODEC Title File                            !!!!!
+!!!!!                                                                      !!!!!
+!!!!!                          Version:  2.  4                             !!!!!
+!!!!!                                                                      !!!!!
+!!!!!                                by                                    !!!!!
+!!!!!                                                                      !!!!!
+!!!!!                     A. Ali      - DESY Hamburg                       !!!!!
+!!!!!                     B. van Eijk - CERN Geneva                        !!!!!
+!!!!!                                                                      !!!!!
+!!!!! |------------------------------------------------------------------| !!!!!
+!!!!! | Version | Who | Date     | Comments                              | !!!!!
+!!!!! |------------------------------------------------------------------| !!!!!
+!!!!! |   1.  1 | BvE |          | Non official Release.                 | !!!!!
+!!!!! |   2.  1 | BvE | 01/01/88 | First official Release.               | !!!!!
+!!!!! |   2.  2 | BvE | 01/02/89 | Pseudoscalar Probability for light and| !!!!!
+!!!!! |         |     |          | heavy Mesons separately selectable,   | !!!!!
+!!!!! |         |     |          | subsequent Fragmentation in Top etc.  | !!!!!
+!!!!! |         |     |          | Decays (not b ---> c !) optional.     | !!!!!
+!!!!! |   2.  3 | BvE | 15/04/89 | Possibility to keep Particles stable, | !!!!!
+!!!!! |         |     |          | Switch for Printing modified branching| !!!!!
+!!!!! |         |     |          | Ratios added.                         | !!!!!
+!!!!! |   2.  4 | BvE | 07/08/89 | Cards for Seeds random Number Genera- | !!!!!
+!!!!! |         |     |          | tor and Onium Potential added.        | !!!!!
+!!!!! |------------------------------------------------------------------| !!!!!
+!!!!!                                                                      !!!!!
+!!!!! This describes an example of the use of data cards which allows the  !!!!!
+!!!!! user of the EUROJET fragmentation and decay package (EURODEC) to     !!!!!
+!!!!! modify the default setting of parameters in the program.             !!!!!
+!!!!! Each record (of 80 characters) should start in the first column,     !!!!!
+!!!!! Lines starting with a '!' in the first column are discarded,         !!!!!
+!!!!! Qualifiers should start with '/',                                    !!!!!
+!!!!! After all keywords and qualifiers have been specified, comments may  !!!!!
+!!!!! be included by adding '!COMMENT',                                    !!!!!
+!!!!! The file should always be closed by the keyword 'ENDLIST '           !!!!!
+!!!!! Both keywords and qualifiers should be in capitals whereas particle  !!!!!
+!!!!! names should always cover a field of 8 characters.                   !!!!!
+!!!!!                                                                      !!!!!
+!
+PARTICLE PROPERTIES/NAME=K      -/STABLE                               !OPTIONAL
+!
+PARTICLE PROPERTIES/NAME=PI     -/STABLE                               !OPTIONAL
+!
+PARTICLE PROPERTIES/NAME=TOP     /MASS=60.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=LOW     /MASS=100.00000                        !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=HIGH    /MASS=160.00000                        !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=SIGMA  -/MASS=40.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=HIGGS0  /MASS=9.60000                          !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=HIGGS  +/MASS=23.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=W      +/MASS=82.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=Z0      /MASS=93.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=QL1     /MASS=10.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=QL2     /MASS=20.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=QL3     /MASS=80.00000                         !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=QL4     /MASS=200.00000                        !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=KLONG   /LIFETIME=0.8923E-08                   !DEFAULT
+!
+PARTICLE PROPERTIES/NAME=W      +/WIDTH=2.636                           !DEFAULT
+!
+!PARTICLE PROPERTIES/NAME=HIGGS  +/MASS=23.00000/FORCE DECAY:          !OPTIONAL
+!/TAU    +/TAUNEU                                                      !OPTIONAL
+!
+!PARTICLE PROPERTIES/NAME=HIGGS  -/FORCE DECAY:                        !OPTIONAL
+!/TAU    -/TAUNEU B                                                    !OPTIONAL
+!
+QCD PARTON SHOWER/ON                                            !SEE USER MANUAL
+!
+DEFAULT DECAY RATIOS/OFF/NOPRINT                                        !DEFAULT
+!
+PARTICLE MASS SMEARING/OFF                                              !DEFAULT
+!
+ONIUM POTENTIAL/RICHARDSON                                              !DEFAULT
+!
+STABLE PARTICLE LIFETIME/VALUE=1.E+12                                   !DEFAULT
+!
+QUARK DEPOLARIZATION/VALUE=0.5                                          !DEFAULT
+!
+WEINBERG ANGLE/VALUE=0.22                                               !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=UP      /VALUE=0.89                        !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=DOWN    /VALUE=0.89                        !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=STRANGE /VALUE=0.89                        !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=CHARM   /VALUE=0.05                        !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=BOTTOM  /VALUE=0.015                       !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=TOP     /VALUE=0.00025                     !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=LOW     /VALUE=0.0001                      !DEFAULT
+!
+FRAGMENTATION PARAMETER/NAME=HIGH    /VALUE=0.0001                      !DEFAULT
+!
+FRAGMENTATION HEAVY DECAYS/ON                                           !DEFAULT
+!
+MESON PROBABILITY/VALUE=0.90                                            !DEFAULT
+!
+LIGHT PSEUDOSCALAR PROBABILITY/VALUE=0.5                                !DEFAULT
+!
+HEAVY PSEUDOSCALAR PROBABILITY/VALUE=0.6667                             !DEFAULT
+!
+VACUUM EXPECTATION/NAME=STRANGE /VALUE=0.15                             !DEFAULT
+!
+VACUUM EXPECTATION/NAME=US      /VALUE=0.15                             !DEFAULT
+!
+VACUUM EXPECTATION/NAME=SS      /VALUE=0.10                             !DEFAULT
+!
+WEAK MIXING/NAME=D0      /VALUE=0.0                                     !DEFAULT
+!
+WEAK MIXING/NAME=B0      /VALUE=0.0                                     !DEFAULT
+!
+WEAK MIXING/NAME=BS0     /VALUE=0.0                                     !DEFAULT
+!
+!PRIMARY VERTEX/X-WIDTH=0./Y-WIDTH=0./Z-WIDTH=0.                        !DEFAULT
+!
+!SECONDARY VERTICES/OFF                                                 !DEFAULT
+!
+RANDOM SEED/SEED1=1802/SEED2=9373                                       !DEFAULT
+!
+ENDLIST

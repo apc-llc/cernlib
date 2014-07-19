@@ -1,0 +1,5 @@
+SRCS_S= \ @@\
+	 cfact.s cfeqn.s cfinv.s dfact.s dfeqn.s dfinv.s rfact.s rfeqn.s \ @@\
+	 rfinv.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

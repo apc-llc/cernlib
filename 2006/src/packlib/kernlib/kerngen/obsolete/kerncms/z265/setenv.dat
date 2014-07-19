@@ -1,0 +1,48 @@
+*
+* $Id: setenv.dat,v 1.1.1.1 1996/02/15 17:51:53 mclareni Exp $
+*
+* $Log: setenv.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:53  mclareni
+* Kernlib
+*
+*
+/*DECK ID>, setenv.exec */
+/*********************************************************************
+ *                                                                   *
+ * SETENV EXEC v1.04                                                 *
+ *                                                                   *
+ * Emulation of the Unix command. Used as a function returns the val.*
+ *                                                                   *
+ * Author: M.Marquina 90/05/10                                       *
+ *                                                                   *
+ * Mods       Date   Comments                                        *
+ * MARQUINA 90/11/01 Use Address Command                             *
+ *          91/03/12 Support DISPLAY                                 *
+ *          91/03/12 Add STACK option                                *
+ *          92/03/07 Strip off leading+trailing quotes (as UNIX)     *
+ *                                                                   *
+ *********************************************************************/
+   Address Command
+   Arg var value "(" options
+ 
+   Parse Source . act .
+   f.fnc  = act='FUNCTION'
+   f.stack= 'FIND'(options,"STACK")
+   'IDENTIFY ( LIFO'
+   Parse Pull . . node .
+ 
+      group="*"node
+   If var="DISPLAY" Then Do
+      group="CENV" ; 'GLOBAL TXTLIB IBMLIB'
+      If 'INDEX'(value,":")=0 Then value=value":0"
+   End
+   If var^="" & ^f.stack Then Do
+     If f.fnc Then Do
+        'GLOBALV SELECT' group 'GET' var
+        Return 'VALUE'(var)
+     End
+        value='STRIP'(value,,"'")
+        value='STRIP'(value,,'"')
+        'GLOBALV SELECT' group 'SETL' var value
+   End
+   Else 'GLOBALV SELECT' group 'WORD'("LIST STACK",f.stack+1) var

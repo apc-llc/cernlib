@@ -1,0 +1,23 @@
+*
+* $Id: fatstack.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fatstack.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FATSTACK.EXEC */
+/* Exec to Stack a line (LIFO or FIFO) */
+Parse arg line '(' options ')' .
+options = translate(options)
+Say 'FATSTACK. enter for arg=' line ' options = 'options
+if strip(options) = '' then options = 'FIFO'
+if options ^= 'FIFO' & options ^='LIFO' then do
+   Say 'Invalid option: 'options
+   Exit 1
+   end
+   else do
+   if options = 'FIFO' then queue line
+                       else push  line
+   Exit 0
+   end

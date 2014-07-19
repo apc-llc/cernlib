@@ -1,0 +1,93 @@
+/* $Id: Imakefile,v 1.1.1.1 1995/12/20 15:26:45 cernlib Exp $
+ *
+ * $Log: Imakefile,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:45  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM $XConsortium: Imakefile,v 1.32 94/04/09 21:46:51 rws Exp $
+
+#ifdef LocalConfigFiles
+LOCALFILES = LocalConfigFiles
+#endif
+
+DEFFILES = \
+site.def
+
+RULEFILES = \
+Imake.rules \
+Win32.rules \
+hpLib.rules \
+bsdLib.rules \
+ibmLib.rules \
+lnxLib.rules \
+necLib.rules \
+noop.rules \
+oldlib.rules \
+osfLib.rules \
+sgiLib.rules \
+sunLib.rules \
+sv4Lib.rules \
+xf86.rules
+
+TMPLFILES = \
+Imake.tmpl \
+Fresco.tmpl \
+Ixx.tmpl \
+bsdLib.tmpl \
+lnxLib.tmpl \
+Library.tmpl \
+Project.tmpl \
+Server.tmpl \
+Threads.tmpl \
+WinLib.tmpl \
+hpLib.tmpl \
+ibmLib.tmpl \
+necLib.tmpl \
+osfLib.tmpl \
+sunLib.tmpl \
+sv4Lib.tmpl
+
+CFFILES = \
+Imake.cf \
+Amoeba.cf \
+DGUX.cf \
+Mips.cf \
+NetBSD.cf \
+FreeBSD.cf \
+Oki.cf \
+Win32.cf \
+apollo.cf \
+bsd.cf \
+bsdi.cf \
+convex.cf \
+cray.cf \
+fujitsu.cf \
+generic.cf \
+hp.cf \
+ibm.cf \
+linux.cf \
+luna.cf \
+macII.cf \
+moto.cf \
+ncr.cf \
+nec.cf \
+osf1.cf \
+pegasus.cf \
+rtcchack.bac \
+sequent.cf \
+sgi.cf \
+sony.cf \
+sun.cf \
+svr4.cf \
+ultrix.cf \
+usl.cf \
+x386.cf \
+xfree86.cf
+
+INSTFILES = $(RULEFILES) $(TMPLFILES) $(DEFFILES) $(CFFILES) $(LOCALFILES)
+
+all::
+
+InstallMultipleDestFlags(install,$(INSTFILES),$(CONFIGDIR),$(INSTDATFLAGS))

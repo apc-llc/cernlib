@@ -1,0 +1,37 @@
+*
+* $Id: fatzero.dat,v 1.1.1.1 1996/03/07 15:17:52 mclareni Exp $
+*
+* $Log: fatzero.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+#   Ensure that variables are defined...
+#
+for i in /fatmen/fm*
+ 
+   do
+ 
+      typeset -u fatgrp
+      fatpath=$i
+      fatgrp=`basename $i`
+      eval $fatgrp=$fatpath;export $fatgrp
+#
+# Look for startable servers (fatserv exists)
+#
+      if [ -x ${i}/fatserv ]
+      then
+#
+# Zero files?
+#
+      for i in ${i}/todo/*
+ 
+      do
+         [ ! -s ${i} ] && echo zero length file in TODO for ${fatgrp} | \
+            mail -s " ${i}: zero length file " fatcat-mgr@zfatal.cern.ch
+      done
+ 
+      fi
+   done

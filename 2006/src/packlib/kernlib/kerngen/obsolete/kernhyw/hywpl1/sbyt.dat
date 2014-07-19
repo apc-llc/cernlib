@@ -1,0 +1,25 @@
+*
+* $Id: sbyt.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: sbyt.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+sbyt   : proc (a, x, lx, nbits);
+ 
+/* *****************************************************************
+   *                                                               *
+   * sbyt(a,x,lx,nbits)       mettre les derniers nbits de a       *
+   *                          dans bits lx a lx-nbits-1 de x       *
+   *                                                               *
+   ***************************************************************** */
+ 
+dcl (a, x, lx, nbits) bin fixed (35);
+ 
+          substr (unspec (x), 38-lx-nbits, nbits) =
+substr (unspec (a), 37-nbits, nbits);
+     END sbyt;
+#ifdef CERNLIB_TCGEN_SBYT
+#undef CERNLIB_TCGEN_SBYT
+#endif

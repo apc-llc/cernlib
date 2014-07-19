@@ -1,0 +1,42 @@
+*
+* $Id: uctoh1.s,v 1.1.1.1 1996/02/15 17:54:50 mclareni Exp $
+*
+* $Log: uctoh1.s,v $
+* Revision 1.1.1.1  1996/02/15 17:54:50  mclareni
+* Kernlib
+*
+*
+       MODULE M_UCTOH1
+%
+% CERN PROGLIB# M409    UCTOH1          .VERSION KERNNOR  1.13  811202
+% ORIG.  H.OVERAS, CERN, 811201
+%
+% CALL UCTOH1(CHAR,A1,NCH)      CONVERT CHAR TO HOLLERITH A1
+%                          HOLLERITH INPUT IF TYPE CHARACTER UNLIKELY
+%
+       EXPORT UCTOH1
+       ROUTINE UCTOH1
+       LIB UCTOH1
+VBAS:  STACK FIXED
+PAR:   W BLOCK 3
+       ENDSTACK
+UCTOH1:  ENTF VBAS
+       W1:=0
+       W2:=IND(B.PAR+8)
+       IF<=GO OUT
+       W2-1
+       W RLADDR IND(B.PAR)
+       W COMP2 R.0,177777B %IF LEN TOO BIG, TRY HOLLERITH
+       IF > GO BEGLP
+       W MOVE R.4,B.PAR %CHANGE POINTER TO STRING ITSELF
+BEGLP: BY3:=IND(B.PAR)(R1)
+       W SHR R3,-8
+       W3+10020040B
+       W3=:IND(B.PAR+4)(R1)
+       W LOOPI R1,R2,BEGLP
+OUT:   RET
+       ENDROUTINE
+       ENDMODULE
+#ifdef CERNLIB_TCGEN_UCTOH1
+#undef CERNLIB_TCGEN_UCTOH1
+#endif

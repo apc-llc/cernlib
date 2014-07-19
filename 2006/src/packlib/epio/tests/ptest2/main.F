@@ -1,0 +1,83 @@
+*
+* $Id: main.F,v 1.1.1.1 1996/03/08 15:21:45 mclareni Exp $
+*
+* $Log: main.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:45  mclareni
+* Epio
+*
+*
+#if !defined(CERNLIB_ND100B16)
+#include "pilot.h"
+#if defined(CERNLIB_CDC)
+      PROGRAM PTEST(OUTPUT,TAPE11,TAPE12,TAPE13)
+#endif
+#include "testc.inc"
+      IPADUL=3
+#if defined(CERNLIB_HLESS)
+C--- SUPPRESS UNPADDED HEADERLESS BLOCKS
+      IPADUL=2
+#endif
+C--- RESET DEBUG FLAG
+      DBUGFL=.FALSE.
+C--- NWOUT = NO. OF WORDS / RECORD
+      NWOUT=5000
+C--- NREC = NO. OF IDENTICAL RECORDS WRITTEN EACH TIME
+      NREC=1
+      NH=9
+      PRINT 2001
+      CALL EPINIT
+C--- DEFINE HEADER
+      DO 1  I=1,NH
+    1 IH(I)=100+I
+C--- WRITE TEST DATA ONTO UNIT 11
+      NPASS=1
+*    TEST 32 BIT PHYSICAL HEADERS
+#if defined(CERNLIB_PH32BIT)
+      CALL EPSETW(11,29,1,IERR)
+#endif
+#if defined(CERNLIB_IBM)
+      CALL VMCMS(
+     -'FILEDEF IOFILE11 DISK EPIOT1 DATA A (RECFM U BLOCK 3600',IVMERR)
+      CALL VMCMS(
+     -'FILEDEF IOFILE12 DISK EPIOT2 DATA A (RECFM U BLOCK 3600',IVMERR)
+      CALL VMCMS(
+     -'FILEDEF IOFILE13 DISK EPIOT3 DATA A (RECFM U BLOCK 3600',IVMERR)
+#endif
+      CALL WR11
+      PRINT 2004,NPASS
+      CALL EPRWND(11,IBUF11,IERR)
+      IF(IERR.NE.0)  CALL ERREX(36)
+#if (defined(CERNLIB_VAX))&&(defined(CERNLIB_HLESS))
+      CLOSE(11)
+#endif
+C--- READ 11, WRITE 12 + 13
+      CALL RWR123
+#if (defined(CERNLIB_VAX))&&(defined(CERNLIB_HLESS))
+      CLOSE(12)
+      CLOSE(13)
+#endif
+      PRINT 2005,ICALL
+C--- REWIND ALL THREE, READ BACK AND CHECK WITH
+C    HEADER BUFFER CUT, DATA BUFFER CUT, NORMAL BUFFER
+      CALL TEST2
+C--- TERMINATE
+      PRINT 3001
+      STOP
+#if !defined(CERNLIB_CDC)
+2001  FORMAT('1 ++++++++++ EPTEST2 - START OF EXECUTION ++++++++')
+2004  FORMAT(/,' ROUTINE WR11 SUCCESSFUL, PASS =',I5)
+2005  FORMAT(/,' ROUTINE RWR123 SUCCESSFUL - NO. OF REC.S =',I10,//)
+3001  FORMAT(///,1X,10(10H++++++++++),//,
+     1          '        EPTEST2 - NORMAL TERMINATION, ALL TESTS DONE',
+     2    //,   1X,10(10H++++++++++),/////)
+#endif
+#if defined(CERNLIB_CDC)
+2001  FORMAT("1 ++++++++++ EPTEST2 - START OF EXECUTION ++++++++")
+2004  FORMAT(/," ROUTINE WR11 SUCCESSFUL, PASS =",I5)
+2005  FORMAT(/," ROUTINE RWR123 SUCCESSFUL - NO. OF REC.S =",I10,//)
+3001  FORMAT(///,1X,10(10H++++++++++),//,
+     1          "        EPTEST2 - NORMAL TERMINATION, ALL TESTS DONE",
+     2    //,   1X,10(10H++++++++++),/////)
+#endif
+      END
+#endif

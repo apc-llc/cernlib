@@ -1,0 +1,234 @@
+*
+* $Id: v4_22,v 1.1.1.1 1996/01/16 17:08:11 mclareni Exp $
+*
+* $Log: v4_22,v $
+* Revision 1.1.1.1  1996/01/16 17:08:11  mclareni
+* First import
+*
+*
+*CMZ :  4.22/14 14/10/94  12.20.44  by  Rene Brun
+*-- Author :    Rene Brun   30/03/94
+*
+*::>          VERSION  4.22/14   14/10/94 12.20.44
+*
+*    Due to some early design mistake PAW expects all character columns to
+*    be returned in character*32 variables instead of in variables of the
+*    original size. For single character variables this was fine, however
+*    character array columns were not restored correctly (unless they had
+*    an original size of 32). To fix this HBOOK has to know if the Ntuple
+*    is read back by PAW. Bit 3 in the status word of the first block is
+*    set in this case (in HBNAM). HGNT2 and HGNTF check this bit in case
+*    of character arrays. Routines modified: HBNAM, HGNT2, HGNTF, HNTGET,
+*    HRIN.
+*
+*::>          VERSION  4.22/13   28/09/94 08.40.30
+*
+*    Change in HBUG. When LERR.LE.0 error messagse are not printed.
+*
+*    HNTDEL: fix UHTOC call (don't multiply NCHRZ by 4).
+*
+*    Change default quota to 32000 records in HRFILE
+*
+*::>          VERSION  4.22/12   19/09/94 11.16.36
+*
+*    Move VIDQQ sattement in HLIMAP to avoid problem with F2C.
+*
+*::>          VERSION  4.22/11   05/09/94 13.36.29
+*
+*    Many decks indented.
+*
+*    New option in HLIMAP.
+*    When the first parameter LIMIT=0, an existing shared memory
+*    is attached as the current directory. In this case, HLIMIT must have been
+*    called before.
+*
+*    Changes in HDIFF to solve numerical problems (precision).
+*
+*    Extend range of formats in HINDEX and HINPRX.
+*
+*    Bug corrected in HRESETM1 and HREZ0M in case of profile histograms
+*    or histograms with error bars (bug reported by W.Brueckner)
+*
+*    Protection in HFCXY for large real numbers
+*
+*::>          VERSION  4.22/10   04/08/94 14.58.02
+*
+*    Routine HALLOC:
+*    Free all Ntuple buffers or all buffers belonging to Ntuples in
+*    the same unit.
+*    If lun<0 free all Ntuple buffers that are in use (do this from an
+*    exception handler in case the filling of the buffers was
+*    interrupted).
+*
+*    Modification in HREBIN. If IFIRST<0 then do not normalize Y values
+*
+*    Bug corrected in HMINUT when option 'E' is specified.
+*      NARGS must be set to 0 before calling MNEXCM in this case.
+*      (Problem reported by Marcos Dracos)
+*
+*    Profile histograms can be filled with weights (mods in HFILPF)
+*
+*::>          VERSION  4.22/09   27/07/94 18.45.44
+*
+*    Implement calculation of errors in HOPERA for 2-D histograms
+*
+*    Deck HALLOC: force refill of Ntuple cache also when event range changes.
+*                 added new routine HBFREEC to free cache associated
+*                 with chains.
+*
+*    Routine HBALLOC: pass also first event (to define event range).
+*
+*    Routine HGNT1: accepts dynamic buffer offsets as argument (used by
+*    HGNTBF).
+*
+*    Routines HGNT, HGNTV, HGNTB: changed call to HGNT1 accordingly.
+*
+*    Routine HGNT2: check for the usage of the cache for each variable
+*    instead of only once.
+*
+*    Routine HGNTBF: completely re-written. Does not read a whole column
+*    in cache anymore. Is now a convenient front-end for HGNT2 with the
+*    IVOFF cache offsets set.
+*
+*    New routine HCPOFF: copy cache offsets into an array IVOFF. This array
+*    is used in case of chains in PAW to continue filling the cache in the
+*    place where the last call to HGNTF stoped.
+*
+*::>          VERSION  4.22/08   15/07/94 09.31.43
+*
+*    Modify calling sequence of HNTDUP (new convention for NEWBUF)
+*
+*    New routine HBGMAX in HALLOC to return the maximum amount of memory
+*    that may be malloced.
+*
+*    Protection in HSCR in file in READ only mode
+*
+*    New routine HCONVOL introduced (Per Steinar Iversen)
+*    See comments in routine
+*
+*    Modify dummy calls to HFUNC,HSUPIM,HSUPIS to avoid intercompilation
+*    analysis message on Alpha/VMS.
+*
+*::>          VERSION  4.22/07   28/06/94 17.44.26
+*
+*    New routine HMERGE(Nfiles,Files,Filout)
+*    New Routine HMERGIN calls HMERGE
+*
+*::>          VERSION  4.22/06   28/06/94 08.25.18
+*
+*    Mods in HRFILE to take into account possible new option 'N' in RZMAKE
+*
+*    HRESET can reset ntuples
+*    New routine HNTRSET called by HRESET for CWNtuples
+*
+*    Implement new option 'K' in HMINUT
+*
+*::>          VERSION  4.22/05   21/06/94 18.38.39
+*
+*    Deck HALLOC: fix in case malloc and realloc fail.
+*
+*    Routine HMERGE: need option X in HROPEN for auto-record length
+*    detection to work on Alpha/OSF/VMS.
+*
+*    Routine HNTDUP: updated some comments.
+*
+*    Mods in HMINUT.
+*    Set the FNIX and FEPS parameters in agreement with the MINUIT definition.
+*    Defaults are unchanged. FNIX and FEPS can be modified via
+*    the routine HSETPR or PAW command HSETPR.
+*
+*    New routine HBAR2 to store errors for 2-D histograms
+*    Routines HF2,HPAKE,HUNPKE,HFITH1 modified in consequence
+*
+*    hfithc - protection against deviation being 0 is introduced
+*
+*    hminut - correction MINUIT save file ISAV=7
+*
+*    Protection in HNTNAM in case of misalignement (INTEGER*4 mixed
+*    with REAL*8 variables in the same block).
+*
+*::>          VERSION  4.22/04   08/06/94 11.38.01
+*
+*    Routine HRENAME: works now also for CWN's.
+*
+*    Routine HBNT: in case of memory resident Ntuple set IQ(LCID+ZNCHRZ)=0.
+*
+*    Routine HUWFUN: cosmetic change.
+*
+*    New routine HNTDUP: duplicates a complete Ntuple header. Works for
+*    CWN's as well as RWN's.
+*
+*    New routine HNTVDEF: returns a complete variable definition. Used
+*    by HNTDUP (works for CWN's and RWN's).
+*
+*    New patch HMERGE: this patch contains the program HMERG that can merge
+*    hbook files with identical objects. Histograms are added and
+*    Ntuples are combined. Works for CWN's and RWN's.
+*    HMERG is the main program (to be selected with option MAIN). It calls
+*    the main control routine HMERGE (user callable).
+*
+*    Implement proposal from Stephane Coutu for the computation of errors
+*    for profile histograms (see routine HBPROF)
+*
+*    Add TYPE declaration to several sequences
+*
+*    Changes in HIDOPT for option SHOW
+*       Options PROS or PROE are displayed with option SHOW
+*
+*    Mods in HCX for the computation of errors for profile histograms.
+*    With the previous versions, channels with one entry only had
+*    an error=0. Now the error is teh sqrt(abs(content)).
+*
+*    Mystyping in HWPDCL  (PAWR8 instead of PAWCR8
+*
+*::>          VERSION  4.22/03   30/05/94 14.10.33
+*
+*    Routine HLNEXT supports RLOGIN directories
+*
+*    New routine HRENAME(ID,CHOLD,CHNEW) to rename columns of ntuples
+*
+*    Bug fixed in HCDIR in case of subdirectories (hrout, option T, then HREND)
+*
+*::>          VERSION  4.22/02   19/05/94 12.07.56
+*
+*    Several changes in patch HMCSTAT (Christine Beeston)
+*    >1) I've fixed the bug with the number of entries - I now use HSUM instead
+*    >of HNOENT to get the number of entries in a histogram, since including
+*    >the underflows and overflows messes up the normalisation of the result.
+*    >
+*    >2) The user can now do multiple simultaneous fits (this was requested and
+*    >seems useful) - to do this they must call HMCINI once for each set of
+*    >histograms (each fit will have a data histogram and a set of monte carlo
+*    >and weight histograms), and then
+*    >HMCLNL must be called with the histogram identifiers and number of MC
+*    >sources, as well as the fractions.
+*    >
+*    >HMCMLL already uses the new HMCLNL, I have left the old HMCLNL as HMCLNO,
+*    >but will delete it in a couple of months.
+*    >
+*    >HMCINI and the new and old versions of HMCLNL both contain a banner
+*    >announcing the change, as it's not backwards compatible.
+*    >
+*    >The weight histograms may be used for more than one of the
+*    >fits if necessary - a check is made to make sure that they are not
+*    >normalised more than once.
+*
+*    Minor change in HRENDC (nchmax=nchtop before loop)
+*
+*    Mods in HMINUT to compute an equivalent chisquare in case
+*    of a log-likelihood fit
+*
+*    Bug fixed in HPAK in case weights <1.e-5 (number of entries was wrong)
+*
+*    Protection in HREND (NCHTOP was changed in the loop)
+*
+*::>          VERSION  4.22/01   07/04/94 09.04.32
+*
+*    Bug corrected in HFC1 in case of empty histograms with one bin only
+*
+*::>          VERSION  4.22/00   30/03/94 09.53.07
+*
+*    Bug fixed in HBOOKN (IQ(LCIDN+5) set to ID) for disk-resident tuples
+*    This bug affected HBOOK jobs calling HPROJ1,HPROJ2, HGN or HGNF when
+*    the ntuple header was not written to the file
+*

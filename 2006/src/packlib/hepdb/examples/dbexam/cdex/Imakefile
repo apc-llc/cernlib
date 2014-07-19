@@ -1,0 +1,7 @@
+SRCS_F=	 blandeck.F cderrms.F cdex.F cdex_db.F cdex_ux.F \ @@\
+	cdexe1.F cdi_mess.F cdx_end.F cdx_mess.F cdxini0.F cdxiniz.F \ @@\
+	cdxseq.F cdzseq.F cxaaaa.F cxddir.F cxlist.F cxmdir.F cxnew.F \ @@\
+	cxopen.F cxpaw.F cxpref.F cxpurg.F cxtext.F cxtime.F dbread.F \ @@\
+	rzxchch.F rzxseq.F texpkj.F uxnewp.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

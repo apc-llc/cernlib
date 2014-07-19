@@ -1,0 +1,42 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:44 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:44  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNHPX)
+
+UP-DATE  1.03 :  11-May-1994
+----------------------------
+
+Replacing file   KERNHPX  1.02  920521 16.28
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+---------------------------------------------------------------------
+
+UP-DATE  1.02 :  11-May-1992
+----------------------------
+
+Replacing file   KERNHPX 1.01  920304 18.56
+
+New Decks:    LENOCC, LNBLNK                      for speed
+
+---------------------------------------------------------------------
+
+UP-DATE  1.01 :   4-mar-1992
+----------------------------
+
+Replacing file   KERNHPX 1.00  910313 18.10
+
+Correct:      D=FFSIZE
+
+---------------------------------------------------------------------
+
+          First release of the KERNHPX  Pam :  25-FEB-1991
+
+---------------------------------------------------------------------
+
+#endif

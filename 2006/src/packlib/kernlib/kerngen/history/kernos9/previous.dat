@@ -1,0 +1,17 @@
+*
+* $Id: previous.dat,v 1.1.1.1 1996/02/15 17:50:46 mclareni Exp $
+*
+* $Log: previous.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:46  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNOS9)
+
+---------------------------------------------------------------------
+ 
+          First release of the KERNOS9  Pam :  21-MAY-1992
+ 
+---------------------------------------------------------------------
+ 
+#endif

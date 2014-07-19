@@ -1,0 +1,31 @@
+*
+* $Id: timed.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: timed.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+timed  : proc (t);
+ 
+/* *****************************************************************
+   *                                                               *
+   * timed(t) :     t nombre de secondes depuis dernier appel      *
+   *                si pas appele depuis debut du process          *
+   *                                                               *
+   ***************************************************************** */
+dcl  t bin fixed (35);
+dcl  vti fixed bin (71) static init (0);
+dcl  vclock builtin;
+dcl (vt, vtt) bin fixed (71);
+ 
+          vt = vclock ();
+          vtt = vt;
+          vt = vt-vti;
+          vti = vtt;
+          t = vt/1000000;
+          return;
+     END timed;
+#ifdef CERNLIB_TCGEN_TIMED
+#undef CERNLIB_TCGEN_TIMED
+#endif

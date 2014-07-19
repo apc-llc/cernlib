@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 iandetc.F uflint.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

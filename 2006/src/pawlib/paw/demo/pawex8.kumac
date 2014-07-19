@@ -1,0 +1,25 @@
+MACRO PAWEX8  1=8
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 8                           *
+* Plot a one-dimensional function and loop                               *
+* The Macro parameter is the number of plot to draw on the picture       *
+* The defaults is 8                                                      *
+**************************************************************************
+Exec ALLDEF
+SET DMOD 1
+SET XTIC 0.0001
+SET YTIC 0.0001
+SET Xval 100.
+SET Yval 100.
+OPT utit
+FUN/PLOT X*SIN(X) -10 10
+FUN/PLOT X*COS(X)*SIN(X) -10 10 S
+A=[1]-1
+LOOP:
+  FUN/PLOT X*SIN(X)*[A]/[1] -10 10 S
+  FUN/PLOT X*COS(X)*SIN(X)*[A]/[1] -10 10 S
+A=[A]-1
+IF [A]>0 GOTO LOOP
+opt htit
+RETURN
+

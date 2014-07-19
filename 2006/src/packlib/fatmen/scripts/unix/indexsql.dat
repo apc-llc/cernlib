@@ -1,0 +1,13 @@
+*
+* $Id: indexsql.dat,v 1.1.1.1 1996/03/07 15:17:51 mclareni Exp $
+*
+* $Log: indexsql.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:51  mclareni
+* Fatmen
+*
+*
+typeset -l group
+typeset -u ugroup
+group=$1
+ugroup=${1#'FM'}
+sed "s/THRONG/${ugroup}/g" $HOME/sql/indexfat.sql > $HOME/sql/ix${group}.sql

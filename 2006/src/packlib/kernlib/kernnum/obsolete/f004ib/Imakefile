@@ -1,0 +1,5 @@
+SRCS_S= \ @@\
+	 cmmla.s cmmls.s cmmlt.s cmmltc.s cmnma.s cmnms.s dmmla.s dmmls.s \ @@\
+	 dmmlt.s dmnma.s dmnms.s rmmla.s rmmls.s rmmlt.s rmnma.s rmnms.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

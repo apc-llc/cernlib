@@ -1,0 +1,143 @@
+
+C-       CHECKWHERE GIVES A ALPHABETIC LIST OF THE GENERAL
+C-       SECTION ROUTINES WHICH ARE CHECKED BY MICKY.
+C-       THE LIST ALSO GIVES THE PATCH AND DECK OF THE MICKYPAM
+C-       WHERE THE ROUTINE IS CHECKED (AND TIMED, IF timing option).
+C-
+C-
+C-       LIST OF CHECKED ROUTINES
+C-
+C-  ROUTINE   PATCH    DECK            Comment
+C-
+C-  ACOS      PDIV     TTRIGO
+C-  AMAXMU    PDIV     TMAXMU          timing option
+C-  ASIN      PDIV     TTRIGO
+C-  CBYT      NPBYT    TBYT            timing option
+C-  CROSS     PVECT    TCROSS          timing option
+C-  DOTI      PVPACK   TVEC
+C-  ICNTH     PM432    TICNTH
+C-  ICNTHL    PM432    TICNTH
+C-  ICNTHU    PM432    TICNTH
+C-  INCBYT    NPBYT    TVCBYT
+C-  IUBACK    PCHAR    TBABY
+C-  IUBIN     PUTIL    TIUCHA          timing option
+C-  IUCHAN    PUTIL    TIUCHA          timing option
+C-  IUCOMP    PUTIL    TIUCOM          timing option
+C-  IUEND     PCHAR    TBABY
+C-  IUFIND    PUTIL    TIUCOM
+C-  IUFORW    PCHAR    TBABY
+C-  IUHIST    PUTIL    TIUCHA          timing option
+C-  IUHUNT    PUTIL    TIUCOM
+C-  IULAST    PCHAR    TBABY
+C-  IULOOK    PCHAR    TBABY
+C-  IUNEXT    PCHAR    TBABY
+C-  IUSAME    PUTIL    TIUSAM          timing option
+C-  JBIT      NPBYT    TBYT            timing option
+C-  JBYT      NPBYT    TBYT            timing option
+C-  JBYTET    NPBYT    TBYT            timing option
+C-  JBYTPK    NPBYT    TVCBYT
+C-  JRSBYT    NPBYT    TBYT
+C-  LENOCC    PM432    TLENOC          timing option
+C-  LNBLNK    PM432    TLENOC          timing option
+C-  LOCBYT    PUTIL    TIUCOM
+C-  LORENB    PVECT    TLOR            timing option
+C-  LORENF    PVECT    TLOR            timing option
+C-  LOREN4    PVECT    TLOR            timing option
+C-  LVMAX     PVPACK   TVEC
+C-  LVMAXA    PVPACK   TVEC
+C-  LVMIN     PVPACK   TVEC
+C-  LVMINA    PVPACK   TVEC
+C-  MBYTOR    NPBYT    TMBYT           timing option
+C-  MBYTET    NPBYT    TMBYT           timing option
+C-  MCBYT     NPBYT    TMBYT           timing option
+C-  MSBIT     NPBYT    TMBYT           timing option
+C-  MSBIT0    NPBYT    TMBYT           timing option
+C-  MSBIT1    NPBYT    TMBYT           timing option
+C-  MSBYT     NPBYT    TMBYT           timing option
+C!  MXEQU     PMATRIX  TMXEQU          timing option
+C!  MXEQU1    PMATRIX  TMXEQU          timing option
+C-  MXMAD     PMATRIX  TMXM            timing option
+C-  MXMAD1    PMATRIX  TMXM            timing option
+C-  MXMAD2    PMATRIX  TMXM            timing option
+C-  MXMAD3    PMATRIX  TMXM            timing option
+C-  MXMLRT    PMATRIX  TMXM
+C-  MXMLTR    PMATRIX  TMXM
+C-  MXMPY     PMATRIX  TMXM            timing option
+C-  MXMPY1    PMATRIX  TMXM            timing option
+C-  MXMPY2    PMATRIX  TMXM            timing option
+C-  MXMPY3    PMATRIX  TMXM            timing option
+C-  MXMUB     PMATRIX  TMXM            timing option
+C-  MXMUB1    PMATRIX  TMXM            timing option
+C-  MXMUB2    PMATRIX  TMXM            timing option
+C-  MXMUB3    PMATRIX  TMXM            timing option
+C-  MXTRP     PMATRIX  TMXTRP          timing option
+C-  MXUTY     PMATRIX  TMXUTY          timing option
+C-  PKBYT     NPBYT    TVCBYT
+C-  PKCHAR    PCHAR    TPKCH           timing option
+C-  PROXIM    PDIV     TTRIGO
+C-  PSCALE    PDIV     TSCALE
+C-  ROT       PVECT    TROT            timing option
+C-  SBIT      NPBYT    TBYT            timing option
+C-  SBIT0     NPBYT    TBYT            timing option
+C-  SBIT1     NPBYT    TBYT            timing option
+C-  SBYT      NPBYT    TBYT            timing option
+C-  SBYTOR    NPBYT    TBYT            timing option
+C-  SBYTPK    NPBYT    TVCBYT
+C-  SORTI     PDIV     TSORTN          timing option
+C-  SORTR     PDIV     TSORTN          timing option
+C!  SORTX     PDIV     TSORTX          timing option
+C-  TLERR     PTLPAC   TTLPAC          timing option
+C-  TLRES     PTLPAC   TTLPAC          timing option
+C-  TLS       PTLPAC   TTLPAC          timing option
+C-  TLSC      PTLPAC   TTLPAC          timing option
+C-  TR...     PTRPAC   ...
+C-  UBLANK    PUTIL    TUZERO
+C-  UBLOW     PCHAR    TUBLOW          timing option
+C-  UBUNCH    PCHAR    TUBLOW          timing option
+C-  UCOCOP    PUTIL    TCOCOP          timing option
+C-  UCOPIV    PUTIL    TUCOPY
+C-  UCOPY     PUTIL    TUCOPY          timing option
+C-  UCOPYN    PUTIL    TUCOPY
+C-  UCOPY2    PUTIL    TUCOPY
+C-  UCTOH     PCHAR    TUCTOH
+C-  UCTOH1    PCHAR    TUCTOH
+C-  UDICOP    PUTIL    TCOCOP
+C-  UFILL     PUTIL    TUZERO
+C-  ULEFT     PCHAR    TBABY
+C-  UHTOC     PCHAR    TUCTOH
+C-  UH1TOC    PCHAR    TUCTOH
+C-  UOPT      PUTIL    TUOPT
+C-  UPKBYT    NPBYT    TVCBYT
+C-  UPKCH     PCHAR    TPKCH           timing option
+C-  URIGHT    PCHAR    TBABY
+C-  USET      PCHAR    TBABY
+C-  USWOP     PUTIL    TUSWOP          timing option
+C-  UTRANS    PCHAR    TUBLOW
+C-  UZERO     PUTIL    TUZERO          timing option
+C-  VADD      PVPACK   TVEC
+C-  VASUM     PVPACK   TVEC
+C-  VBIAS     PVPACK   TVEC
+C-  VBLANK    PUTIL    TUZERO
+C-  VDOT      PVPACK   TVEC
+C-  VDOTN     PVPACK   TVEC
+C-  VDOTN2    PVPACK   TVEC
+C-  VEXCUM    PVPACK   TVEC
+C-  VFILL     PUTIL    TUZERO
+C-  VLINE     PVPACK   TVEC
+C-  VMATL     PVPACK   TVEC
+C-  VMATR     PVPACK   TVEC
+C-  VMAX      PVPACK   TVEC
+C-  VMAXA     PVPACK   TVEC
+C-  VMIN      PVPACK   TVEC
+C-  VMINA     PVPACK   TVEC
+C-  VMOD      PVPACK   TVEC
+C-  VMUL      PVPACK   TVEC
+C-  VSCALE    PVPACK   TVEC
+C-  VSUB      PVPACK   TVEC
+C-  VSUM      PVPACK   TVEC
+C-  VUNIT     PVPACK   TVEC
+C-  VXINVB    PM434    TVXINV          timing option
+C-  VXINVC    PM434    TVXINV          timing option
+C-  VZERO     PUTIL    TUZERO
+C-
+C-  ROUTINE   PATCH    DECK            Comment

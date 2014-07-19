@@ -1,0 +1,44 @@
+SRCS_F= gdrmat.F gidrop.F gintri.F goptim.F gpaw.F gpawpp.F gxclos.F \ @@\
+	gxcont.F gxcs.F gxdraw.F gxdz.F gxfca.F gxfort.F gxfz.F gxgcon.F \ @@\
+	gxgeom.F gxlist.F gxlunf.F gxobj.F gxphys.F gxpick.F \ @@\
+	gxrz.F gxscah.F gxscal.F gxscan.F
+
+#ifdef CERNLIB_QMVAOS
+ FORTRANSAVEOPTION=FortranSaveFlags
+ FORTRANOPTIONS = -math_library accurate $(FORTRANSAVEOPTION)
+#endif
+#if defined(CERNLIB_DECS) && !defined(CERNLIB_QMVAOS)
+ FDEBUGFLAGS = -O1
+ FORTRANOPTIONS = $(FORTRANSAVEOPTION)
+#endif
+
+EXTRA_DEFINES=-DCERNLIB_BLDLIB
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+InstallNonExecFileTarget(install.lib,gxint321.f,$(CERN_LIBDIR))
+
+#if defined(CERNLIB_VAXVMS)
+
+CppFileTarget(gxint321.f,gxint.$$f,$(FORTRANINCLUDES) $(ALLDEFINES),NullParameter)
+
+#endif
+
+#if defined(CERNLIB_UNIX)
+/* This is CppFileTarget(..) except for the extra sed to delete empty lines.
+ */
+
+gxint321.f:  gxint.F
+	RemoveFile($@)
+	$(CPP) $(FORTRANALLDEFMDEPEND) < $^ | sed -e '/^$$/d' | CppSedMagic >$@
+
+install.lib:: $(CERN_LIBDIR)/gxint.f
+
+$(CERN_LIBDIR)/gxint.f: $(CERN_LIBDIR)/gxint321.f
+	RemoveFile($@)
+	cd $(@D);$(LN) $(^F) $(@F)
+
+clean::
+	RemoveFiles(gxint321.f)
+
+#endif

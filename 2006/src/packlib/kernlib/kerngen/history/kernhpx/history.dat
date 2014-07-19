@@ -1,0 +1,26 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:50:44 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:44  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernhpx.car patch kernhpx
+#if !defined(CERNLIB_KERNHPX)
+
+              KERNLIB routines particular to HP Unix
+
+---------------------------------------------------------------------
+
+             This file contains the following patches :
+
+*KHPX     Pilot-patch selecting the full standard general KERNLIB
+                                         for the HP Unix
+
+QMHPX     HPX machine patch
+
+HPXGS     HPX versions of general KERNLIB rotuines
+
+=====================================================================
+#endif

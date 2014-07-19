@@ -1,0 +1,17 @@
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+SRCS_F=	aintgb.F alosb.F andb.F andntb.F binvec.F cntob.F \ @@\
+	cntzb.F copyb.F cprsb.F dalosb.F dcopyb.F ddotb.F dgthrb.F \ @@\
+	dmod3b.F dotb.F drangb.F dscalb.F dscttb.F dsxpyb.F dsxyb.F \ @@\
+	dvsetb.F dvxpyb.F dxypwzb.F dylosb.F dyloxb.F gthrb.F idlosb.F \ @@\
+	intgb.F iylosb.F iyloxb.F nandb.F norb.F notb.F oneb.F orb.F \ @@\
+	ornotb.F rangb.F rjctb.F scalb.F scttb.F smod3b.F sxpyb.F \ @@\
+	sxyb.F vsetb.F vxpyb.F xorb.F xypwzb.F ylosb.F yloxb.F zerob.F
+
+#ifdef CERNLIB_HPUX
+FORTRANOPTIONS += -WF,-P
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

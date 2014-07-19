@@ -1,0 +1,287 @@
+*
+* $Id: v2_03,v 1.1.1.1 1996/03/01 11:38:51 mclareni Exp $
+*
+* $Log: v2_03,v $
+* Revision 1.1.1.1  1996/03/01 11:38:51  mclareni
+* Paw
+*
+*
+*CMZ :  2.03/22 22/10/93  09.43.08  by  Rene Brun
+*-- Author :    Rene Brun   21/06/93
+*
+*::>          VERSION  2.03/22   22/10/93 09.43.08
+*
+*    Bug in parser corrected for IBM only (problem with pipe character |)
+*
+*::>          VERSION  2.03/21   21/10/93 15.22.20
+*
+*    PIAF starts in PARalell mode by default
+*
+*    Protections in PRINT statements (not to exceed 128 characters on VMS)
+*
+*    Changes in PACUTS to allow for Log scales
+*
+*::>          VERSION  2.03/20   19/10/93 15.35.29
+*
+*
+*    Mods in PAWLOC for LOG scale axis
+*
+*    Mods in PALOGS for PIAF (switch between SEQ and PAR mode)
+*
+*    Several minor bugs in selection algorithms
+*
+*    change colour defaults in cmotif/init
+*
+*::>          VERSION  2.03/19   18/10/93 18.15.34
+*
+*    Handling of the PIAF/STAGE command implemented on client side.
+*
+*    New PIAF commands message mkdir and rmdir
+*
+*    Fix in PPROJN for variable length arrays(2-D graphics case).
+*
+*    Dummy code removed from PAWSEL
+*
+*    Bug corrected in PAHOPE (wrong setting of JOFSET).
+*
+*    Handling of x**y modified (case when y is integer).
+*
+*::>          VERSION  2.03/18   15/10/93 16.54.01
+*
+*    Fix in PPROJN for variable length arrays.
+*
+*    Graphical cuts are correctly transmitted to Piaf.
+*
+*    Removed some dead code from HGET2.
+*
+*    In PACUTS, reset CUTS arrays before redefining a cut.
+*
+*::>          VERSION  2.03/17   13/10/93 17.41.06
+*
+*    Changes in PAWSEL to support chains
+*
+*    Mods in PAHIST and PAPLOT in order to be able to draw LEGO
+*       and SURFACES with more than 1000 channels
+*
+*    Mod in the command GRAPH: the limits of the frame were not
+*       computed correctly in case of constant negative functions.
+*
+*::>          VERSION  2.03/16   08/10/93 18.07.34
+*
+*    Corrections in Yacc/Lex parsers for the priority to evaluate
+*    operations.
+*
+*    .and..not. is now OK.
+*
+*    Note important restriction on VM. COMIS files must be .fxxx
+*
+*    Changes in ntuple expression selection mechanism:
+*        a<1e4 not recognised,   a<1.e4 was OK
+*
+*    Comment calls to the new HMCSTAT package in PAWCS because of
+*    space problems on VM.
+*
+*    Limitation to 999 bins in PAHIST and PAPLOT removed.
+*
+*    New Piafserver protocol (931013). Added graphical cut RPC.
+*
+*    Routine PACUTS: fixed bug when saving and printing 1D graphical
+*    cuts.
+*    Introduced some Convex specific changes from Balashov.
+*
+*    The command FOR/CLOSE now supports LUN=0 to close all open units.
+*
+*    The above change is used in the PSTATE routine used in the Piaf
+*    Master server to send the state information to the slave servers.
+*
+*    Bug fixed in PCHNCD: did not return to correct sub-directory.
+*
+*    Bug fixed in PPROJN: incorrect histogram filling when only event
+*    numbers were stored in the dynamic memory buffer.
+*
+*    Bug fixed in PECRIT: mistake in the LICODE scanning.
+*
+*::>          VERSION  2.03/15   30/09/93 18.14.08
+*
+*    Underscore allowed in ntuple variable names.
+*
+*    New logic in ntuple selections and expressions to support
+*    variable length arrays.
+*
+*    Maximum cut expression-length increased to 128 characters
+*
+*::>          VERSION  2.03/14   29/09/93 13.36.56
+*
+*    Code removed in PAHIST and PAPLOT for Date, Stats etc.. drawing.
+*
+*    Add routines HMCINI and HMCMLL to the list of PAWCS.
+*    These two routines are part of the new package HMCSTAT in HBOOK
+*      developped by C.Beeston, R.Barlow from OPAL.
+*
+*     Mods in PPROJN to draw NT/PLOT id.x%y%z%t
+*
+*::>          VERSION  2.03/13   27/09/93 11.50.35
+*
+*     The HPLOT sequences HPL2, HPL9 and HPL12 are now suppressed.
+*        This implies mods in PAGRAF, PAGHPL and PAHIST.
+*
+*::>          VERSION  2.03/12   17/09/93 16.44.09
+*
+*
+*     Mods in CMOTIF/CUTS to allow COMIS functions in Ntuple_viewer cuts
+*
+*     Bug corrected in CPAW/GENERATI for graphical cuts and ANDs in cuts.
+*
+*::>          VERSION  2.03/11   16/09/93 19.10.35
+*
+*     Sequence $PCFUNC modified.
+*
+*     Dummy routine CZTCP added in 0PAMAINM.
+*
+*     HPUX option in LEX_YY and FLEX_SKEL
+*
+*     Mods in PAWCS: Add HXI in list of COMIS callable routines
+*
+*::>          VERSION  2.03/10   15/09/93 14.29.40
+*
+*     Corrections in PPROJ0 to compute the VIDNs in Nt/Loop
+*
+*     Changes in PAFUNC,PANDRA,PANT3D
+*
+*::>          VERSION  2.03/09   13/09/93 16.43.34
+*
+*     Problem with Character alignement fixed in PAWFCU.
+*     Unitialized variable found in PPROJN
+*     New version of PAWFCU.
+*
+*::>          VERSION  2.03/08   07/09/93 12.05.29
+*
+*     Modules deleted: PAWEVT,PAWDFF,PAWFCL,PAWFCM,PAWSLO,PAWTRN
+*                      PAWTYT,PAWTES,PAWTAL.
+*
+*     Mods in PANTUP (upper/lower case in calls to PIAF routines)
+*
+*     Changes to compile on RS6000.
+*
+*::>          VERSION  2.03/07   06/09/93 12.42.13
+*
+*     PATCH,PAWDEC removed.
+*     Deck PAWDEC moved to patch,CPAW.
+*     Deck PAMDEC moved to CMOTIF
+*
+*     New patches YACC, LEX and HPAW.
+*     Replacement of the old PAWFCU by the new set of routines PAWFCU,etc
+*     generated by YACC and LEX.
+*     Many changes in PPROJ0, PPROJN, PASCAN,etc to reflect the changes
+*     due to the new PAWFCU.
+*     Note that during the implementation phase, the include files in HPAW
+*     must be generated before processing CPAW.
+*
+*     The new PAWFCU includes many new facilities, in particular a better
+*     syntax checking, the logic for arrays in ntuples.
+*
+*             *** Parallel Piaf server code introduced ***
+*
+*     Many changes and new routines in the PIAFS patch and a number
+*     of new PF.... routines in the PAW patch.
+*
+*     Changes in PADRFA, PANDRA and PPROJN to call the new routine IHISO.
+*
+*     Bug fixed in HISTO (PATCH CMOTIF). The option used to draw ntuples with
+*     Gouraud shading was not correct.
+*
+*     MINUIT routine MNERRS callable from PAWCS
+*
+*::>          VERSION  2.03/06   05/08/93 12.39.53
+*
+*     New routines DENLAN,DSTLAN,DIFLAN,XM1LAN,XM2LAN,RANLAN in PAWCS.
+*
+*::>          VERSION  2.03/05   03/08/93 15.39.17
+*
+*
+*     New routine PMNCOMD called by HMINUT to read MINUIT data cards
+*        Minuit command MNC is intercepted if it has 3 arguments
+*          In this case a graphical contour is drawn
+*          and the points in the contour are saved in vectors XFIT,YFIT
+*        Normal PAW commands can be executed from MINUIT if they
+*        are prefixed with a +
+*
+*     Mods in the MOTIF interface to implement browser for PIAF files.
+*
+*     Bug fix in PPROJ0 when XLOW(I)=XUP(I)
+*
+*     Mods in PAHIO to call new routine HRESETM for shared memory
+*
+*     Add routines HGNTB and RZQUOT in PAWCS.
+*
+*     Routine HBUG activated for APOLLO
+*
+*::>          VERSION  2.03/04   23/07/93 10.47.00
+*
+*     Increased dynamic Ntuple buffer size in piafserv to 64MB (was 10MB).
+*
+*     Command NT/CSELECT propagates setting to piafserv.
+*     Routine PACSEL makes RPC back to client.
+*
+*     Command NT/VMEM returns also memory statistics for piafserv.
+*     Routine PVMEM: part of code moved to HBPRNT in HBOOK.
+*
+*     Message of the day (motd) is now echoed immidiately after connecting
+*     to piafserv.
+*
+*     The commands H/ERR and H/AERR have now a CHOPT parameter (see HELP).
+*
+*     New options to draw the errors in the command HISTO/PLOT (see HELP).
+*
+*::>          VERSION  2.03/03   08/07/93 10.33.46
+*
+*      Bug fix in PAWTYT for LOGICAL variables
+*
+*::>          VERSION  2.03/02   930705 16.25
+*
+*      The HPLOT routine HPLFRA is now callable in a COMIS program
+*      (see PAWCS).
+*
+*      New Command:
+*      * GRAPHICS/HPLOT/AERRORS X Y EXL EXU EYL EYU N [ ISYMB SSIZE ]
+*      to draw asymetric error bars.
+*
+*      The "IAUTO" mechanism is now suppressed from PANTUP in order to
+*      have the same plot with:
+*         NT/PLOT 30.x    and    NT/PLOT 30.1
+*      The variable IAUTO is suppressed from the sequence PAWNTU.
+*
+*::>          VERSION  2.03/01   28/06/93 11.49.39
+*
+*      Sequence PAWCFU modified
+*
+*      Correction in PPROJ0 for log scale Y axis
+*
+*      New version of the PIAFS patch.
+*      command PIAF/CLOSE renamed to PIAF/DISCONNECT
+*
+*      Bug fixed in PFINDV for VAGE(I)=AGE problem
+*
+*      New version of TCPIAF
+*
+*      New command HMINUIT (for Application HMINUIT)
+*      Interactive MINUIT commands can be given in a APPLICATION HMINUIT
+*      before invoking one the fit commands
+*
+*      PAWFCU now handles correctly character substrings in a selection.
+*
+*::>          VERSION  2.03/00   21/06/93 18.25.27
+*
+*      UWFUNC now also adds the chain COMMONs to selection functions for
+*      the RWNs.
+*
+*      Fix for "NT/CHAIN chn -P path" command for VMS
+*
+*      Added X (exchange mode option) to CHOPT for HI/FILE commands
+*      (necessary for automatic record length detection) issued via the
+*      Motif interface and via the chain mechanism
+*
+*      Fixed bug in Ntuple scanner (matrix was not saved in context struct)
+*
+*      Some code cleanup: Remove commons that are not referenced.
+*

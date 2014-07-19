@@ -1,0 +1,16 @@
+Macro Legend
+TYPE = [1]   | Type of hatches
+X1   = [2]   | X bottom left corner of the box.
+X2   = [3]   | X top right corner of the box.
+Y1   = [4]   | Y bottom left corner of the box.
+Y2   = [5]   | Y top right corner of the box.
+TEXT = [6]   | Text to be printed
+Set FAIS 3
+Set FASI [TYPE]
+Set BORD 1
+Box [X1] [X2] [Y1] [Y2]
+Set TXAL 03
+XT = [X2]+$GRAFINFO('?CHHE')
+YT = ([Y2]+[Y1])/2
+Itx [XT] [YT] [TEXT]
+Return

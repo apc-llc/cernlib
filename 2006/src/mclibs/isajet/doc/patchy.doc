@@ -1,0 +1,290 @@
+\newpage
+\section{Patchy and PAM Organization\label{PATCHY}}
+
+      Patchy is a code management system developed at CERN and used to
+maintain the CERN Library. It is used to provide versions of ISAJET for
+a wide variety of computers. Instructions for using PATCHY are
+available from \verb|http://wwwinfo.cern.ch/asdoc/Welcome.html|.
+
+      A master source file in Patchy is called a ``PAM.'' The ISAJET
+PAM contains all the source code and documentation plus Patchy
+commands to include common blocks and to select the desired version. It
+is divided into the following patches: 
+
+      \verb|ISACDE|: contains all common blocks, etc. These are divided
+into decks based on their usage.
+
+      \verb|ISADATA|: contains block data ALDATA. This must always be
+loaded when using ISAJET.
+
+      \verb|ISAJET|: contains the code for generating events. Each
+subroutine is in a separate deck with the same name.
+
+      \verb|ISASSRUN|: contains the main program for ISASUSY, which
+prompts for input parameters and prints out all the decay modes. It is
+selected by \verb|*ISASUSY|.
+
+      \verb|ISASUSY|: contains code to calculate all the decay widths
+and branching fractions in the minimal supersymmetric model.
+
+      \verb|ISATAPE|: contains the code for reading and writing tapes,
+again with each subroutine on a separate deck.
+
+      \verb|ISARUN|: contains a main program and a simple interactive
+interface.  It is selected by \verb|IF=INTERACT|.
+
+      \verb|ISAZEB|: contains Zebra format output routines, an
+alternative to the ISATAPE routines.
+
+      \verb|ISZRUN|: contains the analog of ISAPLT for the Zebra
+format. 
+
+      \verb|ISAPLT|: contains a simple calorimeter simulation and the
+skeleton of a histogramming job using HBOOK.
+
+      \verb|ISATEXT|: contains the instructions for using ISAJET, i.e.
+the text of this document. It also includes the documentation for
+ISASUSY.
+
+      \verb|ISZTEXT|: contains the instructions for the Zebra output
+routines and a description of the Zebra banks.
+
+      \verb|ISADECAY|: contains the input decay table.
+
+      The code is actually maintained using RCS on a Silicon Graphics
+computer at BNL. Patchy is used primarily to handle common blocks and
+machine dependent code.
+
+      The input to YPATCHY must contain both \verb|+USE| cards, which
+define the wanted program version, and \verb|+EXE| cards, which
+determine which patches or decks are written to the ASM file. To
+facilitate this selection, the ISAJET PAM contains the following pilot
+patches:
+
+      \verb|*ISADECAY|: USE selects ISADECAY and all corrections to it.
+
+      \verb|*ISAJET|: USE selects ISACDE, ISADATA, ISAJET, ISATAPE,
+ISARUN and all corrections to them. Note that ISARUN is not actually
+selected without \verb|+USE,INTERACT|.
+
+      \verb|*ISAPLT|: USE selects ISACDE, ISAPLT, and all corrections
+to them.
+
+      \verb|*ISASUSY|: USE selects CDESUSY, ISASUSY, and ISASSRUN to
+create a program to calculate all the MSSM decay modes.
+
+      \verb|*ISATEXT|: USE selects ISACDE, ISATEXT, and all corrections
+to them. 
+
+      \verb|*ISAZEB|: USE selects ISAJET with a Zebra output format.
+
+      \verb|*ISZRUN|: USE selects the Zebra analysis package.
+
+      Patches are provided to select the machine dependent features for
+specific computers or operating systems:
+
+      \verb|ANSI|: ANSI standard Fortran (no time or date functions)
+
+      \verb|APOLLO|: APOLLO -- only tested by CERN
+
+      \verb|CDC|: CDC 7600 and 60-bit CYBER (obsolete)
+
+      \verb|CRAY|: CRAY with UNICOS
+
+      \verb|DECS|: DEC Station with Ultrix 
+
+      \verb|ETA|: ETA 10 running Unix System V (obsolete)
+
+      \verb|HPUX|: HP/9000 7xx running Unix System V
+
+      \verb|IBM|: IBM 370 and 30xx running VM/CMS 
+
+      \verb|IBMRT|: IBM RS/6000 running AIX 3.x or 4.x
+
+      \verb|LINUX|: PC running Linux with f2c/gcc or g77 compiler
+
+      \verb|SGI|: Silicon Graphics running IRIX
+
+      \verb|SUN|: Sun Sparcstation running SUNOS or Solaris
+
+      \verb|VAX|: DEC VAX or Alpha running VMS
+
+\noindent These patches in turn select a variety of patches and IF
+flags, allowing one to select more specific features, as indicated
+below. (Replace \verb|&| by \verb|+| everywhere.)
+\begin{verbatim}
+&PATCH,ANSI.                      GENERIC ANSI FORTRAN.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,APOLLO.
+&DECK,BLANKDEK.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&USE,IMPNONE.                     IMPLICIT NONE
+&EOD.
+
+&PATCH,CDC.                       CDC 7600 OR CYBER 175.
+&USE,SINGLE.                      SINGLE PRECISION.
+&USE,LEVEL2.                      LEVEL 2 STORAGE.
+&USE,CDCPACK.                     PACK 2 WORDS PER WORD FOR INPUT/OUTPUT.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,CRAY.                      CRAY XMP OR 2.
+&USE,SINGLE.                      SINGLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,DECS.                      DEC STATION (ULTRIX)
+&USE,SUN.
+&EOD
+
+&PATCH,ETA.                       ETA-10.
+&USE,SINGLE.                      SINGLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,HPUX.                      HP/9000 7XX RUNNING UNIX.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&USE,IMPNONE.                     IMPLICIT NONE
+&EOD
+
+&PATCH,IBM.                       IBM 370 OR 30XX.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,IBMRT.                     IBM RS/6000 WITH AIX 3.1
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&USE,IMPNONE.                     IMPLICIT NONE
+&EOD
+
+&PATCH,LINUX.                     IBM PC WITH LINUX 1.X
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.  STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&USE,IMPNONE.                     IMPLICIT NONE
+&EOD
+
+&PATCH,SGI.
+SILICON GRAPHICS 4D/XX.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,SUN.                       SUN (SPARC)
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&EOD
+
+&PATCH,VAX.                       DEC VAX 11/780 OR 8600.
+&USE,DOUBLE.                      DOUBLE PRECISION.
+&USE,STDIO.                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+&USE,MOVEFTN.                     FORTRAN REPLACEMENT FOR MOVLEV.
+&USE,RANFFTN,IF=-CERN.            FORTRAN RANF.
+&USE,RANFCALL.                    STANDARD RANSET AND RANGET CALLS.
+&USE,NORANLUX,IF=-RANLUX.         NO RANLUX RANDOM NUMBERS.
+&USE,NOCERN,IF=-CERN.             NO CERN LIBRARY.
+&USE,IMPNONE.                     IMPLICIT NONE
+&EOD
+\end{verbatim}
+
+      An empty patch INTERACT selects a main program and an interactive
+interface which will prompt the user for parameters and do some error
+checking. A patch CERN allows ISAJET to take the random number generator
+RANF and several other routines from the CERN Library; to use this
+include the Patchy command
+\begin{verbatim}
+&USE,CERN.
+\end{verbatim}
+Similarly, a patch PDFLIB enables the interface to the PDFLIB parton
+distribution compilation by H. Plothow-Besch:
+\begin{verbatim}
+&USE,PDFLIB
+\end{verbatim}
+The only internal links with PDFLIB are calls to the routines PDFSET,
+PFTOPDG, and DXPDF, and the common blocks W50510 and W50517,
+\begin{verbatim}
+#if defined(CERNLIB_PDFLIB)
+#include "w50510.inc"
+* Ignoring t=pass
+#endif
+#if defined(CERNLIB_PDFLIB)
+#include "w50517.inc"
+* Ignoring t=pass
+#endif
+\end{verbatim}
+which are used to specify the level of output messages and the logical
+unit number for them. A patch RANLUX selects the RANLUX random number
+generator instead of the 48-bit congruential generator RANF:
+\begin{verbatim}
+&USE,RANLUX
+\end{verbatim}
+RANLUX has a very long period, and each 32-bit integer seed gives an
+independent sequence.
+
+      In general it should be sufficient to run YPATCHY with the
+following cradle (replace \verb|&| with \verb|+| everywhere):
+\begin{verbatim}
+&USE,(*ISAJET,*ISATEXT,*ISADECAY,*ISAPLT).     CHOOSE ONE.
+&USE,ANSI,DECS,HPUX,IBM,IBMRT,SGI,SUN,....     CHOOSE ONE.
+&[USE,INTERACT].                               FOR INTERACTIVE MODE.
+&[USE,CERN.]                                   FOR CERN LIBRARY.
+&[USE,HBOOK3.]                                 HBOOK 3 FOR ISAPLT.
+&EXE.
+&PAM.
+&QUIT.
+\end{verbatim}
+
+      The input to YPATCHY can also contain changes by the user. It is
+suggested that these not be made permanent parts of the PAM to avoid
+possible conflicts with later corrections.

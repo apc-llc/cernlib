@@ -1,0 +1,9 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+PROGRAMDIRS= hepdb cdbackup cdmake cdmove cdserv
+
+SUBDIRS= $(PROGRAMDIRS)
+
+InstallBinSubdirs($(SUBDIRS))

@@ -1,0 +1,19 @@
+*
+* $Id: v148.dat,v 1.1.1.1 1996/04/01 15:01:32 mclareni Exp $
+*
+* $Log: v148.dat,v $
+* Revision 1.1.1.1  1996/04/01 15:01:32  mclareni
+* Mathlib gen
+*
+*
+* 1.48/00   951031 
+C
+C  Additions:
+C  ----------
+C
+C  B002 PRHFCT - Prime Numbers and Prime Factor Decomposition
+C  C317 CPSIPG - Psi (Digamma) and Polygamma Functions for Complex Argument
+C  D120 RADMUL - Adaptive Quatrature for Multiple Integrals of N-Dimemsional
+C                Rectangular Regions
+C  E106 LOCATR - Binary Search for Element in Ordered Array
+C

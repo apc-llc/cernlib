@@ -1,0 +1,66 @@
+*
+* $Id: jumpx2.F,v 1.1.1.1 1996/02/15 17:52:27 mclareni Exp $
+*
+* $Log: jumpx2.F,v $
+* Revision 1.1.1.1  1996/02/15 17:52:27  mclareni
+* Kernlib
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "pilot.h"
+      SUBROUTINE JUMPX2 (IPARA,IPARB)
+C
+C CERN PROGLIB# Z042    JUMPX2          .VERSION KERNCVX  1.05  890913
+C ORIG. 01/01/89  AGA+MAV, Convex
+C MOD.  12/09/89 JZ, add entries JUMPX1, JUMPX0
+C
+C-    TO TRANSFER TO THE USER ROUTINE TARGET (SAY) WITH 2 PARAMETERS
+C-    THREE STEPS ARE NEEDED :
+
+C- 1) EXTERNAL TARGET              TO GET THE ADDRESS OF TARGET
+C-    IADR = JUMPAD (TARGET)
+
+C- 2) CALL JUMPST (IADR)           TO SET THE TRANFER ADDRESS
+
+C- 3) CALL JUMPX2 (PAR1,PAR2)      TO TRANSFER
+
+      DIMENSION IPARA(9), IPARB(9)
+      SAVE JPOINT
+
+      CALL  JUMPY2 (%VAL(INT4(JPOINT)),IPARA,IPARB)
+      RETURN
+
+      ENTRY JUMPX1 (IPARA)
+      CALL  JUMPY1 (%VAL(INT4(JPOINT)),IPARA)
+      RETURN
+
+      ENTRY JUMPX0
+      CALL  JUMPY0 (%VAL(INT4(JPOINT)))
+      RETURN
+
+      ENTRY JUMPST (JADR)
+      JPOINT = JADR
+      RETURN
+      END
+C-----------------------------------------------------
+      SUBROUTINE JUMPY2 (TARSUB,IPARA,IPARB)
+      DIMENSION IPARA(9), IPARB(9)
+      EXTERNAL  TARSUB
+
+      CALL  TARSUB (IPARA,IPARB)
+      RETURN
+
+      ENTRY JUMPY1 (TARSUB,IPARA)
+      CALL  TARSUB (IPARA)
+      RETURN
+
+      ENTRY JUMPY0 (TARSUB)
+      CALL  TARSUB
+      RETURN
+      END
+#ifdef CERNLIB_TCGEN_JUMPXN
+#undef CERNLIB_TCGEN_JUMPXN
+#endif
+#ifdef CERNLIB_CCGEN_JUMPXN
+#undef CERNLIB_CCGEN_JUMPXN
+#endif

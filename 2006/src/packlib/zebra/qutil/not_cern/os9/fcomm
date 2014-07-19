@@ -1,0 +1,145 @@
+*
+* $Id: fcomm,v 1.1.1.1 1996/03/06 10:47:16 mclareni Exp $
+*
+* $Log: fcomm,v $
+* Revision 1.1.1.1  1996/03/06 10:47:16  mclareni
+* Zebra
+*
+*
+*               Fortran COMMONs for OS9
+* This directory was created from zebra.car patch fcomm
+      SUBROUTINE ZBCD_NOOP
+#include "zbcd.inc"
+      END
+      SUBROUTINE ZBCDCH_NOOP
+#include "zbcdch.inc"
+      END
+      SUBROUTINE ZCETA_NOOP
+#include "zceta.inc"
+      END
+      SUBROUTINE ZHEADP_NOOP
+#include "zheadp.inc"
+      END
+      SUBROUTINE ZKRAKCC_NOOP
+#include "zkrakcc.inc"
+      END
+      SUBROUTINE ZLIMIT_NOOP
+#include "zlimit.inc"
+      END
+      SUBROUTINE ZMACH_NOOP
+#include "zmach.inc"
+      END
+      SUBROUTINE ZNATUR_NOOP
+#include "znatur.inc"
+      END
+      SUBROUTINE ZSTATE_NOOP
+#include "zstate.inc"
+      END
+      SUBROUTINE ZUNIT_NOOP
+#include "zunit.inc"
+      END
+      SUBROUTINE ZVFAUT_NOOP
+#include "zvfaut.inc"
+      END
+      SUBROUTINE QUEST_NOOP
+#include "quest.inc"
+      END
+      SUBROUTINE MZCA_NOOP
+#include "mzca.inc"
+      END
+      SUBROUTINE MZCB_NOOP
+#include "mzcb.inc"
+      END
+      SUBROUTINE MZCC_NOOP
+#include "mzcc.inc"
+      END
+      SUBROUTINE MZCL_NOOP
+#include "mzcl.inc"
+      END
+      SUBROUTINE MZCN_NOOP
+#include "mzcn.inc"
+      END
+      SUBROUTINE MZCT_NOOP
+#include "mzct.inc"
+      END
+      SUBROUTINE MZCWK_NOOP
+#include "mzcwk.inc"
+      END
+      SUBROUTINE MZIOC_NOOP
+#include "mzioc.inc"
+      END
+      SUBROUTINE ZVFWKC_NOOP
+#include "zvfwkc.inc"
+      END
+      SUBROUTINE ZEBQ_NOOP
+#include "zebq.inc"
+      END
+      SUBROUTINE FZSTAT_NOOP
+#include "fzstat.inc"
+      END
+      SUBROUTINE FZCF_NOOP
+#include "fzcf.inc"
+      END
+      SUBROUTINE FZCI_NOOP
+#include "fzci.inc"
+      END
+      SUBROUTINE FZCX_NOOP
+#include "fzcx.inc"
+      END
+      SUBROUTINE FZCSEG_NOOP
+#include "fzcseg.inc"
+      END
+      SUBROUTINE FZCOCC_NOOP
+#include "fzcocc.inc"
+      END
+      SUBROUTINE FZHCI_NOOP
+#include "fzhci.inc"
+      END
+      SUBROUTINE JZUC_NOOP
+#include "jzuc.inc"
+      END
+      SUBROUTINE JZC_NOOP
+#include "jzc.inc"
+      END
+      SUBROUTINE TZUC_NOOP
+#include "tzuc.inc"
+      END
+      SUBROUTINE TZC1_NOOP
+#include "tzc1.inc"
+      END
+      SUBROUTINE RZBUFF_NOOP
+#include "rzbuff.inc"
+      END
+      SUBROUTINE RZCLUN_NOOP
+#include "rzclun.inc"
+      END
+      SUBROUTINE RZCH_NOOP
+#include "rzch.inc"
+      END
+      SUBROUTINE RZDIR_NOOP
+#include "rzdir.inc"
+      END
+      SUBROUTINE RZCKEY_NOOP
+#include "rzckey.inc"
+      END
+      SUBROUTINE RZCOUT_NOOP
+#include "rzcout.inc"
+      END
+      SUBROUTINE RZCOUNT_NOOP
+#include "rzcount.inc"
+      END
+      SUBROUTINE RZCSTR_NOOP
+#include "rzcstr.inc"
+      END
+      SUBROUTINE RZCLXX_NOOP
+#include "rzclxx.inc"
+      END
+      SUBROUTINE CQC_NOOP
+#include "cqc.inc"
+      END
+      SUBROUTINE CQBKC_NOOP
+#include "cqbkc.inc"
+      END
+      SUBROUTINE ZTELLC_NOOP
+#include "ztellc.inc"
+      END

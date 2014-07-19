@@ -1,0 +1,3 @@
+SRCS_F=	 izbcd.F izbcdt.F izbcdv.F izhnum.F zhtoi.F zitoh.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

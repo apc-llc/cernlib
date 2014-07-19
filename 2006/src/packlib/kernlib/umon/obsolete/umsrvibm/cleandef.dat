@@ -1,0 +1,32 @@
+*
+* $Id: cleandef.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: cleandef.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, :clean_d.exec */
+/**********************************************************************/
+arg system
+ 
+'QUERY DISK (FIFO'; pull .      /* to get rid of the header line     */
+ Do k=1 to queued()
+   pull label vaddr fm .; parse var fm 1 fm 2 .
+   If find(system,fm) > 0 Then iterate
+  'RELEASE 'fm
+  'EXECIO 1 CP (SKIP STRING DETACH 'vaddr
+ End k
+ 
+/* Now I will detach all those disks which are not attached          */
+'EXECIO * CP (FIFO STRING QUERY DASD'
+ DO QUEUED();  pull 6 t 10
+  If ^qdisk(t,'ACCESSED') Then Do
+  'EXECIO 1 CP (SKIP STRING DETACH 't
+  End
+ END
+ 
+EXIT 0
+/*--------------------------------------------------------------------*/
+#endif

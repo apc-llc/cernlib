@@ -1,0 +1,5 @@
+SRCS_F= \ @@\
+	 tcocop.F tiucha.F tiucom.F tiusam.F tucopy.F tuopt.F tuswop.F \ @@\
+	 tuzero.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

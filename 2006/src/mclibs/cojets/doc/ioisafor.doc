@@ -1,0 +1,39 @@
+*
+* $Id: ioisafor.doc,v 1.1.1.1 1996/01/11 14:15:00 mclareni Exp $
+*
+* $Log: ioisafor.doc,v $
+* Revision 1.1.1.1  1996/01/11 14:15:00  mclareni
+* Cojets
+*
+*
+[12] MAIN PROGRAM FOR IOISA
+
+      The user must provide a main program for COJETS containing at
+least the following:
+
+      PROGRAM MAIN
+C
+C          MAIN PROGRAM FOR COJETS WITH I/O OF ISAJET TYPE.
+C          TAPE NUMBERS ARE ARBITRARY
+C
+C          FILES TO BE CONNECTED INTERNALLY, WITH OPEN STATEMENTS,
+C          OR EXTERNALLY
+C
+      CALL COJETS(+-i,+-j,m,n)
+C
+      STOP
+      END
+
+      The arguments of COJETS are tape numbers for files, all of which
+should be opened by the main program (or assigned externally).
+      TAPEi: Decay table (formatted).
+         +i: Print the particle-decay table on the output listing.
+         -i: Suppress printing of the particle-decay table.
+      TAPEj: Output file for events (unformatted).
+         +j: Write out both resonances and stable particles.
+         -j: Write out only stable particles.
+      TAPEm: Input commands as defined in [13] (formatted).
+      TAPEn: Output listing (formatted).
+
+
+

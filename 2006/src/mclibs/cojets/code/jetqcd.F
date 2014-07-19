@@ -1,0 +1,287 @@
+*
+* $Id: jetqcd.F,v 1.1.1.1 1996/01/11 14:14:39 mclareni Exp $
+*
+* $Log: jetqcd.F,v $
+* Revision 1.1.1.1  1996/01/11 14:14:39  mclareni
+* Cojets
+*
+*
+#include "cojets/pilot.h"
+      SUBROUTINE JETQCD(SETIN)
+C     ************************
+C-- DEVELOPS TIMELIKE CASCADE OF QUANTA
+C
+#if defined(CERNLIB_SINGLE)
+      IMPLICIT REAL (A-H,O-Z)
+#endif
+#if defined(CERNLIB_DOUBLE)
+      IMPLICIT DOUBLE PRECISION (A-H,O-Z)
+#endif
+#include "cojets/boflag.inc"
+#include "cojets/ctopdc.inc"
+#include "cojets/cuejet.inc"
+#include "cojets/cutoff.inc"
+#include "cojets/event.inc"
+#include "cojets/isjetc.inc"
+#include "cojets/isjetn.inc"
+#include "cojets/itapes.inc"
+#include "cojets/jetset.inc"
+#include "cojets/keybre.inc"
+#include "cojets/keyjet.inc"
+#include "cojets/m2qua.inc"
+#include "cojets/maxn.inc"
+#include "cojets/parqua.inc"
+#include "cojets/qcd.inc"
+#include "cojets/tabpsq.inc"
+C
+      DIMENSION PROB(7),VZLW(7),VZUP(7),SETIN(6)
+      DATA NJTQCD/0/
+C
+      NJTQCD=NJTQCD+1
+      IF(NJTQCD.GT.1) GO TO 1
+      CALL INIQCD
+1     CONTINUE
+C
+C-- RESET
+      NCUE=0
+C
+C-- SETTING PARAMETERS OF INITIAL LEG
+      IFLA=SETIN(6)
+      IF(IFLA.EQ.0) IFLA=LGLU
+      MFLA=ABS(IFLA)
+      PX=SETIN(1)
+      PY=SETIN(2)
+      EPP=SETIN(3)
+      PSQ=SETIN(5)
+      IF(KEYBRE.GE.2) PSQ=1.E-5
+      IF(PSQ.LT.0.)
+     1CALL PSQGEN(MFLA,-SETIN(5),PSQ,IGO)
+C--  EXTRA PJSET INFO
+      NJSET=NJSET+1
+      IF(NJSET.GT.MXJSET) GO TO 560
+      PJSET(1,NJSET)=PX
+      PJSET(2,NJSET)=PY
+      AMT2=PX**2+PY**2+PSQ
+      EPM=AMT2/EPP
+      PJSET(3,NJSET)=.5*(EPP-EPM)
+      PJSET(4,NJSET)=.5*(EPP+EPM)
+      PJSET(5,NJSET)=SQRT(PSQ)
+C--  WHEN CALLED BY BJETS AND TOPDCY, THIS JORIG IS RESET THERE
+      JORIG(NJSET)=JPACK*JETN
+      JTYPE(NJSET)=JDENTF(IFLA)
+      JDCAY(NJSET)=0
+      CALL ROTJET
+      JETP=NJSET
+      IF(PSQ.GT.QTHRSQ(MFLA)) GO TO 200
+C
+C-- NO EMISSION AT ALL, BOOK INITIAL LEG IN PARQUA
+      JETC=JETP
+      CALL JTBOOK(PX,PY,EPP,PSQ,IFLA)
+      RETURN
+C
+C-- BRANCHING LOOP
+C   ==============
+C
+C-- GENERATE Z
+C   ----------
+200   CONTINUE
+      MFLA=ABS(IFLA)
+      IF(IFLA.EQ.LGLU) GO TO 210
+C-- QUARK BRANCHING
+      CALL ZLIM(PSQ,QZFLSQ(MFLA),QZSQ,ZLW,ZUP,FLAG)
+      CALL ZGEN(1,ZLW,ZUP,FLAG,Z)
+      IFLA1=IFLA
+      IFLA2=LGLU
+      IF(IFLA.GT.0) GO TO 201
+      Z=1.-Z
+      IFLA1=LGLU
+      IFLA2=IFLA
+201   CONTINUE
+      GO TO 250
+C
+C-- GLUON BRANCHING - GENERATE DECAY CHANNEL
+210   CONTINUE
+      CALL ZLIMSY(PSQ,QZSQ,ZLW,ZUP,FLAG)
+      PROGL=PAPINT(2,ZUP)-PAPINT(2,ZLW)
+      PROB(1)=PROGL
+      VZLW(1)=ZLW
+      VZUP(1)=ZUP
+      DO 211 L=1,NFLAVT
+      CALL ZLIMSY(PSQ,QZFLSQ(L),ZLW,ZUP,FLAG)
+      IF(FLAG.GT.0.) GO TO 212
+      PROQQB=PAPINT(3,ZUP)-PAPINT(3,ZLW)
+      PROB(L+1)=PROB(L)+PROQQB
+      VZLW(L+1)=ZLW
+      VZUP(L+1)=ZUP
+      GO TO 211
+212   PROB(L+1)=PROB(L)
+211   CONTINUE
+      RR=CJRN(0.)
+      DO 213 L=1,LGLU
+      LOUT=L
+      IF(RR.LT.PROB(L)/PROB(LGLU)) GO TO 214
+213   CONTINUE
+214   LFLA=LOUT-1
+      FLAG=-1.
+      IF(LFLA.GT.0) GO TO 230
+C
+C-- GLUON BRANCHES INTO TWO GLUONS
+      ZLW=VZLW(1)
+      ZUP=VZUP(1)
+      CALL ZGEN(2,ZLW,ZUP,FLAG,Z)
+      IFLA1=LGLU
+      IFLA2=LGLU
+      GO TO 250
+C
+C-- GLUON BRANCHES INTO Q-QB
+230   ZLW=VZLW(LFLA+1)
+      ZUP=VZUP(LFLA+1)
+      CALL ZGEN(3,ZLW,ZUP,FLAG,Z)
+      IFLA1=-LFLA
+      IFLA2=LFLA
+      GO TO 250
+C
+C-- GENERATE MASSES OF SECONDARIES
+C   ------------------------------
+250   CONTINUE
+      MFLA1=ABS(IFLA1)
+      MFLA2=ABS(IFLA2)
+      IF(IZFAST.EQ.1) GO TO 251
+      IF(CJRN(0.).GT..5) GO TO 270
+      GO TO 280
+251   IF(Z.GT..5) GO TO 270
+      GO TO 280
+270   CONTINUE
+      XP1SQ=Z*(PSQ-QZFLSQ(MFLA2)/(1.-Z))
+      CALL PSQGEN(MFLA1,XP1SQ,P1SQ,IGO1)
+      XP2SQ=(1.-Z)*(PSQ-P1SQ/Z)
+      CALL PSQGEN(MFLA2,XP2SQ,P2SQ,IGO2)
+      GO TO 290
+280   CONTINUE
+      XP2SQ=(1.-Z)*(PSQ-QZFLSQ(MFLA1)/Z)
+      CALL PSQGEN(MFLA2,XP2SQ,P2SQ,IGO2)
+      XP1SQ=Z*(PSQ-P2SQ/(1.-Z))
+      CALL PSQGEN(MFLA1,XP1SQ,P1SQ,IGO1)
+      GO TO 290
+C
+C-- SET TRANSVERSE VARIABLES
+C   ------------------------
+290   CONTINUE
+      PTRSQ=Z*(1.-Z)*(PSQ-P1SQ/Z-P2SQ/(1.-Z))
+      PTR=SQRT(PTRSQ)
+      IF(KEYBRE.GE.1) PTR=0.
+      PHI=2.*PI*CJRN(0.)
+      PTRX=PTR*COS(PHI)
+      PTRY=PTR*SIN(PHI)
+      P1X=Z*PX+PTRX
+      P1Y=Z*PY+PTRY
+      P2X=(1.-Z)*PX-PTRX
+      P2Y=(1.-Z)*PY-PTRY
+C
+C-- SET LONGITUDINAL VARIABLES
+C   --------------------------
+      EPP1=EPP*Z
+      EPP2=EPP*(1.-Z)
+C
+C-- BOOK SECONDARIES, DECIDE WHICH IS NEXT TO CASCADE
+C   -------------------------------------------------
+C--  EXTRA PJSET INFO
+      NJSET=NJSET+1
+      IF(NJSET.GT.MXJSET) GO TO 560
+      PJSET(1,NJSET)=P1X
+      PJSET(2,NJSET)=P1Y
+      APSQ=P1SQ
+      AMT2=P1X**2+P1Y**2+APSQ
+      EPM1=AMT2/EPP1
+      PJSET(3,NJSET)=.5*(EPP1-EPM1)
+      PJSET(4,NJSET)=.5*(EPP1+EPM1)
+      PJSET(5,NJSET)=SQRT(APSQ)
+      JORIG(NJSET)=JPACK*JETN+JETP
+      JTYPE(NJSET)=JDENTF(IFLA1)
+      JDCAY(NJSET)=0
+      CALL ROTJET
+C
+      NJSET=NJSET+1
+      IF(NJSET.GT.MXJSET) GO TO 560
+      PJSET(1,NJSET)=P2X
+      PJSET(2,NJSET)=P2Y
+      APSQ=P2SQ
+      AMT2=P2X**2+P2Y**2+APSQ
+      EPM2=AMT2/EPP2
+      PJSET(3,NJSET)=.5*(EPP2-EPM2)
+      PJSET(4,NJSET)=.5*(EPP2+EPM2)
+      PJSET(5,NJSET)=SQRT(APSQ)
+      JORIG(NJSET)=JPACK*JETN+JETP
+      JTYPE(NJSET)=JDENTF(IFLA2)
+      JDCAY(NJSET)=0
+      CALL ROTJET
+C
+      JDCAY(JETP)=JPACK*(NJSET-1)+NJSET
+      IF(IGO1.EQ.0) GO TO 291
+C-- 1ST KEEPS CASCADING
+      IFLA=IFLA1
+      PSQ=P1SQ
+      EPP=EPP1
+      PX=P1X
+      PY=P1Y
+      JETP=NJSET-1
+C-- 2ND IN CUE FOR FUTURE CASCADING
+      NCUE=NCUE+1
+      MNCUEJ=MAX(MNCUEJ,NCUE)
+      IF(NCUE.GT.MXCUEJ) GO TO 550
+      IF(IGO2.EQ.0) P2SQ=-P2SQ
+      CUE(NCUE,1)=IFLA2
+      CUE(NCUE,2)=P2SQ
+      CUE(NCUE,3)=EPP2
+      CUE(NCUE,4)=P2X
+      CUE(NCUE,5)=P2Y
+      CUE(NCUE,6)=NJSET
+      GO TO 200
+C
+C-- 1ST STOPS, BOOKED IN PARQUA
+291   CONTINUE
+      JETC=NJSET-1
+      CALL JTBOOK(P1X,P1Y,EPP1,P1SQ,IFLA1)
+      IF(IGO2.EQ.0) GO TO 293
+C-- 2ND KEEPS CASCADING
+      IFLA=IFLA2
+      PSQ=P2SQ
+      EPP=EPP2
+      PX=P2X
+      PY=P2Y
+      JETP=NJSET
+      GO TO 200
+C-- 2ND STOPS, BOOKED IN PARQUA. LAST IN CUE PICKED UP FOR CASCADING
+293   CONTINUE
+      JETC=NJSET
+      CALL JTBOOK(P2X,P2Y,EPP2,P2SQ,IFLA2)
+C-- EXIT FROM BRANCHING LOOP, IF THERE IS NO CUE LEFT
+295   IF(NCUE.EQ.0) RETURN
+      IFLA=CUE(NCUE,1)
+      PSQ =CUE(NCUE,2)
+      EPP =CUE(NCUE,3)
+      PX  =CUE(NCUE,4)
+      PY  =CUE(NCUE,5)
+      JETP=CUE(NCUE,6)
+      NCUE=NCUE-1
+      IF(PSQ.LT.0.) GO TO 294
+      GO TO 200
+C-- LAST IN CUE STOPS, BOOKED IN PARQUA
+294   PSQ=-PSQ
+      JETC=JETP
+      CALL JTBOOK(PX,PY,EPP,PSQ,IFLA)
+      GO TO 295
+C
+C-- ABNORMAL EXIT
+550   N1=NEVENT+1
+      WRITE(ITLIS,551) MXCUEJ,N1,NJTQCD
+551   FORMAT(1H1,39HNUMBER OF QUANTA IN JETQCD CUE EXCEEDS       ,I10
+     1 //1X,11HEVENT NO. =         ,I10
+     1   //1X,20HNO. OF JETQCD CALLS      ,I10
+     3      ,19HAND INCREASE MXCUEJ           )
+      STOP
+560   WRITE(ITLIS,561) MXJSET
+561   FORMAT(5(/),1X,'NJSET EXCEEDS',I10,' (JETQCD)'
+     1//1X,'INCREASE MXJSET')
+      STOP
+      END

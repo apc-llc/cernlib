@@ -1,0 +1,17 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+AllTarget(ariadne)
+
+SUBDIRS= code test
+
+TopOfPackage(ariadne)
+
+MakeSubdirs($(SUBDIRS))
+
+SubdirLibraryTarget(ariadne,code)
+
+InstallLibrary(ariadne,$(CERN_LIBDIR))
+
+TestSubdirs(test)

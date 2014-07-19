@@ -1,0 +1,730 @@
+# This is the Makefile for the Ariadne program. You should edit it to 
+# suite the way your system is set up. The macros you should customize
+# are: FC FFLAGS JETSET PYTHIA LEPTO and INSTALLDIR. A few examples are
+# given for each macro.
+
+# set FC to the FORTRAN 77 compiler you want to use.
+FC = f77
+
+# set FFLAGS to the compiler options you want to use:
+FFLAGS = -O
+# FFLAGS = -O4 -automatic -fpe1
+
+# JETSET should be set to the name of the object/library file for JETSET v.7
+JETSET = -L/cern/pro/lib -ljetset74
+# JETSET = -L$$HOME/lib -lj74
+# JETSET = -L/usr/users/lib -lj74
+# JETSET = -L/usr/local/lib -lj74
+# JETSET = $$HOME/lib/jetset_74.o
+
+# PYTHIA sould be set to the name of the object/library file for PYTHIA v.5
+PYTHIA = -L/cern/pro/lib -ljetset74
+# PYTHIA = -L$$HOME/lib -lpy5
+# PYTHIA = -L/usr/users/lib -lpy5
+# PYTHIA = -L/usr/local/lib -lpy5
+# PYTHIA = $$HOME/lib/pythia_56.o
+
+# LEPTO sould be set to the name of the object/library file for LEPTO v.6
+LEPTO = -L/cern/pro/lib -llepto61 -lgenlib -lkernlib 
+# LEPTO = -L$$HOME/lib -ll61
+# LEPTO = -L/usr/users/lib -ll61
+# LEPTO = -L/usr/local/lib -ll61
+# LEPTO = $$HOME/lib/lepto_61.o
+
+# INSTALLDIR should be set to the name of the directory where the compiled 
+# Ariadne program should be placed.
+INSTALLDIR = $$HOME/lib
+# INSTALLDIR = /usr/users/lib
+# INSTALLDIR = /usr/local/lib
+
+#
+# YOU SHOULD NOT CHANGE ANYTHING BELOW THIS LINE
+#
+
+objects = araddg.o arangl.o arbocm.o arcasc.o archem.o arclus.o arcopa.o  arcopj.o arcrdi.o ardump.o arduph.o ardyre.o aremit.o arerrm.o  arexec.o argpt2.o argqcd.o argqed.o argtyp.o arinit.o aript2.o  arjoin.o armade.o armass.o armcdi.o armipt.o arnofl.o arordj.o  arorie.o arpars.o arradg.o arradp.o arradq.o arreca.o arupdj.o  arrndx.o arrndy.o arrobo.o arsplg.o arstor.o artest.o arveto.o  artune.o arprda.o archki.o arexma.o arphas.o arlept.o argdis.o  arpyth.o arptqq.o arinqq.o arsume.o arzcms.o arpcms.o arstra.o  arscan.o arremn.o arpoki.o arposf.o arupom.o lnstrf.o pystfu.o  arniqq.o armtqq.o arging.o aradig.o arearr.o arputr.o arthrw.o  aruthr.o ar4frm.o
+
+sources = arinit.f araddg.f arangl.f arbocm.f arcasc.f archem.f arclus.f  arcopa.f arcopj.f arcrdi.f ardump.f arduph.f ardyre.f aremit.f  arerrm.f arexec.f argpt2.f argqcd.f argqed.f argtyp.f aript2.f  arjoin.f armade.f armass.f armcdi.f armipt.f arnofl.f arordj.f  arorie.f arpars.f arradg.f arradp.f arradq.f arreca.f arupdj.f  arrndx.f arrndy.f arrobo.f arsplg.f arstor.f artest.f arveto.f  artune.f arprda.f archki.f arexma.f arphas.f arlept.f argdis.f  arpyth.f arptqq.f arinqq.f arsume.f arzcms.f arpcms.f arstra.f  arscan.f arremn.f arpoki.f arposf.f arupom.f lnstrf.f pystfu.f  arniqq.f armtqq.f arging.f aradig.f arearr.f arputr.f arthrw.f  aruthr.f ar4frm.f
+
+all: lib
+
+test: atest jtest ltest ptest
+	./atest
+	./jtest
+	./ltest
+	./ptest
+
+atest: libartest.a atest.f
+	$(FC) $(FFLAGS) -o atest atest.f -L. -lartest $(JETSET)
+
+jtest: libartest.a jtest.f
+	$(FC) $(FFLAGS) -o jtest jtest.f -L. -lartest $(JETSET)
+
+ltest: libartest.a ltest.f
+	$(FC) $(FFLAGS) -o ltest ltest.f $(LEPTO) -L. -lartest $(JETSET)
+
+ptest: libartest.a ptest.f
+	$(FC) $(FFLAGS) -o ptest ptest.f $(PYTHIA) -L. -lartest $(JETSET)
+
+lib: libartest.a
+
+libartest.a: libar4.a
+	rm -f libartest.a
+	ln -s libar4.a libartest.a
+
+libar4.a: $(objects)
+	$(AR) $(ARFLAGS) $@ $?
+	ranlib $@
+
+.f.o:
+	$(FC) -c $(FFLAGS) $*.f
+
+install: libar4.a
+	cp libar4.a $(INSTALLDIR)
+
+clean:
+	rm -f *.o *~ core *.bak
+
+realclean: clean
+	rm -f atest jtest ltest ptest libar4.a libartest.a
+
+# DO NOT DELETE THIS LINE -- f77dep uses it.
+# DO NOT PUT ANYTHING AFTER THIS LINE, IT WILL GO AWAY.
+
+arinit.o : arinit.f \
+    arimpl.f \
+    arpart.f \
+    ardat1.f \
+    ardat2.f \
+    ludat1.f \
+    ludat2.f \
+    leptou.f \
+    pypars.f \
+    arimpl.f \
+    ardat1.f \
+    ardat2.f \
+    ardat3.f \
+    arhide.f \
+    arpopa.f
+araddg.o : araddg.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    ardips.f \
+    arstrs.f
+arangl.o : arangl.f \
+    arimpl.f \
+    arpart.f
+arbocm.o : arbocm.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arint2.f \
+    arimpl.f \
+    lujets.f \
+    arimpl.f \
+    lujets.f \
+    ludat1.f \
+    pypars.f \
+    leptou.f
+arcasc.o : arcasc.f \
+    arimpl.f \
+    arstrs.f \
+    ardat1.f \
+    arlist.f \
+    arimpl.f \
+    arstrs.f \
+    ardat1.f \
+    arimpl.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f
+archem.o : archem.f \
+    arimpl.f \
+    arpart.f \
+    arint3.f \
+    ardat1.f \
+    lujets.f
+arclus.o : arclus.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    ludat1.f
+arcopa.o : arcopa.f \
+    arimpl.f \
+    arpart.f \
+    lujets.f \
+    ardat1.f
+arcopj.o : arcopj.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    lujets.f \
+    ludat1.f \
+    ludat2.f
+arcrdi.o : arcrdi.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f
+ardump.o : ardump.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    lujets.f
+arduph.o : arduph.f \
+    arimpl.f \
+    arpart.f \
+    arstrs.f \
+    arint3.f \
+    lujets.f
+ardyre.o : ardyre.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arint2.f \
+    arhide.f
+aremit.o : aremit.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    arhide.f \
+    arint1.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f
+arerrm.o : arerrm.f \
+    arimpl.f \
+    arstrs.f \
+    ardat1.f \
+    ardat3.f
+arexec.o : arexec.f \
+    arimpl.f \
+    arpart.f \
+    ardat1.f \
+    lujets.f \
+    leptou.f \
+    arhide.f
+argpt2.o : argpt2.f \
+    arimpl.f \
+    ardat1.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arhide.f \
+    leptou.f
+argqcd.o : argqcd.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    arint1.f \
+    ludat1.f \
+    arimpl.f \
+    ardips.f \
+    arpart.f \
+    arstrs.f \
+    ardat1.f \
+    arint1.f \
+    arint2.f \
+    arhide.f \
+    ludat1.f \
+    arimpl.f \
+    ardips.f \
+    ardat1.f \
+    ardat2.f \
+    arint1.f \
+    ludat1.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arint1.f \
+    arhide.f \
+    arlist.f \
+    lujets.f
+argqed.o : argqed.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arint1.f \
+    arhide.f \
+    ludat1.f
+argtyp.o : argtyp.f \
+    arimpl.f \
+    lujets.f \
+    ludat2.f
+aript2.o : aript2.f \
+    arimpl.f \
+    arpart.f
+arjoin.o : arjoin.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ludat1.f
+armade.o : armade.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f
+armass.o : armass.f \
+    arimpl.f \
+    arpart.f
+armcdi.o : armcdi.f \
+    arimpl.f \
+    arint1.f
+armipt.o : armipt.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f
+arnofl.o : arnofl.f \
+    ardat2.f
+arordj.o : arordj.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    lujets.f \
+    ludat1.f
+arorie.o : arorie.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ludat1.f \
+    arimpl.f \
+    ludat1.f
+arpars.o : arpars.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f
+arradg.o : arradg.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arhide.f \
+    ardat1.f \
+    arint2.f \
+    arint4.f \
+    lujets.f
+arradp.o : arradp.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    arint2.f
+arradq.o : arradq.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    arint2.f
+arreca.o : arreca.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f
+arupdj.o : arupdj.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f
+arrndx.o : arrndx.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f
+arrndy.o : arrndy.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f \
+    ardat1.f \
+    arimpl.f \
+    arint1.f
+arrobo.o : arrobo.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arimpl.f \
+    arpart.f
+arsplg.o : arsplg.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat2.f
+arstor.o : arstor.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f
+artest.o : artest.f \
+    arimpl.f \
+    ardat1.f \
+    ardat3.f \
+    arint1.f \
+    lujets.f \
+    ludat1.f
+arveto.o : arveto.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arint4.f \
+    arhide.f \
+    arimpl.f \
+    ardat1.f \
+    arint1.f \
+    arint4.f \
+    arhide.f \
+    arimpl.f \
+    arint1.f \
+    arimpl.f \
+    arint1.f
+artune.o : artune.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f \
+    ludat1.f \
+    leptou.f \
+    pypars.f
+arprda.o : arprda.f \
+    arimpl.f \
+    ardat1.f
+archki.o : archki.f \
+    arimpl.f \
+    arstrs.f \
+    ardat1.f \
+    arint1.f \
+    arpart.f \
+    ardips.f \
+    ardat2.f \
+    arhide.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f
+arexma.o : arexma.f \
+    arimpl.f \
+    arpart.f \
+    ardat1.f
+arphas.o : arphas.f \
+    arimpl.f \
+    ardat1.f \
+    leptou.f \
+    lujets.f \
+    arint4.f \
+    ludat1.f
+arlept.o : arlept.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arint4.f \
+    arhide.f \
+    lujets.f \
+    leptou.f
+argdis.o : argdis.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    arint1.f \
+    arhide.f \
+    ludat1.f \
+    leptou.f \
+    arimpl.f \
+    ardips.f \
+    ardat1.f \
+    arint1.f \
+    arhide.f \
+    ludat1.f
+arpyth.o : arpyth.f \
+    arimpl.f \
+    arpart.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f \
+    ludat2.f \
+    pypars.f \
+    pyint1.f \
+    leptou.f \
+    arimpl.f \
+    arpart.f \
+    lujets.f \
+    pypars.f \
+    arimpl.f \
+    arpart.f \
+    lujets.f \
+    pypars.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f \
+    pypars.f
+arptqq.o : arptqq.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f \
+    ludat1.f
+arinqq.o : arinqq.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstrf.f \
+    ardat1.f \
+    arhide.f
+arsume.o : arsume.f \
+    arimpl.f \
+    arpart.f
+arzcms.o : arzcms.f \
+    arimpl.f
+arpcms.o : arpcms.f \
+    arimpl.f
+arstra.o : arstra.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f
+arscan.o : arscan.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f
+arremn.o : arremn.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    arstrf.f \
+    arlist.f \
+    arhide.f \
+    lujets.f \
+    ludat1.f \
+    pypars.f \
+    pyint3.f \
+    leptou.f \
+    arimpl.f \
+    arpart.f \
+    arhide.f \
+    lujets.f
+arpoki.o : arpoki.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    ardat1.f \
+    lujets.f \
+    ludat1.f \
+    leptou.f \
+    pypars.f
+arposf.o : arposf.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f \
+    arpopa.f \
+    arimpl.f
+arupom.o : arupom.f \
+    arimpl.f
+lnstrf.o : lnstrf.f \
+    arimpl.f
+pystfu.o : pystfu.f \
+    arimpl.f
+arniqq.o : arniqq.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstrf.f \
+    ardat1.f \
+    arhide.f \
+    ludat1.f
+armtqq.o : armtqq.f \
+    arimpl.f \
+    ardat1.f \
+    arhide.f \
+    ludat1.f
+arging.o : arging.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f \
+    ludat1.f \
+    leptou.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f \
+    ludat1.f \
+    leptou.f
+aradig.o : aradig.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstrf.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f \
+    leptou.f \
+    lujets.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstrf.f \
+    arlist.f \
+    ardat1.f \
+    arhide.f \
+    leptou.f \
+    lujets.f
+arearr.o : arearr.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arlist.f \
+    arhide.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f
+arputr.o : arputr.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstak.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    arstak.f
+arthrw.o : arthrw.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f
+aruthr.o : aruthr.f \
+    arimpl.f
+ar4frm.o : ar4frm.f \
+    arimpl.f \
+    arpart.f \
+    ardips.f \
+    arstrs.f \
+    ardat1.f \
+    arhide.f \
+    lujets.f \
+    ludat1.f
+atest.o : atest.f
+jtest.o : jtest.f
+ltest.o : ltest.f
+ptest.o : ptest.f
+
+# IF YOU PUT ANYTHING HERE IT WILL GO AWAY

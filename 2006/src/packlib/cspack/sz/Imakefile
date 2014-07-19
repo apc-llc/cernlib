@@ -1,0 +1,13 @@
+SRCS_F=	setdef.F szcd.F szclos.F szinqr.F szls.F szmv.F szopen.F \ @@\
+	szpiaf.F szread.F szrewd.F szrite.F szrm.F szvers.F
+
+#if defined(CERNLIB_IBMRT) && defined(CERNLIB_PLODGE)
+/* Historical */
+SRCS_F := $(SRCS_F) chdir.F getcwd.F
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F := $(SRCS_F) getdef.F
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

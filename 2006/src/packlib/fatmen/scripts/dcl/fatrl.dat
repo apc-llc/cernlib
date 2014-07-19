@@ -1,0 +1,70 @@
+*
+* $Id: fatrl.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatrl.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATRL.COM
+$!
+$!    Copy FATMEN update files from "RDR" to [.TODO]
+$!    Requires CERN Interlink mod to transfer files as user.fn_ft
+$!
+$      set noverify
+$ !
+$ if p1 .eqs. "" then exit
+$ fatmen =  p1
+$ count  = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$ if f$trnlnm("RDRLIST_DEVICE") .eqs. "" then -
+define/proc/nolog rdrlist_device "SYS$SPECIFIC:"
+$ if f$trnlnm("RDRLIST_DIRECTORY") .eqs. ""
+$ then rdr_dir = "[DECNET]"
+$ else rdr_dir = f$trnlnm("RDRLIST_DIRECTORY")
+$ endif
+$ !
+$ !     Loop over all FATMEN
+$ !
+$loop:
+$ fatman = f$element(count,",",fatmen)
+$ if fatman .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''fatman'..."
+$ ON WARNING THEN GOTO UNDEFINED
+$ fatdir = &fatman
+$ ON WARNING THEN CONTINUE
+$ search   = "RDRLIST_DEVICE:" + rdr_dir + fatman + ".*;*"
+$ fatuser  = &fatman
+$ fatdir   = f$extract(0,f$length(fatuser)-1,fatuser) + ".TODO]"
+$ loop_rdr:
+$ cur_file = f$search(search)
+$ if cur_file .eqs. "" then goto loop
+$ if f$locate("_",cur_file) .eq. f$length(cur_file) then goto loop_rdr
+$ fname    = f$parse(cur_file,,,"NAME")
+$ !
+$ ! Skip files not destined for us...
+$ !
+$ if fname .nes. fatman then goto loop_rdr
+$ ftype    = f$parse(cur_file,,,"TYPE") - "."
+$ if f$locate("_",ftype) .eq. f$length(ftype) then goto loop_rdr
+$ created  = f$file_attributes(cur_file,"RDT")
+$ fatdate  = f$cvtime(created,,"DATE") - "-" - "-"
+$ fattime  = f$cvtime(created,,"HOUR") + f$cvtime(created,,"MINUTE") + -
+f$cvtime(created,,"SECOND")
+$ ftype    = "''fname'_CERNVM"
+$ fatfile  = fatdir + ftype + "." + fatdate + fattime
+$ copy 'cur_file' 'fatfile'
+$ !
+$ delete 'cur_file' ! requires PRIV
+$ !
+$     goto loop_rdr
+$ !
+$ undefined:
+$ write sys$output "Warning: symbol ''fatman' is not defined"
+$ goto loop
+$ !
+$ end:
+$ set message 'save_mess'
+$ exit

@@ -1,0 +1,34 @@
+SRCS_F= \ @@\
+	 acosx.F alias.F amass.F asimp.F atan2x.F baryo.F bboost.F bdecay.F \ @@\
+	 betaeu.F bevber.F bevint.F bgefla.F bgeven.F bgexin.F bgpair.F \ @@\
+	 bjets.F bkweig.F blept.F bmcorr.F book.F boso.F bpregn.F bradlp.F \ @@\
+	 bwidth.F charge.F chdec.F cjeb.F cjrn.F cojets.F ddang.F decay.F \ @@\
+	 dmatch.F dqhfsi.F dqhid.F dqhnid.F dreyin.F dsdt.F dsexg.F dsexq.F \ @@\
+	 dshvg.F dshvq.F dumpev.F editp.F eicht1.F eicht2.F evol.F f2in.F \ @@\
+	 fevinb.F fevinj.F fglu.F figlu.F fillbo.F fillhd.F findx.F fiqrk.F \ @@\
+	 flavex.F fmul.F fmuldg.F force.F forcsl.F forpre.F framul.F \ @@\
+	 freeze.F fun1.F fun2.F fun3.F fusion.F gecode.F gefla.F gepair.F \ @@\
+	 geqsq.F gevent.F gexin.F grot.F gsplit.F hadron.F hard.F headb.F \ @@\
+	 headh.F heavyq.F hgeven.F idext.F idgen.F iniqcd.F inpart.F \ @@\
+	 inqcds.F inset.F intid.F jdentf.F jetcor.F jetgen.F jetqcd.F \ @@\
+	 jtbook.F kno.F krcomb.F label.F list.F listph.F looseq.F loren4.F \ @@\
+	 lorlab.F match.F mnbias.F movlev.F mpscat.F overdm.F p4corr.F \ @@\
+	 papint.F partab.F pregen.F prhead.F psqgen.F ptwgt.F q2gen.F \ @@\
+	 readin.F readtb.F reorsl.F rotjet.F rotqua.F sblock.F shocas.F \ @@\
+	 spectj.F stabkp.F stabph.F stopd.F tables.F tbkisa.F tbook.F \ @@\
+	 tevol.F timelf.F topdcy.F wdang.F wdecay.F wdecif.F weakin.F \ @@\
+	 wpardn.F wpsqz.F wrad.F writeb.F writeh.F x1exp.F z0rad.F zdang.F \ @@\
+	 zdecay.F zdecif.F zgen.F zgens.F zlim.F zlimsy.F zpsqz.F
+
+#if !defined(CERNLIB_GFORTRAN)
+FORTRANSAVEOPTION = FortranSaveFlags
+#else
+FORTRANSAVEOPTION = -fno-automatic
+#endif
+
+#ifdef CERNLIB_IBMRT
+SpecialFortranLibObjectRule(jetqcd,jetqcd,NullParameter,NullParameter)
+#endif
+
+
+SubdirLibraryTarget(NullParameter,NullParameter)

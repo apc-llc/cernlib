@@ -1,0 +1,12 @@
+*
+* $Id: v105.dat,v 1.1.1.1 1996/02/15 17:47:45 mclareni Exp $
+*
+* $Log: v105.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:45  mclareni
+* Kernlib
+*
+*
+*  Version 1.05  870529 16.00
+C- Deletions:
+C  > M441 BITPAK, M508 BITPOS removed into normal KERN-pams
+C

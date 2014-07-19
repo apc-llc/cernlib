@@ -1,0 +1,3100 @@
+*
+* $Id: herwig58.lis,v 1.1.1.1 1996/03/08 17:02:19 mclareni Exp $
+*
+* $Log: herwig58.lis,v $
+* Revision 1.1.1.1  1996/03/08 17:02:19  mclareni
+* Herwig58
+*
+*
+* This directory was created from herwig58.car patch doc
+CDECK  ID>, INFORM. 
+
+                           H E R W I G
+
+            a Monte Carlo event generator for simulating
+        +---------------------------------------------------+
+        | Hadron Emission Reactions With Interfering Gluons |
+        +---------------------------------------------------+
+      G. Marchesini, Dipartimento di Fisica, Universita di Milano
+          I.G. Knowles(*), M.H. Seymour(+) and  B.R. Webber,
+                   Cavendish Laboratory, Cambridge
+-----------------------------------------------------------------------
+ with Deep Inelastic Scattering and Heavy Flavour Electroproduction by
+ G.Abbiendi and L.Stanco, Dipartimento di Fisica, Universita di Padova
+-----------------------------------------------------------------------
+        and Jet Photoproduction in Lepton-Hadron Collisions
+             by J. Chyla, Institute of Physics, Prague
+-----------------------------------------------------------------------
+(*)present address: Dept of Physics and Astronomy,University of Glasgow
+-----------------------------------------------------------------------
+(+)present address: Dept of Theoretical Physics, University of Lund.
+-----------------------------------------------------------------------
+                     Version 5.8 - August 1994
+-----------------------------------------------------------------------
+ Main reference:
+    G.Marchesini,  B.R.Webber,  G.Abbiendi,  I.G.Knowles,  M.H.Seymour,
+    and L.Stanco, Computer Physics Communications 67 (1992) 465.
+-----------------------------------------------------------------------
+ Please send e-mail about  this program  to one of the  authors at the
+ following addresses:
+       Decnet   : 19616::webber, vxdesy::abbiendi, 19800::knowles
+       Internet : webber@hep.phy.cam.ac.uk,
+                  mike@thep.lu.se, knowles@v2.ph.gla.ac.uk
+-----------------------------------------------------------------------
+
+                        ******CONTENTS******
+
+    1. INTRODUCTION
+    2. NEW FEATURES OF THIS VERSION
+    3. FEATURES NOT YET INCLUDED
+    4. PROGRAM STRUCTURE
+    5. BEAMS AND PROCESSES
+    6. INPUT PARAMETERS
+    7. COMMON BLOCK FILE
+    8. FORM FACTOR FILE
+    9. EVENT DATA
+   10. STATUS CODES
+   11. EVENT WEIGHTS
+   12. HEAVY FLAVOUR DECAYS
+   13. QCD HARD SUBPROCESSES
+   14. DIRECT PHOTON SUBPROCESSES
+   15. QCD HIGGS PLUS JET SUBPROCESSES
+   16. ELECTROWEAK SUBPROCESSES
+   17. INCLUDING NEW SUBPROCESSES
+   18. ERROR CONDITIONS
+   19. SAMPLE OUTPUT
+   20. GUIDE TO SAMPLE OUTPUT
+   21. SUBROUTINE DESCRIPTIONS
+
+ -----------------------------------------------------------------------
+
+                     ****** 1. INTRODUCTION*******
+
+    HERWIG is a general-purpose event generator for high energy hadronic
+    processes,  with particular  emphasis on the detailed  simulation of
+    QCD parton showers.  The program has the following special features:
+
+  * Simulation  of any  combination of  hard lepton,  hadron  or  photon
+    scattering and soft hadron-hadron collisions in one package.
+
+  * Colour coherence of partons (initial and final) in hard subprocesses
+
+  * Heavy flavour hadron production and decay with QCD coherence effects
+
+  * QCD jet evolution  with soft gluon interference via angular ordering
+
+  * Backward  evolution of  initial-state partons including interference
+
+  * Azimuthal correlations  within and  between jets due to interference
+
+  * Azimuthal correlations  within  jets  due  to   gluon   polarization
+
+  * Cluster  hadronization of jets via  non-perturbative gluon splitting
+
+  * A similar  cluster  model for soft and  underlying  hadronic  events
+
+   Further details may be found in the references cited above and at the
+   end of this Section, and in comments distributed throughout the code.
+
+   The program  operates by  setting up  parameters in common blocks and
+   then  calling a  sequence of  subroutines to generate an event. Para-
+   meters  not set in the main program  HWIGPR are set to default values
+   in the main initialisation routine HWIGIN.
+
+   To generate events the user must first set up the beam particle names
+   PART1, PART2 (type CHARACTER*4) in the common block /HWBEAM/, and the
+   beam momenta  PBEAM1, PBEAM2 (in GeV/c), a process code IPROC and the
+   number of events required  MAXEV  in /HWPROC/.  See Sect. 5 for beams
+   and processes available.
+
+   All  analysis of  generated  events  (histogramming, etc.)  should be
+   performed  by  the  user-provided  routines  HWABEG  (to initialise),
+   HWANAL (to analyse an event) and  HWAEND  (to terminate).  At present
+   HWANAL  writes  event  information and stable  particle  data on unit
+   LWEVT  defined in  HWIGIN (or simply returns if LWEVT=0).  See HWANAL
+   for details of event information written.  Note  that  HWANAL  should
+   always begin with the line
+      IF (IERROR.NE.0) RETURN
+   to prevent it being executed for incomplete events.
+
+   A detailed  event  summary is printed out for the first  MAXPR events
+   (default MAXPR=1). Set  IPRINT=2  to list the particle identity codes
+   and  (simplified) particle decay schemes used in the program.
+
+   The  programming language is  standard Fortran 77 as far as possible.
+   However,  the  following  may  require  modification  for  running on
+   computers  other than  Vax's:
+
+  *  Most  common  blocks are  inserted  by  INCLUDE 'HERWIG58.INC'  Vax
+     Fortran  statements   (see  below  for  contents  of  HERWIG58.INC)
+
+  *  Subroutine  HWUTIM (returning CPU time left) is  machine dependent.
+
+    The principal references are:
+
+    G.Marchesini  and  B.R.Webber,  Nucl. Phys. B310 (1988) 461;  I.G.
+    Knowles,  Nucl. Phys. B310 (1988) 571;  S.Catani, G.Marchesini and
+    B.R.Webber, Nucl. Phys. B349 (1991) 635;  G.Abbiendi and L.Stanco,
+    Comp.Phys.Comm. 66 (1991) 16, Zeit. Phys. C51 (1991) 81;
+    M.H.Seymour, Zeit. Phys. C56 (1992) 161.
+
+
+    Some additional relevant references are:
+
+    A.Bassetto, M.Ciafaloni and G.Marchesini, Phys. Rep. 100 (1983) 201;
+    G. Marchesini  and  B.R. Webber,  Nucl. Phys.  B238 (1984) 1;  Phys.
+    Rev. D38 (1988) 3419;  B. R. Webber,   Nucl. Phys.  B238 (1984) 492;
+    Ann. Rev. Nucl. Part. Sci. 36 (1986) 253;  I.G. Knowles, Nucl. Phys.
+    B304 (1988) 794; Computer Phys. Comm. 58 (1990) 271.
+ -----------------------------------------------------------------------
+
+                 *** 2. NEW FEATURES OF THIS VERSION ***
+
+  * A hard matrix element correction has been introduced in DIS (IPROC =
+    90**).  This is switched  on and  off by the logical variable HARDME
+    (default = .TRUE.).  The method is essentially identical to the e+e-
+    correction,  generating  first  order  matrix-element  events  in  a
+    phase-space region  complementary  to that of the parton shower. The
+    e+e- correction is also now controlled by HARDME for consistency.
+
+  * Soft matrix element corrections have been introduced in DIS and e+e-
+    processes.  These correct  the distribution of emissions  within the
+    parton  shower  phase-space.   It is similar to  the method  used in
+    JETSET,  except that the  HARDEST emission is matched to the leading
+    order matrix element, not the first as in JETSET.  This ensures that
+    the correction  enters into the  form factor,  and not just the real
+    emission probability.
+
+  * In the backward evolution of initial-state radiation for photons the
+    anomalous branching q-qbar <-- gamma has been introduced.
+
+  * The treatment of forced branching of gluons and sea (anti-)quarks in
+    backward evolution has been improved,   by allowing it to occur at a
+    random scale  between the space-like cutoff  QSPAC  and the infrared
+    cutoff, instead of exactly at QSPAC as before.
+    A new option  ISPAC=2  allows the freezing of structure functions at
+    the scale QSPAC,   while evolution continues to the infrared cutoff.
+    The default,  ISPAC=0  is equivalent to previous versions,  in which
+    perturbative evolution stops at QSPAC.
+
+  * It is now possible to completely switch off initial-state radiation,
+    by setting NOSPAC =.TRUE.   Only the forced splitting of non-valence
+    partons is generated. The default is (of course) NOSPAC =.FALSE.
+
+  * An option to damp the parton distributions of off mass-shell photons
+    relative on-shell photons,  according to the scheme defined in Drees
+    and Godbole MAD/PH/819 has been introduced. The adjustable parameter
+    PHOMAS defines the crossover from the  non-suppressed to  suppressed
+    regimes.  Recommended values lie in the range  QCDLAM to 1 GeV.  The
+    default value PHOMAS=0. corresponds to no suppression as in previous
+    versions.
+
+  * The interface to PDFLIB version 4 has been slightly changed. Instead
+    of indicating a PDF set by a unique number, an `author group' string
+    and set number are required. PDFLIB version 3 can still be used from
+    HERWIG, simply by setting the author group to 'MODE'. It is also now
+    possible to independently set the PDF set for each of the two beams.
+    For example, if you previously used MRS D- for the proton and Gordon
+    -Storrow set 1 for the photon, by setting
+          MODPDF=47
+          MODPHO=231
+    You should now set
+          AUTPDF(2)='MRS'
+          MODPDF(2)=28
+          AUTPDF(1)='GS'
+          MODPDF(1)=2
+    Alternatively, if you are still using PDFLIB version 3, you can set
+          AUTPDF(2)='MODE'
+          MODPDF(2)=47
+          AUTPDF(1)='MODE'
+          MODPDF(1)=231
+
+  * In the  CLDIR=1  option for  cluster  decays  a new parameter  CLSMR
+    (default = 0.)  allows a  Gaussian smearing  of the direction of the
+    perturbative quark's momentum.  The smearing is actually exponential
+    in 1-cos(theta) with mean CLSMR.  Thus increasing CLSMR decorrelates
+    the cluster decay from the initial quark direction.
+
+  * New subprocess have been added:
+
+    - The direct,  higher twist,  production of light (u,d,s) L=0 mesons
+      by point-like photons is now available: IPROC = 5500 all Spin =0,1
+      mesons, = 5510 only S=0 mesons; = 5520 only S=1 mesons. The vector
+      mesons are produced with transverse  or  longitudinal polarisation
+
+      and decayed accordingly.
+
+    - High transverse momentum,  scalar Higgs production, in association
+      with a jet, is now available as IPROC =2300. Only the top quark is
+      included in the loops with IAPHIG controlling the approx. used: =0
+      zero top mass limit; = 1 exact result; = 2 infinite top mass limit
+      (default 1). Note the routines: HWHGJ1, HWHGJA, HWHGJB/C/D, HWUCI2
+      and HWULI2 use (non-standard FORTRAN-77)  DOUBLE COMPLEX variables
+      which may not be accepted by some compilers.   Users can change to
+      COMPLEX variables, however this involves a risk of rounding errors
+      spoiling numerical cancellations.
+
+    - DIS with neutrino beams is now available in processes IPROC= 90**.
+
+  * The DIS O(alpha_s) jet production processes, IPROC = 92**, have been
+    withdrawn and are no longer supported.
+
+  * A running electromagnetic coupling has been introduced,  HWUAEM(Q2).
+    ALPHEM (now a single variable)  sets the Thomson limit (Q2=0) value,
+    default = 0.0072993 (1/137.0).
+
+  * Two new particles have been created: 'REMG', IDHW=71, IDHEP=9998 and
+    'REMN',  IDHW=72,  IDHEP=9999   are  remnant  photons  and  nucleons
+    respectively.  They are identical to photons & nucleons, except that
+    gluons are labelled as valence partons and, for the nucleon, valence
+    quark distributions are set to zero. They are used internally by the
+    JIMMY generator for multiple interactions,  and are not intended for
+    general use.
+
+  * An error in setting the scale EMCMF (now called EMSCA) for QCD
+    decays of colour neutral particles, preventing parton showers, has
+    been corrected.
+
+  * Minor bugs have been corrected in:  phi decays to neutral kaons; the
+    weights for photo-production processes; the value of EVWGT in di-jet
+    production by point-like photons.
+
+  * The transverse momentum cutoff  for final-state photon emission from
+    quarks, VPCUT, now defaults to 0.4 GeV.  Previous versions defaulted
+    to SQRT(S), switching off such emission.
+
+  * The default top quark mass has been increased to 170 GeV/c^2
+
+
+
+    Version 5.1 of  HERWIG was described  in detail in  Computer Physics
+    Communications 67 (1992) 465. For completeness we list here also the
+    main new features added in versions 5.2 - 5.7.
+
+    In version 5.2:
+
+  * New e+e- processes:
+    - two photon processes, IPROC = 500+ID  where ID=0-10 is the same as
+      in Higgs processes for qqbar, llbar, and W+W-.  The phase space is
+      controlled  by  EMMIN,EMMAX for the CMF mass,  PTMIN,PTMAX for the
+      transverse momentum of the CMF in the lab,  and CTMAX  for the CMF
+      angle of the outgoing particles.
+    - photon-W fusion,  IPROC = 550+ID  where  ID=0-9 is the  same as in
+      Higgs processes,  except that ID=1 or 2 both give the sum of dubar
+      and udbar etc.  The phase space is controlled by EMMIN,EMMAX only.
+      The full 2-->3 matrix elements for photon e-->f f'bar nu are used,
+      so the cross-section  for real W production is correctly included.
+    - ZZ pair production,  IPROC=250 is treated just like WW production,
+      and is based on the program kindly supplied by Zoltan Kunszt.
+
+  * New ep processes:
+    - the phase space for BGF is now controlled by EMMIN,EMMAX as above.
+      The default values are 0 and RootS respectively,  corresponding to
+      the behaviour of version 5.1
+    - J/psi production from BGF, IPROC = 9104 is now available.
+    - W W fusion to Higgs is now available in ep, IPROC = 9500+ID.
+
+  * IPROC = 1600+ID now gives the sum of gluon fusion and q qbar fusion.
+    This is especially important in e+e- if tan(beta) is large,  when it
+    is dominated by e+e- --> e+e- gamma gamma --> e+e- b bbar H.
+
+  * Users can now force  Z --> b bbar  decays,  with MODBOS(i)=7  (for a
+    complete list see Sect. 15).  For example,  IPROC=250,  MODBOS(1)=7,
+    MODBOS(2)=0 gives ZZ production with one Z decaying to b bbar.
+
+  * All Higgs vertices now include an enhancement factor to  account for
+    non-SM couplings. ENHANC(ID), where ID=1-11 is the same as for Higgs
+    production, holds the ratio of the AMPLITUDE for the given vertex to
+    that of the SM. This of course only simulates the chargeless scalars
+    of any extended model, and not the pseudoscalars or charged Higgses.
+
+  * The heavy quark  content of the photon  now uses the  corrections to
+    the Drees-Grassie distribution functions for light quarks,  recently
+    calculated by C.S.Kim et al. (see M.Drees & C.S.Kim, DESY 91-039 and
+    C.S.Kim, Durham preprint DTP/91/16).
+
+  * A new structure function set, Owens1.1, similar to Duke+Owens1, but
+    fitted to new data (Preprint FSU-HEP-910606) is available via
+    NSTRU=5, and is now the default structure function set.
+
+    In version 5.3:
+
+  * O(alpha-s) jet production in ep processes has been included (IPROC=
+    9200 etc),  with Q**2 range controlled by  Q2MIN, Q2MAX and minimum
+    jet transverse momentum  (in the hard subprocess c.m. frame) set by
+    PTMIN. The new subroutines were written by Sebastian Brandis and we
+    are grateful to him for permission to use his code.
+
+  * Minor bugs have been fixed in the  backward evolution of quarks into
+    photons,  hadronic  processes  in e+e-, remnant hadronization in ep,
+    and in the  generation of weighted events  (ie. with NOWGT=.FALSE.).
+
+    In version 5.4:
+
+  * A correction to  hard gluon  emission in e+e- events  has been added
+    and is now the  default  process.  This uses the  O(alpha-s)  matrix
+    element to add events in the  `back-to-back'  region of  phase-space
+    corresponding to a quark-antiquark pair  recoiling from a  very hard
+    gluon.  Although this is asymptotically  negligible,  and  cannot be
+    produced  within the shower itself,  it has a sizeable effect at LEP
+    energies.   As a result,  the default parameters  have been retuned,
+    and show a marked improvement in agreement with  OPAL data for event
+    shapes sensitive to  three-jet  configurations  (J.W. Gary,  private
+    communication).   The  uncorrected  process  has  been  retained for
+    comparative purposes and is available as IPROC=120+IQ.
+
+  * Photons are now included in  time-like parton showering.  The infra-
+    red cutoff is VPCUT,  which defaults to SQRT(S)  corresponding to no
+    emission.  Agreement with LEP data is satisfactory  if used together
+    with the  matrix element correction  to produce photons in the back-
+    to-back region.  The results are  insensitive  to  VPCUT  variations
+    in the range 0.1-1.0 GeV.
+
+  * W decay correlations and width are  now correctly included in  W+jet
+    production (previous versions used unpolarized, on-shell approx.).
+
+  * An inconsistency in  the argument used for  alpha_s in the branching
+    g -> q qbar has been removed. The change is a non-leading correction
+    but leads to slightly more quarks in gluon jets.
+
+  * A new parameter  B1LIM  has been introduced for  B cluster hadroniz-
+    ation.  If  MCL is the B cluster mass and  MTH the threshold for its
+    decay into 2 hadrons,  the probability of  its decay into a single B
+    hadron is:   1 if MCL<MTH,   0 if MCL>(1+B1LIM)*MTH,   with a linear
+    interpolation i.e. 1-(MCL-MTH)/(B1LIM*MTH) if MTH<MCL<(1+B1LIM)*MTH.
+    Thus the default value  B1LIM=0 gives the same as previous versions,
+    while B1LIM>0 gives a harder B spectrum.
+
+  * B decays can now be performed by the  EURODEC  or  CLEO  Monte Carlo
+    packages.  The new variable  BDECAY  controls which package is used:
+    'HERW' for HERWIG; 'EURO' for EURODEC; 'CLEO' for CLEO.  The EURODEC
+    package can be obtained from the CERN library.   The CLEO package is
+    available by  kind permission of the CLEO collaboration,  and can be
+    obtained from Luca Stanco at the address given above.
+
+    In version 5.5:
+
+  * The Sudakov form factors can now be calculated using the one-loop or
+    two-loop alpha_s, according to the variable SUDORD (DEFAULT=1).  The
+    parton showering  still incorporates  the two-loop alpha_s in either
+    case but if SUDORD=1 this is done using the veto algorithm,  whereas
+    if SUDORD=2 no vetoes  are used in the  final-state evolution.  This
+    means that the  relative weight of any  shower configuration  can be
+    calculated in a closed form, and hence that showers can be `forced'.
+    For example,  a package of  routines  should  be available  soon for
+    forcing jets to contain  photons,  which will therefore  drastically
+    improve the efficiency of photon FSR studies.
+    To next-to-leading order  the two possibilities SUDORD=1 or 2 should
+    be identical,  but they  differ  at beyond-NLO,  so some results may
+    change a little. Previous versions were equivalent to SUDORD=1.
+
+  * Alpha_em is now multiplied by the factor ALPFAC (DEFAULT=1)  for all
+    quark-photon vertices in jets, and in the `dead zone' in e+e-.  This
+    is a cheap  way of improving  the efficiency of  photon FSR studies,
+    which should  not be needed  once photon forcing is available.  Note
+    that results at small ycut become sensitive to ALPFAC above about 5.
+
+  * A new parameter CLPOW (DEFAULT=2) is available in the cluster hadro-
+    nization model.  A cluster of mass  MCL made of quarks of mass M1,M2
+    is split into lighter clusters before decaying if
+                 MCL**CLPOW > CLMAX**CLPOW + (M1+M2)**CLPOW
+    Thus the previous value was CLPOW=2,  like the new default.  Smaller
+    values will  increase the  yield of  heavier clusters  (and hence of
+    baryons) for heavy quarks, without affecting light quarks much.  For
+    example, the default value gives no b-baryons (for the default value
+    of CLMAX) whereas CLPOW=1.0 makes b-baryons/b-hadrons about 1/4.
+
+  * The event record has been modified to retain entries for all partons
+    before hadronization  (with status ISTHEP=2).  During hadronization,
+    the gluons are split  into quark-antiquark,  while other partons are
+    copied to a location  (indicated by JDAHEP(1,*)) where their momenta
+    may be shifted slightly, to conserve momentum,  during heavy cluster
+    splitting. Previously the original momenta were shifted, so momentum
+    appeared not to be conserved at the parton level.
+
+  * Minor improvements have been made to: NLO correction to Higgs decays
+    to qqbar;  pt spectra of outgoing electrons in two-photon processes;
+    quark-mass effects in gamma-W fusion; WW spectrum below threshold in
+    e+e-; t-bbar spectrum in W Drell-Yan (IPROC=1406).
+
+  * Bugs preventing the use of  Sudakov form factor tables from disk and
+    gluon-> diquarks splitting option under some circumstances, together
+    with other minor bugs and machine-dependences, have been fixed.
+
+    In version 5.6:
+
+  * Decays of very heavy quarks  (top and higher generations)  can occur
+    either before or after hadronization. At present all top quarks will
+    decay  before/after hadronizing if the top mass is greater/less than
+    130 GeV.  This can be changed in subroutine HWDTOP.  All higher (>3)
+    generations now decay before hadronization. Note that the new state-
+    ment  CALL HWDHQK  must appear in the main program between the calls
+    to  HWBGEN and HWCFOR  to carry out any decays before hadronization.
+
+  * Bugs in the subroutine  HWHDOA for O(alpha_s)  jet production in DIS
+    have been corrected by J. Chyla,  who has also extended this process
+    into the photoproduction region. If Q2MIN.LT.2D-6 (the new default),
+    the kinematic lower limit on Q**2 is computed and used.  New options
+    IPROC=9250 to 9277 use various approximations to the neutral-current
+    matrix element, as specified in the Table below.
+
+  * The photoproduction  processes  have  also  been  extended  from the
+    original  heavy quark production program,  to include all quark pair
+    production  (IPROC=9100-9106)  and QCD Compton (IPROC=9110-9122), as
+    well as the sum of the two  (IPROC=9130).  The possible flavours for
+    the 9100,9110 and 9130 processes are limited by the input parameters
+    IFLMIN and IFLMAX  (defaults are 1 and 3, i.e. only u,d,s flavours).
+    The corresponding Charged Current processes are now provided via the
+    IPROC=9140-9144 codes.
+
+  * All the DIS processes  IPROC=9000-9599  are now available in e+e- as
+    well as  lepton-hadron  collisions.  The program  generates a photon
+    from the second beam (only) in Weizsacker-Williams approximation and
+    uses Drees-Grassie structure functions for DIS on the photon.
+
+  * Pointlike photon-hadron scattering  to produce QCD jets is available
+    as IPROC=5000.  This is suitable for  fixed-target  photoproduction,
+    provided events  are generated in  a frame in  which the  target has
+    high momentum, and then boosted back to the lab.  IPROC=5000+IQ gen-
+    erates only those processes involving quark flavour IQ,  using exact
+    kinematics and  light-cone  momentum fraction.  In both cases, after
+    event generation the hard subprocess code  IHPRO is set to  51,52 or
+    53 for photon+q->g+q, photon+qbar->g+qbar, or photon+g->q+qbar.
+
+  * The default limits on Q**2 in DIS processes  (Q2MIN,Q2MAX) have been
+    set very  small/large  (0.0, 1.D10)  and are reset  to the kinematic
+    limits unless  changed by the user.  This means the default Q2MIN is
+    not suitable for simple NC DIS (IPROC=9000 etc),  but is appropriate
+    for jet and heavy quark photoproduction.
+
+  * A new parameter  NMXJET,  the maximum number of  outgoing partons in
+    a hard subprocess  (default 200)  has been  introduced in the common
+    block file HERWIG56.INC.
+
+  * For technical reasons, some HERWIG status codes  ISTHEP  between 153
+    and 165 have changed their meanings. See the Table in Sect.10 below.
+
+  * Bugs in the hadronization of  diquark-antidiquark clusters have been
+    fixed. Any such clusters with  masses below threshold for decay into
+    baryon-antibaryon are shifted to the  threshold via a transfer of 4-
+    momentum to a neighbouring cluster.
+
+  * A bug in the default pion structure function (no gluons) is fixed.
+
+    In version 5.7:
+
+- ELECTRO-WEAK COUPLINGS: New arrays QFCH(16), VFCH(16,2), AFCH(16,2)
+  and VCKM(3,3) have been set up for couplings and CKM matrix.  See the
+  documentation file or HWIGIN for conventions.  Note that universality
+  is not assumed, so lepton axial couplings may differ for example; this
+  is primarily to cover Z' possibilities, see below. The variable
+  SCABI=sin^2 theta_Cabibbo is however also retained for the present.
+
+- A Z' has been introduced with PDG code 32, HERWIG identifier 202,
+  default mass 500 GeV, width GAMZP (default 5 GeV) and name 'Z0PR'.
+  It is invoked by setting ZPRIME=.TRUE. (default .FALSE.).
+
+- POLARISATION: incoming lepton and antilepton beam polarisations
+  are now specified by setting two new vectors EPOLN(3) and PPOLN(3):
+  component 3 is longitudinal and 1,2 transverse. Transverse only occurs
+  in e+e- routines; recall that two transverse 'measurements' are needed
+  to see an effect so it should not arise elsewhere. Note that in DIS
+  processes you have to set either EPOLN if it is a lepton or (exclusive)
+  PPOLN if an antilepton.
+
+  Polarisation effects are now included in e+e- 2/3 jet production
+  and Bjorken process, together with DIS processes apart from J/psi
+  production.
+
+- NEW SUBPROCESSES:
+  2200    QCD direct photon pair production (inc. g+g->gamma+gamma)
+  5100+IQ Point-like photon/QCD heavy flavour pair production
+  5200+IQ Point-like photon/QCD heavy flavour single excitation
+  The latter two replace 5000+IQ, while 5000 remains as before (ie
+  a sum over all processes and flavours with simplified kinematics)
+
+- The kinematic reconstruction of DIS processes can now take place in
+  the Breit frame, if BREIT=.TRUE. (the default value). Previous versions
+  used the lab frame. Although the reconstruction is fully invariant under
+  Lorentz boosts along the incoming hadron's direction, it is not under
+  transverse boosts, so there should be some difference between the two
+  frames. The boost is not performed for very small Q^2 (<10^-4) to avoid
+  numerical instabilities, but the two frames are in any case equivalent
+  for such small Q^2.
+
+- A new parameter PRSOF to produce an underlying event in only a fraction
+  PRSOF of events (default=1.0).  IPROC=19000 etc are thus equivalent to
+  PRSOF=0.
+
+- Non-diffractive hadronic minimum bias events (IPROC=8000) can now be
+  generated for a wider variety of beams (P,PBAR,PI+/-,K+/-,E+/-,MU+/-,GAMA
+  on target P; also P and PBAR or leptons on target N). The event weight
+  (previously set to 1.0 for this process) is the estimated cross section
+  based on the parametrizations of Donnachie and Landshoff, CERN-TH.6635/92.
+  The non-diffractive cross section is assumed to be 70% of the total.
+  For lepton beams a photon is first generated using the effective photon
+  approximation (see below) and then the on-shell photon cross section
+  is used.
+
+- A bug has been fixed in HWBRAN and HWSBRN (present in versions 5.1 to
+  5.6) that led to too much transverse momentum being developed by the
+  parton showers in hadron-hadron collisions. All radiation with pt
+  greater than the hard process scale is now vetoed. In the case of
+  initial-state radiation, this affects all events, while for final-state
+  radiation it only affects those in which the two jets have a rapidity
+  difference of more than about 3.4.
+
+- When SUDORD=2, no veto is needed for gluon splitting to quarks. This
+  means that no vetoes are needed for final state showering, except for
+  the previously-mentioned transverse momentum cut. The removal of
+  vetoes allows preselection of the flavours that a jet will contain,
+  giving a huge increase in the efficiency of rare process simulation. A
+  package is already available to simulate heavy flavour production
+  inside jets, and the equivalent for photons should soon be available.
+
+- Parameter BTCLM is now available to users to adjust the mass parameter
+  in remnant formation. Its default value, 1.0, is identical to previous
+  versions.
+
+- There is a new switch CLDIR for cluster decays. CLDIR=0 is the same as
+  previous versions, while CLDIR=1 (the default) means that a cluster that
+  contains a `perturbative' quark, ie one coming from the perturbative
+  stage of the event (the hard process or perturbative gluon splitting)
+  `remembers' its direction: when the cluster decays, the hadron carrying
+  its flavour continues in the same direction (in the cluster c.m. frame)
+  as the quark. This considerably hardens the spectrum of heavy hadrons,
+  particularly of c- and b-flavoured hadrons. It also introduces a tendency
+  for baryon-antibaryon pairs preferentially to align themselves with the
+  event axis (the `TPC/2gamma string effect').
+
+- The functionality of the routine HWUINE has now been split between it
+  and a new routine, HWUFNE. A call to the latter MUST be inserted into
+  the users main program, between the calls to HWMEVT and HWANAL. A
+  check is built in to version 5.7 to prevent execution if this change
+  is not made. See the documentation file for an example main program.
+  We should also take this opportunity to remind users that the analysis
+  routine HWANAL should begin with the line
+      IF (IERROR.NE.0) RETURN
+  since if an event is cancelled, each of the routines is still called
+  in turn until reaching the end of the main loop.
+
+- If the new flag USECMF is .TRUE. (the default), events are boosted to
+  their centre-of-mass frame before processing if necessary, and boosted
+  back afterwards.  This second boost is performed by the new routine
+  HWUFNE, so it is essential that this is inserted in the correct place,
+  as described above.
+
+- In hadronic processes with lepton beams (eg photoproduction in ep),
+  the lepton->lepton+photon vertex now uses the full tranverse-momentum-
+  dependent splitting function, with exact light-cone kinematics (i.e.
+  the Equivalent Photon instead of the Weizsacker-Williams approximation).
+  This means that the photon-hadron collision has a transverse momentum
+  in the lepton-hadron frame, and must be boosted to a frame where it
+  has no transverse momentum. Thus the cmf boost described above is
+  always used in these processes, regardless of the value of USECMF.
+  The correct lower energy cut-off appropriate to the hadronic process
+  is applied to the photon, rather than the fixed cut of 5 GeV that
+  was used in previous versions. The Q**2 of the photon is generated
+  within the kinematically allowed limits, or the user-defined limits
+  Q2WWMN and Q2WWMX (defaults 0 and 4) whichever is more restrictive.
+  The momentum fraction is generated within the kinematic limits or
+  between YBMIN and YBMAX (defaults 0 and 1).
+
+- Point-like photon processes (IPROC=5***) are now also available with
+  lepton beams, using the Equivalent Photon Approximation.
+
+- Several minor improvements have been made to the O(as) processes in
+  DIS (IPROC=91**):
+  - A sign error has been corrected that led to the incorrect sign for
+    the lepton-jet azimuthal correlation in QCD Compton processes.
+  - An additional cut on the phase-space generation has been provided:
+    the Bjorken-y variable (=Q^2/xs) is limited to range [YBMIN,YBMAX].
+  - BGSHAT=.FALSE. is now the default.
+  - J/Psi production (IPROC=9107) now uses the EPA instead of the WWA,
+    with the same phase-space cuts as hadronic processes with lepton
+    beams, see above.
+
+- Many bugs have been fixed in the other O(as) process routines, HWHDOA
+  and HWHDOM, ie for IPROC=92**. However, this process is no longer
+  supported, and is only retained for comparative purposes. It will be
+  withdrawn completely at the next version release.
+
+- An interface is now provided to Mark Gibbs' HERBVI package for baryon-
+  number violation, and other multi-W production processes, IPROC=7***.
+
+- Minor bug fixes in HWHDIS, HWHEGW and HWHIGW and minor improvements in
+  HWHHVY, HWHPHO, HWHQCD and HWHWEX hard process routines.
+
+- New fictional e+e- processes: e+e- -> gluon+gluon(+gluon), IPROC=107
+  & 127, treated just like e+e- -> quark+antiquark, summed over light
+  quark flavours, for direct comparisons between quark and gluon jets.
+
+- New logical variable PRNDEC (default=.TRUE. unless NMXHEP>9999) causes
+  track numbers in event listings to be printed in hexadecimal if.FALSE.
+  This is necessary for very large events such as those generated by the
+  HERBVI package (see above).
+
+- PDFLIB structure functions can now be used for the photon as well as
+  nucleons. The new variable MODPHO acts just like MODPDF. PDFLIB calls
+  have also been updated to allow for structure function sets with
+  flavour-asymmetric sea contributions.
+
+- A logical inconsistency has been fixed in the decays of clusters to
+  eta or eta' - previously all mixing was neglected, leading to double-
+  counting and a significant over-estimate of the number of each. The
+  new variable ETAMIX gives the eta_8/eta_0 mixing angle in degrees
+  (default = -20). Rates are not very sensitive to its exact value, as
+  the eta'/eta suppression is dominated by mass effects in the cluster
+  model.
+
+- The maximum weight is now always printed in full precision (needed
+  to be sure of generating the same events in repeated runs).
+
+- New constants:  GEV2NB=389385 
+                  ALPHEM(1)=1./137(.03599)    for Q^2=0.
+                  ALPHEM(2)=1./128            for Q^2~M_W^2
+  are introduced in various cross section formulae, and G_Fermi is
+  eliminated.
+
+- The default top quark mass was increased to 150 GeV.
+
+ -----------------------------------------------------------------------
+
+                  *** 3. FEATURES NOT YET INCLUDED***
+
+   Note that the following features are NOT yet included in the program:
+   polarization  of  produced  heavy  quarks  and leptons;  treatment of
+   coherence  in the  small-x region  of incoming  jets  (see S. Catani,
+   F. Fiorani  and  G. Marchesini,  Nucl.Phys. B336(1990)18);   multiple
+   parton  interactions  and  parton  shadowing;  diffractive processes;
+   QED radiative corrections; W/Z bosons within parton showers.
+
+ -----------------------------------------------------------------------
+
+                     ***** 4. PROGRAM STRUCTURE*****
+
+   The main program HWIGPR has the following form:
+
+      PROGRAM HWIGPR
+C---COMMON BLOCKS ARE INCLUDED AS FILE HERWIG58.INC
+      INCLUDE 'HERWIG58.INC'
+      INTEGER N
+C---MAX NUMBER OF EVENTS THIS RUN
+      MAXEV=100
+C---BEAM PARTICLES
+      PART1='PBAR'
+      PART2='P   '
+C---BEAM MOMENTA
+      PBEAM1=900.
+      PBEAM2=900.
+C---PROCESS
+      IPROC=1500
+C---INITIALISE OTHER COMMON BLOCKS
+      CALL HWIGIN
+C---USER CAN RESET PARAMETERS AT
+C   THIS POINT, OTHERWISE DEFAULT
+C   VALUES IN HWIGIN WILL BE USED.
+      PTMIN=1000.
+C---COMPUTE PARAMETER-DEPENDENT CONSTANTS
+      CALL HWUINC
+C---CALL HWUSTA TO MAKE ANY PARTICLE STABLE
+      CALL HWUSTA('PI0 ')
+C---USER'S INITIAL CALCULATIONS
+      CALL HWABEG
+C---INITIALISE ELEMENTARY PROCESS
+      CALL HWEINI
+C---LOOP OVER EVENTS
+      DO 100 N=1,MAXEV
+C---INITIALISE EVENT
+      CALL HWUINE
+C---GENERATE HARD SUBPROCESS
+      CALL HWEPRO
+C---GENERATE PARTON CASCADES
+      CALL HWBGEN
+C---DO HEAVY QUARK DECAYS
+      CALL HWDHQK
+C---DO CLUSTER FORMATION
+      CALL HWCFOR
+C---DO CLUSTER DECAYS
+      CALL HWCDEC
+C---DO UNSTABLE PARTICLE DECAYS
+      CALL HWDHAD
+C---DO HEAVY FLAVOUR HADRON DECAYS
+      CALL HWDHVY
+C---ADD SOFT UNDERLYING EVENT IF NEEDED
+      CALL HWMEVT
+C---FINISH EVENT
+      CALL HWUFNE
+C---USER'S EVENT ANALYSIS
+      CALL HWANAL
+  100 CONTINUE
+C---TERMINATE ELEMENTARY PROCESS
+      CALL HWEFIN
+C---USER'S TERMINAL CALCULATIONS
+      CALL HWAEND
+      STOP
+      END
+
+   Various phases of the  simulation can be  suppressed by  deleting the
+   corresponding  subroutine  calls,  or  different  subroutines  may be
+   substituted.  For example,  in studies at the parton level everything
+   from CALL HWDHQK to CALL HWMEVT can be omitted.
+
+   The following is a full list of subroutines and functions,  which are
+   classified  according to their initial letters.  The starred sections
+   may be  omitted for  certain  event types  provided the corresponding
+   subroutine  calls  are  suppressed  in  HWIGPR or HWBGEN.  Brief sub-
+   routine descriptions may be found in Sect. 20.
+
+   Main program and initialisation:
+
+   HWIGPR  HWIGIN
+
+   User-provided routines to initialise, perform and terminate
+   user's analysis of event data:
+
+   HWABEG  HWAEND  HWANAL
+
+   Parton branching generation with interfering gluons:
+
+   HWBAZF  HWBCON  HWBDED  HWBDIS  HWBFIN  HWBGEN  HWBJCO  HWBMAS
+   HWBRAN  HWBSPA  HWBSPN  HWBSU1  HWBSU2  HWBSUD  HWBSUG  HWBSUL
+   HWBTIM  HWBVMC
+
+   Cluster hadronization model:
+
+   HWCCUT  HWCDEC  HWCFLA  HWCFOR  HWCGSP  HWCHAD
+
+   Decay of unstable particles and heavy flavours:
+
+   HWDBOS  HWDBOZ  HWDCLE  HWDEUR  HWDHAD  HWDHGC  HWDHGF  HWDHIG
+   HWDHQK  HWDHVY  HWDIDP  HWDPWT  HWDTHR  HWDTOP  HWDTWO  HWDWWT
+
+   Elementary subprocess generation:
+
+   HWEFIN  HWEGAM  HWEINI  HWEONE  HWEPRO  HWETWO
+
+   Individual hard subprocesses:
+
+   HWHBGF  HWHBKI  HWHBRN  HWHBSG  HWHDIS  HWHDYP  HWHEGG  HWHEGW
+   HWHEGX  HWHEPA  HWHEPG  HWHEW0  HWHEW1  HWHEW2  HWHEW3  HWHEW4
+   HWHEW5  HWHEWW  HWHHVY  HWHIG1  HWHIGA  HWHIGB  HWHIGJ  HWHIGM
+   HWHIGS  HWHIGT  HWHIGW  HWHIGY  HWHIGZ  HWHPH2  HWHPHO  HWHPPB
+   HWHPPE  HWHPPH  HWHPPM  HWHPPT  HWHQCD  HWHQCP  HWHW1J  HWHWEX
+   HWHWPR
+
+  *Soft minimum-bias hadron-hadron collision or underlying event:
+
+   HWMEVT  HWMLPS  HWMNBI  HWMULT  HWMWGT
+
+   Random number generators:
+
+   HWRAZM  HWREXP  HWREXQ  HWREXT  HWRGAU  HWRGEN  HWRINT  HWRLOG
+   HWRPOW  HWRUNG  HWRUNI
+
+  *Spacelike branching of incoming partons:
+
+   HWSBRN  HWSDGG  HWSDGQ  HWSFBR  HWSFUN  HWSGAM  HWSGEN  HWSGQQ
+   HWSSPC  HWSSUD  HWSTAB  HWSVAL
+
+   Miscellaneous utilities:
+
+   HWUAEM  HWUAER  HWUALF  HWUBPR  HWUBST  HWUCFF  HWUCI2  HWUDAT
+   HWUECM  HWUEDT  HWUEEC  HWUEMV  HWUEPR  HWUFNE  HWUGAU  HWUIDT
+   HWUINC  HWUINE  HWULDO  HWULI2  HWULOB  HWULOF  HWULOR  HWUMAS
+   HWUPCM  HWURAP  HWURES  HWUROB  HWUROF  HWUROT  HWUSOR  HWUSQR
+   HWUSTA  HWUTAB  HWUTIM
+
+   Vector manipulation:
+
+   HWVDIF  HWVDOT  HWVEQU  HWVSCA  HWVSUM  HWVZRO
+
+   Warning messages and error handling:
+
+   HWWARN
+
+
+   Dummy versions of the external routines
+
+   PDFSET  STRUCTM
+   EUDINI  FRAGMT  IEUPDG  IPDGEU
+   DECADD  QQINIT  QQLMAT  IUCOMP
+   HVCBVI  HVHBVI
+
+   should be deleted if the structure function library,  EURODEC B decay
+   package,  CLEO B decay package,  or HERBVI (respectively) is linked.
+ -----------------------------------------------------------------------
+
+                     *** 5. BEAMS AND PROCESSES***
+
+   As indicated above, a number of variables must be set in the main
+   program to specify what is to be simulated:
+
+
+         +----------+----------------------------------+-------+
+         |   Name   |     Description                  |Default|
+         +----------+----------------------------------+-------+
+         | PART1    | Type of particle in beam 1       | 'PBAR'|
+         | PART2    | Type of particle in beam 2       | 'P   '|
+         | PBEAM1   | Momentum of beam 1               | 900.  |
+         | PBEAM2   | Momentum of beam 2               | 900.  |
+         | IPROC    | Type of process to generate      | 1500  |
+         | MAXEV    | Number of events to generate     | 100   |
+         +----------+----------------------------------+-------+
+
+
+    The beam particle types PART1,PART2 supported at present are:
+
+
+              +-------------------------------------------+
+              | 'E+  ','E-  ','MU+ ','MU- ','NUE ','NUEB' |
+              | 'NUMU','NMUB','NTAU','NTAB','GAMA',       |
+              | 'P   ','PBAR','N   ','NBAR','PI+ ','PI- ' |
+              +-------------------------------------------+
+
+    In addition, beams 'K+  ' and 'K-  ' are supported for minimum
+    bias non-diffractive soft hadronic events (IPROC=8000) only.
+
+    The currently available processes IPROC are tabulated below.
+
+  +---------+--------------------------------------------------------+
+  |  IPROC  |                     Process                            |
+  +---------+--------------------------------------------------------+
+  | 100     | e+ e-  -> q qbar (gluon) (all flavours)                |
+  | 100+IQ  | e+ e-  -> q qbar (gluon) (IQ=1--6 for q=d,u,s,c,b,t)   |
+  | 107     | e+ e-  -> gluon gluon (gluon) fictitious process       |
+  | 110     | e+ e-  -> q qbar gluon (all flavours)                  |
+  | 110+IQ  | e+ e-  -> q qbar gluon (IQ as above)                   |
+  | 120     | e+ e-  -> q qbar (all flavours)| without correction to |
+  | 120+IQ  | e+ e-  -> q qbar (IQ as above) | hard gluon branching  |
+  | 127     | e+ e-  -> gluon gluon          |                       |
+  | 150+IL  | e+ e-  -> l lbar (IL=2,3 for l=mu,tau)                 |
+  +---------+--------------------------------------------------------+
+  | 200     | e+ e-  -> W+ W- (see Sect. 15 on control of W/Z decays)|
+  | 250     | e+ e-  -> Z0 Z0 (see Sect. 15 on control of W/Z decays)|
+  +---------+--------------------------------------------------------+
+  | 300     | e+ e-  -> Z H -> Z q qbar (all flavours)               |
+  | 300+IQ  | e+ e-  -> Z H -> Z q qbar (IQ as above)                |
+  | 306+IL  | e+ e-  -> Z H -> Z l lbar (IL=1,2,3 for l=e,mu,tau)    |
+  | 310,11  | e+ e-  -> Z H -> Z W W, Z Z Z                          |
+  | 312     | e+ e-  -> Z H -> Z gamma gamma                         |
+  | 399     | e+ e-  -> Z H -> Z anything                            |
+  +---------+--------------------------------------------------------+
+  | 400+ID  | e+ e-  -> nu nu H + e e H (ID as in IPROC=300+ID)      |
+  +---------+--------------------------------------------------------+
+  | 500+ID  | e+ e-  -> gamma gamma -> qqbar/llbar/WW (ID=0-10 as in |
+  |         |                                          IPROC=300+ID) |
+  | 550+ID  | e+ e-  -> gamma W -> qq'bar/ll'bar      (ID=0-9)       |
+  +---------+--------------------------------------------------------+
+  | 1350    | q qbar -> Z0/gamma -> l lbar (all lepton species)      |
+  | 1350+IL | q qbar -> Z0/gamma -> l lbar (IL as above)             |
+  +---------+--------------------------------------------------------+
+  | 1400    | q qbar -> W+/- -> q' qbar'' (all flavours)             |
+  | 1400+IQ | q qbar -> W+/- -> q' qbar'' (q' or q'' as above)       |
+  | 1450    | q qbar -> W+/- -> l nul (all lepton species)           |
+  | 1450+IL | q qbar -> W+/- -> l nul (IL as above)                  |
+  | 1499    | q qbar -> W+/- -> anything                             |
+  +---------+--------------------------------------------------------+
+  | 1500    | QCD  2 -> 2 hard parton scattering                     |
+  |         | After generation, IHPRO is subprocess (see list)       |
+  +---------+--------------------------------------------------------+
+  | 1600+ID | q qbar/g g -> Higgs (ID as in IPROC=300+ID)            |
+  +---------+--------------------------------------------------------+
+  | 1700+IQ | QCD heavy quark production (IQ as above)               |
+  |         | After generation, IHPRO is subprocess (see list)       |
+  +---------+--------------------------------------------------------+
+  | 1800    | QCD direct photon + jet production                     |
+  |         | After generation, IHPRO is subprocess (see list)       |
+  +---------+--------------------------------------------------------+
+  | 1900+ID | q qbar -> q' qbar' H (ID as in IPROC=300+ID)           |
+  +---------+--------------------------------------------------------+
+  | 2000    |    t production via W exchange (sum of 2001-2008)      |
+  | 2001,2  |    ubar bbar -> dbar tbar,   d bbar -> u tbar          |
+  | 2003,4  |    dbar bbar -> ubar tbar,   u b    -> d t             |
+  | 2005,6  |    cbar bbar -> sbar tbar,   s bbar -> c tbar          |
+  | 2007,8  |    sbar b    -> cbar t   ,   c b    -> s t             |
+  +---------+--------------------------------------------------------+
+  | 2100    | W + jet production.                                    |
+  | 2110,20 | Compton only (g q -> W q), annih. only (q qbar -> W q) |
+  +---------+--------------------------------------------------------+
+  | 2200    | QCD direct photon pair production (see list for IHPRO) |
+  +---------+--------------------------------------------------------+
+  | 2300    | QCD Higgs plus jet production (see list for IHPRO)     |
+  +---------+--------------------------------------------------------+
+  | 5000    | Pointlike photon-hadron jet production (all flavours)  |
+  | 5100+IQ | Pointlike photon heavy flavour IQ pair production      |
+  | 5200+IQ | Pointlike photon heavy flavour IQ single excitation    |
+  |         | After generation, IHPRO is subprocess (see list)       |
+  | 5500    | Pointlike photon production of light (u,d,s) L=0 mesons|
+  | 5510,20 | S=0 mesons only, S=1 mesons only (see list for IHPRO)  |
+  +---------+--------------------------------------------------------+
+  | 7000 -  | Baryon-number violating and other multi-W processes    |
+  | 7999    | generated by HERBVI package                            |
+  +---------+--------------------------------------------------------+
+  | 8000    | Minimum bias non-diffractive soft hadron-hadron event  |
+  +---------+--------------------------------------------------------+
+  | 9000    | Deep inelastic lepton scattering (all neutral current) |
+  | 9000+IQ | Deep inelastic lepton scattering (NC on flavour IQ)    |
+  | 9010    | Deep inelastic lepton scattering (all charged current) |
+  | 9010+IQ | Deep inelastic lepton scattering (CC on flavour IQ)    |
+  +---------+--------------------------------------------------------+
+  | 9100+IQ | Boson-gluon fusion in NC DIS, IQ=0-6 as above          |
+  | 9107    | J/Psi + gluon production by boson-gluon fusion         |
+  | 9110    | QCD Compton process in NC DIS, all flavours            |
+  | 9110+IP | QCD Compton process in NC DIS, IP=1-12, d-t, dbar-tbar |
+  | 9140+IP | CC proc, IP:1 = s cbar,2 = b cbar,3 = s tbar,4 = b tbar|
+  +---------+--------------------------------------------------------+
+  | 92**    | Withdrawn: use 91** instead                            |
+  +---------+--------------------------------------------------------+
+  | 9500+ID | W W fusion -> Higgs in e p (ID as in IPROC=300+ID)     |
+  +---------+--------------------------------------------------------+
+  |10000+IP | as IPROC=IP but with soft underlying event (hadron     |
+  |         | remnant fragmentation in lepton-hadron) suppressed     |
+  +---------+--------------------------------------------------------+
+
+
+ -----------------------------------------------------------------------
+
+
+                     ***** 6. INPUT PARAMETERS*****
+
+   The quantities that may be regarded as adjustable parameters are
+
+         +----------+----------------------------------+-------+
+         |   Name   |     Description                  |Default|
+         +----------+----------------------------------+-------+
+         | QCDLAM   | QCD Lambda (see below)           | 0.18  |
+         +----------+----------------------------------+-------+
+         | RMASS(1) | Down    quark mass               | 0.32  |
+         | RMASS(2) | Up      quark mass               | 0.32  |
+         | RMASS(3) | Strange quark mass               | 0.50  |
+         | RMASS(4) | Charmed quark mass               | 1.80  |
+         | RMASS(5) | Bottom  quark mass               | 5.20  |
+         | RMASS(6) | Top     quark mass               | 100.  |
+         +----------+----------------------------------+-------+
+         | RMASS(13)| Gluon effective mass             | 0.75  |
+         +----------+----------------------------------+-------+
+         | VQCUT    | Quark virtuality cutoff (added to| 0.48  |
+         |          | quark masses in parton showers)  |       |
+         | VGCUT    | Gluon virtuality cutoff (added to| 0.10  |
+         |          | effective mass in parton showers)|       |
+         | VPCUT    | Photon virtuality cutoff         | 0.40  |
+         +----------+----------------------------------+-------+
+         | CLMAX    | Maximum cluster mass parameter   | 3.35  |
+         | CLPOW    | Power in maximum cluster mass    | 2.00  |
+         | PSPLT    | Split cluster spectrum parameter | 1.00  |
+         +----------+----------------------------------+-------+
+         | QDIQK    | Maximum scale for gluon->diquarks| 0.00  |
+         | PDIQK    | Gluon->diquarks rate parameter   | 5.00  |
+         +----------+----------------------------------+-------+
+         | QSPAC    | Cutoff for spacelike evolution   | 2.50  |
+         | PTRMS    | Intrinsic pt in incoming hadrons | 0.00  |
+         +----------+----------------------------------+-------+
+
+   Notes on parameters:
+
+  *  QCDLAM can be identified  at high momentum fractions  (x or z) with
+     the fundamental QCD scale Lambda-MSbar (5 flavours).  However, this
+     relation does not necessarily hold in other regions of phase space,
+     since higher order corrections are not treated  precisely enough to
+     remove renormalization scheme ambiguities. See S. Catani, G. March-
+     esini and B.R.Webber, Nucl. Phys. B349 (1991) 635.
+
+  *  RMASS(1,2,3,13)  are effective light quark and gluon masses used in
+     the  hadronization phase  of the program.  They can be  set to zero
+     provided the parton shower cutoffs VQCUT and VGCUT are large enough
+     to prevent divergences (see below).
+
+  *  For cluster hadronization, it must be possible to split gluons into
+     q-qbar, i.e. RMASS(13)  must be at  least twice the  lightest quark
+     mass.  Similarly it may be  impossible for heavy flavoured clusters
+     to decay if RMASS(4,5) are too low.
+
+  *  VQCUT and VGCUT are needed if the  quark and gluon effective masses
+     become small. The condition to avoid divergences in  parton showers
+     is
+         1/Q(i) + 1/Q(j) < 1/QCDL3  for either i or j or both gluons,
+     where  Q(i)=RMASS(i)+VQCUT for quarks,  RMASS(13)+VGCUT for gluons,
+     and QCDL3 is the equivalent 3-flavour Lambda computed from  QCDLAM.
+     In the notation of  the above reference by  S. Catani et al., QCDL3
+     is the 3-flavour equivalent of QCDL5 where
+           QCDL5 = QCDLAM*exp(K/(4*pi*beta))/sqrt(2)=1.109*QCDLAM
+
+  *  VPCUT is the analogous quantity for photon emission. It defaults to
+     SQRT(S)  corresponding to no emission.  Results after  experimental
+     cuts are insensitive to its exact value in the range 0.1 to 1.0 GeV
+
+  *  CLMAX and CLPOW  determine the  maximum allowed  mass of  a cluster
+     made from quarks i and j as follows
+           Mass**CLPOW < CLMAX**CLPOW + (RMASS(i)+RMASS(j))**CLPOW
+     Since the cluster mass spectrum falls rapidly at high mass, results
+     become  insensitive to  CLMAX and CLPOW  at large  values of CLMAX.
+     Smaller values OF CLPOW will increase the yield of heavier clusters
+     (and hence of baryons)  for heavy quarks,  without affecting  light
+     quarks  much.  For example,  the default  value gives  no b-baryons
+     whereas CLPOW=1.0 makes b-baryons/b-hadrons about 1/4.
+
+  *  PSPLT  determines the  mass  distribution in the  cluster splitting
+     CL1 -> CL2 + CL3  when CL1 is above  the maximum allowed mass.  The
+     masses of CL2 and CL3 are generated uniformly in Mass**PSPLT. Since
+     the number of split clusters is small, dependence on PSPLT is weak.
+
+  *  QDIQK greater than twice the  lightest diquark mass  enables gluons
+     to split  non-perturbatively into  diquarks as well as quarks.  The
+     probability  of this is  PDIQK*dQ/Q  for scales Q  below QDIQK. The
+     diquark masses are taken to be the sum of constituent quark masses.
+     Thus the default value QDIQK=0 suppresses gluon->diquark splitting.
+
+  *  QSPAC is the scale below which the structure functions of incoming
+     hadrons are frozen and non-valence constituent partons are forced
+     to evolve to valence partons, if ISPAC=0.  For ISPAC=2, structure
+     functions are frozen at scale QSPAC, but evolution continues down
+     to the infrared cutoff.
+
+  *  PTRMS is the width of the (Gaussian) intrinsic  transverse momentum
+     distribution of valence partons in incoming hadrons at scale QSPAC.
+     (N.B. Neither  QSPAC nor PTRMS  affect  lepton-lepton  collisions.)
+
+   In practice, the parameters  that have been  found most  effective in
+   fitting data are QCDLAM,  the gluon effective mass RMASS(13), and the
+   cluster mass parameter CLMAX.
+
+   The default parameter values  have been found to give  good agreement
+   with event shape  distributions at LEP (OPAL preprint CERN-EP/90-48).
+
+   A number of  further parameters are needed to control the program and
+   to turn various options on or off:
+
+         +----------+----------------------------------+-------+
+         |   Name   |     Description                  |Default|
+         +----------+----------------------------------+-------+
+         | IPRINT   | Printout option                  | 1     |
+         | MAXPR    | Number of events to print out    | 1     |
+         | MAXER    | Max number of errors             | 10    |
+         | LWEVT    | Unit for writing output events   | 0     |
+         | LRSUD    | Unit for reading Sudakov table   | 0     |
+         | LWSUD    | Unit for writing Sudakov table   | 77    |
+         | SUDORD   | Alpha_s order in Sudakov table   | 1     |
+         +----------+----------------------------------+-------+
+         | NRN(1)   | Random number seed 1             | 17673 |
+         | NRN(2)   | Random number seed 2             | 63565 |
+         | WGTMAX   | Max weight (0 to search for it)  | 0.    |
+         | NOWGT    | Generate unweighted events       | .TRUE.|
+         +----------+----------------------------------+-------+
+         | AZSOFT   | Soft gluon azimuthal correlations| .TRUE.|
+         | AZSPIN   | Gluon spin azimuthal correlations| .TRUE.|
+         +----------+----------------------------------+-------+
+         | NCOLO    | Number of colours                | 3     |
+         | NFLAV    | Number of (producible) flavours  | 6     |
+         +----------+----------------------------------+-------+
+         | MODPDF(I)| PDFLIB structure function set and| -1    |
+         | AUTPDF(I)| author group for beam I(=1,2)    | 'MRS' |
+         |          | (if MODPDF()<0 do not use PDFLIB)|       |
+         | NSTRU    | Input structure function set     | 5     |
+         |          | (1,2=Duke-Owens1,2   3,4=EHLQ1,2 |       |
+         |          |    5=Owens1.1)                   |       |
+         +----------+----------------------------------+-------+
+         | ETAMIX   | eta/eta' mixing angle in degrees | -20   |
+         +----------+----------------------------------+-------+
+         | B1LIM    | B cluster -> 1 hadron parameter  |  0.0  |
+         +----------+----------------------------------+-------+
+         | CLDIR    | Decay of perturbative clusters,  | 1     |
+         |          | 0=>isotropic, 1=>along quark dirn|       |
+         | CLSMR    | Width of Gaussian angle smearing | 0.0   |
+         +----------+----------------------------------+-------+
+         | HARDME   | Use hard and soft matrix-element | .TRUE.|
+         | SOFTME   | corrections to e+e- and DIS      | .TRUE.|
+         +----------+----------------------------------+-------+
+         | BDECAY   | Controls which B Decay package is| 'HERW'|
+         |          | used. The allowed values are:    |       |
+         |          | 'HERW'; 'EURO'; or 'CLEO'.       |       |
+         +----------+----------------------------------+-------+
+         | EPOLN(3) | Electron and positron beam       | 0.0   |
+         |          | polarizations in DIS and e+e-    | 0.0   |
+         |          | annihilation. First two cmpts are| 0.0   |
+         | PPOLN(3) | transverse and only used in e+e-,| 0.0   |
+         |          | 3rd cmpt is longitudinal, and is | 0.0   |
+         |          | +/-1 for fully rh/lh polarized   | 0.0   |
+         +----------+----------------------------------+-------+
+         | BGSHAT   | Scale=shat for boson-gluon fusion|.FALSE.|
+         +----------+----------------------------------+-------+
+         | BREIT    | Use Breit frame for DIS kinematix| .TRUE.|
+         +----------+----------------------------------+-------+
+         | USECMF   | Use hadron-hadron cmf            | .TRUE.|
+         +----------+----------------------------------+-------+
+         | NOSPAC   | Switch off space-like showers    |.FALSE.|
+         +----------+----------------------------------+-------+
+         | ISPAC    | Changes meaning of QSPAC,        | 0     |
+         |          | see the earlier notes on QSPAC   |       |
+         +----------+----------------------------------+-------+
+         | PTMIN    | Min pt in hadronic jet production| 10.   |
+         | PTMAX    | Max pt in hadronic jet production| 1.E8  |
+         | PTPOW    | 1/pt**PTPOW for jet sampling     | 4.    |
+         | YJMIN    | Min jet rapidity                 |-8.    |
+         | YJMAX    | Max jet rapidity                 | 8.    |
+         +----------+----------------------------------+-------+
+         | EMMIN    | Min dilepton mass in Drell-Yan   | 10.   |
+         | EMMAX    | Max dilepton mass in Drell-Yan   | 1.E8  |
+         | EMPOW    | 1/m**EMPOW for Drell-Yan sampling| 4.    |
+         +----------+----------------------------------+-------+
+         | Q2MIN    | Min Q**2 in deep inelastic       | 0.0   |
+         | Q2MAX    | Max Q**2 in deep inelastic       | 1.E10 |
+         | Q2POW    | (1/Q**2)**Q2POW for sampling     | 2.5   |
+         +----------+----------------------------------+-------+
+         | Q2WWMN   | Min Q**2 in Equiv Photon Approx  | 0.0   |
+         | Q2WWMX   | Max Q**2 in Equiv Photon Approx  | 4.0   |
+         +----------+----------------------------------+-------+
+         | PHOMAS   | Damp structure functions for off-| 0.0   |
+         |          | shell photons (0 for no damping) |       |
+         +----------+----------------------------------+-------+
+         | YBMIN    | Min and Max Bjorken-y in DIS and | 0.0   |
+         | YBMAX    | Equivalent Photon Approx         | 1.0   |
+         +----------+----------------------------------+-------+
+         | ZJMAX    | Max Z in J/psi production        | 0.9   |
+         +----------+----------------------------------+-------+
+         | THMAX    | Max thrust in 3 parton production| 0.9   |
+         |          | (equal to 1-Y_cut in JADE scheme)|       |
+         +----------+----------------------------------+-------+
+
+     Printout options are:
+
+           IPRINT = 0   Print program title only
+                    1   Print selected input parameters
+                    2   1 + table of particle codes and properties
+                    3   2 + tables of Sudakov form factors
+
+     See Sect. 8 on form factors for details of LRSUD, LWSUD and SUDORD.
+
+     If BGSHAT is false, the scale used for heavy quark production via
+     boson-gluon fusion in lepton-hadron collisions will be
+             2*shat*that*uhat/(shat**2+that**2+uhat**2)
+
+     If BREIT is true,  the kinematic reconstruction of  deep inelastic
+     events  takes place  in the Breit frame  (ie. the frame  where the
+     exchanged  boson  is  purely  space-like,  and collinear  with the
+     incoming  hadron).    In  fact  the  reconstruction  procedure  is
+     invariant  under  longitudinal  boosts,  so any frame in which the
+     boson and hadron are collinear would be equivalent, and it is only
+     the transverse part of the boost that has an effect.
+     The BREIT frame option becomes very inaccurate for very small Q^2.
+     It is therefore only used if Q**2 > 1E-4 (the lab and Breit frames
+     are anyway equivalent for such small Q**2).
+     If BREIT is false, reconstruction takes place in the lab frame.
+
+     If USECMF is true, the entire event record is boost to the hadron-
+     hadron cmf before  event processing,  and boosted back afterwards.
+     This means that  fixed-target simulation  can be done  in the  lab
+     frame, ie with PBEAM2=0.
+     For hadronic processes with lepton beams,  this boosting is always
+     done, regardless of the value of USECMF.
+
+     The  interface  to  the  PDFLIB  structure  function  package  is
+     compatible with PDFLIB versions 3 and 4.  For version 4, AUTPDF()
+     should be set to the author group as listed in the PDFLIB manual,
+     eg  'MRS',  and MODPDF() to the set number in the new convention.
+     For version 3,  AUTPDF() should be set to 'MODE', and MODPDF() to
+     the set number in the old convention.
+
+     The `hard' matrix-element correction adds e+e- and DIS events in
+     regions of phase-space that cannot be filled by the usual parton
+     shower.  The  `soft'  matrix-element  correction moves emissions
+     around within the shower  phase-space,   essentially by matching
+     the HARDEST emission (which is not necessarily the first) to the
+     first-order matrix-element.
+
+     The quantities  from  PTMIN  onwards  control the region of  phase
+     space in  which events  are generated and  the importance sampling
+     inside those regions.  See Section 11 on event weights for further
+     details on  these  quantities  and the use of  WGTMAX  and  NOWGT.
+
+     If hadronic processes with lepton beams are requested,  the photon
+     emission vertex  includes the  full  transverse-momentum-dependent
+     kinematics  (the Equivalent Photon Approximation).   The variables
+     Q2WWMN  and  Q2WWMX  set  the  minimum  and  maximum  virtualities
+     generated respectively. For normal simulation, Q2WWMN should be 0,
+     and Q2WWMX should be the largest Q**2 through which the lepton can
+     be scattered  without  being  detected.  The  variables  YBMIN and
+     YBMAX control the range of lightcone momentum fraction generated.
+
+     In addition  there are  options to  give  different weights to the
+     various  flavours  of quarks and  diquarks,  and to  resonances of
+     different spins.  So far,  these options  have not  been used. See
+     the comments in the  initialization  routine  HWIGIN  for details.
+ ----------------------------------------------------------------------
+
+                    **** 7. COMMON BLOCK FILE ****
+
+C          ****COMMON BLOCK FILE FOR HERWIG VERSION 5.8****
+C ALTERATIONS:DOUBLED NQEV
+C             DOUBLED NMXHEP
+C             CONVERTED TO DOUBLE PRECISION
+C             INTRODUCED NMXSUD (MAX NUMBER OF ENTRIES IN LOOKUP
+C               TABLES OF SUDAKOV FORM FACTORS)
+C             ADDED NEW VARIABLE RHOHEP: LIKE RHOPAR BUT WITH 3 CMPTS
+C  25/7/90    CHANGED TREATMENT OF ALPHA-S
+C  3/11/90    CHANGED ORDER (DOUBLE PRECISION FIRST), ADDED EPOLN
+C  29/3/91    ADDED NEW COMMON /HWBOSC/, MADE NRN,IBRN ARRAYS(2)
+C   1/7/91    ADDED ENHANC(12) TO /HWBOSC/
+C 11/11/91    ADDED NEW VARIABLES MODMAX,VPCUT
+C  29/1/92    ADDED NEW VARIABLES BDECAY,B1LIM
+C  13/3/92    ADDED NEW VARIABLE  CLPOW
+C  17/7/92    ADDED NEW VARIABLES ALPFAC,SUDORD
+C  9/12/92    ADDED PARAMETER NMXJET (MAX NUMBER OF OUTGOING
+C             PARTONS FROM HARD SUBPROCESS)
+C  20/1/93    ADDED NEW VARIABLES IFLMIN,IFLMAX
+C 18/10/93    ADDED NEW VARIABLES CLDIR,Q2WWMN,Q2WWMX,MODPHO,HVFCEN,
+C               PRNDEC,NUMER,NUMERU,FSTEVT,FSTWGT,ETAMIX,BREIT,USECMF
+C               TPOL,COSS,SINS,ZPRIME,GAMZP,GEV2NB,QFCH(16),VFCH(16,2),
+C               AFCH(16,2),ALPHEM(2),PRSOF,GENSOF,EBEAM1,EBEAM2,IPART1,
+C               IPART2,ZJMAX,YBMIN,YBMAX
+C             Replaced EPOLN by EPOLN(3) and PPOLN(3)
+C                      REQ, AEQ, REQT and IDEQ
+C                   by CLQ(6,7), TQWT and MAPQ(6)
+C   4/8/94    Added new variables HARDST,HARDME,SOFTME,ISPAC,NOSPAC
+C             Changed variable name EMCMF to EMSCA
+C             Added new variable CLSMR
+C             Added parameter FOUR, new variable IAPHIG
+C             Replaced ALPHEM(2) by ALPHEM
+C             Replaced MODPDF and MODPHO by MODPDF(2)
+C             Put local variable JNHAD into same common as INHAD
+C             Added new variable PHOMAS
+      IMPLICIT NONE
+      DOUBLE PRECISION
+     & ZERO, ONE, TWO, THREE, FOUR, HALF
+      PARAMETER (ZERO= 0.D0, ONE =1.D0, TWO= 2.D0,
+     &           THREE=3.D0, FOUR=4.D0, HALF=0.5D0)
+C
+      DOUBLE PRECISION
+     & PHEP,VHEP,PBEAM1,PBEAM2,QCDLAM,VGCUT,VQCUT,VPCUT,BETAF,CAFAC,
+     & CFFAC,CLMAX,CLPOW,PSPLT,QSPAC,PTRMS,PXRMS,QG,QV,SWEIN,SCABI,
+     & PDIQK,QDIQK,ENSOF,TMTOP,ZBINM,GAMW,GAMZ,GAMH,PGSMX,PGSPL,PPAR,
+     & VPAR,PHIPAR,DECPAR,RHOPAR,RHOHEP,XFACT,PTINT,EVWGT,AVWGT,WGTMAX,
+     & WGTSUM,WSQSUM,WBIGST,TLOUT,YJMIN,YJMAX,PTMIN,PTMAX,PTPOW,EMMIN,
+     & EMMAX,EMPOW,Q2MIN,Q2MAX,Q2POW,THMAX,QLIM,XXMIN,XLMIN,EMSCA,
+     & EMLST,COSTH,GPOLN,GCOEF,XX,DISF,RESN,RMIN,CTMAX,FBTM,
+     & FTOP,FHVY,RMASS,BFRAC,CMMOM,ACCUR,QEV,SUD,VECWT,TENWT,DECWT,
+     & QWT,PWT,SWT,SWTEF,RESWT,PIFAC,QCDL3,QCDL5,BRHIG,GAMMAX,
+     & ENHANC,B1LIM,ALPFAC,Q2WWMN,Q2WWMX,BTCLM,ETAMIX,
+     & QFCH,VFCH,AFCH,VCKM,TQWT,CLQ,EPOLN,PPOLN,COSS,SINS,GAMZP,GEV2NB,
+     & ALPHEM,PRSOF,EBEAM1,EBEAM2,ZJMAX,YBMIN,YBMAX,HARDST,CLSMR,PHOMAS
+C
+      INTEGER NMXHEP,NEVHEP,NHEP,ISTHEP,IDHEP,JMOHEP,JDAHEP,
+     & IPROC,MAXEV,IPRINT,LRSUD,LWSUD,NCOLO,NFLAV,MODPDF(2),NSTRU,
+     & NZBIN,NBTRY,NCTRY,NDTRY,NETRY,NSTRY,NGSPL,NMXPAR,NEVPAR,
+     & NPAR,ISTPAR,IDPAR,JMOPAR,JDAPAR,JCOPAR,INHAD,JNHAD,NSPAC,NRN,
+     & MAXER,MAXPR,LWEVT,ISTAT,IERROR,NWGTS,IDHW,IBSH,IBRN,IPRO,
+     & IFLMIN,IFLMAX,MAXFL,IDCMF,IHPRO,IDN,ICO,LOCN,
+     & NRES,IDPDG,ICHRG,MADDR,MODES,MODEF,IDPRO,INTER,NQEV,
+     & NSUD,NMXSUD,MODBOS,IOPHIG,MODMAX,SUDORD,CLDIR,NUMER,NUMERU,
+     & MAPQ,IPART1,IPART2,ISPAC,IAPHIG
+C
+      LOGICAL AZSOFT,AZSPIN,FROST,GENEV,BGSHAT,NOWGT,TMPAR,PRNDEC,
+     & HVFCEN,FSTEVT,FSTWGT,BREIT,USECMF,ZPRIME,TPOL,GENSOF,
+     & HARDME,SOFTME,NOSPAC
+C
+      CHARACTER*4 PART1,PART2,RNAME,BDECAY
+      CHARACTER*20 AUTPDF(2)
+C
+C---NEW STANDARD EVENT COMMON
+      PARAMETER (NMXHEP=2000)
+      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP),
+     & JMOHEP(2,NMXHEP),JDAHEP(2,NMXHEP),PHEP(5,NMXHEP),VHEP(4,NMXHEP)
+C
+C---BEAMS, PROCESS AND NUMBER OF EVENTS
+      COMMON/HWBEAM/PART1,PART2,IPART1,IPART2
+      COMMON/HWPROC/PBEAM1,PBEAM2,EBEAM1,EBEAM2,IPROC,MAXEV
+C
+C---PARAMETERS (AND QUANTITIES DERIVED FROM THEM)
+      COMMON/HWPRAM/QCDLAM,VGCUT,VQCUT,VPCUT,PIFAC,BETAF,CAFAC,CFFAC,
+     & CLMAX,CLPOW,PSPLT,QSPAC,PTRMS,PXRMS,QG,QV,SWEIN,SCABI,PDIQK,
+     & QDIQK,BTCLM,ENSOF,TMTOP,ZBINM,GAMW,GAMZ,GAMH,QCDL3,QCDL5,B1LIM,
+     & PGSMX,PGSPL(4),QFCH(16),VFCH(16,2),AFCH(16,2),VCKM(3,3),
+     & GAMZP,GEV2NB,ALPHEM,PRSOF,CLSMR,
+     & IPRINT,LRSUD,LWSUD,NCOLO,NFLAV,MODPDF,NSTRU,NZBIN,NBTRY,
+     & NCTRY,NDTRY,NETRY,NSTRY,NGSPL,AZSOFT,AZSPIN,CLDIR,PRNDEC,ZPRIME,
+     & HARDME,SOFTME,ISPAC,NOSPAC,
+     & AUTPDF
+C
+C---PARTON SHOWER COMMON (SAME FORMAT AS /HEPEVT/)
+      PARAMETER (NMXPAR=500)
+      COMMON/HWPART/NEVPAR,NPAR,ISTPAR(NMXPAR),IDPAR(NMXPAR),
+     & JMOPAR(2,NMXPAR),JDAPAR(2,NMXPAR),PPAR(5,NMXPAR),VPAR(4,NMXPAR)
+C---PARTON POLARIZATION COMMON
+      COMMON/HWPARP/PHIPAR(2,NMXPAR),DECPAR(2,NMXPAR),RHOPAR(2,NMXPAR),
+     & TMPAR(NMXPAR)
+C---ELECTROWEAK BOSON COMMON
+      PARAMETER (MODMAX=5)
+      COMMON/HWBOSC/ALPFAC,BRHIG(12),ENHANC(12),GAMMAX,RHOHEP(3,NMXHEP),
+     &  MODBOS(MODMAX),IOPHIG
+C---PARTON COLOUR COMMON:
+C   JCOPAR(1,*) = COLOUR MOTHER
+C   JCOPAR(2,*) = ANTICOLOUR MOTHER
+C   JCOPAR(3,*) = COLOUR DAUGHTER
+C   JCOPAR(4,*) = ANTICOLOUR DAUGHTER
+      COMMON/HWPARC/JCOPAR(4,NMXPAR)
+C
+C---OTHER HERWIG BRANCHING, EVENT AND HARD SUBPROCESS COMMON
+      COMMON/HWBRCH/XFACT,PTINT(3,2),HARDST,NSPAC(7),INHAD,JNHAD,FROST,
+     & BREIT,USECMF
+      COMMON/HWEVNT/EVWGT,AVWGT,WGTMAX,WGTSUM,WSQSUM,WBIGST,TLOUT,
+     & NRN(2),MAXER,NUMER,NUMERU,MAXPR,LWEVT,ISTAT,IERROR,NOWGT,NWGTS,
+     & IDHW(NMXHEP),GENSOF
+      COMMON/HWHARD/YJMIN,YJMAX,PTMIN,PTMAX,PTPOW,EMMIN,EMMAX,EMPOW,
+     & Q2MIN,Q2MAX,Q2POW,Q2WWMN,Q2WWMX,THMAX,QLIM,XXMIN,XLMIN,ZJMAX,
+     & YBMIN,YBMAX,EMSCA,EMLST,COSTH,CTMAX,GPOLN,GCOEF(7),XX(2),PHOMAS,
+     & DISF(13,2),TQWT,CLQ(7,6),MAPQ(6),EPOLN(3),PPOLN(3),COSS,SINS,
+     & IBSH,IBRN(2),IPRO,IFLMIN,IFLMAX,MAXFL,IDCMF,IHPRO,
+     & IDN(10),ICO(10),GENEV,FSTEVT,FSTWGT,BGSHAT,HVFCEN,
+     & TPOL,IAPHIG
+C---UTILITIES COMMON
+      COMMON/HWUCLU/RESN(12,12),RMIN(12,12),LOCN(12,12)
+      COMMON/HWUFHV/FBTM(6,2),FTOP(6,2),FHVY(6,2),BDECAY
+      COMMON/HWUNAM/RNAME(264)
+      COMMON/HWUPDT/RMASS(264),BFRAC(460),CMMOM(460),ETAMIX,IDPDG(264),
+     & ICHRG(264),MADDR(264),MODES(264),MODEF(264),IDPRO(3,460),NRES
+C---MAX NUMBER OF ENTRIES IN LOOKUP TABLES OF SUDAKOV FORM FACTORS
+      PARAMETER (NMXSUD=1024)
+      COMMON/HWUSUD/ACCUR,QEV(NMXSUD,6),SUD(NMXSUD,6),INTER,NQEV,NSUD,
+     & SUDORD
+      COMMON/HWUWTS/VECWT,TENWT,DECWT,QWT(3),PWT(12),SWT(264),
+     & SWTEF(264),RESWT(264)
+      INTEGER NMXJET
+      PARAMETER (NMXJET=200)
+
+
+ ----------------------------------------------------------------------
+
+                    ****** 8. FORM FACTOR FILE******
+
+   HERWIG uses look-up tables of Sudakov form factors for the evolution
+   of initial-  and final-state parton showers.  These can be read from
+   an input file  rather than being recomputed each time.  The reading,
+   writing and computing of form factor tables is controlled by integer
+   parameters LRSUD and LWSUD:
+
+      LRSUD = N>0   Read form factors for this run from unit N
+      LRSUD = 0     Compute new form factor tables for this run
+      LRSUD < 0     Form factor tables are already loaded
+      LWSUD = N>0   Write form factors on unit N for future use
+      LWSUD = 0     Do not write new form factor tables
+
+   The option LRSUD<0 allows the program to be initialized several times
+   in the same run (e.g. to generate various event types) without recom-
+   puting or rereading form factors.
+
+   N.B. The Sudakov form factors depend on the parameters QCDLAM, VQCUT,
+   VGCUT, NCOLO, NFLAV, NAFLA, RMASS(13) and RMASS(i) for i=1,...,NFLAV.
+   Consequently form factor tables  MUST be recomputed every time any of
+   these  parameters  is  changed.   From  version  5.1  onwards,  these
+   parameters are written/read  with the  form factor tables  and checks
+   are performed to ensure consistency.
+
+   The parton  showering  algorithm  uses  the  two-loop  alpha_s,  with
+   matching at each flavour threshold. However, the Sudakov table can be
+   computed with either the one-loop or two-loop form,  according to the
+   variable SUDORD  (= 1 or 2 respectively, DEFAULT=1).  If SUDORD=1 the
+   two-loop value is  recovered using the  veto algorithm in the shower,
+   whereas if SUDORD=2 no vetoes  are used in the final-state evolution.
+   This means  that the relative weight of any shower  configuration can
+   be calculated in a closed form,  hence that showers  can be `forced'.
+
+   To next-to-leading order  the two  possibilities should be identical,
+   but they  differ at beyond-NLO,  so some results may change a little.
+   The most noticeable difference is that the form factor  table takes a
+   factor of about five times longer to compute with SUDORD=2 than 1.
+ ----------------------------------------------------------------------
+
+                    ******** 9. EVENT DATA********
+
+   /HEPEVT/ is the standard common block containing current event data:
+
+   NEVHEP      - event number
+   NHEP        - number of entries for this event
+   ISTHEP(I)   - status of entry I (see below)
+   IDHEP(I)    - identity of entry I (Particle Data Group code)
+   JMOHEP(1,I) - pointer to  first mother of entry I (see below)
+   JMOHEP(2,I) - pointer to second mother of entry I (see below)
+   JDAHEP(1,I) - pointer to first daughter of entry I (see below)
+   JDAHEP(2,I) - pointer to  last daughter of entry I (see below)
+   PHEP(*,I)   - (Px,Py,Pz,E,M) of entry I: M=sign(sqrt(abs(m**2)),m**2)
+   VHEP(*,I)   - (x,y,z,t) of prod'n vertex of entry I (not yet used)
+
+   All momenta are  given in the  laboratory frame,  in which  the input
+   beam momenta are PBEAM1 and PBEAM2 as specified by the user and point
+   along the +z and -z directions respectively.  Final  state  particles
+   have ISTHEP(I) = 1.  See the next Section for a  complete list of the
+   special status codes used by HERWIG.
+
+   The identity codes IDHEP are as recommended by the LEP Working Group,
+   i.e. as defined by the Particle Data Group plus the following:
+
+  * IDHEP = 91 for clusters, 94 for jets, 0 for others with no PDG code.
+
+   (HERWIG also has its own internal identity codes  IDHW(I),  stored in
+   /HWEVNT/. The utility subroutine HWUIDT translates between HERWIG and
+   PDG identity codes.  See Sect. 16 for further details.)
+
+   The  mother/daughter  pointers are standard,  except that JMOHEP(2,I)
+   and  JDAHEP(2,I) for a  PARTON are its  COLOUR  mother  and daughter,
+   i.e., the partons to which its  colour and  anticolour are connected,
+   respectively.  For this purpose the  primary partons from a hard sub-
+   process are all  regarded as outgoing  (see examples in Sects. 13, 16
+   and 19).  Since quarks  have no  anticolour,  JDAHEP(2,I)  is used to
+   point to  its FLAVOUR partner.  Similarly for JMOHEP(2,I) in the case
+   of an antiquark.
+
+   In addition to entries representing partons, particles, clusters etc,
+   /HEPEVT/ contains purely informational entries representing the total
+   c.m. momentum,  hard and soft  subprocess momenta, etc.  See Sect. 10
+   for the corresponding status codes.
+
+   Information  from  all  stages  of event  processing  is  retained in
+   /HEPEVT/ so the same particle may appear several times with different
+   status codes. For example, an outgoing parton from a  hard scattering
+   (entered initially with status 113 or 114) will appear after process-
+   ing as an on-mass-shell parton before QCD branching (status 123,124),
+   an off-mass-shell entry representing the flavour and momentum  of the
+   outgoing  jet (status 143,144), and a jet constituent (157). It might
+   also appear again in  other contexts,  e.g. as a spectator in a heavy
+   flavour decay (status 154,160).
+
+   Incoming partons  (entered with status  111, 112, changed to 121, 122
+   after branching) give rise to spacelike jets (status 141,142, m**2<0,
+   indicated by PHEP(5,IHEP)<0)  due to the loss of momentum via initial
+   state  bremsstrahlung.  The  same  applies  in principle  to incoming
+   leptons, but QED radiative corrections are not yet included.
+
+   Each  parton jet  begins  with a  status 141-144 jet entry giving the
+   total flavour and  momentum of the jet.  The first  mother pointer of
+   this entry gives the  location of the  parent hard parton,  while the
+   second gives that of the subprocess  c.m. momentum.  If QCD branching
+   has occurred,  this is  followed by a  lightlike  CONE  entry,  which
+   fixes the angular  extent of  the jet  and its  azimuthal orientation
+   relative to the parton with which it interferes. The interfering par-
+   ton is listed as the second mother of the cone.  Next come the actual
+   constituents of the jet.  If no branching  has occurred,  there is no
+   cone and the single jet constituent is the same as the jet.
+   -----------------------------------------------------------------------
+
+                    *******10. STATUS CODES*******
+
+   A complete list of currently-used HERWIG status codes is given below.
+   Many are used only in  intermediate stages of  event processing.  The
+   most important for users are probably 1 (final-state particle), 101-3
+   (initial  state), 141-4 (jets), and 199 (decayed  b-  and t-flavoured
+   hadrons).
+
+   The event status ISTAT in common /HWEVNT/ is roughly ISTHEP-100 where
+   ISTHEP  is the status of entries being processed.  However, ISTAT=100
+   for completed events.
+
+                 +------+------------------------------+
+                 |ISTHEP|         Description          |
+                 +------+------------------------------+
+                 |   1  |  final state particle        |
+                 |   2  |  parton before hadronization |
+                 |   3  |  documentation line          |
+                 +------+------------------------------+
+                 | 100  |  cone limiting jet evolution |
+                 | 101  | `beam'   (beam 1)            |
+                 | 102  | `target' (beam 2)            |
+                 | 103  |  overall centre of mass      |
+                 +------+------------------------------+
+                 | 110  | unprocessed hard process c.m.|
+                 | 111  |      "      beam parton      |
+                 | 112  |      "      target parton    |
+                 | 113  |      "      outgoing parton 3|
+                 | 114  |      "      outgoing parton 4|
+                 | 115  |      "      spectator parton |
+                 +------+------------------------------+
+                 |120-25| as 110-15, after processing  |
+                 +------+------------------------------+
+                 | 130  | lepton in jet (unboosted)    |
+                 |131-34| as 141-44, unboosted to c.m. |
+                 | 135  | spacelike parton (beam, unb.)|
+                 | 136  | spacelike parton (target,unb)|
+                 | 137  | spectator (beam, unboosted)  |
+                 | 138  | spectator (target, unb.)     |
+                 | 139  | parton from branching (unb.) |
+                 | 140  | parton from g splitting (unb)|
+                 +------+------------------------------+
+                 |141-44| jet from parton type 111-14  |
+                 |145-50| as 135-40 boosted, unclust'd |
+                 +------+------------------------------+
+                 | 151  | as 159, not yet clustered    |
+                 | 152  | as 160,  "   "      "        |
+                 | 153  | spectator from beam          |
+                 | 154  | spectator from target        |
+                 | 155  | heavy quark before decay     |
+                 | 156  | spectator before heavy decay |
+                 | 157  | parton from QCD branching    |
+                 | 158  | parton after gluon splitting |
+                 | 159  | parton from cluster splitting|
+                 | 160  | spectator after heavy decay  |
+                 +------+------------------------------+
+                 | 161  | beam spect.after gl.splitting|
+                 | 162  | targ.spect.after gl.splitting|
+                 | 163  | other cluster bef. soft proc.|
+                 | 164  | beam cluster before soft proc|
+                 | 165  | targ.cluster before soft proc|
+                 | 167  | unhadronized beam cluster    |
+                 | 168  | unhadronized target cluster  |
+                 +------+------------------------------+
+                 | 170  | soft process centre of mass  |
+                 | 171  | soft cluster (beam, unhadr'd)|
+                 | 172  | soft cluster (target,  "    )|
+                 | 173  | soft cluster (other,   "    )|
+                 +------+------------------------------+
+                 | 181  | beam cluster  (no soft proc.)|
+                 | 182  | target cluster( "   "    "  )|
+                 | 183  | hard proc. clus. (hadronized)|
+                 | 184  | soft cluster (beam,    "    )|
+                 | 185  | soft cluster (target,  "    )|
+                 | 186  | soft cluster (other,   "    )|
+                 +------+------------------------------+
+                 |190-93| as 195-98, before decays     |
+                 | 195  | direct unstable non-hadron   |
+                 | 196  | dir.unst. hadron (1-body cl.)|
+                 | 197  | dir.unst. hadron (2-body cl.)|
+                 | 198  | indir.unst. hadron or lepton |
+                 | 199  | decayed heavy flavour hadron |
+                 +------+------------------------------+
+ -----------------------------------------------------------------------
+
+                     ******11. EVENT WEIGHTS******
+
+   The  default is  to generate  unweighted events  (EVWGT=AVWGT).  Then
+   event distributions are generated by computing a  weight proportional
+   to the cross section  and comparing it with a random number times the
+   maximum weight.  Set WGTMAX to the maximum weight, or to zero for the
+   program to compute it.  If a weight greater than  WGTMAX is generated
+   during execution, a warning is printed and WGTMAX is reset. Similarly
+   if the  efficiency  is too low  (WGTMAX too large).  If these  errors
+   occur  too often,  output  event  distributions  could be  distorted.
+
+   To generate  weighted  events,  set NOWGT=.FALSE. in common /HWEVNT/.
+
+   In QCD hard scattering and heavy flavour and direct photon production
+   (IPROC = 1500 to 1800) the transverse energy distribution of weighted
+   events (or the efficiency for unweighted  events) can be varied using
+   the parameters PTMIN, PTMAX and PTPOW.
+
+   Similarly in  Drell-Yan processes (IPROC = 13**) the lepton pair mass
+   distribution is controlled by the parameters  EMMIN, EMMAX and EMPOW,
+   and in  deep  inelastic  scattering the  Q**2 distribution  is set by
+   Q2MIN, Q2MAX and Q2POW.
+
+   Data on weights  generated are output at the end of the run. The mean
+   weight is an  estimate of the cross section (in nanobarns) integrated
+   over the region used for event generation.
+
+   N.B.  The  mean weight  is the  sum of  weights  divided by the total
+   number  of  WEIGHTS  generated,  not  the  total  number  of  EVENTS.
+ -----------------------------------------------------------------------
+
+                  ****12. HEAVY FLAVOUR DECAYS***
+
+   Heavy quark decays are treated as  secondary hard  subprocesses.  Top
+   quarks can decay either  before or after hadronization,  depending on
+   the value of the  logical variable  DECAY  returned by the subroutine
+   HWDTOP.  At present decay occurs  before hadronization (DECAY=.TRUE.)
+   if the top mass is above 120 GeV (default=100 GeV).  Any hypothetical
+   heavier quarks  always decay  before hadronization.  Top- and bottom-
+   flavoured hadrons are split into  collinear heavy quark and spectator
+   and the former decays independently.  After decay, parton showers may
+   be  generated  from  coloured  decay products, in the usual way.  See
+   Nucl. Phys. B330 (1990) 261  for details  of the  treatment of colour
+   coherence in these showers.
+
+   Users may  wish to  change the  decay fractions for heavy quarks, for
+   example to force a leptonic decay in every event. This can be done by
+   modifying the contents of  COMMON/HWUFHV/:  FBTM(1,1), FBTM(2,1),...,
+   FBTM(6,1) are the b-quark decay fractions into the 6 doublets  (d,u),
+   (s,c),(b,t),(e,nue),(mu,numu),(tau,nutau) respectively. FBTM(1,2) etc
+   are the corresponding b-bar fractions.  Thus to get all  B hadrons to
+   decay to muons,  while keeping the default decay  fractions for B-bar
+   hadrons,  one would set FBTM(J,1)=0 for J.NE.5 and FBTM(5,1)=1, with-
+   out changing  FBTM(J,2).  FTOP is the corresponding array for the top
+   quark, while FHVY is for quarks heavier than top.  All  these  quant-
+   ities  can  be  changed  from  event to event.
+ -----------------------------------------------------------------------
+
+                     ***13. QCD HARD SUBPROCESSES***
+
+    At present only 2->2 subprocesses are implemented. They are class-
+    ified as shown below.
+
+            +-----+------------------------------+---------+
+            |IHPRO|   Process 1 + 2 -> 3 + 4     |Col/F.Con|
+            +-----+------------------------------+---------+
+            |  1  | q + q        -> q + q        | 3 4 2 1 |
+            |  2  | q + q        -> q + q        | 4 3 1 2 |
+            |  3  | q + q'       -> q + q'       | 3 4 2 1 |
+            |  4  | q + qbar     -> q'+ qbar'    | 2 4 1 3 |
+            |  5  | q + qbar     -> q + qbar     | 3 1 4 2 |
+            |  6  | q + qbar     -> q + qbar     | 2 4 1 3 |
+            |  7  | q + qbar     -> g + g        | 2 4 1 3 |
+            |  8  | q + qbar     -> g + g        | 2 3 4 1 |
+            |  9  | q + qbar'    -> q + qbar'    | 3 1 4 2 |
+            | 10  | q + g        -> q + g        | 3 1 4 2 |
+            | 11  | q + g        -> q + g        | 3 4 2 1 |
+            | 12  | qbar + q     -> qbar' +q'    | 3 1 4 2 |
+            | 13  | qbar + q     -> qbar + q     | 2 4 1 3 |
+            | 14  | qbar + q     -> qbar + q     | 3 1 4 2 |
+            | 15  | qbar + q     -> g + g        | 3 1 4 2 |
+            | 16  | qbar + q     -> g + g        | 4 1 2 3 |
+            | 17  | qbar + q'    -> qbar + q'    | 2 4 1 3 |
+            | 18  | qbar + qbar  -> qbar + qbar  | 4 3 1 2 |
+            | 19  | qbar + qbar  -> qbar + qbar  | 3 4 2 1 |
+            | 20  | qbar + qbar' -> qbar + qbar' | 4 3 1 2 |
+            | 21  | qbar + g     -> qbar + g     | 2 4 1 3 |
+            | 22  | qbar + g     -> qbar + g     | 4 3 1 2 |
+            | 23  | g + q        -> g + q        | 2 4 1 3 |
+            | 24  | g + q        -> g + q        | 3 4 2 1 |
+            | 25  | g + qbar     -> g + qbar     | 3 1 4 2 |
+            | 26  | g + qbar     -> g + qbar     | 4 3 1 2 |
+            | 27  | g + g        -> q + qbar     | 2 4 1 3 |
+            | 28  | g + g        -> q + qbar     | 4 1 2 3 |
+            | 29  | g + g        -> g + g        | 4 1 2 3 |
+            | 30  | g + g        -> g + g        | 4 3 1 2 |
+            | 31  | g + g        -> g + g        | 2 4 1 3 |
+            +-----+------------------------------+---------+
+
+   `Col/F.Con'  refers  to the  colour/flavour  connections  between the
+   partons:`I J K L' means that the colour of parton 1 comes from parton
+   I, that of 2 from J, etc.  For antiquarks, which have no colour (only
+   anticolour),  the label shows  instead to which parton the flavour is
+   connected.  For this colour/flavour labelling all partons are defined
+   as outgoing.  Thus, for example,  process  10 has colour  connections
+   3 1 4 2, corresponding to the colour flow diagram:
+
+                           1 -->--+ +-->-- 3
+                                  | |
+                                  | |
+                             --<--+ +--<--
+                           2 -->------->-- 4
+
+   When different colour flows are possible, they are listed as separate
+   subprocesses.  This separation  is not exact  but is  normally a good
+   approximation.  The sum of the colour flows is the exact lowest-order
+   cross section.
+ -----------------------------------------------------------------------
+
+                ***14. QCD DIRECT PHOTON SUBPROCESSES***
+
+            +-----+------------------------------+---------+
+            |IHPRO|   Process 1 + 2 -> 3 + 4     |Col/F.Con|
+            +-----+------------------------------+---------+
+            | 41  | q + qbar     -> g + photon   | 2 3 1 4 |
+            | 42  | q + gluon    -> q + photon   | 3 1 2 4 |
+            | 43  | qbar + q     -> g + photon   | 3 1 2 4 |
+            | 44  | qbar + gluon -> qbar + photon| 2 3 1 4 |
+            | 45  | gluon + q    -> q    + photon| 2 3 1 4 |
+            | 46  | gluon + qbar -> qbar + photon| 3 1 2 4 |
+            | 47  | gluon + gluon-> gluon+ photon| 2 3 1 4 |
+            +-----+------------------------------+---------+
+            | 51  | photon+ q    -> gluon+ q     | 1 4 2 3 |
+            | 52  | photon+ qbar -> gluon+ qbar  | 1 3 4 2 |
+            | 53  | photon+ gluon-> q    + qbar  | 1 4 2 3 |
+            +-----+------------------------------+---------+
+            | 61  | q + qbar     -> photon+photon| 2 1 3 4 |
+            | 62  | qbar + q     -> photon+photon| 2 1 3 4 |
+            | 63  | gluon + gluon-> photon+photon| 2 1 3 4 |
+            +-----+------------------------------+---------+
+            | 71  | photon+ q    -> M(S=0) +q'   | 1 4 3 2 |
+            | 72  | photon+ q    -> M(S=1)L+q'   | 1 4 3 2 |
+            | 73  | photon+ q    -> M(S=1)T+q'   | 1 4 3 2 |
+            | 74  | photon+ qbar -> M(S=0) +qbar'| 1 4 3 2 |
+            | 75  | photon+ qbar -> M(S=1)L+qbar'| 1 4 3 2 |
+            | 76  | photon+ qbar -> M(S=1)T+qbar'| 1 4 3 2 |
+            +-----+------------------------------+---------+
+
+   N.B. The photon is connected to itself.
+ -----------------------------------------------------------------------
+
+                ***15. QCD HIGGS PLUS JET SUBPROCESSES***
+
+            +-----+------------------------------+---------+
+            |IHPRO|   Process 1 + 2 -> 3 + 4     |Col/F.Con|
+            +-----+------------------------------+---------+
+            | 81  | q    + qbar  -> g    + H     | 2 3 1 4 |
+            | 82  | q    + g     -> q    + H     | 3 1 2 4 |
+            | 83  | qbar + q     -> g    + H     | 3 1 2 4 |
+            | 84  | qbar + g     -> qbar + H     | 2 3 1 4 |
+            | 85  | g    + q     -> q    + H     | 2 3 1 4 |
+            | 86  | g    + qbar  -> qbar + H     | 3 1 2 4 |
+            | 87  | g    + g     -> g    + H     | 2 3 1 4 |
+            +-----+------------------------------+---------+
+
+   N.B. The Higgs is connected to itself.
+
+ -----------------------------------------------------------------------
+                ******16. ELECTROWEAK SUBPROCESSES******
+
+   HERWIG  generates  Higgs bosons  through  gluon-gluon/quark-antiquark
+   fusion,  and W fusion in hadron-hadron collisions  (IPROC=1600+ID and
+   1900+ID),  in lepton-lepton  collisions  through  the Bjorken process
+   (that is, Z(*)->Z(*)H  with one or both Zs  off-shell)  and  W fusion
+   (IPROC=300+ID and 400+ID),  and in lepton-hadron collisions through W
+   fusion (IPROC=9500+ID).  Each process  is generated  according to the
+   exact  leading  order matrix  element in the s-channel approximation.
+   This results in  unitarity violation for  Mh >> Mw,  s >~ a few Mh^2,
+   (where s=qh^2), so to regularize this,  the Mh*GAMH in the propagator
+   can be replaced by SQRT(s)*GAMH(s). The variable IOPHIG controls this
+   procedure:
+
+       +------+------------------------------+-----------+
+       |IOPHIG|   Choose s according to      | Reweight? |
+       +------+------------------------------+-----------+
+       |   0  | s^2 / ((s-Mh^2)^2 + Mh*GAMH) |    YES    |
+       |   1  |  1  / ((s-Mh^2)^2 + Mh*GAMH) |    YES    |
+       |   2  | s^2 / ((s-Mh^2)^2 + Mh*GAMH) |     NO    |
+       |   3  |  1  / ((s-Mh^2)^2 + Mh*GAMH) |     NO    |
+       +------+------------------------------+-----------+
+
+   Where reweighting means weighting the distribution back to
+
+                          SQRT(s) * GAMH(s)
+                     ----------------------------
+                     (s-Mh^2)^2 + SQRT(s)*GAMH(s)
+
+   The default is IOPHIG=1.  The difference  between options  0 and 1 is
+   purely  in the  weight  distribution  produced.  Options  2 and 3 are
+   intended primarily for  users who wish to supply  their own unitarity
+   conserving  reweighting  function at the point  indicated in  routine
+   HWHIGM.  In all cases,  the distribution  is restricted  to the range
+   [Mh-GAMMAX*GAMH , Mh+GAMMAX*GAMH].  GAMMAX defaults to 10, but in the
+   (probably unphysical) region  Mh >~ 1TeV should be reduced to protect
+   against poor weight distributions. These considerations do not affect
+   the distribution noticably for  Mh <~ 500 GeV,  and GAMMAX can safely
+   be increased if necessary.
+
+   For each process, ID controls the Higgs decay: ID=1-6 for quarks, 7-9
+   for leptons, 10/11 for WW/ZZ pairs,  and 12 for photons.  In addition
+   ID=0 gives quarks of all flavours,  and ID=99  gives all decays.  For
+   each process,  the average  event  weight  is the cross-section in nb
+   times the branching  fraction  to the requested decay.  The branching
+   ratios to quarks use the next-to-leading logarithm corrections, those
+   to WW/ZZ pairs allow for one or both bosons off-shell. The amplitudes
+   for all Higgs vertices are multiplied by the factor ENHANC(ID)  where
+   ID is the same as in IPROC=300+ID except the gammagammaHiggs `vertex'
+   which is calculated from ENHANC(6)  and ENHANC(10)  for the top and W
+   loops.  This allows  the simulation  of any chargeless  scalar Higgs.
+   Note however  that  pseudoscalar and charged Higgses,  and  processes
+   involving more than one Higgs (eg the decay H-->hZ) are not included.
+
+   Gauge bosons  are generated  through the  processes  of  W + 1 parton
+   production in hadron-hadron  collisions,  and  WW  pair production in
+   lepton-lepton collisions, as well as in the Higgs processes mentioned
+   above.   In  all  cases  their  decay is controlled  by the  variable
+   MODBOS(i). This controls the decay of the ith gauge boson per event:
+
+       +---------+-----------------+-----------------+
+       |MODBOS(i)|     W Decay     |     Z Decay     |
+       +---------+-----------------+-----------------+
+       |    0    |        all      |        all      |
+       |    1    |       qqbar     |       qqbar     |
+       |    2    |        enu      |       e+e-      |
+       |    3    |        munu     |      mu+mu-     |
+       |    4    |       taunu     |     tau+tau-    |
+       |    5    |     enu & munu  |    ee & mumu    |
+       |    6    |        all      |      nunu       |
+       |    7    |        all      |     bbbar       |
+       |   >7    |        all      |       all       |
+       +---------+-----------------+-----------------+
+
+   All  entries of  MODBOS  default to 0.   Bosons which are produced in
+   pairs  (ie. from WW pair production, or Higgs decay)  are symmetrized
+   in MODBOS(i)  and  MODBOS(i+1).  For processes which directly produce
+   gauge bosons, the event weight includes the branching fraction to the
+   requested decay,  but this is only true for Higgs production if decay
+   to WW/ZZ is forced (ID=10/11) and not if ID=99. The spin-correlations
+   in the decays are handled in one of two ways:
+   (a) the diagonal  members of the  spin  density  matrix are stored in
+       RHOHEP(i,IHEP),  where i=1,2,3 for helicity=i-2 in the centre-of-
+       mass frame of their production,  for processes  where this matrix
+       is diagonal (ie. there is no interference between spin states).
+   (b) the  correlations  in the  decay  are  handled  directly  by  the
+       production routine where (a) is not possible.
+   In the case of  gamma gamma --> W W  the  decay correlations  are not
+   correctly included: they currently decay isotropically.
+
+   The electroweak vector boson--fermion coupling  constants are  stored
+   in the arrays QFCH(I), VFCH(I,J) and AFCH(I,J) for the charge, vector
+   and axial vector couplings to the neutral current respectively. These
+   are given in the convention 
+       V_f=(T_3/2-Qsin^2_W)/(cos_W sin_W);  A_f=T_3/(2 cos_W sin_W).
+   In each case,
+     I= 1- 6: d,u,s,c,b,t (quarks)
+      =11-16: e,nu_e,mu,nu_mu,tau,nu_tau (leptons) (`I=IDHW-110')
+     J=1 for minimal SM:
+      =2 for Z' couplings (only included if ZPRIME=.TRUE.)
+   Note that no universality is assumed -- couplings can be arbitrarily
+   set for each fermion species separately.
+   The quark mixing matrix  is stored in VCKM(K,L),  K=1,2,3 for u,c,t,
+   L=1,2,3 for d,s,b.
+
+   A running electromagnetic coupling constant is provided, HWUAEM(Q2).
+   ALPHEM =1/137 provides the normalisation at the Thomson (Q2=0) limit
+   and is used for all processes involving real photons.
+   The electroweak coupling is calculated as,
+                 g^2 = 4 PIFAC ALPHEM(Q2) / SWEIN,
+   where Q2 is appropriate for the given process.
+   Photon emission in parton showers,  and in the  `dead-zone'  in e+e-
+   is enhanced by a factor of ALPFAC (default=1.).
+
+ -----------------------------------------------------------------------
+
+                *****17. INCLUDING NEW SUBPROCESSES*****
+
+   It should not be difficult for users to include  further subprocesses
+   in this version of the program if required.  The parton and hard sub-
+   process 4-momenta,  masses and  identity codes  need to be entered in
+   COMMON/HEPEVT/ with the appropriate status codes ISTHEP(I)=110-114 to
+   tell the program which is which (see table in Sect. 10).  The colour/
+   flavour structure should be specified by the second mother and daugh-
+   ter pointers as explained in Sect. 13 (see also the sample output and
+   guide, Sects. 18 and 19).
+
+   Apart from the status codes ISTHEP, the HERWIG identity codes IDHW(I)
+   in COMMON/HWEVNT/ also need  to be set correctly.  The IDHW codes can
+   be listed in a run with  IPRINT=2:  the most important are the quarks
+   1-6 (as IDHEP), antiquarks 7-12, gluon 13, overall c.m. 14, hard c.m.
+   15, soft c.m. 16,  photon 59,  leptons 121-126,  antileptons 127-132.
+
+   The  utility  subroutine  HWUIDT(IOPT,IPDG,IHWG,NAME)  is provided to
+   translate between  Particle Data Group code  IPDG,  HERWIG code IHWG,
+   and HERWIG  character*4 NAME,  with IOPT=1,2,3  depending on which of
+   IPDG, IHWG and NAME is the input argument.
+
+   Consider for example  the process of  virtual photon-gluon  fusion to
+   make  b+bbar in  e p collisions.
+
+       **** N.B. This process is now included as IPROC = 9102 ****
+
+   We assume the user provides a subroutine to generate the momenta PHEP
+   for the  hard  subprocess   e+g -> e+b+bbar.  The colour structure is
+
+                        (e)4 ........... 7(e)
+                                  :
+                                  :
+                                  +-->-- 8(b)
+                                  |
+                             -->--+
+                        (g)5 --<-----<-- 9(bbar)
+
+   Thus the momenta generated, together with those of the initial beams
+   and the overall  centre of mass,  could be entered  in the following
+   sequence:
+
+             +----+--------+------+-----+------+------+----+
+             |IHEP|  Entry |ISTHEP|IDHEP|JMOHEP|JDAHEP|IDHW|
+             +----+--------+------+-----+------+------+----+
+             |  1 | e beam |  101 |   11|  0  0|  0  0| 121|
+             |  2 | p beam |  102 | 2212|  0  0|  0  0|  73|
+             |  3 | ep c.m.|  103 |    0|  0  0|  0  0|  14|
+             +----+--------+------+-----+------+------+----+
+             |  4 | e in   |  111 |   11|  6  7|  0  7| 121|
+             |  5 | gluon  |  112 |   21|  6  9|  0  8|  13|
+             |  6 | hard cm|  110 |    0|  4  5|  7  9|  15|
+             |  7 | e out  |  113 |   11|  6  4|  0  4| 121|
+             |  8 | b      |  114 |    5|  6  5|  0  9|   5|
+             |  9 | bbar   |  114 |   -5|  6  8|  0  5|  11|
+             +----+--------+------+-----+------+------+----+
+
+   Note that if there are more than two outgoing partons,  the first has
+   status  113 and all the others 114.  Each parton has JMOHEP(1,I)=6 to
+   indicate  the location of  the hard c.m.  for this subprocess,  while
+   JMOHEP(2,I) gives the location of the colour mother (treating the in-
+   coming gluon as outgoing) or the connected electron. JDAHEP(1,I) will
+   be set by the jet generator  HWBGEN,  while JDAHEP(2,I) points to the
+   anticolour mother (or connected electron). Finally the HERWIG identi-
+   fiers IDHW(I) could be set to the indicated values by means of the
+   translation subroutine HWUIDT as follows:
+
+      CHARACTER*4 NAME
+      .....
+      NHEP=9
+      IDHEP(1)=11
+      IDHEP(2)=2212
+      .....
+      IDHEP(9)=-5
+      DO 10 I=1,NHEP
+   10 CALL HWUIDT(1,IDHEP(I),IDHW(I),NAME)
+      IDHW(6)=15
+
+   The last statement is needed because  IDPDG(I)=0  returns IDHW(I)=14.
+   If subroutine HWBGEN is now called, it will find the coloured partons
+   and generate QCD jets from them.  Subsequent calls to  HWCFOR etc can
+   then be used to form clusters and hadronize them.
+
+   If the  hard subprocess  routine is  called from  HWEPRO,  like those
+   already provided, it should have two options controlled by the logic-
+   al variable  GENEV  in  COMMON/HWHARD/.   For GENEV=.FALSE., an event
+   weight  (normally the  cross section  in nanobarns)  is generated and
+   stored as  EVWGT  in COMMON/HWEVNT/.  If this  weight is  accepted by
+   HWEPRO, the subroutine is called a second time with  GENEV=.TRUE. and
+   the corresponding  event data should  then be generated and stored as
+   explained above.
+ -----------------------------------------------------------------------
+
+                     *****18. ERROR CONDITIONS*****
+
+   Certain combinations of input parameters may lead to problems in exe-
+   cution.  HERWIG  tries to  detect these and  print a warning.  Errors
+   during  execution are dealt with by  HWWARN  which prints the calling
+   subprogram and a code and takes  appropriate action.  In general, the
+   larger  the code  the more serious  the problem.  Refer to the source
+   code  to find  out why  HWWARN  was  called.  Events  can be rerun by
+   setting the random number seeds  NRN to the values given in the error
+   message or event dump,  and MAXWGT to the maximum weight  encountered
+   in the run.  Contents of  /HEPEVT/  can by printed by calling HWUEPR,
+   those of /HWPART/ (last parton shower) by HWUBPR.
+
+   If WGTMAX is increased during event generation, so that this message
+   is printed:
+   HWWARN CALLED FROM SUBPROGRAM HWEPRO: CODE =   1
+   EVENT      21:   SEEDS =  836291635 & 1823648329  WEIGHT = 0.3893E-08
+   EVENT SURVIVES. EXECUTION CONTINUES
+          NEW MAXIMUM WEIGHT = 0.428217360829367E-08
+   then to regenerate any later events, WGTMAX must be set to the printed
+   value, as well as setting NRN to the appropriate seeds.
+
+   Examples of error messages:
+
+   HWWARN CALLED FROM SUBPROGRAM HWSBRN: CODE = 101
+   EVENT      31:   SEEDS =  422399901 &  771980111  WEIGHT = 0.3893E-08
+   EVENT KILLED.   EXECUTION CONTINUES
+
+   Spacelike (initial-state) parton branching had no phase space. This
+   can happen due to cutoffs which are slightly different in the hard
+   subprocess and the parton shower.
+   Action taken:  program  throws away  this event and starts a new one.
+
+   HWWARN CALLED FROM SUBPROGRAM HWCHAD: CODE = 102
+   EVENT      51:   SEEDS = 1033784787 & 1428957533  WEIGHT = 0.3893E-08
+   EVENT KILLED.   EXECUTION CONTINUES
+
+   A cluster has been formed with too low a mass to represent any hadron
+   of the correct flavour, and there is no colour-connected cluster from
+   which the necessary additional mass could be transferred.
+   Action taken:  program  throws away  this event and starts a new one.
+
+   HWWARN CALLED FROM SUBPROGRAM HWUINE: CODE= 200
+   EVENT SURVIVES.  RUN ENDS GRACEFULLY
+
+   CPU time limit liable to be reached  before generating  MAXEV events.
+   Action taken:  skips to terminal  calculations using existing events.
+
+   HWWARN CALLED FROM SUBPROGRAM HWBSUD: CODE= 500
+   RUN CANNOT CONTINUE
+
+   The table of Sudakov form factors read on unit  LRSUD does not extend
+   to  the  maximum  momentum  scale  (QLIM)  specified  for  this  run.
+   Action taken: run aborted.  The user must either reduce  QLIM  or set
+   LRSUD=0  to make a  bigger  table  (set  LWSUD  nonzero to write it).
+
+   HWWARN CALLED FROM SUBPROGRAM HWBSUD: CODE= 515
+   RUN CANNOT CONTINUE
+
+   The table of  Sudakov form factors read on unit  LRSUD is for a diff-
+   erent value of a relevant parameter  (in this case the b quark mass).
+   Action taken: run aborted.  The user must make a new table (set LWSUD
+   nonzero to write it).
+ -----------------------------------------------------------------------
+
+                      *****19. SAMPLE OUTPUT*****
+
+   Below we give a  complete listing  of output  from version 5.1 of the
+   program,  set up for  b quark  production in  pbar-p  collisions at a
+   c.m. energy of  1.8 TeV.  Output from  version  5.8 is  very similar.
+   The main features of the output are discussed in Sect. 19.
+
+
+         HERWIG 5.1      APRIL   1991
+
+
+         INPUT CONDITIONS FOR THIS RUN
+
+         BEAM 1 (PBAR) MOMENTUM =    900.00
+         BEAM 2 (P   ) MOMENTUM =    900.00
+         PROCESS CODE (IPROC)   =    1705
+         NUMBER OF FLAVOURS     =    6
+         STRUCTURE FUNCTION SET =    3
+         AZIM SPIN CORRELATIONS =    T
+         AZIM SOFT CORRELATIONS =    T
+         QCD LAMBDA (GEV)       =    0.2000
+         DOWN     QUARK  MASS   =    0.3200
+         UP       QUARK  MASS   =    0.3200
+         STRANGE  QUARK  MASS   =    0.5000
+         CHARMED  QUARK  MASS   =    1.8000
+         BOTTOM   QUARK  MASS   =    5.2000
+         TOP      QUARK  MASS   =  100.0000
+         GLUON EFFECTIVE MASS   =    0.7500
+         EXTRA SHOWER CUTOFF (Q)=    0.4800
+         EXTRA SHOWER CUTOFF (G)=    0.0600
+         CLUSTER MASS PARAMETER =    3.5000
+         SPACELIKE EVOLN CUTOFF =    2.5000
+         INTRINSIC P-TRAN (RMS) =    0.0000
+         MIN P-TRAN FOR 2->2    =   10.0000
+         MAX P-TRAN FOR 2->2    =  900.0000
+
+         PDFLIB STRUCT FUNCTIONS NOT USED
+
+         NO EVENTS WILL BE WRITTEN TO DISK
+         READING SUDAKOV TABLE ON UNIT   77
+         PARTICLE TYPE  21=PI0  SET STABLE
+
+         INITIAL SEARCH FOR MAX WEIGHT
+
+         PROCESS CODE IPROC =        1705
+         RANDOM NO. SEED 1  =     1246579
+                    SEED 2  =     8447766
+         NUMBER OF SHOTS    =        2000
+         NEW MAXIMUM WEIGHT =  0.3123E+05
+         NEW MAXIMUM WEIGHT =  0.3883E+05
+         NEW MAXIMUM WEIGHT =  0.5639E+05
+
+         INITIAL SEARCH FINISHED
+
+         OUTPUT ON ELEMENTARY PROCESS
+
+         NUMBER OF EVENTS   =           0
+         NUMBER OF WEIGHTS  =        2000
+         MEAN VALUE OF WGT  =  0.2447E+04
+         RMS SPREAD IN WGT  =  0.7210E+04
+         ACTUAL MAX WEIGHT  =  0.5542E+05
+         ASSUMED MAX WEIGHT =  0.5639E+05
+
+         PROCESS CODE IPROC =        1705
+         CROSS SECTION (PB) =2447328.6400
+         ERROR IN C-S  (PB) = 161219.9097
+         EFFICIENCY PERCENT =      4.3404
+
+
+
+ EVENT      1:     900.00 GEV/C PBAR ON     900.00 GEV/C P     PROCESS:  1705
+
+ SEEDS:      17673 &      63565   STATUS: 100  ERROR:   0  WEIGHT: 0.2447E+04
+
+                           ---INITIAL STATE---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   1 PBAR -2212 101   0   0   0   0    0.00    0.00   900.00   900.00    0.94
+   2 P     2212 102   0   0   0   0    0.00    0.00  -900.00   900.00    0.94
+   3 CMF      0 103   0   0   0   0    0.00    0.00     0.00  1800.00 1800.00
+
+                          ---HARD SUBPROCESS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   4 GLUE    21 121   6   7   9   5    0.00    0.00    49.00    49.00    0.75
+   5 BBAR    -5 122   6   4  15   8    0.00    0.00    -5.19     7.35    5.20
+   6 HARD     0 120   4   5   7   8    8.17   -5.11    43.81    57.17   35.45
+   7 GLUE    21 123   6   8  21   4    5.97   11.07    40.40    42.32    0.75
+   8 BBAR    -5 124   6   5  28   7   -5.97  -11.07     3.41    14.03    5.20
+
+                          ---PARTON SHOWERS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   9 GLUE    94 141   4   6  11  14    3.81    0.90    50.87    50.70   -5.67
+  10 CONE     0 100   4   7   0   0    0.47    0.88     2.41     2.61    0.00
+  11 GLUE    21   2   9  12  33  34   -1.23   -0.28    33.27    33.30    0.75
+  12 GLUE    21   2   9  13  35  36   -1.81   -1.85    30.74    30.85    0.75
+  13 DBAR    -1 157   9  14  84  56   -0.69    1.09    63.44    63.45    0.32
+  14 UBUB -2203 155   9  49  69  13    0.00    0.00   626.16   626.16    0.64
+  15 BBAR    94 142   5   6  17  20    4.36   -6.01    -7.06     6.46   -7.95
+  16 CONE     0 100   5   4   0   0   -0.69   -0.72     1.70     1.97    0.00
+  17 BOTM     5 157  15  51  70  32   -3.10    5.14   -63.03    63.53    5.20
+  18 UD    2101 156  15  19  82  52    0.00    0.00  -527.92   527.92    0.64
+  19 UP       2 157  15  53  71  18    0.61   -1.83  -178.83   178.84    0.32
+  20 GLUE    21   2  15  33  37  38   -1.88    2.83   -80.06    80.14    0.75
+  21 GLUE    94 143   7   6  23  27    9.16    4.95    34.61    37.96   11.59
+  22 CONE     0 100   7   8   0   0   -0.34   -0.79     0.70     1.11    0.00
+  23 GLUE    21   2  21  24  39  40    0.97    2.06    11.95    12.19    0.75
+  24 SBAR    -3 157  21  25  76  40    0.62    0.41    12.20    12.23    0.50
+  25 STRA     3 157  21  41  72  24    2.76    0.90     5.42     6.17    0.50
+  26 GLUE    21   2  21  27  41  42    2.21    0.79     3.08     3.94    0.75
+  27 GLUE    21   2  21  30  43  44    2.58    0.80     1.97     3.43    0.75
+  28 BBAR    94 144   8   6  30  32   -0.99  -10.06     9.19    19.21   13.51
+  29 CONE     0 100   8   7   0   0    0.22    0.90     0.51     1.05    0.00
+  30 GLUE    21   2  28  31  45  46   -0.44    1.69     1.76     2.59    0.75
+  31 GLUE    21   2  28  32  47  48    1.06    0.55     0.86     1.65    0.75
+  32 BBAR    -5 157  28  17  80  48   -1.60  -12.30     6.57    14.97    5.20
+
+                          ---GLUON SPLITTING---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  33 DBAR    -1 158   9  34  90  68   -0.18   -0.06     4.28     4.29    0.32
+  34 DOWN     1 158   9  35  73  33   -0.87   -0.16    24.76    24.78    0.32
+  35 DBAR    -1 158   9  36  73  34   -0.54   -0.43     9.16     9.19    0.32
+  36 DOWN     1 158   9  55  74  35   -0.93   -1.03    16.12    16.18    0.32
+  37 UBAR    -2 158  15  38  83  54   -0.76    1.26   -38.50    38.53    0.32
+  38 UP       2 158  15  61  75  37   -0.59    0.81   -21.14    21.16    0.32
+  39 UBAR    -2 158  21  40  81  50    0.55    1.27     8.00     8.12    0.32
+  40 UP       2 158  21  24  76  39    0.41    0.75     3.78     3.89    0.32
+  41 UBAR    -2 158  21  42  72  25    1.23    0.50     2.01     2.43    0.32
+  42 UP       2 158  21  43  77  41    0.99    0.28     1.07     1.52    0.32
+  43 UBAR    -2 158  21  44  77  42    0.69    0.30     0.66     1.05    0.32
+  44 UP       2 158  21  45  78  43    1.90    0.50     1.31     2.38    0.32
+  45 DBAR    -1 158  28  46  78  44   -0.23    1.19     1.00     1.60    0.32
+  46 DOWN     1 158  28  47  79  45   -0.21    0.50     0.76     0.99    0.32
+  47 DBAR    -1 158  28  48  79  46    0.72    0.52     0.54     1.09    0.32
+  48 DOWN     1 158  28  32  80  47    0.34    0.04     0.32     0.57    0.32
+  49 DBAR    -1 159   9  50  69  14    0.00    0.01    68.74    68.74    0.32
+  50 DOWN     1 159  21  39  81  49    0.01    0.03    19.19    19.19    0.32
+  51 DBAR    -1 159  15  52  70  17   -0.04    0.06    -8.67     8.68    0.32
+  52 DOWN     1 159  15  18  82  51   -0.04    0.07    -7.69     7.69    0.32
+  53 DBAR    -1 159  15  54  71  19   -0.04    0.02   -14.54    14.55    0.32
+  54 DOWN     1 159  15  37  83  53    0.00   -0.08   -18.38    18.38    0.32
+  55 DBAR    -1 159   9  56  74  36   -0.20   -0.10     6.72     6.73    0.32
+  56 DOWN     1 159   9  13  84  55   -0.22   -0.15     6.51     6.53    0.32
+  57 DBAR    -1 159  15  58  86  60   -0.02    0.00     0.29     0.43    0.32
+  58 DOWN     1 159   9  65  85  57   -0.08    0.11    -2.97     2.99    0.32
+  59 DBAR    -1 159  15  60  87  62   -0.01    0.00     0.12     0.34    0.32
+  60 DOWN     1 159  15  57  86  59   -0.17    0.23    -6.07     6.09    0.32
+  61 UBAR    -2 159  15  62  75  38   -0.06    0.09    -2.25     2.27    0.32
+  62 UP       2 159  15  59  87  61   -0.04    0.05    -1.22     1.26    0.32
+  63 UBAR    -2 159   9  64  89  66   -0.02    0.00     0.40     0.52    0.32
+  64 UP       2 159   9  67  88  63   -0.02    0.02    -0.44     0.54    0.32
+  65 SBAR    -3 159   9  66  85  58   -0.02    0.00     0.04     0.50    0.50
+  66 STRA     3 159   9  63  89  65   -0.02    0.02    -0.47     0.69    0.50
+  67 UBAR    -2 159   9  68  88  64   -0.01    0.00     0.10     0.33    0.32
+  68 UP       2 159   9  33  90  67   -0.11   -0.04     2.48     2.50    0.32
+
+                         ---CLUSTER FORMATION---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  69 CLUS    91 167  14  49 225   0    0.00    0.00   694.90   694.90    1.22
+  70 CLUS    91 183  17  51  91  92   -3.14    5.21   -71.70    72.21    5.97
+  71 CLUS    91 183  19  53  93  94    0.57   -1.82  -193.38   193.39    1.38
+  72 CLUS    91 183  25  41  95  96    3.99    1.40     7.42     8.59    0.93
+  73 CLUS    91 183  34  35  97  98   -1.41   -0.59    33.92    33.97    1.00
+  74 CLUS    91 183  36  55  99 100   -1.13   -1.13    22.84    22.91    0.92
+  75 CLUS    91 183  38  61 101 102   -0.65    0.90   -23.38    23.44    1.08
+  76 CLUS    91 183  40  24 103 104    1.03    1.16    15.98    16.12    1.46
+  77 CLUS    91 183  42  43 105 106    1.67    0.58     1.73     2.57    0.67
+  78 CLUS    91 183  44  45 107 108    1.66    1.69     2.31     3.98    2.22
+  79 CLUS    91 183  46  47 109 110    0.51    1.02     1.31     2.08    1.14
+  80 CLUS    91 183  48  32 111 112   -1.26  -12.26     6.89    15.53    6.47
+  81 CLUS    91 183  50  39 113 114    0.56    1.30    27.19    27.31    2.23
+  82 CLUS    91 168  52  18 225   0   -0.04    0.07  -535.60   535.61    2.84
+  83 CLUS    91 183  54  37 115 116   -0.76    1.18   -56.88    56.91    1.31
+  84 CLUS    91 183  56  13 117 118   -0.92    0.94    69.95    69.98    1.45
+  85 CLUS    91 183  58  65 119 120   -0.10    0.12    -2.93     3.49    1.89
+  86 CLUS    91 183  60  57 121 122   -0.19    0.23    -5.79     6.52    2.99
+  87 CLUS    91 183  62  59 123 124   -0.05    0.05    -1.10     1.61    1.17
+  88 CLUS    91 183  64  67 125 126   -0.03    0.02    -0.34     0.88    0.81
+  89 CLUS    91 183  66  63 127 128   -0.04    0.02    -0.07     1.20    1.20
+  90 CLUS    91 183  68  33 129 130   -0.29   -0.10     6.75     6.79    0.66
+
+                          ---CLUSTER DECAYS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  91 B-    -521 199  70  15 173 174   -2.32    4.11   -63.08    63.48    5.27
+  92 PI+    211   1  70  15   0   0   -0.82    1.10    -8.62     8.73    0.14
+  93 PI+    211   1  71  15   0   0   -0.22   -0.71  -113.64   113.64    0.14
+  94 PI0    111   1  71  15   0   0    0.79   -1.11   -79.74    79.75    0.13
+  95 K-    -321   1  72  21   0   0    2.50    0.83     5.24     5.88    0.49
+  96 PI0    111   1  72  21   0   0    1.50    0.57     2.19     2.72    0.13
+  97 RHO0   113 197  73   9 131 132   -1.26   -0.63    28.22    28.26    0.77
+  98 PI0    111   1  73   9   0   0   -0.15    0.04     5.70     5.71    0.13
+  99 PI0    111   1  74   9   0   0   -0.17   -0.10     3.32     3.33    0.13
+ 100 RHO0   113 197  74   9 133 134   -0.96   -1.03    19.52    19.58    0.77
+ 101 ETA    221 197  75  15 135 137   -0.57    0.18   -12.55    12.58    0.55
+ 102 PI0    111   1  75  15   0   0   -0.08    0.72   -10.83    10.86    0.13
+ 103 PI+    211   1  76  21   0   0    0.38   -0.04     5.48     5.50    0.14
+ 104 K*0    313 197  76  21 138 139    0.66    1.21    10.50    10.62    0.89
+ 105 PI+    211   1  77  21   0   0    0.92    0.38     0.56     1.15    0.14
+ 106 PI-   -211   1  77  21   0   0    0.75    0.20     1.17     1.41    0.14
+ 107 PI0    111   1  78  21   0   0    0.96    0.52     0.12     1.11    0.13
+ 108 A1+  20213 197  78  21 140 141    0.70    1.16     2.18     2.87    1.27
+ 109 ETA    221 197  79  28 142 144    0.28    0.39     0.76     1.06    0.55
+ 110 ETA    221 197  79  28 145 147    0.24    0.62     0.54     1.02    0.55
+ 111 PI-   -211   1  80  28   0   0    0.56   -3.35     1.41     3.68    0.14
+ 112 B+     521 199  80  28 175 176   -1.82   -8.92     5.47    11.86    5.27
+ 113 PI-   -211   1  81  21   0   0    1.07    0.70     8.59     8.69    0.14
+ 114 OMEG   223 197  81  21 148 150   -0.51    0.60    18.59    18.63    0.78
+ 115 K0     311 197  83  15 151 151   -0.71    1.02   -46.50    46.52    0.50
+ 116 K-    -321   1  83  15   0   0   -0.05    0.16   -10.38    10.39    0.49
+ 117 ETA    221 197  84   9 152 154   -0.53    0.30    39.53    39.54    0.55
+ 118 RHO0   113 197  84   9 155 156   -0.39    0.64    30.42    30.44    0.77
+ 119 K0     311 197  85   9 157 157    0.05    0.43    -0.41     0.78    0.50
+ 120 ETPS   331 197  85   9 158 159   -0.15   -0.31    -2.52     2.72    0.96
+ 121 DEL0  2114 197  86  15 160 161   -0.51    0.76    -2.22     2.70    1.23
+ 122 DLB0 -2114 197  86  15 162 163    0.32   -0.52    -3.57     3.82    1.23
+ 123 PI0    111   1  87  15   0   0    0.41    0.28    -0.89     1.03    0.13
+ 124 PI+    211   1  87  15   0   0   -0.46   -0.23    -0.21     0.58    0.14
+ 125 PI0    111   1  88   9   0   0    0.05   -0.11    -0.24     0.30    0.13
+ 126 ETA    221 197  88   9 164 166   -0.08    0.13    -0.11     0.58    0.55
+ 127 K-    -321   1  89   9   0   0   -0.42    0.28    -0.12     0.72    0.49
+ 128 PI0    111   1  89   9   0   0    0.38   -0.27     0.05     0.49    0.13
+ 129 PI0    111   1  90   9   0   0   -0.43   -0.02     3.06     3.09    0.13
+ 130 PI+    211   1  90   9   0   0    0.14   -0.07     3.70     3.70    0.14
+
+                       ---STRONG HADRON DECAYS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 131 PI-   -211   1  97   9   0   0   -0.98   -0.63    16.58    16.62    0.14
+ 132 PI+    211   1  97   9   0   0   -0.28    0.00    11.64    11.64    0.14
+ 133 PI-   -211   1 100   9   0   0   -0.23   -0.10     7.80     7.80    0.14
+ 134 PI+    211   1 100   9   0   0   -0.73   -0.93    11.72    11.78    0.14
+ 135 PI0    111   1 101  15   0   0   -0.32    0.13    -3.90     3.91    0.13
+ 136 PI0    111   1 101  15   0   0   -0.07    0.04    -3.64     3.64    0.13
+ 137 PI0    111   1 101  15   0   0   -0.18    0.01    -5.02     5.02    0.13
+ 138 PI-   -211   1 104  21   0   0    0.24    0.83     6.31     6.37    0.14
+ 139 K+     321   1 104  21   0   0    0.42    0.37     4.18     4.25    0.49
+ 140 PI+    211   1 108  21   0   0    0.64    0.42     0.74     1.07    0.14
+ 141 RHO0   113 198 108  21 167 168    0.06    0.74     1.45     1.80    0.77
+ 142 PI0    111   1 109  28   0   0    0.06    0.27     0.26     0.40    0.13
+ 143 PI-   -211   1 109  28   0   0    0.12   -0.03     0.25     0.31    0.14
+ 144 PI+    211   1 109  28   0   0    0.10    0.15     0.26     0.35    0.14
+ 145 PI0    111   1 110  28   0   0    0.10    0.32     0.35     0.50    0.13
+ 146 PI0    111   1 110  28   0   0   -0.02    0.16     0.15     0.26    0.13
+ 147 PI0    111   1 110  28   0   0    0.16    0.15     0.04     0.26    0.13
+ 148 PI0    111   1 114  21   0   0   -0.24    0.35    11.48    11.48    0.13
+ 149 PI-   -211   1 114  21   0   0   -0.30    0.28     5.78     5.80    0.14
+ 150 PI+    211   1 114  21   0   0    0.04   -0.03     1.33     1.34    0.14
+ 151 K0L    130   1 115  15   0   0   -0.71    1.02   -46.50    46.52    0.50
+ 152 PI0    111   1 117   9   0   0   -0.06    0.04     4.66     4.66    0.13
+ 153 PI0    111   1 117   9   0   0   -0.35    0.08    23.42    23.43    0.13
+ 154 PI0    111   1 117   9   0   0   -0.12    0.18    11.45    11.45    0.13
+ 155 PI-   -211   1 118   9   0   0   -0.01    0.28    21.64    21.65    0.14
+ 156 PI+    211   1 118   9   0   0   -0.38    0.37     8.78     8.80    0.14
+ 157 K0S    310 198 119   9 169 170    0.05    0.43    -0.41     0.78    0.50
+ 158 GAMA    22   1 120   9   0   0   -0.03   -0.02     0.02     0.04    0.00
+ 159 RHO0   113 198 120   9 171 172   -0.12   -0.29    -2.54     2.67    0.77
+ 160 PI-   -211   1 121  15   0   0    0.02    0.01    -0.59     0.60    0.14
+ 161 P     2212   1 121  15   0   0   -0.53    0.74    -1.63     2.09    0.94
+ 162 PI0    111   1 122  15   0   0   -0.13    0.03    -0.58     0.61    0.13
+ 163 NBAR -2112   1 122  15   0   0    0.45   -0.56    -2.99     3.22    0.94
+ 164 PI0    111   1 126   9   0   0   -0.06   -0.07    -0.06     0.18    0.13
+ 165 PI0    111   1 126   9   0   0   -0.08    0.01     0.01     0.16    0.13
+ 166 PI0    111   1 126   9   0   0    0.05    0.19    -0.06     0.25    0.13
+ 167 PI-   -211   1 141  21   0   0    0.22    0.55     1.38     1.51    0.14
+ 168 PI+    211   1 141  21   0   0   -0.15    0.19     0.07     0.29    0.14
+ 169 PI-   -211   1 157   9   0   0    0.16    0.37    -0.14     0.44    0.14
+ 170 PI+    211   1 157   9   0   0   -0.10    0.06    -0.28     0.33    0.14
+ 171 PI-   -211   1 159   9   0   0    0.01    0.07    -1.95     1.96    0.14
+ 172 PI+    211   1 159   9   0   0   -0.14   -0.36    -0.59     0.72    0.14
+
+                       ---HEAVY FLAVOUR DECAYS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 173 BOTM     5 153  91 174 177 179   -2.18    3.86   -59.25    59.62    4.95
+ 174 UBAR    -2 125  91 179 183 179   -0.14    0.25    -3.83     3.85    0.32
+ 175 UP       2 125 112 182 184 182   -0.11   -0.54     0.33     0.72    0.32
+ 176 BBAR    -5 153 112 175 180 182   -1.71   -8.37     5.14    11.14    4.95
+ 177 UBAR    -2 123 173 178 185 178    0.46    0.82    -8.43     8.49    0.32
+ 178 DOWN     1 124 173 177 187 177    0.55    1.58   -16.23    16.32    0.32
+ 179 CHRM     4 124 173 173 189 173   -3.19    1.47   -34.60    34.82    1.80
+ 180 UP       2 123 176 181 191 181   -0.35   -0.50    -0.24     0.73    0.32
+ 181 DBAR    -1 124 176 180 193 180   -1.73   -3.45     3.62     5.30    0.32
+ 182 CBAR    -4 124 176 176 195 176    0.37   -4.43     1.77     5.11    1.80
+ 183 UBAR    -2 160 174 190 199 190   -0.14    0.25    -3.83     3.85    0.32
+ 184 UP       2 160 175 196 197 196   -0.11   -0.54     0.33     0.72    0.32
+
+                          ---PARTON SHOWERS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 185 UBAR    94 143 177 173 186 186    0.46    0.82    -8.43     8.49    0.32
+ 186 UBAR    -2 157 185 188 198 188    0.46    0.82    -8.43     8.49    0.32
+ 187 DOWN    94 144 178 173 188 188    0.55    1.58   -16.23    16.32    0.32
+ 188 DOWN     1 157 187 186 198 186    0.55    1.58   -16.23    16.32    0.32
+ 189 CHRM    94 144 179 173 190 190   -3.19    1.47   -34.60    34.82    1.80
+ 190 CHRM     4 157 189 183 199 183   -3.19    1.47   -34.60    34.82    1.80
+ 191 UP      94 143 180 176 192 192   -0.35   -0.50    -0.24     0.73    0.32
+ 192 UP       2 157 191 194 200 194   -0.35   -0.50    -0.24     0.73    0.32
+ 193 DBAR    94 144 181 176 194 194   -1.73   -3.45     3.62     5.30    0.32
+ 194 DBAR    -1 157 193 192 200 192   -1.73   -3.45     3.62     5.30    0.32
+ 195 CBAR    94 144 182 176 196 196    0.37   -4.43     1.77     5.11    1.80
+ 196 CBAR    -4 157 195 184 197 184    0.37   -4.43     1.77     5.11    1.80
+
+                         ---CLUSTER FORMATION---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 197 CLUS    91 183 184 196 201 202    0.26   -4.97     2.10     5.83    2.19
+ 198 CLUS    91 183 188 186 203 204    1.02    2.39   -24.65    24.80    0.72
+ 199 CLUS    91 183 190 183 205 206   -3.33    1.72   -38.43    38.68    2.26
+ 200 CLUS    91 183 192 194 207 208   -2.08   -3.95     3.38     6.03    2.25
+
+                          ---CLUSTER DECAYS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 201 PI0    111   1 197 175   0   0    0.05   -0.25     0.22     0.36    0.13
+ 202 DC*B  -423 197 197 175 209 210    0.21   -4.72     1.88     5.47    2.01
+ 203 PI0    111   1 198 187   0   0    0.99    2.32   -23.61    23.75    0.13
+ 204 PI-   -211   1 198 187   0   0    0.03    0.07    -1.04     1.05    0.14
+ 205 DC*+   413 197 199 189 211 212   -3.27    1.70   -36.09    36.33    2.01
+ 206 PI-   -211   1 199 189   0   0   -0.06    0.02    -2.34     2.34    0.14
+ 207 N     2112   1 200 191   0   0   -0.86   -1.96     1.85     2.98    0.94
+ 208 DLB+ -1114 197 200 191 213 214   -1.22   -1.99     1.52     3.05    1.23
+
+                       ---STRONG HADRON DECAYS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 209 DCBR  -421 198 202 175 215 216    0.09   -4.58     1.85     5.28    1.86
+ 210 GAMA    22   1 202 175   0   0    0.12   -0.14     0.03     0.19    0.00
+ 211 DC0    421 198 205 189 217 219   -2.97    1.54   -32.84    33.07    1.86
+ 212 PI+    211   1 205 189   0   0   -0.30    0.15    -3.25     3.27    0.14
+ 213 PI+    211   1 208 191   0   0   -0.29   -0.20     0.41     0.57    0.14
+ 214 NBAR -2112   1 208 191   0   0   -0.93   -1.79     1.11     2.48    0.94
+ 215 K0     311 198 209 175 220 220   -0.10   -0.24     0.13     0.58    0.50
+ 216 ETA    221 198 209 175 221 222    0.20   -4.34     1.72     4.70    0.55
+ 217 K-    -321   1 211 189   0   0   -1.43    0.96   -12.18    12.31    0.49
+ 218 PI+    211   1 211 189   0   0   -0.29   -0.01    -1.19     1.23    0.14
+ 219 PI0    111   1 211 189   0   0   -1.26    0.59   -19.48    19.53    0.13
+ 220 K0S    310 198 215 175 223 224   -0.10   -0.24     0.13     0.58    0.50
+ 221 GAMA    22   1 216 175   0   0    0.12   -0.41     0.04     0.43    0.00
+ 222 GAMA    22   1 216 175   0   0    0.07   -3.92     1.68     4.27    0.00
+ 223 PI-   -211   1 220 175   0   0    0.06   -0.08     0.24     0.29    0.14
+ 224 PI+    211   1 220 175   0   0   -0.16   -0.16    -0.10     0.29    0.14
+
+                       ---SOFT UNDERLYING EVENT---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 225 SOFT     0 170  69  82 226 378   -0.04    0.07   159.29  1230.51 1220.16
+ 226 CLUS    91 184 225   0 227 228   -0.09    0.20   518.20   518.20    2.18
+ 227 DLB- -2214 197 226   0 229 230   -0.01    0.25   400.61   400.61    1.23
+ 228 OMEG   223 197 226   0 231 232   -0.08   -0.05   117.59   117.59    0.78
+ 229 PI0    111   1 227   0   0   0   -0.01   -0.18    63.93    63.93    0.13
+ 230 PBAR -2212   1 227   0   0   0    0.00    0.42   336.68   336.68    0.94
+ 231 GAMA    22   1 228   0   0   0    0.07   -0.01     0.95     0.95    0.00
+ 232 PI0    111   1 228   0   0   0   -0.14   -0.04   116.63   116.63    0.13
+ 233 CLUS    91 185 225   0 234 235   -1.14   -0.04  -277.65   277.68    3.80
+ 234 K**0   315 197 233   0 236 237   -1.39    0.93  -179.23   179.24    1.43
+ 235 SG*0  3214 197 233   0 238 239    0.25   -0.97   -98.42    98.44    1.38
+ 236 RHO-  -213 198 234   0 240 241   -0.84    0.58   -80.31    80.32    0.77
+ 237 K+     321   1 234   0   0   0   -0.55    0.35   -98.92    98.93    0.49
+ 238 PI-   -211   1 235   0   0   0    0.04   -0.10   -19.22    19.22    0.14
+ 239 SIG+  3222 198 235   0 242 243    0.21   -0.87   -79.21    79.22    1.19
+ 240 PI0    111   1 236   0   0   0   -0.88    0.65   -73.31    73.32    0.13
+ 241 PI-   -211   1 236   0   0   0    0.04   -0.07    -7.00     7.00    0.14
+ 242 PI+    211   1 239   0   0   0    0.16   -0.30   -26.09    26.09    0.14
+ 243 N     2112   1 239   0   0   0    0.05   -0.57   -53.12    53.13    0.94
+ 244 CLUS    91 186 225   0 245 246   -0.28   -0.14    31.76    31.81    1.71
+ 245 K0     311 197 244   0 247 247   -0.16    0.21     5.29     5.32    0.50
+ 246 K*-   -323 197 244   0 248 249   -0.11   -0.35    26.48    26.49    0.89
+ 247 K0S    310 198 245   0 250 251   -0.16    0.21     5.29     5.32    0.50
+ 248 PI-   -211   1 246   0   0   0   -0.27   -0.25    15.14    15.14    0.14
+ 249 KBAR  -311 198 246   0 252 252    0.16   -0.10    11.34    11.35    0.50
+ 250 PI-   -211   1 247   0   0   0   -0.17    0.28     2.50     2.52    0.14
+ 251 PI+    211   1 247   0   0   0    0.00   -0.07     2.79     2.80    0.14
+ 252 K0S    310 198 249   0 253 254    0.16   -0.10    11.34    11.35    0.50
+ 253 PI0    111   1 252   0   0   0    0.07   -0.20     3.01     3.02    0.13
+ 254 PI0    111   1 252   0   0   0    0.08    0.10     8.33     8.33    0.13
+ 255 CLUS    91 186 225   0 256 257    0.95    0.56    19.47    19.54    1.29
+ 256 RHO0   113 197 255   0 258 259    0.45    0.32    15.96    15.98    0.77
+ 257 PI0    111   1 255   0   0   0    0.50    0.24     3.51     3.56    0.13
+ 258 PI-   -211   1 256   0   0   0    0.37   -0.14     9.55     9.56    0.14
+ 259 PI+    211   1 256   0   0   0    0.08    0.46     6.41     6.43    0.14
+ 260 CLUS    91 186 225   0 261 262    0.06    0.60    17.26    17.33    1.54
+ 261 PI+    211   1 260   0   0   0    0.17    0.22     3.85     3.86    0.14
+ 262 A10  20113 197 260   0 263 264   -0.10    0.38    13.41    13.48    1.27
+ 263 PI+    211   1 262   0   0   0    0.34    0.16     3.23     3.26    0.14
+ 264 RHO-  -213 198 262   0 265 266   -0.45    0.22    10.18    10.22    0.77
+ 265 PI0    111   1 264   0   0   0    0.05   -0.20     3.56     3.56    0.13
+ 266 PI-   -211   1 264   0   0   0   -0.50    0.42     6.62     6.66    0.14
+ 267 CLUS    91 186 225   0 268 269   -0.10   -0.36    31.15    31.37    3.67
+ 268 F0     225 197 267   0 270 271    1.40   -0.43    19.34    19.43    1.27
+ 269 RHO-  -213 197 267   0 272 273   -1.50    0.08    11.81    11.93    0.77
+ 270 PI-   -211   1 268   0   0   0    0.92    0.07     5.45     5.53    0.14
+ 271 PI+    211   1 268   0   0   0    0.48   -0.50    13.89    13.90    0.14
+ 272 PI0    111   1 269   0   0   0   -1.14   -0.24     7.53     7.62    0.13
+ 273 PI-   -211   1 269   0   0   0   -0.36    0.32     4.28     4.31    0.14
+ 274 CLUS    91 186 225   0 275 276   -0.65    1.07    25.11    25.30    2.83
+ 275 K**+   325 197 274   0 277 278   -0.24    0.62    10.86    10.97    1.43
+ 276 QA0B-20313 197 274   0 279 280   -0.41    0.45    14.26    14.33    1.34
+ 277 PI+    211   1 275   0   0   0    0.31   -0.25     3.68     3.71    0.14
+ 278 K0     311 198 275   0 281 281   -0.55    0.86     7.17     7.26    0.50
+ 279 PI+    211   1 276   0   0   0   -0.42   -0.05     4.13     4.15    0.14
+ 280 K*-   -323 198 276   0 282 283    0.01    0.50    10.13    10.18    0.89
+ 281 K0S    310 198 278   0 284 285   -0.55    0.86     7.17     7.26    0.50
+ 282 PI0    111   1 280   0   0   0   -0.28    0.15     3.81     3.82    0.13
+ 283 K-    -321   1 280   0   0   0    0.29    0.36     6.32     6.36    0.49
+ 284 PI-   -211   1 281   0   0   0   -0.43    0.69     4.30     4.38    0.14
+ 285 PI+    211   1 281   0   0   0   -0.12    0.17     2.87     2.88    0.14
+ 286 CLUS    91 186 225   0 287 288   -0.28   -0.15    19.67    19.84    2.56
+ 287 PI-   -211   1 286   0   0   0   -0.85    0.51     7.72     7.79    0.14
+ 288 A2+    215 197 286   0 289 290    0.57   -0.66    11.95    12.05    1.32
+ 289 PI0    111   1 288   0   0   0    0.06   -0.62     5.94     5.97    0.13
+ 290 RHO+   213 198 288   0 291 292    0.50   -0.04     6.01     6.08    0.77
+ 291 PI0    111   1 290   0   0   0    0.53   -0.11     5.74     5.77    0.13
+ 292 PI+    211   1 290   0   0   0   -0.03    0.07     0.27     0.31    0.14
+ 293 CLUS    91 186 225   0 294 295   -0.27   -0.18     8.10     8.39    2.14
+ 294 OMEG   223 197 293   0 296 298    0.15    0.53     4.83     4.92    0.78
+ 295 OMEG   223 197 293   0 299 301   -0.41   -0.71     3.28     3.47    0.78
+ 296 PI0    111   1 294   0   0   0    0.13    0.27     1.97     2.00    0.13
+ 297 PI-   -211   1 294   0   0   0   -0.03    0.11     0.25     0.31    0.14
+ 298 PI+    211   1 294   0   0   0    0.04    0.15     2.60     2.61    0.14
+ 299 PI0    111   1 295   0   0   0   -0.08   -0.13     0.34     0.39    0.13
+ 300 PI-   -211   1 295   0   0   0    0.05   -0.04     0.21     0.26    0.14
+ 301 PI+    211   1 295   0   0   0   -0.38   -0.54     2.73     2.81    0.14
+ 302 CLUS    91 186 225   0 303 304    0.51   -0.45    11.34    11.85    3.37
+ 303 RHO-  -213 197 302   0 305 306   -0.79   -0.86     3.17     3.47    0.77
+ 304 A2+    215 197 302   0 307 308    1.30    0.41     8.17     8.38    1.32
+ 305 PI0    111   1 303   0   0   0   -0.30   -0.58     0.90     1.12    0.13
+ 306 PI-   -211   1 303   0   0   0   -0.49   -0.28     2.28     2.35    0.14
+ 307 PI0    111   1 304   0   0   0    0.29    0.50     3.36     3.41    0.13
+ 308 RHO+   213 198 304   0 309 310    1.01   -0.08     4.81     4.97    0.77
+ 309 PI0    111   1 308   0   0   0   -0.02    0.09     1.33     1.34    0.13
+ 310 PI+    211   1 308   0   0   0    1.03   -0.17     3.48     3.64    0.14
+ 311 CLUS    91 186 225   0 312 313   -1.61   -0.81     6.00     6.53    1.85
+ 312 K*0    313 197 311   0 314 315   -0.19   -0.51     2.56     2.77    0.89
+ 313 KBAR  -311 197 311   0 316 316   -1.43   -0.30     3.44     3.77    0.50
+ 314 PI-   -211   1 312   0   0   0   -0.30   -0.01     0.90     0.96    0.14
+ 315 K+     321   1 312   0   0   0    0.11   -0.50     1.66     1.81    0.49
+ 316 K0L    130   1 313   0   0   0   -1.43   -0.30     3.44     3.77    0.50
+ 317 CLUS    91 186 225   0 318 319    0.08    0.36     2.78     3.24    1.61
+ 318 A2-   -215 197 317   0 320 321    0.09    0.30     2.77     3.09    1.32
+ 319 PI0    111   1 317   0   0   0   -0.01    0.07     0.01     0.15    0.13
+ 320 PI-   -211   1 318   0   0   0    0.15    0.44     1.63     1.70    0.14
+ 321 RHO0   113 198 318   0 322 323   -0.06   -0.14     1.14     1.39    0.77
+ 322 PI-   -211   1 321   0   0   0    0.17   -0.08     1.07     1.10    0.14
+ 323 PI+    211   1 321   0   0   0   -0.24   -0.06     0.07     0.29    0.14
+ 324 CLUS    91 186 225   0 325 326   -0.21    0.63    -0.01     1.28    1.10
+ 325 PI+    211   1 324   0   0   0    0.33    0.60    -0.14     0.71    0.14
+ 326 PI-   -211   1 324   0   0   0   -0.53    0.03     0.13     0.57    0.14
+ 327 CLUS    91 186 225   0 328 329   -0.33   -1.92    -0.45     2.58    1.63
+ 328 RHO0   113 197 327   0 330 331    0.31   -1.51    -0.09     1.72    0.77
+ 329 PI+    211   1 327   0   0   0   -0.65   -0.41    -0.36     0.86    0.14
+ 330 PI-   -211   1 328   0   0   0    0.34   -0.85     0.27     0.96    0.14
+ 331 PI+    211   1 328   0   0   0   -0.02   -0.66    -0.36     0.76    0.14
+ 332 CLUS    91 186 225   0 333 334   -0.61   -0.72    -2.37     3.24    2.00
+ 333 PI-   -211   1 332   0   0   0   -1.03   -0.59    -2.49     2.76    0.14
+ 334 PI0    111   1 332   0   0   0    0.42   -0.13     0.12     0.48    0.13
+ 335 CLUS    91 186 225   0 336 337    0.69   -0.53    -4.01     4.66    2.20
+ 336 QA+  20323 197 335   0 338 339    0.89   -0.76    -2.90     3.40    1.34
+ 337 KBAR  -311 197 335   0 340 340   -0.20    0.23    -1.11     1.25    0.50
+ 338 PI+    211   1 336   0   0   0    0.49    0.01    -1.11     1.22    0.14
+ 339 K*0    313 198 336   0 341 342    0.40   -0.78    -1.80     2.19    0.89
+ 340 K0L    130   1 337   0   0   0   -0.20    0.23    -1.11     1.25    0.50
+ 341 PI-   -211   1 339   0   0   0   -0.07   -0.42    -0.46     0.64    0.14
+ 342 K+     321   1 339   0   0   0    0.48   -0.35    -1.34     1.55    0.49
+ 343 CLUS    91 186 225   0 344 345    0.15   -0.58   -14.67    14.86    2.30
+ 344 A2-   -215 197 343   0 346 347   -0.17   -0.61    -7.39     7.53    1.32
+ 345 RHO0   113 197 343   0 348 349    0.33    0.02    -7.29     7.33    0.77
+ 346 PI0    111   1 344   0   0   0   -0.03   -0.49    -1.36     1.45    0.13
+ 347 RHO-  -213 198 344   0 350 351   -0.15   -0.12    -6.03     6.08    0.77
+ 348 PI-   -211   1 345   0   0   0   -0.16   -0.17    -1.92     1.94    0.14
+ 349 PI+    211   1 345   0   0   0    0.49    0.20    -5.37     5.39    0.14
+ 350 PI0    111   1 347   0   0   0    0.03    0.25    -1.21     1.24    0.13
+ 351 PI-   -211   1 347   0   0   0   -0.17   -0.37    -4.81     4.83    0.14
+ 352 CLUS    91 186 225   0 353 354    1.06    0.42   -15.95    16.12    2.02
+ 353 K+     321   1 352   0   0   0    0.13   -0.03    -1.95     2.02    0.49
+ 354 QA0B-20313 197 352   0 355 356    0.92    0.45   -14.00    14.10    1.34
+ 355 RHO+   213 198 354   0 357 358    0.42    0.44    -8.53     8.58    0.77
+ 356 K-    -321   1 354   0   0   0    0.50    0.01    -5.47     5.52    0.49
+ 357 PI0    111   1 355   0   0   0    0.04    0.11    -5.95     5.96    0.13
+ 358 PI+    211   1 355   0   0   0    0.39    0.33    -2.57     2.63    0.14
+ 359 CLUS    91 186 225   0 360 361    0.43    0.35   -12.99    13.09    1.48
+ 360 ETA    221 197 359   0 362 364    0.61    0.57   -12.06    12.10    0.55
+ 361 PI-   -211   1 359   0   0   0   -0.19   -0.22    -0.93     0.99    0.14
+ 362 PI0    111   1 360   0   0   0    0.23    0.15    -5.41     5.42    0.13
+ 363 PI0    111   1 360   0   0   0    0.22    0.14    -2.35     2.37    0.13
+ 364 PI0    111   1 360   0   0   0    0.16    0.28    -4.30     4.31    0.13
+ 365 CLUS    91 186 225   0 366 367    1.48    0.54   -28.43    28.54    1.90
+ 366 RHO+   213 197 365   0 368 369    1.19   -0.21   -19.84    19.90    0.77
+ 367 ETA    221 197 365   0 370 372    0.30    0.75    -8.59     8.64    0.55
+ 368 PI0    111   1 366   0   0   0    0.22   -0.36    -6.15     6.17    0.13
+ 369 PI+    211   1 366   0   0   0    0.97    0.15   -13.69    13.73    0.14
+ 370 GAMA    22   1 367   0   0   0    0.00    0.43    -2.89     2.92    0.00
+ 371 PI-   -211   1 367   0   0   0    0.14    0.14    -2.99     3.00    0.14
+ 372 PI+    211   1 367   0   0   0    0.15    0.18    -2.70     2.72    0.14
+ 373 CLUS    91 186 225   0 374 375   -0.06    0.34   -39.65    39.68    1.53
+ 374 RHO-  -213 197 373   0 376 377    0.19   -0.32   -20.23    20.25    0.77
+ 375 PI0    111   1 373   0   0   0   -0.25    0.65   -19.42    19.43    0.13
+ 376 PI0    111   1 374   0   0   0    0.16   -0.46   -18.41    18.42    0.13
+ 377 PI-   -211   1 374   0   0   0    0.03    0.14    -1.82     1.83    0.14
+ 378 CLUS    91 186 225   0 379 380    0.17    0.89  -135.36   135.38    2.15
+ 379 RHO0   113 197 378   0 381 382    0.39    0.07  -113.48   113.49    0.77
+ 380 PI+    211   1 378   0   0   0   -0.22    0.82   -21.88    21.90    0.14
+ 381 PI-   -211   1 379   0   0   0   -0.15   -0.06   -14.42    14.42    0.14
+ 382 PI+    211   1 379   0   0   0    0.54    0.14   -99.06    99.06    0.14
+
+         OUTPUT ON ELEMENTARY PROCESS
+
+         NUMBER OF EVENTS   =         100
+         NUMBER OF WEIGHTS  =        2640
+         MEAN VALUE OF WGT  =  0.2174E+04
+         RMS SPREAD IN WGT  =  0.6626E+04
+         ACTUAL MAX WEIGHT  =  0.5505E+05
+         ASSUMED MAX WEIGHT =  0.5639E+05
+
+         PROCESS CODE IPROC =        1705
+         CROSS SECTION (PB) =2173900.2123
+         ERROR IN C-S  (PB) = 128956.9891
+         EFFICIENCY PERCENT =      3.8554
+FORTRAN STOP
+ -----------------------------------------------------------------------
+
+                  *****20. GUIDE TO SAMPLE OUTPUT*****
+
+   After listing  the more important input parameter values, the program
+   prints the messages
+
+         PDFLIB STRUCT FUNCTIONS NOT USED
+
+   indicating that the  CERN PDFLIB  structure function library will not
+   be used (MODPDF<0), and
+
+         NO EVENTS WILL BE WRITTEN TO DISK
+
+   to remind the user that LWEVT=0 for this run. Then a table of Sudakov
+   form factors  for parton branching is read from  unit 7,  having been
+   computed in a previous run (LRSUD=7).
+
+   The default particle data table is modified by calling HWUSTA('PI0 ')
+   to suppress pi0 decays:
+
+         PARTICLE TYPE  21=PI0  SET STABLE
+
+   Next the program  searches for the  maximum weight,  i.e. the maximum
+   cross section in the available phase space, as implied by the default
+   value WGTMAX=0. The parameters
+
+         MIN P-TRAN FOR 2->2    =   10.0000
+         MAX P-TRAN FOR 2->2    =  900.0000
+   with
+         PROCESS CODE       =        1705
+
+   mean that the transverse momentum of the b quark in the QCD 2->2 hard
+   subprocesses  is required  to be  greater than  10 GeV/c.  After this
+   search, the estimated total cross section of relevant subprocesses in
+   this region of phase space is printed, together with the anticipated
+   efficiency of subprocess generation (i.e. average/maximum weight):
+
+         CROSS SECTION (PB) =2447328.6400
+         ERROR IN C-S  (PB) = 161219.9097
+         EFFICIENCY PERCENT =      4.3404
+
+   Since the default is  MAXPR=1,  the first generated event is printed.
+
+   The event heading
+
+ EVENT      1:     900.00 GEV/C PBAR ON     900.00 GEV/C P     PROCESS:  1705
+
+ SEEDS:      17673 &      63565   STATUS: 100  ERROR:   0  WEIGHT: 0.2447E+04
+
+   tells us  the beam and target, the random number seeds at the start of
+   the  event and the process code IPROC. The status 100 means a complete
+   event  was generated  and the zero  error code means  no problems were
+   encountered.  Since  NOWGT=.TRUE. (unweighted event generation),  each
+   event has the mean weight computed earlier.
+
+   Next come the contents of  COMMON/HEPEVT/  and related quantities.  The
+   various parts of this particular event are located as follows:
+
+             +---------+--------------------------------------+
+             |   Entry | Description                          |
+             +---------+--------------------------------------+
+             |   1-  3 | Initial state                        |
+             |   4-  8 | Hard subprocess: g+g -> b+bbar       |
+             |   9- 32 | Parton showers                       |
+             |  33- 68 | Gluon splitting                      |
+             |  69- 90 | Cluster formation                    |
+             |  91-172 | Cluster and hadron decays            |
+             | 173-184 | Weak decays of B- and B0 mesons      |
+             | 185-224 | Hadronization of B-/0 decay products |
+             | 225-382 | Soft underlying event                |
+             +---------+--------------------------------------+
+
+   We discuss each part in turn.
+
+                           ---INITIAL STATE---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   1 PBAR -2212 101   0   0   0   0    0.00    0.00   900.00   900.00    0.94
+   2 P     2212 102   0   0   0   0    0.00    0.00  -900.00   900.00    0.94
+   3 CMF      0 103   0   0   0   0    0.00    0.00     0.00  1800.00 1800.00
+
+   CMF represents  the overall centre of mass of  the initial state.  The
+   'mother' MOi=JMOHEP(i,IHEP) and 'daughter' DAi=JDAHEP(i,IHEP) pointers
+   are set to zero for these entries.
+
+                          ---HARD SUBPROCESS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   4 GLUE    21 121   6   7   9   5    0.00    0.00    49.00    49.00    0.75
+   5 BBAR    -5 122   6   4  15   8    0.00    0.00    -5.19     7.35    5.20
+   6 HARD     0 120   4   5   7   8    8.17   -5.11    43.81    57.17   35.45
+   7 GLUE    21 123   6   8  21   4    5.97   11.07    40.40    42.32    0.75
+   8 BBAR    -5 124   6   5  28   7   -5.97  -11.07     3.41    14.03    5.20
+
+   In this event the subprocess is 'flavour excitation',  g+bbar->g+bbar.
+   HARD is the  hard subprocess  centre of mass.  Its mother and daughter
+   pointers give the locations of the incoming and outgoing partons.  The
+   status codes 121-124 correspond to partons 1-4 in the hard subprocess.
+   The first  mother pointers show the location of the hard c.m., and the
+   second mother  of each parton  is the  'colour  mother',  as explained
+   above. Thus the colours of partons 1234 are connected to 3142 respect-
+   ively, corresponding to process  IHPRO=25. Similarly, the first daugh-
+   ter points to the associated jet but the second daughter is the colour
+   daughter, i.e. the parton to which this one's anticolour is connected.
+   Thus the anticolour connections  of 1234 in this case are to 2413. The
+   colour diagram is
+
+                        (g)1 --<-------<-- 3(g)
+                             -->--+ +-->--
+                                  | |
+                                  | |
+                     (bbar)2 --<--+ +--<-- 4(bbar)
+
+
+   Note that for specifying the colour connections all lines are regarded
+   as outgoing, and that since antiquarks  carry no colour MO2 is in that
+   case  used for the flavour connection (similarly with DA2 for quarks).
+   Gluon radiation from the incoming bbar will be limited by interference
+   with gluon 1,  that from the outgoing bbar by gluon 3,  gluon 1 by the
+   incoming bbar or gluon 3, and gluon 3 by the outgoing bbar or gluon 1.
+   The momenta and masses of the partons are the raw on-shell values gen-
+   erated before QCD radiative corrections,  but HARD has been updated to
+   give the true hard  subprocess momentum after initial- and final-state
+   parton branching.
+
+                          ---PARTON SHOWERS---
+
+   The QCD cascade from each hard parton is generated in sequence. First
+   there is a jet entry (IDHEP=94)  giving the total jet momentum,  mass
+   and flavour. For initial-state jets the mass represents  -|q**2|**1/2
+   for the virtual parton  entering the  hard subprocess.  MO1 gives the
+   parent hard parton and MO2 the hard centre-of-mass. DO1 and DO2 point
+   to the first and last parton in the jet after perturbative branching.
+   If branching occurs, the next entry  (CONE)  is a lightlike  4-vector
+   defining the  radiation  cone  and the  orientation of  the radiation
+   pattern.
+
+   The partons in the jet  (ISTHEP=157, plus 155,156 for spectators, with
+   gluons  reset to 2 by  gluon splitting subroutine  HWCGSP)  have their
+   colour and anticolour connections specified by MO2 and DA2 respective-
+   ly, as described above for the hard subprocess. Gluon jet 1 is:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+   9 GLUE    94 141   4   6  11  14    3.81    0.90    50.87    50.70   -5.67
+  10 CONE     0 100   4   7   0   0    0.47    0.88     2.41     2.61    0.00
+  11 GLUE    21   2   9  12  33  34   -1.23   -0.28    33.27    33.30    0.75
+  12 GLUE    21   2   9  13  35  36   -1.81   -1.85    30.74    30.85    0.75
+  13 DBAR    -1 157   9  14  84  56   -0.69    1.09    63.44    63.45    0.32
+  14 UBUB -2203 155   9  49  69  13    0.00    0.00   626.16   626.16    0.64
+
+   The incoming bbar jet must contain a b quark to conserve flavour:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  15 BBAR    94 142   5   6  17  20    4.36   -6.01    -7.06     6.46   -7.95
+  16 CONE     0 100   5   4   0   0   -0.69   -0.72     1.70     1.97    0.00
+  17 BOTM     5 157  15  51  70  32   -3.10    5.14   -63.03    63.53    5.20
+  18 UD    2101 156  15  19  82  52    0.00    0.00  -527.92   527.92    0.64
+  19 UP       2 157  15  53  71  18    0.61   -1.83  -178.83   178.84    0.32
+  20 GLUE    21   2  15  33  37  38   -1.88    2.83   -80.06    80.14    0.75
+
+   The outgoing gluon jet contains a perturbative s-sbar pair:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  21 GLUE    94 143   7   6  23  27    9.16    4.95    34.61    37.96   11.59
+  22 CONE     0 100   7   8   0   0   -0.34   -0.79     0.70     1.11    0.00
+  23 GLUE    21   2  21  24  39  40    0.97    2.06    11.95    12.19    0.75
+  24 SBAR    -3 157  21  25  76  40    0.62    0.41    12.20    12.23    0.50
+  25 STRA     3 157  21  41  72  24    2.76    0.90     5.42     6.17    0.50
+  26 GLUE    21   2  21  27  41  42    2.21    0.79     3.08     3.94    0.75
+  27 GLUE    21   2  21  30  43  44    2.58    0.80     1.97     3.43    0.75
+
+   The outgoing bbar radiated two gluons:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  28 BBAR    94 144   8   6  30  32   -0.99  -10.06     9.19    19.21   13.51
+  29 CONE     0 100   8   7   0   0    0.22    0.90     0.51     1.05    0.00
+  30 GLUE    21   2  28  31  45  46   -0.44    1.69     1.76     2.59    0.75
+  31 GLUE    21   2  28  32  47  48    1.06    0.55     0.86     1.65    0.75
+  32 BBAR    -5 157  28  17  80  48   -1.60  -12.30     6.57    14.97    5.20
+
+                          ---GLUON SPLITTING---
+
+   As the first step  in the cluster  hadronization model,  any gluons in
+   the jets are split into light  quark-antiquark pairs.  The flavours of
+   the pairs are  chosen at random  amongst those allowed  by kinematics.
+   The colour connections are remade accordingly.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  33 DBAR    -1 158   9  34  90  68   -0.18   -0.06     4.28     4.29    0.32
+  34 DOWN     1 158   9  35  73  33   -0.87   -0.16    24.76    24.78    0.32
+  35 DBAR    -1 158   9  36  73  34   -0.54   -0.43     9.16     9.19    0.32
+  36 DOWN     1 158   9  55  74  35   -0.93   -1.03    16.12    16.18    0.32
+ .......
+  47 DBAR    -1 158  28  48  79  46    0.72    0.52     0.54     1.09    0.32
+  48 DOWN     1 158  28  32  80  47    0.34    0.04     0.32     0.57    0.32
+
+   Each quark  (or antidiquark) is combined with its colour mother anti-
+   quark (or diquark) to make a cluster with the sum of their 4-momenta.
+   All  non-beam  clusters with  masses above  the maximum  are split by
+   creating new quark-antiquark pairs with  ISTHEP=159  (8 such pairs in
+   this event).  The beam remnant clusters,  i.e., those  containing the
+   spectator  quarks from  the incident hadrons  (ISTHEP = 167,168)  are
+   split into 2 "soft" clusters each  (see new features of  version 4.3,
+   above), making another two pairs.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  49 DBAR    -1 159   9  50  69  14    0.00    0.01    68.74    68.74    0.32
+  50 DOWN     1 159  21  39  81  49    0.01    0.03    19.19    19.19    0.32
+  51 DBAR    -1 159  15  52  70  17   -0.04    0.06    -8.67     8.68    0.32
+  52 DOWN     1 159  15  18  82  51   -0.04    0.07    -7.69     7.69    0.32
+ .......
+  67 UBAR    -2 159   9  68  88  64   -0.01    0.00     0.10     0.33    0.32
+  68 UP       2 159   9  33  90  67   -0.11   -0.04     2.48     2.50    0.32
+
+                         ---CLUSTER FORMATION---
+
+   Next the clusters themselves are listed. The mothers of a cluster are
+   the partons from which it is made,  and the daughters are the primary
+   hadrons into which it decays.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  69 CLUS    91 167  14  49 225   0    0.00    0.00   694.90   694.90    1.22
+  70 CLUS    91 183  17  51  91  92   -3.14    5.21   -71.70    72.21    5.97
+  71 CLUS    91 183  19  53  93  94    0.57   -1.82  -193.38   193.39    1.38
+ .......
+  89 CLUS    91 183  66  63 127 128   -0.04    0.02    -0.07     1.20    1.20
+  90 CLUS    91 183  68  33 129 130   -0.29   -0.10     6.75     6.79    0.66
+
+                          ---CLUSTER DECAYS---
+
+   The non-beam clusters,  including the  b-flavoured clusters 70 and 80,
+   now decay isotropically into pairs of hadrons chosen according to den-
+   sity  of  states.  Particles  with  ISTHEP=1  are  stable.  ISTHEP=199
+   indicates a heavy (b or t) hadron  which will later decay weakly via a
+   secondary hard subprocess.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+  91 B-    -521 199  70  15 173 174   -2.32    4.11   -63.08    63.48    5.27
+  92 PI+    211   1  70  15   0   0   -0.82    1.10    -8.62     8.73    0.14
+  93 PI+    211   1  71  15   0   0   -0.22   -0.71  -113.64   113.64    0.14
+  94 PI0    111   1  71  15   0   0    0.79   -1.11   -79.74    79.75    0.13
+ .......
+ 111 PI-   -211   1  80  28   0   0    0.56   -3.35     1.41     3.68    0.14
+ 112 B+     521 199  80  28 175 176   -1.82   -8.92     5.47    11.86    5.27
+ 113 PI-   -211   1  81  21   0   0    1.07    0.70     8.59     8.69    0.14
+ 114 OMEG   223 197  81  21 148 150   -0.51    0.60    18.59    18.63    0.78
+ .......
+ 129 PI0    111   1  90   9   0   0   -0.43   -0.02     3.06     3.09    0.13
+ 130 PI+    211   1  90   9   0   0    0.14   -0.07     3.70     3.70    0.14
+
+                       ---STRONG HADRON DECAYS---
+
+   Next come  the decay  products of  unstable hadrons  generated  in the
+   cluster decays.  Remember that the pi0 was set  stable in the initial-
+   ization phase.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 131 PI-   -211   1  97   9   0   0   -0.98   -0.63    16.58    16.62    0.14
+ 132 PI+    211   1  97   9   0   0   -0.28    0.00    11.64    11.64    0.14
+ .......
+ 171 PI-   -211   1 159   9   0   0    0.01    0.07    -1.95     1.96    0.14
+ 172 PI+    211   1 159   9   0   0   -0.14   -0.36    -0.59     0.72    0.14
+                       ---HEAVY FLAVOUR DECAYS---
+
+   The B- and B+  are split into collinear  heavy quarks  and spectators:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 173 BOTM     5 153  91 174 177 179   -2.18    3.86   -59.25    59.62    4.95
+ 174 UBAR    -2 125  91 179 183 179   -0.14    0.25    -3.83     3.85    0.32
+ 175 UP       2 125 112 182 184 182   -0.11   -0.54     0.33     0.72    0.32
+ 176 BBAR    -5 153 112 175 180 182   -1.71   -8.37     5.14    11.14    4.95
+
+   Then the heavy quarks  decay weakly  and the spectators are copied and
+   given the correct colour connection labels:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 177 UBAR    -2 123 173 178 185 178    0.46    0.82    -8.43     8.49    0.32
+ 178 DOWN     1 124 173 177 187 177    0.55    1.58   -16.23    16.32    0.32
+ 179 CHRM     4 124 173 173 189 173   -3.19    1.47   -34.60    34.82    1.80
+ 180 UP       2 123 176 181 191 181   -0.35   -0.50    -0.24     0.73    0.32
+ 181 DBAR    -1 124 176 180 193 180   -1.73   -3.45     3.62     5.30    0.32
+ 182 CBAR    -4 124 176 176 195 176    0.37   -4.43     1.77     5.11    1.80
+ 183 UBAR    -2 160 174 190 199 190   -0.14    0.25    -3.83     3.85    0.32
+ 184 UP       2 160 175 196 197 196   -0.11   -0.54     0.33     0.72    0.32
+
+                ---HADRONIZATION OF B DECAY PRODUCTS---
+
+   The heavy flavour  decays are  treated as new hard processes, in which
+   secondary parton showers may be  generated.  The branching phase space
+   is small and in this event none of the decay quarks emits a gluon.
+
+                          ---PARTON SHOWERS---
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 185 UBAR    94 143 177 173 186 186    0.46    0.82    -8.43     8.49    0.32
+ 186 UBAR    -2 157 185 188 198 188    0.46    0.82    -8.43     8.49    0.32
+ 187 DOWN    94 144 178 173 188 188    0.55    1.58   -16.23    16.32    0.32
+ 188 DOWN     1 157 187 186 198 186    0.55    1.58   -16.23    16.32    0.32
+ 189 CHRM    94 144 179 173 190 190   -3.19    1.47   -34.60    34.82    1.80
+ 190 CHRM     4 157 189 183 199 183   -3.19    1.47   -34.60    34.82    1.80
+ 191 UP      94 143 180 176 192 192   -0.35   -0.50    -0.24     0.73    0.32
+ 192 UP       2 157 191 194 200 194   -0.35   -0.50    -0.24     0.73    0.32
+ 193 DBAR    94 144 181 176 194 194   -1.73   -3.45     3.62     5.30    0.32
+ 194 DBAR    -1 157 193 192 200 192   -1.73   -3.45     3.62     5.30    0.32
+ 195 CBAR    94 144 182 176 196 196    0.37   -4.43     1.77     5.11    1.80
+ 196 CBAR    -4 157 195 184 197 184    0.37   -4.43     1.77     5.11    1.80
+
+                         ---CLUSTER FORMATION---
+
+   The weak decay products are thus four clusters:
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 197 CLUS    91 183 184 196 201 202    0.26   -4.97     2.10     5.83    2.19
+ 198 CLUS    91 183 188 186 203 204    1.02    2.39   -24.65    24.80    0.72
+ 199 CLUS    91 183 190 183 205 206   -3.33    1.72   -38.43    38.68    2.26
+ 200 CLUS    91 183 192 194 207 208   -2.08   -3.95     3.38     6.03    2.25
+
+                          ---CLUSTER DECAYS---
+
+   The clusters decay as in a primary hard process.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 201 PI0    111   1 197 175   0   0    0.05   -0.25     0.22     0.36    0.13
+ 202 DC*B  -423 197 197 175 209 210    0.21   -4.72     1.88     5.47    2.01
+ 203 PI0    111   1 198 187   0   0    0.99    2.32   -23.61    23.75    0.13
+ 204 PI-   -211   1 198 187   0   0    0.03    0.07    -1.04     1.05    0.14
+ 205 DC*+   413 197 199 189 211 212   -3.27    1.70   -36.09    36.33    2.01
+ 206 PI-   -211   1 199 189   0   0   -0.06    0.02    -2.34     2.34    0.14
+ 207 N     2112   1 200 191   0   0   -0.86   -1.96     1.85     2.98    0.94
+ 208 DLB+ -1114 197 200 191 213 214   -1.22   -1.99     1.52     3.05    1.23
+
+                       ---STRONG HADRON DECAYS---
+
+   The subsequent  charmed  particle  decays are  generated  according to
+   simplified particle data tables.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 209 DCBR  -421 198 202 175 215 216    0.09   -4.58     1.85     5.28    1.86
+ 210 GAMA    22   1 202 175   0   0    0.12   -0.14     0.03     0.19    0.00
+ 211 DC0    421 198 205 189 217 219   -2.97    1.54   -32.84    33.07    1.86
+ 212 PI+    211   1 205 189   0   0   -0.30    0.15    -3.25     3.27    0.14
+ 213 PI+    211   1 208 191   0   0   -0.29   -0.20     0.41     0.57    0.14
+ 214 NBAR -2112   1 208 191   0   0   -0.93   -1.79     1.11     2.48    0.94
+ 215 K0     311 198 209 175 220 220   -0.10   -0.24     0.13     0.58    0.50
+ 216 ETA    221 198 209 175 221 222    0.20   -4.34     1.72     4.70    0.55
+ 217 K-    -321   1 211 189   0   0   -1.43    0.96   -12.18    12.31    0.49
+ 218 PI+    211   1 211 189   0   0   -0.29   -0.01    -1.19     1.23    0.14
+ 219 PI0    111   1 211 189   0   0   -1.26    0.59   -19.48    19.53    0.13
+ .......
+ 223 PI-   -211   1 220 175   0   0    0.06   -0.08     0.24     0.29    0.14
+ 224 PI+    211   1 220 175   0   0   -0.16   -0.16    -0.10     0.29    0.14
+
+                       ---SOFT UNDERLYING EVENT---
+
+   The undecayed beam clusters  (69 and 82)  undergo a  soft collision at
+   a c.m. energy of 1220 GeV in parallel with the hard subprocesses. This
+   produces 22  soft clusters  with a flat  rapidity distribution and low
+   transverse momenta,  which decay to provide the  low-pt hadrons of the
+   soft underlying event. The two leading clusters appear first, then the
+   ones at intermediate rapidities.
+
+ IHEP ID  IDPDG IST MO1 MO2 DA1 DA2    P-X     P-Y      P-Z    ENERGY    MASS
+ 225 SOFT     0 170  69  82 226 378   -0.04    0.07   159.29  1230.51 1220.16
+ 226 CLUS    91 184 225   0 227 228   -0.09    0.20   518.20   518.20    2.18
+ 227 DLB- -2214 197 226   0 229 230   -0.01    0.25   400.61   400.61    1.23
+ 228 OMEG   223 197 226   0 231 232   -0.08   -0.05   117.59   117.59    0.78
+ 229 PI0    111   1 227   0   0   0   -0.01   -0.18    63.93    63.93    0.13
+ 230 PBAR -2212   1 227   0   0   0    0.00    0.42   336.68   336.68    0.94
+ 231 GAMA    22   1 228   0   0   0    0.07   -0.01     0.95     0.95    0.00
+ 232 PI0    111   1 228   0   0   0   -0.14   -0.04   116.63   116.63    0.13
+ 233 CLUS    91 185 225   0 234 235   -1.14   -0.04  -277.65   277.68    3.80
+ 234 K**0   315 197 233   0 236 237   -1.39    0.93  -179.23   179.24    1.43
+ 235 SG*0  3214 197 233   0 238 239    0.25   -0.97   -98.42    98.44    1.38
+ 236 RHO-  -213 198 234   0 240 241   -0.84    0.58   -80.31    80.32    0.77
+ 237 K+     321   1 234   0   0   0   -0.55    0.35   -98.92    98.93    0.49
+ 238 PI-   -211   1 235   0   0   0    0.04   -0.10   -19.22    19.22    0.14
+ 239 SIG+  3222 198 235   0 242 243    0.21   -0.87   -79.21    79.22    1.19
+ 240 PI0    111   1 236   0   0   0   -0.88    0.65   -73.31    73.32    0.13
+ 241 PI-   -211   1 236   0   0   0    0.04   -0.07    -7.00     7.00    0.14
+ 242 PI+    211   1 239   0   0   0    0.16   -0.30   -26.09    26.09    0.14
+ 243 N     2112   1 239   0   0   0    0.05   -0.57   -53.12    53.13    0.94
+ .......
+ 378 CLUS    91 186 225   0 379 380    0.17    0.89  -135.36   135.38    2.15
+ 379 RHO0   113 197 378   0 381 382    0.39    0.07  -113.48   113.49    0.77
+ 380 PI+    211   1 378   0   0   0   -0.22    0.82   -21.88    21.90    0.14
+ 381 PI-   -211   1 379   0   0   0   -0.15   -0.06   -14.42    14.42    0.14
+ 382 PI+    211   1 379   0   0   0    0.54    0.14   -99.06    99.06    0.14
+
+   After the 100 events requested have been generated, an analysis of the
+   associated weight distribution and cross section is printed.
+ -----------------------------------------------------------------------
+
+                 ***21. SUBROUTINE DESCRIPTIONS***
+
+       +--------+---------------------------------------------+
+       |  Name  | Description                                 |
+       +--------+---------------------------------------------+
+       | HWIGPR | Main program                                |
+       | HWIGIN | Default initializations                     |
+       +--------+---------------------------------------------+
+       | HWABEG | Initializes user's analysis                 |
+       | HWAEND | Terminates user's analysis                  |
+       | HWANAL | Performs user's analysis on event           |
+       +--------+---------------------------------------------+
+       | HWBAZF | Computes azimuthal correlation functions    |
+       | HWBCON | Makes colour connections between jets       |
+       | HWBDED | Correction to the `dead zone' in e+e-       |
+       | HWBDIS | Correction to the `dead zone' in DIS        |
+       | HWBFIN | Transfers external lines of jet to /HEPEVT/ |
+       | HWBGEN | Finds unevolved partons and generates jets  |
+       | HWBJCO | Combines jets with correct kinematics       |
+       | HWBMAS | Computes masses and trans. momenta in jet   |
+       | HWBRAN | Generates a timelike parton branching       |
+       | HWBSPA | Computes momenta in spacelike jet           |
+       | HWBSPN | Computes spin density/decay matrices        |
+       | HWBSU1 | First  term in quark Sudakov form factor    |
+       | HWBSU2 | Second term in quark Sudakov form factor    |
+       | HWBSUD | Computes (or reads) Sudakov form factors    |
+       | HWBSUG | Integrand in gluon Sudakov form factor      |
+       | HWBSUL | Logarithmic part of Sudakov form factor     |
+       | HWBTIM | Computes momenta in timelike jet            |
+       | HWBVMC | Virtual mass cutoff for parton type ID      |
+       +--------+---------------------------------------------+
+       | HWCCUT | Cuts a massive cluster in two               |
+       | HWCDEC | Decays clusters into primary hadrons        |
+       | HWCFLA | Sets up flavours for HWCHAD                 |
+       | HWCFOR | Forms clusters                              |
+       | HWCGSP | Splits gluons                               |
+       | HWCHAD | Decays a cluster into one or two hadrons    |
+       +--------+---------------------------------------------+
+       | HWDBOS | Finds and decays W and Z bosons             |
+       | HWDBOZ | Chooses decay mode of W and Z bosons        |
+       | HWDCLE | Interface to CLEO package for B decays      |
+       | HWDEUR | Interface to EURODEC package for B decays   |
+       | HWDHAD | Generates decays of unstable hadrons        |
+       | HWDHGC | Higgs -> gamma gamma decay                  |
+       | HWDHGF | Higgs -> W+ W- decay                        |
+       | HWDHIG | Finds and decays Higgs bosons               |
+       | HWDHQK | Finds and decays heavy quarks               |
+       | HWDHVY | Finds and decays heavy flavour hadrons      |
+       | HWDIDP | Chooses a parton for HWDHVY                 |
+       | HWDPWT | Phase space decay weight                    |
+       | HWDTHR | Generates a three-body decay                |
+       | HWDTOP | Decides whether to decay top quark          |
+       | HWDTWO | Generates a two-body decay                  |
+       | HWDWWT | Weak (V-A)  decay weight                    |
+       +--------+---------------------------------------------+
+       | HWEFIN | Final calculations on elementary subprocess |
+       | HWEGAM | Generates Weizsacker-Williams photon        |
+       | HWEINI | Initializes elementary subprocess           |
+       | HWEONE | Sets up a 2->1 hard subprocess              |
+       | HWEPRO | Generates elementary subprocess             |
+       | HWETWO | Sets up a 2->2 hard subprocess              |
+       +--------+---------------------------------------------+
+       | HWHBGF | Hard subprocess: boson-gluon fusion (BGF)   |
+       | HWHBKI | Computes kinematics for BGF                 |
+       | HWHBRN | Returns a phase-space point for BGF         |
+       | HWHBSG | Computes cross section for BGF              |
+       | HWHDIS | Hard subprocess: deep inelastic lepton quark|
+       | HWHDYP | Hard subprocess: Drell-Yan Z0/photon prodn  |
+       | HWHEGG | Hard subprocess: two-photon processes in ee |
+       | HWHEGW | Hard subprocess: photon-W processes in e+e- |
+       | HWHEGX | Calculates cross-section for HWHEGW         |
+       | HWHEPA | Hard subprocess: e+e- -> f fbar             |
+       | HWHEPG | Hard subprocess: e+e- -> q qbar gluon       |
+       | HWHEW0 | e+e- -> W W / Z Z subroutine                |
+       | HWHEW1 | e+e- -> W W / Z Z subroutine                |
+       | HWHEW2 | e+e- -> W W / Z Z subroutine                |
+       | HWHEW3 | e+e- -> W W subroutine                      |
+       | HWHEW4 | e+e- -> W W / Z Z subroutine                |
+       | HWHEW5 | e+e- -> Z Z subroutine                      |
+       | HWHEWW | Hard subprocess: e+e- -> W W / Z Z          |
+       | HWHHVY | Hard subprocess: heavy quark production     |
+       | HWHIG1 | Matrix elements for Higgs + jet production  |
+       | HWHIGA | Amplitudes squared for Higgs + jet          |
+       | HWHIGB | Loop integrals for Higgs + jet              |
+       | HWHIGJ | QCD Higgs + jet production                  |
+       | HWHIGM | Choose Higgs mass for production routines   |
+       | HWHIGS | Hard subprocess: gg/qqbar -> Higgs          |
+       | HWHIGT | Computes gg -> Higgs cross section          |
+       | HWHIGW | Hard subprocess: WW / ZZ -> Higgs           |
+       | HWHIGY | Computes ee -> Z -> ZH cross section        |
+       | HWHIGZ | Hard subprocess: ee -> Z -> ZH              |
+       | HWHPH2 | Hard subprocess: direct photon pairs        |
+       | HWHPHO | Hard subprocess: direct photon production   |
+       | HWHPPB | Box contribution to gg->photon photon       |
+       | HWHPPE | Pointlike photon-parton (fixed flavour)     |
+       | HWHPPH | Pointlike photon-parton (fixed pair flavour)|
+       | HWHPPM | Pointlike photon-parton direct light meson  |
+       | HWHPPT | Pointlike photon-parton (all flavours)      |
+       | HWHQCD | Hard subprocess: QCD 2->2                   |
+       | HWHQCP | Identifies QCD 2->2 hard subprocess         |
+       | HWHW1J | Hard subprocess: W + jet production         |
+       | HWHWEX | Top production by W exchange                |
+       | HWHWPR | Hard subprocess: W production               |
+       +--------+---------------------------------------------+
+       | HWMEVT | Generates min bias or soft underlying event |
+       | HWMLPS | Generates longitudinal phase space          |
+       | HWMNBI | Computes negative binomial probability      |
+       | HWMULT | Chooses min bias charged multiplicity       |
+       | HWMWGT | Calculates weight for minimum bias events   |
+       +--------+---------------------------------------------+
+       | HWRAZM | Randomly rotated azimuth                    |
+       | HWREXP | Random number: exponential distribution     |
+       | HWREXQ | Random number: exp. dist. with cutoff       |
+       | HWREXT | Random number: exponential transverse mass  |
+       | HWRGAU | Random number: Gaussian                     |
+       | HWRGEN | Random number generator (l'Ecuyer method)   |
+       | HWRINT | Random integer                              |
+       | HWRLOG | Random logical                              |
+       | HWRPOW | Random number: power distribution           |
+       | HWRUNG | Random number: uniform + Gaussian tails     |
+       | HWRUNI | Random number: uniform                      |
+       +--------+---------------------------------------------+
+       | HWSBRN | Generates spacelike parton branching        |
+       | HWSDGG | Drees-Grassie photon str. function (gluon)  |
+       | HWSDGQ | Drees-Grassie photon str. function (quarks) |
+       | HWSFBR | Chooses a spacelike branching               |
+       | HWSFUN | Hadron structure functions                  |
+       | HWSGAM | Gamma function (for structure functions)    |
+       | HWSGEN | Generates x values for spacelike partons    |
+       | HWSGQQ | Inserts g->q qbar part of gluon form factor |
+       | HWSSPC | Replaces spacelike partons by spectators    |
+       | HWSSUD | Sudakov form factor/structure function      |
+       | HWSTAB | Interpolates in function table (for HWSSUD) |
+       | HWSVAL | Checks for valence parton                   |
+       +--------+---------------------------------------------+
+       | HWUAEM | Running electromagnetic coupling constant   |
+       | HWUAER | Real part of photon self-energy             |
+       | HWUALF | Two-loop QCD running coupling constant      |
+       | HWUBPR | Prints branching data for last parton shower|
+       | HWUBST | Boost event record to/from hadron-hadron cmf|
+       | HWUCFF | Coefficients for e+e- and DIS cross-sections|
+       | HWUCI2 | Logarithmic integral Ci_2                   |
+       | HWUDAT | Block data: particle properties             |
+       | HWUECM | Centre-of-mass energy                       |
+       | HWUEDT | Insert or delete entries in the event record|
+       | HWUEEC | Computes coefficients for e+e- cross section|
+       | HWUEPR | Prints event data                           |
+       | HWUEMV | Moves entries within the event record       |
+       | HWUFNE | Finishes an event                           |
+       | HWUGAU | Adaptive Gaussian integration               |
+       | HWUIDT | Translates particle identity codes          |
+       | HWUINC | Initial parameter-dependent calculations    |
+       | HWUINE | Initializes an event                        |
+       | HWULDO | Lorentz 4-vector dot product                |
+       | HWULI2 | Logarithmic integral Li_2 (Spence function) |
+       | HWULOB | Lorentz transformation: rest frame -> lab   |
+       | HWULOF | Lorentz transformation: lab -> rest frame   |
+       | HWULOR | Multiplies by Lorentz matrix                |
+       | HWUMAS | Puts mass in 5th component of vector        |
+       | HWUPCM | Centre-of-mass momentum                     |
+       | HWURAP | Rapidity                                    |
+       | HWURES | Computes/prints resonance data              |
+       | HWUROB | Rotation by inverse of matrix R             |
+       | HWUROF | Rotation by matrix R                        |
+       | HWUROT | Computes rotation R from vector to z-axis   |
+       | HWUSOR | Sorts an array in ascending order           |
+       | HWUSQR | Square root with sign retention             |
+       | HWUSTA | Makes a particle type stable                |
+       | HWUTAB | Interpolates in a table                     |
+       | HWUTIM | Checks time remaining (N.B. VAX Fortran)    |
+       +--------+---------------------------------------------+
+       | HWVDIF | Vector difference                           |
+       | HWVDOT | Vector dot product                          |
+       | HWVEQU | Vector equality                             |
+       | HWVSCA | Vector times scalar                         |
+       | HWVSUM | Vector sum                                  |
+       | HWVZRO | Vector zero                                 |
+       +--------+---------------------------------------------+
+       | HWWARN | Issues warnings and deals with errors       |
+       +--------+---------------------------------------------+

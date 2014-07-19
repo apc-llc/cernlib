@@ -1,0 +1,493 @@
+
+          CHANGES FROM VERSION 2.01 TO VERSION 2.02
+          -----------------------------------------
+
+      1.  PATCH COMMENT IS REPLACED BY PATCH **HEADER
+
+      2.  ALL PILOT PATCHES HAVE BEEN TOUCHED.
+
+      3.  SMALL BUG IN TUBLOW
+
+      4.  DEFAULT VALUE FOR OPTION FOR TIMING IS NO TIMING.
+          DEFAULT VALUE FOR TESTING OF ROUTINES IN TCGENR IS NO TESTING.
+          FOR ACTIVATING THESE OPTIONS SEE P=**HEADER, D=STORY.
+
+      5.  P=PCHAR, D=TIFORM.  THE SUBROUTINE TIFORM HAS BEEN
+          REWRITTEN TO BE MORE GENERAL.
+
+      6.  P=PCHAR, D=TPKCH. THE SUBROUTINE TPKCH HAS BEEN REWRITTEN.
+
+      7.  P=PUTIL, D=TWEED.  OUTPUT MESSAGE ADDED.
+
+      8.  A TIMEZB ROUTINE FOR PDP10 IS ADDED TO PILOT *PDP10.
+
+      9.  SMALL BUG IN TDIRCO
+
+=====================================================================
+
+          CHANGES FROM VERSION 2.02 TO VERSION 2.03
+          -----------------------------------------
+
+      1.  BUGS IN PILOTS *MIBM AND *MUNIVAC CORRECTED.
+
+      2.  TIMEZB IN PILOT *MPDP10 DELETED.
+
+      3.  AUTODELETE OF ROUTINES NOT USED.
+
+      4.  MALFUNCTIONING OF TTRIGO CORRECTED.
+
+      5.  DIMENSIONS OF IA AND IB IN SEQ WORK INCREASED
+
+      6.  PRECISION REQUIRMENT REDUCED IN TTRIGO, TLOR, TROT
+
+=====================================================================
+
+          CHANGES FROM VERSION 2.03 TO VERSION 2.04   25-JULY-1973
+          -----------------------------------------
+
+      1.  P=PVPACK, D=TVEC.  TESTS OF  DOT4-DOT-DOTNOR-DIST  DELETED.
+
+      2.  PILOTS FOR  IBM-PDP-UNIVAC    DELETES D=TWEED (FOR CDC ONLY)
+
+      3.  P=PDIV, D=TTRIGO.  BUGS IN TEST 2 AND 3 CORRECTED.
+
+      4.  P=*MIBM360.  SEQUENCE TIUCHA1 MODIFIED.
+
+=====================================================================
+
+          CHANGES FROM VERSION 2.04 TO 2.10    3-NOV-75
+          ---------------------------------
+
+      1.  TEST FOR
+                    IFORMT          P=PCHAR, D=TIFORM  ( WHOLE DECK).
+                    IOFPAR-PAROFI   P=PCHAR, D=TPAROF  ( WHOLE DECK).
+                    ERPRIP-PRIPAR   P=PDIV,  D=TPRIP   ( WHOLE DECK).
+                    IOFMAS-VOMAS    P=PDIV,  TVOMAS    ( WHOLE DECK).
+                    MOVE            P=PUTIL, D=TUCOPY.
+                    DIRCOS-ERDIIRC  P=PVECT, D=TDIRCO  ( WHOLE DECK).
+          DELETED.
+
+      2.  PILOT FOR TIUSAME IN ALL PILOT PATCHES HAS BEEN DELETED.
+
+      3.  SEQ OTHERSMACHINE DELETED.
+
+      4.  P=CDC60/70 SEQ Z=VERIFY1 DELETED.
+
+      5.  P=OTHERS AND P=PUTIL, D=TWEED DELETED.
+
+      6.  P=SYSMICKY, D=VERIFY SPLIT    INTO D=VERIFY AND D=VERIFF.
+          P=SYSMICKY, D=TIMEGO SPLITTED INTO D=TIMEGO AND D=TIMING.
+
+      7.  SMALL BUG IN P=*MIBM360.
+
+      8.  CDE SEQUENCES BASIC,KEEP AND WORK REPLACED BY ONE SEQUENCE MKCDE.
+
+      9.  TIMING PARAMETERIZED WITH USE OF +SEQ, Z=TIMING.
+
+     10.  P=SYSMICKY, D=MINIT REWRITTEN TO CONTAIN ALL INITIALIZATION
+          ( D=BLKDATA AND D=TVERY DELETED).
+
+     11.  ZERO DEFINED IN 5 LEVELS, WHEREFOR PRECISION REQUIRMENTS
+          ARE CHANGED FOR SOME TESTS.
+
+     12.  CHECK OF LIMIT FOR SIZE OF CHECKVECTOR ADDED TO VERIFY AND VERIFF.
+
+     13.  BETTER ANSIFITTING AND PREPERATION FOR PATCHY4.
+
+     14.  TEST FOR
+                    IUHUNT          P=PUTIL, D=TIUCOM.
+                    JRSBYT          P=NPBYT, D=TBYT.
+                    LORENB-LORENF   P=PVECT  D=TLOR.
+                    TLERR-TLRES     P=PTLPAC,D=TTLPAC  ( NEW PATCH).
+                    TLS-TLSC        P=PTLPAC,D=TTLPAC  ( NEW PATCH).
+                    VDOTN2          P=PVPACK, D=TVEC.
+          ADDED.
+
+     15.  P=**HEADER, D=CHECKWHERE ADDED.
+
+     16.  D=STORY AND D=CHECKWHAT UPDATED.
+
+=====================================================================
+
+
+      CHANGES FROM VERSION  2.10  TO  2.11    29-SEPT-76
+      ------------------------------------
+
+   1) INTRODUCE CHECKING OF TR-ROUTINES (P=PTRPAC)
+
+   2) REMOVE USAGE OF  VMODUL, DOT, DOT4
+
+   3) FLOATING POINT PRECISION IN COMPARISONS HAS BEEN LOOKED AT,
+      WITH CONSEQUENT CHANGES. SETTING THE LEVEL-VECTOR 'ZEROV' IN MINIT
+      HAS BEEN TAKEN OUT INTO MACHINE-DEPENDENT SEQUENCES.
+
+   4) NEW PATCH P=GENUSE FOR MORE EXACT CHECKING OF NEWLY-WRITTEN FLOAT.
+      MACHINE-LANGUAGE ROUTINES.  THIS ALLOWS FOR A 2-PASS RUNNING:
+      FIRST:   IN THE 'GEN'-PASS THE HAVE-DATA ARE WRITTEN TO A BINARY
+               FORTRAN FILE BY MICKY WITH THE FORTRAN GENSEC ROUTINES
+               CONNECTED.
+      SECOND:  THE 'USE'-PASS IS THE IDENTICAL MICKY RUN, BUT WITH
+               THE MACHINE-LANGUAGE ROUTINES CONNECTED. COMPARISON IS
+               AGAINST THE HAVE-DATA OF THE FIRST PASS, WITH THE
+               PRECISION DEFINED IN 'ZERGU'.  (CF D=VERIFF)
+
+=====================================================================
+
+      CHANGES FROM VERSION  2.11  TO  2.12    3-DEC-76
+      ------------------------------------
+
+      INTRODUCE USAGE OF GENSEC ROUTINE  TIMED  FOR MICKY TIMING
+
+=====================================================================
+
+      CHANGES FROM VERSION  2.12  TO  2.13    11-FEB-78
+      ------------------------------------
+
+      RE-WRITE P=PUTIL, D=IUCHA  FOR MORE SERIOUS TESTS OF
+                                     IUBIN, IUCHAN, IUHIST
+
+=====================================================================
+
+      CHANGES FROM VERSION  2.13  TO  2.14    1-MAR-78
+      ------------------------------------
+
+   1) BUG CORRECTED IN  P=NPBYT, D=TBYT
+
+   2) CORRECT TROUBLE WITH TIMING IN  P=PTLPAC, D=TTLPAC
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.15            23-SEP-78
+      ------------------------
+
+   1) COMMON /SLATE/  WITH 2 WORDS EXTRA INTO P=SYSMICKY, D=MICKY
+                   THE MAIN PROGRAM MUST LOAD BEFORE ANY ROUTINE
+                   USING /SLATE/
+
+   2) CHECKING OF 'UTRANS' CODED INTO P=PCHAR, D=TUBLOW
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.16            19-NOV-78
+      ------------------------
+
+   1) BRING NEW SEQU  Z=MINIT2   FOR INIT OF GENUSE MODE
+   2) SET UNITS FOR IBM  IN P=*IBM360
+   3) CHANGE NAMES 'TTRCHOL'  TO  'TTRCHO'
+   4) REMOVE TESTING OF OBSOLETE  AFROMI - IFROMA
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.17            24-JUN-80
+      ------------------------
+
+      ENTIRELY FORMAL CLEAN-UP FOR PATCHY 4
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.18            25-JUN-80
+      ------------------------
+
+   1) NEW PATCHES  P=*MNORD2, *MVAX11
+
+   2) REMOVE TEST AND USAGE OF MXADD, MXSUB, MXMTR, MXNTR, MXTRA
+      AND OF ALL ROUTINES      MXD...
+      ALL THESE ROUTINES HAVE BEEN OBSOLETE FOR A LONG TIME
+
+   3) INCLUDE P=CDC60/70 INTO P=*MFTN
+
+   4) NEW VALUES FOR ZEROV(1) AND (2) IN P=SYSMICKY,D=.
+      SET MORE TOLERANT ZERO FOR TLOR AND TTRCHO
+
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.19            14-NOV-80
+      ------------------------
+
+      D=TLOR, P=PVECT : MODIFY EQUIVALENCES FOR SOME COMPILER
+                        REMOVE TEST OF LOTRAN & LORENC
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.20            17-NOV-80
+      ------------------------
+
+      D=TLOR, P=PVECT : CORRECT NEW BUG
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.21            19-NOV-80
+      ------------------------
+
+      D=VERIFF, P=SYSMICKY :  MODIFY FOR CURIOUS VAX COMPILER
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.22            25-FEB-81
+      ------------------------
+
+      P=*MUNO              :  NEW PATCH FOR UNIVAC FTN COMPILER
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.23            21-MAR-81
+      ------------------------
+
+      P=*MCDC              :  NEW PATCH FOR CDC FORTRAN 5 COMPILER
+
+      CHANGE ALL 1H,2H,3H TO 4H IN HOLLERITH CONSTANTS
+      CHANGE DIMENSION IN D=TIUCOM TO AVOID REFERENCE OUT OF BOUNDS
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.24            17-JUN-82
+      ------------------------
+
+      D=TBYT, P=NPBYT : CORRECT BUG FOR UNIVAC A4 VERSION
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.25            20-JUL-82
+      ------------------------
+
+      D=TUCOPY, P=PUTIL :  MORE ELABORATE TESTS
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.26             1-FEB-83
+      ------------------------
+
+      D=TVCBYT, P=NPBYT :  MORE ELABORATE TESTS
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.27            25-MAY-83
+      ------------------------
+
+      NEW CALLING OF NEWGUY
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.28            23-JUN-83
+      ------------------------
+
+      PILOT *MCRAY ADDED
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.29            16-NOV-83
+      ------------------------
+
+      TIDY UP EQUIVALENCE STATEMENTS IN
+      D=TPROB,TSCALE,TTRIGO,TMXEQU,TMXM,TIUCOM,TLOR,TIUSAM
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.32            21-NOV-83
+      ------------------------
+
+      RE-ORGANISE PRINTING OF 'TEST OK'
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.33            21-NOV-83
+      ------------------------
+
+      SUPPRESS LINE-COUNTING, HENCE NEW CALL TO NEWGUY
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.34            22-NOV-83
+      ------------------------
+
+      ADD D=TUCTOH, BUT NOT YET CONNECTED IN Z=EXECUTION
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.35            13-DEC-83
+      ------------------------
+
+      ADD      P=*MAPO            FOR APOLLO
+      CORRECT  D=NEWGUY           RE-SET NFAIL=0
+      CORRECT  Z=EXECUTION        RE-ORDER A BIT, CONNECT TUCTOH
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.36            14-DEC-83
+      ------------------------
+
+      CORRECT  D=MICKY            ADD CALLS TO DATIME, DATIMEH
+      CORRECT  D=TIUCHA           ALLOW FOR APOLLO REP. OF .TRUE.
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.37            16-DEC-83
+      ------------------------
+
+      CORRECT  D=TIUCHA           ANOTHER FIX FOR THE APOLLO
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.38             8-AUG-85
+      ------------------------
+
+      ADD  D=TMBYT                TO TEST MSBIT, MSBYT, ETC.
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.39            14-AUG-85
+      ------------------------
+
+      REPLACE D=TBIT AND TBYT  BY A NEW ROUTINE TBYT
+      ADD CALLING ROUTINE NAME INTO CALLS TO NEWGUY
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.40            11-FEB-86
+      ------------------------
+
+      ADD P=*MDGE FOR DATA GENERAL ECLIPSE
+      CHANGE CALLING OF NEWGUY FOR FORTRAN 77, AVOID CALL TO UCTOH
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.41            21-JAN-87
+      ------------------------
+
+      CHANGE ROUTINE NAMES :  VERIFY -> MVERII
+                              VERIFF -> MVERIF
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.42             3-JUN-87
+      ------------------------
+
+      ADD P=*MHYWGC FOR HONEYWELL GCOS
+      CONNECT CALL TO TMBYT
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.43            21-SEP-87
+      ------------------------
+
+      TIMING ADDED FOR UCTOH ET AL.
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.44             2-NOV-87
+      ------------------------
+
+      CORRECT ERROR IN TIMING FOR UCTOH ET AL.
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.45            10-FEB-88
+      ------------------------
+
+      ADD PILOT  P=*MALT  FOR ALLIANT
+      ADD PILOT  P=*MNORD3  FOR NORD 500, FOR CONSISTENCY
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.46            15-FEB-88
+      ------------------------
+
+      Extend timing in TUCTOH to 40 characters
+      Change print formats to print blank lines rather than 0
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.47            22-FEB-88
+      ------------------------
+
+      TUCTOH : test on trailing characters
+      Change Common variable names  IBITS ->IQBITW, ICHAR -> IQCHAW
+      Pilots tidied up
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.48            11-APR-88
+      ------------------------
+
+      Add pilot  P=*MCRU  for Cray Unicos
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.49             7-JUL-88
+      ------------------------
+
+      Change name of Pam from MICKYPAM to Micky
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.50             3-AUG-88
+      ------------------------
+
+      Add P=*MIRT for IBM RT PC
+      Re-order the pilot patches
+      Change TSCALE
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.51            24-AUG-88
+      ------------------------
+
+      Fix problem IN TPKCH
+      Correct bug intoduced to TSCALE
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.52            21-SEP-88
+      ------------------------
+
+      Change Hollerith to type Integer in TBABY, TUBLOW
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.53            26-SEP-88
+      ------------------------
+
+      Add pilot  P=*MSUN  for SUN
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.54            16-Feb-89
+      ------------------------
+
+      Add pilots  P=*MTMO and *MVMI  for Transputer and VAX/MIPS
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.55            24-Feb-89
+      ------------------------
+
+      Add pilot  P=*MCVX  for Convex
+      Change CALL UBLOW to CALL UCTOH1 in initialisation calls
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.56             7-Mar-89
+      ------------------------
+
+      Avoid Hollerith literal in call to UOPT
+      Remove F77 flag
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.57            22-Mar-89
+      ------------------------
+
+      new system routines MVERIC + MVEUNS
+      new test routine TSORTN to test SORTI, SORTR
+      new test routine TRANDM preparing for the test of RANMAR et al
+
+=====================================================================
+
+      CHANGES FOR VERSION 2.59            26-Feb-91
+      ------------------------
+
+      new patch P=*MHPX     for Hewlett Packard
+
+=====================================================================
+

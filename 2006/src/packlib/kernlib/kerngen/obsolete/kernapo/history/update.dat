@@ -1,0 +1,32 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:58 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:58  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNAPO)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNAPO
+              ----------------------------------------
+
+
+UP-DATE  1.26 :  31-May-1994
+----------------------------
+
+Replacing File   KERNAPO  1.25  921006 12.01
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+Re-organize the pilots *KAPOF77 and *KAPO a bit, delete P=*KAPOL
+
+New names :   QF_APO77 for QMAPOF77    to compile with /bin/f77
+              QF_APO   for QMAPOFTN    to compile with /com/ftn
+
+Delete:       p=APOSYS, D=JUMPAD,JUMPX2   use routines on KERNFOR
+
+---------------------------------------------------------------------
+
+#endif

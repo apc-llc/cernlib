@@ -1,0 +1,25 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:52:02 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:02  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNCVX)
+
+
+              UP-DATE RECORD FOR THE PAM-FILE  KERNCVX
+              ----------------------------------------
+
+
+UP-DATE  1.11 :  11-May-1994
+----------------------------
+
+Replacing File   KERNCVX  1.10  940224 12.28
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+---------------------------------------------------------------------
+
+#endif

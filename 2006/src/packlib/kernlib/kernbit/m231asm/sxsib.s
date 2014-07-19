@@ -1,0 +1,55 @@
+;
+; $Id: sxsib.s,v 1.1.1.1 1996/02/15 17:47:47 mclareni Exp $
+;
+; $Log: sxsib.s,v $
+; Revision 1.1.1.1  1996/02/15 17:47:47  mclareni
+; Kernlib
+;
+;
+ .TITLE  SXSIB
+;
+; CERN PROGLIB# M231    CVTIB
+; ORIG.  HYDRA FQT PACKAGE ROUTINE FQTICD
+; EXTRACTED AND NAME CHANGED BY H.RENSHALL/DD, 1984-05-11
+; & THEN MODIFIED BY F.CARMINATI/DD TO CONVERT FROM VAX
+; TO IBM FLOATING, 1985-11-02
+;
+;      SUBROUTINE SXSIB (A,NWORDS)
+;
+; CONVERTS THE FIRST NWORDS OF VECTOR A FROM VAX FLOATING
+; POINT NUMBER FORMAT TO IBM FLOATING POINT FORMAT
+;
+        .PSECT  $CODE,PIC,CON,REL,LCL,SHR,EXE,RD,NOWRT,LONG
+;SXSIB::
+        .ENTRY  SXSIB,^M<R8,R9,R10,R11>
+        MOVAL   @4(AP),R11      ;GET ADRESS OF VECTOR
+        MOVL    @8(AP), R9      ;LOAD COUNT
+        TSTL    R9              ;COMPARE 0 WITH THE COUNT
+        BGTR    LOOP            ;LOOP COUNT GT 0
+        RET                     ;LOOP COUNT LE 0
+;---
+ LOOP:  MOVL    (R11)+,R0       ;FIELD SHIFTED ALREADY.
+        TSTL    R0              ;CHECK IF EXACT ZERO
+        BEQL    FIN             ;BRANCH ON ZERO
+        EXTZV   #7,#8,R0,R8     ;EXTRACT EXPONENT (POWERS OF 2)
+        SUBL2   #^X80,R8        ;TAKE AWAY EXCESS
+        EXTZV   #0,#2,R8,R1     ;FIND THE REST
+        ASHL    #-2,R8,R8       ;DIVIDE EXPONENT BY FOUR
+                                ;SO YOU GET THE POWERS OF 16
+        TSTB    R1              ;COMPARE THE REST WITH ZERO
+        BNEQ    LAB1            ;BRANCH ON NOT EQUAL
+        ADDL2   #4,R1           ;NORMALIZE EXPONENT
+        SUBL2   #1,R8           ;NORMALIZE EXPONENT BASE 16
+ LAB1:  ADDL2   #^X94,R1        ;THIS IS THE NEW EXP
+        INSV    R1,#7,#8,R0     ;THIS IS THE FLOATING TO CONVERT
+        CLRL    R1              ;CLEAR THE SIGN MASK
+        BBCC    #15,R0,POS      ;BRANCH IF POSITIVE
+        MOVL    #^X80000000,R1  ;LOAD R1 WITH THE SIGN
+  POS:  CVTFL   R0,R10          ;THIS IS THE IBM MANTISSA
+        ADDL2   #65,R8          ;THIS IS THE IBM EXPONENT
+        INSV    R8,#24,#7,R10   ;THAT NOW WE HAVE PACKED
+        BISL2   R1,R10          ;INSERT THE SIGN
+        MOVL    R10, -4(R11)
+  FIN:  SOBGTR  R9, LOOP        ;LOOP
+        RET
+  .END

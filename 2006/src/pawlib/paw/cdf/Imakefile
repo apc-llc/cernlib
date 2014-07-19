@@ -1,0 +1,13 @@
+#define IHaveCDF
+
+SRCS_CDF= pawcdf.cdf pamcdf.cdf mlpdef.cdf
+
+#ifdef CERNLIB_IBMRT
+/* Otherwise cc dies with internal compiler error on pawcdf. 
+ * IBM AIX XL C Compiler  Version 01.03.0000.0019 
+ * may be space related, as it worked on a much bigger machine 
+ */
+CDEBUGFLAGS=
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

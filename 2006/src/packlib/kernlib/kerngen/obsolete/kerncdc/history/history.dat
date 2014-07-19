@@ -1,0 +1,268 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:51:12 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:51:12  mclareni
+* Kernlib
+*
+*
+* This directory was created from kerncdc.car patch kerncdc
+#if !defined(CERNLIB_KERNCDC)
+ 
+     KERNLIB ROUTINES IN MACHINE LANGUAGE OR OTHERWISE SPECIAL
+                     FOR CDC MACHINES
+ 
+---------------------------------------------------------------------
+ 
+           THIS FILE CONTAINS THE FOLLOWING PATCHES :
+ 
+ 
+PILOT PATCHES
+-------------
+ 
+*KVCDC76  KERNLIB FOR CDC FORTRAN 5 ON 7600
+ 
+*KVNOSBE  KERNLIB FOR CDC FORTRAN 5 FOR NOS/BE
+ 
+*KVNOS    KERNLIB FOR CDC FORTRAN 5 FOR NOS
+ 
+*KCDC76   KERNLIB FOR CDC FORTRAN 4 ON 7600
+ 
+*KCDC60   KERNLIB FOR CDC FORTRAN 4 FOR SCOPE 3.4
+ 
+*KNOSBE   KERNLIB FOR CDC FORTRAN 4 FOR NOS/BE
+ 
+*KNOS     KERNLIB FOR CDC FORTRAN 4 FOR NOS
+ 
+*KCDC     COMMON SUB-PILOT
+ 
+OTHER PATCHES
+-------------
+ 
+XIOCDCV   CDC FORTRAN 5 VERSION OF XIN-ROUTINES OF P=XVECT
+ 
+XVECTCDC  CDC FORTRAN 4 VERSION OF XIN-ROUTINES OF P=XVECT
+ 
+XSCOPE2   X-PACKAGE FOR 7600 WITH SCOPE 2
+ 
+XSCOPE3   X-PACKAGE FOR 6000 WITH SCOPE 3.4
+ 
+XSCOPE    COMMON SUB-SET
+ 
+CDCFTN    ML-VERSIONS OF NORMAL SYSTEM-INDEPENDENT KERNLIB ROUTINES
+ 
+CDCNOSBE  SYSTEM COMMUNICATION ROUTINES FOR SYSTEM NOS/BE
+ 
+CDCNOS    SYSTEM COMMUNICATION ROUTINES FOR SYSTEM NOS
+ 
+CDC76SYS  SYSTEM COMMUNICATION ROUTINES FOR CDC 7600
+ 
+CDC60SYS  SYSTEM COMMUNICATION ROUTINES FOR CDC 6000
+ 
+CDCSYS    COMMON SUB-SET
+ 
+=====================================================================
+ 
+ 
+       UP-DATE RECORD FOR THE PAM-FILE  KERNCDC, VERSION 2
+       ---------------------------------------------------
+ 
+ 
+UP-DATE  2.19 : 12-JULY-1988
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.18  870602 11.41
+ 
+CORRECT :      P=CDCSYS, D=NOARG    to delete the dummy in TCGEN
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.18 :  2-JUNE-1987
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.17  861204 21.04
+ 
+NEW DECKS :    P=CDCFTN, D=IANDETC, BITPOS.
+                         D=JBYTOR.
+                         D=ISHFT, ISHFTC.
+                         D=BTEST,IBITS,IBCLR,IBSET,MVBITS.
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.17 :   4-DEC-1986
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.16  860514 15.45
+ 
+NEW DECKS :    P=CDCFTN, D=IE3FOS, IE3FOD, IE3TOS, IE3TOD
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.16 :  14-MAY-1986
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.15  850813 19.51
+ 
+NEW DECKS :    P=CDCFTN, D=CFROMI, IFROMC
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.15 :  13-AUG-1985
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.14  850320 20.49
+ 
+NEW DECKS :    P=CDCFTN, D=MBYTET,MBYTOR,MCBYT
+                         D=MSBIT,MSBIT0,MSBIT1,MSBYT
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.14 :  20-MAR-1985
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.13  840827 17.14
+ 
+NEW DECK :    P=CDCNOSBE, D=INTRAC
+ 
+CORRECTIONS : P=CDCFTN, D=UH1TOC       BUG FIXED FOR CHARACTER VECTOR
+              P=CDC60SYS, D=JOBNAM     NAME WITH BLANK-FILL
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.13 :  27-AUG-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.12  840712 18.17
+ 
+NEW DECK :    P=CDCSYS, D=QNEXTE       TAKEN OVER FROM HYDRA
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.12 :  12-JUL-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.11  840706 16.57
+ 
+CORRECTIONS : P=CDCSYS, D=EQUBUF       TRIAL TO FIX INTERMITTENT BUG
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.11 :   6-JUL-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.10  840704 19.36
+ 
+CORRECTIONS : P=CERNOSBE, D=INBCD      FIXED TO WORK ALSO FOR F77
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.10 :   3-JUL-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.09  840618 11.14
+ 
+CORRECTIONS : P=CERNOSBE, D=INBCD      FIXED TO WORK
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.09 :  18-JUN-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.08  840426 13.09
+ 
+CORRECTIONS : P=XIOCDCV     HANDLE LIST EXCEEDS DATA
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.08 :  26-APR-1984
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.07  831121 18.51
+ 
+NEW PATCH :   P=CERNOSBE         FOR USE AT CERN
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.07 :  21-NOV-1983
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.06  830901 18.16
+ 
+CORRECTIONS:  P=CDCFTN, D=UCTOH,UHTOC      NEW VERSIONS
+                        D=UCTOH1,UH1TOC    NEW ROUTINES FOR F77
+                        D=UBLOW,UBUNCH     ENTRY UCTOH1,UH1TOC
+                                           CONDITIONAL IF=-F77
+ 
+              P=CDCSYS,  D=KFILE           ADD FIX FOR F77
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.06 :   1-SEP-1983
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.05  821202 15.55
+ 
+CORRECTIONS:  P=XIOCDCV, D=.        ADD USE-SELECTION OF XERROR
+ 
+              P=CDCSYS,  D=DATIMH   ACCEPT HOLLERITH OR CHAR TYPE
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.05 :   2-DEC-1982
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.04  821124 22.24
+ 
+ 
+CORRECTIONS:  D=UHTOC           CORRECT ERROR IN CALLING SEQUENCE
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.04 :  24-NOV-1982
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.03  821007 17.10
+ 
+ 
+DELETION :    P=CDCFTN, D=FINT.         USE FORTRAN STANDARD VERSION
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.03 :   7-OCT-1982
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.02  820818 17.58
+ 
+ 
+CORRECTIONS:  P=XIOCDCV         ADD USE-SELECTION OF XSETIO
+ 
+                 D=LOCF,DATIME,...     ADD  +USE,...,T=INH
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.02 :  18-AUG-1982
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.01  820801 12.00
+ 
+ 
+CORRECTIONS:  P=XVECTCDC, D=XINB,XINBS   REMOVE USE OF IXLONG
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  2.01 :  27-JUL-1982
+----------------------------
+ 
+REPLACING FILE   KERNCDC 2.00  820401 12.00
+ 
+DELETED   :   P=CDCFTN, D=NORRAN
+ 
+NEW DECKS :   P=CDCFTN, D=CVT360, FTO360
+ 
+CORRECTIONS:  P=*KV...                 ACTIVATE LXBITS FOR FORTRAN 77
+              P=*KVCDC76                  INHIBIT INCMEM, LBCMZB
+              P=CDCFTN, D=UCOPY,UCOPY2    FIX FOR FORTRAN 77
+ 
+---------------------------------------------------------------------
+ 
+#endif

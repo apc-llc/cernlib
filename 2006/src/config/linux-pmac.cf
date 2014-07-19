@@ -1,0 +1,133 @@
+
+#ifndef OSName
+#define OSName			Linux
+#endif
+#ifndef OSVendor
+#define OSVendor		Linux PPC
+#endif
+#ifndef OSMajorVersion
+#define OSMajorVersion		2
+#endif
+#ifndef OSMinorVersion
+#define OSMinorVersion		0
+#endif
+#ifndef OSTeenyVersion
+#define OSTeenyVersion		33
+#endif
+
+#undef	unix			/* GF. this is not needed anywhere */
+
+#define HasNdbm			YES
+#define DBMLibrary		-lgdbm
+#define UseElfFormat		YES
+#define HasGcc			YES
+#define HasGcc2			YES
+/* Create static and shared libraries */
+#define HasSharedLibraries	YES
+#define ForceNormalLib		YES
+#define HasGcc2ForCplusplus	YES
+#define GccUsesGas		YES
+#define UseGas			YES
+#define GnuCpp			YES
+#define HasShadowPasswd		NO
+#define HasLibCrypt		YES
+#define HasPutenv		YES
+#define HasShm			YES
+#define HasSockets		YES
+#define HasZlib                 YES 
+
+#define AvoidNullMakeCommand	YES
+#define StripInstalledPrograms	YES
+#define CompressAllFonts	YES
+#define Malloc0ReturnsNull	YES
+#define NeedConstPrototypes	YES
+#define NeedFunctionPrototypes	YES
+#define NeedNestedPrototypes	YES
+#define NeedVarargsPrototypes	YES
+#define NeedWidePrototypes	NO
+#define SetTtyGroup		YES
+
+#define CcCmd			gcc
+#define DefaultCCOptions	-fsigned-char
+#define AsCmd			as
+#define LdCmd			ld
+#define AsmDefines		-DUSE_GAS -U__ELF__
+#define MkdirHierCmd		mkdir -p
+#define CppCmd			/lib/cpp
+#define YaccCmd			byacc
+#define LexCmd			flex -l
+#define LexLib			-lfl
+#define PreProcessCmd		CcCmd -E
+#define PostIncDir		`CcCmd --print-libgcc-file-name | sed 's/libgcc.a/include/'`
+#define LdCombineFlags		-r
+#define OptimizedCDebugFlags	-O2 -fno-strength-reduce -fomit-frame-pointer
+#define StandardDefines		-Dlinux -DPPC -D__powerpc__ -D_POSIX_SOURCE \
+				-D_BSD_SOURCE -D_SVID_SOURCE -DX_LOCALE
+#define XawI18nDefines		-DUSE_XWCHAR_STRING -DUSE_XMBTOWC
+#define HasWChar32		YES
+#define StandardCppDefines	-traditional StandardDefines
+#define	XpmacServer		YES
+#define BuildXKB		YES
+#define BuildXKBLib		YES
+#define ServerOSDefines		-DDDXTIME
+#define ExtensionOSDefines	-DXTESTEXT1
+#define ServerExtraDefines	-DGCCUSESGAS
+#define ConnectionFlags		-DUNIXCONN -DTCPCONN
+#define InstallXserverSetUID	YES
+#define InstUidFlags		-s -m 4711
+
+#define	ServerExtraSysLibs	
+#define ExtraLibraries		-lcrypt
+
+/* Some of these man page defaults are overriden in the above OS sections */
+#ifndef ManSuffix
+# define ManSuffix	1x
+#endif
+#ifndef ManDir
+# define ManDir		$(MANSOURCEPATH)1
+#endif
+#ifndef LibManSuffix
+# define LibManSuffix	3x
+#endif
+#ifndef LibmanDir
+# define LibmanDir	$(MANSOURCEPATH)3
+#endif
+#ifndef FileManSuffix
+# define FileManSuffix	5x
+#endif
+#ifndef FileManDir
+# define FileManDir	$(MANSOURCEPATH)5
+#endif
+
+#include <lnxLib.rules>
+#define f2cFortran              YES
+#define FortranCmd              g77
+#define XargsCmd                xargs
+#define FortranSaveFlags        /* */ /* Everything static !? */
+#define OptimisedFortranFlags	-O2 -funroll-loops -fomit-frame-pointer
+#define DefaultFCOptions        -fno-automatic \
+				-fno-second-underscore \
+				-fno-f90 -fugly-complex -fno-globals \
+				-fugly-init -Wno-globals
+#define CernlibSystem           -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX \
+				-DCERNLIB_PPC -DCERNLIB_QMGLIBC
+
+#define CERNLIB_SHIFT NO
+#define CERNLIB_LINUX
+#define CERNLIB_UNIX
+#define CERNLIB_LNX
+#define CERNLIB_PPC
+#define CERNLIB_QMGLIBC
+
+#define X11Includes             -I/usr/X11R6/include
+
+/*
+ *  Create a Make Variable to allow building with/out Motif
+ */
+#undef MotifDependantMakeVar
+#define MotifDependantMakeVar(variable,value)                           @@\
+ifneq ($(strip $(HAVE_MOTIF)),)                                         @@\
+    variable=value                                                      @@\
+endif                                                                   @@\
+/* End  CERNLIB changes */
+

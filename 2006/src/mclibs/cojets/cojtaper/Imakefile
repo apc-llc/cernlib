@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 bufin.F chicnv.F prtevt.F rdbeg.F rdtape.F rend.F rgens.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

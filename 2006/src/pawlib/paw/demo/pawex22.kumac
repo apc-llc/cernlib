@@ -1,0 +1,27 @@
+MACRO PAWEX22
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 22                          *
+* Examples of the SIGMA processor 1                                      *
+**************************************************************************
+Exec ALLDEF
+zone 2 2
+opt GRID
+set ndvx 520
+sigma x=array(200,0#2*PI)
+sigma sinus=sin(x)
+sigma sinx=sin(x)/x
+gra 200 x sinus
+set dmod 2
+gra 200 x sinx l
+set dmod 0
+SIGMA x=array(300,0#8)
+SIGMA g=cosh(x)+sin(1/(.1+X*X))
+gra 300 x g
+SIGMA  x=array(300,0#3)
+SIGMA g=cosh(x)+sin(1/(.1+X*X))
+gra 300 x g
+SIGMA  x=array(300,0#1)
+SIGMA g=cosh(x)+sin(1/(.1+X*X))
+gra 300 x g
+RETURN
+

@@ -1,0 +1,140 @@
+*
+* $Id: ttlpac.F,v 1.1.1.1 1996/02/15 17:55:01 mclareni Exp $
+*
+* $Log: ttlpac.F,v $
+* Revision 1.1.1.1  1996/02/15 17:55:01  mclareni
+* Kernlib
+*
+*
+#include "kerngent/pilot.h"
+      SUBROUTINE TTLPAC
+
+#include "kerngent/mkcde.inc"
+
+      COMMON /TLSDIM/ M1,M,N,L,IER
+      DIMENSION A1(32),AA(24),B1(8),B2(8),B3(6),BB(6),X(16),X1(16)
+     +         ,X2(16),X3(16),X4(16),AUX(8),AUX1(1),AUX2(1),IPIV(8)
+      INTEGER   TINF(4),TINFL2,TINFM2,TINFN2,TINFN4
+
+      DATA IV/4/, AUX1/0.000039507/, AUX2/0.00000104397/
+     1    ,X1/0.997853373,1.,0.501073313,0.216701283, 12*0./
+     2    ,X2/0.304564727,0.,-0.152282363,-0.253309074,0.,0.,0.,0.,
+     3        -0.152282363,0.,0.0761411817,0.126654537,-0.253309074,0.,
+     3        0.126654537,0.972317137/                                    3+
+     4    ,X3/0.99981032,1.01480489,0.42385913,0.27962963, 12*0./
+     5    ,X4/0.960317,-6.11772,10.9127,-5.78704,-6.11772,90.5809,
+     6        -214.947,132.13735,10.9127,-214.947,559.276,-361.690,
+     7        -5.78704,132.13735,-361.690,241.12654/
+     8    ,A1/0.,1.,0.,0.,1.,0.,2.,0.,
+     9        1.,0.,0.,0.,1.,0.2,0.04,0.008,1.,0.4,0.16,0.064,1.,0.6,
+     A        0.36,0.216,1.,0.8,0.64,0.512,1.,1.,1.,1./
+     B    ,AA/1.,0.,0.,0.,1.,0.2,0.04,0.008,1.,0.4,0.16,0.064,1.,0.6,
+     C        0.36,0.216,1.,0.8,0.64,0.512,1.,1.,1.,1./
+     D    ,B1/1.,2.,1.,1.2214,1.4918,1.8221,2.2255,2.7183/
+     E    ,B2/0.,0.,0.00214663,0.00177008,-0.000093985,-0.00294724,
+     F        -0.00399135,0.00267203/
+     G    ,B3/0.000189683,-0.000562698,0.000353968,0.000417460,
+     H        -0.000594444,0.000196032/
+     I    ,BB/1.,1.2214,1.4918,1.8221,2.2255,2.7183/
+
+      DATA TINF/100,4HTLSC,0,4H8*4 /
+      DATA TINFL2/4HLRES/,TINFM2/4HLERR/,TINFN2/4HTLS /,TINFN4/4H6*4 /
+
+      CALL NEWGUY ('TLSC-TLRES-TLERR.','TTLPAC  ')
+      ZERLEV = 2*ZEROV(3)
+
+      M1 = 2
+      M = 8
+      N = 4
+      L = 1
+      CALL UCOPY(A1,A,32)
+      CALL UCOPY(B1,B,8)
+
+      CALL TLSC(A,B,AUX,IPIV,1.,X)
+      CALL MVERII(11,IER,IV,1)
+      CALL MVERIF(12,X,X1,4)
+      CALL MVERIF(13,AUX,AUX1,1)
+
+      CALL TLRES(A,B,AUX)
+      CALL MVERIF(14,B,B2,8)
+
+      CALL TLERR(A,X,AUX,IPIV)
+      CALL MVERIF(15,X,X2,16)
+
+C--      TIMING
+      IF (ITIMES.EQ.0)  GO TO 200
+      NTIMES = ITIMES*TINF(1)
+      TINF(1) = NTIMES
+
+      CALL UCOPY (A1,A,32)
+      CALL UCOPY (B1,B,8)
+
+      CALL TIMED (TIMERD)
+      DO 50 J=1,NTIMES
+      CALL UCOPY (A,A1,32)
+      CALL UCOPY (B,B1,8)
+   50 CALL TLSC(A1,B1,AUX,IPIV,1.,X)
+      CALL TIMING(TINF)
+
+      TINF(2) = TINFL2
+      CALL TIMED (TIMERD)
+      DO 100 J=1,NTIMES
+  100 CALL TLRES(A1,B1,AUX)
+      CALL TIMING(TINF)
+
+      TINF(2) = TINFM2
+      CALL TIMED (TIMERD)
+      DO 150 J=1,NTIMES
+  150 CALL TLERR(A1,X,AUX,IPIV)
+      CALL TIMING(TINF)
+
+
+  200 CALL NEWGUY ('TLS-TLRES-TLERR.','TTLPAC  ')
+
+      M1 = 0
+      M = 6
+      CALL UCOPY(AA,A,24)
+      CALL UCOPY(BB,B,6)
+
+      CALL TLS(A,B,AUX,IPIV,0.01,X)
+      CALL MVERII(21,IER,IV,1)
+      CALL MVERIF(22,X,X3,4)
+      ZERLEV=ZEROV(3)
+      CALL MVERIF(23,AUX,AUX2,1)
+
+      CALL TLRES(A,B,AUX)
+      CALL MVERIF(24,B,B3,6)
+
+      CALL TLERR(A,A,AUX,IPIV)
+      ZERLEV = ZEROV(4)
+      CALL MVERIF(25,A,X4,16)
+
+C--      TIMING
+      IF (ITIMES.EQ.0)  RETURN
+      TINF(2) = TINFN2
+      TINF(4) = TINFN4
+
+      CALL UCOPY (AA,A,24)
+      CALL UCOPY (BB,B,6)
+
+      CALL TIMED (TIMERD)
+      DO 250 J=1,NTIMES
+      CALL UCOPY (A,AA,24)
+      CALL UCOPY (B,BB,6)
+  250 CALL TLS(AA,BB,AUX,IPIV,0.01,X)
+      CALL TIMING(TINF)
+
+      TINF(2) = TINFL2
+      CALL TIMED (TIMERD)
+      DO 300 J=1,NTIMES
+  300 CALL TLRES(AA,BB,AUX)
+      CALL TIMING(TINF)
+
+      TINF(2) = TINFM2
+      CALL TIMED (TIMERD)
+      DO 350 J=1,NTIMES
+  350 CALL TLERR(AA,X,AUX,IPIV)
+      CALL TIMING(TINF)
+      RETURN
+
+      END

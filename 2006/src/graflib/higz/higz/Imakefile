@@ -1,0 +1,16 @@
+INCLUDES=	 di3dev.inc di3met.inc di3seg.inc dicdes.inc \ @@\
+	glibm.inc glsgi.inc golden.inc grex.inc hcequi.inc hclevl.inc \ @@\
+	hcligh.inc hcline.inc hcmctr.inc hcmcub.inc hcphi.inc \ @@\
+	hcrast.inc hcscrn.inc hctnor.inc hczbuf.inc hczcli.inc \ @@\
+	hczpor.inc hczwin.inc hi3d.inc hiaadr.inc hiaca.inc hiatnb.inc \ @@\
+	hiatnm.inc hiatt.inc hibit.inc hibitvax.inc hicode.inc \ @@\
+	hicont.inc hiconv.inc hicur.inc hifc1.inc hifc2.inc hifc3.inc \ @@\
+	hifc6.inc hiflag.inc hiflat.inc higed.inc higraf.inc hihid.inc \ @@\
+	hihist.inc hikern.inc hilabs.inc hilink.inc hiloc.inc hilun.inc hilut.inc \ @@\
+	himail.inc himdos.inc himenu.inc himet2.inc himeta.inc \ @@\
+	hint.inc hipack.inc hipaw.inc hiphig.inc hipick.inc hipost.inc \ @@\
+	hiques.inc hisava.inc hisave.inc hisved.inc hivers.inc \ @@\
+	hiwcdc.inc hiwcps.inc icmtop.inc ihdes.inc kerdes.inc \ @@\
+	msdes.inc phigsdes.inc pinum.inc pnvmax.inc pilot.h
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),higz)

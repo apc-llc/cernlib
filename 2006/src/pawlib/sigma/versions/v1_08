@@ -1,0 +1,20 @@
+*
+* $Id: v1_08,v 1.1.1.1 1995/12/12 14:36:21 mclareni Exp $
+*
+* $Log: v1_08,v $
+* Revision 1.1.1.1  1995/12/12 14:36:21  mclareni
+* Imported sources
+*
+*
+*CMZ :  1.08/01 27/05/93  08.29.54  by  Rene Brun
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  1.08/01   27/05/93 08.29.54
+*
+*     LINUX flag introduced in PILOT Patch.
+*
+*::>          VERSION  1.08/00   930429  8.55
+*
+*     Changes in SIARRA required for ALPHA/VMS (A.Nathaniel)
+*
+*     Routine SIARCH modified to process the PAW graphical cuts.

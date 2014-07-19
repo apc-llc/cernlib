@@ -1,0 +1,14 @@
+SRCS_F=	ipdef.F ipdlin.F ipdraw.F ipend.F ipfon.F ipfout.F \ @@\
+	ipinit.F ipiout.F ipjout.F ipltyp.F iplwid.F ipmark.F ipmove.F \ @@\
+	ippatt.F ippstr.F iprng.F ipscol.F ipspec.F ipsvrt.F iptext.F \ @@\
+	iptlin.F iptmac.F ipttex.F ipzone.F
+
+#ifdef CERNLIB_QMVAOS
+SpecialFortranLibObjectRule(iptext,iptext,FortranNoSaveFlags,NullParameter)
+#endif
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

@@ -1,0 +1,3 @@
+SRCS_F=	 fmget.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,15 @@
+*
+* $Id: cdinme.dat,v 1.1.1.1 1996/02/28 16:24:50 mclareni Exp $
+*
+* $Log: cdinme.dat,v $
+* Revision 1.1.1.1  1996/02/28 16:24:50  mclareni
+* Hepdb, cdlib, etc
+*
+*
+#if defined(CERNLIB__CDF)
+>Name CDINME
+ 
+>Menu HEPDB
+>Guidance
+HEPDB Interactive commands
+#endif

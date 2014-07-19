@@ -1,0 +1,36 @@
+/* $Id: apollo.cf,v 1.1.1.1 1995/12/20 15:26:44 cernlib Exp $
+ *
+ * $Log: apollo.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:44  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: apollo.cf,v 1.31 93/08/07 11:24:47 rws Exp $
+
+/*
+ * Minimally tested, and only in the bsd4.3 environment.  X_NOT_POSIX is not
+ * in Xosdefs.h, because we suspect someone might want to try building with
+ * POSIX support in the sysv environment (the OS doc seems to imply that
+ * POSIX is supported in sysv).
+ */
+
+#define OSName            Domain/OS SR10.3
+XCOMM operating system:  OSName
+#define OSMajorVersion    10
+#define OSMinorVersion    3
+
+#define CCompilerMajorVersion 6
+#define CCompilerMinorVersion 8
+
+#define StandardDefines -DX_NOT_POSIX
+#define BuildServer	NO
+#define HasNdbm		YES
+#define ConnectionFlags	-DTCPCONN
+
+#define	InstallManPageLong(file,destdir,dest)				@@\
+install.man:: file.man							@@\
+	MakeDir($(DESTDIR)destdir)					@@\
+	nroff -man file.man > file.mantxt				@@\
+	$(INSTALL) -c $(INSTMANFLAGS) file.mantxt $(DESTDIR)destdir/dest.$(MANSUFFIX) @@\
+	$(RM) file.mantxt

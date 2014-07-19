@@ -1,0 +1,57 @@
+#!/bin/sh
+# **********************************************************************
+# * PAW SHELL 1.05                                                     *
+# *@(#) paw driver running the proper paw module
+# *@(#) $Header: /afs/cern.ch/asis/share/cern/CVS/scripts/paw,v 1.5 1995/02/07 09:54:06 cernlib Exp $
+# *                                                                    *
+# * Shell driver to the different versions of PAW                      *
+# *                                                                    *
+# * Author: M.Marquina 90/10/06                                        *
+# * Mods       Date   Commments                                        *
+# * MARQUINA 90/11/30 Add host option, pass on non-filtered options    *
+# *          91/08/15 Access pawGKS directly from GKS_ROOT             *
+# *          91/12/12 Correct local SUN host                           *
+# *          93/03/26 Add -display option, do not override DISPLAY     *
+# *                   clean up empty paw.metafile                      *
+# * G.Folger 93/11/02 pawGKS is now in CERN_ROOT/$ver/gksbin           *
+# * following mods are in the RCS log
+# *                                                                    *
+# **********************************************************************
+ 
+  SHOPT="d:h:v:"
+#SEQ,GETOPTD.
+  [ "`uname -s`" = "DomainOS" ] && drv="GKS" || drv="X11"
+  [ -z "$CERN"       ] && CERN="/cern"
+  [ -z "$CERN_LEVEL" ] && ver="pro" || ver="$CERN_LEVEL"
+ 
+  while [ $# -gt 0 ]
+  do case $1 in
+       -d) drv=$2 ; shift      ;;
+       -h) hst=$2 ; shift      ;;
+       -display) hst=$2 ; shift      ;;
+       -v) ver=$2 ; shift      ;;
+       --) shift ; break       ;;
+        *)         break       ;;
+     esac
+     shift
+  done
+ 
+     GDIR=$CERN/$ver/bin
+  if [ "$drv" = "GKS" ] ; then
+     [ -z "$GKS_ROOT" ] && GKS_ROOT="$CERN/gks/$ver"
+     [ -z "$GKS"      ] && . $CERN/gks/$ver/mgr/gksstart.sh
+#    inlib $GKS_INLIB
+     GDIR=$CERN/$ver/gksbin
+  fi
+  if [ "$drv" = "X11" -a -n "$hst" ] ; then
+     nw=`echo $hst | awk -F: '{ print NF }'`
+     [ $nw -eq 1 ] && hst="$hst:0"
+     DISPLAY="$hst" ; export DISPLAY
+  fi
+  if [ "$ver" != "pro" ] ; then
+     echo
+     echo " Calling $ver version of paw-$drv"
+     echo
+  fi
+  $GDIR/paw$drv $*
+  [ ! -s paw.metafile ] && rm paw.metafile

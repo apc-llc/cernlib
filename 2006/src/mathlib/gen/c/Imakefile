@@ -1,0 +1,119 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F= aslgf64.F atani64.F besi064.F besj064.F bsir364.F bsir464.F \ @@\
+	bsja64.F bzejy64.F c311bd.F cbsja64.F cdigam64.F celfun64.F \ @@\
+	celint64.F cexpin64.F cgamma64.F cgplg64.F clogam64.F \ @@\
+	clogok.F cpolyz64.F cpolyzd.F cpsipg.F crit.F csqrtk.F cwerf64.F \ @@\
+	cwhitm64.F dawson64.F dbska64.F dclaus64.F dilog64.F elfun64.F \ @@\
+	fconc64.F ferfr64.F freq64.F frsin64.F gagnc64.F \ @@\
+	gammf64.F gapnc64.F hypgm.F leg1.F legfn.F legor.F legv.F \ @@\
+	legz.F nic311.F nzerfz64.F qfunct.F reli164.F reli1c64.F \ @@\
+	reli264.F reli364.F religc64.F relikc64.F rexpin64.F rgam.F \ @@\
+	rmullz64.F rpsipg64.F rrizet64.F rrteq4.F rsnleq.F \ @@\
+	rteq3.F rteq364.F rteq464.F rtheta64.F sinint64.F snleq64.F \ @@\
+	strh064.F theta1.F trdz.F wpsipg.F zerox64.F
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) atani.F besi0.F besj0.F bsir3.F bsir4.F bsja.F \ @@\
+	cbsja.F cdigam.F celfun.F celint.F cexpin.F cgamma.F cgplg.F \ @@\
+	clogam.F cwerf.F cwhitm.F freq.F gammf.F raslgf.F rbzejy.F \ @@\
+	rclaus.F rdawsn.F rdilog.F relfun.F reli1.F reli1c.F rexpin.F \ @@\
+	rfconc.F rferfr.F rfrsin.F rgapnc.F rmullz.F rpsipg.F rrizet.F \ @@\
+	rsinin.F rstrh0.F rtheta.F rzerox.F r1dp.F r2dp.F r3dp.F r4dp.F \ @@\
+	r5dp.F r6dp.F r7dp.F r8dp.F wclbes.F 
+
+#if defined(CERNLIB_IBM)
+SRCS_F:= $(SRCS_F) alogam.F  
+#else
+SRCS_F:= $(SRCS_F) gamma.F algama.F
+#endif
+
+#else
+SRCS_F:= $(SRCS_F) atani128.F aslgf128.F besi0128.F besj0128.F bsir3128.F \ @@\
+	bsir4128.F bska.F dbska.F bzejy128.F cbsja128.F cdigam128.F \ @@\
+	cexpin128.F cgplg128.F cgamma128.F clogam128.F cwerf128.F \ @@\
+	cwhitm128.F dawson.F dawson128.F dclaus.F deli1128.F dilog.F \ @@\
+	dilog128.F dpsipg128.F erf128.F fconc128.F ferdr128.F ferfr.F \ @@\
+	rexpin128.F freq128.F frsin.F frsin128.F gammf128.F gapnc.F \ @@\
+	gapnc128.F snleq128.F strh0.F strh0128.F reli1c128.F rmullz128.F \ @@\
+	rteq3128.F rtheta128.F rteq4128.F sinint.F sinint128.F \ @@\
+	welfun128.F zerox128.F
+#endif
+
+#if defined(CERNLIB_IBMVM)
+SRCS_F:= $(SRCS_F) cbsja128.F 
+#endif
+
+
+#if defined(CERNLIB_SINGLE)
+SRCS_F:= $(SRCS_F) cclbes.F r1sp.F r2sp.F r3sp.F r4sp.F r5sp.F r6sp.F r7sp.F  
+#endif
+
+
+#if defined(CERNLIB_QUAD)
+SRCS_F:= $(SRCS_F) gamma128.F algama128.F bsja128.F 
+#endif
+
+#if defined(CERNLIB_IBM)
+SRCS_F:= $(SRCS_F) dlogam.F 
+#else
+SRCS_F:= $(SRCS_F) gamma64.F algama64.F 
+#endif
+
+/* The systems that don't have erf or not in a form that we can call
+   particularly in pawcs.F   */
+
+#if defined(CERNLIB_HPUX)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+#if defined(CERNLIB_IBMRT)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+#if defined(CERNLIB_SOLARIS)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+#if defined(CERNLIB_WINNT)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+#if defined(CERNLIB_LINUX)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+#if defined(CERNLIB_VAXVMS)
+SRCS_F:= $(SRCS_F) erf64.F erf.F
+#endif
+
+/* End of erf section */
+
+#ifdef CERNLIB_HPUX
+FORTRANOPTIONS += -WF,-P
+#endif
+
+#if defined(CERNLIB_IBMRT)
+SpecialFortranLibObjectRule(cpolyz64,cpolyz64,NullParameter,NullParameter)
+#endif
+
+#if defined(CERNLIB_QFAPOGEE)
+/* without optimization compiler crashes */
+SpecialFortranLibObjectRule(clogam,clogam,'-O',NullParameter)
+SpecialFortranLibObjectRule(clogam64,clogam64,'-O',NullParameter)
+#endif
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)
+
+#if defined(CERNLIB_QMVAOS)
+SpecialFortranLibObjectRule(cwhitm64,cwhitm64,-O,NullParameter)
+SpecialFortranLibObjectRule(nzerfz64,nzerfz64,-O,NullParameter)
+SpecialFortranLibObjectRule(wclbes,wclbes,-O,NullParameter)
+#endif

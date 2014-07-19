@@ -1,0 +1,26 @@
+*
+* $Id: README,v 1.1.1.1 1996/02/15 17:54:14 mclareni Exp $
+*
+* $Log: README,v $
+* Revision 1.1.1.1  1996/02/15 17:54:14  mclareni
+* Kernlib
+*
+*
+*       for Nord 500
+* This directory was created from kernfor.car patch qmnd3
+#ifndef CERNLIB_B32
+#define CERNLIB_B32
+#endif
+#ifndef CERNLIB_A4
+#define CERNLIB_A4
+#endif
+*               ISA standard routines, ISHFT, IOR, etc
+#ifndef CERNLIB_QISASTD
+#define CERNLIB_QISASTD
+#endif
+#ifndef CERNLIB_ENTRET
+#define CERNLIB_ENTRET
+#endif
+#ifndef CERNLIB_QDEFAULT
+#define CERNLIB_QDEFAULT
+#endif

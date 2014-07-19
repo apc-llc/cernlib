@@ -1,0 +1,36 @@
+/* $Id: pegasus.cf,v 1.1.1.1 1995/12/20 15:26:43 cernlib Exp $
+ *
+ * $Log: pegasus.cf,v $
+ * Revision 1.1.1.1  1995/12/20 15:26:43  cernlib
+ * X11R6 config files unmodified
+ *
+ *
+ */
+XCOMM platform:  $XConsortium: pegasus.cf,v 1.36 94/02/10 12:16:24 rws Exp $
+
+#define OSName             UTek 4.0
+XCOMM operating system:  OSName
+#define OSMajorVersion     4
+#define OSMinorVersion     0
+
+#define HasNdbm		   YES
+#define HasVoidSignalReturn NO
+
+#define BootstrapCFlags    -DM4310 -DUTEK
+#define StandardDefines    -DM4310 -DUTEK -Dpegasus 
+
+#if HasGcc
+/* put back all of the -Ds which -ansi removes */
+#define CcCmd gcc -ansi -fstrength-reduce -fpcc-struct-return -Dmc68000 -Dtektronix -Dutek -Dunix -Dm68k
+#endif
+
+#define BuildServer NO
+/* #define XtekServer YES */
+
+#define ServerExtraDefines   -DM4310 -DM4317
+#define ServerOSDefines -DDDXTIME
+#define FontFilters BDFTOSNFFILT SHELLPATH
+#define PrimaryScreenResolution 95
+
+.DIRECTORIES:		/* Turn off directory search for RCS */
+

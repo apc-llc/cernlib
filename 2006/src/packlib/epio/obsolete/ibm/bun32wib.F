@@ -1,0 +1,33 @@
+*
+* $Id: bun32wib.F,v 1.1.1.1 1996/03/08 15:21:51 mclareni Exp $
+*
+* $Log: bun32wib.F,v $
+* Revision 1.1.1.1  1996/03/08 15:21:51  mclareni
+* Epio
+*
+*
+#include "epio/pilot.h"
+#if defined(CERNLIB_IBM)||defined(CERNLIB_ND100B32)
+      SUBROUTINE BUN32W(SOURCE,N1,TARGET,N2,N3)
+C.+++++++ IBM, NORD 100 32-BIT VERSION ++++++++++
+C. MOVES 32 BIT WORDS INTO 32 BIT WORDS. STARTS ON ANY
+C. 16 BIT WORD IN TARGET.
+C.
+C. +++ IMPORTANT +++ COUNTS PARTLY IN 16 BIT WORDS
+C.
+C. INPUT
+C. SOURCE    SOURCE ARRAY
+C. N1        FIRST WORD TO COPY IS SOURCE(N1)
+C. TARGET    TARGET ARRAY
+C. N2        FIRST 16 BIT WORD IN TARGET
+C. N3        NO. OF WORDS TO COPY
+#if defined(CERNLIB_IBM)
+      INTEGER SOURCE(2),TARGET(2)
+#endif
+#if defined(CERNLIB_NORD)
+      INTEGER*4 N1,N2,N3,SOURCE(2),TARGET(2)
+#endif
+      CALL W16MOV(SOURCE,2*N1-1,TARGET,N2,2*N3)
+      RETURN
+      END
+#endif

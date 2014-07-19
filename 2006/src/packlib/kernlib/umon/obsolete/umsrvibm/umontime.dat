@@ -1,0 +1,19 @@
+*
+* $Id: umontime.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: umontime.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umon.times */
+ALL      +6       16:07:11 CALL W_T
+MON      23:59:00 04/15/91 CALL MIDNIGHT
+TUE      23:59:00 04/09/91 CALL MIDNIGHT
+WED      23:59:00 04/10/91 CALL MIDNIGHT
+THU      23:59:00 04/11/91 CALL MIDNIGHT
+FRI      23:59:00 04/12/91 CALL MIDNIGHT
+SAT      23:59:00 04/13/91 CALL MIDNIGHT
+SUN      23:59:00 04/14/91 CALL MIDNIGHT CLEAN_UP
+#endif

@@ -1,0 +1,6 @@
+SRCS_F=	abend.F cdback.F cdbad.F cdconf.F cddelf.F cdload.F \ @@\
+	cdlogf.F cdsend.F cdserv.F cdstop.F cdtrap.F cdwake.F
+
+CernlibFortranProgramTarget(cdserv,$(OBJS),NullParameter,NullParameter,packlib)
+
+InstallProgram(cdserv,$(CERN_BINDIR))

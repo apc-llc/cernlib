@@ -1,0 +1,38 @@
+*
+* $Id: help,v 1.1.1.1 1996/02/14 13:10:18 mclareni Exp $
+*
+* $Log: help,v $
+* Revision 1.1.1.1  1996/02/14 13:10:18  mclareni
+* Higz
+*
+*
+#include "sys/CERNLIB_machine.h"
+#include "_higz/pilot.h"
+*CMZ :  1.13/00 06/02/92  15.14.55  by  O.Couet
+*-- Author :    O.Couet   04/10/91
+   Macro HELP
+*
+   Mess ' '
+   Mess ' The installation procedure of the PAW library is:'
+   Mess ' '
+   Mess '     CMZ -INSTALL PAW LIB_NAM SRC_DIR OPTIONS'
+   Mess ' '
+   Mess ' Where :'
+   Mess ' '
+   Mess ' LIB_NAM is the library name'
+   Mess ' '
+   Mess ' SRC_DIR is the source directory name'
+   Mess ' '
+   Mess ' OPTIONS :'
+   Mess '        - DEBUG compile with debug option'
+   Mess ' '
+   Mess ' The installation procedure of the PAW examples is:'
+   Mess ' '
+   Mess '     CMZ -INSTALL PAW DIR example'
+   Mess ' '
+   Mess ' Where :'
+   Mess ' '
+   Mess ' DIR is the directory where the example will be installed'
+   Mess ' '
+*
+   Return

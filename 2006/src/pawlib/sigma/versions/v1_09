@@ -1,0 +1,87 @@
+*
+* $Id: v1_09,v 1.1.1.1 1995/12/12 14:36:21 mclareni Exp $
+*
+* $Log: v1_09,v $
+* Revision 1.1.1.1  1995/12/12 14:36:21  mclareni
+* Imported sources
+*
+*
+*CMZ :  1.09/04 26/10/93  10.02.37  by  Carlo E. Vandoni
+*-- Author :    Carlo E. Vandoni   28/07/93
+*
+*::>          VERSION  1.09/04   26/10/93 10.02.36
+*
+*
+*::>          VERSION  1.09/03   28/09/93 14.21.40
+*
+* New operators:
+*
+*  INV   Matrix inversion
+*
+*  DET   Matrix determinant
+*
+*  Routines F010 and F011 from CERN Program Library are used
+*
+*  Error messages are produced if:
+*
+*  - the matrix is singular
+*
+*  - the determinant is (felt to be) too large or too small.
+*
+*  The error messages are produced according to the F010 and F011
+*  routines specifications.
+*
+*::>          VERSION  1.09/02   19/08/93 14.43.47
+*
+* New routines as listed below protected against ill-defined values
+* Unused labels of END statements removed (causing the ALPHA
+* compiler to complian with a misleading message.
+* _ (underscore) is now allowed to appear in names.
+* NOT AS LAST CHARACTER OF COURSE!
+* Revision of error messages (now clearer)
+*
+*
+*::>          VERSION  1.09/01   05/08/93 15.39.31
+*
+*  Variable IMOD renamed to JMOD in several routines. This change
+*  was required in order to compile SIGMA on SGI systems.
+*
+*  EQUIVALENCE statements moved before DATA in routine SIDELI
+*
+*::>          VERSION  1.09/00   28/07/93 12.04.43
+*CMZ :  1.08/00 18/11/92  14.57.21  by  Unknown
+*-- Author :
+*::>          VERSION  1.09/00   930801 09.00
+* *********************
+* August 1 1993
+* Major revision of the package
+* Revision of common blocks
+* Elimination of unused and dead code
+* (Re-)Implementation of features
+*
+*
+*
+*   The following functions have been reactivated
+*
+*          DAWSON       Dawson's Integral
+*          DILOG        Dilogarithm Function
+*
+*
+*   The following functions are now accessible
+*
+*
+*          ADIGAM       Digamma or Psi Function
+*          ASINH        Hyperbolic Arcsine
+*          ATANI        Arctangent integral
+*          FRSIN        Fresnel Integrals
+*          FRCOS        Fresnel Integrals
+*          GAMMF        Gamma Function for Real Argument
+*          GAUSIN       Inverse of Gaussian Distribution
+*          RANGAM       Random Numbers in Gamma or Chisquare Distribution
+*          STRH0        Struve Functions of Order Zero
+*          STRH1        Struve Functions of Order One
+*
+*
+* Nominal speed up (5%)
+*
+* *********************

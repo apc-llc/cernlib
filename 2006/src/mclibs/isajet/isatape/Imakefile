@@ -1,0 +1,7 @@
+SRCS_F= bufin.F bufout.F edit.F isahep.F isawbg.F isawev.F \ @@\
+	isawnd.F itrans.F movlev.F prtlst.F rdbeg.F rdtape.F \ @@\
+	rend.F rgens.F wgens.F zerol.F
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

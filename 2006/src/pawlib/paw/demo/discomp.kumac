@@ -1,0 +1,40 @@
+MACRO DISCOMP
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 30 - DISCOMP                *
+* Text for slide example DISCOMP                                         *
+**************************************************************************
+exec slide sn='DisComp' title='Distributed Computing'
+igset txfp mainfont
+igset chhe 0.5
+itx 2 17 'With a distributed operating system (not yet !)'
+itx 2 15 'With tools on top (RPCs, NCS,.. ?)'
+igset chhe 0.4
+itx 3 14 Tmess
+itx 3 13 Tfork
+itx 3 12 Tdata
+itx 3 11 Tcomp
+igset txfp -70
+itx 5 14 'Time to send message to remote process'
+itx 5 13 'Time to fork a process'
+itx 5 12 'Time to pass data (in and out)'
+itx 5 11 'Time used for computation on remote process'
+igset txfp mainfont
+pave 2 16 2 9 0.3 0 1001 trs
+igset txal 33
+itx 6 7 'Efficiency ='
+igset txal 20
+line 6.1 7 14.1 7
+itx 10 7.2 Tcomp
+itx 10 6.3 'Tcomp + Tmess + Tfork + Tdata'
+igset txfp -240
+igset chhe 0.6
+igset txal 30
+itx 1.5 17 P
+itx 1.5 15 P
+igset chhe 0.3
+igset txal 20
+igset txfp 2
+itx 9 4 'Many time consuming applications today have'
+itx 9 3 'Efficiency > 0.9'
+RETURN
+

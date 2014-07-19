@@ -1,0 +1,94 @@
+*
+* $Id: fmlock.F,v 1.1.1.1 1996/03/07 15:18:14 mclareni Exp $
+*
+* $Log: fmlock.F,v $
+* Revision 1.1.1.1  1996/03/07 15:18:14  mclareni
+* Fatmen
+*
+*
+#include "fatmen/pilot.h"
+      SUBROUTINE FMLOCK(GENAM,LBANK,KEYS,CHOPT,IRC)
+*
+*     routine to lock a VID in the TMS according to CHOPT
+*     Current function is to disable Write (independant of CHOPT)
+*
+#include "fatmen/faust.inc"
+      CHARACTER*(*) GENAM,CHOPT
+      PARAMETER     (LKEYFA=10)
+      DIMENSION     KEYS(LKEYFA)
+      CHARACTER*80  COMAND
+      CHARACTER*15  VID
+#include "fatmen/tmsrep.inc"
+      CHARACTER*15  XVID
+      CHARACTER*8   VIP
+#include "fatmen/fatpara.inc"
+#include "fatmen/fatbank.inc"
+#include "fatmen/fatvid0.inc"
+#include "fatmen/fatoptd.inc"
+#include "fatmen/fatvid1.inc"
+#include "fatmen/fatoptc.inc"
+ 
+      NFLOCK = NFLOCK + 1
+ 
+      IRC = 0
+      LGN = LENOCC(GENAM)
+#if !defined(CERNLIB_TMS)
+      IF(IDEBFA.GE.0) PRINT *,
+     +                'FMLOCK. TMS option not installed on this node'
+#endif
+#if defined(CERNLIB_TMS)
+      IF(LBANK.EQ.0) THEN
+         IF(IDEBFA.GE.0) PRINT *,'FMLOCK. get bank for ',GENAM(1:LGN)
+         CALL FMGETK(GENAM(1:LGN),LBANK,KEYS,IRC)
+         IF(IRC.NE.0) THEN
+            IF(IDEBFA.GE.0)
+     +      PRINT *,'FMLOCK. Return code ',IRC,' from FMGETK'
+            IRC = 1
+            RETURN
+         ENDIF
+      ELSE
+         IF(IDEBFA.GE.0)
+     +      PRINT *,'FMLOCK. enter for user supplied bank for ',
+     +         GENAM(1:LGN)
+      ENDIF
+ 
+      IF(KEYS(MKMTFA).LT.2) THEN
+         IF(IDEBFA.GE.-1) PRINT *,'FMLOCK. request ignored for ',
+     +      'media type ',KEYS(MKMTFA)
+         RETURN
+      ENDIF
+ 
+      CALL FMGETC(LBANK,VID,MVIDFA,6,IRC)
+      LVID = LENOCC(VID)
+#endif
+#if (defined(CERNLIB_PREFIX))&&(defined(CERNLIB_TMS))
+*
+*        Generate eXtended VID - with VID prefix
+*
+      JP = IQ(LBANK+KOFUFA+MVIPFA)
+      IF(JP.NE.0) THEN
+         LVIP = LENOCC(PREVID(JP))
+         VIP = PREVID(JP)(1:LVIP)
+         XVID = PREVID(JP)(1:LVIP) // '.' // VID(1:LVID)
+         LXVID = LENOCC(XVID )
+ 
+      ELSE
+         XVID = VID
+         LXVID = LVID
+         LVIP = 0
+      ENDIF
+ 
+      VID = XVID
+      LVID = LXVID
+#endif
+#if defined(CERNLIB_TMS)
+ 
+   10 CONTINUE
+      I = LENREP
+*
+      IF(IDEBFA.GE.1) PRINT *,'FMLOCK. disable write access to ',VID
+      CALL FMSREQ('TMS     ',
+     +            'LOCK DISABLE WRITE VID '//VID(1:LVID),
+     +            IRC,TMSREP,I)
+#endif
+      END

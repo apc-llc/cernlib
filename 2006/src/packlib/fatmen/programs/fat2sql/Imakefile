@@ -1,0 +1,3 @@
+SRCS_F=	 fat2sql.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

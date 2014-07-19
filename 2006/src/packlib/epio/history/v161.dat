@@ -1,0 +1,20 @@
+*
+* $Id: v161.dat,v 1.1.1.1 1996/03/08 15:21:47 mclareni Exp $
+*
+* $Log: v161.dat,v $
+* Revision 1.1.1.1  1996/03/08 15:21:47  mclareni
+* Epio
+*
+*
+*  Version 1.61
+C   IBM flag now implies IBMVM; Flag IBMMVS added
+C   For IBM, ULP in EPBLIN is now CHARACTER*4
+C   Add AMODE/RMODE qualifiers with flag QMIBMXA to W16MOV
+C   EPBLIN and EPBOUT changed to allow for new RC=8 from IOPACK routines
+C   Minor changes to test jobs for IBM
+C
+C   Introductory changes for the CONVEX version.
+C
+C   Changes in EPOPEN_VAX to treat correctly files
+C   written by plain FORTRAN write.
+C

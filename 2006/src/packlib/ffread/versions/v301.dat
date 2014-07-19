@@ -1,0 +1,16 @@
+*
+* $Id: v301.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v301.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.01   861019
+C
+C- Correct bugs in FFREAD, FFGO
+C- Remove restriction on data cards - '3*   5' is now legal
+C- Introduce possibility to define length of input line in the
+C  range 72 to 132 characters (FFINIT, FFGET, FFSET, FFGO)
+C- Optimization for VAX in FFGO
+C

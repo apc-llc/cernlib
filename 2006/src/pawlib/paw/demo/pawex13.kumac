@@ -1,0 +1,31 @@
+MACRO PAWEX13
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 13                          *
+* Perform operations on histograms read from file and save result        *
+**************************************************************************
+Exec ALLDEF
+histogram/file 1 pawhists.hbook ! U
+hrin  0
+zon 2 2
+opt grid
+igset mtyp 26
+hi/pl 110 e
+set KSIZ 0.1
+hi/pl 110 pl
+zon 1 2 2 s
+hi/op/add 110 110 120 0.5 0.
+hi/op/add 110 110 130 0.25 0.
+set htyp 245
+hi/pl 110
+set htyp 254
+hi/pl //PAWC/120 s
+set htyp 253
+hi/pl //PAWC/130 s
+text 0.55 95. 'LEP Very Preliminary' 0.35 25.
+set htyp 0
+hrout 0
+close 1
+hi/del 0
+zone
+RETURN
+

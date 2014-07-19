@@ -1,0 +1,12 @@
+SRCS_F= hballoc.F hbnam.F hbnamc.F hbname.F hbnt.F hbset.F hcleft.F \ @@\
+	hcompr.F hcpoff.F hfnt.F hfnt1.F hfnt2.F hfntb.F hgnt.F hgnt1.F \ @@\
+	hgnt2.F hgntb.F hgntbf.F hgntf.F hgntv.F hgtdir.F hicton.F hitoc.F \ @@\
+	hnbent.F hnbfwr.F hnbmin.F hnbptr.F hnbuf.F hnbufd.F hnbuff.F \ @@\
+	hnbufr.F hndesc.F hnform.F hnhdwr.F hnmadr.F hnmptr.F hnmset.F \ @@\
+	hnpart.F hnsize.F hntdel.F hntdim.F hntdup.F hntget.F hntgeti.F \ @@\
+	hntmp.F hntmpd.F hntmpf.F hntnam.F hntnew.F hntrd.F hntrng.F \ @@\
+	hntrset.F hntsav.F hnttok.F hntvar.F hntvdef.F hntwrt.F hparnt.F \ @@\
+	hprnt.F hprnts.F hreco1.F hreco2.F hrecov.F hrzfra.F hrztoa.F \ @@\
+	huwfun.F hvxist.F hwbnam.F hwdecl.F hwpdcl.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

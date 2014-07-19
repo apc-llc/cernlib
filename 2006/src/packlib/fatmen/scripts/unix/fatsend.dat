@@ -1,0 +1,52 @@
+*
+* $Id: fatsend.dat,v 1.2 1996/04/16 06:43:42 jamie Exp $
+*
+* $Log: fatsend.dat,v $
+* Revision 1.2  1996/04/16 06:43:42  jamie
+* latest fatmen scripts from /afs/cern.ch/project/fatmen/scripts
+*
+* Revision 1.1.1.1  1996/03/07 15:17:52  mclareni
+* Fatmen
+*
+*
+#!/bin/ksh
+#
+# Check that the FATMEN server is running for all known servers
+# Restart if not, unless signal.stop file exists
+#
+
+typeset -l program
+typeset -l logfile
+typeset -l stopfile
+
+for i in /fatmen/FMSEND.log
+do
+pid=`cat $i | awk '{printf "%s\n",$14}'`
+server=`basename $i .log`
+echo
+echo Processing ${server}...
+if (test $pid)
+   then
+   if(ps -ae  | grep -qs $pid )
+      then
+      else
+         echo FATSRV not found
+         program=/fatmen/${server}/fatserv
+         logfile=${program}.log
+         echo "nohup $program > $logfile &"
+   fi
+   else
+      echo Cannot find PID of server process for $server
+      stopfile=/fatmen/${server}/todo/signal.stop
+      if [ -f $stopfile ]
+      then
+         echo Server has been stopped - remove ${stopfile} to restart
+      else
+         program=/fatmen/${server}/fatserv
+         logfile=${program}.log
+         echo To start server, type 
+         echo "nohup $program > $logfile &"
+      fi
+   fi
+done
+

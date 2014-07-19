@@ -1,0 +1,116 @@
+*
+* $Id: v1_14,v 1.1.1.1 1996/02/26 17:16:37 mclareni Exp $
+*
+* $Log: v1_14,v $
+* Revision 1.1.1.1  1996/02/26 17:16:37  mclareni
+* Comis
+*
+*
+*CMZ :  1.14/08 24/06/93  12.35.52  by  Vladimir Berezhnoi
+*-- Author :    Rene Brun   29/04/93
+*
+*::>          VERSION  1.14/08   930624 12.35
+*
+*    A bug was fixed when parsing:
+*       REAL SUB_NAME
+*       ............
+*       CALL SUB_NAME(ARG...)
+*
+*::>          VERSION  1.14/07   930609 12.52
+*
+*
+*    A bug was fixed in CSIODV routine, cause misprint
+*    during added corrections for LINUX version.
+*    A bug was fixed in parsing CHARACTER NAME*(IPAR)
+*
+*::>          VERSION  1.14/06   930607 15.10
+*
+*
+*     A character constant can lasts more then one line:
+*       '  string
+*    +     cont. string'
+*
+*::>          VERSION  1.14/05   930603 19.08
+*
+*
+*     New decks added CSCALIA,CSCALRA and CSCALDA with a flag ALPHA_OSF
+*     MVBITS intrinsic routine added
+*     Corrections for LINUX by V.Balashov
+*     For MJCHARS and MJSUBRS decks the flag SUN changed to OLDVSUN.
+*
+*::>          VERSION  1.14/04   930527 12.00
+*
+*
+*     Added intrinsic functions ISHFTC and IBITS
+*     Added functions LOCF and LOCB
+*     CHARACTER *(const_int_expr) is permit
+*
+*::>          VERSION  1.14/03   930526 11.44
+*
+*
+*     Added IMPLICIT NONE statement
+*     New routine CSALLO,IF=UNIX.
+*     This routine allocate a block of memory then /MDPOOL/ is full.
+*       Correction for DESY
+*        +SELF,IF=IBMMVS.
+* +++          CALL KMVSSH(COMMAN)
+* ---          CALL KXSHEL
+*
+*::>          VERSION  1.14/02   930525  9.50
+*
+*
+*     Changes in CSTRAN:
+*        The sequence of ** operators is evaluted as in FORTRAN.
+*
+*        Under !FORTRAN directive a call statement like
+*                 ENTRY X(Y)
+*        will cause    ^ SYNTAX ERROR
+*
+*        The bug was fixed in parsing COMMONs statement, like
+*            CHARACTER *12 TEXT1,TEXT2
+*            COMMON/XXX/TEXT1,TEXT2
+*           +      /ZZZ/I,J,K
+*
+*      Added INCLUDE statement
+*
+*        INCLUDE file  or INCLUDE 'file'
+*
+*::>          VERSION  1.14/01   11/05/93 10.19.43
+*
+*      Changes in CSMKVD. Routine now called without arguments.
+*
+*      New routines CSR1FN, CSR2FN and CSR3FN. These routines are
+*      faster than the general routine CSRJCL. CSR1FN is a replacement
+*      for the obsolete routine CSRPAW.
+*
+*     1.  Vector statement can be used in more then one routine.
+*     2.  Vector can be redefined in the main program.
+*     3.  COMIS treatment correctly any ZEBRA bank movement.
+*     4.  A list-directed WRITE statement generate multiple
+*         records in the case when i/o list contains more items
+*         than fit on a single line.
+*     5.  A list-directed READ statement reads multiple records
+*         in the same case as 4.
+*     6.  Added intrinsic functions:
+*           IOR IEOR IAND ISHFT BTEST IBSET IBCLS and NINT
+*     7.  Inline comments with ! now possible
+*
+*::>          VERSION  1.14/00   930429  8.43
+*
+*      Extensions to CSEXT to specify the type of functions.
+*      CALL CSEXT('MYFUNC.I,CHFUNC.C,RFUNC.R,...
+*        declares MYFUNC to be an INTEGER Function
+*                 CHFUNC to be a CHARACTER Function
+*                 RFUNC to be a REAL Function
+*        Recognised types are: I,R,C,L(logical), X(complex), S(Subroutine)
+*        Note that the default type is S.
+*
+*      New routine CSTYPE(csaddr(name),chtype) to return the type of name
+*       following the CSEXT convention.
+*
+*      At compilation time, the COMIS data stack is preset to 0
+*
+*      The COMIS_SCRATCH file is overwritten at every new compilation.
+*      This avoids problems with PAW when users specify many times the
+*      same COMIS file in ntuple expressions.
+

@@ -1,0 +1,36 @@
+*
+* $Id: history.dat,v 1.1.1.1 1996/02/15 17:54:30 mclareni Exp $
+*
+* $Log: history.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:30  mclareni
+* Kernlib
+*
+*
+* This directory was created from kernibx.car patch kernibx
+#if !defined(CERNLIB_KERNIBX)
+
+       KERNLIB routines in machine language or otherwise special
+                        for IBM 3090 with AIX
+
+---------------------------------------------------------------------
+
+             This file contains the following Patches :
+
+Pilot patches
+-------------
+
+*KIBX     Kern IBM pilot for system AIX 370
+
+*KIBXVF   Kern pilot for the vector facility
+
+Other patches
+-------------
+
+QMIBXVF   option : using the Vector Facility
+
+IBXGS     IBM specific normal routines
+
+IBXSYS    System routines for system AIX 370
+
+=====================================================================
+#endif

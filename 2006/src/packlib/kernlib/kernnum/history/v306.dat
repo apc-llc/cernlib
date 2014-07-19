@@ -1,0 +1,27 @@
+*
+* $Id: v306.dat,v 1.1.1.1 1996/02/15 17:48:34 mclareni Exp $
+*
+* $Log: v306.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:48:34  mclareni
+* Kernlib
+*
+*
+*  Version 3.06  910209 13.25
+C-  Updates to current version:
+C/2 > P=FKERNNUM             Add HPUX,MIPS,IBMVM,VAXVMS
+C                            Make FTN=FORTRAN flag in steering patches
+C/1 > P=FKERNNUM             DO not +USE,NUMAP1F for CONVEX
+C
+C-  New patches/flags:
+C     SKERNNUM:  Source patch
+C     FKERNNUM:  Flags  patch
+C     DKERNNUM:  Documentation patch (originally in P=HISTORY + P=INFORM)
+C                segmenting version updates in decks
+C
+C-  Modifications:
+C   > P=D209FORT,D=RKSTP     Define EXTERNAL SUB
+C   > P=D209FORT,D=DRKSTP    Define EXTERNAL SUB
+C   > P=D509FORT,D=D509HI    Define EXTERNAL F
+C   > P=C205FORT,D=RZERO     Define EXTERNAL F
+C   > P=E106FORT             Add Vector version for IBM
+C

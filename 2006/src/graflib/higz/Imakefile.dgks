@@ -1,0 +1,23 @@
+DoIncludePackage(higz)
+
+/*   include rules for subdirs explicitely #define IHaveSubdirs
+ */
+
+#define PassCDebugFlags
+
+IMAKE_DEFINES= -DCERNLIB_DECGKS
+
+LIBDIRS= iz ig ig3 ih ipost menu ged igks higzcc
+
+SUBDIRS= $(LIBDIRS)
+
+TopOfPackage(higzdgks)
+
+SubdirExtraLibraryTarget(grafdgks,NullParameter,$(LIBDIRS),dgks)
+
+InstallLibrary(grafdgks,$(CERN_LIBDIR))
+
+MakeSubdirsNamedMakefiles($(SUBDIRS),tree,dgks)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)
+

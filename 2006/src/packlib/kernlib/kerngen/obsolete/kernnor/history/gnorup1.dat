@@ -1,0 +1,166 @@
+*
+* $Id: gnorup1.dat,v 1.1.1.1 1996/02/15 17:54:46 mclareni Exp $
+*
+* $Log: gnorup1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:54:46  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNNOR)
+ 
+          UP-DATE RECORD FOR GENNOR VERSIONS 1.01 TO 1.16
+          -----------------------------------------------
+ 
+ 
+          FIRST RELEASE OF THE GENNOR MINI-PAM :   18 JULY 1980
+ 
+---------------------------------------------------------------------
+ 
+ 
+UP-DATE  1.02 :  30-JULY-1980
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.01  10-JULY-1980
+ 
+CORRECTIONS :  P=NORD2, D=IUMODE     CHANGE OF CALLING SEQUENCE
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.03 :  24-MAR-1981
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.02  30-JULY-1980
+ 
+NEW PATCH   :  P=*GNORD3 AND P=NORD3  FOR THE NORD 500
+CORRECTIONS :  CHANGE NAME  P=NORD50 TO P=NORD2
+               D=IUMODE CHANGED TO ALLOW 24-BIT INTEGERS
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.04 :  18-MAY-1981
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.03  24-MAR-1981
+ 
+NEW PATCH   :  P=NORDSYS    ROUTINES COMMON TO 500 AND 50
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.05 :  21-MAY-1981
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.04  18-MAY-1981
+ 
+MANY NEW MACHINE LANGUAGE ROUTINES FOR THE NORD 500
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.06 :  9-JUNE-1981
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.05  21-MAY-1981
+ 
+ADD DUMMY ROUTINE TRACEQ
+ 
+---------------------------------------------------------------------
+ 
+UP-DATE  1.07 :  29-JUNE-1981
+-----------------------------
+ 
+REPLACING FILE  GENNOR 1.06  9-JUNE-1981
+ 
+CORRECTED      PKBYT, PKCHAR
+REPLACED       DUMMY ROUTINE TRACEQ
+ADDED NEW M.L. INCBYT, IUBIN, IUHIST, NOARG, UBITS
+               UPKBYT, UPKCH
+               TRAC1Q, TRAC2Q
+ 
+---------------------------------------------------------------
+ 
+UP-DATE  1.08 :  7-AUG-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.07
+ 
+ADDED ROUTINES FOR TIMING: TIMEX,TIMED,TIMEL(DUMMY)
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.09 :  5-NOV-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.08  7-AUG-81
+ 
+ADDED ROUTINE  D=ABEND IN P=NORDSYS
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.10 : 16-NOV-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.09  5-NOV-81
+ 
+BUG FIXED IN D=INCBYT OF P=NORD3
+USE OF PER-CENT IN MACHINE-LANGUAGE COMMENTS CORRECTED
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.11 : 24-NOV-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.10  16-NOV-81
+ 
+BUG FIXED IN D=NOARG OF P=NORD3
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.12 : 26-NOV-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.11  24-NOV-81
+ 
+NEW VERSION OF UBUNCH
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.13 :  2-DEC-1981
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.12  26-NOV-81
+ 
+NEW ROUTINES:  UCTOH1, UCTOH, UH1TOC, UHTOC
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.14 :  29-JUL-1982
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.13   2-DEC-81
+ 
+TIDY UP COMMENT CARDS ONLY TO PREPARE FOR KERNNOR PAM
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.15 :   7-OCT-1982
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.14  29-JUL-82
+ 
+NEW PATCHES  P= *KNORD3, *KNORD2
+ADD USE,T=INH CARDS TO LOCF
+ 
+------------------------------------------------------------------
+ 
+UP-DATE  1.16 :   2-DEC-1982
+------------------------------
+ 
+REPLACING FILE  GENNOR 1.15  821007 12.48
+ 
+CORRECT TIMED, TIDY UP TIMEX, REMOVE DUMMY TIMEL
+ 
+------------------------------------------------------------------
+ 
+              KERNNOR 2.00  =  GENNOR 1.16
+ 
+---------------------------------------------------------------------
+#endif

@@ -1,0 +1,9 @@
+SRCS_F=	fpgetpnam.F fpgoptd.F fpgoptu.F fpgoptw.F fphgetfmod.F \ @@\
+	fphgetrng.F fphgrend.F fphgrinit.F fphgrupdt.F fphplot.F \ @@\
+	fphsetfmod.F fphsetid.F fphsetrng.F fphstart.F fpmninit.F \ @@\
+	fpsavev.F fpsetnpar.F fpsetpnam.F fpsetufcn.F fpsoptd.F \ @@\
+	fpsoptu.F fpsoptw.F fpvexist.F fpvgetfmod.F fpvgetnam.F \ @@\
+	fpvgrend.F fpvgrinit.F fpvgrupdt.F fpvplot.F fpvset.F \ @@\
+	fpvsetfmod.F fpvstart.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

@@ -1,0 +1,93 @@
+CDECK  ID>, SHWXQT.
+      SUBROUTINE SHWXQT
+
+C-    Write the .xqtlog file
+C.    started 5-may-94
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      PARAMETER     (NSLIFI=128)
+      CHARACTER      CHLIFI*(NSLIFI), CHLIEX*8
+      COMMON /FLINKC/LUNOP,LUNFD,LUNOLD,LUNSIZ
+     +,              IXFLUN, NLIFI,CHLIFI,CHLIEX
+      PARAMETER     (NTYSZ=4, NACSZ=4, NLNSZ=4,  NRTSZ=10000)
+      CHARACTER      CHNLOG*80,    CODEX*8, CHTYP*8
+      COMMON /SHMKC/ NNLOG,CHNLOG, CODEX,   CHTYP(17)
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+     +,    NLINST(4,NACSZ,NTYSZ), IXINST(NLNSZ,4,NACSZ,NTYSZ)
+     +,    NCOUNTR(4,NTYSZ), NCSUMR(NTYSZ)
+     +,    NCOUNTH(4,NTYSZ), NCSUMH(NTYSZ), IXOPTN(4,3), IXOPTP(4,3)
+     +,    NRXQT, NROUT, NNAME(NRTSZ),  NRALLC, NRDEL
+     +,    LUNSH, IXOBJ, IXSDIR,  JXTYP, JXACT, JXSTR,  LASTSH
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*64,       LINEWK*256
+      EQUIVALENCE (LINE,SLLINE), (LINEWK,SLLINE)
+
+      IAND (IZV,IZW) = AND (IZV, IZW)
+      ISHFTR (IZW,NZB) = ISHFT (IZW, -NZB)
+
+
+C--       open the  .xqtlog file for output
+
+      CHLIFI = CHNLOG(1:NNLOG) // '.xqtlog'
+      NLIFI  = NNLOG + 7
+      CALL FLINK (LUNSH, 5, 0, 0)
+
+C--       record the compiler options used
+
+      WRITE (LUNSH,9001)
+ 9001 FORMAT ('>.xqtlog')
+ 9000 FORMAT (A)
+
+      DO 27  JTYP=1,3
+      IF (NCSUMH(JTYP).EQ.0)        GO TO 27
+
+      DO 26  JSTR=1,4
+      IF (NCOUNTH(JSTR,JTYP).EQ.0)  GO TO 26
+
+      LINEWK = '>'
+      CALL SMSID (JTYP,JSTR,LINEWK,2)
+
+      CALL NA_GET (IXOPTN(JSTR,JTYP), LINEWK,10)
+      N = NESLAT - 1
+
+      WRITE (LUNSH,9000) LINEWK(1:N)
+   26 CONTINUE
+   27 CONTINUE
+
+C--       write the properties of each routine
+C-        NNAME(JR) = ((IXNAME*8 + JXTYP)*8 + JXSTR)*4 + IFLNEW
+C-                                         IFLNEW = 2 if "same"
+      DO  47  JRT=NRXQT+1,NROUT
+      JJ   = NNAME(JRT)
+      JJ   = ISHFTR(JJ,2)
+      JSTR = IAND (JJ,7)
+      JJ   = ISHFTR (JJ,3)
+      JTYP = IAND (JJ,7)
+      IXNA = ISHFTR (JJ,3)
+
+      LINE = ' '
+      CALL SMSID (JTYP,JSTR,LINE,2)
+
+      CALL NA_GET (IXNA, LINE, 10)
+      N = NESLAT
+
+      WRITE (LUNSH,9000) LINE(1:N-1)
+   47 CONTINUE
+      CLOSE (LUNSH)
+      RETURN
+      END

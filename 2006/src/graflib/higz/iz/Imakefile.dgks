@@ -1,0 +1,34 @@
+DoIncludePackage(higz)
+#include "pilot.h"
+
+SRCS_F=	izctoi.F izctor.F izitoc.F izpave.F izrtoc.F izsav.F izsava.F \ @@\
+	izset.F izseta.F
+
+#if defined(CERNLIB_ZEBRA)
+SRCS_F := $(SRCS_F) izcda.F izcfa.F izcopy.F izdatt.F izdipi.F izdnb.F	\ @@\
+	izfa3.F izfile.F izgadr.F izgcod.F izghnp.F izgngt.F izgnnt.F	\ @@\
+	izgntp.F izin.F izincf.F izinci.F izincs.F izinit.F izmerg.F	\ @@\
+	izml3.F izopen.F izout.F izpict.F izpl3.F izpm3.F izpush.F	\ @@\
+	izrpip.F izscan.F izscpi.F izscr.F izsenv.F izstcc.F iztx3.F	\ @@\
+	izwip.F
+#endif
+
+#if defined(CERNLIB_ZEBRA) || defined(CERNLIB_MAIL)
+SRCS_F := $(SRCS_F) izarc.F izatt.F izaxis.F izend.F izfbox.F izgrap.F	\ @@\
+	izhist.F izlbl.F izml.F izscor.F iztabl.F iztext.F
+#endif
+
+#if defined(CERNLIB_ZEBRA) || defined(CERNLIB_MAIL) || defined(CERNLIB_PSCRIPT)
+SRCS_F := $(SRCS_F) izbox.F izclrd.F izfa.F izpl.F izpm.F izscli.F	\ @@\
+	izseln.F iztx.F
+#endif
+
+#if !defined(CERNLIB_NTC) && !defined(CERNLIB_X11)
+SRCS_F := $(SRCS_F) izgnt.F 
+#endif
+
+SubdirExtraLibraryTarget(NullParameter,NullParameter,NullParameter,dgks)
+
+VersionFortranObjectRule(dgks,NullParameter,-DCERNLIB_DECGKS)
+
+BuildNamedMakefileTarget(Makefile.dgks,Imakefile.dgks,-DCERNLIB_DECGKS)

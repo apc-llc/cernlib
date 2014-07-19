@@ -1,0 +1,15 @@
+MACRO PAWEX21
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 21                          *
+* Two dimensional Ntuple distributions                                   *
+**************************************************************************
+Exec ALLDEF
+hi/file 2 aptuple.hbook
+clr
+2d 20 ' ' 12 3 15 16 0 16 0.
+Nt/project 20 //LUN2/10.step%grade
+lego 20(1:,7:) 20 40
+close 2
+hi/de 0
+RETURN
+

@@ -1,0 +1,791 @@
+\newpage
+\section{Physics\label{PHYSICS}}
+
+      ISAJET is a Monte Carlo program which simulates $pp$, $\bar pp$
+and $e^+e^-$ interactions at high energy. 
+The program incorporates
+perturbative QCD cross sections, initial state and final state QCD
+radiative corrections in the leading log approximation, independent
+fragmentation of quarks and gluons into hadrons, and a
+phenomenological model tuned to minimum bias and hard scattering data
+for the beam jets.
+
+\subsection{Hard Scattering\label{hard}}
+
+      The first step in simulating an event is to generate a primary
+hard scattering according to some QCD cross section. This has the
+general form
+$$
+\sigma = \sigma_0  F(x_1,Q^2) F(x_2,Q^2)
+$$
+where $\sigma_0$ is a cross section calculated in QCD perturbation
+theory, $F(x,Q^2)$ is a structure function incorporating QCD scaling
+violations, $x_1$ and $x_2$ are the usual parton model momentum
+fractions, and $Q^2$ is an appropriate momentum transfer scale.
+
+      For each of the processes included in ISAJET, the basic cross
+section $\sigma_0$ is a two-body one, and the user can set limits on
+the kinematic variables and type for each of the two primary jets. For
+DRELLYAN and WPAIR events the full matrix element for the decay of the
+W's into leptons or quarks is also included.
+
+      The following processes are available:
+
+\subsubsection{Minbias} No hard scattering at all, so that the event
+consists only of beam jets. Note that at high energy the jet cross
+sections become large. To represent the total cross section it is
+better to use a sample of TWOJET events with the lower limit on pt
+chosen to give a cross section equal to the inelastic cross section or
+to use a mixture of MINBIAS and TWOJET events.
+
+\subsubsection{Twojet} All order $\alpha_s^2$ QCD processes, which
+give rise in lowest order to two high-$p_t$ jets. Included are, e.g.
+\begin{eqnarray*}
+g + g &\to& g + g\\
+g + q &\to& g + q \\
+g + g &\to& q + \bar q
+\end{eqnarray*}
+Masses are neglected for $c$ and lighter quarks but are taken into
+account for $b$ and $t$ quarks. The $Q^2$ scale is taken to be
+$$
+Q^2 = 2stu/(s^2+t^2+u^2)
+$$
+The default parton distributions are those of the CTEQ Collaboration,
+fit CTEQ3L, using lowest order QCD evolution. Two older fits, Eichten,
+Hinchliffe, Lane and Quigg (EHLQ), Set~1, and Duke and Owens, Set~1,
+are also included. There is also an interface to the CERN PDFLIB
+compilation of parton distributions. Note that structure functions for
+heavy quarks are included, so that processes like
+$$
+g + t \to g + t
+$$
+can be generated. The Duke-Owens parton distributions do not contain b
+or t quarks.
+
+      Since the $t$ is so heavy, it decays before it can hadronize, so
+instead of $t$ hadrons a $t$ quark appears in the particle list. It is
+decayed using the $V-A$ matrix element including the $W$ propagator
+with a nonzero width, so the same decays should be used for $m_t < m_W$
+and $m_t > m_W$; the $W$ should {\it not} be listed as part of the decay
+mode.  The partons are then evolved and fragmented as usual; see
+below. The real or virtual $W$ and the final partons from the decay,
+including any radiated gluons, are listed in the particle table,
+followed by their fragmentation products.  Note that for semileptonic
+decays the leptons appear twice: the lepton parton decays into a
+single particle of the same type but in general somewhat different
+momentum. In all cases only particles with $\verb|IDCAY| = 0$ should be
+included in the final state.
+
+      A fourth generation $x,y$ is also allowed. Fourth generation
+quarks are produced only by gluon fusion. Decay modes are not included
+in the decay table; for a sequential fourth generation they would be
+very similar to the t decays. In decays involving quarks, it is
+essential that the quarks appear last.
+
+\subsubsection{Drellyan} Production of a $W$ in the standard model,
+including a virtual $\gamma$, a $W^+$, a $W^-$, or a $Z^0$, and its
+decay into quarks or leptons. If the transverse momentum QTW of the
+$W$ is fixed equal to zero then the process simulated is
+\begin{eqnarray*}
+q + \bar q \to W &\to& q + \bar q \\
+                 &\to& \ell + \bar\ell
+\end{eqnarray*}
+Thus the $W$ has zero transverse momentum until initial state QCD
+corrections are taken into account. If non-zero limits on the
+transverse momentum $q_t$ for the $W$ are set, then instead the
+processes
+\begin{eqnarray*}
+q + \bar q &\to& W + g \\
+g + q      &\to& W + q
+\end{eqnarray*}
+are simulated, including the full matrix element for the $W$ decay.
+These are the dominant processes at high $q_t$, but they are of course
+singular at $q_t=0$. A cutoff of the $1/q_t^2$ singularity is made by
+the replacement
+$$
+1/q_t^2 \to 1/\sqrt{q_t^4+q_{t0}^4} \quad q_{t0}^2 =  (.2\,\GeV) M
+$$
+This cutoff is chosen to reproduce approximately the $q_t$ dependence
+calculated by the summation of soft gluons and to give about the right
+integrated cross section. Thus this option can be used for low as well
+as high transverse momenta.
+
+      The scale for QCD evolution is taken to be proportional to the
+mass for lowest order Drell-Yan and to the transverse momentum for
+high-$p_t$ Drell-Yan. The constant is adjusted to get reasonable
+agreement with the $W + n\,{\rm jet}$ cross sections calculated from
+the full QCD matrix elements by F.A. Berends, et al., Phys.\ 
+Lett.\ B224, 237 (1989).
+
+      For the processes $g + b \to W + t$ and $g + t \to Z + t$, cross
+sections with a non-zero top mass are used for the production and the
+$W/Z$ decay. These were calculated using FORM 1.1 by J.~Vermaseren. The
+process $g + t \to W + b$ is {\it not} included. Both $g + b \to W^- +
+t$ and $g + \bar t \to W^- + \bar b$ of course give the same $W^- + t
++\BARB_FINALSTATEAFTERQCDEVOLUTION
+needed to describe the $m_t = 0$(!) mass singularity for $q_t \gg
+m_t$, it has a pole in the physical region at low $q_t$ from on-shell
+$t \to W + b$ decays. There is no obvious way to avoid this without
+introducing an arbitrary cutoff.  Hence, selecting only $W + b$ will
+produce a zero cross section. The $Q^2$ scale for the parton
+distributions in these processes is replaced by $Q^2 + m_t^2$; this
+seems physically sensible and prevents the cross sections from
+vanishing at small $q_t$.
+
+\subsubsection{Photon} Single and double photon production through the
+lowest order QCD processes
+\begin{eqnarray*}
+g + q &\to& \gamma + q \\
+q + \bar q &\to& \gamma + g \\
+q + \bar q &\to& \gamma + \gamma
+\end{eqnarray*}
+Higher order corrections are not included. But $\gamma$'s, $W$'s, and
+$Z$'s are radiated from final state quarks in all processes, allowing
+study of the bremsstrahlung contributions.
+
+\subsubsection{Wpair} Production of pairs of W bosons in the standard
+model through quark-antiquark annihilation,
+\begin{eqnarray*}
+q + \bar q &\to& W^+ + W^- \\
+           &\to& Z^0 + Z^0 \\
+           &\to& W^+ + Z^0, W^- + Z^0 \\
+           &\to& W^+ + \gamma, W^- + \gamma \\
+           &\to& Z^0 + \gamma
+\end{eqnarray*}
+The full matrix element for the W decays, calculated in the narrow
+resonance approximation, is included. However, the higher order
+processes, e.g.
+$$
+q + q \to q + q + W^+ + W^-
+$$
+are ignored, although they in fact dominate at high enough mass.
+Specific decay modes can be selected using the WMODEi keywords.
+
+\subsubsection{Higgs} Production and decay of the standard model Higgs
+boson. The production processes are
+\begin{eqnarray*}
+g + g      &\to& H \quad\hbox{(through a quark loop)} \\
+q + \bar q &\to& H \quad\hbox{(with $t + \bar t$ dominant)} \\
+W^+ + W^-  &\to& H \quad\hbox{  (with longitudinally polarized $W$)} \\
+Z^0 + Z^0  &\to& H \quad\hbox{ (with longitudinally polarized $Z$)}
+\end{eqnarray*}
+If the (Standard Model) Higgs is lighter than $2 M_W$, then it will
+decay into pairs of fermions with branching ratios proportional to
+$m_f^2$. If it is heavier than $2 M_W$, then it will decay primarily
+into $W^+ W^-$ and $Z^0 Z^0$ pairs with widths given approximately by
+\begin{eqnarray*}
+\Gamma(H \to W^+ W^-) &=& {G_F M_H^3 \over 8 \pi \sqrt{2} } \\
+\Gamma(H \to Z^0 Z^0) &=& {G_F M_H^3 \over 16 \pi \sqrt{2} }
+\end{eqnarray*}
+Numerically these give approximately
+$$
+\Gamma_H = 0.5\,{\rm TeV} \left({M_H \over 1\,{\rm TeV}}\right)^3
+$$
+The width proportional to $M_H^3$ arises from decays into longitudinal
+gauge bosons, which like Higgs bosons have couplings proportional to
+mass.
+
+      Since a heavy Higgs is wide, the narrow resonance approximation is
+not valid. To obtain a cross section with good high energy behavior, it
+is necessary to include a complete gauge-invariant set of graphs for the
+processes
+\begin{eqnarray*}
+W^+ W^- &\to& W^+ W^- \\
+W^+ W^- &\to& Z^0 Z^0 \\
+Z^0 Z^0 &\to& W^+ W^- \\
+Z^0 Z^0 &\to& Z^0 Z^0
+\end{eqnarray*}
+with longitudinally polarized $W^+$, $W^-$, and $Z^0$ bosons in the
+initial state. This set of graphs and the corresponding angular
+distributions for the $W^+$, $W^-$, and $Z^0$ decays have been
+calculated in the effective $W$ approximation and included in HIGGS.
+The $W$ structure functions are obtained by integrating the EHLQ
+parameterization of the quark ones term by term. The Cabibbo-allowed
+branchings
+\begin{eqnarray*}
+q &\to& W^+ + q' \\
+q &\to& W^- + q' \\
+q &\to& Z^0 + q
+\end{eqnarray*}
+are generated by backwards evolution, and the standard QCD evolution is
+performed. This correctly describes the $W$ collinear singularity and
+so contains the same physics as the effective $W$ approximation.
+
+      If the Higgs is lighter than $2M_W$, then its decay to
+$\gamma\gamma$ through $W$ and $t$ loops may be important. This is
+also included in the HIGGS process and may be selected by choosing
+\verb|GM| as the jet type for the decay.
+
+      If the Higgs has $M_Z < M_H < 2M_Z$, then decays into one real
+and one virtual $Z^0$ are generated if the \verb|Z0 Z0| decay mode is
+selected, using the calculation of Keung and Marciano, Phys.\ Rev.\
+D30, 248 (1984). Since the calculation assumes that one $Z^0$ is
+exactly on shell, it is not reliable within of order the $Z^0$ width
+of $M_H = 2M_Z$; Higgs and and $Z^0 Z^0$ masses in this region should
+be avoided. The analogous Higgs decays into one real and one virtual
+charged W are not included.
+
+      Note that while HIGGS contains the dominant graphs for Higgs
+production and graphs for $W$ pair production related by gauge invariance,
+it does not contain the processes
+\begin{eqnarray*}
+q + \bar q &\to& W^+ W^- \\
+q + \bar q &\to& Z^0 Z^0
+\end{eqnarray*}
+which give primarily transverse gauge bosons. These must be generated
+with WPAIR.
+
+      If the \verb|MSSMi| or \verb|SUGRA| keywords are used with
+HIGGS, then one of the three MSSM neutral Higgs is generated instead
+using gluon-gluon and quark-antiquark fusion with the appropriate SUSY
+couplings. Since heavy CP even SUSY Higgs are weakly coupled to W
+pairs and CP odd ones are completely decoupled, $WW$ fusion and $WW
+\to WW$ scattering are not included in the SUSY case. ($WW \to WW$ can
+be generated using the Standard Model process with a light Higgs mass,
+say 100 GeV.) The MSSM Higgs decays into both Standard Model and SUSY
+modes as calculated by ISASUSY are included. For more discussion see
+the SUSY subsection below and the writeup for ISASUSY. The user must
+select which Higgs to generate using HTYPE; see Section 6 below. If a
+mass range is not specified, then the range mass $M_H \pm 5\Gamma_H$
+is used by default. (This cannot be done for the Standard Model Higgs
+because it is so wide for large masses.) Decay modes may be selected
+in the usual way.
+
+\subsubsection{WHiggs} Generates associated production of gauge and
+Higgs bosons, i.e.,
+$$
+q + \bar q \to H + W, H + Z\,,
+$$
+in the narrow resonance approximation. The desired subprocesses can be
+selected with JETTYPEi, and specific decay modes of the $W$ and/or $Z$
+can be selected using the WMODEi keywords. Standard Model couplings are
+assumed unless SUSY parameters are specified, in which case the SUSY
+couplings are used.
+
+\subsubsection{SUSY} Generates pairs of supersymmetric particles from
+gluon-quark or quark-antiquark fusion. If the MSSMi or SUGRA
+parameters defined in Section 6 below are not specified, then only
+gluinos and squarks are generated:
+\begin{eqnarray*}
+g + g      &\to& \tilde g + \tilde g \\
+q + \bar q &\to& \tilde g + \tilde g \\
+g + q      &\to& \tilde g + \tilde q \\
+g + g      &\to& \tilde q + \tilde{\bar q} \\
+q + \bar q &\to& \tilde q + \tilde{\bar q} \\
+q + q      &\to& \tilde q + \tilde q
+\end{eqnarray*}
+Left and right squarks are distinguished but assumed to be degenerate.
+Masses can be specified using the \verb|GAUGINO|, \verb|SQUARK|, and
+\verb|SLEPTON| parameters described in Section 6. No decay modes are
+specified, since these depend strongly on the masses. The user can
+either add new modes to the decay table (see Section 9) or use the
+\verb|FORCE| or \verb|FORCE1| commands (see Section 6).
+
+      If \verb|MSSMA|, \verb|MSSMB|, and \verb|MSSMC| are specified,
+then the ISASUSY package is used to calculate the masses and decay
+modes in the minimal supersymmetric extension of the standard model
+(MSSM), assuming SUSY grand unification constraints in the neutralino
+and chargino mass matrix but allowing some additional flexibility in
+the masses. The scalar particle soft masses are input via
+\verb|MSSMi|, so that the physical masses will be somewhat different
+due to $D$-term contributions and mixings for 3rd generation sparticles.
+$\tilde t_1$ and $\tilde t_2$ production and decays are now included.
+The lightest SUSY particle is assumed to be the lightest neutralino
+$\tilde Z_1$. If the \verb|MSSMi| parameters are specified, then the
+following additional processes are included using the MSSM couplings
+for the production cross sections:
+\begin{eqnarray*}
+g + q    &\to& \tilde Z_i + \tilde q, \quad \tilde W_i + \tilde q \\
+q + \bar q &\to& \tilde Z_i + \tilde g, \quad \tilde W_i + \tilde g \\
+q + \bar q &\to& \tilde W_i + \tilde Z_j \\
+q + \bar q &\to& \tilde W_i^+ + \tilde W_j^- \\
+q + \bar q &\to& \tilde Z_i + \tilde Z_j \\
+q + \bar q &\to& \tilde\ell^+ + \tilde\ell^-, \quad \tilde\nu + \tilde\nu
+\end{eqnarray*}
+Processes can be selected using the optional parameters described in
+Section 6 below.
+
+      Beginning with Version 7.42, matrix elements are taken into
+account in the event generator as well as in the calculation of decay
+widths for MSSM three-body decays of the form $\tilde A \to \tilde B f
+\bar f$, where $\tilde A$ and $\tilde B$ are gluinos, charginos, or
+neutralinos. This is implemented by having ISASUSY save the poles and
+their couplings when calculating the decay width and then using these
+to reconstruct the matrix element. Other three-body decays may be
+included in the future. Decays selected with \verb|FORCE| use the
+appropriate matrix elements.
+
+      An optional keyword \verb|MSSMD| can be used to specify the second
+generation masses, which otherwise are assumed degenerate with the first
+generation. An optional keyword \verb|MSSME| can be used to specify
+values of the $U(1)$ and $SU(2)$ gaugino masses at the weak scale rather
+than using the default grand unification values. The chargino and
+neutralino masses and mixings are then computed using these values.
+
+      Instead of using the \verb|MSSMi| parameters, one can use the
+\verb|SUGRA| parameter to specify in the minimal supergravity framework.
+This assumes that the gauge couplings unify at a GUT scale and that SUSY
+breaking occurs at that scale with universal soft breaking terms, which
+are related to the weak scale using the renormalization group. The
+renormalization group equations now include all the two-loop terms for
+both gauge and Yukawa couplings and the possible contributions from
+right-handed neutrinos. The parameters of the model are
+\begin{itemize}
+\item $m_0$: the common scalar mass at the GUT scale;
+\item $m_{1/2}$: the common gaugino mass at the GUT scale;
+\item $A_0$: the common soft trilinear SUSY breaking parameter at the
+GUT scale;
+\item $\tan\beta$: the ratio of Higgs vacuum expectation values at the
+electroweak scale;
+\item $\sgn\mu=\pm1$: the sign of the Higgsino mass term.
+\end{itemize}
+The renormalization group equations are solved iteratively to determine
+all the electroweak SUSY parameters from these data assuming radiative
+electroweak symmetry breaking but not other possible constraints such as
+b-tau unification or limits on proton decay.
+
+      The assumption of universality at the GUT scale is rather
+restrictive and may not be valid. A variety of non-universal SUGRA
+(NUSUGRA) models can be generated using the \verb|NUSUG1|, \dots,
+\verb|NUSUG5| keywords. These might be used to study how well one could
+test the minimal SUGRA model. The keyword \verb|SSBCSC| can be used to
+specify an alternative scale (i.e., not the coupling constant
+unification scale) for the RGE boundary conditions.
+
+      An alternative to the SUGRA model is the Gauge Mediated SUSY
+Breaking (GMSB) model of Dine, Nelson, and collaborators. In this model
+SUSY breaking is communicated through gauge interactions with messenger
+fields at a scale $M_m$ small compared to the Planck scale and are
+proportional to gauge couplings times $\Lambda_m$. The messenger fields
+should form complete $SU(5)$ representations to preserve the unification
+of the coupling constants. The parameters of the GMSB model, which are
+specified by the \verb|GMSB| keyword, are
+\begin{itemize}
+\item $\Lambda_m = F_m/M_m$: the scale of SUSY breaking, typically
+10--$100\,{\rm TeV}$;
+\item $M_m > \Lambda_m$: the messenger mass scale; 
+\item $N_5$: the equivalent number of $5+\bar5$ messenger fields.
+\item $\tan\beta$: the ratio of Higgs vacuum expectation values at the
+electroweak scale;
+\item $\sgn\mu=\pm1$: the sign of the Higgsino mass term;
+\item $C_{\rm grav}\ge1$: the ratio of the gravitino mass to the value it
+would have had if the only SUSY breaking scale were $F_m$.
+\end{itemize}
+In GMSB models the lightest SUSY particle is always the nearly massless
+gravitino $\tilde G$. The parameter $C_{\rm grav}$ scales the gravitino
+mass and hence the lifetime of the next lightest SUSY particle to decay
+into it. The \verb|NOGRAV| keyword can be used to turn off gravitino
+decays. 
+
+      A variety of non-minimal GMSB models can be generated using
+additional parameters set with the GMSB2 keyword. These additional
+parameters are
+\begin{itemize}
+\item $\slashchar{R}$, an extra factor multiplying the gaugino masses
+at the messenger scale. (Models with multiple spurions generally have
+$\slashchar{R}<1$.)
+\item $\delta M_{H_d}^2$, $\delta M_{H_u}^2$, Higgs mass-squared
+shifts relative to the minimal model at the messenger scale. (These
+might be expected in models which generate $\mu$ realistically.)
+\item $D_Y(M)$, a $U(1)_Y$ messenger scale mass-squared term
+($D$-term) proportional to the hypercharge $Y$.
+\item $N_{5_1}$, $N_{5_2}$, and $N_{5_3}$, independent numbers of
+gauge group messengers. They can be non-integer in general.
+\end{itemize}
+For discussions of these additional parameters, see S. Dimopoulos, S.
+Thomas, and J.D. Wells, hep-ph/9609434, Nucl.\ Phys.\ {\bf B488}, 39
+(1997), and S.P. Martin, hep-ph/9608224, Phys.\ Rev.\ {\bf D55}, 3177
+(1997).
+
+      Gravitino decays can be included in the general MSSM framework by
+specifying a gravitino mass with \verb|MGVTNO|. The default is that such
+decays do not occur.
+
+     Another alternative SUSY model choice allowed is anomaly-mediated
+SUSY breaking, developed by Randall and Sundrum.  In this model, it is
+assumed that SUSY breaking takes place in other dimensions, and SUSY
+breaking is communicated to the visible sector via the superconformal
+anomaly. In this model, the lightest SUSY particle is usually the
+neutralino which is nearly pure wino-like. The chargino is nearly mass
+degenerate with the lightest neutralino. It can be very long lived, or
+decay into a very soft pion plus missing energy.  The model incorporated
+in ISAJET, based on work by Ghergetta, Giudice and Wells
+(hep-ph/9904378), and by Feng and Moroi (hep-ph/9907319) adds a
+universal contribution $m_0^2$ to all scalar masses to avoid problems
+with tachyonic scalars.  The parameter set is 
+$m_0,\ m_{3/2},\ \tan\beta,\ sign(\mu )$, 
+and can be input via the $AMSB$ keyword. Care should be taken with the
+chargino decay, since it may have macroscopic decay lengths, or even
+decay outside the detector.
+
+     Since neutrinos seem to have mass, the effect of a massive
+right-handed neutrino has been included in ISAJET, when calculating the
+sparticle mass spectrum. If the keyword \verb|SUGRHN| is used, then the
+user must input the 3rd generation neutrino mass (at scale $M_Z$) in
+units of GeV, and the intermediate scale right handed neutrino Majorana
+mass $M_N$, also in GeV. In addition, one must specify the soft
+SUSY-breaking masses $A_n$ and $m_{\tilde\nu_R}$ valid at the GUT scale.
+Then the neutrino Yukawa coupling is computed in the simple see-saw
+model, and renormalization group evolution includes these effects
+between $M_{GUT}$ and $M_N$. Finally, to facilitate modeling of $SO(10)$
+SUSY-GUT models, loop corrections to 3rd generation fermion masses have
+been included in the ISAJET SUSY models.
+
+      The ISASUSY program can also be used independently of the rest of
+ISAJET, either to produce a listing of decays or in conjunction with
+another event generator. Its physics assumptions are described in more
+detail in Section~\ref{SUSY}. ISASUSY accepts soft SUSY breaking
+parameters at the weak scale and calculates the masses and decay modes
+from them. The ISASUGRA program can also be used independently to solve
+the renormalization group equations with SUGRA, NUSUGRA, GMSB, or AMSB
+boundary conditions and then to call ISASUSY to calculate the decay
+modes. The main programs described in Section~\ref{sugrun} prompt for
+interactive input and print the results to a file.
+
+      Generally the MSSM, SUGRA, or GMSB option should be used to study
+supersymmetry signatures; the SUGRA or GMSB parameter space is clearly
+more manageable. The more general option may be useful to study
+alternative SUSY models. It can also be used, e.g., to generate
+pointlike color-3 leptoquarks in technicolor models by selecting squark
+production and setting the gluino mass to be very large. The MSSM or
+SUGRA option may also be used with top pair production to simulate top
+decays to SUSY particles.
+
+\subsubsection{$e^+e^-$} An $e^+e^-$ event generator is also included in
+ISAJET. The
+Standard Model processes included are $e^+e^-$ annihilation through
+$\gamma$ and $Z$ to quarks and leptons, and production of $W^+W^-$ and
+$Z^0Z^0$ pairs. In contrast to WPAIR and HIGGS for the hadronic
+processes, the produced $W$'s and $Z$'s are treated as particles, so
+their spins are not properly taken into account in their decays.
+(Because the $W$'s and $Z$'s are treated as particles, their decay
+modes can be selected using \verb|FORCE| or \verb|FORCE1|, not
+\verb|WMODEi|. See Section [6] below.)  Other Standard Model
+processes, including $e^+ e^- \to e^+ e^-$ ($t$-channel graph) and $e^+ e^-
+\to \gamma \gamma$, are not included.  Once the primary reaction has been
+generated, QCD radiation and hadronization are done as for hadronic
+processes. 
+
+The $e^+e^-$ generator can be run assuming no initial state
+radiation (the default), or an initial state electron structure function
+can be used for bremsstrahlung or the combination bremsstrahlung/beamstrahlung
+effect. Bremsstrahlung is implemented using the Fadin-Kuraev
+$e^-$ distribution function, and can be turned on using the \verb|EEBREM|
+command while stipulating the minimal and maximal subprocess energy.
+Beamstrahlung is implemented by invoking the \verb|EEBEAM| keyword.
+In this case, in addition the beamstrahlung parameter $\Upsilon$ and
+longitudinal beam size $\sigma_z$ (in mm) must be given.
+The definition for $\Upsilon$ in terms of other beam parameters can be 
+found in the article Phys. Rev. D49, 3209 (1994) by Chen, Barklow and Peskin.
+The bremsstrahlung structure function is then convoluted with the 
+beamstrahlung distribution (as calculated by P. Chen) and a spline fit
+is created. Since the cross section can contain large spikes, event generation
+can be slow if a huge range of subprocess energy is selected for light 
+particles; in these scenarios, \verb|NTRIES| must be increased well beyond
+the default value.
+
+      $e^+e^-$ annihilation to SUSY particles is included as well with
+complete lowest order diagrams, and cascade decays.  The processes
+include
+\begin{eqnarray*}
+e^+ e^- &\to& \tilde q \tilde q \\
+e^+ e^- &\to& \tilde\ell \tilde\ell \\
+e^+ e^- &\to& \tilde W_i \tilde W_j \\
+e^+ e^- &\to& \tilde Z_i \tilde Z_j \\
+e^+ e^- &\to& H_L^0+Z^0,H_H^0+Z^0,H_A^0+H_L^0,H_A^0+H_H^0,H^++H^-
+\end{eqnarray*}
+Note that SUSY Higgs production via $WW$ and $ZZ$ fusion, which can
+dominate Higgs production processes at $\sqrt{s} > 500\,\GeV$,
+is not included. Spin correlations are neglected, although 
+3-body sparticle decay matrix elements are included.
+
+      $e^+e^-$ cross sections with polarized beams are included for
+both Standard Model and SUSY processes. The keyword \verb|EPOL| is
+used to set $P_L(e^-)$ and $P_L(e^+)$, where
+$$
+P_L(e) = (n_L-n_R)/(n_L+n_R)
+$$
+so that $-1 \le P_L \le +1$. Thus, setting \verb|EPOL| to $-.9,0$ will
+yield a 95\% right polarized electron beam scattering on an unpolarized
+positron beam.
+
+\subsubsection{Technicolor} Production of a technirho of arbitrary
+mass and width decaying into $W^\pm Z^0$ or $W^+ W^-$ pairs. The cross
+section is based on an elastic resonance in the $WW$ cross section
+with the effective $W$ approximation plus a $W$ mixing term taken from
+EHLQ.  Additional technicolor processes may be added in the future.
+
+\subsubsection{Extra Dimensions} The possibility that there might be
+more than four space-time dimensions at a distance scale $R$ much larger
+than $G_N^{1/2}$ has recently attracted interest. In these theories,
+$$ 
+G_N = {1 \over 8\pi R^\delta M_D^{2+\delta}}\,, 
+$$
+where $\delta$ is the number of extra dimensions and $M_D$ is the
+$4+\delta$ Planck scale. Gravity deviates from the standard theory at a
+distance $R \sim 10^{22/\delta-19}\,{\rm m}$, so $\delta\ge2$ is
+required. If $M_D$ is of order $1\,{\rm TeV}$, then the usual heirarchy
+problem is solved, although there is then a new heirarchy problem of why
+$R$ is so large.
+
+      In such models the graviton will have many Kaluza-Klein
+excitations with a mass splitting of order $1/R$. While any individual
+mode is suppressed by the four-dimensional Planck mass, the large number
+of modes produces a cross section suppressed only by $1/M_D^2$. The
+signature is an invisible massive graviton plus a jet, photon, or other
+Standard Model particle. The \verb|EXTRADIM| process implements this
+reaction using the cross sections of Giudice, Rattazzi, and Wells,
+hep-ph/9811291. The number $\delta$ of extra dimensions, the mass scale
+$M_D$, and the logical flag \verb|UVCUT| are specified using the keyword
+\verb|EXTRAD|. If \verb|UVCUT| is \verb|TRUE|, the cross section is cut
+off above the scale $M_D$; the model is not valid if the results depend
+on this flag.
+
+\subsection{Multiparton Hard Scattering}
+
+      All the processes listed in Section~\ref{hard} are either $2\to2$
+processes like \verb|TWOJET| or $2\to1$ $s$-channel resonance processes
+followed by a 2-body decay like \verb|DRELLYAN|. The QCD parton shower
+described in Section~\ref{qcdshower} below generates multi-parton final
+states starting from these, but it relies on an approximation which is
+valid only if the additional partons are collinear either with the
+initial or with the final primary ones. Since the QCD shower uses exact
+non-colliear kinematics, it in fact works pretty well in a larger region
+of phase space, but it is not exact.
+
+      Non-collinear multiparton final states are interesting both in
+their own right and as backgrounds for other signatures. Both the matrix
+elements and the phase space for multiparton processes are complicated;
+they have been incorporated into ISAJET for the first time in
+Version~7.45. To calculate the matrix elements we have used the MadGraph
+package by Stelzer and Long, Comput.\ Phys.\ Commun.\ {\bf81}, 357
+(1994), hep-ph/9401258. This automatically generates the amplitude using
+\verb|HELAS|, a formalism by Murayama, Watanabe, and Hagiwarak
+KEK-91-11, that calculates the amplitude for any Feynman diagram in
+terms of spinnors, vertices, and propagators. The MadGraph code has been
+edited to incorporate summations over quark flavors. To do the phase
+space integration, we have used a simple recursive algorithm to generate
+$n$-body phase space. We have included limits on the total mass of the
+final state using the \verb|MTOT| keyword. Limits on the $p_T$ and
+rapidity of each final parton can be set via the \verb|PT| and \verb|Y|
+keyworks, while limits on the mass of any pair of final partons can be
+set via the \verb|MIJTOT| keyword. These limits are sufficient to shield
+the infrared and collinear singularities and to render the result
+finite. However, the parton shower populates all regions of phase space,
+so careful thought is needed to combine the parton-shower based and
+multiparton based results.
+
+      While the multiparton formalism is rather general, it still takes
+a substantial amount of effort to implement any particular process. So
+far only one process has been implemented.
+
+\subsubsection{$Z + {\rm 2\ jets}$} The \verb|ZJJ| process generates a
+$Z$ boson plus two jets, including the $q\bar{q} \to Z q \bar{q}$, $gg
+\to Z q\bar{q}$, $q\bar{q} \to Zgg$, $qq \to Zqq$, and $gq \to Z gq$
+processes. The $Z$ is defined to be jet 1; it is treated in the narrow
+resonance approximation and is decayed isotropically. The quarks,
+antiquarks, and gluons are defined to be jets 2 and 3 and are
+symmetrized in the usual way.
+
+\subsection{QCD Radiative Corrections\label{qcdshower}}
+
+      After the primary hard scattering is generated, QCD radiative
+corrections are added to allow the possibility of many jets. This is
+essential to get the correct event structure, especially at high
+energy.
+
+      Consider the emission of one extra gluon from an initial or a
+final quark line,
+$$
+q(p) \to q(p_1) + g(p_2)
+$$
+From QCD perturbation theory, for small $p^2$ the cross section is
+given by the lowest order cross section multiplied by a factor
+$$
+\sigma = \sigma_0  \alpha_s(p^2)/(2\pi p^2) P(z)
+$$
+where $z=p_1/p$ and $P(z)$ is an Altarelli-Parisi function. The same
+form holds for the other allowed branchings,
+\begin{eqnarray*}
+g(p) &\to& g(p_1) + g(p_2) \\
+g(p) &\to& q(p_1) + \bar q(p_2)
+\end{eqnarray*}
+These factors represent the collinear singularities of perturbation
+theory, and they produce the leading log QCD scaling violations for the
+structure functions and the jet fragmentation functions. They also
+determine the shape of a QCD jet, since the jet $M^2$ is of order
+$\alpha_s p_t^2$ and hence small.
+
+      The branching approximation consists of keeping just these
+factors which dominate in the collinear limit but using exact,
+non-collinear kinematics. Thus higher order QCD is reduced to a
+classical cascade process, which is easy to implement in a Monte Carlo
+program. To avoid infrared and collinear singularities, each parton in
+the cascade is required to have a mass (spacelike or timelike) greater
+than some cutoff $t_c$. The assumption is that all physics at lower
+scales is incorporated in the nonperturbative model for hadronization.
+In ISAJET the cutoff is taken to be a rather large value,
+$(6\,\GeV)^2$, because independent fragmentation is used for the jet 
+fragmentation; a low cutoff would give too many hadrons from
+overlapping partons. It turns out that the branching approximation not
+only incorporates the correct scaling violations and jet structure but
+also reproduces the exact three-jet cross section within factors of
+order 2 over all of phase space.
+
+      This approximation was introduced for final state radiation by
+Fox and Wolfram. The QCD cascade is determined by the probability for
+going from mass $t_0$ to mass $t_1$ emitting no resolvable radiation.
+For a resolution cutoff $z_c < z < 1-z_c$, this is given by a simple
+expression,
+$$      
+P(t_0,t_1)=\left(\alpha_s(t_0)/\alpha_s(t_1)\right)^{2\gamma(z_c)/b_0}
+$$
+where
+$$
+\gamma(z_c)=\int_{z_c}^{1-z_c} dz\,P(z),\qquad
+b_0=(33-2n_f)/(12\pi)
+$$
+Clearly if $P(t_0,t_1)$ is the integral probability, then $dP/dt_1$ is
+the probability for the first radiation to occur at $t_1$. It is
+straightforward to generate this distribution and then iteratively to
+correct it to get a cutoff at fixed $t_c$ rather than at fixed $z_c$.
+
+      For the initial state it is necessary to take account of the
+spacelike kinematics and of the structure functions. Sjostrand has
+shown how to do this by starting at the hard scattering and evolving
+backwards, forcing the ordering of the spacelike masses $t$. The
+probability that a given step does not radiate can be derived from the
+Altarelli-Parisi equations for the structure functions. It has a form
+somewhat similar to $P(t_0,t_1)$ but involving a ratio of the structure
+functions for the new and old partons. It is possible to find a bound
+for this ratio in each case and so to generate a new $t$ and $z$ as for
+the final state. Then branchings for which the ratio is small are
+rejected in the usual Monte Carlo fashion. This ratio suppresses the
+radiation of very energetic partons. It also forces the branching $g
+\to t + \bar t$ for a $t$ quark if the $t$ structure function vanishes
+at small momentum transfer.
+
+      At low energies, the branching of an initial heavy quark into a
+gluon sometimes fails; these events are discarded and a warning is
+printed.
+
+      Since $t_c$ is quite large, the radiation of soft gluons is cut
+off. To compensate for this, equal and opposite transverse boosts are
+made to the jet system and to the beam jets after fragmentation with a
+mean value
+$$
+\langle p_t^2\rangle = (.1\,\GeV) \sqrt{Q^2}
+$$
+The dependence on $Q^2$ is the same as the cutoff used for DRELLYAN and
+the coefficient is adjusted to fit the $p_t$ distribution for the $W$.
+
+      Radiation of gluons from gluinos and scalar quarks is also
+included in the same approximation, but the production of gluino or
+scalar quark pairs from gluons is ignored. Very little radiation is
+expected for heavy particles produced near threshold.
+
+      Radiation of photons, $W$'s, and $Z$'s from final state quarks is
+treated in the same approximation as QCD radiation except that the
+coupling constant is fixed. Initial state electroweak radiation is not
+included; it seems rather unimportant. The $W^+$'s, $W^-$'s and $Z$'s
+are decayed into the modes allowed by the \verb|WPMODE|, \verb|WMMODE|,
+and \verb|Z0MODE| commands respectively. {\it Warning:} The branching
+ratios implied by these commands are not included in the cross section
+because an arbitrary number of $W$'s and $Z$'s can in principle be
+radiated.
+
+\subsection{Jet Fragmentation:}
+
+      Quarks and gluons are fragmented into hadrons using the
+independent fragmentation ansatz of Field and Feynman. For a quark
+$q$, a new quark-antiquark pair $q_1 \bar q_1$ is generated with
+$$
+u : d : s = .43 : .43 : .14
+$$
+A meson $q \bar q_1$ is formed carrying a fraction $z$ of the momentum,
+$$
+E' + p_z' = z (E + p_z)
+$$
+and having a transverse momentum $p_t$ with $\langle p_t \rangle =
+0.35\,\GeV$. Baryons are included by generating a diquark with
+probability 0.10 instead of a quark; adjacent diquarks are not
+allowed, so no exotic mesons are formed. For light quarks $z$ is
+generated with the splitting function
+$$
+f(z) = 1-a + a(b+1)(1-z)^b, \qquad
+a = 0.96, b = 3
+$$
+while for heavy quarks the Peterson form
+$$
+f(z) = x (1-x)^2 / ( (1-x)^2 + \epsilon x )^2
+$$
+is used with $\epsilon = .80 / m_c^2$ for $c$ and $\epsilon = .50 /
+m_q^2$ for $q = b, t, y, x$. These values of $\epsilon$ have been
+determined by fitting PEP, PETRA, and LEP data with ISAJET and should
+not be compared with values from other fits. Hadrons with longitudinal
+momentum less than zero are discarded. The procedure is then iterated
+for the new quark $q_1$ until all the momentum is used. A gluon is
+fragmented like a randomly selected $u$, $d$, or $s$ quark or
+antiquark. 
+
+      In the fragmentation of gluinos and scalar quarks, supersymmetric
+hadrons are not distinguished from partons. This should not matter
+except possibly for very light masses. The Peterson form for $f(x)$ is
+used with the same value of epsilon as for heavy quarks, $\epsilon =
+0.5 / m^2$.
+
+      Independent fragmentation correctly describes the fast hadrons in
+a jet, but it fails to conserve energy or flavor exactly. Energy
+conservation is imposed after the event is generated by boosting the
+hadrons to the appropriate rest frame, rescaling all of the
+three-momenta, and recalculating the energies.
+
+\subsection{Beam Jets}
+
+      There is now experimental evidence that beam jets are different in
+minimum bias events and in hard scattering events. ISAJET therefore uses
+similar a algorithm but different parameters in the two cases.
+
+      The standard models of particle production are based on pulling
+pairs of particles out of the vacuum by the QCD confining field,
+leading naturally to only short-range rapidity correlations and to
+essentially Poisson multiplicity fluctuations. The minimum bias data
+exhibit KNO scaling and long-range correlations. A natural explanation
+of this was given by the model of Abramovskii, Kanchelli and Gribov.
+In their model the basic amplitude is a single cut Pomeron with
+Poisson fluctuations around an average multiplicity $\langle n
+\rangle$, but unitarity then produces graphs giving $K$ cut Pomerons
+with multiplicity $K\langle n \rangle$.
+
+      A simplified version of the AKG model is used in ISAJET. The
+number of cut Pomerons is chosen with a distribution adjusted to fit the
+data. For a minimum bias event this distribution is
+$$
+P(K) = ( 1 + 4 K^2 ) \exp{-1.8 K}
+$$
+while for hard scattering
+$$
+P(1) \to 0.1 P(1),\quad  P(2) \to 0.2 P(2),\quad  P(3) \to 0.5 P(3)
+$$
+For each side of each event an $x_0$ for the leading baryon is selected
+with a distribution varying from flat for $K = 1$ to like that for
+mesons for large K:
+$$
+f(x) = N(K) (1- x_0)^c(K),\qquad c(K) = 1/K + ( 1 - 1/K ) b(s)
+$$
+The $x_i$ for the cut Pomerons are generated uniformly and then
+rescaled to $1-x_0$. Each cut Pomeron is then hadronized in its own
+center of mass using a modified independent fragmentation model with
+an energy dependent splitting function to reproduce the rise in
+$dN/dy$:
+$$
+f(x) = 1 - a  +  a(b(s) + 1)^ b(s),\qquad 
+b(s) = b_0 + b_1  \log(s)
+$$
+The energy dependence is put into $f(x)$ rather than $P(K)$ because in
+the AKG scheme the single particle distribution comes only from the
+single chain. The probabilities for different flavors are taken to be
+$$
+u : d : s = .46 : .46 : .08
+$$
+to reproduce the experimental $K/\pi$ ratio.

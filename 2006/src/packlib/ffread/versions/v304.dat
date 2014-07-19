@@ -1,0 +1,12 @@
+*
+* $Id: v304.dat,v 1.1.1.1 1996/03/08 11:50:42 mclareni Exp $
+*
+* $Log: v304.dat,v $
+* Revision 1.1.1.1  1996/03/08 11:50:42  mclareni
+* Ffread
+*
+*
+* Version 3.04   880328
+C
+C- Maximum number of chars printed by FFREAD changed from 132 to 116
+C

@@ -1,0 +1,117 @@
+
+C-        THE FOLLOWING GIVES A LIST OF WHICH PATCH AND DECK
+C-        OF MICKY PAM CHECKS WHICH GENERAL SECTION ROUTINE(S).
+C-        VARIOUS GENERAL SECTION ROUTINES ARE NEEDED FOR THE EXECUTION
+C-        OF MICKY ITSELF. FOR EXAMPLE THE GENRAL SECTION ROUTINES
+C-        UCOPY - UZERO - UFILL - UBLANK
+C-        ARE HEAVILY USED. APPARENT MALFUNCTIONING OF A GIVEN ROUTINE
+C-        MAY IN FACT BE DUE TO SUCH AN AUXILIARY.
+C-
+C-
+C-        LIST OF CHECKED ROUTINES
+C-
+C-
+C-   P=PCHAR    D=TBABY    checks  IULAST - IULOOK - IUNEXT - IUEND  -
+C-                                 IUBACK - IUFORW - ULEFT  - URIGHT -
+C-                                 USET
+C-                         uses    UCOPY    UBLANK   UBLOW    UFILL
+
+C-   P=PCHAR    D=TPKCH    checks  PKCHAR - UPKCH
+C-                         uses    VZERO    UCOPY
+
+C-   P=PCHAR    D=TUBLOW   checks  UBLOW  - UBUNCH - UTRANS
+C-                         uses    UCOPY    UZERO
+
+C-   P=PCHAR    D=TUCTOH   checks  UH1TOC - UCTOH1 - UCTOH  - UHTOC
+C-                         uses    UTRANS   UZERO
+
+C-   P=PM432    D=TLENOC   checks  LNBLNK - LENOCC
+
+C-   P=PM432    D=TICNTH   checks  ICNTH  - ICNTHL - ICNTHU
+
+C-   p=PM434    D=TVXINV   checks  VXINVB - VXINVC
+C-                         uses    VZERO
+
+C-   P=PDIV     D=TMAXMU   checks  AMAXMU
+
+C-   P=PDIV     D=TSCALE   checks  PSCALE
+
+C-   P=PDIV     D=TSORTN   checks  SORTI  - SORTR
+C-                         uses    UCOPY
+
+C!   P=PDIV     D=TSORTX   checks  SORTX
+C-                         uses    UCOPY
+
+C-   P=PDIV     D=TTRIGO   checks  ASIN   - ACOS   - PROXIM
+C-                         uses    UZERO    UCOPY
+
+C!   P=PMATRIX  D=TMXEQU   checks  MXEQU  - MXEQU1
+C-                         uses    UCOPY
+
+C-   P=PMATRIX  D=TMXM     checks  MXMPY  - MXMPY1 - MXMPY2 - MXMPY3 - MXMAD  -
+C-                                 MXMAD1 - MXMAD2 - MXMAD3 - MXMUB  - MXMUB1 -
+C-                                 MXMUB2 - MXMUB3 - MXMLRT - MXMLTR
+C-                         uses    UZERO    UCOPY    VADD     VSUB    VCOPYN
+C-                                 MXTRP
+
+C-   P=PMATRIX  D=TMXTRP   checks  MXTRP
+C-                         uses    UCOPY
+
+C-   P=PMATRIX  D=TMXUTY   checks  MXUTY
+
+C-   P=PUTIL    D=TCOCOP   checks  UCOCOP - UDICOP
+C-                         uses    UCOPY
+
+C-   P=PUTIL    D=TIUCHA   checks  IUCHAN - IUBIN  - IUHIST
+C-                         uses    UCOPY    UFILL
+
+C-   P=PUTIL    D=TIUCOM   checks  IUCOMP - IUFIND - IUHUNT - LOCBYT
+C-                         uses    UCOPY    UZERO
+
+C-   P=PUTIL    D=TIUSAM   checks  IUSAME
+C-                         uses    UFILL    UCOPY
+
+C-   P=PUTIL    D=TUCOPY   checks  UCOPY  - UCOPY2 - UCOPYN - UCOPIV
+C-                         uses    UZERO
+
+C-   P=PUTIL    D=TUOPT    checks  UOPT
+C-                         uses    UZERO    UBUNCH
+
+C-   P=PUTIL    D=TUSWOP   checks  USWOP
+C-                         uses    UZERO    UCOPY
+
+C-   P=PUTIL    D=TUZERO   checks  UZERO  - UBLANK - UFILL  - VZERO  - VBLANK -
+C-                                 VFILL
+C-                         uses    UCOPY
+
+C-   P=PVECT    D=TCROSS   checks  CROSS
+
+C-   P=PVECT    D=TLOR     checks  LOREN4 - LORENF - LORENB
+C-                         uses    VCOPYN   DOTI
+
+C-   P=PVECT    D=TROT     checks  ROT
+
+C-   P=PVPACK   D=TVEC     checks  VADD   - VSUB   - VMUL   - VBIAS  - VSCALE -
+C-                                 VLINE  - VUNIT  - VSUM   - VASUM  - VMAX   -
+C-                                 VMAXA  - VMIN   - VMINA  - VEXCUM - LVMAX  -
+C-                                 LVMAXA - LVMIN  - LVMINA - VMOD   -
+C-                                 DOTI   - VDOT   - VDOTN  - VDOTN2 - VMATR  -
+C-                                 VMATL
+C-                         uses    VZERO    VFILL
+
+C-   P=NPBYT    D=TBYT     checks  JBIT   - SBIT   - SBIT0  - SBIT1
+C-                                 JBYT   - SBYT   - CBYT   - JBYTET
+                                   SBYTOR - JRSBYT
+
+C-   P=NPBYT    D=TMBYT    checks  MSBIT0 - MSBIT1 - MSBIT  - MSBYT
+C-                                 MCBYT  - MBYTOR - MBYTET
+C-                         uses    SBIT0    SBIT1    SBIT     SBYT
+                                   CBYT     SBYTOR   JBYTET
+
+C-   P=NPBYT    D=TVCBYT   checks  JBYTPK - SBYTPK - PKBYT  - UPKBYT - INCBYT
+C-                         uses    UZERO    UCOPY
+
+C-   P=PTLPAC   D=TTLPAC   checks  TLS    - TLSC   - TLRES  - TLERR
+C-                         uses    UCOPY
+
+C-   P=PTRPAC   D=...      checks  ROUTINES TR...

@@ -1,0 +1,27 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:45 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:45  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNIRT)
+
+              Up-date RECORD FOR THE PAM-FILE  KERNIRT
+              ----------------------------------------
+
+
+Up-date  1.08 :  31-May-1994
+----------------------------
+
+Replacing File   KERNIRT  1.07  940303 11.34
+
+Selection on  P=P5BOOT  for the Patchy boot-strap export
+
+Correct:      p=IRTDGS             @PROCESS directive corrected
+              p=IRTDGS, d=UPACK    direction sensitive
+
+---------------------------------------------------------------------
+
+#endif

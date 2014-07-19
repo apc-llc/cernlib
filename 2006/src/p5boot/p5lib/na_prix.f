@@ -1,0 +1,24 @@
+CDECK  ID>, NA_PRIX.
+      SUBROUTINE NA_PRIX (MSG,IX)
+
+C-    Print content of index IX with message
+C.    started 7-june-94
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      COMMON /QUNIT/ IQREAD,IQPRNT, IQTTIN,IQTYPE, IQOFFL,IQRTTY,IQRSAV
+     +,              IQRFD,IQRRD,IQRSIZ, NQLPAT,NQUSED,NQLLBL, NQINIT
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*128, MSG*(*)
+      EQUIVALENCE (LINE,SLERRM)
+
+
+      CALL NA_GET (IX,LINE,1)
+
+      WRITE (IQPRNT,9001) MSG,LINE(1:NDSLAT)
+      NQUSED = NQUSED + 1
+      NQLLBL = 0
+ 9001 FORMAT (A,A)
+      RETURN
+      END

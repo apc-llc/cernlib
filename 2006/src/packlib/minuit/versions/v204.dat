@@ -1,0 +1,21 @@
+*
+* $Id: v204.dat,v 1.1.1.1 1996/03/07 14:31:33 mclareni Exp $
+*
+* $Log: v204.dat,v $
+* Revision 1.1.1.1  1996/03/07 14:31:33  mclareni
+* Minuit
+*
+*
+* Version 2.04   901031 15.30
+C
+C- Introduce the following patches/flags:
+C   > SMINUIT   : source patch
+C   > FMINUIT   : flags  patch (renamed from MNFLAGS)
+C   > DMINUIT   : documentation patch
+C
+C- Routine changes:
+C   > P=MINUIT,D=MNINIT     Update version
+C   > P=MINUIT,D=MNSAVE     Minor change in FORMAT statement
+C   > P=MINUIT,D=MNCONT     Compute NFCNMX
+C   > P=MINUIT,D=MNLINE     Protect SLAM against null denominators
+C

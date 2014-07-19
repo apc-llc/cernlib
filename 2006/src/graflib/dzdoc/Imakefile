@@ -1,0 +1,17 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+
+LIBDIRS= cdf  dzdkern  dzdraw
+SUBDIRS= $(LIBDIRS) dzedit dzdoc
+
+TopOfPackage(dzdoc)
+
+SubdirLibraryTarget(dzdoc,$(LIBDIRS))
+
+InstallBinSubdirs(dzedit)
+
+InstallIncludeSubdirs(dzdoc)
+
+/* doc dzdoc dzedit dzeditcdf */

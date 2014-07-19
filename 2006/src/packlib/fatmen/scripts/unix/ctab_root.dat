@@ -1,0 +1,33 @@
+# @(#)08	1.15  com/cmd/cntl/cron/root, bos, bos320 9/9/91 06:04:47
+#
+# COMPONENT_NAME: (CMDCNTL) commands needed for basic system needs
+#
+# FUNCTIONS: 
+#
+# ORIGINS: 27
+#
+# (C) COPYRIGHT International Business Machines Corp. 1989,1991
+# All Rights Reserved
+# Licensed Materials - Property of IBM
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+#45 2 * * 0 /usr/lib/spell/compress
+#45 23 * * * ulimit 5000; /usr/lib/smdemon.cleanu > /dev/null
+0 11 * * * /usr/bin/errclear -d S,O 30
+0 12 * * * /usr/bin/errclear -d H 90
+#30 3 * * * /etc/lpp/diagnostics/bin/run_ela 1>/dev/null 2>/dev/null
+ 0 0  * * *  /usr/lpp/ssp/bin/cleanup.logs.nodes
+01,11,21,31,41,51  * * * *  /var/sysman/supper update ccdb sys.admin 1>/dev/null 2>/dev/null
+10  * * * *  /var/sysman/supper update sup.admin  node.root power_system amd 1>/dev/null 2>/dev/null
+8 6 * * * /afs/usr/local/etc/sue.daily.cron
+53 4 1 * * /afs/usr/local/etc/sue.monthly.cron
+#01 00 * * * /usr/sbin/acct/runacct.ues  2>/var/adm/acct/nite/acterr
+01 00 * * * /usr/sbin/acct/runacct  2>/var/adm/acct/nite/acterr
+8,18,28,38,48,58 * * * * /usr/lib/dmmgr/bin/dm10minly
+7 * * * * /usr/lib/dmmgr/bin/dmhourly
+3 12 * * * /usr/lib/dmmgr/bin/dmdaily
+10 * * * *  /var/sysman/supper update sup.admin user.admin node.root 1>/dev/null 2>/dev/null
+48 7,23 * * * ( /usr/lpp/adsm/scripts/cron_adsm.pl ) >/dev/null 2>&1
+1,11,21,31,41,51 * * * * chmod o+rw /fatmen/fmdelphi/todo/*

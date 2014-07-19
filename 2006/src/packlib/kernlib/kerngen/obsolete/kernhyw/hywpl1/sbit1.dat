@@ -1,0 +1,21 @@
+*
+* $Id: sbit1.dat,v 1.1.1.1 1996/02/15 17:52:57 mclareni Exp $
+*
+* $Log: sbit1.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:52:57  mclareni
+* Kernlib
+*
+*
+sbit1  : proc (x, lx) ;
+ 
+/* *****************************************************************
+   *                                                               *
+   * sbit1(x,lx)    x avec bit lx=1                                *
+   *                                                               *
+   ***************************************************************** */
+dcl (a, x, lx) bin fixed (35);
+          substr (unspec (x), 37-lx, 1) = "1"b;
+     END sbit1;
+#ifdef CERNLIB_TCGEN_SBIT1
+#undef CERNLIB_TCGEN_SBIT1
+#endif

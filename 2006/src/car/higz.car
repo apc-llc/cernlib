@@ -1,0 +1,2639 @@
++TITLE.
+HIGZ     1.23/05  18/10/95  10.14.00  PROGRAM LIBRARY HIGZ = Q120
++PATCH,$VERSION.
++DECK,V1_23.
+*CMZ :          10/11/95  10.51.46  by  O.Couet
+*-- Author :    O.Couet   05/05/95
+*
+* 10/11/95  10.51.30  by  O.Couet
+* Mods in IGCOLM
+*
+* 01/11/95  14.05.51  by  O.Couet
+* Mods in IMAC (Cees Th. de Laat)
+*
+*::>          VERSION  1.23/05   18/10/95 10.14.00
+*
+* In x11int, size_hints and wm_hints are memset to 0.
+*
+* 17/10/95  18.22.29  by  O.Couet
+* New routine IGELLI to draw an ellipse.
+*
+* 11/10/95  17.26.20  by  O.Couet
+* The default value of CHHE in igset is now 0.28 (like in HPLOT).
+*
+* 04/10/95  17.40.07  by  O.Couet
+* IRAST was not initialized in IGTABL
+*
+* 02/10/95  17.14.30  by  O.Couet
+* TK_WINDOWS flag in x11int
+*
+*::>          VERSION  1.23/04   28/09/95 09.54.20
+*
+* Mods in x11int: free the colors before defining a new one.
+*
+*::>          VERSION  1.23/03   20/09/95 14.08.27
+*
+* Bug fixed in IZPM. The marker types different from 1 to 5 produced
+* some PS output in the LaTex files.
+*
+* 05/09/95  15.03.33
+* A +SELF was missing in ISTXAL in IKERNEL
+*
+* 04/09/95  12.17.57
+* Fixes in IGOBJ and IGPICK for the picking in PAW++
+*
+* 01/09/95  09.45.00
+* IKFILE crashed if the file higz_windows.dat was r/w protected.
+*
+*::>          VERSION  1.23/02   30/08/95 18.20.27
+*
+* Bug fixed in IZDNB: the alpha numeric labels was not stored
+* in the picture in case of IZMERG.
+*
+* 30/08/95  13.44.39
+* The test of validity on window size in IGSSE is now a
+* .LT.0 test instead of .LE.0 test
+*
+* 29/08/95  11.43.13
+* The PASS attribute is now use as line width for the PS
+* hollow fonts.
+*
+* 15/08/95  17.39.19
+* IKFNTX called IXSETTF as a subroutine, rather than an
+* integer function in the MSDOS part.
+*
+* 07/06/95  17.36.31
+* %%BeginProlog and %%EndProlog was misplaced in PS files.
+*
+* 01/06/95  16.16.50
+* Xflush is now called at the end of ixreqlo (x11int) to be
+* sure that rubberdanding line has been erased.
+*
+* 30/05/95  09.45.20
+* Bug fixed in igaxis: The alignment of the exponent was
+* not correct on the axis drawn on the right of the plots.
+*
+*::>          VERSION  1.23/01   24/05/95 11.13.21
+*
+* The "gsave" an "grestore" are now managed via the routine
+* IPSVRT which count the number of gsave in the variable NBSAVE.
+* This allows to write the correct number of grestore at the
+* end of the PS file.
+*
+* 08/05/95  11.51.44
+* New MSDOS version (Valery Fine)
+*
+*::>          VERSION  1.23/00   05/05/95 15.25.21
+*
+* In IZGRAP and IZHIST, BORD was not consider as a possible
+* attribute for graphs and histograms.
+*
+* 10/04/95  17.50.26
+* Bug fixed in IGPICK for the picking of IGTABL.
+*
+* 10/04/95  10.39.58
+* New version of IGOBJ which looks in all the NTs if nothing is found
+* in the one the user picked in. A new routine to scan the NTs in a
+* picture has been created for that (IZGNNT).
+*
++DECK,V1_22.
+*CMZ :  1.22/11 07/04/95  10.46.41  by  O.Couet
+*-- Author :    O.Couet   10/11/94
+*
+*::>          VERSION  1.22/11   07/04/95 10.46.41
+*
+* Bug fixed in IGPAVE: The coordinates was not stored in the correct
+* order.
+*
+*::>          VERSION  1.22/10   05/04/95 15.48.50
+*
+* Fix in IZTX: the IGTEXT call (for PS) was not done with GFLAG=.TRUE.
+*
+* 05/04/95  11.03.50
+* Bug fixed in IGAXIS. When the axis is close to the vertical a test
+* XMIN = XMAX was done. Now we compare the difference to EPSIL.
+*
+* 03/04/95  17.08.19
+* Fix in IPPATT: the trailing blank before the continuation line in
+* the middle of a character string are removed on VAXes.
+*
+* 03/04/95  10.36.54
+* Bug fixed in //HIGZ/IKERNEL/IRQLC. After the MAIL option removal
+* the SAMPLE variable was not initialized (a +SELF was missing).
+*
+*::>          VERSION  1.22/09   23/03/95 15.25.29
+*
+* Bug fixed in IPL (all the versions): The clipping on line type
+* greater than 12 was not correct.
+*
+* 09/03/95  16.17.22
+* Mods in IGTABL and IGHCXY to drawn the errors (color) correctly for
+* 1D histos.
+*
+*::>          VERSION  1.22/08   09/03/95 14.09.16
+*
+* New option E in IGTABL. This option allows to draw the error
+* on 2D histograms. Used with S1, S2, etc the colors are mapped
+* on the errors not on the content.
+*
+* 27/02/95  17.41.51
+* The MAIL option (telnetg) has bin removed from the installation
+* cradle *HIGZ.
+*
+* 24/02/95  16.57.11
+* Misplaced RETURN in IGWWK (options 2BUF and HWCO).
+*
+* 24/02/95  15.46.45
+* Bug fixed in IGTAB4: Th background color for surface was not correct
+* if, for example, BCOL=1102.
+*
+* 22/02/95  12.05.12
+* All the ONtuple material has been moved in the OBSOLETE patch.
+*
+* 14/02/95  10.43.48
+* Bug fixed in IKBOX for the FALCO driver. IGSG was missing.
+*
+*::>          VERSION  1.22/07   09/02/95 17.03.34
+*
+* Bug fixed in IPTEXT. Some arrays was accessed with wrong indeces.
+*
+* 07/02/95  10.10.51
+* Mod in IPEND: In some cases (for example NEXT at the end of a macro)
+* a PS file was terminated like an EPS file.
+*
+*::>          VERSION  1.22/06   03/02/95 12.15.27
+*
+* Bug fixed in IPTEXT: in some case the text was cutted in the middle
+* of an octal code.
+*
+*::>          VERSION  1.22/05   30/01/95 11.02.06
+*
+*   Bug fixed in IZSCLI. The PostScript clipping was stored in
+*   the LaTex file (-777).
+*
+* 27/01/95  16.28.10
+*
+*   Better drawing of the ARC border. Patch IG: IGARC2 IGARC3 IGARC4
+*
+*::>          VERSION  1.22/04   25/01/95 17.50.08
+*
+*   New routine IXMOVWI to move an X11 window.
+*
+* 25/01/95  15.44.18
+*
+*   New option WIID in IGQWK to return the window identifier associated
+*   to a given workstation ID.
+*
+*   Bug fixed in ixgetwi (x11int): It was not working for several
+*   windows.
+*
+*::>          VERSION  1.22/03   06/01/95 15.29.04
+*
+*   ISWN3 is called in IGTABL instead of IHSVIE. If IHSVIE is called,
+*      a sequence like:
+*         call hplfr3(0.,4.,0.,1.,0.,1.,30.,30.,'WBF')
+*         lego 20
+*      does not work because the window (ISWN3) is not normalized after
+*      the call to HPLFR3.
+*   Protection added in ISVP3 and ISWN3
+*
+*::>          VERSION  1.22/02   05/01/95 15.10.45
+*
+*   Mods in IZSCLI, IPINIT, IPZONE: The clipping is now set only
+*      if IPZONE has been called. Otherwise some clipping problems
+*      can append if there is several zones in the PS file
+*   Mod in IPDEF: atend is replaced by (atend).
+*
+*::>          VERSION  1.22/01   15/11/94 15.57.56
+*
+*   Modif in IGAXIS to have the correct label alignment (L,R,C) for
+*      vertical axis. I the previous version it was set to Left always
+*      if the axis was drawn TOP do DOWN. IGCOLM also been modified
+*      accordingly.
+*
+*::>          VERSION  1.22/00   10/11/94 11.49.51
+*
+*   Modif in the definition of the clipping for PostScript to avoid
+*      side effect in FrameMaker.
+*
++DECK,V1_21.
+*CMZ :  1.21/12 25/10/94  13.47.25  by  O.Couet
+*-- Author :    O.Couet   30/03/94
+*
+*::>          VERSION  1.21/12   25/10/94 13.47.24
+*
+*   Bug fixed in IPIOUT: the I7 format was too small. It is now I15.
+*
+*::>          VERSION  1.21/11   21/10/94 12.01.27
+*
+*   Improvement in IGAXIS in case of integer labelling. The optimization
+*      provide by IGAXI0 is better than the one provide by IGAXI4. When
+*      integer labelling is required, IGAXI0 is invoke first and only
+*      if the result is not an integer labelling, IGAXI4 is invoked.
+*
+*::>          VERSION  1.21/10   17/10/94 15.08.15
+*
+*   VIDQQ is now removed from IGINIT because it is now in igvers.
+*   Mods IGAXIS to have a better drawing of label like 10^xxx: Now we
+*      take into account the length of the exponant to avoid
+*      overlapping text. (improvement suggested by Mike Kelsey).
+*   New option HWCO in IGQWK to return the number of hardware colours
+*      available.
+*
+*::>          VERSION  1.21/09   27/09/94 17.41.14
+*
+*   In IGPICK, TA_IND was not declared as an INTEGER. It is now
+*      replaced by ITAIND.
+*   Mods in X11INT: VAX machines was asumed to be X11R3 now
+*      they are consider as X11R4 (at least) machines. APOLLO machines
+*      are still consider as X11R3 machines.
+*   Bug fixed in IACWK (X11 version). The line width set was not the
+*      same as the one set by ISLWSC.
+*   Bug fixed in ICLKS. This routine close all the workstations still
+*      open. It was looping on ILOPWK but this list was changed by
+*      ICLWK, so ICLKS tried to close a non opened workstation. Now
+*      ILOPWK is copied in an intermediate array.
+*   Mods in IRQST/GPR. A small editor is now available.
+*      (Robert Franchisseur robert@ramses.ibp.fr)
+*   New C routine igvers to return the current HIGZ version. It is
+*      used by the PAW command BUGREPORT
+*   Precision problem in LOG scale has been solved (hopefully) in
+*      IGAXIS. (XMNLOG-IH1).GT.EPSIL is now (XMNLOG-IH1).GT.0.. This
+*      problem has been reflected in the pawdemo file.
+*   Protection added in ISTXAL (IKERNEL): ixsetta was called even
+*      with GFLAG=.FALSE.
+*   New option 'X' in IGZSET to turn OFF the 'Z' mode without changing
+*      the 'G' mode (used in HPLOPT).
+*   New set of pattern in the X11 driver.
+*   The Fill Pattern from 1 to 25 are now available also on PS files.
+*      be careful with GhostView because to many filled areas with
+*      such patterns can block this program.
+*   Speed optimization in the PS file writing (a factor 3.6). A fast
+*      writting routine has been introduced (IPPSTF entry point of
+*      IPPSTR). In IPIOUT some code of IPPSTR is now inlined. IPDRAW
+*      call has been replaced by two IPIOUT calls. The speed up gained
+*      is the following (a 100x100 scatter plot):
+*         Real time 00:01:08 (Old version)
+*         Real time 00:00:34 (new IPIOUT)
+*         Real time 00:00:22 (IPPSTF and inline in IPIOUT)
+*         Real time 00:00:19 (suppress IPDRAW in IZPM)
+*
+*::>          VERSION  1.21/08   22/07/94 15.22.13
+*
+*   New routine IXWARP in x11int to move the pointer at a given
+*      position (Adeyemi Adesanya).
+*   New routine IZPAVE to store IGPAVE as a macro primitive. It implies
+*      also mods in IZDNB and IGPICK.
+*   Mods in IGRAP1 (push the LX and LY banks) in order to draw
+*      filled area in one go.
+*   Changes in IGPICK to pick text (Yemi)
+*   A blank was missing in IPFON (DECS only)
+*
+*::>          VERSION  1.21/07   30/06/94 14.56.15
+*
+*   Protection added in IKFILE (ERR=999 in the last READ).
+*   New routine IXQPTR in x11int to query the current pointer
+*      position (Adeyemi Adesanya).
+*   Mods in IGTAB5 to return in QUEST the axis positions (useful
+*      for HPLOT to draw the axis titles).
+*
+*::>          VERSION  1.21/06   27/06/94 18.21.00
+*
+*   Mods in IZFILE to take into account the new option 'N' of RZMAKE.
+*   Mods in IGTABL and IGTAB2 in order to close the surface plots
+*      when the options POL, CYL, SPH or PSD are used.
+*   Bug fixed in ixreqlo (x11int) when a button was pressed, the
+*      cursor was undefined but not set to NULL (now it is).
+*
+*::>          VERSION  1.21/05   17/06/94 17.41.08
+*
+*   Bug fixed in IXCLSDS (X11INT): isdisp was not reset.
+*      (Thierry MOUTHUY, <mouthuy@marpix1.in2p3.fr>).
+*   New options 'E' and 'C' in IGZSET.
+*   New options 'FB' and 'BB' in IGTABL.
+*
+*::>          VERSION  1.21/04   10/06/94 15.05.39
+*
+*   New option 'K' in IGHIST (histogram are pacKed like in HBOOK).
+*   Fix in X11INT/ixreqst: in some cases, the '?' cursor was not
+*      set correctly.
+*   Protection added in IZPM and IGAXIS: when IGTEXT is called with
+*      option 'S', the ANGLE parameter should be initialize to 0.
+*   Optimization in IGAXIS to avoid identical labels on the same
+*      axis (IF1 and IF2 too small), and to avoid x10^0.
+*   In the sequence HIATT, all the variables are now declared.
+*
+*::>          VERSION  1.21/03   06/06/94 13.34.58
+*
+*   New version of IZPM (PS driver) to have shorter files.
+*   Mods in IKFNTX to have a better maping between X11 and PS fonts.
+*   Interface to GKSBx (CMZ flag: GKSBX).
+*   Mods in IGKS and IDI3000 to use the C management of the NTs.
+*   The cursor is reset after a request locator in sample mode (X11).
+*   Mods is IPTEXT: the "stwn" value is now printed in I6.
+*   Bug fixed in IGSA (FALCO version): it was a side effect of the
+*     last mod apply for GPR (bug reported by Andrea Parri).
+*
+*::>          VERSION  1.21/02   19/05/94 10.09.37
+*
+*   Bug fixed in IGAXIS (precision problem on IBM/VM). This was a side
+*      effect of the fix made in the version 1.20/05 for the X00 and
+*      XONE comparison. Now the variable XMNSAV is not used, only XMNLOG
+*      is used.
+*   Bug fixed in IGSA (GPR version). GPR_RELEASE_DISPLAY was not
+*      called if no workstation was opened.
+*   Bug fixed in the PostScript driver: if EPS is selected and if the
+*      BoundingBox is not yet in the file, the clipping cannot be set.
+*
+*::>          VERSION  1.21/01   11/05/94 18.57.56
+*
+*   New option 'W' in IGPXMP (write a pixmap in a bitmap file).
+*   Major changes in the PostScript driver: the clipping is now
+*      managed in the PS file itself.
+*
+*::>          VERSION  1.21/00   30/03/94 18.14.42
+*
+*   IGINIT: If GKSIBM is selected, METDEF = 3
+*   In IGSA (DECGKS), '\' is now BSLASH (AlphaVMS).
+*
++DECK,V1_20.
+*CMZ :  1.20/11 28/02/94  11.26.52  by  O.Couet
+*-- Author :    O.Couet   02/11/93
+*
+*::>          VERSION  1.20/11   28/02/94 11.26.52
+*
+*   Bugs fixed in IGTABL (default parameter values initialization).
+*   IGERR was called in IGWKTY without LUNERR and LUNOUT initialized.
+*   Update in IZHIST to take into account the new 'Z' option of IGHIST.
+*
+*::>          VERSION  1.20/10   21/02/94 11.15.35
+*
+*   Mods in IGTEXT, IKFNTX *HIGZ and *HIGZEXAM for Windows-NT (Valery Fine)
+*   New option 'Z' in IGHIST. Like in IGRAPH, if it is selected, the vectors
+*      X and Y are taken into PAWC at the adresses IQUEST(81) and IQUEST(82).
+*      This protect agains the ZEBRA garbage collections.
+*
+*::>          VERSION  1.20/09   26/01/94 09.21.23
+*
+*   IGPICK is now able to pick IGARC.
+*   Mod in IXOPNDS (x11int): The display was reopen for each window.
+*   The READ in IGWKTY is in FORTRAN (IXGETL under the flag CCREAD) because
+*      KUIP do the READ in FORTRAN (cf FFREAD).
+*   Mod in ISTXFP for the FALCO driver.
+*
+*::>          VERSION  1.20/08   20/01/94 11.30.15
+*
+*   The 3D is available (ISWN3, ISVP3) for the X11 only. ntmgt should be
+*      used also with the GKS version.
+*   New routine IXDOGIF to produce gif files. It is available only if
+*      if the FLAG GIF is selected.
+*   Correction in IKERNEL/IPM: The marker size was not linear
+*
+*::>          VERSION  1.20/07   17/01/94 18.06.42
+*
+*   Mods in the FALCO driver: John Clement
+*   Protection added in IZDIPI. (LN)
+*   IXCLSDS perform immediatly a return if display=NULL
+*   Bug fixed in IHPVIE (a RETURN was missing).
+*   Mods in IOPWK, IGWKTY, IGINIT and IKFILE to be able to call
+*      IGWKTY before or after IGINIT.
+*
+*::>          VERSION  1.20/06   07/01/94 18.38.19
+*
+*   Mod in IGXMES for IBM/VM.
+*   New 3D routines: ISWN3 and ISVP3. See the HIGZ manual for more details
+*   Protection added in IHSDRL (if NT > NTMAX).
+*   Mods in IGTABL to use the new 3D routines
+*   Mods for FALCO driver: John Clement, Rice University
+*      <CLEMENT@physics.rice.edu>. I some places, test like IWTYPE.EQ.7878
+*      should be IGIWTY(IWKID).EQ.7878
+*
+*::>          VERSION  1.20/05   08/12/93 09.33.04
+*
+*   Bug fixed in IGAXIS. In some cases (it seems very rarely because
+*      the code has not change in this part since at least 3 years)
+*      in the test:
+*          IF((X00-XONE).GT.EPSIL) GOTO 150
+*      EPSIL was to big. Now the test is:
+*          IF(X00.GT.XONE) GOTO 150
+*      and in fact that is what is needed in this case.
+*   Changes in rotated to avoid warnings with /com/cc on APOLLO.
+*
+*::>          VERSION  1.20/04   26/11/93 13.42.06
+*
+*   Fix in higzcc/rotated for IBM/VM: The text width returned for
+*      lowercase is 0. Now it is protected.
+*   New routine IGDWK to Get the Default WorKstation type. This
+*      routine is called by IGWKTY.
+*
+*::>          VERSION  1.20/03   23/11/93 11.44.01
+*
+*   Mods in IGCOLM in order to support default position and color map.
+*   The xvertext package to rotate and scale X11 fonts is now available
+*      in higzcc/rotated (Alan Richardson(mppa3@uk.ac.sussex.syma))
+*      Now the X11 fonts are managed as follows:
+*            font=xx precision=0 : X11 font a rotated
+*            font=xx precision=1 : IGTEXT is used on the screen
+*            font=xx precision=2 : X11 font a rotated and scaled.
+*   Fix in higzcc/rotated for IBM/VM.
+*   Protection added in ixgetge: sometimes (for instance after a CTRL-C),
+*      XGetGeometry returns wrong values. In this case the previous "good
+*      values" are used.
+*
+*::>          VERSION  1.20/02   08/11/93 09.53.03
+*
+*   IXSELWI is now called in IACWK (X11) to be sure the window
+*      in active even if IGTERM is not called.
+*
+*::>          VERSION  1.20/01   03/11/93 11.12.27
+*
+*   The unused routine IGPHSL is now removed.
+*   The PATCH IGKS3D is removed (not used and not documented). The
+*      related routines in IG and the corresding KEEP in HICDES are
+*      also removed.
+*
+*::>          VERSION  1.20/00   02/11/93 17.44.57
+*
+*   Some unused sequences are removed.
+*
++DECK,V1_19.
+*CMZ :  1.19/17 22/10/93  17.59.07  by  O.Couet
+*-- Author :    O.Couet   28/06/93
+*
+*::>          VERSION  1.19/17   22/10/93 17.59.07
+*
+*   Mods in IGRAP1 in order to draw Curves with in infinite number
+*      of point (ZEBRA banks replace HIGRAF common block). Mods also
+*      in IGRAPH to take advantage of the new version of IGRAP1.
+*
+*::>          VERSION  1.19/16   22/10/93 09.34.26
+*
+*   Bug fixed in IZGRAP in case the original data are in a zebra bank.
+*   The format in IZPICT (for the listing) are now I5 instead of I2.
+*
+*::>          VERSION  1.19/15   12/10/93 12.10.10
+*
+*   Bug fixed in IGAXIS (case NULL 9.999 10).
+*   Optimization in IGAXIS. In case of overlap, the alphanumeric labels
+*      are rotated.
+*   Mods in IGTABL, IZTABL and IZDNB to allow 2D plots with more than 999
+*      bins (with subranges).
+*
+*::>          VERSION  1.19/14   07/10/93 15.33.40
+*
+*   Flag NOVAGKS suppressed.
+*   Useless pilot patches *GKSGRAL, *DECGKS, *SUNGKS, *GPR, *GL, *X11 and
+*      *DI3000 are removed. The installation of HIGZ should be done with
+*      the pilot patch *HIGZ.
+*   For DecStation Color, GXinvert should be use for rubberbanding.
+*
+*::>          VERSION  1.19/13   01/10/93 10.54.59
+*
+*   Speed improvments in IPM4ID (3-4 times faster).
+*   Mods in IGWKTY. For UNIX machines wokstation type read is done via
+*      a C routine (IXGETL) in order to allow:
+*      $ paw < filename
+*                       or
+*      $ cat filename | paw
+*
+*::>          VERSION  1.19/12   28/09/93 17.37.09
+*
+*   Bug fixed in IZGRAP: The BASL attributes was not flaged.
+*   Bug fixed in IRQST for FALCO: the output parameter L was not correct.
+*   IGSG is now called in ISLN for the FALCO driver.
+*   New routine IPM4ID to draw NT/PLOT id.x%y%z%t
+*
+*::>          VERSION  1.19/11   27/09/93 11.59.25
+*
+*   In IGTCCH the character % is translated into '"Y#'
+*
+*::>          VERSION  1.19/10   15/09/93 11.16.41
+*
+*   Changes in IGTAB5, and IGTABL to be able to define the log option
+*      from the calling sequence and not via COMMON.
+*   Bug fixed in IZMERG.
+*
+*::>          VERSION  1.19/09   06/09/93 11.29.16
+*
+*   Mods in IGRAPH: when it was called with an invalid CHOPT (for
+*      example '?'), a blank CHOPT was stored in the picture and
+*      the image produced with IZPICT was different from the original.
+*   Bug fixed in IKBOX. For the 7879 driver and solid filled areas,
+*      IGHATC was not called correctly.
+*
+*::>          VERSION  1.19/08   03/09/93 17.08.41
+*
+*   Flag QMALPH added in *HIGZ.
+*   The routine ixgetwi in x11int is now a FORTRAN callable routine.
+*
+*::>          VERSION  1.19/07   31/08/93 09.39.07
+*
+*   Mods in the PATCH IMAC: New version of imacplo an f_readwi.
+*      The deck imacevl is now obsolete.
+*
+*::>          VERSION  1.19/06   27/08/93 17.15.44
+*
+*   Improvments in the vertical centering of rotated texts. This
+*     implies mods in the ITX routines (IKERNEL, IGKS and IDI3000)
+*     and in the routine IPTEXT.
+*   Small Improvments in the 3d function drawing (PATCH IH).
+*
+*::>          VERSION  1.19/05   26/08/93 11.58.10
+*
+*   Improvments in the 3d function drawing (PATCH IH). It is
+*      also possible to draw with hidden lines removal.
+*
+*::>          VERSION  1.19/04   25/08/93 10.19.48
+*
+*   Changes for CONVEX (V.Balashov).
+*   Bug fixed in IOPKS in the pathes IGKS an IDI3000: The string
+*      CHVERS was not initialized.
+*
+*::>          VERSION  1.19/03   24/08/93 12.03.26
+*
+*   New flag WINNT introduced.
+*   In IGTEXT, IA is saved for MACMPW (Cees Delaat).
+*   Lot of changes in the IMAC PATCH (Cees Delaat).
+*
+*::>          VERSION  1.19/02   930729 13.07
+*
+*   Unreachable code suppressed in IGTAB6.
+*   IF=HIGZEXAM on +PATCH,HIGZEXAM.
+*   CHDEFT has now 256 in IGMENU (instead of 80). (Roger Ruber
+*      RUBER@JPNKEKVX.BITNET)
+*   Bug fixed in IPDEF for the not A4 landscape PS file.
+*
+*::>          VERSION  1.19/01   930705 12.42
+*
+*   Protection added in IGMENU if the multiple choices ended with ','.
+*
+*::>          VERSION  1.19/00   930628 12.14
+*
+*   Protection added in IPTEXT: if the text size is less or equal
+*      to zero, a RETURN is performed.
+*   The EPS files contain now a showpage.
+*
++DECK,V1_18.
+*CMZ :  1.18/10 22/06/93  17.28.47  by  O.Couet
+*-- Author :    O.Couet   30/04/93
+*
+*::>          VERSION  1.18/10   930622 17.28
+*
+*   In the FALCO driver the marker type 3 (*) in known. This implies
+*      mods in IGPM.
+*   Mod in IGAXIS to have a better alignment for the vertical right
+*      labeled axis.
+*   Line type for FALCO implemented (merlant@csnvs1.in2p3.fr).
+*   Bug fixed in ISCHH (patch IKERNEL): in case of FALCO, CHHE was
+*      not stored in the pictures.
+*
+*::>          VERSION  1.18/09   930611  9.40
+*
+*   Bug fixed in ICLWK in case one the workstation was a PS file.
+*   New version of IGTABL and IGTAB6 to allow POL etc.. with
+*      Gouraud shading surfaces.
+*
+*::>          VERSION  1.18/08   10/06/93 17.50.50
+*
+*   In IKERNEL/IOPWK for the X11 version the string :0.0 is append after
+*      the display name/adress only if ":" is not yet in the name.
+*   New primitive ICA to draw cell arrays.
+*   Remove bug in IGSSE (introduced with the changes for DECGKS)
+*
+*::>          VERSION  1.18/07   930601 17.22
+*
+*   Changes in IKERNEL/IOPWK for the X11 version to allow to change
+*      the HIGZ window name. In higz_windows.dat after the adress
+*      of the host it is possible to give the window name.
+*
+*::>          VERSION  1.18/06   930528  9.32
+*
+*   Improvment in IPSCOL (set the PostScript Color): if the color is
+*      black, the operator "setgray" is used instead of "setrgbcolor"
+*      because on some color printers black is better with "setgray".
+*
+*::>          VERSION  1.18/05   930527 15.01
+*
+*   LINUX version introduced. <balashov@main1.jinr.dubna.su>
+*   New version of hidden line removal algorithm for Polar, Cylindrical,
+*      and Sperical coordinates.
+*   Bug fixed in IGTCCH: CHBUF is now erased before to be filled.
+*
+*::>          VERSION  1.18/04   930526 14.08
+*
+*   Bug fixed in IKFILE: on IBM/VM the string CCHOST was too long.
+*
+*::>          VERSION  1.18/03   930525 17.06
+*
+*   Mods for the GKSGRAL,NEWLIB version in IGSA, IGSG ad IGWKTY
+*      (Harald Butenschoen)
+*
+*::>          VERSION  1.18/02   930525 10.13
+*
+*   The string CHHOST in HIKERC was too small it is now 80 characters.
+*      (mjk@illini.physics.utah.edu)
+*   "IF=" on PATCH cards.
+*   In the X11 driver, the class hint is now equal to "HIGZ" (W.Brueckner).
+*
+*::>          VERSION  1.18/01   930511 17.24
+*
+*   The X11 mode to draw the cursor in ixreqlo is define according to
+*      the XServerVendor output.
+*   In IGMETA, if LUN=999, the metafile is deactivated AND closed.
+*   New routine IGMETN to set the metafile name. It is usefull for
+*      some HIGZ version (ATCGKS, MSDOS ...)
+*   Mods in IH routine to have the angle on the first coordinate with
+*      Polar, Cylindrical and Spherical reprsentations.
+*   Bug fixed in ntmgt: #include <stdio.h> was missing for SUN
+*   New routine IGTCCH to translate IGTEXT control characters (in a string)
+*      into their printable version.
+*
+*::>          VERSION  1.18/00   930430 12.57
+*
+*   New C deck NTMGT to manage dynamically the NT. Now used only with X11.
+*   Mods in IZPICT and IZSELN: The NT banks have now the same name in order
+*      to describe there structure with dzdoc.
+*   In IGTEXT, XW,YW and WDTH are now initialized to 0.
+*   Mods in various routines for DECGKS on VAX (Lynn Garren <GARREN@FNPSP>).
+*   Now the number of colors in HILUT is 256.
+*   New options POL, CYL, SPH, and PSD in IGTABL.
+*   Sequences are now splited in hicdes, and QFTITLECH is used to set
+*      the version number.
+*   Logarithmic scales on X and Y axis are now available for Lego and Surface
+*      plots. It implies mods in many routines around IGTABL and also
+*      in IGAXIS: with options W and G the label were not correct.
+*   The X11 mode to draw the cursor in ixreqlo is now "GXxor" which seems
+*      to work in a better way than "GXinvert".
+*
++DECK,V1_17.
+*CMZ :  1.17/03 22/03/93  10.04.38  by  O.Couet
+*-- Author :    O.Couet   24/02/93
+*
+*::>          VERSION  1.17/03   930322 10.04
+*
+*   The maximal number of NTs is now 100.
+*   The routine XGetCGValues is not used for VAX machines (x11int).
+*   A cross cursor is displayed together with the cross-air (x11int).
+*   The line type of the contour plots is controled with IGSET LTYP
+*      when all the contours are drawn with the same line type (IGTABL)
+*   Bug fixed in IFA3: NGRAF was not initialized.
+*
+*::>          VERSION  1.17/02   930309 11.58
+*
+*   Improvements in the GDDM driver. This version may be used on
+*      IBM 3192G terminals, IBM 5080 stations and corresponding
+*      emulators (notable the Macintosh version of tn3270).
+*      The modifications have been contributed by J.Salicio/CIEMAT.
+*
+*::>          VERSION  1.17/01   930302 12.20
+*
+*    Bug fixed in IKERNEL/IOPWK: in case of "Invalid Workstation type"
+*       INOPWK wasn't decremented.
+*    Mods in IGWKTY: when '?' is typed by the user, the metafile
+*       types are not displayed.
+*
+*::>          VERSION  1.17/00   930224 15.51
+*
+*    Improvments in IGAXIS: If the intermediate labels in LOG scale
+*       overlap each other, they are not drawn. The position of the
+*       exponants is now better in case of LOG scale.
+*    New routine IZGRAP to store the IGRAPH primitive.
+*    New option Z in IGRAPH.
+*    Improvments in IGAXIS: If the intermediate labels in LOG scale
+*       are drawn if YMAX < 10000.
+*
++DECK,V1_16.
+*CMZ :  1.16/13 01/02/93  14.50.45  by  Rene Brun
+*-- Author :    O.Couet   23/07/92
+*
+*::>          VERSION  1.16/13   930201 14.50
+*
+*
+*     Inprovments in the X11 fonts management. 4 fonts are kept in
+*        memory in order to avoid too many fonts loading.
+*
+*::>          VERSION  1.16/12   930126 10.15
+*
+*     Bug fixed in IPDLIN. Some line where missing in PS file
+*        if they were too small.
+*     Improvements in IPTEXT. The PostScript text was always visible
+*        even if the text position was outside the paper.
+*
+*::>          VERSION  1.16/11   930122  9.40
+*
+*     Bug fix in IPZONE for the marker type 1 size.
+*
+*::>          VERSION  1.16/10   930118 15.57
+*
+*     Mods in IPTEXT in the ' ' and \040 management.
+*     Improvments in the intermediate label drawing in case of
+*        LOG axis. the rule is now: If  1 =< WMIN <100 and
+*        Log(WMAX/WMIN) <2, some intermediate label are drawn.
+*
+*::>          VERSION  1.16/09   930112 11.26
+*
+*    Changes in IKFNTX: on IBM/VM only non proportional fonts are
+*       used in the X11 version because for the proportional fonts
+*       the text width is not correctly computed.
+*    Bug fixed in IZPM: In PostScript files, invalid marker types
+*       produce points.
+*    Improvments in IGTAB5 in order to have the size of the axis
+*       value, the size of the axis tick marks and the offset of the
+*       values independant of the viewing angles in the surface and
+*       lego plots drawing.
+*    Bug fixed in IGTAB2: in case of LOGZ option the position of the
+*       contour plot was not correct with the SURF3 option of IGTABL.
+*
+*::>          VERSION  1.16/08   930106 11.16
+*
+*    A few bugs fixed in the DI3000 PATCH <MARRAFINO@FNPSP>
+*    Mods in x11int in the graphics context used to draw the
+*       rubberbanding cursor: it is now more portable
+*       jank@sunra1.cern.ch or jank@cernvm (Werner Jank)
+*    Mods in the PostScript driver for EPS files: a new dictionnary
+*       is defined in order to be included in WORD.<SCHRODER@CERNVM>
+*    Mods in the PostScript driver for EPS files: the new dictionnary
+*       was too small.
+*    Changes in IZPICT. The options C, O, and D can be invoked in the
+*       same CALL to IZPICT.
+*    Mods in IGHIST. The 1Dim histogram with 1 or 2 bins are not plotted
+*       with a marker or with a line but according to the current
+*       option choosen.
+*
+*::>          VERSION  1.16/07   921126 11.40
+*
+*    Bug corrected in IZHIST: The value give to IZPUSH was not
+*       correct in case of non equidistant bins.
+*    New version of the routine ixmotif. New routine ixminit to
+*       initialize the Motif call backs from IOPWK.
+*    Mods in IHSDRL (IH) to avoid precision problems on NEXT.
+*    New version of the routine IGMESS calling the routine IGXMES
+*       which allows a more flexible usage of the X11 windows.
+*    Mod in ixopnwi: if the window name begins with '-' the extension
+*       ' @ machine_name' is not added to the window title.
+*    Mods in the MSDOS driver in the routines  IGWKTY, IGSG, IOPWK
+*       and MAPCOL to support SuperVGA 800x600 with 16 colors screen
+*       (Dr.Valery Fine LCTA/JINR Dubna).
+*
+*::>          VERSION  1.16/06   921030 11.04
+*
+*    Changes in IGAXIS. With LOG scale, intermediate division
+*      are ploted if one one decade is visible. This implies also
+*      mods in IZRTOC.
+*    Bug fixed in IPTEXT. The @ mechanism to escape control characters
+*       was wrong for <, >, ", #, ?, !, & and $.
+*    New sequence HIPICK use in IGPID and IGPICK.
+*    Default FONT and PRECISION change to 0,2 in IGSET.
+*
+*::>          VERSION  1.16/05   921013 16.26
+*
+*   Changes in IGAXIS secondary and tertiary axis divisions are
+*      optimized like the primary divisions.
+*   Changes in the MacIntosh driver (fill area management) (C.Delaat).
+*   Bug fixed in the IKERNEL PATCH: With the FALCO driver, some
+*      attributes (FACI, FAIS etc...) where not correctly stored in
+*      the ZEBRA data structure.
+*
+*::>          VERSION  1.16/04   921009 13.53
+*
+*   Some fixes in the Macintosh driver (Cees Delaat).
+*   New option 'Q' in IZPICT.
+*   Changes in the X11 interface. The routine ixmotif allows to
+*      manage several window in a motif program. The routine ixopnwi
+*      has one additional parameter IFLAG.
+*   New flag APOF77 for the f77 apollo compiler.
+*   New flag QX_SC and QXNO_SC to add or not an "_" in the C routines.
+*   Bug fixed: the PostScript marker size is now reset in IPZONE.
+*   Some changes in IGAXI3 in order to get a better automatic
+*      labeling of the axis.
+*   Changes in IPTEXT: the control characters can be escaped with '@'.
+*
+*::>          VERSION  1.16/03   920824  9.44
+*
+*   Bug fixed in IZSELN: the graphics editor didn't work. This
+*      was a side effect of the introduction of IGPID (Lee Roberts).
+*   Bug fixed in the routine IRQST for GL: the blank was forgotten.
+*      (Lee Roberts).
+*
+*::>          VERSION  1.16/02   920820 10.06
+*
+*   Mods in x11int. The window is raised by ixupdwi only
+*      if necessary.
+*   New version of PostScript text (routine IPTEXT in PATCH IPOST)..
+*       (P.Juillot CRN Strasbourg <JUILLOT@CERNVM).
+*
+*::>          VERSION  1.16/01   920818 11.03
+*
+*   Mods in the Mac interface (Cees de Laat)
+*   Bug fixed in x11int (ixsetco) the RGB value were not stored.
+*   Bug fixed in IGAXIS in the optimization of the secondary divisions.
+*
+*::>          VERSION  1.16/00   920723 13.57
+*
+*   Change in IGAXIS for the TOP->DOWN labels.
+*
++DECK,V1_15.
+*CMZ :  1.15/03 22/07/92  12.17.38  by  O.Couet
+*-- Author :    O.Couet   14/07/92
+*
+*::>          VERSION  1.15/03   920722 12.17
+*
+*   Bug corrected in IGSEE and ITX at the PATCHY level (MSDOS
+*      flag side effect).
+*   Change in IGINIT: the alpha numeric labels are now initialized
+*      with ' '. And in IGLBL: if the label list has N<50 labels, the
+*      labels form N+1 to 50 are reset to ' '.
+*   Bug fixed in IGADID: the IZPUSH parameter was not correct.
+*
+*::>          VERSION  1.15/02   920717 14.25
+*
+*   Bug fixed in lego and surface drawing: on VM legos with a small
+*      range on X or Y axis were shifted. some variables needed
+*      to be in DOUBLE PRECISION in the IH PATCH (on VM).
+*
+*::>          VERSION  1.15/01   920715 10.00
+*
+*   Change in IGCHWK. In the case of GKS OPND and LUNWIN were not
+*      initialized <GUNTER@CERNVM>.
+*   Change in IRQLC for ATCGKS (call to GPREC) (koellner@lbl.Bitnet).
+*
+*::>          VERSION  1.15/00   920714 16.29
+*
+*   New flag GKSIBM for the native version of GKS on IBM RS6000.
+*      To install this version of HIGZ the following selection are
+*      needed: +USE,*HIGZ,IBMRT,GKSIBM. (Roger Howard <RH2@CERNVM>).
+*   Mods in X11INT for IBM/VM: the static variable are now initialised
+*      with a "long NULL" (LNULL).
+*
++DECK,V1_14.
+*CMZ :  1.14/13 03/07/92  13.06.26  by  O.Couet
+*-- Author : O.Couet
+*
+*::>          VERSION  1.14/13   920703 13.06
+*
+*   New routine ixrscwi in x11int to rescale a X11 window.
+*   IGMESS is now able to resize the message window if necessary.
+*   New routine IPM3ID to store identifiers for each point of a 3D
+*      polymarker.
+*   New version of the MSDOS driver.
+*
+*::>          VERSION  1.14/12   920630 17.21
+*
+*   Mods in IGTABL: In case of colored Legos or Surfaces, if the
+*      color levels are not initialised, it is now done automatically.
+*      (Mariapia.Pascarella@crs4.it).
+*
+*::>          VERSION  1.14/11   920630 16.19
+*
+*   New workstation transformation management. For the time being
+*      it is implemented only for the X11 driver.
+*   First version of the MSDOS driver (fine@main2.jinr.dubna.su).
+*      To install HIGZ with this driver the following PATCHY
+*      selections are needed:
+*              +USE,*HIGZ,MSDOS
+*
+*::>          VERSION  1.14/10   920623 16.07
+*
+*   The definition of VAL in IGSET has changed if PNAME='2BUF':
+*      VAL=10*(WKID)+(double buffer mode: 1.=on 0.=off)
+*      This implies also changes in ixs2buf (X11INT).
+*   Changes in *HIGZ and IKBOX for MACMPW.
+*   New clipping mechanism in the X11 interface. The routines IXCLIP
+*      and IXNOCLI need now the window identifier as input parameter.
+*
+*::>          VERSION  1.14/09   920610 10.04
+*
+*   Some improvements in the MAC driver. To install HIGZ with this
+*      driver the following PATCHY selections are needed:
+*              +USE,*HIGZ,MACMPW,machinename
+*   Mod in ixreqlo in x11int for B&W screens.
+*   MACPLO and FCLEVL are renamed into IMACPLO and IMACEVL in the
+*      MacIntosh driver.
+*   New version of ixupdwi (X11INT) calling XSync (Cees de Laat).
+*
+*::>          VERSION  1.14/08   920519 17.17
+*
+*   Changes in the X11 interface:
+*      - IXGETGE returns the Display size if IWID<0.
+*      - New routine IXGETPL to return the number of planes.
+*      - IXUPDWI has an input parameter in order to raise or not
+*        the current graphics window.
+*
+*   First version of the MacIntosh driver (Cees de Laat).
+*
+*   Mods in IXREQLO, in sample mode it return:
+*
+*                 11 = left is released
+*                 12 = middle is released
+*                 13 = right is released
+*                 -1 = nothing is pressed or released
+*                 -2 = leave the window
+*
+*      This is also available in the X11 version of IRQLC.
+*
+*::>          VERSION  1.14/07   920513 12.02
+*
+*   New version of the double buffer for X11. Now it works on several
+*      windows. The changes done previously (see version 1.14/05) in the
+*      routines ICLRWK, IUWK and the sequence HI2BUF are not necessary
+*      as the work is now done by the C routine IXS2BUF.
+*
+*::>          VERSION  1.14/06   920506  9.59
+*
+*   Few mods in the PostScript driver for US format (Lee Roberts).
+*   New routine to write a pixmap in a bitmap file: IXWRPX
+*   Mod in IGRSIZ if the double buffer is on.
+*   Bug corrected in IZPM. A declaration was after a DATA statement.
+*   Mods in IZDIPI and IGCLES in order to avoid wrong PostScript files
+*      in the context of STYLE GP in PAW.
+*   Mods in IGTABL, IGTAB2 and IGTAB6 in order to plot the contour and
+*      the nodes of the surfaces in the middle of the histograms bins.
+*   Protection added in the FALCO driver (routine IGSG in IKERNEL).
+*
+*::>          VERSION  1.14/05   920414 10.03
+*
+*   Nothing is done in the routine ixupdwi (DECK X11INT) if a
+*      pixmap is opened.
+*   First implementation of the double buffer with the X11 driver.
+*      This implies a new sequence HI2BUF and new routines in the
+*      C X11 driver (ixclrpx, ixswapx). To set on or of the double
+*      buffer it is enough to do:
+*      CALL IGSET('2BUF',1.) or CALL IGSET('2BUF',0.)
+*      Note that CALL IGSET('*',0.) don't reset the double buffer off.
+*   Bug corrected in IZCDA, the number of real attributes was not
+*      correctly compute (REDMOND@CERNVM).
+*
+*   American paper sizes in the PostScript driver are now available.
+*      The PostScript specifier is of the form:
+*
+*                  -[Format][Nx][Ny][Type]
+*
+*      3 new values of Format are now available:
+*
+*                       100 ==> 8.5x11 inch
+*                       200 ==> 8.5x14 inch
+*                       300 ==> 11x17  inch
+*
+*::>          VERSION  1.14/04   920401 14.01
+*
+*   Correction in x11int, the declaration "int Motif=NULL" has been
+*      changed to "int Motif=(int)NULL" for IBM/VM.
+*   Correction in the routine IPDEF (PATCH IPOST) to prevent too long
+*      PostScript file names.
+*
+*::>          VERSION  1.14/03   920319 14.38
+*
+*   If an external_window (motif) is required (X11 interface) the border
+*      width used is 0 in XCreateWindow.
+*   In the X11 interface a new graphics context (gcpxmp) is used for
+*      the pixmap management.
+*   In the routine IGRSIZ, used to redraw the current picture, pixmaps
+*      are used in order to avoid to see the drawing.
+*   If a motif window is required (X11 interface) the XCloseDisplay is
+*      not performed.
+*   Mods in x11int in order to release the unused fonts.
+*
+*::>          VERSION  1.14/02   920312 17.29
+*
+*   Mods in IGTABL:
+*      - NCOL is reset after the drawing of a Gouraud shaded surfaces.
+*      - For the 3D plots, if PAR(11) = 0 the axis are not drawn.
+*
+*::>          VERSION  1.14/01   920310 18.39
+*
+*   Bug corrected in IGTAB6. The end of the DO-LOOP number 10 was
+*      misplaced.
+*   Mods in IPM3 and IPL3 in order to plot a non limited number
+*      of points.
+*
+*::>          VERSION  1.14/00   920228 17.54
+*
+*   The clipping can now be controlled with the routine IGSET.
+*   New routine IGPXMP to control the X11 pixmaps. This routine is just
+*      dummy if HIGZ is installed without X11.
+*   New option 'P' (post structure) in IGSTR.
+*   New PHIGS routine (for NT/PLOT) IATR3, IGPARF, IGPHSL and IGPHST.
+*   Correction in the PostScript boxes clipping (IZBOX).
+*   The GL version of IUWK call now GFLUSH
+*      (Lee Roberts SSCVX1::LROBERTS).
+*   New routine ixwipx to save a part of the current open window in a
+*      preopen pixmap. This functionality is available in IGPXMP under
+*      the option 'S'.
+*   New version for the PostScript marker 30 (m30) (P.Juillot).
+*   New logic to compute the color map for the option S4 in IGTABL.
+*      The basic color used is the current fill area color index.
+*   IGTAB4 is now able to draw the background of the 3d plots.
+*   Correction in IGSA (IGKS) GUESC001 is now called with IWK
+*      (W.Koellner, LBL).
+*   Mods in the PostScript drivers. New Structuring comments are
+*      introduced: %%Pages: atend, %%EOF, %%Trailer, %%Page. This
+*      is useful for some PostScript previewers, for example
+*      'pageview' on SUN workstations.
+*
++DECK,V1_13.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.13/08   911204 17.14
+*
+*   New routines to create and display pixmaps in X11INT:
+*      ixopnpx : create a new pixmap
+*      ixclpx  : close the current opened pixmap
+*      ixcppx  : copy a pixmap to the screen
+*   Modification in ixopndsp: the variable lenhst was not tested as
+*      a pointer.
+*   Change in X11INT, if the line width is 1, 0 is used (for speed).
+*
+*::>          VERSION  1.13/07   911114 14.14
+*
+*   Modification in IZPUSH in the use of MZNEED.
+*   Mods in IGTABL. The drawing of axis for the 2D representation is
+*      implemented.
+*   Protection added in IGTABL if the subrange of the matrix to be
+*      plotted is not correct.
+*   Correction in IGRTOH, the light parameter was not at the right place
+*   IGERR use now LUNERR to print the error messages. If LUNERR is not
+*      equal to 6, the error message are printed in the file "higz.err".
+*   Change in IGQWK in the DECGKS workstation type test (brock@cernapo)
+*   Bug fixed in IGTABL. In case of option 'R' with a subrange, the plot
+*      was misplaced.
+*
+*::>          VERSION  1.13/06   911024 10.56
+*
+*   New fill area style indices in the X11 interface (1-9).
+*      ixsetfas has now two parameters.
+*   Correction in IZPM for the PostScript marker size.
+*   New Graphics Context "echo" in the X11 interface for input echo.
+*   New function "setinput" to enable or disable the inputs in X11
+*      windows (mods in X11INT). This function is used in ixreqlo
+*      and ixreqst.
+*   Mod in IGHATC to have continuous hatches between two different
+*      fill areas (Chuck Parsons MIT).
+*
+*::>          VERSION  1.13/05   911017 10.13
+*
+*   Entry point ixflpat removed from X11INT.
+*   Correction in IPDEF: a "stroke" was missing in the PostScript
+*      macros "m2" and "m5".
+*
+*::>          VERSION  1.13/04   911015  9.44
+*
+*   First version of the $KUMACS PATCH.
+*   Mods in IGAXIS. NCAR is now a parameter and the variable IAZ was
+*      not used (F.Carminati CN/AS).
+*   Mods in IGQWK. IWT was not used (Cf APOLLO compiler with -info 4).
+*   Changes in X11INT to avoid to trap the event outside the routine
+*      ixreqlo. This is useful for Motif applications (N.Cremel CN/AS)
+*   Corrections for IBM/VM in X11INT: some NULL was not correctly
+*      defined (Wojciech Wojcik <WOJCIK@FRCPN11.BITNET>).
+*   Correction in IPDEF on VAX/VMS: the macro "mb" was not correct.
+*   Correction in IPTEXT. If the last character of a text was a "\"
+*      nothing was printed.
+*
+*::>          VERSION  1.13/03   911003 17.44
+*
+*   Changes in the drawing of markers in the PostScript interface.
+*      The marker 1 to 5 and 20 to 31 are now drawn via PostScript
+*      macros:
+*      1) The aspect of markers, in particular for the types 20,21,22,23 and
+*         29, is better because they are fully black.
+*      2) The size of the PostScript file has reduced and doesn't depend
+*         on the marker type.
+*      N.B. The PostScript macros "mk" and "circ" are now not used so
+*           they are suppressed from the PS file.
+*
+*::>          VERSION  1.13/02   910930 12.02
+*
+*   Some improvements in the "font-loading" for X11. The routine
+*      ixsettf can be now use just to see if a font exist.
+*   Some modifications to IPINIT, IPLTYP, and IPTMAC to fix a problem
+*      when printing several pages in a LaTeX metafile. (A.Nathaniel)
+*   The full A4 page can now be used in encapsulated LaTeX
+*      metafiles. (A.Nathaniel)
+*   Flag ALLIANT introduced (Curtis A. Meyer <cmeyer@physik.unizh.ch>)
+*
+*::>          VERSION  1.13/01   910918 18.03
+*
+*   Bug corrected in IGAXIS on HP: the "0" was not drawn.
+*   MZNEED is now called with option 'G' in IZPUSH.
+*   Change in IXGETGE: The window ID is an input parameter
+*      to avoid to activate the window before getting the size.
+*   IXCLRWI call now XFlush.
+*   New option Z in IGTABL to display the Z scale with option COL.
+*      A new routine IGCOLM has been introduced.
+*
+*::>          VERSION  1.13/00   910827 12.18
+*
+*   New PostScript macro "circ" to draw circle marker.
+*   gethostname removed from x11int (now in cspack).
+*
+*   IPSC/860 version introduced (Lee Roberts) flag IPSC
+*
+*   Changes in HIGZEX: PSCRIPT flag is now used.
+*   Bug corrected in IRQLC and IGRNG in PATCH IGKS for the
+*      DECGKS version (Chuck Parsons MIT).
+*
++DECK,V1_12.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.12/16   910816 18.22
+*
+*   Protection added in IPM (IKERNEL) if N > IBUFSI.
+*
+*   Important rewrite of the PostScript interface, and introduction
+*      of new features to divide the paper in several zone. This work
+*      has been done with the help of P.Juillot (CRN Strasbourg).
+*      The PostScript workstation types have now the following format:
+*
+*                    -[Format][Nx][Ny][Type]
+*
+*::>          VERSION  1.12/15   910717 18.20
+*
+*   Clean up in the PostScript procedures defined in IPDEF (P.Juillot).
+*   The comment %%Title in PostScript gives the name of the file.
+*   2D PHIGS interface introduced.
+*   MOTIF flag no more needed.
+*   Mods in IEARC (Valery Fine).
+*   Clipping of the software polymarkers (20-31) implemented.
+*   Some improvements in the creation and displaying speed of pictures.
+*   New version of the functions IXWCDC and IYWCDC for X11
+*      to avoid overflow problems on VAX/VMS.
+*
+*::>          VERSION  1.12/14   910627 11.43
+*
+*   Mods in the FALCO driver in IKBOX and IFA. IGSA is called in IACWK
+*      in case of 7879.
+*   Two new routines for Motif: ixgetwi to retrieve the X11 window id
+*      of a given workstation, and IGDRPI to redraw the current picture
+*      if it exists (useful when the window is resized).
+*   Bug corrected in IPFOUT if the number to be printed in the PS file
+*      is 0
+*   Mods in IGRNG (IG) for ATCGKS. IERR=22 instead of 31 (W.Koellner)
+*   New options in IGPIE.
+*      H : To force the labels size to be the current character height.
+*      R : To draw the labels align on the radius.
+*   Mod in IGTABL in the contour plot drawing. In case of a given set
+*      of altitudes the drawing was wrong (ICONT=12 instead of 11).
+*
+*::>          VERSION  1.12/13   910605 11.30
+*
+*   FLAG MOTIF introduced.
+*   New routine IGMESS to print a message in a X11 window.
+*   Correction in ISCR (IKERNEL) to update the colors if the color
+*      change is already use.
+*   Protection added in IGAXI3 if the number of division is < 2.
+*   Improvements in the usage of the X11 fonts (routine IKFNTX).
+*   CALL IGSA remove for the FALCO driver in IACWK (L.Tremblet).
+*   Changes in the PostScript driver to reduce the size of the
+*      tables with option COL.
+*   Some variables are now in DOUBLE PRECISION in IGHATC to avoid
+*      missing hatches (A.Michalon).
+*   Mods in HIGZEXAM for IBMVMS.
+*   New option DRMD in IGSET to change the drawing mode of graphics.
+*   New option SYNC in IGSET to allow to set the Synchronization on or
+*      off in the X11 driver.
+*   FLAG BATCH to generate HIGZ only with ZEBRA and PostScript:
+*         *HIGZ,BATCH,machinename.
+*
+*::>          VERSION  1.12/12   910503 17.55
+*
+*   NCAR is now set to 5 is IGAXIS because of rounding problem on IBM if
+*      it is equal to 6.
+*   host_name has now a length of 64 characters in X11INT (B.Stone).
+*   Mod in IPINIT: The line in the LaTeX file -778 is now 80 for IBM/VM.
+*   New options 'S' and 'R' in IGZSET to Save and Restore the state of
+*      the 'G' and 'Z' flags.
+*
+*::>          VERSION  1.12/11   910425 12.27
+*
+*   Protection added if the X11 fonts are not available (ITX, IKFNTX).
+*   One line removed in HIEX3. It was drawing a text outside the screen.
+*   New C routine "ixbox" to draw boxes faster (3x) with X11.
+*   Flag PSCRIPT added in IGBOX, ICLRWK, IFA, IPL, IPM, ISELNT and ITX
+*      in order to install HIGZ without ZEBRA but with PostScript.
+*   Correction in IGRAP1: if it was called from IGHIST with option F
+*      the fill area was not drawn.
+*   Marker type "dot" added in the FALCO driver (Lee Roberts).
+*   Mods in IGRAP1 to allow both the drawing of contour and the drawing
+*      of function with X in increasing order.
+*   IGTERM call now IUWK with control FLAG equal to 1 (useful for GKS).
+*   X11 windows are now created with a border width of 1.
+*   Mods in IGTABL to allow to plot flat distributions (ZMAX=ZMIN).
+*
+*::>          VERSION  1.12/10   910409 15.22
+*
+*   Protection added in IKFILE (IKERNEL): an INQUIRE is done on the
+*      higz_windows.dat to avoid an error on IBM/VM when it is
+*      opened in 'OLD' mode.
+*   GCGTOA and GCATOG are now called in IGSA and IGSG in the GKSGRAL
+*      version for APOLLO.
+*   IRQLC is now able to do the sample mode for X11
+*   The C routine "ixreqlo" is completely new. It provide now several
+*      prompt echo types and the sample mode.
+*   The decwindows flag is now suppressed in X11INT.
+*
+*::>          VERSION  1.12/09   910402 16.36
+*
+*   Protection added in ISWN (IKERNEL) if the range of the window
+*      is not correct.
+*   Bug corrected in IGAXIS (IG) when (WMAX-WMIN)/N1A less than 0.001
+*   Some corrections in the FALCO driver (ICLRWK, IOPWK and IGQWK)
+*
+*::>          VERSION  1.12/08   910328 15.49
+*
+*   New PATCHY flag NOVERS to avoid the printing of the version number
+*      in the routine IOPKS (PATCH IKERNEL).
+*   New routine IGASCI to return the ASCII code of one character.
+*
+*::>          VERSION  1.12/07   910322 10.22
+*
+*   The routine IKFNTX (to set the X11 fonts) is now access in ITX.
+*   The routine IKFILE call now the KERNLIB routine GETENVF for UNIX
+*      and CRAY instead of GETENV.
+*
+*::>          VERSION  1.12/06   910315 17.00
+*
+*   Protection added in the macro "mk" of the PostScript driver (s)
+*   Bug corrected in IKFILE if the file "higz_windows.dat" is in the
+*      Current directory.
+*   All the Adobe fonts are now available in the X11 interface with
+*      variable heights.
+*
+*::>          VERSION  1.12/05   910307 17.06
+*
+*   Mod in IMWRIT (PATCH IMAIL) in case of UNIX the 1X is not use
+*      in the FORMAT.
+*   Mods in IGQ (IG) flag SGI replaced by GL.
+*   The following GKS entry points are available in the PATCH IKERNEL:
+*      GACWK,GCLKS,GCLRWK,GCLWK,GDAWK,GFA,GOPKS,GOPWK,GPL,GPM,GRQLC,
+*      GRQST,GSCHH,GSCHUP,GSCLIP,GSCR,GSELNT,GSFACI,GSFAIS,GSFASI,GSLN,
+*      GSLWSC,GSMK,GSMKSC,GSPLCI,GSPMCI,GSTXAL,GSTXCI,GSTXFP,GSVP,
+*      GSWKVP,GSWKWN,GSWN,GTX,GUWK
+*   Mods in the Latex driver in markers and text (A.Nathaniel)
+*   Mods in the X11 interface for IBM/VM. The concerned routines
+*      are: IOPWK,IKFILE (IKERNEL) and X11INT (HIGZCC).
+*
+*::>          VERSION  1.12/04   910228 14.22
+*
+*   Changes the the HIGZ examples (HIEX2) DO loop on IGTEXT go
+*      now up to 45 (A. Johnstad SSC).
+*   New workstation type 7879 for xterm (A.Nathaniel).
+*   Minor mods for ATC/GKS Version (W.Koellner)
+*   Changes in the LaTeX driver to support boxes (A.Nathaniel)
+*
+*::>          VERSION  1.12/03   910218 15.31
+*
+*   Changes in Pilot patch *HIGZ for automatic selection of IBM.
+*   For ATCGKS the default metafiles names in IGMETA are in lowercase.
+*   Mods in IGWKTY for AIX370.
+*   Mods in x11int for CRAY the X11 includes were missing.
+*
+*::>          VERSION  1.12/02   910215  9.50
+*
+*   New version of the routine IPTMAC to avoid the "overfull hbox"
+*      in the LaTeX interpretation.
+*
+*::>          VERSION  1.12/01   910214 15.25
+*
+*   Correction in IFPUT (patch IFALCO) "SAVE BOUT" was missing.
+*   Mods in the LaTeX driver to allow to have several plots in the
+*      same file (-778).
+*
+*::>          VERSION  1.12/00   910212 12.24
+*
+*   Mods in X11INT (in the routine setcolor) for B&W (F. Marabelle)
+*   FALCO interface introduced. To install use:
+*         *HIGZ,FALCO,machinename.
+*      This interface can be install with X11.
+*      The workstation type is 7878.
+*   Correction in IPDEF. Centering problem with -111.
+*   New C DECK FALINT in PATCH HIGZCC to do the HIGZ/FALCO interface
+*      on the UNIX machines (L. Tremblet ECP/DS).
+*   New flag HPUX introduced for HP-Unix.
+*   Correction in the X11 version of request string.
+*   Mods in IOPWK and IGSSE for SUNGKS (Lee Roberts).
+*   Mods in IHWL02 to fix rounding problems (Steve Gensler).
+*   New metafiles type -777 and -778 to output encapsulated
+*      LaTeX pictures (-777) and LaTeX picture (-778) (A.Nathaniel).
+*      This implies changes in IGINIT,IZBOX,IZCLRD,IZFA,IZPL,IZPM
+*      IZSELN,IZTX,IPDRAW,IPINIT, and IPSCOL and the creation of the
+*      new routines IPDLIN,IPJOUT,IPLTYP,IPTLIN,IPTMAC, and IPTTEX.
+*   Implementation of marker types 2..5 for X-Windows in IPM,ISMK
+*      of IKERNEL
+*   New PostScript workstation type -114 and -115 for portrait and
+*      landscape color printer (the vertical translate is bigger).
+*   Improvements in text alignment and line types in the X11 interface.
+*   New variable CHMETA (metafile name) introduced in HIMETA
+*
++DECK,V1_11.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.11/07   901214 16.28
+*
+*    Mods in IGRAP1 to draw closed curves
+*    IGRAP1 use the COMMON HIARC for working space
+*    Mods in the routines IGARC* in order to use the COMMON HIARC
+*    Changes in the metafiles management in the ATCGKS version
+*       (W.KOELLNER). This implies mods in the routines IGSSE,
+*       IGMETA, and IGRNG in the PATCH IG.
+*    Flag AIX370 introduced in IGWKTY (PATCH IG)
+*    The COMMON HIARC is replace by:
+*       COMMON /HIGRAF/NGRAF,XGRAF(503),YGRAF(503) in order to be
+*       accessible in a COMIS program
+*    New option 'F' (for Fill area) in IGRAPH. 'FC' is also possible
+*
+*::>          VERSION  1.11/06   901207 11.22
+*
+*    Changes in IGTABL to define via PAR(2) the color of a contour plot
+*    In IGRAPH the protection on the "increasing order" for curves
+*       is removed
+*
+*::>          VERSION  1.11/05   901203 10.38
+*
+*    The IXCRLWIN (Patch HIGZCC) call now "XSetWindowBackground" to
+*       the color 0 as background color
+*    Change in IZPICT: In case of addressing picture by number, the
+*       conversion between CHARACTER and INTEGER in done by IZCTOI
+*       and not with an internal READ (problem on the VAX)
+*
+*::>          VERSION  1.11/04   901129 11.01
+*
+*    The line width acts now on the line type 13, 14 and 15. This
+*       implies mods in: /IKERNEL/IPL, /IGKS/IPL, /IGMR/IPL, and
+*                        /IDI3000/IPL
+*    New logic to specify the Display_Name with X11:
+*       The routine IGWKTY can get (with X11) a workstation type like:
+*       "n.hostname" where "n" is the line number in the file
+*       higz_windows.dat and "hostname" the name of the machine on
+*       which the graphics is displayed. This facility avoid to define
+*       the variable DISPLAY before using HIGZ.
+*       o  If the one gives to IGWKTY a workstation type like "n.hostname",
+*          the "hostname" is written at the end of the line "n" in
+*          higz_windows.dat.
+*       o  If one gives the workstation type "n" and if a "hostname" is
+*          present on the line "n" in higz_windows.dat, the graphics goes
+*          to the machine "hostname".
+*       o  If one gives the workstation type "n" and if a "hostname" is NOT
+*          on the line "n" in higz_windows.dat, the graphics goes to
+*          the machine define by the variable DISPLAY.
+*       o  If one gives the workstation type "n." and if a "hostname" is
+*          present on the line "n" in higz_windows.dat, the graphics goes
+*          on the machine define by the variable DISPLAY and "hostname" is
+*          removed from the line "n" in higz_windows.dat.
+*       This implies mods in IGWKTY (IG), IOPWK (IKERNEL) and X11INT (HIGZCC)
+*       in which a new routine has been created: IXOPNDSP
+*    In IGQWK, IDTY is replace by IGIWTY(IWKID) in case of GKS
+*
+*::>          VERSION  1.11/03   901126 17.04
+*
+*    The routine IKBOX (PATCH IKERNEL) is activated only if
+*       "GL" or "GPR is selected.
+*    Changes in the C interface to X11: all the C routines with
+*       a character string as input parameter (IXOPNWIN, IXSETTFN,
+*       IXTEXT) have now one more input parameter: the string length.
+*       This imply also changes in the routines IOPWK, IACWK, ISTXFP,
+*       and ITX in the PATCH IKERNEL.
+*
+*::>          VERSION  1.11/02   901123 10.15
+*
+*    Correction in fill area in the X11 interface: in case of hollow
+*       mode the polygon was not closed.
+*    Bug fixed in IGTABL in case of stacked LEGO with hidden line
+*       removal (the minimum was not good).
+*    Correction in IPDEF (PATCH IPOST) in case of PostScript file
+*       -112 the centering was not good.
+*
+*::>          VERSION  1.11/00   901107 14.09
+*
+*    ATCGKS version introduced by:  Werner KOELLNER, LBL
+*
+*    To install it do:
+*       +USE,VAX,ATCGKS,*GKSGRAL.  On VAX/VMS
+*       +USE,SUN,ATCGKS,*HIGZ.     On SUN
+*
+*    In IPINIT the first line of a PostScript file is now :
+*       %!PS-Adobe-2.0
+*       %!PS-Adobe-2.0 EPSF-2.0 for encapsulated PostScript
+*    Option LOGX and LOGY in IGTABL
+*    ZMIN and ZMAX available for all option of IGTABL
+*    Request locator and clipping in the GDDM driver
+*    The marker "point" in PostScript (mk) is now done with an arc
+*    Correction for Black and White devices in X11 interface:
+*       Background and Foreground colors were inverted
+*    Changes in the DECGKS version (IOPWK, IGQWK, IGRNG) to
+*       distinguish between DEC-Windows workstation types and
+*       non-windows types by assuming all workstation types at
+*       or above 200 are DEC-Windows.
+*    Check on the "Server Vendor" in the X11INT (patch HIGZCC)
+*    New flag BSLASH (different from UNIX) to replace "\" by "\\"
+*    Mods for 3.2 Version of ATCGKS.
+*    New PATCH IH for hidden surfaces and hidden lines drawing.
+*    Bug corrected in IGHIST: In option C the center of each is used
+*    New driver for encapsulated PostScript (-113)
+*    The date of creation and the version of HIGZ are now printed
+*       in PostScript to follow the Adobe conventions.
+*    Protection add in PostScript driver if an error in writing occurs
+*    Mods in IXLINE (X11INT) if the number of points is 1 XDrawPoint
+*       is used (F.Marabelle SACLAY).
+*    The PostScript plot are now centered on the page with WKTYPE
+*       equal to -111 or -112
+*
++DECK,V1_09.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.09/00   891219 15.24
+*
+*    Bugs corrected in IZHIST in case of not equidistant bins
+*    Correction for CRAY in IGSET (NINT used in TXAL)
+*    Correction in IUWK (PATCH IGKS) to call IPUWK even if GFLAG=.FALSE.
+*    New version of clear for PostScript (see IZCLRD)
+*    Accents are available in PostScript
+*    New PostScript metafile type -2xx with 132 characters per lines
+*    Telnetg : Protections added in IMFIN and IMFOUT (if XMIN=XMAX)
+*    Bug corrected in IPINIT (CALL IZSELN is added)
+*    In IGTABL, the contour plot can now drawn a given set of altitudes
+*    Changes in IGTABL to allow scaling change on Lego plots
+*    New routine IPTEXT (called by IZTX) in PATCH IPOST to draw the
+*        PostScript text like IGTEXT if 0 < Font < -25 and Precision = 1
+*
++DECK,V1_08.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.08/00   891011 14.13
+*
+*    Bugs corrected in contour plot (routine IGTABL)
+*    Option LOG on Z-axis is available in IGTABL
+*    New fill area style index available (> 100 see routine IGFA)
+*    IGARC6 deleted (obsolete)
+*    New routine IZOPEN to open a picture file
+*    Clean up in IGSA and IGSG (PATCH IDI3000) for VAX version
+*    IGWKTY has been modified for DEC-GKS to use the logical name
+*        GKS$WSTYPE to obtain the default workstation type for
+*        DEC-GKS. This logical name is provided by DEC and, in case of a
+*        default workstation selection, is used by DEC-GKS anyway. In case
+*        of a problem with the GKS$WSTYPE logical name translation, the
+*        workstation defaults to a monochrome VT240.  (Similar to DEC's
+*        default selection described on page 4-43 of the DEC GKS Reference
+*        Manual). This code provides DECwindows as the default device on
+*        a DECwindows workstation and VWS as the default device on a VWS
+*        workstation.
+*
++DECK,V1_07.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.07/01   890922 11.03
+*
+*    Protections in request locator (IRQLC and IGINIT)
+*    Bugs corrected in IGAXI0 and IGAXI2 in case of very large labels
+*    MASK=MSBIT(xxx,xxx,xxx) replaced by CALL SBIT(xxx,xxx,xxx) in
+*       IGSATT of HIGZ/GMR
+*    CALL IUWK(0,0) update all the workstations
+*    New routine IGTERM in PATCH IG
+*    PATCHY flag WINDOWS introduced (+USE,DECGKS,WINDOWS)
+*    New version of IGRAPH and IGHIST without ZEBRA.
+*    Option MAIL take care with IGTERM
+*    PATCHY flag WINDOWS introduced in IGWKTY
+*    New option 'K' (Key) in IGPAVE
+*    New option 'D' (Delete) in IGPAVE (useful for IGMENU)
+*    New routine IEGRID to draw the grid in the graphics editor
+*    Bug fixed in IZMERG if the picture contains only NT=0
+*    New routine clipping routine IGCLIP (in IG) using Cohen-Sutherland
+*       clipping algorithm (now used by IPDRAW in IPOST).
+*    New IGVOLU (volume orientation inside WC)
+*    Mods in IGICOL IGWKTY and IGRNG for DECGKS
+*    New PostScript workstation type -113 without 'translate' and
+*       with the bounding box.
+*    New routine IGTABL to draw all kind of tables representation
+*    New routine IZTABL to store IGTABL in picture
+*
+*::>          VERSION  1.07/00   890601 10.56
+*
+*    Improvement of the axis labeling optimization (IGAXIS and IGAXI0)
+*    New workstation types for DECGKS and GK2000 introduced in IGWKTY
+*    New version of IZCOPY (without using MZCOPY)
+*    X Factor and Y Factor added in GED grid
+*    PATCHY Flag SUN and SUNGKS introduced in IGWKTY
+*    Mod in IZPICT (option 'L': the active picture is noted)
+*    CALL IZPICT('*','S') Delete all pictures in memory
+*    CALL IZPICT('*','D') Display all pictures in memory
+*    CALL IZPICT('*','M') <==> CALL IZPICT(' ','M')
+*    IQUEST(1) is set to 1 in IGERR
+*    If PNAME='*' in IZOUT all picture in memory are stored on disk
+*    If PNAME=' ' in IZOUT the current picture in memory are stored on disk
+*    If PNAME='*' in IZIN all picture on disk are put in memory
+*    Option 'A' in IZPICT. Combined with 'L' it provide the full listing
+*    Pictures in memory could be addressed by number this implies
+*       Mods in IZPICT, IZCOPY, IZGED and IZMERG.
+*    Generic functions introduced (LOG10, MAX, MIN etc ..)
+*    New versions of IGTEXT for CONVEX and SUN.
+*    Protection in IZIN if the CWD is not a picture data base
+*    New 3D version: Cuts are implemented
+*                    2 New routines for 3D IGPINT and IGCCYL
+*    Mods in HIGZ/GMR in routines: IGDRAV,ICLRWK,IDAWK,IOPWK,IPL
+*                                  IRQLC,IGSATT,IGSEGM,IGVIEW,IGPICK
+*                                  DPINIT,GMINSERT,GMSPRIO,GMRBAND
+*                                  GMPECHO,GMTRANB1
+*    New options 'GX' and 'GY' (for LOGX and LOGY) in IGHIST and IGRAPH
+*
++DECK,V1_06.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.06/07   890405 17.53
+*
+*
+*    New version of IGMENU for SUNGKS
+*    Bug corrected in IZBOX in the stored of PLCI
+*    New version for GMR3D, implies mods in HICDES, IGSSE and
+*       IGDIME. New version of IGMR
+*    New Macro primitive IGPAVE to draw "paving blocks"
+*    Mods in *GMR (IGMR3D replaced by 3D)
+*    New options in the routine IGQWK (used in IGMETA and IGEND):
+*       ACTI to inquire if a workstation is active
+*       OPEN to inquire if a workstation is open
+*    New option 'S' in IGPAVE
+*    New routine in IGWKTY (PATCH IG) to read the workstation type
+*       from the standard input.
+*    New features in IGSEGM (DEL *, VISI * etc ...)
+*
+*::>          VERSION  1.06/06   890316 16.20
+*
+*
+*    Protection in IZIN if PNAME is already in memory
+*    Numerous and significant corrections to P=IDI300
+*    Bug corrected on PATCHY FLAG selection on DECK IZFBOX
+*       and MAIL option introduced in *DI3000
+*    HIGZ version for SUN:
+*       - PATCHY FLAG "SUN" and "SUNGKS" introduced
+*       - HIGZ/SUN version is generated by:
+*                  +USE,*SUNGKS.
+*                  +EXE.
+*                  +PAM,11,T=CARDS,T=ATTACH .higz.car
+*                  +QUIT.
+*    New features in HIGZ-3D:
+*       - New shapes in IGVOLU (PCON and PGON)
+*       - New routine IGFR3D (in IG) to convert 3D to 2D
+*
+*::>          VERSION  1.06/05   890302 12.56
+*
+*    First version of graphics input and error recovering
+*       with option MAIL
+*    More compact way to send the data in option MAIL
+*    New option DIME in IGSET (Mods in IGINIT IGSET and ISELNT)
+*    New 3D routines (IGVOLU, IGROTM, IGDRAW, IGDRAV and IGTRAN)
+*       in the patch IG
+*    New attribute NLIN for the 3D shapes (number of lines)
+*    Any window size is now take into account by IMINT and telnetg
+*    Grid size initialized to 20x20 in IZGED
+*    Complete IGMENU  in MAIL option
+*
+*::>          VERSION  1.06/04   890217 10.36
+*
+*
+*    New option 'I' in IGMENU (Input mode)
+*    New MAIL option (connected with TELNETG).New PATCH IMAIL
+*       and new PATCHY FLAG: MAIL. The MAIL option is now tested
+*       with APOLLO, VAX and IBM sending graphics to an APOLLO
+*       with a square graphics window. this version contains only
+*       the graphics outputs.
+*
+*::>          VERSION  1.06/03   890124 15.46
+*
+*    Mods in IZDNB and IZPICK to allow the translation of polyline and
+*       Fill Area in the graphics editor
+*    The command GRID is available in IZGED (with sampled locator input)
+*    UNDO impossible on the first state of a picture
+*    The command FRONT is available in IZGED
+*    Mods in the PostScript driver (to use -112 several times in the same file)
+*    Mods in IGEND to close correctly the OPEN and ACTIVATE workstation.
+*    Mods in IGAXIS in case of labels 10xn (if X0 .EQ. X1)
+*
++DECK,V1_05.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.05/00   881222
+*
+*    New version of IGKS3D.
+*    New Fonts in the PostScript Driver (-15/0 to -24/0)
+*    GFLAG and ZFLAG introduced in IGKS3d routines
+*    New routine IGQ
+*    Routine IGCLES move from the PATCH GED to the PATCH IG
+*    Mods in IPINIT an IZTX to center and align the PostScript text
+*    IGAXIS grid are drawn on the positive side of the axis.
+*    New version of the MENU package (connected with KUIP)
+*    Changes in IZHATC, in IGMETA
+*    Changes in IZIN to access the picture by number
+*    The pictures have now a maximal name length of 20 characters
+*    New data structure to manage the attributes (new routine IZATT new HIATT)
+*    The 24 routines to store the attributes in pictures are replaced by IZATT
+*    Mods in GED: Better user interface
+*    Routine IZSFA suppressed
+*    CHOPT initialize to ' ' in the decoding of IGAXIS, IGHIST
+*    New routine IGQWK
+*    The range of an INTEGER attribute is now -100001<IATT<900000
+*       (the old range was -501<IATT<900500)
+*    New PATCH IDI3000
+*    Mods in the PostScript part of IZPL in case of 12<ILN<15
+*    Mods in IZHIST
+*
++DECK,V1_04.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.04/00   881104
+*
+*    New routine IUWK
+*    Changes in IGRNG (call to IUWK)
+*    IPM changed to GPM in routine IPL (recursivity from IPM)
+*    Bug corrected in IZSCHU.
+*    DECGKS version introduced.
+*    PostScript Interface introduced (-111=Portrait -112=Landscape).
+*    Character height and position of the PostScript Font are OK.
+*    Minor bugs corrected.
+*    Bugs corrected in IZGED in order to be called in STYLE G of PAW
+*    The alphanumeric axis labels are now stored in the ZEBRA structure
+*    The clipping is supported in the PostScript interface
+*    The menu position in IGMENU are given in % of the screen size
+*    Improvement in IGMENU and IZGED (Menu FILES introduced).
+*    Line width introduced in IZGED
+*    Bug corrected in IGAXIS in case of NDIV.LE.3
+*    Bug corrected in IGSET if AWLN<0
+*    Error with a local ZEBRA link corrected in IZGED
+*    Bug corrected in IZLBL
+*    New option 'M' in IGAXIS
+*
++DECK,V1_03.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.03/00   880906
+*
+*    Changes in IGINIT and IGEND
+*    Structure for GMR,UISDC,DI3000 versions introduced.
+*    New patches IGKS,IGMR,IGKS3D
+*    New PILOT patches for master versions.
+*    ZEBRA flag introduced (if Z option not wanted)
+*    The new attribute: Axis Wire Length is reachable via IGSET
+*    PATCH,HIGZEXAM introduced
+*
++DECK,V1_02.
+*CMZ :          09/02/95  15.51.10  by  O.Couet
+*-- Author :
+*
+*::>          VERSION  1.02/00   880420
+*
+*  27/03/87 New version of IZMERG the option 'D' is available
+*
+*  27/03/87 The routine IRQLC fills the COMMON /QUEST/ with the window
+*           and viewport parameters. For more precision see the comments
+*           at the beginning of the routine
+*
+*  30/03/87 New version of IGAXIS with beautiful ticks marks and labels
+*
+*  01/04/87 A new version of IZMERG
+*
+*  02/04/87 First implementation of IGRAPH
+*
+*  06/04/87 New format in the option SHOW in IGSET
+*
+*  07/04/87 Correction of IGARC in case of R1=R2 and PHIMIN=PHIMAX
+*
+*  13/04/87 Corrections for IBM/VM
+*
+*  13/04/87 New version of IGRAPH for Fill Area
+*
+*  13/04/87 New picture structure : Control bank.
+*
+*  16/04/87 The routine IGSA is implemented
+*
+*  21/04/87 New internal coding of the control bank
+*
+*  22/04/87 Polyline with two points and marker with one point are stored
+*           in a compact way
+*
+*  23/04/87 Line type from 12 to 15 are available . They are independent from
+*           the basic graphics package . For this line types the Basic Segment
+*           Length may be sets with the routine IGSET
+*
+*  11/05/87 Implementation of the routines IGSG and IGSA for IBM
+*
+*  20/05/87 First version of IGPIE
+*
+*  27/05/87 Modifications for the GTS_GRAL version of GKS
+*
+*  27/05/87 The routine IGRNG is available. This routine maps the workstation
+*           window onto the whole screen and select the normalization
+*           transformation number 1 according to the XSIZ and YSIZ parameters
+*
+*  12/06/87 Mods in IGAXIS to solve rounding problems for log axis
+*
+*  17/06/87 New error routine IGERR
+*
+*  18/06/87 Bar charts implemented in IGRAPH (option "B")
+*
+*  26/06/87 Changes in routine IGMETA (variable IWTYPE was reset!)
+*
+*  30/06/87 Bug corrected in IZPICT when GFLAG=.FALSE.
+*
+*  02/07/87 Bug corrected when ZFLAG=.TRUE. and GFLAG=.FALSE.
+*
+*  16/07/87 Bars attributes in IGRAPH are now stored in the data structure.
+*
+*  29/07/87 RBOF,RBWD are returned in RQUEST(1) and RQUEST(2) after a call
+*           to IGRAPH with option 'B'
+*
+*  06/08/87 Some bugs in IGRAPH are corrected
+*
+*  10/08/87 New version of IGRAPH with new options "L" and "M"
+*
+*  12/08/87 IZGRAP corrected according to the new version of IGRAPH
+*
+*  13/08/87 IGRAPH is now IGHIST (cf. doc) and IZGRAP is now IZHIST.
+*           The old option "A" is now the option "F" for "Fill area"
+*
+*  13/08/87 The angle of IGARC are now in degrees
+*
+*  20/08/87 Changes in IGAXIS (temporary variable CHTEMP)
+*
+*  28/09/87 New version of IGAXIS: option I (Integer labeling). Correction
+*           in IGSET : BARO can be .LT.0.
+*
+*  05/10/87 The routines IGSA and IGSG have the "Workstation Type" as input
+*           parameter.
+*
+*  20/10/87 The routine IZRIOS is replaced by the routines IZIN, IZOUT, IZSCR
+*
+*  28/10/87 This file contains now the PATCH MENU and the PATCH GED
+*
+*  30/11/87 A priority system is available between the normalization
+*           transformation. The last selected transformation by ISELNT
+*           has the higher priority. In case of overlaping of the
+*           transformations the transformations with the higher priority
+*           is choosen by IRQLC .
+*
+*  04/01/88 Modifications to IGRAP1. Normalization in X and Y
+*
+*  04/03/88 Mods in the IZ routine (IZHIST)
+*
+*  30/03/88 Bug corrected in IPM
+*
+*  18/04/88 Changes in HICDES to run on CRAY
+*
+*  24/05/88 Mods in IGMETA
+*
++PATCH,$KUMACS.
++DECK,HELP.
+*CMZ :  1.19/14 05/10/93  16.00.03  by  O.Couet
+*-- Author :
+   Macro HELP
+*
+   Mess ' '
+   Mess ' The installation procedure of HIGZ is:'
+   Mess ' '
+   Mess '     CMZ -INSTALL HIGZ GRAPHICS_PACKAGE LIB_NAM SRC_DIR OPTIONS'
+   Mess ' '
+   Mess ' Where :'
+   Mess ' '
+   Mess ' GRAPHICS_PACKAGE could be :'
+   Mess '                GKSGRAL, SUNGKS, MGKS, PLOT10GKS'
+   Mess '                UNIGKS, DECGKS, GK2000, ATCGKS'
+   Mess '                PHIGS, GL, GPR, X11, GDDM'
+   Mess '                FALCO, DI3000, BATCH'
+   Mess ' '
+   Mess ' LIB_NAM is the library name'
+   Mess ' '
+   Mess ' SRC_DIR is the source directory name'
+   Mess ' '
+   Mess ' OPTIONS :'
+   Mess '        - DEBUG compile with debug option'
+   Mess '        - FALCO allows to install the FALCO driver '
+   Mess '                with GRAPHICS_PACKAGE'
+   Mess ' '
+*
+   Return
++DECK,INSTALL.
+*CMZ :  1.22/02 18/11/94  15.20.15  by  O.Couet
+*-- Author :
+   Macro INSTALL 1=X 2=X 3=' ' 4=X
+*
+   If [1]='?' Then
+      Exec help
+      Goto END
+   Endif
+*
+*  GRAPHICS   Underlaying graphics package used
+*  LIBRARY    Library name
+*  CODEDIR    Source code directory
+*
+   GRAPHICS = $Upper([1])
+   LIBRARY  = $Lower([2])
+   CODEDIR  = $Lower([3])
+*
+   D  = FALSE
+   Do I = 4,[#]
+      Case $Upper([%I]) In
+         (DEBUG) D  = TRUE
+         (FALCO) Sel FALCO
+      Endcase
+   Enddo
+*
+   Case [GRAPHICS] In
+      (GKSGRAL)
+      (SUNGKS)
+      (MGKS)
+      (PLOT10GKS)
+      (UNIGKS)
+      (DECGKS)
+      (GK2000)
+      (ATCGKS)
+      (GKSBX)
+      (PHIGS)
+      (GL)
+      (GPR)
+      (X11)
+      (GDDM)
+      (FALCO)
+      (DI3000)
+      (BATCH)
+      (*,X)Mess ' '
+          Mess '*** ERROR : Incorrect graphics package name.'
+          Mess '*** The possible choices are:'
+          Mess ' '
+          Mess 'GKSGRAL, SUNGKS, MGKS, PLOT10GKS'
+          Mess 'UNIGKS, DECGKS, GK2000, ATCGKS, GKSBX'
+          Mess 'PHIGS, GL, GPR, X11, GDDM'
+          Mess 'FALCO, DI3000, BATCH'
+          Mess ' '
+          Goto END
+   Endcase
+*
+*  All the options selected are valid, the installation can start
+*
+   Mess ' '
+   Mess Installation of HIGZ on $MACHINE with [GRAPHICS] _
+        starting at $DATE $TIME .
+   Mess ' '
+*
+*  Define the installation script name
+*
+   Set [CODEDIR]//higz.sh -XADCL
+*
+*  Set up the library name
+*
+   If [LIBRARY] = 'x' Then
+      Set [CODEDIR]//'$cmzfile.a' -L
+   Else
+      Set [LIBRARY] -L
+   Endif
+*
+*  Set the debug option if necessary
+*
+   If [D] = TRUE Then
+      Case $MACHINE In
+         (APOLLO)       D='-dba '
+         (VAX,ALPHA)    D='/NOOP/DEB'
+         (*)            D='-g '
+      Endcase
+   Else
+      D=' '
+   Endif
+*
+*  Select the options
+*
+   Select  $MACHINE [GRAPHICS]
+*
+*  Select FORTRAN extension name
+*
+   Case $MACHINE In
+     (APOLLO)       EXT    = ftn
+     (VAX,ALPHA)    EXT    = FOR
+     (IBM)          EXT    = FORTRAN
+     (*)            EXT    = f
+   Endcase
+*
+*  Select the languages
+*
+   Set f77 xcc -lan
+*
+*  Set the directory source code
+*
+   Case $MACHINE In
+      (VAX,ALPHA)    Set [CODEDIR]//'HIGZ.'//[EXT] -F f77
+      (*)            Set [CODEDIR]*.[EXT]    -F f77
+   Endcase
+   Set [CODEDIR]//*.c       -F xcc
+*
+*  Set up the C compiling options
+*
+   Case $MACHINE In
+     (APOLLO)       CC     = '/com/cc '
+                    CFLAGS = ' '
+                    INCDIR = ' '
+     (HPUX)         CC     = 'cc '
+                    CFLAGS = '-c -G '
+                    INCDIR = '-I /usr/include/X11R5 '
+     (SUN)          CC     = '/usr/local/bin/gcc '
+                    CFLAGS = '-c -DANSI_CPP '
+                    INCDIR = ' '
+     (VAX,ALPHA)    CC     = 'CC'
+                    CFLAGS = '/STANDARD=VAXC '
+                    INCDIR = ' '
+     (DECS)         CC     = 'c89 '
+                    CFLAGS = '-c '
+                    INCDIR = ' '
+     (SGI)          CC     = 'cc '
+                    CFLAGS = '-c -G 0 '
+                    INCDIR = ' '
+     (*)            CC     = 'cc '
+                    CFLAGS = '-c '
+                    INCDIR = ' '
+   Endcase
+   Set [CC]//[CFLAGS]//[D]//[INCDIR]//' $compfile' -C xcc
+*
+*  Set up the FORTRAN compiling options
+*
+   Case $MACHINE In
+     (APOLLO)       FORTRAN = '/com/ftn '
+                    FFLAGS  = '-indexl -save '
+     (HPUX)         FORTRAN = 'f77 '
+                    FFLAGS  = '-c -G +Obb100 +ppu '
+     (SUN)          FORTRAN = 'f77 '
+                    FFLAGS  = '-c -O '
+     (IBMRT)        FORTRAN = 'xlf '
+                    FFLAGS  = '-c -qextname '
+     (VAX,ALPHA)    FORTRAN = 'FOR'
+                    FFLAGS  = ' '
+     (DECS)         FORTRAN = 'f77 '
+                    FFLAGS  = '-c -O0 -G 0 '
+     (SGI)          FORTRAN = 'f77 '
+                    FFLAGS  = '-c -G 0 '
+     (*)            FORTRAN = 'f77 '
+                    FFLAGS  = '-c '
+   Endcase
+   Set [FORTRAN]//[FFLAGS]//[D]//' $compfile' -C f77
+*
+*  Compile and archive
+*
+   Pilot  *HIGZ
+   CMake  -P
+*
+END:
+   Return
++PATCH,*HIGZ.
++DECK,BLANKDEK.
+*CMZ :  1.23/05 09/10/95  15.34.18  by  O.Couet
+*-- Author :
++USE, HICDES,IZ,IG,IH,ZEBRA,PSCRIPT,IPOST.
++USE, UNIX,     IF=SGI,IBMRT,SUN,CONVEX,DECS,AIX370,HPUX.
++USE, UNIX,     IF=IPSC,ALLIANT,MACMPW,MSDOS,NEXT,LINUX,WINNT,TK_WINDOWS.
++USE, VAX,      IF=ALPHA.
++USE, APOLLO,   IF=APOF77.
++USE, IBM,      IF=IBMMVS,NEWLIB.
++USE, F2C,      IF=MSDOS,WINNT,LINUX.
++USE, BSLASH,   IF=SUN,SGI,DECS,IBMRT,IPSC,APOF77,F2C,QMALPH.
++USE, BSLASH,   IF=WINNT
++USE, MENU,GED, IF=UNIX,APOLLO,IBM,VAX,NORD,CRAY.
++USE, GKSGRAL,  IF=SUNGKS,GKSIBM.
++USE, GKS,      IF=GKSGRAL,MGKS,PLOT10GKS,UNIGKS.
++USE, GKS,      IF=DECGKS,GK2000,ATCGKS,GKSBX.
++USE, IGKS,     IF=GKS.
++USE, GL,CIPACK,IF=MSDOS.
++USE, X11,      IF=WINNT,TK_WINDOWS.
++USE, KERNEL,   IF=GL,GPR,X11,GDDM,MACMPW,MSDOS.
++USE, IKERNEL,  IF=KERNEL,BATCH,FALCO,PHIGS.
++USE, QXNO_SC,  IF=CRAY,VAX,IBM.
++USE, QXNO_SC,  IF=APOLLO,IF=-APOF77.
++USE, QX_SC,    IF=SGI,IBMRT,SUN,CONVEX,DECS,AIX370,HPUX,APOF77.
++USE, QX_SC,    IF=NEXT,CONVEX,F2C,WINNT.
++USE, NTC.
++USE, HIGZCC,   IF=X11,FALCO,NTC,UNIX.
++USE, IFALCO,   IF=FALCO.
++USE, IDI3000,  IF=DI3000.
++USE, IMAC,     IF=MACMPW.
++USE, NOVERS,   IF=PHIGS.
++USE, IMSDOS,   IF=MSDOS.
++USE, IGOLD,    IF=MSDOS.
++USE, CVX,      IF=CONVEX,IF=SINGLE.
++USE, CVY,      IF=CONVEX,IF=-SINGLE.
++PATCH,*HIGZEXAM.
++DECK,BLANKDEK.
+*CMZ :  1.20/10 31/01/94  12.19.26  by  O.Couet
+*-- Author :
++USE,HIGZEXAM.
++USE, UNIX,     IF=SGI,IBMRT,SUN,CONVEX,DECS,AIX370,HPUX,LINUX.
++USE, UNIX,     IF=WINNT.
++PATCH,HICDES. CONTAINS ALL COMMON BLOCKS
++KEEP,HIFC3.
+*CMZ :  1.20/08 18/01/94  14.30.32  by  O.Couet
+*-- Author :    O.Couet   18/01/94
+      COMMON/HIFC3/XL,YL,FLAG1
++KEEP,HIFC1.
+*CMZ :  1.20/08 18/01/94  14.30.07  by  O.Couet
+*-- Author :    O.Couet   18/01/94
+      COMMON/HIFC1/ISFL
++KEEP,HIFC6.
+*CMZ :  1.20/08 18/01/94  14.29.45  by  O.Couet
+*-- Author :    O.Couet   18/01/94
+      COMMON/HIFC6/ISCR,IPOUT,JPIN,MFL
++KEEP,HIFC2.
+*CMZ :  1.20/08 18/01/94  14.25.59  by  O.Couet
+*-- Author :    O.Couet   18/01/94
+      COMMON/HIFC2/FX,FY,XMIN,XMAX,YMIN,YMAX,IXMIN,IXMAX,IYMIN,IYMAX
++KEEP,HI3D.
+*CMZ :  1.20/06 21/12/93  11.41.11  by  O.Couet
+*-- Author :    O.Couet   20/12/93
+      COMMON /HI3D/ AWNX,BWNX,CWNX,DWNX,AWNY,BWNY,CWNY,DWNY
++KEEP,HIVERS.
+*CMZ :  1.18/00 23/04/93  17.50.07  by  O.Couet
+*-- Author :
+      COMMON /HIVERS/ CHVERS
+      CHARACTER*8 CHVERS
++KEEP,HIPAW.
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      COMMON /PAWC/ NWPAW,IXPAWC,IHBOOK,IXHIGZ,IXKU,IFENCE(5)
+     +,             LMAIN, IPAW(9989)
+      DIMENSION IQ(2),Q(2),LQ(8000)
+      EQUIVALENCE (Q(1),IQ(1),LQ(9)),(LQ(1),LMAIN)
+      COMMON /QUEST/ IQUEST(100)
+      DIMENSION RQUEST(100)
+      EQUIVALENCE (IQUEST(1),RQUEST(1))
+      COMMON /HILINK/ LHIGZ,LCG,LWV
+     +,               LPICT,LHNT0,LHI,LHF,LHC,LHNT,LHNTLA
+     +,               LPICD,LDNT0,LDI,LDF,LDC,LDNT,LDNTLA
+     +,               LPIC2,L2NT0,L2I,L2F,L2C,L2NT,L2NTLA
+     +,               LNDECO,LIDECO,LFDECO,LCDECO
+     +,               LPSAV,LPCOP,LNTCOP,LSTACK(10),LAST
+      COMMON /HIPTR/  ITBPTR,INTPTR,IFLPTR,ISTPTR
+     +,               IIAPTR,IRAPTR
+      COMMON /HISIZE/ INSIZ,IISIZ,IFSIZ,ISSIZ
+     +,               IRNSIZ,IRISIZ,IRFSIZ,IRSSIZ
+      COMMON /HINUM/  NBPICT,INBNT,INBLEV
+
++KEEP,HINT.
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      PARAMETER (INWDNT=2)
+      PARAMETER (NBNTMX=100)
+      COMMON /HINT/ NTSTOR(INWDNT*NBNTMX+1),WNVPST(8*NBNTMX)
+
++KEEP,HIQUES.
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      COMMON /QUEST/ IQUEST(100)
+      DIMENSION RQUEST(100)
+      EQUIVALENCE (IQUEST(1),RQUEST(1))
+
++KEEP,HIFLAG.
+*CMZ :  1.21/05 16/06/94  14.37.23  by  O.Couet
+*-- Author :
+      COMMON /HIFLAG/ GFLAG,GLFLAG,ZFLAG,PFLAG,MFLAG,TFLAG
+     +,ASFLAG,GRFLAG,AXFLAG,CFLAG
+      LOGICAL GFLAG,GLFLAG,ZFLAG,PFLAG,MFLAG,TFLAG
+     +,ASFLAG,GRFLAG,AXFLAG,CFLAG
+
++KEEP,HILUN.
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      COMMON /HILUN/ LUNIN,LUNOUT,LUNERR
+
++KEEP,HIATT. Attributes list
+*CMZ :  1.21/03 02/06/94  15.12.02  by  O.Couet
+*-- Author :
+      INTEGER INTR,IWTYPE,IDID,IDTY,ILOPWK(10),IWTYL(10),INOPWK
+     +,       IWINID(10),IPICT,ICLIP,NT0PRI,IPLCI,ILN,IPMCI,IMK,IFACI
+     +,       IFAIS,IFASI,ITXCI,ITXALG,IFTPR,INPASS,IBORD,INLINE
+     +,       INTATT(17),IFONT,IPREC,ITXALH,ITXALV,IDIM,INBCOL
+      REAL XRATIO,YRATIO,RWXMIN,RWXMAX,RWYMIN,RWYMAX,RVXMIN,RVXMAX
+     +,    RVYMIN,RVYMAX,RDWXMI,RDWXMA,RDWYMI,RDWYMA,RDVXMI,RDVXMA
+     +,    RDVYMI,RDVYMA,RMDSX,RMDSY,XWKSIZ(10),YWKSIZ(10),WKMAX(10)
+     +,    XWKR(10),YWKR(10),XWKW1(10),YWKW1(10),XWKV1(10),YWKV1(10)
+     +,    XWKW2(10),YWKW2(10),XWKV2(10),YWKV2(10),REDIT,RMKSC,RLWSC
+     +,    RBSL,RANGLE,RCHH,RCSHIF,RBOF,RBWD,RAWL,RTMS,RALH,RALD
+     +,    REAATT(18),RCHUX,RCHUY
+       LOGICAL ACWKFL(10),NODRFL(10)
+      COMMON /HIATT/ INTR,XRATIO,YRATIO
+     +,RWXMIN,RWXMAX,RWYMIN,RWYMAX,RVXMIN,RVXMAX,RVYMIN,RVYMAX
+     +,RDWXMI,RDWXMA,RDWYMI,RDWYMA,RDVXMI,RDVXMA,RDVYMI,RDVYMA
+     +,RMDSX ,RMDSY ,IWTYPE,IDID  ,IDTY
+     +,ILOPWK,ACWKFL,NODRFL,IWTYL ,INOPWK
+     +,XWKSIZ,YWKSIZ,WKMAX ,IWINID,XWKR  ,YWKR
+     +,XWKW1 ,YWKW1 ,XWKV1 ,YWKV1
+     +,XWKW2 ,YWKW2 ,XWKV2 ,YWKV2
+     +,IPICT ,ICLIP ,REDIT,NT0PRI
+     +,RMKSC ,RLWSC ,RBSL  ,RANGLE,RCHH  ,RCSHIF,RBOF  ,RBWD
+     +,RAWL  ,RTMS  ,RALH  ,RALD  ,REAATT
+     +,IPLCI ,ILN   ,IPMCI ,IMK   ,IFACI ,IFAIS ,IFASI ,ITXCI
+     +,ITXALG,IFTPR ,INPASS,IBORD ,INLINE,INTATT
+     +,IFONT ,IPREC ,ITXALH,ITXALV,RCHUX ,RCHUY
+     +,IDIM  ,INBCOL
++KEEP,HIATNB. Number of INTEGER and REAL attributes
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      PARAMETER (NBRATT=12,NBIATT=13)
+
++KEEP,HIAADR. Attributes adresses in the current picture
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      COMMON /HIAADR/ IATADR(60)
+
++KEEP,HIATNM. Attributes names
+*CMZ :  1.18/00 23/04/93  17.27.56  by  O.Couet
+*-- Author :
+      CHARACTER*4 CHRATT(NBRATT),CHIATT(NBIATT)
+      DATA CHRATT /'MSCF','LWID','BASL','TANG','CHHE','CSHI'
+     +,            'BARO','BARW','AWLN','TMSI','LASI','LAOF'/
+      DATA CHIATT /'PLCI','LTYP','PMCI','MTYP','FACI','FAIS'
+     +,            'FASI','TXCI','TXAL','TXFP','PASS','BORD'
+     +,            'NLIN'/
+
++KEEP,HIFLAT. Attributes control flags
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIFLAT/
+     + KMKSC,KLWSC,KBSL ,KTANG,KCHH ,KTXSH
+     +,KBOF ,KBWD ,KAWL ,KTMS ,KALH ,KALD
+     +,KRFLAG(18)
+     +,KPLCI,KLN  ,KPMCI,KMK  ,KFACI,KFAIS
+     +,KFASI,KTXCI,KTXAL,KFONT,KTXPA,KBOR
+     +,KNLIN
+     +,KIFLAG(17)
+
++KEEP,HICODE. Attributes codes
+*CMZ :  1.21/08 20/07/94  16.40.03  by  O.Couet
+*-- Author :
+      PARAMETER (INOPCO=1 ,IUNDCO=2 ,IPICO1=3 ,IPICO2=4 ,IMIDCO=5
+     +,IHISCO=6 ,IPM1CO=7 ,IPL2CO=8 ,IPLCO =9 ,IPMCO =10,IFACO =11
+     +,ITXCO =12,IBXCO =13,IFBXCO=14,IARCCO=15,IAXICO=16,IGTXCO=17
+     +,IMLCO =18,ILBLCO=19,ITABCO=20,IGRACO=21,IPAVCO=22
+     +,ICRCO =48,ICLICO=49
+     +,IMKSCO=50,ILWSCO=51,IBSLCO=52,IANGCO=53,ICHHCO=54,IGTSCO=55
+     +,IBOFCO=56,IBWDCO=57,IAWLCO=58,ITMSCO=59,IALHCO=60,IALDCO=61
+     +,IPLCCO=80,ILNCO =81,IPMCCO=82,IMKCO =83,IFACCO=84,IFAICO=85
+     +,IFASCO=86,ITXCCO=87,ITXACO=88,ITXFCO=89,IGTWCO=90,IBORCO=91
+     +,INLICO=92)
+
++KEEP,HISAVE.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HISAVE/ ISAVE(NBIATT),RSAVE(NBRATT),ISVNT,WNVPSV(8)
+
++KEEP,HISAVA.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HISAVA/ ISAVA(NBIATT),RSAVA(NBRATT)
+
++KEEP,HISVED.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HISVED/ ISAVED(NBIATT),RSAVED(NBRATT)
+
++KEEP,HICUR.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HICUR/ HICDIR
+      CHARACTER*32 HICDIR
+
++KEEP,HIGED.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIGED/ XPM(2,3),YPM(2,3),ICUMEN(3),ICUCHO(3),NBU(3)
+     +,NBITEM(3),ISOF,ICPLCI,ICLN,ICFACI,ICFAIS,ICFASI,ICBOCI,ICBOIS
+     +,ICBOSI,ICBOBO,ICFBCI,ICFBIS,ICFBSI,ICFBBO,ICPMCI,ICMK,RCMKSC
+     +,RCSTAN,RCSTSI,ICSTPA,RCSTSH,ICSTCI,RCTXAN,RCTXSI,ICTXFT,ICTXPR
+     +,ICTXCI,ICTXAH,ICTXAV,RCBOF,RCBWD,ICHILN,ICHIPC,ICHIFC,ICHIFI
+     +,ICHIFS,RCARSI,ICARLC,ICARFC,ICARFI,ICARFS,ICARLN,RCAXTS,RCAXLS
+     +,RCAXLO,RCAXW1,RCAXW2,ICAXND,ICAXLN,ICAXLC,ICAXLF,ICAXLP,ICACFI
+     +,ICACFS,ICACBO,ICACLC,ICACFC,RCLWSC,X(100),Y(100)
+     +,IXSTEP,IYSTEP,IXFACT,IYFACT,ICPBST,ICPFST,RCDZPV
+      CHARACTER*32 TITLE(3)
+      CHARACTER*20 CHUSKE(20,3)
+      CHARACTER*32 CHITEM(20,3)
+      CHARACTER*80 CHDEF(20)
+      CHARACTER*32 CHOPST,CHOPAX,CHOPHI,CHOPPV
+      CHARACTER*80 CCST,CCTX
+      CHARACTER*80 CHFAC,CHPLC,CHTXC,CHPMC,CHFAIS,CHHIFC,CHHIPC,CHARFC
+     +            ,CHARLC,CHARFI,CHBOC,CHBOIS,CHFBC,CHFBIS,CHSTC,CHHIIS
+     +            ,CHAXLC,CHACIS,CHACLC,CHACFC
+      CHARACTER*8 CHDOAR,CHBOBO,CHFBBO,CHAFL,CHACBO
+      CHARACTER*80 EDIPIC
+      COMMON /HIGEDC/ TITLE,CHUSKE,CHITEM,CHDEF,CHOPST,CHOPAX,CHOPHI
+     +,CCST,CCTX,CHFAC,CHPLC,CHTXC,CHPMC,CHFAIS,CHHIFC,CHHIPC,CHARFC
+     +,CHARLC,CHARFI,CHBOC,CHBOIS,CHFBC,CHFBIS,CHSTC,CHHIIS,CHAXLC
+     +,CHACIS,CHACLC,CHACFC,CHDOAR,CHBOBO,CHFBBO,CHAFL,CHACBO,EDIPIC
+     +,CHOPPV
+
++KEEP,HIACA.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON/HIACA/ IACHOP,IADRAT
+
++KEEP,HILABS.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      PARAMETER (MAXLAB=100)
+      CHARACTER*32 HILABS
+      COMMON/HILBL1/NHILAB
+      COMMON/HILBL2/HILABS(MAXLAB)
+
++KEEP,HIMENU.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIMENU/ Y3,Y4,YT,XSIZ,YSIZ,RINT,REDLOC,NBCHOI,ICUCH,DEC
+     +,OTH,TH,XPOS(2),YPOS(2),IRSU,ILSU,XM,XML,XMR,YSTEP,XP,YP
+     +,XOPT,IPARA,ISOFT,NBUSER,UTH,USIZ,ISEGM(100),MENNUM
+
++KEEP,HIMDOS.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIMDOS/ IPICNM,SCMETA
++KEEP,HIMETA.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIMETA/ IDMETA,XMFACT,YMFACT,TEKACT,METACT,FILOPN
+      LOGICAL TEKACT,METACT,FILOPN
+      COMMON /HIMETC/ CHMETA
+      CHARACTER*24 CHMETA
++SEQ,HIMDOS,IF=MSDOS.
+
++KEEP,HIMET2.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIMET2/ ITGKS,METDEF,IFUSER
+
++KEEP,HIGRAF.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      PARAMETER (NPMAX=500)
+      COMMON /HIGRAF/ NGRAF,XGRAF(NPMAX),YGRAF(NPMAX)
+
++KEEP,HICONV.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HICONV/ X1MIN,X1MAX,Y1MIN,Y1MAX,X2MIN,X2MAX,Y2MIN,Y2MAX
+
++KEEP,HICONT.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HICONT/ DZ,ZMIN,ZMAX
+
++KEEP,HIPACK.
+*CMZ :  1.22/08 24/02/95  17.10.52  by  O.Couet
+*-- Author :
+      COMMON /HIPACK/ NCX,NCY,IPACK,ILOG,ZLOW,ZHIGH,IDIM1,IOPTER
+
++KEEP,HIHIST.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIHIST/ XWORK(204),YWORK(204),XWORKL(204),YWORKL(204)
+
++KEEP,ICMTOP.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      ICMTOP(U)=NINT(72.*U/2.54)
++KEEP,HIWCPS.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      IXWCPS(U)=NINT(4.*WKMAX(IPSI)*(FX*(U-X1W)+X1V))
+      IYWCPS(V)=NINT(4.*WKMAX(IPSI)*(FY*(V-Y1W)+Y1V))
++KEEP,HIPOST.
+*CMZ :  1.23/01 23/05/95  14.36.14  by  O.Couet
+*-- Author :
+      COMMON /HIPOST/ X1V,X2V,Y1V,Y2V,X1W,X2W,Y1W,Y2W,FX,FY
+     +,LUNPS,LENBUF,IPSCI,PSRED,PSGRN,PSBLU,IPSMSC
+     +,IPSLT,IPSLW,IPSWID,IPSI,IPSWTY,IPTWTY,LENBMX
+     +,XVP1,XVP2,YVP1,YVP2,XVS1,XVS2,YVS1,YVS2,XPSR,YPSR
+     +,NX,NY,IXZ,IYZ,MODE,NPAGES,IPCLIP,IPDXC,IPDYC,IPXC,IPYC
+     +,LOPRT,LOBB,LOCLR,LOPRNG,LOSCLI,LOZONE,NBSAVE,NBSAV0
+      LOGICAL LOPRT,LOBB,LOCLR,LOPRNG,LOSCLI,LOZONE
+      COMMON /HIPOSC/ STRBUF,BSLASH,ALIGN1
+      CHARACTER*132 STRBUF
+      CHARACTER*1 BSLASH
+      CHARACTER*3 ALIGN1
+
++KEEP,HILUT.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      PARAMETER (NBCLUT=256)
+      COMMON /HILUT/ REDLUT(NBCLUT),GRNLUT(NBCLUT),BLULUT(NBCLUT)
+
++KEEP,HIMAIL.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HIMAIC/ CHMAIL,CHOPTM,CHCTRL,CHEOR,ALIGN2
+      CHARACTER*2 CHCTRL
+      CHARACTER*1 CHEOR,ALIGN2
+      CHARACTER*80 CHMAIL,CHOPTM
+
++KEEP,HILOC.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      COMMON /HILOC/ OLDXP,OLDYP
+
++KEEP,HIPICK.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      PARAMETER (LEVLEN=16)
+      COMMON /HIPICK/ CHLVL,CHLVL2
+      CHARACTER*(LEVLEN) CHLVL,CHLVL2
+
++KEEP,HIBITVAX.
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
+      JBIT (IZW,IZP)=JIBITS (IZW,IZP-1,1)
+      JBYT (IZW,IZP,NZB)=JIBITS (IZW,IZP-1,NZB)
++KEEP,HIBIT
+*CMZ :  1.18/00 23/04/93  17.27.57  by  O.Couet
+*-- Author :
++SEQ,HIBITVAX,IF=VAX.
+*
++DECK,DICDES,IF=DI3000.  COMMONS FOR HIGZ-DI3000 INTERFACE
+*CMZ :  1.14/04 23/03/92  10.37.27  by  Unknown
+*-- Author :
++KEEP,DI3DEV.
+      LOGICAL          ENTRY_FLAG
+      COMMON /DI3DEV/  ENTRY_FLAG
+
++KEEP,DI3MET.
+      CHARACTER*30     METNAM
+      COMMON /DI3MET/  METNAM
+
++KEEP,DI3SEG.
+      LOGICAL          SEGOPN
+      COMMON /DI3SEG/  SEGOPN
+
++DECK,IHDES.
+*CMZ :  1.19/05 26/08/93  09.41.02  by  O.Couet
+*-- Author :
++KEEP,HCSCRN.
+      PARAMETER         (NSLIC=1000, NTMAX=100)
+      COMMON /HCSCRN/   TN(4,3),TB(4,3),
+     &                  NT,X0,DX,U(2,NSLIC),D(2,NSLIC),T(2,NTMAX)
++KEEP, HCRAST.
+      PARAMETER          (NBW=30, L1=NBW/2, L2=(NBW+1)/2)
+      PARAMETER          (LMASK=(NBW+1)*L1+(NBW-L1*2)*L2)
+      INTEGER            IRAST(4),JMASK(NBW),MASK(LMASK)
+      COMMON /HCRAST/    NXRAST,NYRAST,XRAST,DXRAST,YRAST,DYRAST,
+     &                   IFRAST,JRAST,IRAST,JMASK,MASK
++KEEP,HCTNOR.
+      COMMON /HCTNOR/   TNORM(4,3),TBACK(4,3)
++KEEP,HCLEVL.
+      PARAMETER         (LLEV=256)
+      COMMON /HCLEVL/   NLEV,FUNLEV(LLEV+1),ICLEV(LLEV+2)
++KEEP,HCLINE.
+      PARAMETER         (LLINES=200)
+      COMMON /HCLINE/   NLINES,ILLEVL(LLINES),PLINES(3,2,LLINES)
++KEEP,PNVMAX.
+      PARAMETER         (NVMAX=20)
++KEEP, HCPHI.
+      PARAMETER         (NPMAX=180)
+      COMMON /HCPHI/    APHI(NPMAX+3)
++KEEP,HCLIGH.
+      PARAMETER (LLIGHT = 4)
+      COMMON /HCLIGH/   LOFF,YDL,YLS(LLIGHT),VLS(3,LLIGHT),QA,QD,QS,NQS
++KEEP,HCEQUI,IF=VAX,DECS,LINUX.
+      PARAMETER         (I2EQUI=2)
++KEEP,HCEQUI,IF=-VAX,IF=-DECS,IF=-LINUX.
+      PARAMETER         (I2EQUI=1)
++KEEP,HCZBUF.
+      INTEGER*2         IBUFF(1)
+      COMMON /HCZBUF/   KXSCR,KYSCR,JSCRN,JZBUF,IBUFF
++KEEP,HCZCLI.
+      COMMON /HCZCLI/   KX1CLI,KX2CLI,KY1CLI,KY2CLI
++KEEP,HCZWIN.
+      COMMON /HCZWIN/   XW1,XW2,YW1,YW2,ZW1,ZW2
++KEEP,HCZPOR.
+      COMMON /HCZPOR/   IXP1,IXP2,IYP1,IYP2,IZP1,IZP2
++KEEP, HCMCUB.
+      COMMON /HCMCUB/   P8(3,8),F8(8),G8(3,8)
++KEEP, HCMCTR.
+      PARAMETER         (NISO = 4, NMAXP = NISO*13, NMAXT = NISO*12)
+      REAL              XYZ(3,NMAXP),XYZN(3,NMAXP),GRAD(3,NMAXP)
+      REAL              DTRIA(6,NMAXT),ABCD(3,NMAXT)
+      INTEGER           ITRIA(3,NMAXT),IATTR(NMAXT),IORDER(NMAXT)
+      COMMON /HCMCTR/   XYZ,XYZN,GRAD,DTRIA,ABCD,ITRIA,IATTR,IORDER
++KEEP,HIHID.
+      PARAMETER (MAXSTK=10)
+      COMMON /HIHID/ REFWRD(MAXSTK),ZMINST,ZMAXST
+     +,IXFCHA(MAXSTK),IYFCHA(MAXSTK),IXNCHA(MAXSTK),IYNCHA(MAXSTK)
+     +,ISTCOL(MAXSTK),ISTCO2(MAXSTK),ISTCOT,ISTCOB,IADRES(MAXSTK)
+     +,NIDS,XSTP,YSTP,XLAB1,YLAB1,XLAB2,YLAB2,IDRGR,RLEGBO,RLEGBW
+     +,I4AXI,ISYS,ILOGX,ILOGY,XVAL1,XVAL2,YVAL1,YVAL2,RINRAD,DANG
++DECK,KERDES,IF=KERNEL,IF=-MSDOS.
+*CMZ :  1.20/07 13/01/94  18.14.47  by  O.Couet
+*-- Author :
++KEEP,HIKERN,IF=GPR.   COMMON BLOCK for the GPR interface
+%include '/sys/ins/pad.ins.ftn'
+%include '/sys/ins/base.ins.ftn'
+%include '/sys/ins/gpr.ins.ftn'
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),ICURWK,IXPOS(IBUFSI),IYPOS(IBUFSI)
+     +,WINSIZ(4),IXX,IYY,IXYLOC(2),STREAM(10),ICURCI(10),IOFCOL
+     +,UNOBS,LOINS,LUNWIN
+      LOGICAL UNOBS,LOINS
+      INTEGER*2 WINSIZ,IXPOS,IYPOS,IXX,IYY,IXYLOC,STREAM
+      INTEGER*2 WINID,DISCHA(31),DISLER,HIPLAN
+      COMMON /HIKERC/ FILEN
+      CHARACTER*80 FILEN
+
++KEEP,HIWCDC,IF=GPR.   Convert WC to DC for the GPR interface
+      IXWCDC(U)=MIN(
+     +WKSC(IWKNB)*(RVXMIN+XRATIO*(U-RWXMIN)),XWKSIZ(IWKNB))
+      IYWCDC(V)=MIN(YWKSIZ(IWKNB)-
+     +WKSC(IWKNB)*(RVYMIN+YRATIO*(V-RWYMIN)),YWKSIZ(IWKNB))
+
++KEEP,GLSGI,IF=GL,IF=SGI.
+#include <fgl.h>
+#include <fdevice.h>
+
++KEEP,GLIBM,IF=GL,IF=IBMRT.
+      INCLUDE 'gl/fgl.h'
+      INCLUDE 'gl/fdevice.h'
+
++KEEP,HIKERN,IF=GL.   COMMON BLOCK for the GL interface
++SEQ,GLSGI,IF=SGI.
++SEQ,GLIBM,IF=IBMRT.
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),WINSIZ(4),IPOS(2,IBUFSI),IXX,IYY,ICURWK
+     +,LOINS,ICURCI(10),IOFCOL,IXLOCO,IYLOCO,LUNWIN
+      LOGICAL LOINS
+      INTEGER WINSIZ,WINID
+      INTEGER*2 IVAL
+      COMMON /HIKERC/ FILEN
+      CHARACTER*80 FILEN
+
++KEEP,HIWCDC,IF=GL.   Convert WC to DC for the GL interface
+      IXWCDC(U)=INT(WKSC(IWKNB)*(RVXMIN+XRATIO*(U-RWXMIN)))
+      IYWCDC(V)=INT(WKSC(IWKNB)*(RVYMIN+YRATIO*(V-RWYMIN)))
+
++KEEP,HIKERN,IF=X11,IF=-WINNT.   COMMON BLOCK for the X11 interface
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),ICURWK,WINSIZ(4)
+     +,IPOS(2,IBUFSI),LUNWIN,THX11,IFPX11,RMAGN
+      INTEGER WINSIZ
+      INTEGER*2 IPOS
+      COMMON /HIKERC/ CHHOST,FILEN,FX11
+      CHARACTER*80 CHHOST,FILEN,FX11
+
++KEEP,HIKERN,IF=WINNT.   COMMON BLOCK for the Windows NT interface
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),ICURWK,WINSIZ(4)
+     +,IPOS(2,IBUFSI),LUNWIN,THX11,IFPX11
+      INTEGER WINSIZ
+      COMMON /HIKERC/ CHHOST,FILEN,FX11
+      CHARACTER*80 CHHOST,FILEN,FX11
+
++KEEP,HIWCDC,IF=X11,IF=VAX.   Convert WC to DC for X11
+      IXWCDC(U)=MAX(MIN(XWKV1(IWKNB)+
+     +XWKR(IWKNB)*(XRATIO*(U-RWXMIN)+RVXMIN-XWKW1(IWKNB))
+     +,32767.),-32766.)
+      IYWCDC(V)=MAX(MIN(YWKSIZ(IWKNB)-(YWKV1(IWKNB)+
+     +YWKR(IWKNB)*(YRATIO*(V-RWYMIN)+RVYMIN-YWKW1(IWKNB)))
+     +,32767.),-32766.)
+
++KEEP,HIWCDC,IF=X11,IF=-VAX.   Convert WC to DC for X11
+      IXWCDC(U)=XWKV1(IWKNB)+
+     +XWKR(IWKNB)*(XRATIO*(U-RWXMIN)+RVXMIN-XWKW1(IWKNB))
+      IYWCDC(V)=YWKSIZ(IWKNB)-(YWKV1(IWKNB)+
+     +YWKR(IWKNB)*(YRATIO*(V-RWYMIN)+RVYMIN-YWKW1(IWKNB)))
+
++KEEP,HIKERN,IF=GDDM.   COMMON BLOCK for the GDDM interface
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),ICURWK
+     +,XPOS(IBUFSI),YPOS(IBUFSI),ICURCI
+
++KEEP,HIWCDC,IF=GDDM.   Convert WC to DC for the GDDM interface
+      XWCDC(U)=WKSC(IWKNB)*(RVXMIN+XRATIO*(U-RWXMIN))
+      YWCDC(V)=WKSC(IWKNB)*(RVYMIN+YRATIO*(V-RWYMIN))
+
++KEEP,HIKERN,IF=MACMPW.   COMMON BLOCK for the MacIntosh interface
+      PARAMETER (IBUFSI=1000)
+      COMMON /HIKERN/ WKSC(10),ICURWK,WINSIZ(4)
+     +,IPOS(2,IBUFSI),LUNWIN
+      INTEGER WINSIZ
+      COMMON /HIKERC/ FILEN
+      CHARACTER*80 FILEN
+
++KEEP,HIWCDC,IF=MACMPW.   Convert WC to DC for MacIntosh
+      IXWCDC(U)=WKSC(IWKNB)*(RVXMIN+XRATIO*(U-RWXMIN))
+      IYWCDC(V)=YWKSIZ(IWKNB)-WKSC(IWKNB)*(RVYMIN+YRATIO*(V-RWYMIN))
++DECK,MSDES,IF=MSDOS.
+*CMZ :  1.14/13 03/07/92  12.05.59  by  O.Couet
+*-- Author :
++KEEP, PINUM.
+      PARAMETER (PI=3.1415926, PI2 = 2*PI)
++KEEP, GOLDEN.
+C--
+C--     PARAMETERS FOR SURFER META-FILE
+C
+        INTEGER    PA,MA,TR,PS,SC,SS,SP
+        PARAMETER (NJOB = 7)
+        PARAMETER (PA=1,MA=2,TR=3,PS=4,SC=5,SS=6,SP=7)
+
+        PARAMETER (LBUF=256)
+        COMMON /GOLDEN/ LUNG(9), NREC, M_OPEN, BIMODE, BUFFER(LBUF/4)
+     *,                        IPOINT, SYMFIL,COOR(4), LOCK, FRADEL
+        LOGICAL BIMODE, M_OPEN, LOCK, FRADEL
+        CHARACTER*80 SYMFIL
+        CHARACTER*512 CHMBUF
+        EQUIVALENCE (BUFFER,CHMBUF)
++KEEP, HIVERS.
+      character*52 CHVERS
+      DATA
+     * CHVERS /' 1.14/13D (FineSoft,JINR, fine@main2.jinr.dubna.su)'/
++KEEP, GREX.
+C        INCLUDE 'GREX.FH'
+C        INCLUDE 'DOS.FH'
+       integer get_video_mode
+       integer video_configuration
+       integer graphics_mode
+       integer super_vga
+       integer clear
+       integer get_device_limits
+       integer move
+       integer draw
+       integer get_cursor
+       integer get_clip_limits
+       integer set_clip_limits
+       integer graphic_text
+       integer locate
+       integer pause
+       integer delete_graphics
+       integer beep
+       integer set_xor
+       integer write_string
+       integer set_color
+       integer vga_palette
+       integer define_color
+       integer filled_rectangle
+       integer filled_ellipse
+       integer open_ellipse
+       integer linewi
+       integer ixsetfs
+       integer setpat
+       integer polfil
+       integer set_pixel
+       integer set_dash
+       integer move_cursor
+       integer init_mouse
+       integer get_mouse
+       integer set_mouse
+       integer set_mp_ratio
+       integer set_palette
+       integer magnify_text
+       integer text_mode
+       integer write_screen
+       integer display_off
+       integer display_on
++KEEP,HIKERN, IF=NDP. COMMON BLOCK for the NDP_PC interface
++SEQ, GREX.
+      PARAMETER (IBUFSI=1000)
+      PARAMETER (ISURF= 18)
+      PARAMETER (IRIS = 17)
+
++SEQ, GOLDEN.
+
+       COMMON /HIKERN/ WKSC(10),WINSIZ(4),IPOS(IBUFSI,2),IXX,IYY,ICURWK
+     +,LOINS,ICURCI(10),IOFCOL,IXLOCO,IYLOCO,IWKNB,LUNMET(10)
+     *, MAX_COLOR(10), IER, DASH_PATTERN(16), video_system(4)
+     *, PAL, ISTEP, MAG_X, MAG_Y, MOUSE, IXSAVE(10), IYSAVE(10)
+       LOGICAL LOINS, MOUSE
+      INTEGER WINSIZ,WINID,video_system
+      CHARACTER*4 DASH_PATTERN
+      CHARACTER PAL(20)
+C---      INTEGER STRWID
++KEEP,HIKERN, IF=-NDP. COMMON BLOCK for the NDP_PC interface
++SEQ, GREX.
+      PARAMETER (IBUFSI=1000)
+      PARAMETER (ISURF= 18)
+      PARAMETER (IRIS = 17)
+
++SEQ, GOLDEN.
+
+       COMMON /HIKERN/ WKSC(10),WINSIZ(4),IPOS(2,IBUFSI),IXX,IYY,ICURWK
+     +,LOINS,ICURCI(10),IOFCOL,IXLOCO,IYLOCO,IWKNB,LUNMET(10)
+     *, MAX_COLOR(10), IER, DASH_PATTERN(16), video_system(4)
+     *, PAL, ISTEP, MAG_X, MAG_Y, MOUSE, IXSAVE(10), IYSAVE(10)
+       LOGICAL LOINS, MOUSE
+      INTEGER WINSIZ,WINID,video_system
+      CHARACTER*4 DASH_PATTERN
+      CHARACTER PAL(20)
+C---      INTEGER STRWID
++KEEP,HIWCDC.   Convert WC to DC for the PC AT 386/486 interface
+      IXWCDC(U)=NINT(WKSC(IWKNB)*(RVXMIN+XRATIO*(U-RWXMIN)))
+      IYWCDC(V)=NINT(YWKSIZ(IWKNB)
+     *               -WKSC(IWKNB)*(RVYMIN+YRATIO*(V-RWYMIN)))
++DECK,PHIGSDES,IF=PHIGS.
+*CMZ :  1.18/02 12/05/93  09.27.30  by  O.Couet
+*-- Author :
++KEEP,HIPHIG.   COMMON BLOCK for the PHIGS interface
+      COMMON /HIPHIG/ LOSTOP,LOSTEX,ICSTN
+      LOGICAL LOSTOP,LOSTEX
++PATCH,PAMEND.
+*

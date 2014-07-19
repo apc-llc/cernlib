@@ -1,0 +1,11 @@
+*
+* $Id: v101.dat,v 1.1.1.1 1996/03/22 16:42:49 mclareni Exp $
+*
+* $Log: v101.dat,v $
+* Revision 1.1.1.1  1996/03/22 16:42:49  mclareni
+* Phtools
+*
+*
+*  Version 1.01  940525 12.30
+Add WICO
+Copy PATCH,M435. CHMOVE   MOVE CHARACTER STRINGS from GEN.CAR to FOWL.

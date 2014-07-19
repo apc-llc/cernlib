@@ -1,0 +1,61 @@
+*
+* $Id: fm.dat,v 1.1.1.1 1996/03/07 15:17:50 mclareni Exp $
+*
+* $Log: fm.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:50  mclareni
+* Fatmen
+*
+*
+/*DECK ID>, FM.EXEC */
+/**********************************************************************
+ *                                                                    *
+ * FATMEN EXEC V1.03                                                  *
+ *                                                                    *
+ * user interface to FATMEN MODULE                                    *
+ *                                                                    *
+ * Author: M.Marquina 90/01/29                                        *
+ *                                                                    *
+ * Mods       Date   Comments                                         *
+ * MARQUINA 90/05/22 Use GETVER to find the version                   *
+ *          91/02/24 Support PF-keys, check storage                   *
+ * JAMIE    91/05/16 Do not pop or push filesdefs                     *
+ *                                                                    *
+ **********************************************************************/
+   Address Command
+   Arg parms "(" options
+   Parse Source . . xfn .
+   xfn="FATMEN"
+ 
+   If ^'QSTOR'("5M") Then Call ERROR 1 8 "5M"
+ 
+      vn='GETVER'(options,"LINK")
+      vv=""
+   If vn^="PRO" Then Do
+      vv='LEFT'(vn,1)"_"
+      Say
+      Say "Calling" vn "version of" xfn"..."
+      Say
+   End
+ 
+   If vn='NEW' Then Do
+      'EXEC GIME TESTSOFT (QUIET NONOTICE'
+      'NUCXDROP *'
+   End
+ 
+   nw='FIND'(options,vn)
+   If nw>0 Then options='DELWORD'(options,nw,1)
+ 
+   If options^="" Then parms=parms "("options
+   pgm=vv||xfn
+   prc='XCPUSH'("PFK","SET")
+   'FILEDEF 6 TERM (LRECL 133'
+ 
+   'IDENTIFY ( LIFO' ; Pull . . site .
+   If site="CERNVM" Then 'EXEC UMLOG FATMEN 0' vn parms
+   'EXEC USERPF' xfn          /* Set FATMEN PF-keys */
+   pgm parms
+   cc=rc
+   If site="CERNVM" Then 'EXEC UMLOG FATMEN 1' vn parms
+ 
+   If prc=0 Then rc='XCPOP'("PFK","SET")
+   Exit cc

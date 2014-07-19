@@ -1,0 +1,35 @@
+*
+* $Id: fatpurge.dat,v 1.1.1.1 1996/03/07 15:17:49 mclareni Exp $
+*
+* $Log: fatpurge.dat,v $
+* Revision 1.1.1.1  1996/03/07 15:17:49  mclareni
+* Fatmen
+*
+*
+$!DECK ID>, FATPURGE.COM
+$SET NOON
+$ !
+$ ! Purge journalled FATMEN updates that are over a day old
+$ !
+$ if p1 .eqs. "" then exit
+$ fatmen =  p1
+$ count  = 0
+$ save_mess = f$environment("MESSAGE")
+$ set message/nofacility/noseverity/noid/notext
+$loop:
+$ fatman = f$element(count,",",fatmen)
+$ if fatman .eqs. "," then goto end
+$ count  = count + 1
+$ write sys$output "Processing ''fatman'..."
+$ ON WARNING THEN GOTO UNDEFINED
+$ fatdir = &fatman
+$ fatfil = f$extract(0,f$length(fatdir)-1,fatdir) + ".DONE]*.*;*"
+$ ON WARNING THEN CONTINUE
+$ delete/before=-0-23:59 'fatfil'
+$ goto loop
+$ undefined:
+$ write sys$output "Warning: symbol ''fatman' is not defined"
+$ goto loop
+$ end:
+$ set message 'save_mess'
+$ exit

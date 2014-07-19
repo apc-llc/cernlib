@@ -1,0 +1,19 @@
+*
+* $Id: rtoacld.dat,v 1.1.1.1 1996/03/06 10:47:20 mclareni Exp $
+*
+* $Log: rtoacld.dat,v $
+* Revision 1.1.1.1  1996/03/06 10:47:20  mclareni
+* Zebra
+*
+*
+#if !defined(CERNLIB_DCLTABLES)
+MODULE RTOA_CLD
+#endif
+define verb RTOA
+#if defined(CERNLIB_DCLTABLES)
+       image "CERN_ROOT:[EXE]RTOA"
+#endif
+              parameter       P1,LABEL=FIN,PROMPT="RZ_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)
+              parameter       P2,LABEL=FOUT,PROMPT="FA_File",
+                              VALUE(NOCONCATENATE,REQUIRED,TYPE=$FILE)

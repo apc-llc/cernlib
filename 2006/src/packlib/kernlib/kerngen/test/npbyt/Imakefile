@@ -1,0 +1,4 @@
+SRCS_F= \ @@\
+	 tbyt.F tmbyt.F tvcbyt.F
+
+SubdirLibraryTarget(NullParameter,NullParameter)

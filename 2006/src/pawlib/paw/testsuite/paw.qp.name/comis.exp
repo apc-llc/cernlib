@@ -1,0 +1,75 @@
+#
+#  comis.exp  --
+#
+#  Original: 18-Oct-1995 11:29
+#
+#  Author:   Maarten Ballintijn <Maarten.Ballintijn@cern.ch>
+#
+#
+
+#
+# Setup for tests
+#
+paw_cmd {h/file 4 ~/cern/paw/tuple/tuple.hbook}
+
+
+# --------------------------------------------------------------
+#
+# Begin real tests
+#
+# --------------------------------------------------------------
+
+comis_test Int32	"iret.f(123,-456,1)" 123
+comis_test Int32	"iret.f(123,-456,2)" -456
+
+comis_test Float32	"xret.f(123.0,-456.0e13,1)" 1.230000e+02
+comis_test Float32	"xret.f(123.0,-456.0e13,2)" -4.560000e+15
+
+comis_test Float64	"dret.f(123.0d0,-456.0d13,1)" 1.23000000000000d+02
+comis_test Float64	"dret.f(123.0d0,-456.0d13,2)" -4.56000000000000d+15
+
+
+comis_test Int32	"ibool.f(true)"			1
+comis_test Int32	"ibool.f(false)"		0
+comis_test Int32	"isimple.f(int32_min)"		-2147483648
+comis_test Int32	"isimple.f(int32_max)"		2147483647
+comis_test Float32	"simple.f(float32_min)"		1.175494e-38
+comis_test Float32	"simple.f(float32_max)"		3.402823e+38
+comis_test Float64	"dsimple.f(float64_min)"	2.22507385850720d-308
+comis_test Float64	"dsimple.f(float64_max)"	1.79769313486232d+308
+
+comis_test Float32	"tst8arg.f(1.0,i2,b2,1d0,1d0,b2,i2,1.0)" 1.000000e+00
+comis_test Float32	"tst8arg.f(1.0,i2,b2,1d0,1d0,b2,i2,2.0)" 0.000000e+00
+
+set old_timeout $timeout
+set timeout [expr $old_timeout * 2]
+
+comis_test Int32	"iret.f77(123,-456,1)" 123
+comis_test Int32	"iret.f77(123,-456,2)" -456
+
+comis_test Float32	"xret.f77(123.0,-456.0e13,1)" 1.230000e+02
+comis_test Float32	"xret.f77(123.0,-456.0e13,2)" -4.560000e+15
+
+comis_test Float64	"dret.f77(123.0d0,-456.0d13,1)" 1.23000000000000d+02
+comis_test Float64	"dret.f77(123.0d0,-456.0d13,2)" -4.56000000000000d+15
+
+
+comis_test Int32	"ibool.f77(true)"		1
+comis_test Int32	"ibool.f77(false)"		0
+comis_test Int32	"isimple.f77(int32_min)"	-2147483648
+comis_test Int32	"isimple.f77(int32_max)"	2147483647
+comis_test Float32	"simple.f77(float32_min)"	1.175494e-38
+comis_test Float32	"simple.f77(float32_max)"	3.402823e+38
+comis_test Float64	"dsimple.f77(float64_min)"	2.22507385850720d-308
+comis_test Float64	"dsimple.f77(float64_max)"	1.79769313486232d+308
+
+
+comis_test Float32	"tst8arg.f77(1.0,i2,b2,1d0,1d0,b2,i2,1.0)" 1.000000e+00
+comis_test Float32	"tst8arg.f77(1.0,i2,b2,1d0,1d0,b2,i2,2.0)" 0.000000e+00
+
+set timeout $old_timeout
+
+#
+# Cleanup after tests
+#
+paw_cmd { close 4 }

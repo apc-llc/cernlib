@@ -1,0 +1,18 @@
+*
+* $Id: v102.dat,v 1.1.1.1 1996/03/21 17:19:54 mclareni Exp $
+*
+* $Log: v102.dat,v $
+* Revision 1.1.1.1  1996/03/21 17:19:54  mclareni
+* Bvsl
+*
+*
+* Version 1.02   901113 23.30
+C- Introduce the following patches/flags:
+C   > DBVSL     : documentation patch
+C
+C- Additions/modifications
+C   > P=*BVSLEX          deleted
+C   > P=EQUDEF           moved into P=BVSLIBM
+C   > P=BVSLFTN          added. FORTRAN-compatible version
+C   > P=BVSLIBM ,D=ONEB-SMOD3B  added
+C   > P=BVSLEX           renamed to P=BVSLTEST,add tests for new routines

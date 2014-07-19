@@ -1,0 +1,12 @@
+SRCS_F=	 uprog.F
+
+#define IHaveCDF
+SRCS_CDF=uprogcdf.cdf
+
+DefinePackageLibrary(NullParameter)
+
+CernlibFortranProgramTarget(ktest,$(OBJS),$(PACKAGE_LIB),$(PACKAGE_LIB),graflib packlib kernlib)
+
+TestTarget(ktest,NullParameter,ktest.inp)
+
+CopyFile(kuipct.inp,ktest.inp)

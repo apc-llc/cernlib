@@ -1,0 +1,22 @@
+DoIncludePackage(gen)
+#include "pilot.h"
+
+SRCS_F=	asinh64.F atg.F binom64.F dplnml.F prmfct.F rplnml.F rsrtnt64.F
+
+#if defined(CERNLIB_DOUBLE)
+SRCS_F:= $(SRCS_F) asinh.F binom.F rsrtnt.F 
+#else
+SRCS_F:= $(SRCS_F) asinh128.F binom128.F rsrtnt128.F
+#endif
+
+#ifdef CERNLIB_HPUX
+FORTRANOPTIONS += -WF,-P
+#endif
+
+#if defined(CERNLIB_SGI)
+IMAKE_DEFINES=-DFortranDoesCpp=NO
+#endif
+
+FORTRANSAVEOPTION = FortranSaveFlags
+
+SubdirLibraryTarget(NullParameter,NullParameter)

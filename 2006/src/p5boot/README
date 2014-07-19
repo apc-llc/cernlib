@@ -1,0 +1,22 @@
+Building the Nypatchy (Patchy 5) suite using the standard Cernlib build
+procedures or the Patchy CAR files requires an executable of nypatchy or
+ypatchy (Patchy 4). The procedure below can be used to bootstrap
+nypatchy.
+
+Sources for Solaris version of nypatchy, which will probably work on
+most 32-bit systems. The system dependent routines are in kernlib for
+each system.
+
+nypatchy.f	 Main program for Patchy 5
+p5lib		 Other source (*.f) files common to all P5 programs.
+
+Then to make nypatchy, assuming the Fortran compiler is g77:
+cd p5lib
+g77 -c libp5/*.f
+ar cr libp5.a *.o
+g77 -o nypatchy nypatchy.f libp5.a $CERN_ROOT/lib/libkernlib.a
+
+The nypatchy executable should then be copied to the bin directory,
+where it might also be necessary to make a link, e.g
+mv nypatchy $CERN_ROOT/bin
+ln -s nypatchy ypatchy

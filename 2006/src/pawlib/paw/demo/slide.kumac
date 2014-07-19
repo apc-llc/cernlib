@@ -1,0 +1,35 @@
+MACRO SLIDE name='Author/CERN  CONF99' sn=' ' title=' '
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 30 - SLIDE                  *
+* General macro to draw contours of SLIDE                                *
+**************************************************************************
+xsize=18
+ysize=22
+width=0.4
+xmax = [xsize]-[width]
+ymax = [ysize]-[width]
+size [xsize] [ysize]
+next
+igset *
+igset lwid 2
+pave 0 [xmax] 0 [ymax] [width] 0 1005 tr
+igset lwid 1
+xtitle = $sigma(([xsize]-0.2)/2.)
+ytitle = [ysize]-1.5
+igset txfp 2
+igset txal 20
+igset chhe 0.6
+itx [xtitle] [ytitle] [title]
+igset chhe 0.3
+igset txal 10
+xtext = [xmax]-0.2
+ytext = 0.1
+igset chhe 0.2
+igset txal 30
+itx [xtext] [ytext] [name]
+igset txal 10
+itx 0.1 0.1 [sn]
+igset chhe 0.3
+igset lwid 2
+return
+

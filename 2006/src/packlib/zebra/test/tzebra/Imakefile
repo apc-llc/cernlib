@@ -1,0 +1,9 @@
+SRCS_F=	 zetece.F zetemq.F zetere.F zeteut.F
+
+#ifdef CERNLIB_HPUX
+SpecialFortranLibObjectRule(zetemq,zetemq,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(zetere,zetere,'-WF,-P',NullParameter)
+SpecialFortranLibObjectRule(zeteut,zeteut,'-WF,-P',NullParameter)
+#endif
+
+SubdirLibraryTarget(NullParameter,NullParameter)

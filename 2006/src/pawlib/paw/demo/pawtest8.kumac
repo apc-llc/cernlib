@@ -1,0 +1,34 @@
+MACRO PAWTEST8
+*
+*  loop to fit a 1d function. The learning curve and the result are
+*  displayed in2 windows
+*
+ set *FON -60
+ set VSIZ 0.4 ; set TSIZ 0.5
+ set XMGL 3   ; set XMGR 1
+ set XVAL 0.7
+ set 2BUF 1 
+*
+ mlp/reset
+ mlp/crea 1 5
+ fun1  10 sin(x)/x 100 0. 20.
+ mlp/lpat/set 10 
+ mlp/learn 1 
+*
+ work 2 O 2 
+ set 2BUF 1 
+*  
+ nloop = 15    | 60 a needed to fit completly the curve
+*
+ work 2 A ; work 1 D 
+ do i=1,[nloop]
+    set PLCI 4 
+    mlp/learn 50 +q
+    work 1 A; work 2 D  
+    set FCOL 3 ; set FWID 8
+    h/pl 10
+    set FCOL 2 ; set FWID 1 ; set DMOD 1
+    fun/plot pawmlp.f 0 20 s
+    work 2 A ; work 1 D 
+ enddo 
+RETURN

@@ -1,0 +1,37 @@
+*
+* $Id: v5_16,v 1.1.1.1 1996/01/19 10:50:13 mclareni Exp $
+*
+* $Log: v5_16,v $
+* Revision 1.1.1.1  1996/01/19 10:50:13  mclareni
+* Hplot
+*
+*
+*CMZ :  5.16/02 27/05/93  08.26.42  by  O.Couet
+*-- Author :    O.Couet   30/04/93
+*
+*::>          VERSION  5.16/02   930527  8.26
+*
+*     LINUX version introduce. <balashov@main1.jinr.dubna.su>
+*
+*::>          VERSION  5.16/01   930511 17.24
+*
+*     Mods in HPLOPT to return the value of the LOG* options.
+*     HPLFIL call now IGTCCH to convert IGTEXT control characters.
+*
+*::>          VERSION  5.16/00   930430 12.03
+*
+*     Bug fixed in HPLTAB. If the number of entries was 0 IGTABL was
+*        not called.
+*
+*     Changes in routines HPLC,HPLONE and HPLTAB to support MIN/MAX
+*     for 2-Dim histograms.
+*
+*     HPLAX restore the text alignment.
+*     In HPLER, the symbols are drawn only if they are not exactly on
+*        the minimum or on the maximum of the current normalisation
+*        transformation window.
+*     Option POL and CYL in HPLTAB
+*     Mods in HPLONE: if IDOPT with option LOGY has been called on a
+*        histogram, the way to remove it in PAW in IDOPT id LINY
+*        and not OPTION LINY as it was the case in this routine.
+*

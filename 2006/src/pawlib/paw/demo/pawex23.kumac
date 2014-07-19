@@ -1,0 +1,42 @@
+MACRO PAWEX23
+**************************************************************************
+*                       PAW TUTORIAL EXAMPLE 23                          *
+* Examples of the SIGMA processor 2                                      *
+**************************************************************************
+Exec ALLDEF
+zone 2 2
+sigma x=array(200,0#5)
+sigma A=8
+sigma B=.01
+sigma Y=EXP(-X)*SIN(A*X)+B*X*X
+opt GRID
+set ndvx 520
+gra 200 x y
+opt NGRI
+SIGMA x=array(200,0#2*pi)
+SIGMA s=sin(x)
+SIGMA S2=S/2
+SIGMA c=cos(x)
+SIGMA c2=c/2
+SIGMA s4=s/4
+SIGMA c4=c/4
+gra 200 s c
+gra 200 s2 c l
+gra 200 s4 c l
+gra 200 s c2 l
+gra 200 s2 c2 l
+gra 200 s4 c2 l
+gra 200 s c4 l
+gra 200 s2 c4 l
+gra 200 s4 c4 l
+sigma a=array(100,0#59.77)
+SIGMA NC=NCO(A)
+SIGMA y=cos(a)*a
+SIGMA x=sin(a)*a
+GRA NC X Y
+SIGMA a=a*2.55555
+SIGMA y=cos(a)*a
+SIGMA x=sin(a)*a
+GRA NC X Y
+RETURN
+

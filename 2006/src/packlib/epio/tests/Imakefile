@@ -1,0 +1,10 @@
+
+#define IHaveSubdirs
+#define PassCDebugFlags
+
+SUBDIRS= ptest1 ptest2 ptest3
+
+MakeSubdirs($(SUBDIRS))
+
+TestSubdirs($(SUBDIRS))
+

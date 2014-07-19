@@ -1,0 +1,135 @@
+CDECK  ID>, TILIST.
+      SUBROUTINE TILIST
+
+C-    Count the modification done, list them if option Verbose
+C.    started 27-may-94
+
+      COMMON /SLATE/ NDSLAT,NESLAT,NFSLAT,NGSLAT,NUSLAT(2),DUMMY(34)
+      CHARACTER       SLLINE*512, SLERRM*256
+      COMMON /SLATLN/ SLLINE, SLERRM
+      COMMON /QPAGE/ NQLMAX,NQLTOL,NQLTOK,NQCMAX,NQCPGH,NQPAGE
+     +,              NQWYLDO,NQWYL,NQNEWH,NQJOIN,NQDKNO,NQDKPG
+      COMMON /QUNIT/ IQREAD,IQPRNT, IQTTIN,IQTYPE, IQOFFL,IQRTTY,IQRSAV
+     +,              IQRFD,IQRRD,IQRSIZ, NQLPAT,NQUSED,NQLLBL, NQINIT
+      CHARACTER      CHEXPD*68
+      COMMON /CHEXC/ IXEXPAM, IXEXPAT,IXEXDEC,IXEXID, NCHEPD, CHEXPD
+      PARAMETER (KQGARB=1,KQARRV=3,KQKEEP=4,KQPREP=5,KQMAIN=6,KQPAST=8)
+      PARAMETER      (NEWLN=10, NCHNEWL=1)
+      PARAMETER      (NSIZEQ=100000, NSIZELN=100000)
+      PARAMETER      (NSIZETX=40*NSIZELN)
+                     CHARACTER    TEXT(NSIZETX)*1
+                     DIMENSION    LQ(NSIZEQ), IQ(NSIZEQ), MLIAD(NSIZELN)
+                     EQUIVALENCE (LQ,IQ,LQGARB), (MLIAD(1),LQ(NSIZEQ))
+                     EQUIVALENCE (TEXT(1), MLIAD(NSIZELN))
+      COMMON //      IQUEST(100),LQGARB,LQHOLD,LQARRV,LQKEEP,LQPREP
+     +,         LEXP,LLPAST,LQPAST, LQUSER(4), LHASM,LRPAM,LPAM, LQINCL
+     +,         LACRAD,LARRV, LPCRA,LDCRAB, LEXD,LDECO, LCRP,LCRD, LSERV
+     +, INCRAD, IFLGAR, JANSW, IFMODIF, IFALTN
+     +, JDKNEX,JDKTYP, JSLZER,NSLORG,JSLORG
+     +, MOPTIO(34), MOPUPD, NCLASH, IFLMERG,IFLDISP, NSLFRE,NTXFRE
+     +, NVGAP(4), NVGARB(6), NVIMAT(4), NVUTY(4),  LASTWK
+     +,       IXBLADK, IXSQSP(7), NTRBLA,NMODIF, JSLTTL,   LASTTI
+C--------------    End CDE              --------------------------------
+      CHARACTER    LINE*512
+      EQUIVALENCE (LINE,SLLINE)
+
+
+      LDO = KQPREP + 1
+   21 LDO = LQ(LDO-1)
+      IF (LDO.EQ.0)                RETURN
+      IF (LQ(LDO-2).EQ.0)          GO TO 21
+
+      NMODIF = NMODIF + 1
+      IF (MOPTIO(22).EQ.0)         GO TO 21
+
+      IF (NQNEWH.EQ.0)             GO TO 27
+      NQNEWH = 0
+
+C--           list P/D identifier
+
+      LINE(1:80) = ' --- p='
+      CALL NA_GET (IXEXPAT,LINE,8)
+      JN = NESLAT
+      LINE(JN+1:JN+2) = 'd='
+      CALL NA_GET (IXEXDEC,LINE,JN+3)
+      N = NESLAT - 1
+
+      CALL DPBLAN (0)
+      WRITE (IQPRNT,9024) LINE(1:N)
+ 9024 FORMAT (A/)
+
+   27 LNEW   = LQ(LDO-2)
+      JSLOLD = IQ(LDO+1)
+      NSLOLD = IQ(LDO+2)
+      IF (LNEW.GT.0)               GO TO 41
+
+C------       NSLOLD lines deleted
+
+C--       check multiple deletes
+
+   31 LNX = LQ(LDO-1)
+      IF (LNX.EQ.0)                GO TO 32
+      IF (LQ(LNX-2).GE.0)          GO TO 32
+      NSLOLD    = NSLOLD + IQ(LNX+2)
+      IQ(LDO+2) = NSLOLD
+      LQ(LDO-1) = LQ(LNX-1)
+      GO TO 31
+
+   32 CALL DPBLAN (1)
+      WRITE (IQPRNT,9032)
+ 9032 FORMAT ('  delete:')
+
+      JSL  = JSLOLD
+      LNO  = JSL - JSLZER
+      JSLE = JSLOLD + NSLOLD - 1
+      LNOE = LNO    + NSLOLD - 1
+
+      NSLX = NSLOLD
+      IF (NSLX.GT.7)  NSLX = 3
+
+      DO 34  J=1,NSLX
+      CALL LN_GET (JSL,LINE,512)
+      WRITE (IQPRNT,9034) LNO,LINE(1:NDSLAT)
+      LNO = LNO + 1
+   34 JSL = JSL + 1
+      IF (NSLX.EQ.NSLOLD)          GO TO 21
+
+      CALL LN_GET (JSLE,LINE,512)
+      WRITE (IQPRNT,9033)
+      WRITE (IQPRNT,9034) LNOE,LINE(1:NDSLAT)
+      GO TO 21
+
+ 9033 FORMAT (8X,'...')
+ 9034 FORMAT (I8,' - ',A)
+
+C------       NSLNEW lines replacing
+
+   41 JSLNEW = IQ(LNEW+1)
+      NSLNEW = IQ(LNEW+2)
+
+      CALL DPBLAN (1)
+      WRITE (IQPRNT,9041)
+ 9041 FORMAT ('  replace:')
+
+      JSL = JSLOLD
+      LNO = JSL - JSLZER
+
+      DO 44  J=1,NSLOLD
+      CALL LN_GET (JSL,LINE,512)
+      WRITE (IQPRNT,9034) LNO,LINE(1:NDSLAT)
+      LNO = LNO + 1
+   44 JSL = JSL + 1
+
+      WRITE (IQPRNT,9042)
+ 9042 FORMAT ('       by:')
+
+      JSL = JSLNEW
+
+      DO 46  J=1,NSLNEW
+      CALL LN_GET (JSL,LINE,512)
+      WRITE (IQPRNT,9044) LINE(1:NDSLAT)
+   46 JSL = JSL + 1
+      GO TO 21
+
+ 9044 FORMAT (8X,' < ',A)
+      END

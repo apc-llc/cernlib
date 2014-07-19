@@ -1,0 +1,3 @@
+INCLUDES=	 herwig59.inc
+
+InstallIncludes($(INCLUDES),$(CERN_INCLUDEDIR),herwig59)

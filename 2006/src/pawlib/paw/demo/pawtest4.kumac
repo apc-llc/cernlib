@@ -1,0 +1,650 @@
+ macro pawtest4
+* -------------------------------------------------------------------
+* Initialisation
+* -------------------------------------------------------------------
+   H/file 1 pawdemo.hbook
+   Cd //lun1/staff
+   Opt *
+   Set *
+   Csel cb
+* -------------------------------------------------------------------
+* Definitions
+* -------------------------------------------------------------------
+   Vect/create ok(100)
+   Vect/create res(100)
+   Vect/create global(10)
+   Vect/create diff(100)
+   Vect/create prob(10)
+* -------------------------------------------------------------------
+* Fortran subroutine ( comis )
+* -------------------------------------------------------------------
+   Exec f77
+* -------------------------------------------------------------------
+* Cuts test
+* -------------------------------------------------------------------
+T1:
+T1_1:
+   Exec gencuts 1 '10.age' 'age.lt.30' 'age.gt.30' 'age.eq.30'
+*
+T1_2:
+   Exec gencuts 2 '10.age' 'age.lt.30' 'step.eq.7' 'grade.gt.10'
+*
+T1_3:
+   Exec gencuts 3 '10.age%children' 'age.gt.30' 'step.ne.7' 'grade.eq.10'
+*
+T1_4:
+   Exec gencuts 4 '10.age*grade' '3.lt.children.lt.5' _
+                  'age.gt.43.or.flag.ne.0' _
+                  'cost.gt.6000.or.children.eq.0'
+*
+T1_5:
+   Exec gencuts 5 '10.age%cost' _
+                  'grade.gt.4.and.step.eq.13' _
+                  'step.eq.15' _
+                  '(grade.eq.13.and.step.eq.10).or.(grade.eq.14.and.step.eq.7)'
+*
+T1_6:
+   Exec gencuts 6 '10.cos(real(cost))*cos(real(age))%sin(real(cost))*cos(real(age))' _
+                'age.le.50' 'cost.gt.1000' 'grade.eq.13'
+*
+T1_7:
+   Exec gencuts 7 '10.division' 'match(''???'',division)' _
+                  'substr(division,1,1)=''D''' 'substr(division,1,1)=''P'''
+*
+* -------------------------------------------------------------------
+* Graphical cut test
+* -------------------------------------------------------------------
+T2:
+   Exec cutg 8
+* -------------------------------------------------------------------
+* Cut and mask test
+* -------------------------------------------------------------------
+T3:
+   Exec cutmask 2 9 10
+* -------------------------------------------------------------------
+* Bilan
+* -------------------------------------------------------------------
+   Exec bilan
+* -------------------------------------------------------------------
+* Clean up
+* -------------------------------------------------------------------
+ vect/del res
+ vect/del ok
+ vect/del global
+ vect/del diff
+ vect/del prob
+*
+ Close 1
+ Return
+
+* ----------------------------------------------------------------------
+macro f77
+* ----------------------------------------------------------------------
+application comis quit
+*
+      subroutine count(id,pos)
+      logical hexist
+      integer id,pos,out
+      vector res(*)
+      if (hexist(id)) then
+      call hnoent(id,out)
+         res(pos) = out
+      else
+         res(pos) = 0
+      endif
+      end
+*
+quit
+return
+
+* ----------------------------------------------------------------------
+ macro fill expr nb cut
+* ----------------------------------------------------------------------
+   nt/pl [expr] [cut] option=box
+   call count( 1000000 , [nb] )
+ return
+* ----------------------------------------------------------------------
+ macro gencuts vers expr cut1 cut2 cut3
+* ----------------------------------------------------------------------
+*
+   Set *
+   opt *
+   Set gsiz 0.8
+   Set ygti 0.29
+   Set hwid 2
+   Set bwid 2
+   Set ywin 0.0001
+   Set xwin 0.0001
+   Set xtic 0.0001
+   Set ytic 0.0001
+   Set xmgl 0.2
+   Set xmgr 0.2
+   Set xval 999
+   Set yval 999
+   Set gfon -60
+   color 0 0.87 0.87 0.87
+   Set hcol 1109
+   Set yhti 999
+*
+   Set txal 0
+   Set txci 2
+   Set chhe 1.9
+   title 'TEST CUTS on '//$os//'/'//$machine
+* ----------------------------------------------------------------------
+*
+   cuts 0 -
+   cuts $1 [cut1]
+   cuts $2 [cut2]
+   cuts $3 [cut3]
+   cuts $4  ($1).or.($2).or.($3)
+*
+   cuts $11 ($1).and.($2).and.($3)
+   cuts $12 ($1).and.($2).and.(.not.($3))
+   cuts $13 ($2).and.($3).and.(.not.(($1)))
+   cuts $14 ($3).and.($1).and.(.not.($2))
+   cuts $15 ($1).and.(.not.($2)).and.(.not.($3))
+   cuts $16 ($2).and.(.not.($3)).and.(.not.(($1)))
+   cuts $17 ($3).and.(.not.($1)).and.(.not.($2))
+*
+* ----------------------------------------------------------------------
+   zone 5 4
+   exec fill [expr]  4  $4
+   exec fill [expr] 11  $11
+   exec fill [expr] 12  $12
+   exec fill [expr] 13  $13
+   exec fill [expr] 14  $14
+   exec fill [expr] 15  $15
+   exec fill [expr] 16  $16
+   exec fill [expr] 17  $17
+   exec fill [expr] 20  $1
+   exec fill [expr] 21  $2
+   exec fill [expr] 22  $3
+   exec fill [expr] 23  ($1).or.($2)
+   exec fill [expr] 24  ($1).or.($3)
+   exec fill [expr] 25  ($3).or.($2)
+   exec fill [expr] 26  ($1).and.($2)
+   exec fill [expr] 27  ($1).and.($3)
+   exec fill [expr] 28  ($3).and.($2)
+*
+* ----------------------------------------------------------------------
+   Set xmgl 8
+   zone 1 4 4 s
+   null 0 1 0 1 'A'
+   Set txci 1
+   Set txal 0
+   Set chhe 0.3
+   itx  0.05 0.8 '1'
+   itx  0.05 0.5 '2'
+   itx  0.05 0.2 '3'
+   itx  0.1  0.8 [cut1]
+   itx  0.1  0.5 [cut2]
+   itx  0.1  0.2 [cut3]
+*
+   vect/input ok(4)  res(4)
+   vect/input ok(11) res(11)
+   vect/input ok(12) res(12)
+   vect/input ok(13) res(13)
+   vect/input ok(14) res(14)
+   vect/input ok(15) res(15)
+   vect/input ok(16) res(16)
+   vect/input ok(17) res(17)
+   tmp = ok(11)+ok(12)+ok(14)+ok(15)
+   vect/input ok(20) [tmp]
+   tmp = ok(11)+ok(12)+ok(13)+ok(16)
+   vect/input ok(21) [tmp]
+   tmp = ok(11)+ok(13)+ok(14)+ok(17)
+   vect/input ok(22) [tmp]
+   tmp = ok(4)-ok(17)
+   vect/input ok(23) [tmp]
+   tmp = ok(4)-ok(16)
+   vect/input ok(24) [tmp]
+   tmp = ok(4)-ok(15)
+   vect/input ok(25) [tmp]
+   tmp = ok(11)+ok(12)
+   vect/input ok(26) [tmp]
+   tmp = ok(11)+ok(14)
+   vect/input ok(27) [tmp]
+   tmp = ok(11)+ok(13)
+   vect/input ok(28) [tmp]
+* ----------------------------------------------------------------------
+*
+* Controle 1
+* La somme des morceaux doit etre egal au tout
+*
+* ----------------------------------------------------------------------
+   sum = 0
+   do i=11,17
+     sum = [sum] + ok([i])
+   enddo
+   val = ok(4)
+   if [val] <> [sum] then
+     mess 'Fatal error'
+     vect/print ok(4)
+     vect/print ok(11:17)
+     goto er
+   endif
+* ----------------------------------------------------------------------
+*
+* Controle 2
+* chaque morceau separement doit etre la somme des morceaux
+* qui le composent
+*
+* ----------------------------------------------------------------------
+   do i = 20,28
+     if res([i]) <> ok([i]) then
+       mess Fatal error: plot [i] is false
+       vect/print ok([i])
+       vect/print res([i])
+       goto er
+     endif
+   enddo
+*
+* ----------------------------------------------------------------------
+ok:
+   sel 1
+   Set txfp -60
+   Set txal 23
+   Set txci 4
+   Set chhe 0.8
+   itx 10 .7 'Test succeed : wait '
+   Waiting
+   vect/input global([vers]) 1
+   goto 99
+* ----------------------------------------------------------------------
+er:
+   sel 1
+   Set txfp -60
+   Set txal 23
+   Set txci 2
+   Set chhe 0.8
+   itx 10 0.7 'Test failed : hit return'
+   Call Igterm
+   Wait
+   vect/input global([vers]) 0
+   goto 99
+   99:
+*
+ return
+
+* ----------------------------------------------------------------------
+ macro cutg vers
+* ----------------------------------------------------------------------
+*
+   Set *
+   opt *
+   title ' '
+   opt stat
+   Set stat 000010
+   Set gsiz 0.5
+   csel n 0.4
+   color 0 0.87 0.87 0.87
+   Set yhti 999
+   zone 2 2
+*
+   cuts $0 -
+   cuts $0 r pawtest4.dat
+*
+   nt/pl 10.step%age  $1
+   cut 1 d
+   call count(1000000,1)
+*
+   nt/pl 10.grade+age%age $2
+   cut 2 d
+   call count(1000000,2)
+*
+   nt/pl 10.grade+age%age+step $3
+   cut 3 d
+   call count(1000000,3)
+   Waiting
+*
+   zone 2 2
+   null 3500 20000 5 8
+   nt/pl 10.sqrt(real(age))%cost  $4.or.$5 option=s
+   cut 4 d
+   cut 5 d
+   call count(1000000,4)
+*
+   null 3500 20000 5 8
+   nt/pl 10.sqrt(real(age))%cost  $4.and.(.not.($5)) option=s
+   cut 4 d
+   cut 5 d
+   call count(1000000,5)
+*
+   null 3500 20000 5 8
+   nt/pl 10.sqrt(real(age))%cost  $4.and.$5 option=s
+   cut 4 d
+   cut 5 d
+   call count(1000000,6)
+*
+   null 3500 20000 5 8
+   nt/pl 10.sqrt(real(age))%cost  $4.and.$5.and.$6 option=s
+   cut 4 d
+   cut 5 d
+   call count(1000000,7)
+   Waiting
+*
+   zone 1 2
+   null 3500 20000 5 8
+   nt/pl 10.sqrt(real(age))+.3%cost  $4.or.$5.and.$6 option=s
+   cut 4 d
+   cut 5 d
+   call count(1000000,8)
+*
+ null 3500 20000 5 8
+ nt/pl 10.sqrt(real(age))%cost  $4.and.$5.or.(step=6).or.(sqrt(real(age)).eq.7.) _
+ option=s
+ cut 4 d
+ cut 5 d
+ call count(1000000,9)
+*
+ vect/input ok(1:9) 1699 1665 750 1898 1129 241 127 1604 601
+*
+ do i = 1,9
+   if res([i]) <> ok([i]) then
+     vect/print res([i])
+     vect/print ok([i])
+     goto er
+   endif
+ enddo
+*
+* ----------------------------------------------------------------------
+ok:
+ sel 1
+ Set txfp -60
+ Set txal 23
+ Set txci 4
+ Set chhe 0.8
+ itx 10 .7 'Test succeed : wait'
+ vect/input global([vers]) 1
+ Waiting
+ goto 99
+* ----------------------------------------------------------------------
+er:
+ mess 'Error: STOP'
+ sel 1
+ Set txal 23
+ Set txci 2
+ Set chhe 0.8
+ itx 10 0.7 'Test failed : hit return'
+ vect/input global([vers]) 0
+ call igterm	
+ wait 'Error type return'
+ goto 99
+ 99:
+*
+ return
+
+* ----------------------------------------------------------------------
+ macro bilan
+* ----------------------------------------------------------------------
+   size 20 20
+   next
+   sel 1
+   Set txfp -60
+*
+   Set txci 2
+   Set txal 23
+   Set chhe 0.8
+   itx  10 2 'PAW TEST ON '//$OS//'/'//$MACHINE
+   call igterm
+*
+   do i=1,7
+     ix = 10
+     iy = 20-[i]
+     if global([i]) .eq. 1 then
+       Set txci 4
+       itx [ix] [iy] 'cut test '//[i]//' is ok'
+     else
+       Set txci 2
+       itx [ix] [iy] 'cut test '//[i]//' failed'
+     endif
+   enddo
+*
+   do i=8,8
+     ix = 10
+     iy = 20-[i]
+     if global([i]) .eq. 1 then
+       Set txci 4
+       itx [ix] [iy] 'graphical cut test '//[i]//' is ok'
+     else
+       Set txci 2
+       itx [ix] [iy] 'graphical cut test '//[i]//' failed'
+     endif
+   enddo
+*
+   do i=9,10
+     ix = 10
+     iy = 20-[i]
+     if global([i]) .eq. 1 then
+       Set txci 4
+       itx [ix] [iy] 'cut/mask test '//[i]//' is ok'
+     else
+       Set txci 2
+       itx [ix] [iy] 'cut/mask test '//[i]//' failed'
+     endif
+   enddo
+
+*
+   call igterm
+ return
+* ----------------------------------------------------------------------
+ macro fcu_isok plot selection position
+* ----------------------------------------------------------------------
+   nt/pl [plot] [selection]
+   call  count(1000000,[position])
+   if ok([position]) <> res([position]) then
+     zone 1 1
+     nt/pl [plot] [selection]
+     mess -- from fc_isok : error
+     mess -- nt/pl [plot] [selection]
+     vect/print ok([position])
+     vect/print res([position])
+     mess -- end
+     Waiting
+     zone 3 3
+   endif
+ return
+
+* ----------------------------------------------------------------------
+ macro cutmask waittime=2 cutnb1=1 cutnb2=2
+* ----------------------------------------------------------------------
+*
+   Set *
+   opt *
+   Set gsiz 0.8
+   Set ygti 0.29
+   Set hwid 2
+   Set bwid 2
+   Set xmgl 0.2
+   Set xmgr 0.2
+   color 0 0.87 0.87 0.87
+   Set hcol 1109
+   Set yhti 999
+   zone 3 3
+   cuts $0 -
+*
+   Set txal 0
+   Set txci 2
+   Set chhe 1.9
+   title 'TEST CUTS/MASK on '//$os//'/'//$machine
+* -----------------------------------------------------------------------
+* vec input            | 1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 |  0 |
+* -----------------------------------------------------------------------
+   /vec/input ok(01:10)   15 1321 1306 1321 1672  816  903  198 1917  551
+   /vec/input ok(11:20) 3329  142 3354  551 3354    0   12 1103 3354 3352
+   /vec/input ok(21:30) 1430 1878 1890  480 1136 2152 3092 1410 2974 2874
+   /vec/input ok(31:40) 1316 2038  137 3168  611 2664 1395 1143 2211  240
+   /vec/input ok(41:50)    0 2801  611  425    0   88  210    0    0 1635
+   /vec/input ok(51:60) 2211    0    0  848 1108    0  108 1124  398  184
+* -----------------------------------------------------------------------
+* vec input            | 1 |  2 |  3 |  4 |  5 |  6 |  7 |  9 |  9 |  0 |
+* -----------------------------------------------------------------------
+   cuts $1  age<25
+   cuts $2  age>50
+   cuts $3  $1.or.$2
+   cuts $4  .not.((.not.($1).and.(.not.($2))))
+   cuts $5  nation.ne.'fr'
+   cuts $6  children=1
+   cuts $7  children=2
+   cuts $8  children=3
+   cuts $9  $6.or.$7.or.$8
+   cuts $10 $3.and.$9
+   cuts $11 cost>3000
+   cuts $12 cost<5000
+   cuts $13 $11.or.$12
+   cuts $14 $13.and.$10
+   cuts $15 $13.or.$10
+   cuts $16 .not.($15)
+   cuts $17 flag=0
+   cuts $18 match('???',division)
+*
+   cuts $31 age>25.and.age<30
+   cuts $32 age>35.and.age<45
+   cuts $33 age>50.and.age<55
+   cuts $34 $31.or.$32.or.$33
+   cuts $35 cost>2500.and.cost<5000
+   cuts $36 cost>7000.and.cost<10000
+   cuts $37 cost>12500.and.cost<17500
+   cuts $38 $35.or.$36.or.$37
+   cuts $39 match('???',division)
+   cuts $40 match('??',division).and.substr(division,1,1)='d'
+   cuts $41 match('??',division).and.substr(division,1,1)='p'
+   cuts $42 $39.or.$40.or.$41
+   cuts $43 $34.and.$38.and.$42
+   cuts $44 $34.and.($38.or.$42)
+   cuts $45 ($34.and.$38).or.$42
+   cuts $46 .not.($34.and.$38).or.$42
+   cuts $47 .not.($34.and.$38).and.$42
+   cuts $48 $34.or.$38.or.$42
+   cuts $49 (.not.($34)).or.(.not.($38)).or.(.not.($42))
+   cuts $50 (.not.($34)).and.((.not.($38)).or.(.not.($42)))
+   cuts $51 .not.((.not.($34)).and.((.not.($38)).or.(.not.($42))))
+*
+   cuts $52 (nation.ne.'fr').and.(mask1(1).and.mask1(4))
+   cuts $53 (nation.ne.'fr').and.(mask1(1).and.mask1(3))
+   cuts $54 (nation.ne.'fr').and.(mask1(3).and.mask1(2))
+   cuts $55 (nation.ne.'fr').and.(mask1(3).and.mask1(4))
+   cuts $56 (nation.ne.'fr').and.(mask2(1).and.mask2(4))
+   cuts $57 (nation.ne.'fr').and.(mask2(1).or.mask2(4))
+   cuts $58 (nation.ne.'fr').and.(mask2(1).or.mask2(3))
+   cuts $59 (nation.ne.'fr').and.(mask2(1).and.mask2(4))
+*
+   mask/file mask1 n
+   mask/file mask2 n
+*1
+   exec fcu_isok '10.division'       '$1'            1
+   exec fcu_isok '10.division'       '$3'            2
+   exec fcu_isok '10.division'       '$2'            3
+*2
+   exec fcu_isok '10.division'       '$4'            4
+   exec fcu_isok '10.division'       '$5'            5
+   exec fcu_isok '10.division'       '$6'            6
+*3
+   exec fcu_isok '10.division'       '$7'            7
+   exec fcu_isok '10.division'       '$8'            8
+   exec fcu_isok '10.division'       '$9'            9
+*0
+   Waiting
+*1
+   exec fcu_isok '10.nation'        '$10'           10
+   exec fcu_isok '10.nation'        '$11'           11
+   exec fcu_isok '10.nation'        '$12'           12
+*2
+   exec fcu_isok '10.nation'        '$13'           13
+   exec fcu_isok '10.nation'        '$14'           14
+   exec fcu_isok '10.nation'        '$15'           15
+*3
+   exec fcu_isok '10.nation'        '$16'           16
+   exec fcu_isok '10.nation'        '$17'           17
+   exec fcu_isok '10.nation'        '$18'           18
+*0
+   Waiting
+*1
+   exec fcu_isok '10.division' '$15.or.$17.or.$18'  19
+   exec fcu_isok '10.division' '$16.or.(.not.($17.and.$18))' 20
+   exec fcu_isok '10.age'           '$34'           21
+*2
+   exec fcu_isok '10.age'           '$38'           22
+   exec fcu_isok '10.age'           '$42'           23
+   exec fcu_isok '10.age'           '$43'           24
+*3
+   exec fcu_isok '10.age'           '$44'           25
+   exec fcu_isok '10.age'           '$45'           26
+   exec fcu_isok '10.age'           '$46'           27
+*0
+   Waiting
+*1
+   exec fcu_isok '10.age'           '$47'           28
+   exec fcu_isok '10.age'           '$48'           29
+   exec fcu_isok '10.age'           '$49'           30
+*2
+   exec fcu_isok '10.age'           '$50'           31
+   exec fcu_isok '10.age'           '$51'           32
+   exec fcu_isok '10.age' '(age<30)>>mask1(1)'      33
+*3
+   exec fcu_isok '10.age' '(age>30)>>mask1(2)'      34
+   exec fcu_isok '10.age' '(age<40)>>mask1(3)'      35
+   exec fcu_isok '10.age' '(age>40)>>mask1(4)'      36
+*0
+   Waiting
+*1
+   exec fcu_isok '10.age' '(children<1)>>mask2(1)'  37
+   exec fcu_isok '10.age' '(children>1)>>mask2(2)'  38
+   exec fcu_isok '10.age' '(children<2)>>mask2(3)'  39
+*2
+   exec fcu_isok '10.age' '(children>2)>>mask2(4)'  40
+   exec fcu_isok '10.age' 'mask1(1).and.mask1(4)'   41
+   exec fcu_isok '10.age' 'mask1(1).or.mask1(4)'    42
+*3
+   exec fcu_isok '10.age' 'mask1(1).or.mask1(3)'    43
+   exec fcu_isok '10.age' 'mask1(3).and.mask1(2)'   44
+   exec fcu_isok '10.age' '$52'                     45
+*0
+   Waiting
+*1
+   exec fcu_isok '10.age' '$53'                     46
+   exec fcu_isok '10.age' '$54'                     47
+   exec fcu_isok '10.age' '$55'                     48
+*2
+   exec fcu_isok '10.age' 'mask2(1).and.mask2(4)'   49
+   exec fcu_isok '10.age' 'mask2(1).or.mask2(4)'    50
+   exec fcu_isok '10.age' 'mask2(1).or.mask2(3)'    51
+*2
+   exec fcu_isok '10.age' 'mask2(3).and.mask2(2)'   52
+   exec fcu_isok '10.age' '$56'                     53
+   exec fcu_isok '10.age' '$57'                     54
+*0
+   Waiting
+*1
+   exec fcu_isok '10.age' '$58'                     55
+   exec fcu_isok '10.age' '$59'                     56
+   exec fcu_isok '10.age' 'mask1(1).and.mask2(1)'   57
+*2
+   exec fcu_isok '10.age' 'mask1(2).and.mask2(2)'   58
+   exec fcu_isok '10.age' 'mask1(3).and.mask2(3)'   59
+   exec fcu_isok '10.age' 'mask1(4).and.mask2(4)'   60
+*
+   mask/close mask1
+   mask/close mask2
+*
+   vect/op/vsub res ok diff
+*
+   ires = 0
+   vect/input global([cutnb1]) 0
+   vect/input global([cutnb2]) 0
+   do i =1,60
+     if diff([i]) <> 0 then
+       mess 'error in cutmask for plot nb ',[i]
+       ires = 1
+     endif
+     if [ires]=0 .and. [i]=32 then
+       ires = 0
+       vect/input global([cutnb1]) 1
+     endif
+
+     if [ires]=0 .and. [i]=60 then
+       vect/input global([cutnb2]) 1
+     endif
+   enddo
+*
+ return

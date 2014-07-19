@@ -1,0 +1,7 @@
+CDECK  ID>, EXITRC.
+      SUBROUTINE EXITRC (INRC)
+
+      JRC = INRC
+
+      CALL EXITF (JRC)
+      END

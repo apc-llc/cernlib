@@ -1,0 +1,42 @@
+*
+* $Id: vax,v 1.9 2000/07/25 14:53:05 mclareni Exp $
+*
+* $Log: vax,v $
+* Revision 1.9  2000/07/25 14:53:05  mclareni
+* Version 7.51 from author
+*
+*
+*                       DEC VAX 11/780 OR 8600.
+* This directory was created from isajet.car patch vax
+*                      DOUBLE PRECISION.
+#ifndef CERNLIB_DOUBLE
+#define CERNLIB_DOUBLE
+#endif
+*                       STANDARD FORTRAN 77 TAPE INPUT/OUTPUT.
+#ifndef CERNLIB_STDIO
+#define CERNLIB_STDIO
+#endif
+*                     FORTRAN REPLACEMENT FOR MOVLEV.
+#ifndef CERNLIB_MOVEFTN
+#define CERNLIB_MOVEFTN
+#endif
+*            FORTRAN RANF.
+#if !defined(CERNLIB_CERN)
+#ifndef CERNLIB_RANFFTN
+#define CERNLIB_RANFFTN
+#endif
+#endif
+*                    STANDARD RANSET AND RANGET CALLS.
+#ifndef CERNLIB_RANFCALL
+#define CERNLIB_RANFCALL
+#endif
+*             NO CERN LIBRARY.
+#if !defined(CERNLIB_CERN)
+#ifndef CERNLIB_NOCERN
+#define CERNLIB_NOCERN
+#endif
+#endif
+*                     IMPLICIT NONE
+#ifndef CERNLIB_IMPNONE
+#define CERNLIB_IMPNONE
+#endif

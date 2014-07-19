@@ -1,0 +1,13 @@
+SRCS_F= \ @@\
+	 btest.F datime.F datimh.F fnblan.F fnnum.F fnzero.F iandetc.F \ @@\
+	 ibclr.F ibits.F ibset.F ie3fod.F ie3fos.F ie3tod.F ie3tos.F \ @@\
+	 ishft.F ishftc.F iuforw.F iuweed.F jbit.F jbyt.F jbytet.F jbytor.F \ @@\
+	 kerngt.F legvar.F locf.F mbytet.F mbytor.F mcbyt.F msbit.F msbit0.F \ @@\
+	 msbit1.F msbyt.F mvbits.F rndm.F sbit.F sbit0.F sbit1.F sbyt.F \ @@\
+	 timed.F timex.F traceq.F ublow.F ubunch.F uctoh.F uctoh1.F uh1toc.F \ @@\
+	 uhtoc.F vmatl.F vmatr.F
+
+SRCS_S= \ @@\
+	 qnexte.s
+
+SubdirLibraryTarget(NullParameter,NullParameter)

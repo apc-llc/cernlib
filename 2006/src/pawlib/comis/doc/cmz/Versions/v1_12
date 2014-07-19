@@ -1,0 +1,46 @@
+*
+* $Id: v1_12,v 1.1.1.1 1996/02/26 17:16:37 mclareni Exp $
+*
+* $Log: v1_12,v $
+* Revision 1.1.1.1  1996/02/26 17:16:37  mclareni
+* Comis
+*
+*
+*CMZ :  1.12/05 20/03/92  16.05.18  by  Rene Brun
+*-- Author :    Rene Brun   28/08/91
+*
+*::>          VERSION  1.12/05   920320 16.05
+*
+*       SUN version integrated with UNIX general version
+*
+*
+*::>          VERSION  1.12/04   920318 12.28
+*
+*       Mods in *COMIS for SUN and ALLIANT
+*       mods in CSKCAL,CSCALI,CSCALR,CSCALD  (C.Meyer)
+*
+*
+*::>          VERSION  1.12/03   920316 18.41
+*
+*       DECS version introduced in MPDSK
+*
+*
+*::>          VERSION  1.12/02   920312  1.07
+*
+*       routine CSIORD modified for IBM.
+*       Only 80 characters files may be read on IBM.
+*
+*
+*       routine CSNUMB modified for IBMRS6000 (Roger Howard)
+*
+*::>          VERSION  1.12/01   920220 17.02
+*
+*
+*
+*       Routine CSSINP modified. READ statement modified for IBM/VM
+*       Protect against unreachable code for IBMMVS in CSLOG,CSSINP.
+*
+*::>          VERSION  1.12/00   910828 10.26
+*
+*       Version for iPSC/860 introduced (flag IPSC)
+*

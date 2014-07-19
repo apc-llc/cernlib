@@ -1,0 +1,28 @@
+*
+* $Id: update.dat,v 1.1.1.1 1996/02/15 17:50:42 mclareni Exp $
+*
+* $Log: update.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:50:42  mclareni
+* Kernlib
+*
+*
+#if !defined(CERNLIB_KERNFOR)
+
+
+       UP-DATE RECORD FOR THE PAM-FILE  KERNFOR, VERSION 4
+       ---------------------------------------------------
+
+
+UP-DATE  4.42 :  11-Oct-1995
+----------------------------
+
+Replacing file   KERNFOR  4.41  950124 14.37
+
+New Decks:    P=CCGEN, D=VXINVB, VXINVC    C version of byte-swop
+                       D=SIGUNBL,SIGPRNT   for signal handling
+
+Delete:       p=TCGEN, D=ATG               is now in mathlib
+
+---------------------------------------------------------------------
+
+#endif

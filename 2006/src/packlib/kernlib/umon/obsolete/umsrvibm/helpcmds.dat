@@ -1,0 +1,117 @@
+*
+* $Id: helpcmds.dat,v 1.1.1.1 1996/02/15 17:47:35 mclareni Exp $
+*
+* $Log: helpcmds.dat,v $
+* Revision 1.1.1.1  1996/02/15 17:47:35  mclareni
+* Kernlib
+*
+*
+#if defined(CERNLIB_IBMVM)
+/*DECK ID>, umon_cmd.helpinfo */
+.cm CAT:INFO
+.cm NAM:UMON_CMDS
+.cm EXP: commands concerning program usage monitors.
+.cm DAT: 88.11.11
+.cm A/R: Bernd Pollermann
+.cm KEY: STATISTICS LOG LOGGING FREQUENCY UMON-COMMAND
+.cm KEY: PROGRAM-USAGE USAGE MONITOR MONITORING UMON U-MON U-MONITOR
+.cm KEY: SERVICE SERVICE-MACHINE SERVER
+.cm KEY: MONITOR-EXEC EXEC-USAGE
+.cm END:
+ 
+UMON commands
+ 
+UMON commands allow you to communicate with your UMON monitor(s). You may
+modify (the status of) your monitor(s) or handle the "log-sheets" produced
+by these monitors. UMON commands can only be issued by the monitor's admini-
+strator.
+ 
+If you are not familiar with the concepts of UMON please read first the UMON
+introduction (accessible via 'FIND UMON INTRODUCTION').
+ 
+Note: All UMON commands are Special MeSsaGes to the service machine UMON.
+      Therefore ALL these commands MUST BE PRECEDED BY 'CP SMSG UMON '.
+      For READABILITY ONLY this "prefix" has been omitted in the text below.
+ 
+ 
+ Monitor commands:
++-----------------------------------------------------------------------------+
+| QUERY  MONitor  moni   -->  shows attributes of monitor moni (Usage note 1) |
+|                                                                             |
+| MODIFY MONitor moni [admin|=]  [disk|=] [vaddr|=] [passw|=]   ( Usage     ) |
+|                        --> gives (new) attributes to moni     (    note 2 ) |
+|                                                                             |
+| ACTIVATE MONitor moni  -->  monitor moni will accept to log messages        |
+| BLOCK    MONitor moni  -->  monitor moni will refuse to log messages        |
+| KILL     MONitor moni  -->  monitor moni ceases to exist                    |
++-----------------------------------------------------------------------------+
+where:
+ 
+ moni     is the name of the monitor
+ admin    is the login-id of the person in charge of the monitor moni
+ disk     is the logon-id to which the minidisk belongs
+ vaddr    the disk's virtual address
+ passw    the disk WRITE password
+ =        used instead of a parameter means that the parameter will not change
+ 
+ Log-sheet Commands:
++-----------------------------------------------------------------------------+
+| WRITEOUT LOGsheet moni  -->  empties the buffer onto disk    (Usage note 3) |
+|                                                                             |
+| SENDERASE LOGsheet moni -->  sends log-sheet to your reader and erases it   |
+|                              immediately afterwards          (Usage Note 4) |
+| SEND      LOGsheet moni -->  sends log-sheet to your reader  (Usage note 5) |
+| ERASE     LOGsheet moni -->  erase the log-sheet                            |
++-----------------------------------------------------------------------------+
+where:
+ 
+ moni      is the name of the monitor used here as the filetype of the file
+           onto which the monitor writes the log. The format of this file is:
+ 
+             col       content
+ 
+            1- 8   logon-id of the user who used the program
+           10-15   date in the form dd mmm
+           17-21   time in the form of hh:mm
+ 
+ 
+Usage notes:
+ 
+1. The meaning of the monitor attributes should be clear from the header in the
+   response to your QUERY. The different forms of the monitor status 'blocked'
+  'a-blocked,'s-blocked' and 'v-blocked') need some further explanations:
+ 
+ status           meaning                           can be changed by
+ 
+a-blocked     administrator-blocked, i.e.          the 'ACTIVATE' command
+              blocked via the 'BLOCK' command
+ 
+s-blocked     space-blocked, i.e. blocked by       freeing disk space by the
+              UMON because the monitors disk      'SENDERASE' command, followed
+              is full                              by 'ACTIVATE'
+ 
+v-blocked     verification-blocked, i.e. blocked   correcting the attributes by
+              by UMON because of wrong attributes  the 'MODIFY' command
+              of the monitor
+ 
+2. MODIFY MONITOR allows you to change all the attributes including the logon-
+   id of the administrator. If you do this only the new administrator will be
+   able to communicate with 'your' monitor.
+ 
+3. For performance reasons logging is done in the memory of UMON. The buffer
+   for each "log-sheet" is written on disk from time to time, at least once
+   a day (around midnight). Use the WRITEOUT command BEFORE you reLINK to your
+   monitor's disk if you want to have a look at the LATEST logs.
+ 
+4. 'SENDERASE LOGSHEET' is the recommended way of dealing with the "log-sheets"
+   in case
+ 
+    - your disk is getting full and
+    - you do not want to loose a single recording
+ 
+5. Both 'SENDERASE' and 'SEND' imply 'WRITEOUT', i.e. you will get the latest
+   version of the "log-sheet" into your reader.
+ 
+ 
+ 
+#endif

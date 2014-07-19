@@ -1,0 +1,13 @@
+tcgen/kerngt
+tcgen/jumpxn
+tcgen/qnexte
+tcgen/rndm
+tcgen/irndm
+tcgen/setjmp
+tcgen/longjmp
+tcgen/ublow
+tcgen/ubunch
+tcgen/xinb
+xvect/xinb
+tcgen/xinbs
+xvect/xinbs

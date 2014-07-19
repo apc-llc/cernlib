@@ -1,0 +1,48 @@
+*
+* $Id: v135m.F,v 1.1.1.1 1996/04/01 15:01:30 mclareni Exp $
+*
+* $Log: v135m.F,v $
+* Revision 1.1.1.1  1996/04/01 15:01:30  mclareni
+* Mathlib gen
+*
+*
+#include "gen/pilot.h"
+      SUBROUTINE V135M
+C
+      CHARACTER*(*) CODE
+      PARAMETER (CODE='V135')
+C
+C     This Subroutine tests the MATHLIB routine V135 RNGAMA
+CSEQ,IMP64.
+#include "iorc.inc"
+ 
+      LOGICAL LOK
+      DIMENSION R(50),RT(50)
+ 
+      DATA EPS /1E-5/
+ 
+      DATA (RT(I),I=1,50)
+     1/ 0.368585, 0.013064, 0.031687, 0.283820, 0.061787,
+     2  1.007356, 0.046791, 2.535777, 0.264645, 0.443505,
+     3  0.587862, 0.266885, 0.631598, 1.830675, 2.270047,
+     4  2.664580, 1.000799, 1.203981, 5.018713, 0.951597,
+     5  2.297888, 0.910781, 2.736375, 1.050737, 3.708016,
+     6  2.653227, 2.746237,11.184518, 3.538424, 4.215284,
+     7  2.417769, 1.234898, 1.576784, 2.405226, 1.348569,
+     8  5.547483, 4.733562, 4.184811, 2.867677, 3.769053,
+     9  3.601086, 2.503126, 3.163369, 0.825783, 4.583592,
+     A  0.740949, 2.361048, 3.623955, 5.648046, 2.919302/
+ 
+      CALL HEADER(CODE,1)
+
+      CALL RLUXGO(3,314159265,0,0)
+ 
+      LOK=.TRUE.
+      DO 2 I = 1,50
+      P=0.1*I
+      R(I)=RNGAMA(P)
+    2 LOK=LOK .AND. ABS(R(I)-RT(I)) .LE. EPS
+      IRC= ITEST(CODE,LOK)
+      CALL PAGEND(CODE)
+      RETURN
+      END
