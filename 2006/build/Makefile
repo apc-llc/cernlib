@@ -36,7 +36,6 @@
 	        / = /
             SHELL = /bin/sh
 
-              TOP = /home/aivahnenko/cernlib/2006/build
       CURRENT_DIR =
 
 	QUOTE="
