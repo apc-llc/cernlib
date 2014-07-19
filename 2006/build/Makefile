@@ -327,7 +327,7 @@ LIBDIRS= packlib pawlib graflib mathlib geant321 mclibs phtools
 
 SUBDIRS= $(LIBDIRS) patchy cfortran
 
-SUBDIRS:= $(SUBDIRS) scripts mgr
+SUBDIRS:= $(SUBDIRS) scripts
 
 install.lib::  $(foreach dir,$(LIBDIRS),$(dir)/Makefile)
 
