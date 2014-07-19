@@ -36,4 +36,4 @@ make install.bin TOP=$CERN_ROOT/build > ../log/scripts
 # Install the libraries
 
 cd $CERN_ROOT/build
-C_INCLUDE_PATH=/usr/include/freetype2 make TOP=$CERN_ROOT/build
+C_INCLUDE_PATH=/usr/include/freetype2 make -j24 TOP=$CERN_ROOT/build
