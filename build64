@@ -28,12 +28,12 @@ $CVSCOSRC/config/imake_boot
 
 # Install kuipc and the scripts (cernlib, paw and gxint) in $CERN_ROOT/bin
 
-make bin/kuipc > log/kuipc
-make scripts/Makefile
+make bin/kuipc TOP=$CERN_ROOT/build > log/kuipc
+make scripts/Makefile TOP=$CERN_ROOT/build
 cd scripts
-make install.bin > ../log/scripts
+make install.bin TOP=$CERN_ROOT/build > ../log/scripts
 
 # Install the libraries
 
 cd $CERN_ROOT/build
-C_INCLUDE_PATH=/usr/include/freetype2 make
+C_INCLUDE_PATH=/usr/include/freetype2 make TOP=$CERN_ROOT/build

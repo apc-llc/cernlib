@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Establish the environment variables for the build procedures
+# Depending on the system, other directories may need to be added to the PATH
+# e.g. for the build tools and alternative compilers.
+
+CERN_LEVEL=2005
+CERN=`pwd`
+CERN_ROOT=$CERN/$CERN_LEVEL
+CVSCOSRC=$CERN/$CERN_LEVEL/src
+PATH=$CERN_ROOT/bin:$CERN:$PATH
+
+export CERN
+export CERN_LEVEL
+export CERN_ROOT 
+export CVSCOSRC
+export PATH
+
+# Create the build directory structure
+
+cd $CERN_ROOT
+mkdir -p build bin lib build/log
+
+# Create the top level Makefile with imake
+
+cd $CERN_ROOT/build
+$CVSCOSRC/config/imake_boot
+make tree -j24 TOP=$CERN_ROOT/build
+find . -name Makefile -exec sed -i 's/g77/g77 -m32/g' {} \;
+find . -name Makefile -exec sed -i 's/gcc/gcc -m32/g' {} \;
+find . -name Makefile -exec sed -i 's/linux-lp64.cf/linux.cf/g' {} \;
+
+# Install kuipc and the scripts (cernlib, paw and gxint) in $CERN_ROOT/bin
+
+make bin/kuipc > log/kuipc TOP=$CERN_ROOT/build
+make scripts/Makefile TOP=$CERN_ROOT/build
+cd scripts
+make install.bin > ../log/scripts TOP=$CERN_ROOT/build
+
+# Install the libraries
+
+cd $CERN_ROOT/build
+C_INCLUDE_PATH=/usr/include/freetype2 make TOP=$CERN_ROOT/build
