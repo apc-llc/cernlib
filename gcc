@@ -6,5 +6,5 @@ if (defined $ENV{'CERN_DEBUG'})
 	push(@filtered, "-O0");
 }
 my($cmd) = "gcc @filtered";
-print "$cmd\n";
+#print "$cmd\n";
 exit(system($cmd));
