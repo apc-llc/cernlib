@@ -1,10 +1,11 @@
 #!/usr/bin/perl
+my(@filtered) = @ARGV;
 if (defined $ENV{'CERN_DEBUG'})
 {
-	@filtered = grep(!/\-O*/, @filtered);
+	@filtered = grep { $_ !~ m/\-O.*/ } @filtered;
 	push(@filtered, "-g");
 	push(@filtered, "-O0");
 }
-my($cmd) = "gcc @filtered";
+my($cmd) = "/usr/bin/gcc @filtered";
 #print "$cmd\n";
 exit(system($cmd));

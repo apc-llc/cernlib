@@ -2,10 +2,10 @@
 my(@filtered) = grep(!/\-fugly\-complex/, @ARGV);
 if (defined $ENV{'CERN_DEBUG'})
 {
-	@filtered = grep(!/\-O*/, @filtered);
+	@filtered = grep { $_ !~ m/\-O.*/ } @filtered;
 	push(@filtered, "-g");
 	push(@filtered, "-O0");
 }
-my($cmd) = "gfortran -std=legacy @filtered";
+my($cmd) = "/usr/bin/gfortran -std=legacy @filtered";
 #print "$cmd\n";
 exit(system($cmd));
