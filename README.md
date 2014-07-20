@@ -13,7 +13,7 @@ The purpose of this fork is to bring up support for building CERNLIB on modern L
 ### Dependencies
 
 ```
-sudo apt-get install xutils-dev makedepend libmotif-dev
+sudo apt-get install xutils-dev libmotif-dev
 ```
 
 ### 32-bit build
