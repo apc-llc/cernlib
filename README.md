@@ -18,20 +18,20 @@ sudo apt-get install xutils-dev makedepend libmotif-dev
 
 ### 32-bit build
 
-In `build32` select which version to build - `2005` or `2006` and then run:
+Run `build32` choosing which version to build - `2005` or `2006`:
 
 ```
-$ ./build32
+$ ./build32 2006
 ```
 
 Resulting libraries will be placed into `2005/lib` or `2006/lib`.
 
 ### 64-bit build
 
-In `build64` select which version to build - `2005` or `2006` and then run:
+Run `build64` choosing which version to build - `2005` or `2006`:
 
 ```
-$ ./build64
+$ ./build64 2006
 ```
 
 Resulting libraries will be placed into `2005/lib` or `2006/lib`.
