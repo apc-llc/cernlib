@@ -5,6 +5,9 @@
 # e.g. for the build tools and alternative compilers.
 
 CERN_LEVEL=2005
+if [ ! -z "$1" ]; then
+CERN_LEVEL=$1
+fi
 CERN=`pwd`
 CERN_ROOT=$CERN/$CERN_LEVEL
 CVSCOSRC=$CERN/$CERN_LEVEL/src
@@ -25,6 +28,7 @@ mkdir -p build bin lib build/log
 
 cd $CERN_ROOT/build
 #$CVSCOSRC/config/imake_boot
+make tree -j24 TOP=$CERN_ROOT/build
 
 # Install kuipc and the scripts (cernlib, paw and gxint) in $CERN_ROOT/bin
 
