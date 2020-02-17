@@ -32,9 +32,11 @@ extern int   strncasecmp( const char* str1, const char* str2, size_t n );
 
 extern char* strrstr( const char* str1, const char* str2 );
 
-#define strdup Strdup           /* prototype without const */
-extern char* strdup( const char* str );
-
+//RN: 20200212 START
+//RN: comment out because provided by string.h
+//RN: #define strdup Strdup           /* prototype without const */
+//RN: extern char* strdup( const char* str );
+//RN: 20200212 END
 
 /*
  * convenience functions from kkern.c
@@ -46,7 +48,10 @@ extern char* str4dup( const char* str1, const char* str2, const char* str3,
                      const char* str4 );
 extern char* str5dup( const char* str1, const char* str2, const char* str3,
                      const char* str4, const char* str5 );
-extern char* strndup( const char* buf, size_t n );
+//RN: 20200212 START
+//RN: comment out because provided by string.h
+//RN: extern char* strndup( const char* buf, size_t n );
+//RN: 20200212 END
 extern char* stridup( int i );
 
 extern char* mstrcat( char* ptr, const char* str );

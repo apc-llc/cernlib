@@ -541,23 +541,25 @@ char *str0dup( const char *str )
   return Strdup( str );
 }
 
-
+//RN: 20200212 START
+//RN: comment out because provided by string.h
 /*
  * like strdup() but string is n characters long and not terminated
  */
-char *strndup( const char *str,
-              size_t len )
-{
-  size_t bytes = len + 1;
-  char *p;
-
-  if( bytes < ALLOC_MIN_BYTES )
-    bytes = ALLOC_MIN_BYTES;
-
-  p = strncpy( malloc( bytes ), str, len );
-  p[len] = '\0';
-  return p;
-}
+//RN: char *strndup( const char *str,
+//RN:              size_t len )
+//RN:{
+//RN:  size_t bytes = len + 1;
+//RN:  char *p;
+//RN:
+//RN:  if( bytes < ALLOC_MIN_BYTES )
+//RN:    bytes = ALLOC_MIN_BYTES;
+//RN:
+//RN:  p = strncpy( malloc( bytes ), str, len );
+//RN:  p[len] = '\0';
+//RN:  return p;
+//RN:}
+//RN: 20200212 END
 
 
 /*
