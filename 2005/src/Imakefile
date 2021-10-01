@@ -7,7 +7,7 @@ LIBDIRS= packlib pawlib graflib mathlib geant321 mclibs phtools
 SUBDIRS= $(LIBDIRS) patchy cfortran
 
 #ifdef CERNLIB_UNIX
-SUBDIRS:= $(SUBDIRS) scripts mgr
+SUBDIRS:= $(SUBDIRS) scripts
 #endif
 
 InstallLibSubdirs($(LIBDIRS))
