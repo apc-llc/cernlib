@@ -4,20 +4,14 @@
 # Depending on the system, other directories may need to be added to the PATH
 # e.g. for the build tools and alternative compilers.
 
-CERN_LEVEL=2005
+export CERN_LEVEL=2005
 if [ ! -z "$1" ]; then
-CERN_LEVEL=$1
+export CERN_LEVEL=$1
 fi
-CERN=`pwd`
-CERN_ROOT=$CERN/$CERN_LEVEL
-CVSCOSRC=$CERN/$CERN_LEVEL/src
-PATH=$CERN_ROOT/bin:$CERN:$PATH
-
-export CERN
-export CERN_LEVEL
-export CERN_ROOT 
-export CVSCOSRC
-export PATH
+export CERN=`pwd`
+export CERN_ROOT=$CERN/$CERN_LEVEL
+export CVSCOSRC=$CERN/$CERN_LEVEL/src
+export PATH=$CERN_ROOT/bin:$CERN_ROOT/src/scripts:$CERN:$PATH
 
 # Create the build directory structure
 
