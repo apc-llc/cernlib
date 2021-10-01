@@ -715,7 +715,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef LnCmd /* can use cp instead of ln if necessary */
 #if HasSymLinks
-#define LnCmd ln -s
+#define LnCmd ln -sf
 #else
 #define LnCmd ln
 #endif

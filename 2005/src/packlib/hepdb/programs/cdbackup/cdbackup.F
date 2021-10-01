@@ -141,7 +141,7 @@
          CALL UNLINKF(CHLINK(1:LLINK))
          PRINT 9008,CHBACK(1:LBAKK),CHLINK(1:LLINK)
  9008 FORMAT(' CDBACKUP. linking ',A,' to ',A)
-         ISTAT = SYSTEMF('ln -s '//CHBACK(1:LBAKK)//
+         ISTAT = SYSTEMF('ln -sf '//CHBACK(1:LBAKK)//
      +                   ' '//CHLINK(1:LLINK))
 #endif
       ENDIF

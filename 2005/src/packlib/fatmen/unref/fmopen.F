@@ -763,13 +763,13 @@
       CALL CUTOL(DSN)
 #endif
 #if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_CRAY))&&(!defined(CERNLIB_SHIFT))&&(!defined(CERNLIB_APOLLO))
-      IC = SYSTEMF('ln -s '//DSN(1:LDSN)//' '
+      IC = SYSTEMF('ln -sf '//DSN(1:LDSN)//' '
      +            //FORLUN(1:LFLUN))
       IF (IDEBFA .GE. 2)    WRITE(LPRTFA,*) 'ln for logical unit ',
      +   FORLUN(1:LFLUN),' dsn = ',DSN(1:LDSN)
 #endif
 #if defined(CERNLIB_APOLLO)
-      IC = SYSTEMF('ln -s '//DSN(1:LDSN)//' '
+      IC = SYSTEMF('ln -sf '//DSN(1:LDSN)//' '
      +            //FORLUN(1:LFLUN))
       IF (IDEBFA .GE. 2)    WRITE(LPRTFA,*) 'ln for logical unit ',
      +   FORLUN(1:LFLUN),' dsn = ',DSN(1:LDSN)

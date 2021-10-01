@@ -38,7 +38,7 @@ XCOMM platform:  $XConsortium: nec.cf,v 1.2 94/04/11 21:18:22 rws Exp $
 #define SystemV			YES
 #define StandardDefines		-Dnec_ews -Dnec_ews_svr2 -DUSG -DSYSV
 #define StandardCppDefines	-Dnec_ews -Dnec_ews_svr2 -DUSG -DSYSV
-#define LnCmd			ln -s
+#define LnCmd			ln -sf
         LEXOPTION = -j
 #endif
 

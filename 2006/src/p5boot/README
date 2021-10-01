@@ -19,4 +19,4 @@ g77 -o nypatchy nypatchy.f libp5.a $CERN_ROOT/lib/libkernlib.a
 The nypatchy executable should then be copied to the bin directory,
 where it might also be necessary to make a link, e.g
 mv nypatchy $CERN_ROOT/bin
-ln -s nypatchy ypatchy
+ln -sf nypatchy ypatchy

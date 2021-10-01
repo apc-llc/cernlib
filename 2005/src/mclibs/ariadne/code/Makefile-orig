@@ -69,7 +69,7 @@ lib: libartest.a
 
 libartest.a: libar4.a
 	rm -f libartest.a
-	ln -s libar4.a libartest.a
+	ln -sf libar4.a libartest.a
 
 libar4.a: $(objects)
 	$(AR) $(ARFLAGS) $@ $?

@@ -2144,7 +2144,7 @@ SUBROUTINE PSPUTA( INTEGER *iskin, INTEGER *loglevel, INTEGER *fs )
                           fsize = (fsize / (1024*1024)) + 1;
 #ifdef PFGET
                           sprintf(cmd,
-                "ln -s `%s/bin/pfget -r -s%dM %s 2>> %s/log/pfget.err` %s/%s",
+                "ln -sf `%s/bin/pfget -r -s%dM %s 2>> %s/log/pfget.err` %s/%s",
                                   conf_dir, fsize, s, conf_dir, path, s);
 #else
 #if defined (CERNLIB_CORE)
@@ -2164,7 +2164,7 @@ SUBROUTINE PSPUTA( INTEGER *iskin, INTEGER *loglevel, INTEGER *fs )
                        } else
 #ifdef PFGET
                           sprintf(cmd,
-                "ln -s `%s/bin/pfget -r -s50M %s 2>> %s/log/pfget.err` %s/%s",
+                "ln -sf `%s/bin/pfget -r -s50M %s 2>> %s/log/pfget.err` %s/%s",
                                   conf_dir, s, conf_dir, path, s);
 #else
 #if defined (CERNLIB_CORE)

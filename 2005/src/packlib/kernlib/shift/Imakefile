@@ -32,8 +32,8 @@ archive/stamp debug/stamp: $(@D)/tree $(@D)//lib/libshift.a
 	cp $< $(@D)/$(<F)
 	cd $(@D);tar xf $(<F)
 	rm $(@D)/$(<F)
-	cd $(@D);ln -s h shift
-	cd $(@D);ln -s h/shift.h shift.h
+	cd $(@D);ln -sf h shift
+	cd $(@D);ln -sf h/shift.h shift.h
 	touch $@
 
 libaddobjects:

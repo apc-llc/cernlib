@@ -76,7 +76,7 @@ $(LDIR)%.cra: %.cra $(LDIR)yexpand
 	PLINAME=$(PLINAME);export PLINAME;$(LDIR)yexpand $< $@
 
 $(LDIR)patchy.car: patchy.car
-	@ ln -s $< $@
+	@ ln -sf $< $@
 
 %.f:  $(LDIR)%.cra $(LDIR)patchy.car
 	ypatchy - $@ $< TTY .go
@@ -97,7 +97,7 @@ P4LINKS: $(foreach yp,$(YMODULES),$(CERN_BINDIR)$(yp))
 $(foreach yp,$(YMODULES),$(CERN_BINDIR)$(yp)):
 	cd $(dir $@);	\ @@\
 	if [ -f ../../patchy/4.15/bin/$(notdir $@) ] ; then \ @@\
-		ln -s ../../patchy/4.15/bin/$(notdir $@) $(notdir $@); \ @@\
+		ln -sf ../../patchy/4.15/bin/$(notdir $@) $(notdir $@); \ @@\
 	else  \	@@\
 		echo "$(notdir $@) not linked, not existing";\	@@\
 	fi		

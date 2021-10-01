@@ -74,4 +74,4 @@ RANLIB = :
 #define BuildXInputLib		NO
 #define BuildPexClients		NO
 
-#define LnCmd			ln -s
+#define LnCmd			ln -sf

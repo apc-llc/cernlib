@@ -70,10 +70,10 @@ cat /hepdb/$1/hepdb.names
 #
 # Link the server script
 #
-ln -s /cern/new/bin/cdserv.sh /hepdb/$1/cdserv
+ln -sf /cern/new/bin/cdserv.sh /hepdb/$1/cdserv
 #
 # and the server module
 #
-ln -s /cern/new/bin/cdserv /hepdb/$1/cdsrv
+ln -sf /cern/new/bin/cdserv /hepdb/$1/cdsrv
  
 #endif

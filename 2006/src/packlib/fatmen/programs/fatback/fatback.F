@@ -78,7 +78,7 @@
          CALL UNLINKF(CHLINK(1:LLINK))
          PRINT 9003,CHBACK(1:LBACK),CHLINK(1:LLINK)
  9003 FORMAT(' FATBACK. linking ',A,' to ',A)
-         ISTAT = SYSTEMF('ln -s '//CHBACK(1:LBACK)//
+         ISTAT = SYSTEMF('ln -sf '//CHBACK(1:LBACK)//
      +                   ' '//CHLINK(1:LLINK))
 #endif
       ENDIF

@@ -360,7 +360,7 @@
 #if (defined(CERNLIB_UNIX))&&(!defined(CERNLIB_CRAY))&&(!defined(CERNLIB_SHIFT))&&(!defined(CERNLIB_APOLLO))
       IF (IDEBFA .GE. 2)    WRITE(LPRTFA,*) 'ln for logical unit ',
      +   FORLUN(1:LFLUN),' CHDSN = ',CHDSN(1:LDSN)
-      IRC = SYSTEMF('ln -sf '//CHDSN(1:LDSN)//' '
+      IRC = SYSTEMF('ln -sff '//CHDSN(1:LDSN)//' '
      +            //FORLUN(1:LFLUN))
       IF(IRC.NE.0) THEN
          IF(IDEBFA.GE.-3) WRITE(LPRTFA,9012) IRC
@@ -370,7 +370,7 @@
       IF(CHDSN(1:4).EQ.'/afs') CALL SBIT1(IHOWFA,JAFSFA)
 #endif
 #if defined(CERNLIB_APOLLO)
-      IC = SYSTEMF('ln -sf '//CHDSN(1:LDSN)//' '
+      IC = SYSTEMF('ln -sff '//CHDSN(1:LDSN)//' '
      +            //FORLUN(1:LFLUN))
       IF (IDEBFA .GE. 2)    WRITE(LPRTFA,*) 'ln for logical unit ',
      +   FORLUN(1:LFLUN),' CHDSN = ',CHDSN(1:LDSN)
