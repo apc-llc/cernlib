@@ -23,6 +23,8 @@ LIBDIRS+=other tcgens
 
 SUBDIRS= $(LIBDIRS) kerngen test
 
+FORTRANOPTIONS += -fallow-invalid-boz
+
 TopOfPackage(kerngen)
 
 SubdirLibraryTarget(kerngen,$(LIBDIRS))
