@@ -69,7 +69,7 @@ endif
         LIBMANDIR = $(MANSOURCEPATH)3
        FILEMANDIR = $(MANSOURCEPATH)5
 
-                AR = ar clq
+                AR = ar cq
 
 	    XARGS = xargs
 
